@@ -1,8 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import Yarnformpage from "./components/Yarnformpage.js";
+import YAMLformpage from "./components/YAMLformpage.js";
 
-const myElement = <p> Hello world!</p>;
-
-ReactDOM.render(<Yarnformpage />, document.getElementById("root"));
+ReactDOM.render(<YAMLformpage />, document.getElementById("root"));

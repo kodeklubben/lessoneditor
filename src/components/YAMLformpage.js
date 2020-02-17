@@ -1,15 +1,15 @@
 import React from "react";
 import ReactDOM from "react-dom";
 
-class Yarnformpage extends React.Component {
+class YAMLformpage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      course: "",
+      course: "Micro:it",
       title: "",
       writer: "",
       translator: "",
-      language: ""
+      language: "Norsk"
     };
   }
   myChangeHandler = event => {
@@ -18,7 +18,7 @@ class Yarnformpage extends React.Component {
     this.setState({ [nam]: val });
   };
   mySubmitHandler = event => {
-    event.preventDefault();
+    //event.preventDefault();
   };
   render() {
     return (
@@ -39,16 +39,19 @@ class Yarnformpage extends React.Component {
             <option value="Arduino">Arduino</option>
           </select>
         </label>
+        <br />
 
         <label>
           Tittel:
           <input type="text" name="title" onChange={this.myChangeHandler} />
         </label>
+        <br />
 
         <label>
-          Forfatter:{" "}
+          Forfatter:
           <input type="text" name="writer" onChange={this.myChangeHandler} />
         </label>
+        <br />
         <label>
           Oversatt av:
           <input
@@ -57,6 +60,8 @@ class Yarnformpage extends React.Component {
             onChange={this.myChangeHandler}
           />
         </label>
+        <br />
+
         <label>
           Språk:
           <select name="language" onChange={this.myChangeHandler}>
@@ -66,6 +71,8 @@ class Yarnformpage extends React.Component {
             <option value="Islandsk">Islandsk</option>
           </select>
         </label>
+        <br />
+
         <button type="button">Tilbake</button>
         <input type="submit" value="Neste" />
       </form>
@@ -73,4 +80,4 @@ class Yarnformpage extends React.Component {
   }
 }
 
-export default Yarnformpage;
+export default YAMLformpage;
