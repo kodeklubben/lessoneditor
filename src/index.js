@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import Yarnformpage from "./Yarnformpage.js";
+import Yarnformpage from "./components/Yarnformpage.js";
 
 const myElement = <p> Hello world!</p>;
 

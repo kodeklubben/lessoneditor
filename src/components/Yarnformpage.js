@@ -9,7 +9,7 @@ class Yarnformpage extends React.Component {
       title: "",
       writer: "",
       translator: "",
-      language: "Norsk"
+      language: ""
     };
   }
   myChangeHandler = event => {
@@ -66,7 +66,8 @@ class Yarnformpage extends React.Component {
             <option value="Islandsk">Islandsk</option>
           </select>
         </label>
-        <input type="submit" />
+        <button type="button">Tilbake</button>
+        <input type="submit" value="Neste" />
       </form>
     );
   }
