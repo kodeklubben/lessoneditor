@@ -5,11 +5,11 @@ class Yarnformpage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      course: "Micro:it",
+      course: "",
       title: "",
       writer: "",
       translator: "",
-      language: ""
+      language: "Norsk"
     };
   }
   myChangeHandler = event => {
@@ -22,42 +22,51 @@ class Yarnformpage extends React.Component {
   };
   render() {
     return (
-      <form>
-        <select value={this.state.course}>
-          Kurs:
-          <option value="Micro:it">Micro:it</option>
-          <option value="Scratch">Scratch</option>
-          <option value="Python">Python</option>
-          <option value="Lego Mindstorms">Lego Mindstorms</option>
-          <option value="Web">Web</option>
-          <option value="Code Studio">Code Studio</option>
-          <option value="Processing">Processing</option>
-          <option value="Elm">Elm</option>
-          <option value="Computer Craft">Computer Craft</option>
-          <option value="App Inventor">App Inventor</option>
-          <option value="Arduino">Arduino</option>
-        </select>
+      <form onSubmit={this.mySubmitHandler}>
+        <label>
+          Tema:
+          <select name="course" onChange={this.myChangeHandler}>
+            <option value="Micro:it">Micro:it</option>
+            <option value="Scratch">Scratch</option>
+            <option value="Python">Python</option>
+            <option value="Lego Mindstorms">Lego Mindstorms</option>
+            <option value="Web">Web</option>
+            <option value="Code Studio">Code Studio</option>
+            <option value="Processing">Processing</option>
+            <option value="Elm">Elm</option>
+            <option value="Computer Craft">Computer Craft</option>
+            <option value="App Inventor">App Inventor</option>
+            <option value="Arduino">Arduino</option>
+          </select>
+        </label>
 
-        <input type="text" name="title" onChange={this.myChangeHandler}>
+        <label>
           Tittel:
-        </input>
+          <input type="text" name="title" onChange={this.myChangeHandler} />
+        </label>
 
-        <input type="text" name="writer" onChange={this.myChangeHandler}>
-          Forfatter:
-        </input>
-        <input type="text" name="translator" onChange={this.myChangeHandler}>
+        <label>
+          Forfatter:{" "}
+          <input type="text" name="writer" onChange={this.myChangeHandler} />
+        </label>
+        <label>
           Oversatt av:
-        </input>
-
-        <select value={this.state.language}>
+          <input
+            type="text"
+            name="translator"
+            onChange={this.myChangeHandler}
+          />
+        </label>
+        <label>
           Språk:
-          <option value="Norsk">Norsk</option>
-          <option value="Nynorsk">Nynorsk</option>
-          <option value="Engelsk">Engelsk</option>
-          <option value="Islandsk">Islandsk</option>
-        </select>
-
-        <input type="submit"> Neste </input>
+          <select name="language" onChange={this.myChangeHandler}>
+            <option value="Norsk">Norsk</option>
+            <option value="Nynorsk">Nynorsk</option>
+            <option value="Engelsk">Engelsk</option>
+            <option value="Islandsk">Islandsk</option>
+          </select>
+        </label>
+        <input type="submit" />
       </form>
     );
   }
