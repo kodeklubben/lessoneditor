@@ -1,5 +1,4 @@
 import React from "react";
-import ReactDOM from "react-dom";
 
 class YAMLformpage extends React.Component {
   constructor(props) {
@@ -91,12 +90,14 @@ class YAMLformpage extends React.Component {
               </select>
             </label>
           </div>
-          <div className="toRight">
-            <button className="ui secondary button" type="button">
-              Tilbake
-            </button>
-            <input className="ui primary button" type="submit" value="Neste" />
-          </div>
+          <button className="ui secondary button" type="button">
+            Tilbake
+          </button>
+          <input
+            className="ui primary button toRight"
+            type="submit"
+            value="Neste"
+          />
         </form>
       </div>
     );
