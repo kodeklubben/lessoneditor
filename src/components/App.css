@@ -1,0 +1,10 @@
+.root {
+  width: auto;
+  height: 100vh;
+  background-color: #b1daae;
+  padding: 10em;
+}
+
+.toRight {
+  float: right;
+}

@@ -1,6 +1,6 @@
+import "semantic-ui-css/semantic.min.css";
 import React from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
-import YAMLformpage from "./components/YAMLformpage.js";
+import App from "./components/App";
 
-ReactDOM.render(<YAMLformpage />, document.getElementById("root"));
+ReactDOM.render(<App />, document.getElementById("root"));
