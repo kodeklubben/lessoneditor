@@ -6,9 +6,9 @@ class YAMLformpage extends React.Component {
     this.state = {
       course: "Micro:it",
       title: "",
-      writer: "",
+      author: "",
       translator: "",
-      language: "Norsk"
+      language: "nb"
     };
   }
   myChangeHandler = event => {
@@ -60,9 +60,9 @@ class YAMLformpage extends React.Component {
               Forfatter:
               <input
                 type="text"
-                name="writer"
+                name="author"
                 placeholder="Navn"
-                value={this.state.writer}
+                value={this.state.author}
                 onChange={this.myChangeHandler}
               />
             </label>
@@ -83,21 +83,28 @@ class YAMLformpage extends React.Component {
             <label>
               Språk:
               <select name="language" onChange={this.myChangeHandler}>
-                <option value="Norsk">Norsk</option>
-                <option value="Nynorsk">Nynorsk</option>
-                <option value="Engelsk">Engelsk</option>
-                <option value="Islandsk">Islandsk</option>
+                <option value="nb">Norsk</option>
+                <option value="nn">Nynorsk</option>
+                <option value="en">Engelsk</option>
+                <option value="is">Islandsk</option>
+                {/* <option value="sv">Svensk</option>
+                <option value="da">Dansk</option>
+                <option value="hr">Kroatisk</option> */}
               </select>
             </label>
           </div>
-          <button className="ui secondary button" type="button">
+          <button className="ui icon left labeled black button" type="button">
+            <i aria-hidden="true" className="left arrow icon"></i>
             Tilbake
           </button>
-          <input
-            className="ui primary button toRight"
-            type="submit"
-            value="Neste"
-          />
+          <button
+            className="ui icon right labeled button toRight"
+            type="button"
+            onClick={this.mySubmitHandler}
+          >
+            Neste
+            <i aria-hidden="true" className="right arrow icon"></i>
+          </button>
         </form>
       </div>
     );
