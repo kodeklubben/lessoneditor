@@ -1,5 +1,7 @@
 import React from "react";
-import Checkbox from "./Checkbox";
+import YMLtagsTopic from "./YMLtagsTopic";
+import YMLtagsSubject from "./YMLtagsSubject";
+import YMLtagsGrade from "./YMLtagsGrade";
 
 class YMLfilePage extends React.Component {
   constructor(props) {
@@ -7,7 +9,7 @@ class YMLfilePage extends React.Component {
     this.state = {
       level: 1,
       license: "",
-      tags: []
+      tags: { topic: [], subject: [], grade: [] }
     };
   }
 
@@ -22,14 +24,16 @@ class YMLfilePage extends React.Component {
     this.props.onSubmit(this.state);
   };
 
-  myCheckboxHandler = value => {
-    console.log(value);
+  myCheckboxHandler = event => {
+    let name = event.target.name;
+    let value = event.target.value;
+
     let i = this.state.tags;
     console.log(i);
-    if (i.includes(value)) {
-      i.splice(i.indexOf(value), 1);
+    if (i[name].includes(value)) {
+      i[name].splice(i[name].indexOf(value), 1);
     } else {
-      i.push(value);
+      i[name].push(value);
     }
     this.setState({ tags: i });
   };
@@ -40,7 +44,7 @@ class YMLfilePage extends React.Component {
         <form className="ui big form" onSubmit={this.mySubmitHandler}>
           <div className="field">
             <label>
-              Nivå:
+              <h3>Nivå:</h3>
               <select name="level" onChange={this.myChangeHandler}>
                 <option value={1}>Introduksjon</option>
                 <option value={2}>Nybegynner</option>
@@ -51,7 +55,7 @@ class YMLfilePage extends React.Component {
           </div>
           <div className="field">
             <label>
-              Lisens:
+              <h3>Lisens:</h3>
               <input
                 type="text"
                 name="license"
@@ -62,37 +66,33 @@ class YMLfilePage extends React.Component {
             </label>
           </div>
           <label>
-            Tags:
-            <div className="ui equal width grid">
-              <div className="column">
-                <Checkbox name="Animasjon" onCheck={this.myCheckboxHandler} />
-                <Checkbox name="App" onCheck={this.myCheckboxHandler} />
-                <Checkbox name="Blokkbasert" onCheck={this.myCheckboxHandler} />
-                <Checkbox name="Elektronikk" onCheck={this.myCheckboxHandler} />
-              </div>
-              <div className="column">
-                <Checkbox name="Kryptografi" onCheck={this.myCheckboxHandler} />
-                <Checkbox name="Lyd" onCheck={this.myCheckboxHandler} />
-                <Checkbox name="Minecraft" onCheck={this.myCheckboxHandler} />
-                <Checkbox name="Nettside" onCheck={this.myCheckboxHandler} />
-              </div>
-              <div className="column">
-                <Checkbox name="Robot" onCheck={this.myCheckboxHandler} />
-                <Checkbox name="Spill" onCheck={this.myCheckboxHandler} />
-                <Checkbox name="Stegbasert" onCheck={this.myCheckboxHandler} />
-                <Checkbox name="Tekstbasert" onCheck={this.myCheckboxHandler} />
-              </div>
-            </div>
+            <h3>Tema:</h3>
+            <YMLtagsTopic myCheckboxHandler={this.myCheckboxHandler} />
           </label>
-
-          <button className="ui secondary button" type="button">
-            Tilbake
-          </button>
-          <input
-            className="ui primary button toRight"
-            type="submit"
-            value="Neste"
-          />
+          <label>
+            <br />
+            <h3>Fag:</h3>
+            <YMLtagsSubject myCheckboxHandler={this.myCheckboxHandler} />
+          </label>
+          <label>
+            <br />
+            <h3>Klassetrinn: </h3>
+            <YMLtagsGrade myCheckboxHandler={this.myCheckboxHandler} />
+          </label>
+          <div className="buttons">
+            <button className="ui icon left labeled black button" type="button">
+              <i aria-hidden="true" className="left arrow icon"></i>
+              Tilbake
+            </button>
+            <button
+              className="ui icon right labeled button toRight"
+              type="button"
+              onClick={this.mySubmitHandler}
+            >
+              Neste
+              <i aria-hidden="true" className="right arrow icon"></i>
+            </button>
+          </div>
         </form>
       </div>
     );

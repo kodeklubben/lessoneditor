@@ -31,8 +31,8 @@ class App extends React.Component {
   render() {
     return (
       <div className="root container">
-        <YAMLformPage onSubmit={this.onYAMLSubmitHandler} />
-        {/* <YMLfilePage onSubmit={this.onYMLSubmitHandler} /> */}
+        {/* <YAMLformPage onSubmit={this.onYAMLSubmitHandler} /> */}
+        <YMLfilePage onSubmit={this.onYMLSubmitHandler} />
       </div>
     );
   }

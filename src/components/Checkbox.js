@@ -1,18 +1,24 @@
 import React from "react";
 
-const Checkbox = props => {
-  return (
-    <div>
-      <input
-        type="checkbox"
-        name={props.name}
-        id={props.name}
-        value={props.name}
-        onChange={e => props.onCheck(e.target.value)}
-      ></input>
-      <label htmlFor={props.name}> {props.name} </label>
-    </div>
-  );
-};
+class Checkbox extends React.Component {
+  onInputChange = event => {
+    this.props.onCheck(event);
+  };
+
+  render() {
+    return (
+      <div>
+        <input
+          type="checkbox"
+          name={this.props.subtag}
+          id={this.props.value}
+          value={this.props.value}
+          onChange={this.onInputChange}
+        ></input>
+        <label htmlFor={this.props.subtag}> {this.props.name} </label>
+      </div>
+    );
+  }
+}
 
 export default Checkbox;
