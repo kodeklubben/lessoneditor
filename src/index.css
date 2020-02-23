@@ -11,3 +11,26 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* CSS for Editor */
+
+.Editor {
+  display: flex;
+}
+
+/* CSS for TextArea */
+
+.TextArea {
+  width: 600px;
+  height: 600px;
+  margin: 10px;
+}
+
+/* CSS for MDPreview */
+
+.MDPreview {
+  width: 600px;
+  height: 600px;
+  margin: 10px;
+  border: 1px solid black;
+}
