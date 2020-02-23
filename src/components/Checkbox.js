@@ -7,15 +7,17 @@ class Checkbox extends React.Component {
 
   render() {
     return (
-      <div>
-        <input
-          type="checkbox"
-          name={this.props.subtag}
-          id={this.props.value}
-          value={this.props.value}
-          onChange={this.onInputChange}
-        ></input>
-        <label htmlFor={this.props.subtag}> {this.props.name} </label>
+      <div className="inline field">
+        <div className="ui checkbox">
+          <input
+            type="checkbox"
+            name={this.props.subtag}
+            id={this.props.value}
+            value={this.props.value}
+            onChange={this.onInputChange}
+          />
+          <label htmlFor={this.props.value}>{this.props.name}</label>
+        </div>
       </div>
     );
   }

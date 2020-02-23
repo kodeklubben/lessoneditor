@@ -6,6 +6,9 @@ import YMLtagsGrade from "./YMLtagsGrade";
 class YMLfilePage extends React.Component {
   constructor(props) {
     super(props);
+  }
+  /* constructor(props) {
+    super(props);
     this.state = {
       level: 1,
       license: "",
@@ -29,23 +32,26 @@ class YMLfilePage extends React.Component {
     let value = event.target.value;
 
     let i = this.state.tags;
-    console.log(i);
     if (i[name].includes(value)) {
       i[name].splice(i[name].indexOf(value), 1);
     } else {
       i[name].push(value);
     }
     this.setState({ tags: i });
-  };
+  }; */
 
   render() {
     return (
       <div className="ui container">
-        <form className="ui big form" onSubmit={this.mySubmitHandler}>
+        <form className="ui big form" onSubmit={this.props.mySubmitHandler}>
           <div className="field">
             <label>
               <h3>Nivå:</h3>
-              <select name="level" onChange={this.myChangeHandler}>
+              <select
+                name="level"
+                onChange={this.props.myChangeHandler}
+                required
+              >
                 <option value={1}>Introduksjon</option>
                 <option value={2}>Nybegynner</option>
                 <option value={3}>Erfaren</option>
@@ -60,25 +66,23 @@ class YMLfilePage extends React.Component {
                 type="text"
                 name="license"
                 placeholder="Lisens"
-                value={this.state.license}
-                onChange={this.myChangeHandler}
+                value={this.props.state.license}
+                onChange={this.props.myChangeHandler}
               />
             </label>
           </div>
-          <label>
-            <h3>Tema:</h3>
-            <YMLtagsTopic myCheckboxHandler={this.myCheckboxHandler} />
-          </label>
-          <label>
-            <br />
-            <h3>Fag:</h3>
-            <YMLtagsSubject myCheckboxHandler={this.myCheckboxHandler} />
-          </label>
-          <label>
-            <br />
-            <h3>Klassetrinn: </h3>
-            <YMLtagsGrade myCheckboxHandler={this.myCheckboxHandler} />
-          </label>
+
+          <h3>Tema:</h3>
+          <YMLtagsTopic myCheckboxHandler={this.props.myCheckboxHandler} />
+
+          <br />
+          <h3>Fag:</h3>
+          <YMLtagsSubject myCheckboxHandler={this.props.myCheckboxHandler} />
+
+          <br />
+          <h3>Klassetrinn: </h3>
+          <YMLtagsGrade myCheckboxHandler={this.props.myCheckboxHandler} />
+
           <div className="buttons">
             <button className="ui icon left labeled black button" type="button">
               <i aria-hidden="true" className="left arrow icon"></i>
@@ -87,7 +91,7 @@ class YMLfilePage extends React.Component {
             <button
               className="ui icon right labeled button toRight"
               type="button"
-              onClick={this.mySubmitHandler}
+              onClick={this.props.mySubmitHandler}
             >
               Neste
               <i aria-hidden="true" className="right arrow icon"></i>

@@ -3,6 +3,9 @@ import React from "react";
 class YAMLformpage extends React.Component {
   constructor(props) {
     super(props);
+  }
+  /*   constructor(props) {
+    super(props);
     this.state = {
       course: "Micro:it",
       title: "",
@@ -16,19 +19,24 @@ class YAMLformpage extends React.Component {
     let val = event.target.value;
     this.setState({ [nam]: val });
   };
+
   mySubmitHandler = event => {
     event.preventDefault();
     this.props.onSubmit(this.state);
-  };
+  }; */
 
   render() {
     return (
       <div className="ui container">
-        <form className="ui big form" onSubmit={this.mySubmitHandler}>
+        <form className="ui big form" onSubmit={this.props.mySubmitHandler}>
           <div className="field">
             <label>
               Tema:
-              <select name="course" onChange={this.myChangeHandler}>
+              <select
+                name="course"
+                onChange={this.props.myChangeHandler}
+                required
+              >
                 <option value="Micro:it">Micro:it</option>
                 <option value="Scratch">Scratch</option>
                 <option value="Python">Python</option>
@@ -50,8 +58,9 @@ class YAMLformpage extends React.Component {
                 type="text"
                 name="title"
                 placeholder="Tittel"
-                value={this.state.title}
-                onChange={this.myChangeHandler}
+                value={this.props.state.title}
+                onChange={this.props.myChangeHandler}
+                required
               />
             </label>
           </div>
@@ -62,8 +71,9 @@ class YAMLformpage extends React.Component {
                 type="text"
                 name="author"
                 placeholder="Navn"
-                value={this.state.author}
-                onChange={this.myChangeHandler}
+                value={this.props.state.author}
+                onChange={this.props.myChangeHandler}
+                required
               />
             </label>
           </div>
@@ -74,15 +84,19 @@ class YAMLformpage extends React.Component {
                 type="text"
                 name="translator"
                 placeholder="Navn"
-                value={this.state.translator}
-                onChange={this.myChangeHandler}
+                value={this.props.state.translator}
+                onChange={this.props.myChangeHandler}
               />
             </label>
           </div>
           <div className="field">
             <label>
               Språk:
-              <select name="language" onChange={this.myChangeHandler}>
+              <select
+                name="language"
+                onChange={this.props.myChangeHandler}
+                required
+              >
                 <option value="nb">Norsk</option>
                 <option value="nn">Nynorsk</option>
                 <option value="en">Engelsk</option>
@@ -101,7 +115,7 @@ class YAMLformpage extends React.Component {
             <button
               className="ui icon right labeled button toRight"
               type="button"
-              onClick={this.mySubmitHandler}
+              onClick={this.props.mySubmitHandler}
             >
               Neste
               <i aria-hidden="true" className="right arrow icon"></i>
