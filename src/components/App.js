@@ -1,5 +1,6 @@
 import "./App.css";
 import React from "react";
+import FormPage from "./FormPage";
 import YAMLformPage from "./YAMLformpage";
 import YMLfilePage from "./YMLfilePage";
 
@@ -39,8 +40,7 @@ class App extends React.Component {
       state.title +
       "\nauthor: " +
       state.author +
-      "\ntranslator: " +
-      state.translator +
+      (state.translator ? "\ntranslator: " + state.translator : "") +
       "\nlanguage: " +
       state.language +
       "\n---"
@@ -58,6 +58,8 @@ class App extends React.Component {
 
     console.log("YAML header: \n" + this.YAMLstateToString(this.state));
     console.log("\nYML-file: \n" + this.YMLstateToString(this.state));
+
+    // TODO: Send state-data to database
   };
 
   myCheckboxHandler = event => {
@@ -73,32 +75,15 @@ class App extends React.Component {
     this.setState({ tags: i });
   };
 
-  onYAMLSubmitHandler = state => {
-    //ToDo: Send stateData to database via axios.
-  };
-
-  onYMLSubmitHandler = state => {
-    console.log(this.YMLstateToString(state));
-    //ToDo:  Get state-data from YAMLformpage an send it to database via axios.
-  };
-
   render() {
     return (
       <div className="root container">
-        <YAMLformPage
-          onYAMLSubmitHandler={this.onYAMLSubmitHandler}
-          myChangeHandler={this.myChangeHandler}
+        <FormPage
           mySubmitHandler={this.mySubmitHandler}
-          state={this.state}
-        />
-
-        {/* <YMLfilePage
           myChangeHandler={this.myChangeHandler}
-          mySubmitHandler={this.mySubmitHandler}
-          onYMLSubmitHandler={this.onYMLSubmitHandler}
           myCheckboxHandler={this.myCheckboxHandler}
           state={this.state}
-        /> */}
+        />
       </div>
     );
   }
