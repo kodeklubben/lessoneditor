@@ -1,0 +1,18 @@
+.root {
+  width: auto;
+  height: 100vh;
+  background-color: #b1daae;
+  padding: 10em;
+}
+
+.toRight {
+  float: right;
+}
+
+.equal.width.grid {
+  margin: 0, 0, 40, 0;
+}
+
+.buttons {
+  margin-top: 2em;
+}

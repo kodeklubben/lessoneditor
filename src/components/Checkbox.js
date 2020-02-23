@@ -1,0 +1,26 @@
+import React from "react";
+
+class Checkbox extends React.Component {
+  onInputChange = event => {
+    this.props.onCheck(event);
+  };
+
+  render() {
+    return (
+      <div className="inline field">
+        <div className="ui checkbox">
+          <input
+            type="checkbox"
+            name={this.props.subtag}
+            id={this.props.value}
+            value={this.props.value}
+            onChange={this.onInputChange}
+          />
+          <label htmlFor={this.props.value}>{this.props.name}</label>
+        </div>
+      </div>
+    );
+  }
+}
+
+export default Checkbox;
