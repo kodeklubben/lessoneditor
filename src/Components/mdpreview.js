@@ -1,5 +1,4 @@
 import React from 'react';
-import Markdown from 'markdown-it'
 
 class MDPreview extends React.Component {
     constructor(props) {
@@ -12,7 +11,7 @@ class MDPreview extends React.Component {
                 className="MDPreview"
                 dangerouslySetInnerHTML={{__html: this.props.mdValue}}
             />
-        );
+    );
     }
 }
 

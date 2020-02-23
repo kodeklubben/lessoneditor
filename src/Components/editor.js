@@ -3,6 +3,7 @@ import '../index.css';
 import MDTextArea from './textinput';
 import MDPreview from './mdpreview';
 import Markdown from 'markdown-it'
+import {mdParser} from '../utils/mdParser';
 
 class Editor extends React.Component {
 
@@ -18,12 +19,14 @@ class Editor extends React.Component {
         this.setState(
             {
                 textValue: textInput,
-                mdValue: this.md.render(textInput)
+                mdValue: mdParser(textInput)
             });
     };
 
     componentDidMount() {
+        const attrs = require('markdown-it-attrs');
         this.md = new Markdown();
+        this.md.use(attrs);
     }
 
     render() {
