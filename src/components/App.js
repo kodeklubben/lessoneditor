@@ -1,8 +1,6 @@
 import "./App.css";
 import React from "react";
 import FormPage from "./FormPage";
-import YAMLformPage from "./YAMLformpage";
-import YMLfilePage from "./YMLfilePage";
 
 class App extends React.Component {
   constructor(props) {

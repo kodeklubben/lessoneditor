@@ -1,16 +1,12 @@
 import React from "react";
 
 class YAMLformpage extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <div>
         <div className="field">
           <label>
-            Tema:
+            <h3>Tema:</h3>
             <select
               name="course"
               onChange={this.props.myChangeHandler}
@@ -32,7 +28,7 @@ class YAMLformpage extends React.Component {
         </div>
         <div className="field">
           <label>
-            Tittel:
+            <h3>Tittel:</h3>
             <input
               type="text"
               name="title"
@@ -45,7 +41,7 @@ class YAMLformpage extends React.Component {
         </div>
         <div className="field">
           <label>
-            Forfatter:
+            <h3>Forfatter:</h3>
             <input
               type="text"
               name="author"
@@ -58,7 +54,7 @@ class YAMLformpage extends React.Component {
         </div>
         <div className="field">
           <label>
-            Oversatt av:
+            <h3>Oversatt av:</h3>
             <input
               type="text"
               name="translator"
@@ -70,7 +66,7 @@ class YAMLformpage extends React.Component {
         </div>
         <div className="field">
           <label>
-            Språk:
+            <h3>Språk:</h3>
             <select
               name="language"
               onChange={this.props.myChangeHandler}

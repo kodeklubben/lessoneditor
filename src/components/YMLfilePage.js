@@ -4,10 +4,6 @@ import YMLtagsSubject from "./YMLtagsSubject";
 import YMLtagsGrade from "./YMLtagsGrade";
 
 class YMLfilePage extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <div>
