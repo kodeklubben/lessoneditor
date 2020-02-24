@@ -6,16 +6,16 @@ import YMLtagsGrade from "./YMLtagsGrade";
 class YMLfilePage extends React.Component {
   render() {
     return (
-      <div className="ui grid">
-        <div className="five wide column">
+      <div className="ui three column grid">
+        <div className="column">
           <h3>Tema:</h3>
           <YMLtagsTopic myCheckboxHandler={this.props.myCheckboxHandler} />
         </div>
-        <div className="five wide column">
+        <div className="column">
           <h3>Fag:</h3>
           <YMLtagsSubject myCheckboxHandler={this.props.myCheckboxHandler} />
         </div>
-        <div className="five wide column">
+        <div className="column">
           <h3>Klassetrinn: </h3>
           <YMLtagsGrade myCheckboxHandler={this.props.myCheckboxHandler} />
         </div>

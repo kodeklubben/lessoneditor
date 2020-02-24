@@ -16,7 +16,9 @@ class Checkbox extends React.Component {
             value={this.props.value}
             onChange={this.onInputChange}
           />
-          <label htmlFor={this.props.value}>{this.props.name}</label>
+          <label style={{ cursor: "pointer" }} htmlFor={this.props.value}>
+            {this.props.name}
+          </label>
         </div>
       </div>
     );

@@ -1,56 +1,58 @@
 import React from "react";
 import "../../index.css";
 import MDTextArea from "./MDTextArea";
-import MDPreview from "./mdpreview";
+import MDPreview from "./MDPreview";
 import Markdown from "markdown-it";
 import { mdParser } from "../../utils/mdParser";
 import ControlPanel from "./ControlPanel";
 
 class Editor extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            textValue: "",
-            mdValue: ""
-        };
-    }
-
-    handleChange = textInput => {
-        this.setState({
-            textValue: textInput,
-            mdValue: mdParser(textInput)
-        });
+  constructor(props) {
+    super(props);
+    this.state = {
+      textValue: "",
+      mdValue: ""
     };
+  }
 
-    handleButtonClick = value => {
-        let temp = this.state.textValue;
+  handleChange = textInput => {
+    this.setState({
+      textValue: textInput,
+      mdValue: mdParser(textInput)
+    });
+  };
 
-        this.setState({ textValue: temp.concat(value) });
-    };
+  handleButtonClick = value => {
+    let temp = this.state.textValue;
 
-    componentDidMount() {
-        const attrs = require("markdown-it-attrs");
-        this.md = new Markdown();
-        this.md.use(attrs);
-    }
+    this.setState({ textValue: temp.concat(value) });
+  };
 
-    render() {
-        return (
-            <div className="Editor">
-                <ControlPanel
-                    handleButtonClick={this.handleButtonClick}
-                />
-                <MDTextArea
-                    textValue={this.state.textValue}
-                    onInputChange={this.handleChange}
-                    handleButtonClick={this.handleButtonClick}
-                />
-                <MDPreview
-                    mdValue={this.state.mdValue}
-                />
-            </div>
-        );
-    }
+  componentDidMount() {
+    const attrs = require("markdown-it-attrs");
+    this.md = new Markdown();
+    this.md.use(attrs);
+  }
+
+  render() {
+    return (
+      <div className="">
+        <ControlPanel handleButtonClick={this.handleButtonClick} />
+        <div className="ui two column test grid">
+          <div className="column">
+            <MDTextArea
+              textValue={this.state.textValue}
+              onInputChange={this.handleChange}
+              handleButtonClick={this.handleButtonClick}
+            />
+          </div>
+          <div className="column">
+            <MDPreview mdValue={this.state.mdValue} />
+          </div>
+        </div>
+      </div>
+    );
+  }
 }
 
 export default Editor;
