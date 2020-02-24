@@ -11,18 +11,6 @@ class MDTextArea extends React.Component {
   render() {
     return (
       <div>
-        <Button
-          output=" **bold text here** "
-          icon="bold"
-          onButtonClickHandler={this.props.handleButtonClick}
-        />
-
-        <Button
-          output=" _italic text here_ "
-          icon="italic"
-          onButtonClickHandler={this.props.handleButtonClick}
-        />
-
         <textarea
           className="TextArea"
           value={this.props.textValue}

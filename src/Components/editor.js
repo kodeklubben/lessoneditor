@@ -4,6 +4,7 @@ import MDTextArea from "./textinput";
 import MDPreview from "./mdpreview";
 import Markdown from "markdown-it";
 import { mdParser } from "../utils/mdParser";
+import Button from "./Button";
 
 class Editor extends React.Component {
   constructor(props) {
@@ -35,13 +36,52 @@ class Editor extends React.Component {
 
   render() {
     return (
-      <div className="Editor">
-        <MDTextArea
-          textValue={this.state.textValue}
-          onInputChange={this.handleChange}
-          handleButtonClick={this.handleButtonClick}
-        />
-        <MDPreview mdValue={this.state.mdValue} />
+      <div>
+        <div className="Buttons">
+          <div className="ui grid">
+            <div className="column">
+              <Button
+                icon="bold"
+                output=" **bold text here** "
+                title=""
+                onButtonClick={this.handleButtonClick}
+              />
+            </div>
+            <div className="column">
+              <Button
+                icon="italic"
+                output=" _italic text here_ "
+                title=""
+                onButtonClick={this.handleButtonClick}
+              />
+            </div>
+            <div className="grid">
+              <Button
+                icon=""
+                output=" {.activity} "
+                title="Activity"
+                onButtonClick={this.handleButtonClick}
+              />
+            </div>
+            <div className="grid">
+              <Button
+                icon=""
+                output=" {.intro} "
+                title="Introduction"
+                onButtonClick={this.handleButtonClick}
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="Editor">
+          <MDTextArea
+            textValue={this.state.textValue}
+            onInputChange={this.handleChange}
+            handleButtonClick={this.handleButtonClick}
+          />
+          <MDPreview mdValue={this.state.mdValue} />
+        </div>
       </div>
     );
   }

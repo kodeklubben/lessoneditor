@@ -1,23 +1,26 @@
 import React from "react";
 import { Icon } from "semantic-ui-react";
 
+var test = "";
+
 class Button extends React.Component {
   onButtonClick = event => {
-    var test = " ";
+    this.props.onButtonClick(this.props.output);
 
-    this.props.onButtonClickHandler(this.props.output);
-    if (this.test === " ") {
+    if (this.test === "") {
       this.test = "inverted";
     } else {
-      this.test = " ";
+      this.test = "";
     }
   };
 
   render() {
     return (
       <div onClick={this.onButtonClick}>
-        {console.log(`${this.props.icon} ${this.props.test} icon`)}
-        <i className={`${this.props.icon} icon`} />
+        <button>
+          <i className={`${this.props.icon} icon`} />
+          {this.props.title}
+        </button>
       </div>
     );
   }

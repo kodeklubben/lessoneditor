@@ -22,6 +22,7 @@ div {
   display: flex;
   overflow-x: hidden;
   min-height: 100vh;
+  background-color: #b1daae;
 }
 
 /* CSS for Editor */
@@ -35,6 +36,10 @@ div {
 }
 
 /* CSS for TextArea */
+
+.Buttons {
+  margin: 50px 0 -100px 100px !important;
+}
 
 .TextArea {
   width: 600px;
@@ -53,6 +58,7 @@ div {
   height: 600px;
   border: 1px solid black;
   margin: 0 10px;
+  background-color: white;
 }
 
 /*This is the important css for the preview*/
