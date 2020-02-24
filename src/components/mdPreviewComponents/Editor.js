@@ -36,7 +36,7 @@ class Editor extends React.Component {
 
   render() {
     return (
-      <div className="">
+      <div className="test2">
         <ControlPanel handleButtonClick={this.handleButtonClick} />
         <div className="ui two column test grid">
           <div className="column">

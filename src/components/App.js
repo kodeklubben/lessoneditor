@@ -11,7 +11,7 @@ class App extends React.Component {
       /*To render the wanted component, add it to the div below:
        * <FormComponent/>, <Editor/> or <IndexPage/>*/
       <div className="root">
-        <IndexPage />
+        <Editor />
       </div>
     );
   }
