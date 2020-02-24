@@ -1,5 +1,5 @@
 import React from 'react';
-import logo from "./public/logo.jpg";
+//import logo from "./public/logo.jpg";
 import "./style.css";
 export class NavBar extends React.Component{
 
@@ -8,8 +8,8 @@ export class NavBar extends React.Component{
             <div>
                 <div className = "navbar-container">
                     <div className = "logo">
-                        <a href="#default.asp">
-                            <img src={logo} alt="logo" /></a>
+                        <a href="#default.asp"> </a>
+
                     </div>
                     <div className = "navbar">
                         <ul >

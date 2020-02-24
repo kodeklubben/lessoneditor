@@ -1,5 +1,5 @@
 import React from 'react';
-import "style.css";
+import "./style.css";
 
 
 
@@ -22,4 +22,4 @@ export class IndexPage extends React.Component {
         </div>);
 
     };
-    };
+    }
