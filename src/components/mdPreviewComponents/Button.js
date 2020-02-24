@@ -1,10 +1,9 @@
 import React from "react";
 import { Icon } from "semantic-ui-react";
 
-var test = "";
 
 class Button extends React.Component {
-    onButtonClick = event => {
+    onButtonClick = () => {
         this.props.onButtonClick(this.props.output);
 
         if (this.test === "") {
