@@ -10,7 +10,7 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 
@@ -40,6 +40,10 @@ div {
   width: 600px;
   height: 600px;
   margin: 0 10px;
+  outline: none;
+  resize: none;
+  border-radius: 5px;
+  padding: 15px;
 }
 
 /* CSS for MDPreview */
@@ -94,4 +98,3 @@ pre code {
   background-color: transparent;
   border-radius: 0;
 }
-
