@@ -1,0 +1,151 @@
+body{
+    background-color: #b1daae;
+}
+
+
+
+.btn1 {
+    font-size: 24px;
+    color: grey;
+    text-align: center;
+    position: relative;
+    margin-left: 40%;
+    margin-right: 20%;
+    top: 210px;
+    height: 60px;
+    width: 300px;
+    border-radius: 22px;
+}
+.btn2{
+    font-size: 24px;
+    font-family: Helvetica, sans-serif, Arial;
+    color: grey;
+    text-align: center;
+    position: relative;
+    margin-left: 40%;
+    margin-right: 20%;
+    top: 230px;
+    height: 60px;
+    width: 300px;
+    border-radius: 22px;
+}
+.btn3{
+    font-size: 24px;
+    color: grey;
+    text-align: center;
+    position: relative;
+    margin-left: 40%;
+    margin-right: 20%;
+    height: 60px;
+    width: 300px;
+    top: 250px;
+    border-radius: 22px;
+}
+ul {
+    list-style-type: none;
+    overflow: hidden;
+    background-color: white;
+    width: 100%;
+}
+
+li {
+    float: left;
+    padding: 0 15px;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 26px ;
+    text-decoration: none;
+    color: black;
+}
+.navbar{
+    float: right;
+    height: 100%;
+    /*border: 1px solid blue;*/
+    right: 0;
+    padding-right: 15px;
+
+}
+.navbar-container{
+    top: 0;
+    margin: 0;
+    padding: 0;
+    height: 100px;
+    /*border: 1px solid red;*/
+    background-color: white;
+}
+li a:hover {
+    text-decoration: underline;
+    text-decoration-color: green;
+    font-size:1.5em;
+}
+.logo{
+    float: left;
+    height: 100%;
+    width: 20%;
+
+}
+.logo img{
+    /*border: 1px solid green;*/
+    height: 100%;
+    width: 100%;
+
+}
+
+.Clear{
+    float: both;
+
+}
+.StartPageContainer{
+    /*border: 1px solid red;*/
+    height: 600px;
+}
+.closeBtn{
+    font-size: 24px;
+    background-color: #F0F0F0;
+    text-align: center;
+    width: 40%;
+    margin-left: 40%;
+    margin-right: 20%;
+    top: 120px;
+    height: 60px;
+    width: 300px;
+    border-radius: 22px;
+    color: grey;
+
+}
+.greeting{
+    text-align: center;
+    font-size: 30px;
+    margin:130px;
+    color: #999999;
+    text-align: center;
+    position: relative;
+    top: 80px;
+    font-family: Helvetica, sans-serif, Arial;
+    line-height: 15px;
+}
+
+p3{
+    font-size: 16px;
+    text-align: right;
+    position: relative;
+    top: 60px;
+    right: 140px;
+    font-family: Helvetica, sans-serif, Arial;
+
+}
+
+.quote{
+    text-align: center;
+    font-size: 30px;
+    color: #999999;
+    text-align: center;
+    position: relative;
+    top: 100px;
+    font-family: cursive;
+
+}
