@@ -1,11 +1,43 @@
-import React from "react";
+import React, { useState } from "react";
 import "../../index.css";
 import MDTextArea from "./MDTextArea";
 import MDPreview from "./MDPreview";
-import Markdown from "markdown-it";
 import { mdParser } from "../../utils/mdParser";
 import ControlPanel from "./ControlPanel";
 
+const Editor = () => {
+  const [textValue, setTextValue] = useState("");
+  const [mdValue, setMdValue] = useState("");
+
+  const handleChange = textInput => {
+    setTextValue(textInput);
+    setMdValue(mdParser(textInput));
+  };
+
+  const handleButtonClick = value => {
+    setTextValue(textValue.concat(value));
+  };
+
+  return (
+    <div className="controlPanelPlacement">
+      <ControlPanel handleButtonClick={handleButtonClick} />
+      <div className="ui two column test grid">
+        <div className="column">
+          <MDTextArea
+            textValue={textValue}
+            onInputChange={handleChange}
+            handleButtonClick={handleButtonClick}
+          />
+        </div>
+        <div className="column">
+          <MDPreview mdValue={mdValue} />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/*
 class Editor extends React.Component {
   constructor(props) {
     super(props);
@@ -55,5 +87,6 @@ class Editor extends React.Component {
     );
   }
 }
+*/
 
 export default Editor;
