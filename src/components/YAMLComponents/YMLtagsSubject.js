@@ -37,15 +37,15 @@ class YMLtagsSubject extends React.Component {
             subtag="subject"
             onCheck={this.props.myCheckboxHandler}
           />
-
+          <br />
+        </div>
+        <div className="column checkbox">
           <Checkbox
             name="Norsk"
             value="first_language"
             subtag="subject"
             onCheck={this.props.myCheckboxHandler}
           />
-        </div>
-        <div className="column checkbox">
           <Checkbox
             name="Engelsk"
             value="english"
