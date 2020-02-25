@@ -2,45 +2,24 @@ body{
     background-color: #b1daae;
 }
 
+.btnDiv {
+    display: flex;
+    flex-direction: column;
+    margin-top: 2em;
+}
+
+.btn {
+    font-size: 24px;
+    text-align: center;
+    width: 20%;
+    min-height: 70px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 1em;
+    border-radius: 22px;
+}
 
 
-.btn1 {
-    font-size: 24px;
-    color: grey;
-    text-align: center;
-    position: relative;
-    margin-left: 40%;
-    margin-right: 20%;
-    top: 210px;
-    height: 60px;
-    width: 300px;
-    border-radius: 22px;
-}
-.btn2{
-    font-size: 24px;
-    font-family: Helvetica, sans-serif, Arial;
-    color: grey;
-    text-align: center;
-    position: relative;
-    margin-left: 40%;
-    margin-right: 20%;
-    top: 230px;
-    height: 60px;
-    width: 300px;
-    border-radius: 22px;
-}
-.btn3{
-    font-size: 24px;
-    color: grey;
-    text-align: center;
-    position: relative;
-    margin-left: 40%;
-    margin-right: 20%;
-    height: 60px;
-    width: 300px;
-    top: 250px;
-    border-radius: 22px;
-}
 ul {
     list-style-type: none;
     overflow: hidden;
@@ -102,6 +81,9 @@ li a:hover {
 .StartPageContainer{
     /*border: 1px solid red;*/
     height: 600px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 100px;
 }
 .closeBtn{
     font-size: 24px;
@@ -129,23 +111,22 @@ li a:hover {
     line-height: 15px;
 }
 
-p3{
+#author{
     font-size: 16px;
-    text-align: right;
-    position: relative;
-    top: 60px;
-    right: 140px;
     font-family: Helvetica, sans-serif, Arial;
+    text-align: right;
+    margin-right: 27%;
 
 }
 
 .quote{
     text-align: center;
     font-size: 30px;
-    color: #999999;
-    text-align: center;
-    position: relative;
-    top: 100px;
+    color: #265732;
     font-family: cursive;
 
+}
+
+a {
+    color: #265732;
 }
