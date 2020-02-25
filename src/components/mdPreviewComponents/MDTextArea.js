@@ -1,19 +1,16 @@
 import React from "react";
 
 class MDTextArea extends React.Component {
-    onHandleChange = e => {
-        this.props.onInputChange(e.target.value);
-    };
-
-    render() {
-        return (
-            <textarea
-                className="TextArea"
-                value={this.props.textValue}
-                onChange={this.onHandleChange}
-            />
-        );
-    }
+  render() {
+    return (
+      <textarea
+        autoFocus
+        className="TextArea"
+        value={this.props.textValue}
+        onChange={e => this.props.onInputChange(e.target.value)}
+      />
+    );
+  }
 }
 
 export default MDTextArea;
