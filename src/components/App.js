@@ -14,15 +14,15 @@ class App extends React.Component {
       <Router>
         <Switch>
           <Route exact path="/">
-            <div className="root">
-              <IndexPage />
-            </div>
+            <IndexPage />
           </Route>
           <Route path="/createNewLesson">
             <FormComponent />
           </Route>
           <Route path="/editor">
-            <Editor />
+            <div className="controlPanelPlacement">
+              <Editor />
+            </div>
           </Route>
         </Switch>
       </Router>

@@ -31,14 +31,22 @@ select {
   cursor: pointer;
 }
 
+.ui.container {
+  margin-top: 5em;
+}
+
 /* CSS for Editor */
 
 .test {
   height: 40em;
 }
 
-.test2 {
+.controlPanelPlacement {
   margin-top: -8em;
+  width: auto;
+  height: auto;
+  background-color: #b1daae;
+  padding: 10em;
 }
 
 /* .Editor {
