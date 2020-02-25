@@ -20,6 +20,7 @@ class Editor extends React.Component {
       textValue: textInput,
       mdValue: mdParser(textInput)
     });
+    console.log(this.state.textValue);
   };
 
   handleButtonClick = value => {

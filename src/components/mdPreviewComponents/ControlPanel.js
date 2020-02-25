@@ -1,6 +1,8 @@
 import React from "react";
 import Button from "./Button";
 
+const temp = "```";
+
 class ControlPanel extends React.Component {
   handleButtonClick = value => {
     this.props.handleButtonClick(value);
@@ -9,7 +11,7 @@ class ControlPanel extends React.Component {
   render() {
     return (
       <div className="Buttons">
-        <div className="ui segment four column grid">
+        <div className="ui segment six column grid">
           <div className="column">
             <Button
               icon="bold"
@@ -30,7 +32,7 @@ class ControlPanel extends React.Component {
             <Button
               icon=""
               output=" {.activity} "
-              title="Activity"
+              title="Steg"
               onButtonClick={this.handleButtonClick}
             />
           </div>
@@ -38,7 +40,23 @@ class ControlPanel extends React.Component {
             <Button
               icon=""
               output=" {.intro} "
-              title="Introduction"
+              title="Intro"
+              onButtonClick={this.handleButtonClick}
+            />
+          </div>
+          <div className="column">
+            <Button
+              icon=""
+              output=" `inline code here` "
+              title="Inline Kode"
+              onButtonClick={this.handleButtonClick}
+            />
+          </div>
+          <div className="column">
+            <Button
+              icon=""
+              output={`${temp}\ncodeblock\n${temp}`}
+              title="Code Block Kode"
               onButtonClick={this.handleButtonClick}
             />
           </div>
