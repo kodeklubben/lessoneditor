@@ -7,8 +7,10 @@ class Button extends React.Component {
         onClick={() =>
           this.props.onButtonClick(
             this.props.output,
-            this.props.cursorInt,
-            this.props.bTitle
+            this.props.cursorIntON,
+            this.props.cursorIntOFF,
+            this.props.bTitle,
+            this.props.endOutput
           )
         }
       >

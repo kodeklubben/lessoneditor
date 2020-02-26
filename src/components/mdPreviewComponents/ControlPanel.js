@@ -9,52 +9,68 @@ const buttonConfig = [
     icon: "bold",
     output: "****",
     title: "",
-    cursorInt: 2
+    cursorIntON: 2,
+    cursorIntOFF: 2,
+    endOutput: ""
   },
   {
     bTitle: "italic",
     icon: "italic",
-    output: " __",
+    output: "__ ",
     title: "",
-    cursorInt: 1
+    cursorIntON: 2,
+    cursorIntOFF: 2,
+    endOutput: ""
   },
   {
     bTitle: "activity",
     icon: "",
     output: "{.activity}",
     title: "Steg",
-    cursorInt: -11
+    cursorIntON: 0,
+    cursorIntOFF: 0,
+    endOutput: "\n"
   },
   {
     bTitle: "intro",
     icon: "",
     output: "{.intro}",
     title: "Intro",
-    cursorInt: -8
+    cursorIntON: 0,
+    cursorIntOFF: 0,
+    endOutput: "\n"
   },
   {
     bTitle: "inline",
     icon: "",
     output: "``",
     title: "Inline Code",
-    cursorInt: 1
+    cursorIntON: 1,
+    cursorIntOFF: 1,
+    endOutput: ""
   },
   {
     bTitle: "codeblock",
     icon: "",
     output: `${temp}\n\n${temp}`,
     title: "Codeblock",
-    cursorInt: 4
+    cursorIntON: 4,
+    endOutput: "\n"
   }
 ];
 
 class ControlPanel extends React.Component {
-  handleButtonClick = (value, cursorInt, bTitle) => {
-    this.props.handleButtonClick(value, cursorInt, bTitle);
+  handleButtonClick = (value, cursorIntON, cursorIntOFF, bTitle, endOutput) => {
+    this.props.handleButtonClick(
+      value,
+      cursorIntON,
+      cursorIntOFF,
+      bTitle,
+      endOutput
+    );
   };
 
   render() {
-    console.log({ ...buttonConfig[0], icon: "Hei" });
     return (
       <div className="Buttons">
         <div className="ui segment six column grid">
@@ -65,7 +81,9 @@ class ControlPanel extends React.Component {
                 icon={element.icon}
                 output={element.output}
                 title={element.title}
-                cursorInt={element.cursorInt}
+                cursorIntON={element.cursorIntON}
+                cursorIntOFF={element.cursorIntOFF}
+                endOutput={element.endOutput}
                 onButtonClick={this.handleButtonClick}
               />
             </div>
