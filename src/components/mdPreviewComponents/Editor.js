@@ -8,14 +8,45 @@ import ControlPanel from "./ControlPanel";
 const Editor = () => {
   const [textValue, setTextValue] = useState("");
   const [mdValue, setMdValue] = useState("");
+  const [boolButton, setBoolButton] = useState({
+    bold: true,
+    italic: true,
+    activity: true,
+    intro: true,
+    inline: true,
+    codeBlock: true
+  });
 
   const handleChange = textInput => {
     setTextValue(textInput);
     setMdValue(mdParser(textInput));
   };
 
-  const handleButtonClick = value => {
-    setTextValue(textValue.concat(value));
+  const editorRef = React.createRef();
+
+  // const handleButtonClick = value => {
+  //   setTextValue(textValue.concat(value));
+  //   editorRef.current.focus();
+  // };
+
+  const handleButtonClick = (value, cursorInt, bTitle) => {
+    let temp = textValue;
+    editorRef.current.focus();
+    console.log(editorRef.current);
+    // if (boolButton[bTitle]) {
+    //   setBoolButton({ [bTitle]: false });
+    //   setTextValue(temp.concat(value));
+    //   setTimeout(() => {
+    //     editorRef.current.selectionStart -= cursorInt;
+    //     editorRef.current.selectionEnd -= cursorInt;
+    //   }, 0);
+    // } else {
+    //   setBoolButton({ [bTitle]: true });
+    //   setTimeout(() => {
+    //     editorRef.current.selectionStart += cursorInt;
+    //     editorRef.current.selectionEnd += cursorInt;
+    //   }, 0);
+    // }
   };
 
   return (
@@ -24,6 +55,7 @@ const Editor = () => {
       <div className="ui two column test grid">
         <div className="column">
           <MDTextArea
+            editorRef={editorRef}
             textValue={textValue}
             onInputChange={handleChange}
             handleButtonClick={handleButtonClick}

@@ -4,17 +4,53 @@ import Button from "./Button";
 const temp = "```";
 
 const buttonConfig = [
-  { icon: "bold", output: "**bold text here** ", title: "" },
-  { icon: "italic", output: " _italic text here_ ", title: "" },
-  { icon: "", output: " {.activity} ", title: "Steg" },
-  { icon: "", output: " {.intro} ", title: "Intro" },
-  { icon: "", output: " `inline code here` ", title: "Inline Code" },
-  { icon: "", output: `${temp}\ncodeblock\n${temp}`, title: "Codeblock" }
+  {
+    bTitle: "bold",
+    icon: "bold",
+    output: "****",
+    title: "",
+    cursorInt: 2
+  },
+  {
+    bTitle: "italic",
+    icon: "italic",
+    output: " __",
+    title: "",
+    cursorInt: 1
+  },
+  {
+    bTitle: "activity",
+    icon: "",
+    output: "{.activity}",
+    title: "Steg",
+    cursorInt: -11
+  },
+  {
+    bTitle: "intro",
+    icon: "",
+    output: "{.intro}",
+    title: "Intro",
+    cursorInt: -8
+  },
+  {
+    bTitle: "inline",
+    icon: "",
+    output: "``",
+    title: "Inline Code",
+    cursorInt: 1
+  },
+  {
+    bTitle: "codeblock",
+    icon: "",
+    output: `${temp}\n\n${temp}`,
+    title: "Codeblock",
+    cursorInt: 4
+  }
 ];
 
 class ControlPanel extends React.Component {
-  handleButtonClick = value => {
-    this.props.handleButtonClick(value);
+  handleButtonClick = (value, cursorInt, bTitle) => {
+    this.props.handleButtonClick(value, cursorInt, bTitle);
   };
 
   render() {
@@ -25,9 +61,11 @@ class ControlPanel extends React.Component {
           {buttonConfig.map(element => (
             <div key={element.output} className="column">
               <Button
+                bTitle={element.bTitle}
                 icon={element.icon}
                 output={element.output}
                 title={element.title}
+                cursorInt={element.cursorInt}
                 onButtonClick={this.handleButtonClick}
               />
             </div>
