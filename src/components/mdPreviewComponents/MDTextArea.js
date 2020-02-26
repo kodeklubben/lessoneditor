@@ -5,6 +5,7 @@ class MDTextArea extends React.Component {
     return (
       <textarea
         autoFocus
+        ref={this.props.editorRef}
         className="TextArea"
         value={this.props.textValue}
         onChange={e => this.props.onInputChange(e.target.value)}
