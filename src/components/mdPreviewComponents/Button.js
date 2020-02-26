@@ -16,7 +16,7 @@ class Button extends React.Component {
       >
         <button>
           {this.props.title}
-          <i className={`${this.props.icon} ${this.test} icon`} />
+          <i className={`${this.props.icon} icon`} />
         </button>
       </div>
     );
