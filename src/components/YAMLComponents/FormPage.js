@@ -22,7 +22,7 @@ const FormPage = props => {
           />
         </div>
         <div className="buttons">
-          <button className="ui icon left labeled black button" type="button">
+          <button className="ui icon left labeled button" type="button">
             <i aria-hidden="true" className="left arrow icon"></i>
             <Link to="/">Tilbake</Link>
           </button>
