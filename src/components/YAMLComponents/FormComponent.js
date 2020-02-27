@@ -55,16 +55,6 @@ class FormComponent extends React.Component {
 
     //const for yml creation
     const fs = require("browserify-fs");
-    //const for database
-    const mongoose = require("mongoose");
-
-    //Connection to database
-    mongoose.connect(
-      "mongodb+srv://oyvindjt:EYi6WQN9DfPat58@cluster0-psp4u.azure.mongodb.net/test?retryWrites=true&w=majority"
-    );
-    mongoose.connection.once("open", function() {
-      console.log("connection has been made");
-    });
 
     //create yml file
     fs.writeFile("lesson.yml", this.YMLstateToString(this.state), function(
