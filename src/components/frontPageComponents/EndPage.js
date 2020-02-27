@@ -7,7 +7,7 @@ export default class EndPage extends React.Component {
       <div>
         <div className="greeting">
           <p>Takk for ditt bidrag til Lær Kidsa Koding!</p>
-          <p1>Ditt bidrag er nå inne til vurdering. </p1>
+          <p>Ditt bidrag er nå inne til vurdering. </p>
         </div>
 
         <button className="closeBtn"> Lukk vindu </button>
