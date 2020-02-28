@@ -23,6 +23,24 @@ const buttonConfig = [
     endOutput: ""
   },
   {
+    bTitle: "undo",
+    icon: "undo",
+    output: "",
+    title: "undo",
+    cursorIntON: 0,
+    cursorIntOFF: 0,
+    endOutput: ""
+  },
+  {
+    bTitle: "redo",
+    icon: "redo",
+    output: "",
+    title: "redo",
+    cursorIntON: 0,
+    cursorIntOFF: 0,
+    endOutput: ""
+  },
+  {
     bTitle: "load",
     icon: "",
     output: "",
@@ -84,7 +102,7 @@ class ControlPanel extends React.Component {
       <div className="Buttons">
         <div className="ui segment six column grid">
           {buttonConfig.map(element => (
-            <div key={element.output} className="column">
+            <div key={element.bTitle} className="column">
               <Button
                 bTitle={element.bTitle}
                 icon={element.icon}

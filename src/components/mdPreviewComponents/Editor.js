@@ -16,15 +16,33 @@ var buttonBoolValues = {
 
 var storedTextValue = "";
 
+// undo/redo stacks variables
+
+var undoStack = [];
+var redoStack = [];
+
+// ___________________
+
 const Editor = () => {
   const [textValue, setTextValue] = useState("");
   const [mdValue, setMdValue] = useState("");
   const [boolButton, setBoolButton] = useState(buttonBoolValues);
 
   const handleChange = textInput => {
+    if (
+      textInput.charCodeAt(textInput.length - 1) === 32 ||
+      textInput.charCodeAt(textInput.length - 1) === 10
+    ) {
+      undoStack.push(textInput);
+    }
+
+    console.log("undostack: " + undoStack);
+
     setTextValue(textInput);
     setMdValue(mdParser(textInput));
   };
+
+  // referanseVariabel for Textarea-elementet i DOM.  Tillater å manipulere DOM i react
 
   const editorRef = React.useRef();
 
@@ -37,7 +55,7 @@ const Editor = () => {
     }, 10000);
   });
 
-  //TODO: Rydde opp/Refactorere handleButtonClick
+  //TODO: Rydde opp eller Refactorere handleButtonClick. Er mye rot her nå.
 
   const handleButtonClick = (
     value,
@@ -49,7 +67,7 @@ const Editor = () => {
     let temp = textValue;
     editorRef.current.focus();
 
-    //if(bTitle === "load")    Henter verdiene som er autolagret.
+    // Knapper for lagring av tekst.
 
     if (bTitle === "load") {
       setTextValue(storedTextValue);
@@ -57,11 +75,38 @@ const Editor = () => {
       return;
     }
 
+    if (bTitle === "undo") {
+      if (undoStack.length <= 0) {
+        setTextValue("");
+        setMdValue(mdParser(""));
+        return;
+      }
+      let tempUndo = undoStack.pop();
+      setTextValue(tempUndo);
+      setMdValue(mdParser(tempUndo));
+      redoStack.push(tempUndo);
+    }
+
+    if (bTitle === "redo") {
+      if (redoStack.length <= 0) {
+        return;
+      }
+      let tempRedo = redoStack.pop();
+      setTextValue(tempRedo);
+      setMdValue(mdParser(tempRedo));
+      undoStack.push(tempRedo);
+    }
+
+    // sjekker om knapp er feks et Steg.
+
     if (value[0] === "{") {
       let i = value + endOutput;
       setTextValue(temp.concat(i));
       return;
     }
+
+    //  Generelle knapper for styling av tekst
+
     if (buttonBoolValues[bTitle] === true) {
       buttonBoolValues[bTitle] = false;
       setTextValue(temp.concat(value));
