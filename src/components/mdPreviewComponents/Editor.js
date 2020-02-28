@@ -14,6 +14,8 @@ var buttonBoolValues = {
   codeblock: true
 };
 
+var storedTextValue = "";
+
 const Editor = () => {
   const [textValue, setTextValue] = useState("");
   const [mdValue, setMdValue] = useState("");
@@ -26,6 +28,17 @@ const Editor = () => {
 
   const editorRef = React.useRef();
 
+  // useEffect()  Koden kjører når komponenten "mounts"
+  // Her lagrer den Textvalue til storedTextValue hver 10. sekund.
+
+  useEffect(() => {
+    setTimeout(() => {
+      storedTextValue = textValue;
+    }, 10000);
+  });
+
+  //TODO: Rydde opp/Refactorere handleButtonClick
+
   const handleButtonClick = (
     value,
     cursorIntON,
@@ -35,6 +48,15 @@ const Editor = () => {
   ) => {
     let temp = textValue;
     editorRef.current.focus();
+
+    //if(bTitle === "load")    Henter verdiene som er autolagret.
+
+    if (bTitle === "load") {
+      setTextValue(storedTextValue);
+      setMdValue(mdParser(storedTextValue));
+      return;
+    }
+
     if (value[0] === "{") {
       let i = value + endOutput;
       setTextValue(temp.concat(i));

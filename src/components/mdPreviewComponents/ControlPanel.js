@@ -23,6 +23,15 @@ const buttonConfig = [
     endOutput: ""
   },
   {
+    bTitle: "load",
+    icon: "",
+    output: "",
+    title: "Load",
+    cursorIntON: 0,
+    cursorIntOFF: 0,
+    endOutput: ""
+  },
+  {
     bTitle: "activity",
     icon: "",
     output: "{.activity}",
