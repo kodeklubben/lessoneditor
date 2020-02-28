@@ -14,46 +14,45 @@ var buttonBoolValues = {
   codeblock: true
 };
 
-var storedTextValue = "";
-
 // undo/redo stacks variables
 
 var undoStack = [];
 var redoStack = [];
 
+var inputTextfromTextArea = "";
+
 // ___________________
 
 const Editor = () => {
+  const [counter, setCounter] = useState(10);
   const [textValue, setTextValue] = useState("");
   const [mdValue, setMdValue] = useState("");
   const [boolButton, setBoolButton] = useState(buttonBoolValues);
-
-  const handleChange = textInput => {
-    if (
-      textInput.charCodeAt(textInput.length - 1) === 32 ||
-      textInput.charCodeAt(textInput.length - 1) === 10
-    ) {
-      undoStack.push(textInput);
-    }
-
-    console.log("undostack: " + undoStack);
-
-    setTextValue(textInput);
-    setMdValue(mdParser(textInput));
-  };
+  const [storedTextValue, setStoredTextValue] = useState("");
 
   // referanseVariabel for Textarea-elementet i DOM.  Tillater å manipulere DOM i react
 
   const editorRef = React.useRef();
 
   // useEffect()  Koden kjører når komponenten "mounts"
-  // Her lagrer den Textvalue til storedTextValue hver 10. sekund.
-
   useEffect(() => {
-    setTimeout(() => {
-      storedTextValue = textValue;
-    }, 10000);
+    counter >= 0 &&
+      setTimeout(() => {
+        setCounter(counter - 1);
+      }, 1000);
   });
+
+  const handleChange = textInput => {
+    inputTextfromTextArea = textInput;
+
+    if (
+      inputTextfromTextArea.charCodeAt(inputTextfromTextArea.length - 1) === 32
+    ) {
+      undoStack.push(inputTextfromTextArea);
+    }
+    setTextValue(inputTextfromTextArea);
+    setMdValue(mdParser(inputTextfromTextArea));
+  };
 
   //TODO: Rydde opp eller Refactorere handleButtonClick. Er mye rot her nå.
 
@@ -75,25 +74,31 @@ const Editor = () => {
       return;
     }
 
+    if (bTitle === "save") {
+      setStoredTextValue(inputTextfromTextArea);
+      return;
+    }
+
     if (bTitle === "undo") {
+      let tempUndo = undoStack[undoStack.length - 1];
+      setTextValue(tempUndo);
       if (undoStack.length <= 0) {
         setTextValue("");
-        setMdValue(mdParser(""));
         return;
       }
-      let tempUndo = undoStack.pop();
-      setTextValue(tempUndo);
-      setMdValue(mdParser(tempUndo));
+      undoStack.pop();
+
       redoStack.push(tempUndo);
     }
 
     if (bTitle === "redo") {
+      let tempRedo = redoStack[redoStack.length - 1];
+      setTextValue(tempRedo);
       if (redoStack.length <= 0) {
         return;
       }
-      let tempRedo = redoStack.pop();
-      setTextValue(tempRedo);
-      setMdValue(mdParser(tempRedo));
+      redoStack.pop();
+
       undoStack.push(tempRedo);
     }
 
@@ -131,6 +136,9 @@ const Editor = () => {
   return (
     <div className="controlPanelPlacement">
       <ControlPanel handleButtonClick={handleButtonClick} />
+      <div>
+        <p>{counter < 4 && counter >= 0 ? "saving" : ""}</p>
+      </div>
       <div className="ui two column test grid">
         <div className="column">
           <MDTextArea

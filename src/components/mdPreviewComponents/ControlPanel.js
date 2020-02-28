@@ -42,9 +42,18 @@ const buttonConfig = [
   },
   {
     bTitle: "load",
-    icon: "",
+    icon: "upload",
     output: "",
     title: "Load",
+    cursorIntON: 0,
+    cursorIntOFF: 0,
+    endOutput: ""
+  },
+  {
+    bTitle: "save",
+    icon: "save",
+    output: "",
+    title: "Save",
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: ""
