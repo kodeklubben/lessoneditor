@@ -1,99 +1,8 @@
+import buttonConfig from "./buttonConfig.js";
+import dropdownConfig from "./dropdownConfig";
 import React from "react";
 import Button from "./Button";
-
-const temp = "```";
-
-const buttonConfig = [
-  {
-    bTitle: "bold",
-    icon: "bold",
-    output: "****",
-    title: "",
-    cursorIntON: 2,
-    cursorIntOFF: 2,
-    endOutput: ""
-  },
-  {
-    bTitle: "italic",
-    icon: "italic",
-    output: "__ ",
-    title: "",
-    cursorIntON: 2,
-    cursorIntOFF: 2,
-    endOutput: ""
-  },
-  {
-    bTitle: "undo",
-    icon: "undo",
-    output: "",
-    title: "undo",
-    cursorIntON: 0,
-    cursorIntOFF: 0,
-    endOutput: ""
-  },
-  {
-    bTitle: "redo",
-    icon: "redo",
-    output: "",
-    title: "redo",
-    cursorIntON: 0,
-    cursorIntOFF: 0,
-    endOutput: ""
-  },
-  {
-    bTitle: "load",
-    icon: "upload",
-    output: "",
-    title: "Load",
-    cursorIntON: 0,
-    cursorIntOFF: 0,
-    endOutput: ""
-  },
-  {
-    bTitle: "save",
-    icon: "save",
-    output: "",
-    title: "Save",
-    cursorIntON: 0,
-    cursorIntOFF: 0,
-    endOutput: ""
-  },
-  {
-    bTitle: "activity",
-    icon: "",
-    output: "{.activity}",
-    title: "Steg",
-    cursorIntON: 0,
-    cursorIntOFF: 0,
-    endOutput: "\n"
-  },
-  {
-    bTitle: "intro",
-    icon: "",
-    output: "{.intro}",
-    title: "Intro",
-    cursorIntON: 0,
-    cursorIntOFF: 0,
-    endOutput: "\n"
-  },
-  {
-    bTitle: "inline",
-    icon: "",
-    output: "``",
-    title: "Inline Code",
-    cursorIntON: 1,
-    cursorIntOFF: 1,
-    endOutput: ""
-  },
-  {
-    bTitle: "codeblock",
-    icon: "",
-    output: `${temp}\n\n${temp}`,
-    title: "Codeblock",
-    cursorIntON: 4,
-    endOutput: "\n"
-  }
-];
+import Dropdown from "../Dropdown";
 
 class ControlPanel extends React.Component {
   handleButtonClick = (value, cursorIntON, cursorIntOFF, bTitle, endOutput) => {
@@ -120,6 +29,20 @@ class ControlPanel extends React.Component {
                 cursorIntON={element.cursorIntON}
                 cursorIntOFF={element.cursorIntOFF}
                 endOutput={element.endOutput}
+                onButtonClick={this.handleButtonClick}
+              />
+            </div>
+          ))}
+          {dropdownConfig.map(element2 => (
+            <div key={element2.bTitle} className="column">
+              <Dropdown
+                bTitle={element2.bTitle}
+                icon={element2.icon}
+                output={element2.output}
+                title={element2.title}
+                cursorIntON={element2.cursorIntON}
+                cursorIntOFF={element2.cursorIntOFF}
+                endOutput={element2.endOutput}
                 onButtonClick={this.handleButtonClick}
               />
             </div>

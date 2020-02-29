@@ -4,7 +4,9 @@ import MDTextArea from "./MDTextArea";
 import MDPreview from "./MDPreview";
 import { mdParser } from "../../utils/mdParser";
 import ControlPanel from "./ControlPanel";
+import { Redirect } from "react-router-dom";
 
+// variabler som sjekker om en knapp er trykket ned:
 var buttonBoolValues = {
   bold: true,
   italic: true,
@@ -14,17 +16,21 @@ var buttonBoolValues = {
   codeblock: true
 };
 
-// undo/redo stacks variables
-
-var undoStack = [];
-var redoStack = [];
-
+// egen variabel for input i textarea utfor state. Kanskje kjekk å ha...
 var inputTextfromTextArea = "";
+
+// meldingen i autosave
+var autoSaveMessage = "";
+
+// autosave-lengde i sekunder, må være over 3 sek:
+const autoSaveLength = 20;
 
 // ___________________
 
 const Editor = () => {
-  const [counter, setCounter] = useState(10);
+  const [counter, setCounter] = useState(autoSaveLength);
+  const [undo, setUndo] = useState([]);
+  const [redo, setRedo] = useState([]);
   const [textValue, setTextValue] = useState("");
   const [mdValue, setMdValue] = useState("");
   const [boolButton, setBoolButton] = useState(buttonBoolValues);
@@ -34,27 +40,38 @@ const Editor = () => {
 
   const editorRef = React.useRef();
 
-  // useEffect()  Koden kjører når komponenten "mounts"
+  // useEffect():  Koden kjører når komponenten oppdaterer, passer bra til å konfigurere nedtelling:
+
   useEffect(() => {
     counter >= 0 &&
       setTimeout(() => {
         setCounter(counter - 1);
+        if (counter === 3) {
+          autoSaveMessage = "autosaving document...";
+          setStoredTextValue(inputTextfromTextArea);
+        }
+        if (counter === 0) {
+          setCounter(autoSaveLength);
+          autoSaveMessage = " ";
+        }
       }, 1000);
   });
 
   const handleChange = textInput => {
+    // lagrer inputtekst utfor state.  Vet ikke hva jeg skal bruke det til da..  State kontroll :P
     inputTextfromTextArea = textInput;
 
-    if (
-      inputTextfromTextArea.charCodeAt(inputTextfromTextArea.length - 1) === 32
-    ) {
-      undoStack.push(inputTextfromTextArea);
+    // hvis tekstinput er mellomrom lagres textinput til undo:
+    if (textInput[textInput.length - 1] === " ") {
+      setUndo([...undo, inputTextfromTextArea]);
     }
+
+    // textinput output til editor:
     setTextValue(inputTextfromTextArea);
     setMdValue(mdParser(inputTextfromTextArea));
   };
 
-  //TODO: Rydde opp eller Refactorere handleButtonClick. Er mye rot her nå.
+  // TODO: Rydde opp eller Refactorere handleButtonClick. Er mye rot her nå.
 
   const handleButtonClick = (
     value,
@@ -66,11 +83,13 @@ const Editor = () => {
     let temp = textValue;
     editorRef.current.focus();
 
-    // Knapper for lagring av tekst.
+    // Knapper for lagring av tekst. UndoRedo, etc
 
     if (bTitle === "load") {
       setTextValue(storedTextValue);
       setMdValue(mdParser(storedTextValue));
+      setUndo([]);
+      setRedo([]);
       return;
     }
 
@@ -80,26 +99,22 @@ const Editor = () => {
     }
 
     if (bTitle === "undo") {
-      let tempUndo = undoStack[undoStack.length - 1];
-      setTextValue(tempUndo);
-      if (undoStack.length <= 0) {
+      if (undo.length <= 0) {
         setTextValue("");
         return;
       }
-      undoStack.pop();
-
-      redoStack.push(tempUndo);
+      setTextValue(undo[undo.length - 1]);
+      setRedo([...redo, undo[undo.length - 1]]);
+      setUndo(undo.slice(0, -1));
     }
 
     if (bTitle === "redo") {
-      let tempRedo = redoStack[redoStack.length - 1];
-      setTextValue(tempRedo);
-      if (redoStack.length <= 0) {
+      if (redo.length <= 0) {
         return;
       }
-      redoStack.pop();
-
-      undoStack.push(tempRedo);
+      setTextValue(redo[redo.length - 1]);
+      setUndo([...undo, redo[redo.length - 1]]);
+      setRedo(redo.slice(0, -1));
     }
 
     // sjekker om knapp er feks et Steg.
@@ -137,7 +152,7 @@ const Editor = () => {
     <div className="controlPanelPlacement">
       <ControlPanel handleButtonClick={handleButtonClick} />
       <div>
-        <p>{counter < 4 && counter >= 0 ? "saving" : ""}</p>
+        <p>{autoSaveMessage}</p>
       </div>
       <div className="ui two column test grid">
         <div className="column">
