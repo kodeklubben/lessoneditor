@@ -16,11 +16,11 @@ var buttonBoolValues = {
   codeblock: true
 };
 
-// egen variabel for input i textarea utfor state. Kanskje kjekk å ha...
+// egen variabel for input i textarea utfor state. Viste seg å være nødvendig for undo/redo-funksjon pga måten textarea oppdateres fra state.
 var inputTextfromTextArea = "";
 
 // meldingen i autosave
-var autoSaveMessage = "";
+var autoSaveMessage = <br />;
 
 // autosave-lengde i sekunder, må være over 3 sek:
 const autoSaveLength = 20;
@@ -29,7 +29,7 @@ const autoSaveLength = 20;
 
 const Editor = () => {
   const [counter, setCounter] = useState(autoSaveLength);
-  const [undo, setUndo] = useState([]);
+  const [undo, setUndo] = useState([""]);
   const [redo, setRedo] = useState([]);
   const [textValue, setTextValue] = useState("");
   const [mdValue, setMdValue] = useState("");
@@ -52,17 +52,20 @@ const Editor = () => {
         }
         if (counter === 0) {
           setCounter(autoSaveLength);
-          autoSaveMessage = " ";
+          autoSaveMessage = <br />;
         }
       }, 1000);
   });
 
   const handleChange = textInput => {
-    // lagrer inputtekst utfor state.  Vet ikke hva jeg skal bruke det til da..  State kontroll :P
+    // lagrer inputtekst utfor state.  Pga undo/redo.  State kontroll :P
     inputTextfromTextArea = textInput;
 
     // hvis tekstinput er mellomrom lagres textinput til undo:
-    if (textInput[textInput.length - 1] === " ") {
+    if (
+      textInput.charCodeAt(textInput.length - 1) === 32 ||
+      textInput.charCodeAt(textInput.length - 1) === 10
+    ) {
       setUndo([...undo, inputTextfromTextArea]);
     }
 
@@ -86,10 +89,11 @@ const Editor = () => {
     // Knapper for lagring av tekst. UndoRedo, etc
 
     if (bTitle === "load") {
-      setTextValue(storedTextValue);
+      inputTextfromTextArea = storedTextValue;
+      setTextValue(inputTextfromTextArea);
       setMdValue(mdParser(storedTextValue));
-      setUndo([]);
-      setRedo([]);
+      setUndo([storedTextValue]);
+      setRedo([storedTextValue]);
       return;
     }
 
@@ -100,10 +104,11 @@ const Editor = () => {
 
     if (bTitle === "undo") {
       if (undo.length <= 0) {
-        setTextValue("");
         return;
       }
-      setTextValue(undo[undo.length - 1]);
+      inputTextfromTextArea = undo[undo.length - 1];
+      setTextValue(inputTextfromTextArea);
+      setMdValue(mdParser(undo[undo.length - 1]));
       setRedo([...redo, undo[undo.length - 1]]);
       setUndo(undo.slice(0, -1));
     }
@@ -112,7 +117,9 @@ const Editor = () => {
       if (redo.length <= 0) {
         return;
       }
-      setTextValue(redo[redo.length - 1]);
+      inputTextfromTextArea = redo[redo.length - 1];
+      setTextValue(inputTextfromTextArea);
+      setMdValue(mdParser(redo[redo.length - 1]));
       setUndo([...undo, redo[redo.length - 1]]);
       setRedo(redo.slice(0, -1));
     }
@@ -158,7 +165,7 @@ const Editor = () => {
         <div className="column">
           <MDTextArea
             editorRef={editorRef}
-            textValue={textValue}
+            textValue={inputTextfromTextArea}
             onInputChange={handleChange}
             handleButtonClick={handleButtonClick}
           />
