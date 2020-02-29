@@ -83,7 +83,7 @@ const Editor = () => {
     bTitle,
     endOutput
   ) => {
-    let temp = textValue;
+    // flytte fokus til tekstvindu etter button-click
     editorRef.current.focus();
 
     // Knapper for lagring av tekst. UndoRedo, etc
@@ -124,19 +124,22 @@ const Editor = () => {
       setRedo(redo.slice(0, -1));
     }
 
-    // sjekker om knapp er feks et Steg.
+    // sjekker om knapp er feks et Steg (all styling som begyner med "{" ).
 
     if (value[0] === "{") {
       let i = value + endOutput;
-      setTextValue(temp.concat(i));
+      inputTextfromTextArea = inputTextfromTextArea.concat(i);
+      setTextValue(inputTextfromTextArea);
       return;
     }
 
-    //  Generelle knapper for styling av tekst
+    //  Konfig av knapper slik at de registrerer om de er tryket, og flytter tekst-markøren i henhold til MD-syntax
+    // Konfig-data finnes i egne config-filer.
 
     if (buttonBoolValues[bTitle] === true) {
       buttonBoolValues[bTitle] = false;
-      setTextValue(temp.concat(value));
+      inputTextfromTextArea = inputTextfromTextArea.concat(value);
+      setTextValue(inputTextfromTextArea);
       setTimeout(() => {
         editorRef.current.selectionStart -= cursorIntON;
         editorRef.current.selectionEnd -= cursorIntON;
@@ -148,7 +151,8 @@ const Editor = () => {
         editorRef.current.selectionStart += cursorIntOFF;
         editorRef.current.selectionEnd += cursorIntOFF;
         if (endOutput) {
-          setTextValue(temp.concat(endOutput));
+          inputTextfromTextArea = inputTextfromTextArea.concat(endOutput);
+          setTextValue(inputTextfromTextArea);
         }
       }, 0);
       setBoolButton(buttonBoolValues);
