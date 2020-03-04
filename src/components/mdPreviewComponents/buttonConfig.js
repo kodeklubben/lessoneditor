@@ -49,6 +49,15 @@ const buttonConfig = [
     endOutput: ""
   },
   {
+    bTitle: "new",
+    icon: "file",
+    output: "",
+    title: "new",
+    cursorIntON: 0,
+    cursorIntOFF: 0,
+    endOutput: ""
+  },
+  {
     bTitle: "load",
     icon: "upload",
     output: "",

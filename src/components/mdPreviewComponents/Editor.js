@@ -92,6 +92,15 @@ const Editor = () => {
 
     // Knapper for lagring av tekst. UndoRedo, etc
 
+    if (bTitle === "new") {
+      inputTextfromTextArea = "";
+      setUndo(inputTextfromTextArea);
+      setRedo(inputTextfromTextArea);
+      setTextValue(inputTextfromTextArea);
+      setMdValue(mdParser(inputTextfromTextArea));
+      return;
+    }
+
     if (bTitle === "load") {
       inputTextfromTextArea = storedTextValue;
       setUndo([inputTextfromTextArea]);
@@ -109,10 +118,11 @@ const Editor = () => {
       if (undo.length <= 0) {
         return;
       }
+      setRedo([...redo, inputTextfromTextArea]);
       inputTextfromTextArea = undo[undo.length - 1];
       setTextValue(inputTextfromTextArea);
-      setMdValue(mdParser(undo[undo.length - 1]));
-      setRedo([...redo, undo[undo.length - 1]]);
+      setMdValue(mdParser(inputTextfromTextArea));
+
       setUndo(undo.slice(0, -1));
     }
 
@@ -120,10 +130,11 @@ const Editor = () => {
       if (redo.length <= 0) {
         return;
       }
+      setUndo([...undo, inputTextfromTextArea]);
       inputTextfromTextArea = redo[redo.length - 1];
       setTextValue(inputTextfromTextArea);
-      setMdValue(mdParser(redo[redo.length - 1]));
-      setUndo([...undo, redo[redo.length - 1]]);
+      setMdValue(mdParser(inputTextfromTextArea));
+
       setRedo(redo.slice(0, -1));
     }
 
