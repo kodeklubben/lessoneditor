@@ -94,10 +94,9 @@ const Editor = () => {
 
     if (bTitle === "load") {
       inputTextfromTextArea = storedTextValue;
+      setUndo([inputTextfromTextArea]);
       setTextValue(inputTextfromTextArea);
       setMdValue(mdParser(inputTextfromTextArea));
-      setUndo([inputTextfromTextArea]);
-      setRedo([inputTextfromTextArea]);
       return;
     }
 
