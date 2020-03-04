@@ -1,5 +1,7 @@
 const temp = "```";
 
+var listOL = 1;
+
 const buttonConfig = [
   {
     bTitle: "bold",
@@ -15,6 +17,15 @@ const buttonConfig = [
     icon: "italic",
     output: "__ ",
     title: "",
+    cursorIntON: 2,
+    cursorIntOFF: 2,
+    endOutput: ""
+  },
+  {
+    bTitle: "heading",
+    icon: "heading",
+    output: "## ",
+    title: "heading",
     cursorIntON: 2,
     cursorIntOFF: 2,
     endOutput: ""
@@ -56,6 +67,33 @@ const buttonConfig = [
     endOutput: ""
   },
   {
+    bTitle: "image",
+    icon: "file image",
+    output: "",
+    title: "image",
+    cursorIntON: 0,
+    cursorIntOFF: 0,
+    endOutput: ""
+  },
+  {
+    bTitle: "listUl",
+    icon: "list ul",
+    output: "- ",
+    title: "listUl",
+    cursorIntON: 0,
+    cursorIntOFF: 0,
+    endOutput: ""
+  },
+  {
+    bTitle: "listOl",
+    icon: "list ol",
+    output: "1. ",
+    title: "listOl",
+    cursorIntON: 0,
+    cursorIntOFF: 0,
+    endOutput: ""
+  },
+  {
     bTitle: "activity",
     icon: "",
     output: "{.activity}",
@@ -75,7 +113,7 @@ const buttonConfig = [
   },
   {
     bTitle: "inline",
-    icon: "",
+    icon: "terminal",
     output: "``",
     title: "Inline Code",
     cursorIntON: 1,
@@ -84,7 +122,7 @@ const buttonConfig = [
   },
   {
     bTitle: "codeblock",
-    icon: "",
+    icon: "code",
     output: `${temp}\n\n${temp}`,
     title: "Codeblock",
     cursorIntON: 4,

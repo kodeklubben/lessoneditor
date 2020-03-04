@@ -4,7 +4,9 @@ import MDTextArea from "./MDTextArea";
 import MDPreview from "./MDPreview";
 import { mdParser } from "../../utils/mdParser";
 import ControlPanel from "./ControlPanel";
-import { Redirect } from "react-router-dom";
+import PageButtons from "../PageButtons";
+import Autosave from "./Autosave";
+// import { Redirect } from "react-router-dom";
 
 // variabler som sjekker om en knapp er trykket ned:
 var buttonBoolValues = {
@@ -16,19 +18,15 @@ var buttonBoolValues = {
   codeblock: true
 };
 
+var charCounter = 0;
+
 // egen variabel for input i textarea utfor state. Viste seg å være nødvendig for undo/redo-funksjon pga måten textarea oppdateres fra state.
 var inputTextfromTextArea = "";
-
-// meldingen i autosave
-var autoSaveMessage = <br />;
-
-// autosave-lengde i sekunder, må være over 3 sek:
-const autoSaveLength = 20;
 
 // ___________________
 
 const Editor = () => {
-  const [counter, setCounter] = useState(autoSaveLength);
+  const [counter, setCounter] = useState(20); //  <<<<--   init autosave length in seconds here.
   const [undo, setUndo] = useState([""]);
   const [redo, setRedo] = useState([]);
   const [textValue, setTextValue] = useState("");
@@ -40,22 +38,9 @@ const Editor = () => {
 
   const editorRef = React.useRef();
 
-  // useEffect():  Koden kjører når komponenten oppdaterer, passer bra til å konfigurere nedtelling:
-
-  useEffect(() => {
-    counter >= 0 &&
-      setTimeout(() => {
-        setCounter(counter - 1);
-        if (counter === 3) {
-          autoSaveMessage = "autosaving document...";
-          setStoredTextValue(inputTextfromTextArea);
-        }
-        if (counter === 0) {
-          setCounter(autoSaveLength);
-          autoSaveMessage = <br />;
-        }
-      }, 1000);
-  });
+  const autoSave = () => {
+    setStoredTextValue(inputTextfromTextArea);
+  };
 
   const handleChange = textInput => {
     // lagrer inputtekst utfor state.  Pga undo/redo.  State kontroll :P
@@ -69,9 +54,28 @@ const Editor = () => {
       setUndo([...undo, inputTextfromTextArea]);
     }
 
+    // Teller bokstaver på input, og tvinger linjeskift hvis det er 80 bokstaver
+    charCounter += 1;
+
+    if (textInput.charCodeAt(textInput.length - 1) === 10) {
+      charCounter = 0;
+    }
+
+    if (charCounter === 80) {
+      inputTextfromTextArea += "\n";
+      charCounter = 0;
+    }
+
     // textinput output til editor:
     setTextValue(inputTextfromTextArea);
     setMdValue(mdParser(inputTextfromTextArea));
+  };
+  // _______________________________________________________________________
+
+  const onKeyPress = e => {
+    if (e.charCode === 9) {
+      handleChange(inputTextfromTextArea.concat("     "));
+    }
   };
 
   // TODO: Rydde opp eller Refactorere handleButtonClick. Er mye rot her nå.
@@ -91,9 +95,9 @@ const Editor = () => {
     if (bTitle === "load") {
       inputTextfromTextArea = storedTextValue;
       setTextValue(inputTextfromTextArea);
-      setMdValue(mdParser(storedTextValue));
-      setUndo([storedTextValue]);
-      setRedo([storedTextValue]);
+      setMdValue(mdParser(inputTextfromTextArea));
+      setUndo([inputTextfromTextArea]);
+      setRedo([inputTextfromTextArea]);
       return;
     }
 
@@ -133,8 +137,25 @@ const Editor = () => {
       return;
     }
 
+    if (value === "## ") {
+      if (
+        inputTextfromTextArea.substring(inputTextfromTextArea.length - 3) ===
+        "## "
+      ) {
+        inputTextfromTextArea = inputTextfromTextArea.substr(
+          0,
+          inputTextfromTextArea.length - 3
+        );
+        inputTextfromTextArea = inputTextfromTextArea.concat("# ");
+        setTextValue(inputTextfromTextArea);
+        return;
+      }
+    }
+
     //  Konfig av knapper slik at de registrerer om de er tryket, og flytter tekst-markøren i henhold til MD-syntax
     // Konfig-data finnes i egne config-filer.
+    // if/else if kun hvis knapp er ment å skru av og på
+    // hopp rett til "else" hvis knapp ikke har bool-verdi
 
     if (buttonBoolValues[bTitle] === true) {
       buttonBoolValues[bTitle] = false;
@@ -145,7 +166,8 @@ const Editor = () => {
         editorRef.current.selectionEnd -= cursorIntON;
       }, 0);
       setBoolButton(buttonBoolValues);
-    } else {
+      return;
+    } else if (buttonBoolValues[bTitle] === false) {
       buttonBoolValues[bTitle] = true;
       setTimeout(() => {
         editorRef.current.selectionStart += cursorIntOFF;
@@ -156,27 +178,51 @@ const Editor = () => {
         }
       }, 0);
       setBoolButton(buttonBoolValues);
+      return;
+    } else {
+      inputTextfromTextArea = inputTextfromTextArea.concat(value);
+      setTextValue(inputTextfromTextArea);
     }
   };
 
+  const mySubmitHandler = event => {
+    event.preventDefault();
+
+    // TODO: Send inputtext-data to database
+  };
+
   return (
-    <div className="controlPanelPlacement">
-      <ControlPanel handleButtonClick={handleButtonClick} />
-      <div>
-        <p>{autoSaveMessage}</p>
+    <div>
+      <div className="controlPanelPlacement">
+        <ControlPanel handleButtonClick={handleButtonClick} />
+        <Autosave
+          autoSave={autoSave}
+          counter={counter}
+          setCounter={setCounter}
+        />
+        <div className="ui two column test grid">
+          <div className="column">
+            <MDTextArea
+              editorRef={editorRef}
+              textValue={inputTextfromTextArea}
+              onInputChange={handleChange}
+              handleButtonClick={handleButtonClick}
+              onKeyPress={onKeyPress}
+            />
+          </div>
+          <div className="column">
+            <MDPreview mdValue={mdValue} />
+          </div>
+        </div>
       </div>
-      <div className="ui two column test grid">
-        <div className="column">
-          <MDTextArea
-            editorRef={editorRef}
-            textValue={inputTextfromTextArea}
-            onInputChange={handleChange}
-            handleButtonClick={handleButtonClick}
-          />
-        </div>
-        <div className="column">
-          <MDPreview mdValue={mdValue} />
-        </div>
+      <div className="editorFormbuttons">
+        <PageButtons
+          prevTitle="Tilbake"
+          nextTitle="Submit"
+          prevValue="/createNewLesson"
+          nextValue="/endpage"
+          mySubmitHandler={mySubmitHandler}
+        />
       </div>
     </div>
   );

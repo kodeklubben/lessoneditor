@@ -1,7 +1,7 @@
 import "./App.css";
 import React from "react";
 import FormComponent from "./YAMLComponents/FormComponent";
-
+import EndPage from "./frontPageComponents/EndPage";
 import Editor from "./mdPreviewComponents/Editor";
 import { IndexPage } from "./frontPageComponents/IndexPage";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
@@ -23,6 +23,9 @@ class App extends React.Component {
             <div className="controlPanelPlacement">
               <Editor />
             </div>
+          </Route>
+          <Route exact path="/endpage">
+            <EndPage />
           </Route>
         </Switch>
       </Router>

@@ -9,6 +9,7 @@ class MDTextArea extends React.Component {
         className="TextArea"
         value={this.props.textValue}
         onChange={e => this.props.onInputChange(e.target.value)}
+        onKeyPress={e => this.props.onKeyPress(e)}
       />
     );
   }
