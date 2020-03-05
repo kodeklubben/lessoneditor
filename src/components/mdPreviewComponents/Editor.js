@@ -318,7 +318,7 @@ const Editor = () => {
   });
 
   return (
-    <div className="ui segment">
+    <div className="">
       <div className="controlPanelPlacement">
         <ControlPanel handleButtonClick={handleButtonClick} />
         <Autosave

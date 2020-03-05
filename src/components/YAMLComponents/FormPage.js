@@ -5,7 +5,7 @@ import PageButtons from "../PageButtons";
 
 const FormPage = props => {
   return (
-    <div className="ui segment">
+    <div className="">
       <div className="ui container">
         <form className="ui small form" onSubmit={props.mySubmitHandler}>
           <YAMLformPage
