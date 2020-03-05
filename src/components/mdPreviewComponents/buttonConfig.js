@@ -1,7 +1,5 @@
 const temp = "```";
 
-var listOL = 1;
-
 const buttonConfig = [
   {
     bTitle: "bold",
@@ -10,7 +8,8 @@ const buttonConfig = [
     title: "",
     cursorIntON: 2,
     cursorIntOFF: 2,
-    endOutput: ""
+    endOutput: "",
+    shortcut: "b"
   },
   {
     bTitle: "italic",
@@ -19,123 +18,147 @@ const buttonConfig = [
     title: "",
     cursorIntON: 2,
     cursorIntOFF: 2,
-    endOutput: ""
+    endOutput: "",
+    shortcut: "i"
   },
   {
     bTitle: "heading",
     icon: "heading",
     output: "## ",
-    title: "heading",
+    title: "",
     cursorIntON: 2,
     cursorIntOFF: 2,
-    endOutput: ""
+    endOutput: "",
+    shortcut: "h"
   },
   {
     bTitle: "undo",
     icon: "undo",
     output: "",
-    title: "undo",
+    title: "",
     cursorIntON: 0,
     cursorIntOFF: 0,
-    endOutput: ""
+    endOutput: "",
+    shortcut: "z"
   },
   {
     bTitle: "redo",
     icon: "redo",
     output: "",
-    title: "redo",
+    title: "",
     cursorIntON: 0,
     cursorIntOFF: 0,
-    endOutput: ""
+    endOutput: "",
+    shortcut: "shift+z"
   },
   {
     bTitle: "new",
     icon: "file",
     output: "",
-    title: "new",
+    title: "",
     cursorIntON: 0,
     cursorIntOFF: 0,
-    endOutput: ""
+    endOutput: "",
+    shortcut: "n"
   },
   {
     bTitle: "load",
     icon: "upload",
     output: "",
-    title: "Load",
+    title: "",
     cursorIntON: 0,
     cursorIntOFF: 0,
-    endOutput: ""
+    endOutput: "",
+    shortcut: "l"
   },
   {
     bTitle: "save",
     icon: "save",
     output: "",
-    title: "Save",
+    title: "",
     cursorIntON: 0,
     cursorIntOFF: 0,
-    endOutput: ""
+    endOutput: "",
+    shortcut: "s"
   },
   {
     bTitle: "image",
     icon: "file image",
     output: "",
-    title: "image",
+    title: "",
     cursorIntON: 0,
     cursorIntOFF: 0,
-    endOutput: ""
+    endOutput: "",
+    shortcut: "p"
   },
   {
     bTitle: "listUl",
     icon: "list ul",
     output: "- ",
-    title: "listUl",
+    title: "",
     cursorIntON: 0,
     cursorIntOFF: 0,
-    endOutput: ""
+    endOutput: "",
+    shortcut: "u"
   },
   {
     bTitle: "listOl",
     icon: "list ol",
     output: "1. ",
-    title: "listOl",
+    title: "",
     cursorIntON: 0,
     cursorIntOFF: 0,
-    endOutput: ""
+    endOutput: "",
+    shortcut: "o"
+  },
+  {
+    bTitle: "checklist",
+    icon: "tasks",
+    output: "- [ ] ",
+    title: "",
+    cursorIntON: 0,
+    cursorIntOFF: 0,
+    endOutput: "",
+    shortcut: "t"
   },
   {
     bTitle: "activity",
     icon: "",
-    output: "{.activity}",
-    title: "Steg",
+    output: "{.activity}\n\n",
+    title: "{.Activity}",
     cursorIntON: 0,
     cursorIntOFF: 0,
-    endOutput: "\n\n"
+    endOutput: "",
+    shortcut: "a"
   },
   {
     bTitle: "intro",
     icon: "",
-    output: "{.intro}",
-    title: "Intro",
+    output: "{.intro}\n\n",
+    title: "{.Intro}",
     cursorIntON: 0,
     cursorIntOFF: 0,
-    endOutput: "\n\n"
+    endOutput: "",
+    shortcut: "o"
   },
   {
     bTitle: "inline",
     icon: "terminal",
     output: "``",
-    title: "Inline Code",
+    title: "",
     cursorIntON: 1,
     cursorIntOFF: 1,
-    endOutput: ""
+    endOutput: "",
+    shortcut: "e"
   },
   {
     bTitle: "codeblock",
     icon: "code",
     output: `${temp}\n\n${temp}`,
-    title: "Codeblock",
+    title: "",
     cursorIntON: 4,
-    endOutput: "\n"
+    endOutput: "",
+    shortcut: "k"
   }
 ];
 

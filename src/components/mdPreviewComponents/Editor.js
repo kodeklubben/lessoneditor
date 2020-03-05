@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "../../index.css";
 import MDTextArea from "./MDTextArea";
 import MDPreview from "./MDPreview";
 import { mdParser } from "../../utils/mdParser";
 import ControlPanel from "./ControlPanel";
 import PageButtons from "../PageButtons";
+import { GlobalHotKeys, configure } from "react-hotkeys";
 import Autosave from "./Autosave";
 // import { Redirect } from "react-router-dom";
 
@@ -15,10 +16,16 @@ var buttonBoolValues = {
   activity: true,
   intro: true,
   inline: true,
-  codeblock: true
+  codeblock: true,
+  heading: true,
+  heading2: true
 };
 
+const temp = "```";
+
 var charCounter = 0;
+
+var OSspecificKey = "ctrl+";
 
 // egen variabel for input i textarea utfor state. Viste seg å være nødvendig for undo/redo-funksjon pga måten textarea oppdateres fra state.
 var inputTextfromTextArea = "";
@@ -72,16 +79,40 @@ const Editor = () => {
   };
   // _______________________________________________________________________
 
-  const onKeyPress = e => {
-    if (e.charCode === 9) {
-      handleChange(inputTextfromTextArea.concat("     "));
+  const onTextareaKeyDown = e => {
+    console.log(e);
+    console.log(e.keyCode);
+
+    if (e.ctrlKey && e.keyCode === 66) {
+      e.preventDefault();
+    }
+
+    if (e.ctrlKey && e.keyCode === 67) {
+      e.preventDefault();
+    }
+
+    if (e.ctrlKey && e.keyCode === 72) {
+      e.preventDefault();
+    }
+
+    if (e.ctrlKey && e.keyCode === 82) {
+      e.preventDefault();
+    }
+    if (e.ctrlKey && e.keyCode === 84) {
+      e.preventDefault();
+    }
+    if (e.ctrlKey && e.keyCode === 90) {
+      e.preventDefault();
+    }
+    if (e.keyCode === 9) {
+      e.preventDefault();
+      inputTextfromTextArea = inputTextfromTextArea.concat("  ");
     }
   };
 
   // TODO: Rydde opp eller Refactorere handleButtonClick. Er mye rot her nå.
-
   const handleButtonClick = (
-    value,
+    output,
     cursorIntON,
     cursorIntOFF,
     bTitle,
@@ -90,8 +121,24 @@ const Editor = () => {
     // flytte fokus til tekstvindu etter button-click
     editorRef.current.focus();
 
-    // Knapper for lagring av tekst. UndoRedo, etc
+    // nuller ut verdi fra knapp-trykk om verdien allerede er lagt til tekst.
+    // kanselerer da ut knappetrykket.
+    if (
+      inputTextfromTextArea.substring(
+        inputTextfromTextArea.length - output.length
+      ) === output &&
+      !buttonBoolValues[bTitle]
+    ) {
+      inputTextfromTextArea = inputTextfromTextArea.substring(
+        0,
+        inputTextfromTextArea.length - output.length
+      );
+      buttonBoolValues[bTitle] = true;
+      setTextValue(inputTextfromTextArea);
+      return;
+    }
 
+    // fjerner all tekst i editor og lagring.
     if (bTitle === "new") {
       inputTextfromTextArea = "";
       setUndo(inputTextfromTextArea);
@@ -100,6 +147,8 @@ const Editor = () => {
       setMdValue(mdParser(inputTextfromTextArea));
       return;
     }
+
+    // Load, save, undo, redo funksjoner
 
     if (bTitle === "load") {
       inputTextfromTextArea = storedTextValue;
@@ -119,11 +168,11 @@ const Editor = () => {
         return;
       }
       setRedo([...redo, inputTextfromTextArea]);
-      inputTextfromTextArea = undo[undo.length - 1];
+      inputTextfromTextArea = undo.pop();
       setTextValue(inputTextfromTextArea);
       setMdValue(mdParser(inputTextfromTextArea));
-
-      setUndo(undo.slice(0, -1));
+      return;
+      //setUndo(undo.slice(0, -1));
     }
 
     if (bTitle === "redo") {
@@ -136,40 +185,60 @@ const Editor = () => {
       setMdValue(mdParser(inputTextfromTextArea));
 
       setRedo(redo.slice(0, -1));
-    }
-
-    // sjekker om knapp er feks et Steg (all styling som begyner med "{" ).
-
-    if (value[0] === "{") {
-      let i = value + endOutput;
-      inputTextfromTextArea = inputTextfromTextArea.concat(i);
-      setTextValue(inputTextfromTextArea);
       return;
     }
 
-    if (value === "## ") {
+    // sjekker om knapp er feks et Steg (all styling som begyner med "{" ).
+    // if (bTitle === "activity" || bTitle === "intro") {
+    //   output = output + endOutput;
+    //   handleButtonClick(output, 0, 0, "", "");
+    //   return;
+    //   // inputTextfromTextArea = inputTextfromTextArea.concat(output);
+    //   // setTextValue(inputTextfromTextArea);
+    // }
+
+    // Config for å gi "heading" flere verdier på en knapp
+    if (
+      output === "## " &&
+      inputTextfromTextArea.substring(inputTextfromTextArea.length - 3) ===
+        "## " &&
+      buttonBoolValues["heading"]
+    ) {
+      buttonBoolValues["heading"] = false;
+      inputTextfromTextArea = inputTextfromTextArea.substr(
+        0,
+        inputTextfromTextArea.length - 3
+      );
+      inputTextfromTextArea += "# ";
+      setTextValue(inputTextfromTextArea);
+      return;
+    } else if (output === "## " && buttonBoolValues["heading"]) {
+      inputTextfromTextArea += output;
+      setTextValue(inputTextfromTextArea);
+      return;
+    } else if (output === "## " && !buttonBoolValues["heading"]) {
       if (
-        inputTextfromTextArea.substring(inputTextfromTextArea.length - 3) ===
-        "## "
+        inputTextfromTextArea.substring(inputTextfromTextArea.length - 2) ===
+        "# "
       ) {
-        inputTextfromTextArea = inputTextfromTextArea.substr(
+        inputTextfromTextArea = inputTextfromTextArea.substring(
           0,
-          inputTextfromTextArea.length - 3
+          inputTextfromTextArea.length - 2
         );
-        inputTextfromTextArea = inputTextfromTextArea.concat("# ");
+        buttonBoolValues["heading"] = true;
         setTextValue(inputTextfromTextArea);
         return;
       }
     }
 
     //  Konfig av knapper slik at de registrerer om de er tryket, og flytter tekst-markøren i henhold til MD-syntax
-    // Konfig-data finnes i egne config-filer.
-    // if/else if kun hvis knapp er ment å skru av og på
+    // Konfig-data finnes i ./buttonConfig.js
+    // if/elseIf  kun hvis knapp er ment å skru av og på
     // hopp rett til "else" hvis knapp ikke har bool-verdi
 
     if (buttonBoolValues[bTitle] === true) {
       buttonBoolValues[bTitle] = false;
-      inputTextfromTextArea = inputTextfromTextArea.concat(value);
+      inputTextfromTextArea = inputTextfromTextArea.concat(output);
       setTextValue(inputTextfromTextArea);
       setTimeout(() => {
         editorRef.current.selectionStart -= cursorIntON;
@@ -190,19 +259,66 @@ const Editor = () => {
       setBoolButton(buttonBoolValues);
       return;
     } else {
-      inputTextfromTextArea = inputTextfromTextArea.concat(value);
+      inputTextfromTextArea = inputTextfromTextArea.concat(output);
       setTextValue(inputTextfromTextArea);
     }
   };
 
+  // Submithandler,  kode for å sende tekst til backend skrives her her.
   const mySubmitHandler = event => {
     event.preventDefault();
 
     // TODO: Send inputtext-data to database
   };
 
+  // Kode for å lage snarveier på tastatur.
+  const keyMap = {
+    BOLD: OSspecificKey + "b",
+    ITALIC: OSspecificKey + "i",
+    HEADING: OSspecificKey + "h",
+    UNDO: OSspecificKey + "z",
+    REDO: OSspecificKey + "shift+z",
+    NEW: OSspecificKey + "n",
+    LOAD: OSspecificKey + "l",
+    SAVE: OSspecificKey + "s",
+    IMAGE: OSspecificKey + "p",
+    LISTUL: OSspecificKey + "u",
+    LISTOL: OSspecificKey + "o",
+    CHECKLIST: OSspecificKey + "t",
+    ACTIVITY: OSspecificKey + "a",
+    INTRO: OSspecificKey + "o",
+    INLINE: OSspecificKey + "e",
+    CODEBLOCK: OSspecificKey + "k"
+  };
+
+  const handlers = {
+    BOLD: () => handleButtonClick("****", 2, 2, "bold", ""),
+    ITALIC: () => handleButtonClick("__ ", 2, 2, "italic", ""),
+    HEADING: () => handleButtonClick("## ", 2, 2, "heading", ""),
+    UNDO: () => handleButtonClick("", null, null, "undo", ""),
+    REDO: () => handleButtonClick("", null, null, "redo", ""),
+    NEW: () => handleButtonClick("", null, null, "new", ""),
+    LOAD: () => handleButtonClick("", null, null, "load", ""),
+    SAVE: () => handleButtonClick("", null, null, "save", ""),
+    IMAGE: () => handleButtonClick("", null, null, "image", ""),
+    LISTUL: () => handleButtonClick("- ", null, null, "listul", ""),
+    LISTOL: () => handleButtonClick("1. ", null, null, "listol", ""),
+    CHECKLIST: () => handleButtonClick("- [ ]", null, null, "checklist", ""),
+    ACTIVITY: () =>
+      handleButtonClick("{.activity}\n\n", null, null, "activity", ""),
+    INTRO: () => handleButtonClick("{.intro}\n\n", null, null, "intro", ""),
+    INLINE: () => handleButtonClick("``", 1, 1, "inline", ""),
+    CODEBLOCK: () =>
+      handleButtonClick(`${temp}\n\n${temp}`, 4, 0, "codeblock", "")
+  };
+
+  // konfigurerer HotKeys-React
+  configure({
+    ignoreTags: []
+  });
+
   return (
-    <div>
+    <div className="ui segment">
       <div className="controlPanelPlacement">
         <ControlPanel handleButtonClick={handleButtonClick} />
         <Autosave
@@ -212,12 +328,13 @@ const Editor = () => {
         />
         <div className="ui two column test grid">
           <div className="column">
+            <GlobalHotKeys keyMap={keyMap} handlers={handlers} />
             <MDTextArea
               editorRef={editorRef}
               textValue={inputTextfromTextArea}
               onInputChange={handleChange}
               handleButtonClick={handleButtonClick}
-              onKeyPress={onKeyPress}
+              onTextareaKeyDown={onTextareaKeyDown}
             />
           </div>
           <div className="column">
@@ -225,7 +342,7 @@ const Editor = () => {
           </div>
         </div>
       </div>
-      <div className="editorFormbuttons">
+      <div className="ui container">
         <PageButtons
           prevTitle="Tilbake"
           nextTitle="Submit"

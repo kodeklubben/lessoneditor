@@ -4,7 +4,7 @@ body {
   font-size: 16px;
   line-height: 1.42857;
   color: #333;
-  background-color: #b1daae;
+  background-color: white;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -32,26 +32,30 @@ select {
 }
 
 .ui.container {
-  margin-top: 5em;
+  margin-top: 5vh;
 }
 
 /* CSS for Editor */
 
-.editorFormbuttons {
+/* .editorFormbuttons {
   margin-top: -10em;
-}
+} */
 
 .test {
-  height: 40em;
+  height: 65vh;
 }
 
-.controlPanelPlacement {
+.ui.formbutton.container {
+  margin-top: 16vh !important;
+}
+
+/* .controlPanelPlacement {
   margin-top: -8em;
   width: auto;
   height: auto;
-  background-color: #b1daae;
+  background-color: white;
   padding: 10em;
-}
+} */
 
 /* .Editor {
   display: flex;
@@ -69,11 +73,16 @@ select {
   margin: auto;
   outline: none;
   resize: none;
+  overflow: auto;
   border-radius: 5px;
-  padding: 15px;
+  padding: 10px;
 }
 
 /* CSS for MDPreview */
+
+.column {
+  max-width: 100%;
+}
 
 .MDPreview {
   width: 100%;
@@ -82,8 +91,7 @@ select {
   border-radius: 5px;
   margin: auto;
   background-color: white;
-  float: right;
-  padding: 15px;
+  padding: 10px;
 }
 
 /*This is the important css for the preview*/

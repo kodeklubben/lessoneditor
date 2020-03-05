@@ -1,6 +1,7 @@
 import React from "react";
+import { Button, Icon, Popup } from "semantic-ui-react";
 
-class Button extends React.Component {
+class Buttons extends React.Component {
   render() {
     return (
       <div
@@ -14,13 +15,20 @@ class Button extends React.Component {
           )
         }
       >
-        <button>
-          {this.props.title}
-          <i className={`${this.props.icon} icon`} />
-        </button>
+        <Popup
+          content={"ctrl+" + this.props.shortcutKey}
+          mouseEnterDelay={1000}
+          trigger={
+            this.props.title ? (
+              <Button>{this.props.title}</Button>
+            ) : (
+              <Button icon={this.props.icon} />
+            )
+          }
+        />
       </div>
     );
   }
 }
 
-export default Button;
+export default Buttons;

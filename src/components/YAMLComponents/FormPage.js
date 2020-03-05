@@ -5,30 +5,34 @@ import PageButtons from "../PageButtons";
 
 const FormPage = props => {
   return (
-    <div className="ui container">
-      <form className="ui small form" onSubmit={props.mySubmitHandler}>
-        <YAMLformPage
-          mySubmitHandler={props.mySubmitHandler}
-          myChangeHandler={props.myChangeHandler}
-          myCheckboxHandler={props.myCheckboxHandler}
-          state={props.state}
-        />
-        <div style={{ marginTop: 60 }} className="ui segment">
-          <YMLformPage
+    <div className="ui segment">
+      <div className="ui container">
+        <form className="ui small form" onSubmit={props.mySubmitHandler}>
+          <YAMLformPage
             mySubmitHandler={props.mySubmitHandler}
             myChangeHandler={props.myChangeHandler}
             myCheckboxHandler={props.myCheckboxHandler}
             state={props.state}
           />
-        </div>
-        <PageButtons
-          prevTitle="Tilbake"
-          nextTitle="Neste"
-          prevValue="/"
-          nextValue="/editor"
-          mySubmitHandler={props.mySubmitHandler}
-        />
-      </form>
+          <div className="ui container">
+            <YMLformPage
+              mySubmitHandler={props.mySubmitHandler}
+              myChangeHandler={props.myChangeHandler}
+              myCheckboxHandler={props.myCheckboxHandler}
+              state={props.state}
+            />
+          </div>
+          <div className="ui formbutton container">
+            <PageButtons
+              prevTitle="Tilbake"
+              nextTitle="Neste"
+              prevValue="/"
+              nextValue="/editor"
+              mySubmitHandler={props.mySubmitHandler}
+            />
+          </div>
+        </form>
+      </div>
     </div>
   );
 };
