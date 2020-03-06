@@ -139,7 +139,7 @@ const buttonConfig = [
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: "o"
+    shortcut: "r"
   },
   {
     bTitle: "inline",

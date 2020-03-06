@@ -328,7 +328,7 @@ const Editor = () => {
     LISTOL: OSspecificKey + "o",
     CHECKLIST: OSspecificKey + "t",
     ACTIVITY: OSspecificKey + "a",
-    INTRO: OSspecificKey + "o",
+    INTRO: OSspecificKey + "r",
     INLINE: OSspecificKey + "e",
     CODEBLOCK: OSspecificKey + "k"
   };
