@@ -91,7 +91,17 @@ select {
   border-radius: 5px;
   margin: auto;
   background-color: white;
+  float: right;
   padding: 10px;
+}
+
+.ui.two.column.test.grid.container {
+  width: 90% !important;
+  margin-top: -1vh;
+}
+
+.button.segment {
+  margin-left: 3vh;
 }
 
 /*This is the important css for the preview*/

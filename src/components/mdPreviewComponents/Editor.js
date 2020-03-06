@@ -321,12 +321,8 @@ const Editor = () => {
     <div className="">
       <div className="controlPanelPlacement">
         <ControlPanel handleButtonClick={handleButtonClick} />
-        <Autosave
-          autoSave={autoSave}
-          counter={counter}
-          setCounter={setCounter}
-        />
-        <div className="ui two column test grid">
+
+        <div className="ui two column test grid container">
           <div className="column">
             <GlobalHotKeys keyMap={keyMap} handlers={handlers} />
             <MDTextArea
@@ -341,6 +337,13 @@ const Editor = () => {
             <MDPreview mdValue={mdValue} />
           </div>
         </div>
+      </div>
+      <div className="ui container">
+        <Autosave
+          autoSave={autoSave}
+          counter={counter}
+          setCounter={setCounter}
+        />
       </div>
       <div className="ui container">
         <PageButtons

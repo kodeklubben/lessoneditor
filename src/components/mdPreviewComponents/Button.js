@@ -20,7 +20,10 @@ class Buttons extends React.Component {
           mouseEnterDelay={1000}
           trigger={
             this.props.title ? (
-              <Button>{this.props.title}</Button>
+              <Button labelPosition="left">
+                <Icon name={this.props.icon} />
+                {this.props.title}
+              </Button>
             ) : (
               <Button icon={this.props.icon} />
             )
