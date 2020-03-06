@@ -22,7 +22,7 @@ class ControlPanel extends React.Component {
   render() {
     return (
       // <div className="Buttons">
-      <div className="ui segment eight column grid">
+      <div className="ui knapper segment eight column grid">
         {buttonConfig.map(element => (
           <div key={element.bTitle} className="column">
             <Buttons
