@@ -94,9 +94,6 @@ const Editor = () => {
   const onTextareaKeyUp = e => {};
 
   const onTextareaKeyDown = e => {
-    console.log(e);
-    console.log(e.keyCode);
-
     // 66 = "b"
     if (e.ctrlKey && e.keyCode === 66) {
       e.preventDefault();
@@ -145,9 +142,7 @@ const Editor = () => {
     if (e.ctrlKey && e.keyCode === 85) {
       e.preventDefault();
     }
-
-    // 79 = "o"
-    if (e.ctrlKey && e.shiftKey && e.keyCode === 79) {
+    if (e.ctrlKey && e.shiftKey && e.keyCode === 85) {
       e.preventDefault();
     }
 
@@ -157,7 +152,7 @@ const Editor = () => {
     }
 
     // 65 = "a"
-    if (e.ctrlKey && e.keyCode === 65) {
+    if (e.ctrlKey && e.shiftKey && e.keyCode === 65) {
       e.preventDefault();
     }
 
@@ -220,7 +215,6 @@ const Editor = () => {
     }
 
     if (bTitle === "undo") {
-      console.log("stack1: " + undo);
       if (undo.length <= 0) {
         return;
       }
@@ -228,8 +222,6 @@ const Editor = () => {
       inputTextfromTextArea = undo.pop();
       setTextValue(inputTextfromTextArea);
       setMdValue(mdParser(inputTextfromTextArea));
-
-      console.log("stack2: " + undo);
       return;
     }
 
@@ -311,7 +303,6 @@ const Editor = () => {
         editorRef.current.selectionEnd -= cursorIntON;
       }, 0);
       setBoolButton(buttonBoolValues);
-      editorRef.current.focus();
       return;
     } else if (buttonBoolValues[bTitle] === false) {
       buttonBoolValues[bTitle] = true;
@@ -324,12 +315,10 @@ const Editor = () => {
         }
       }, 0);
       setBoolButton(buttonBoolValues);
-      editorRef.current.focus();
       return;
     } else {
       inputTextfromTextArea = inputTextfromTextArea.concat(output);
       setTextValue(inputTextfromTextArea);
-      editorRef.current.focus();
       return;
     }
   };
@@ -353,7 +342,7 @@ const Editor = () => {
     SAVE: OSspecificKey + "shift+s",
     IMAGE: OSspecificKey + "p",
     LISTUL: OSspecificKey + "u",
-    LISTOL: OSspecificKey + "o",
+    LISTOL: OSspecificKey + "shift+u",
     CHECKLIST: OSspecificKey + "y",
     ACTIVITY: OSspecificKey + "shift+a",
     INTRO: OSspecificKey + "shift+i",
