@@ -97,61 +97,86 @@ const Editor = () => {
     console.log(e);
     console.log(e.keyCode);
 
-    // // 65 = "b"
-    // if (e.ctrlKey && e.keyCode === 66) {
-    //   e.preventDefault();
-    // }
+    // 66 = "b"
+    if (e.ctrlKey && e.keyCode === 66) {
+      e.preventDefault();
+    }
 
-    // // 73 = "i"
-    // if (e.metaKey && e.keyCode === 73) {
-    //   e.preventDefault();
-    // }
+    // 73 = "i"
+    if (e.ctrlKey && e.keyCode === 73) {
+      e.preventDefault();
+    }
 
-    // // 72 = "h"
-    // if (e.altKey && e.keyCode === 72) {
-    //   e.preventDefault();
-    // }
+    // 72 = "h"
+    if (e.ctrlKey && e.keyCode === 72) {
+      e.preventDefault();
+    }
 
-    // // 188 = "z"
-    // if (e.ctrlKey && e.keyCode === 188) {
-    //   e.preventDefault();
-    // }
+    // 188 = "z"
+    if (e.ctrlKey && e.keyCode === 188) {
+      e.preventDefault();
+    }
+
     if (e.ctrlKey && e.shiftKey && e.keyCode === 188) {
       e.preventDefault();
     }
-    if (e.ctrlKey && e.shiftKey && e.keyCode === 78) {
+
+    // 8 = "backspace"
+    if (e.ctrlKey && e.shiftKey && e.keyCode === 8) {
       e.preventDefault();
     }
 
-    // // 78 = "n"
-    // if (e.ctrlKey && e.keyCode === 78) {
-    //   e.preventDefault();
-    // }
-
-    // // 76 = "l"
-    // if (e.ctrlKey && e.keyCode === 76) {
-    //   e.preventDefault();
-    // }
-
-    // // 83 = "s"
-    // if (e.ctrlKey && e.keyCode === 83) {
-    //   e.preventDefault();
-    // }
-
-    // // 80 = "p"
-    // if (e.ctrlKey && e.keyCode === 84) {
-    //   e.preventDefault();
-    // }
-
-    // //
-    // if (e.ctrlKey && e.keyCode === 90) {
-    //   e.preventDefault();
-    // }
-
-    if (e.ctrlKey && e.key) {
+    // 76 = "l"
+    if (e.ctrlKey && e.shiftKey && e.keyCode === 76) {
       e.preventDefault();
     }
 
+    // 83 = "s"
+    if (e.ctrlKey && e.shiftKey && e.keyCode === 83) {
+      e.preventDefault();
+    }
+
+    // 80 = "p"
+    if (e.ctrlKey && e.keyCode === 80) {
+      e.preventDefault();
+    }
+
+    // 85 = "u"
+    if (e.ctrlKey && e.keyCode === 85) {
+      e.preventDefault();
+    }
+
+    // 79 = "o"
+    if (e.ctrlKey && e.shiftKey && e.keyCode === 79) {
+      e.preventDefault();
+    }
+
+    // 89 = "y"
+    if (e.ctrlKey && e.keyCode === 89) {
+      e.preventDefault();
+    }
+
+    // 65 = "a"
+    if (e.ctrlKey && e.keyCode === 65) {
+      e.preventDefault();
+    }
+
+    // 73 = "i"
+    if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
+      e.preventDefault();
+    }
+
+    // 69 = "e"
+    if (e.ctrlKey && e.keyCode === 69) {
+      e.preventDefault();
+    }
+
+    // 75 = "k"
+    if (e.ctrlKey && e.keyCode === 75) {
+      e.preventDefault();
+    }
+
+    // 9 = "tab"
     if (e.keyCode === 9) {
       e.preventDefault();
       inputTextfromTextArea = inputTextfromTextArea.concat("  ");
@@ -323,15 +348,15 @@ const Editor = () => {
     HEADING: OSspecificKey + "h",
     UNDO: OSspecificKey + "z",
     REDO: OSspecificKey + "shift+z",
-    NEW: OSspecificKey + "shift+n",
-    LOAD: OSspecificKey + "l",
-    SAVE: OSspecificKey + "s",
+    NEW: OSspecificKey + "shift+backspace",
+    LOAD: OSspecificKey + "shift+l",
+    SAVE: OSspecificKey + "shift+s",
     IMAGE: OSspecificKey + "p",
     LISTUL: OSspecificKey + "u",
     LISTOL: OSspecificKey + "o",
-    CHECKLIST: OSspecificKey + "c",
-    ACTIVITY: OSspecificKey + "a",
-    INTRO: OSspecificKey + "r",
+    CHECKLIST: OSspecificKey + "y",
+    ACTIVITY: OSspecificKey + "shift+a",
+    INTRO: OSspecificKey + "shift+i",
     INLINE: OSspecificKey + "e",
     CODEBLOCK: OSspecificKey + "k"
   };

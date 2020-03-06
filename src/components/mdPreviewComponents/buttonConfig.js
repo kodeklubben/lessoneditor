@@ -59,7 +59,7 @@ const buttonConfig = [
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: "shift+n"
+    shortcut: "shift+backspace"
   },
   {
     bTitle: "load",
@@ -69,7 +69,7 @@ const buttonConfig = [
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: "l"
+    shortcut: "shift+l"
   },
   {
     bTitle: "save",
@@ -79,7 +79,7 @@ const buttonConfig = [
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: "s"
+    shortcut: "shift+s"
   },
   {
     bTitle: "image",
@@ -119,7 +119,7 @@ const buttonConfig = [
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: "c"
+    shortcut: "y"
   },
   {
     bTitle: "activity",
@@ -129,7 +129,7 @@ const buttonConfig = [
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: "a"
+    shortcut: "shift+a"
   },
   {
     bTitle: "intro",
@@ -139,7 +139,7 @@ const buttonConfig = [
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: "r"
+    shortcut: "shift+i"
   },
   {
     bTitle: "inline",
