@@ -30,7 +30,10 @@ const buttonConfig = [
     cursorIntOFF: 2,
     endOutput: "",
     shortcut: "h"
-  },
+  }
+];
+
+const buttonConfig2 = [
   {
     bTitle: "undo",
     icon: "undo",
@@ -50,7 +53,10 @@ const buttonConfig = [
     cursorIntOFF: 0,
     endOutput: "",
     shortcut: "shift+z"
-  },
+  }
+];
+
+const buttonConfig3 = [
   {
     bTitle: "new",
     icon: "file",
@@ -80,7 +86,10 @@ const buttonConfig = [
     cursorIntOFF: 0,
     endOutput: "",
     shortcut: "shift+s"
-  },
+  }
+];
+
+const buttonConfig4 = [
   {
     bTitle: "image",
     icon: "file image",
@@ -90,7 +99,10 @@ const buttonConfig = [
     cursorIntOFF: 0,
     endOutput: "",
     shortcut: "p"
-  },
+  }
+];
+
+const buttonConfig5 = [
   {
     bTitle: "listUl",
     icon: "list ul",
@@ -120,11 +132,14 @@ const buttonConfig = [
     cursorIntOFF: 0,
     endOutput: "",
     shortcut: "y"
-  },
+  }
+];
+
+const buttonConfig6 = [
   {
     bTitle: "activity",
     icon: "",
-    output: "{.activity}\n\n",
+    output: "{.activity}",
     title: "{.Activity}",
     cursorIntON: 0,
     cursorIntOFF: 0,
@@ -134,13 +149,16 @@ const buttonConfig = [
   {
     bTitle: "intro",
     icon: "",
-    output: "{.intro}\n\n",
+    output: "{.intro}",
     title: "{.Intro}",
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
     shortcut: "shift+i"
-  },
+  }
+];
+
+const buttonConfig7 = [
   {
     bTitle: "inline",
     icon: "terminal",
@@ -157,9 +175,18 @@ const buttonConfig = [
     output: `${temp}\n\n${temp}`,
     title: "Code Block",
     cursorIntON: 4,
+    cursorIntOFF: 4,
     endOutput: "",
     shortcut: "k"
   }
 ];
 
-export default buttonConfig;
+export {
+  buttonConfig,
+  buttonConfig2,
+  buttonConfig3,
+  buttonConfig4,
+  buttonConfig5,
+  buttonConfig6,
+  buttonConfig7
+};

@@ -113,7 +113,10 @@ select {
 .ui.knapper {
   padding-left: 3vh;
   margin-top: -3vh;
-  height: 10vh;
+  align-content: center;
+  height: 3vh;
+  width: 85vh;
+  margin-left: 2vh !important;
 }
 
 .ui.autosave {

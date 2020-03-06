@@ -17,16 +17,17 @@ class Buttons extends React.Component {
         className="buttonBorder"
       >
         <Popup
-          content={"ctrl+" + this.props.shortcutKey}
-          mouseEnterDelay={500}
+          content={this.props.title + " (ctrl+" + this.props.shortcutKey + ")"}
+          mouseEnterDelay={250}
           trigger={
-            this.props.title ? (
-              <Button labelPosition="left">
+            this.props.icon ? (
+              <Button className={this.props.cname} labelPosition="left">
                 <Icon name={this.props.icon} />
-                {this.props.title}
               </Button>
             ) : (
-              <Button icon={this.props.icon} />
+              <Button className={this.props.cname} labelPosition="left">
+                {this.props.title}
+              </Button>
             )
           }
         />
