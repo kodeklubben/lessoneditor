@@ -21,13 +21,16 @@ var buttonBoolValues = {
   heading2: true
 };
 
+//Hjelpevariabel for å formatere output til en knapp riktig
 const temp = "```";
 
+// Teller antall char i textarea. Brukes for automatisk linjeskift pr 80 tegn
 var charCounter = 0;
 
+// Variabel for tast i hurtigtaster
 var OSspecificKey = "ctrl+";
 
-// egen variabel for input i textarea utfor state. Viste seg å være nødvendig for undo/redo-funksjon pga måten textarea oppdateres fra state.
+// egen variabel som holder input i textarea. Viser seg å være nødvendig for undo/redo-funksjon pga måten textarea oppdateres om man skulle brukt state.
 var inputTextfromTextArea = "";
 
 // ___________________
@@ -42,18 +45,18 @@ const Editor = () => {
   const [storedTextValue, setStoredTextValue] = useState("");
 
   // referanseVariabel for Textarea-elementet i DOM.  Tillater å manipulere DOM i react
-
   const editorRef = React.useRef();
 
+  // hjelpefunksjon for autolagrings-komponenten
   const autoSave = () => {
     setStoredTextValue(inputTextfromTextArea);
   };
 
+  // Behandler all input i textarea
   const handleChange = textInput => {
-    // lagrer inputtekst utfor state.  Pga undo/redo.  State kontroll :P
-    inputTextfromTextArea = textInput;
+    inputTextfromTextArea = textInput; // lagrer inputtekst utfor state.  Pga undo/redo.  State kontroll :P
 
-    // hvis tekstinput er mellomrom lagres textinput til undo:
+    // hvis input er space lagres textinput til undo:
     if (
       textInput.charCodeAt(textInput.length - 1) === 32 ||
       textInput.charCodeAt(textInput.length - 1) === 10
@@ -77,12 +80,9 @@ const Editor = () => {
     setTextValue(inputTextfromTextArea);
     setMdValue(mdParser(inputTextfromTextArea));
   };
-  // _______________________________________________________________________
 
+  // Behandler input-taster of fjerner default-oppførsel på enkelte av de
   const onTextareaKeyDown = e => {
-    console.log(e);
-    console.log(e.keyCode);
-
     if (e.ctrlKey && e.keyCode === 66) {
       e.preventDefault();
     }
