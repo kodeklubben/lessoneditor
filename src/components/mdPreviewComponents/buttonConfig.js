@@ -59,7 +59,7 @@ const buttonConfig = [
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: "n"
+    shortcut: "shift+n"
   },
   {
     bTitle: "load",
@@ -119,7 +119,7 @@ const buttonConfig = [
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: "t"
+    shortcut: "c"
   },
   {
     bTitle: "activity",

@@ -119,6 +119,9 @@ const Editor = () => {
     if (e.ctrlKey && e.shiftKey && e.keyCode === 188) {
       e.preventDefault();
     }
+    if (e.ctrlKey && e.shiftKey && e.keyCode === 78) {
+      e.preventDefault();
+    }
 
     // // 78 = "n"
     // if (e.ctrlKey && e.keyCode === 78) {
@@ -320,13 +323,13 @@ const Editor = () => {
     HEADING: OSspecificKey + "h",
     UNDO: OSspecificKey + "z",
     REDO: OSspecificKey + "shift+z",
-    NEW: OSspecificKey + "n",
+    NEW: OSspecificKey + "shift+n",
     LOAD: OSspecificKey + "l",
     SAVE: OSspecificKey + "s",
     IMAGE: OSspecificKey + "p",
     LISTUL: OSspecificKey + "u",
     LISTOL: OSspecificKey + "o",
-    CHECKLIST: OSspecificKey + "t",
+    CHECKLIST: OSspecificKey + "c",
     ACTIVITY: OSspecificKey + "a",
     INTRO: OSspecificKey + "r",
     INLINE: OSspecificKey + "e",
