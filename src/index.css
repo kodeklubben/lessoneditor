@@ -1,4 +1,4 @@
-body {
+/* body {
   margin: 0;
   font-family: "Helvetica Neue", "Helvetica N", Arial, sans-serif;
   font-size: 16px;
@@ -7,12 +7,12 @@ body {
   background-color: #b1daae;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
+} */
 
-code {
+/* code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
-}
+} */
 
 /* div {
   display: block;
@@ -42,7 +42,7 @@ select {
 } */
 
 .test {
-  height: 65vh;
+  height: 75vh;
 }
 
 .ui.formbutton.container {
@@ -72,7 +72,7 @@ select {
   height: 100%;
   outline: none;
   resize: none;
-  overflow: auto;
+  /* overflow: auto; */
   border-radius: 5px;
   padding: 15px;
 }
@@ -81,6 +81,18 @@ select {
 
 .column {
   max-width: 100%;
+}
+
+.buttonBorder {
+  background-color: whitesmoke;
+  border-radius: 5px;
+  padding: 0.1vh;
+  cursor: pointer;
+  height: 2vh;
+  width: max-content;
+}
+.buttonBorder:hover {
+  background-color: rgb(231, 231, 231);
 }
 
 .MDPreview {
@@ -95,10 +107,18 @@ select {
 .ui.two.column.test.grid.container {
   width: 100% !important;
   margin-top: -1vh;
+  margin-bottom: -7vh;
 }
 
 .ui.knapper {
   padding-left: 3vh;
+  margin-top: -3vh;
+  height: 10vh;
+}
+
+.ui.autosave {
+  margin: 0;
+  padding: 0;
 }
 
 .button.segment {

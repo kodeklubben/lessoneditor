@@ -4,17 +4,17 @@ import Buttons from "./Button";
 
 class ControlPanel extends React.Component {
   handleButtonClick = (
+    bTitle,
     output,
     cursorIntON,
     cursorIntOFF,
-    bTitle,
     endOutput
   ) => {
     this.props.handleButtonClick(
+      bTitle,
       output,
       cursorIntON,
       cursorIntOFF,
-      bTitle,
       endOutput
     );
   };

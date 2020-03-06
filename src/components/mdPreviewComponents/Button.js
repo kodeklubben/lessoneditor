@@ -7,17 +7,18 @@ class Buttons extends React.Component {
       <div
         onClick={() =>
           this.props.onButtonClick(
+            this.props.bTitle,
             this.props.output,
             this.props.cursorIntON,
             this.props.cursorIntOFF,
-            this.props.bTitle,
             this.props.endOutput
           )
         }
+        className="buttonBorder"
       >
         <Popup
           content={"ctrl+" + this.props.shortcutKey}
-          mouseEnterDelay={1000}
+          mouseEnterDelay={500}
           trigger={
             this.props.title ? (
               <Button labelPosition="left">
