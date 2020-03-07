@@ -57,13 +57,10 @@ select {
   padding: 10em;
 } */
 
-/* .Editor {
-  display: flex;
-  flex-direction: row;
-  margin-left: auto;
-  margin-right: auto;
-  margin-top: 100px;
-} */
+.Editor {
+  width: 98%;
+  margin: auto;
+}
 
 /* CSS for TextArea */
 
@@ -87,6 +84,7 @@ select {
   background-color: whitesmoke;
   border-radius: 5px;
   padding: 0.1vh;
+  margin: 0.7vh;
   cursor: pointer;
   height: 2vh;
   width: max-content;
@@ -111,12 +109,14 @@ select {
 }
 
 .ui.knapper {
-  padding-left: 3vh;
-  margin-top: -3vh;
   align-content: center;
-  height: 3vh;
-  width: 85vh;
-  margin-left: 2vh !important;
+  height: 6vh;
+  width: 100%;
+  padding: 0.5vh;
+}
+
+.space {
+  width: 5vh;
 }
 
 .ui.autosave {

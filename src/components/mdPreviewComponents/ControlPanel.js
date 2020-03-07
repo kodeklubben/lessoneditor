@@ -29,8 +29,7 @@ class ControlPanel extends React.Component {
 
   render() {
     return (
-      // <div className="Buttons">
-      <div className="ui knapper segment sixteen column grid">
+      <div className="ui knapper segment grid">
         {buttonConfig.map(element => (
           <div key={element.bTitle} className="ui icon buttons">
             <Buttons
@@ -47,6 +46,7 @@ class ControlPanel extends React.Component {
             />
           </div>
         ))}
+        <div className="space" />
         {buttonConfig2.map(element => (
           <div key={element.bTitle} className="ui icon buttons">
             <Buttons
@@ -63,6 +63,7 @@ class ControlPanel extends React.Component {
             />
           </div>
         ))}
+        <div className="space" />
         {buttonConfig3.map(element => (
           <div key={element.bTitle} className="ui icon buttons">
             <Buttons
@@ -78,6 +79,7 @@ class ControlPanel extends React.Component {
             />
           </div>
         ))}
+        <div className="space" />
         {buttonConfig4.map(element => (
           <div key={element.bTitle} className="ui icon buttons">
             <Buttons
@@ -93,6 +95,7 @@ class ControlPanel extends React.Component {
             />
           </div>
         ))}
+        <div className="space" />
         {buttonConfig5.map(element => (
           <div key={element.bTitle} className="ui icon buttons">
             <Buttons
@@ -108,6 +111,7 @@ class ControlPanel extends React.Component {
             />
           </div>
         ))}
+        <div className="space" />
         {buttonConfig6.map(element => (
           <div key={element.bTitle} className="ui icon buttons">
             <Buttons
@@ -123,6 +127,7 @@ class ControlPanel extends React.Component {
             />
           </div>
         ))}
+        <div className="space" />
         {buttonConfig7.map(element => (
           <div key={element.bTitle} className="ui icon buttons">
             <Buttons
@@ -139,7 +144,6 @@ class ControlPanel extends React.Component {
           </div>
         ))}
       </div>
-      // </div>
     );
   }
 }

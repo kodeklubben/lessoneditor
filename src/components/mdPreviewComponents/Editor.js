@@ -372,7 +372,7 @@ const Editor = () => {
   };
 
   return (
-    <div className="">
+    <div className="Editor">
       <div className="controlPanelPlacement">
         <ControlPanel handleButtonClick={handleButtonClick} />
 
