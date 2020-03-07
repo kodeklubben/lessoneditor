@@ -34,38 +34,50 @@ const temp = "```";
 // teller input-tegn for automatisk linjeksift etter 80 tegn
 var charCounter = 0;
 
-// Variabel for hurtigtast til React Hotkeys (tastesnarveier)
+// Variabel for å spesifisere hoved-hurtigtast til React Hotkeys (tastesnarveier)
 var OSspecificKey = "ctrl+";
 
-// egen variabel for input i textarea utfor state. Viste seg å være nødvendig for undo/redo-funksjon pga måten textarea oppdateres fra state.
+// egen variabel for input i textarea. Lagres som egen variabel før den pushes til statevariabel "textValue".
+// dette fordi den da kan manipuleres uten å re-rendre siden hele tiden.
 var inputTextfromTextArea = "";
 
+// undo/redo - variabler.
 var undo = [""];
 var redo = [];
+
+// autosave-lengde i sekunder
+var autosaveLength = 30;
 
 // ___________________
 
 const Editor = () => {
-  const [counter, setCounter] = useState(20); //  <<<<--   init autosave length in seconds here.
+  const [counter, setCounter] = useState(autosaveLength);
   const [textValue, setTextValue] = useState("");
   const [mdValue, setMdValue] = useState("");
   const [boolButton, setBoolButton] = useState(buttonBoolValues);
   const [storedTextValue, setStoredTextValue] = useState("");
 
-  // referanseVariabel for Textarea-elementet i DOM.  Tillater å manipulere DOM i react
+  //Hack-variabler for å fjerne kompileringsfeilmeldinger:
+  var test1 = textValue;
+  var test2 = boolButton;
+  test1 = test2;
+  test2 = test1;
+
+  // referanseVariabel (type: GetDocumentByID i vanlig JS) for Textarea-elementet i DOM.  Tillater å manipulere DOM i react
+  // brukes her til å flytte fokus fra knapp tilbake til textarea
   const editorRef = React.useRef();
 
   // autoSave funksjon kalles fra Autosave-komponent
-  const autoSave = () => {
+  const autoSaveFn = () => {
     setStoredTextValue(inputTextfromTextArea);
   };
 
   // all config for å behandle tekst i textarea
   const handleChange = textInput => {
-    // lagrer inputtekst utfor state.  Pga undo/redo.  State kontroll :P
+    // lagrer inputtekst utfor state.
     inputTextfromTextArea = textInput;
 
-    // hvis tekstinput er mellomrom lagres textinput til undo:
+    // hvis tekstinput er mellomrom eller enter, lagres textinput til undo:
     if (
       textInput.charCodeAt(textInput.length - 1) === 32 ||
       textInput.charCodeAt(textInput.length - 1) === 10
@@ -73,7 +85,7 @@ const Editor = () => {
       undo = [...undo, inputTextfromTextArea];
     }
 
-    // Teller bokstaver på input, og tvinger linjeskift hvis det er 80 bokstaver
+    // Teller input-tegn, og tvinger linjeskift hvis det passerer 80 tegn
     charCounter += 1;
 
     if (textInput.charCodeAt(textInput.length - 1) === 10) {
@@ -85,14 +97,13 @@ const Editor = () => {
       charCounter = 0;
     }
 
-    // textinput output til editor:
+    // dytter tekstinput til state for å re-rendre siden.
     setTextValue(inputTextfromTextArea);
     setMdValue(mdParser(inputTextfromTextArea));
   };
-  // _______________________________________________________________________
 
-  const onTextareaKeyUp = e => {};
-
+  // konfigurering for å fjerne default-funksjoner av tastekombinasjoner
+  // brukes for å sette egne hurtigtaster i teksteditor.
   const onTextareaKeyDown = e => {
     // 66 = "b"
     if (e.ctrlKey && e.keyCode === 66) {
@@ -178,7 +189,8 @@ const Editor = () => {
     }
   };
 
-  // TODO: Rydde opp eller Refactorere handleButtonClick. Er mye rot her nå.
+  // funksjon som konfigurerer hva som skjer når man trykker på knapper i teksteditor
+  // hurtigtast-trykk sendes også til denne funksjonen
   const handleButtonClick = (
     bTitle,
     output,
@@ -189,7 +201,7 @@ const Editor = () => {
     // flytte fokus til tekstvindu etter button-click
     editorRef.current.focus();
 
-    // fjerner all tekst i editor og lagring.
+    // fjerner all tekst i editor og undo/redo-variablene
     if (bTitle === "new") {
       inputTextfromTextArea = "";
       undo = [""];
@@ -272,8 +284,8 @@ const Editor = () => {
       }
     }
 
-    // nuller ut verdi fra knapp-trykk om verdien allerede er lagt til tekst.
-    // kanselerer da ut knappetrykket.
+    // nuller ut verdi fra knapp-trykk om man trykker en gang til på knapp uten å ha skrevet noen tegn.
+    // kanselerer da ut første knappetrykket.
     if (
       inputTextfromTextArea.substring(
         inputTextfromTextArea.length - output.length
@@ -289,10 +301,8 @@ const Editor = () => {
       return;
     }
 
-    //  Konfig av knapper slik at de registrerer om de er tryket, og flytter tekst-markøren i henhold til MD-syntax
-    // Konfig-data finnes i ./buttonConfig.js
-    // if/elseIf  kun hvis knapp er ment å skru av og på
-    // hopp rett til "else" hvis knapp ikke har bool-verdi
+    //  Konfig av knapper slik at de registrerer om de er trykket, og flytter tekst-markøren i henhold til hvordan MD-syntax ser ut
+    // Konfig-data finnes i ./buttonConfig.js der tallverdi for hvor mye tekst-markøren skal flyttes er definert in "cursorIntON" og "cursorIntOFF"
 
     if (buttonBoolValues[bTitle] === true) {
       buttonBoolValues[bTitle] = false;
@@ -350,6 +360,8 @@ const Editor = () => {
     CODEBLOCK: OSspecificKey + "k"
   };
 
+  // Hva som skjer når man trykker en hurtigtastetrykk.
+  // kaller samme funksjon som når man trykker på tilsvarende knapper med tilsvarende verdier (finnes i buttonConfig.js)
   const handlers = {
     BOLD: () => handleButtonClick("bold", "****", 2, 2, ""),
     ITALIC: () => handleButtonClick("italic", "__ ", 2, 2, ""),
@@ -384,7 +396,6 @@ const Editor = () => {
               onInputChange={handleChange}
               handleButtonClick={handleButtonClick}
               onTextareaKeyDown={onTextareaKeyDown}
-              onTextareaKeyUp={onTextareaKeyUp}
               handlers={handlers}
               keyMap={keyMap}
             />
@@ -396,7 +407,8 @@ const Editor = () => {
       </div>
       <div className="ui autosave container">
         <Autosave
-          autoSave={autoSave}
+          autoSaveFn={autoSaveFn}
+          autosaveLength={autosaveLength}
           counter={counter}
           setCounter={setCounter}
         />

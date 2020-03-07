@@ -8,7 +8,7 @@ configure({
 
 const MDTextArea = props => {
   return (
-    <GlobalHotKeys handlers={props.handlers} keyMap={props.keyMap} allowChanges>
+    <GlobalHotKeys handlers={props.handlers} keyMap={props.keyMap}>
       <textarea
         autoFocus
         ref={props.editorRef}
@@ -16,7 +16,6 @@ const MDTextArea = props => {
         value={props.textValue}
         onChange={e => props.onInputChange(e.target.value)}
         onKeyDown={e => props.onTextareaKeyDown(e)}
-        onKeyUp={e => props.onTextareaKeyUp}
       />
     </GlobalHotKeys>
   );
