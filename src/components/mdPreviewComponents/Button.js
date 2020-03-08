@@ -19,6 +19,8 @@ class Buttons extends React.Component {
         <Popup
           content={this.props.title + " (ctrl+" + this.props.shortcutKey + ")"}
           mouseEnterDelay={250}
+          mouseLeaveDelay={250}
+          inverted
           trigger={
             this.props.icon ? (
               <Button className={this.props.cname} labelPosition="left">

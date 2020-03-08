@@ -28,10 +28,10 @@ var buttonBoolValues = {
   codeblock: true
 };
 
-//Hjelpevariabel for å formatere string fra knapp.
+// Hjelpevariabel for å formatere string taste-shortcut.
 const temp = "```";
 
-// teller input-tegn for automatisk linjeksift etter 80 tegn
+// Teller input-tegn for automatisk linjeksift etter 80 tegn
 var charCounter = 0;
 
 // Variabel for å spesifisere hoved-hurtigtast til React Hotkeys (tastesnarveier)
@@ -252,10 +252,10 @@ const Editor = () => {
     if (
       output === "## " &&
       inputTextfromTextArea.substring(inputTextfromTextArea.length - 3) ===
-        "## " &&
-      buttonBoolValues["heading"]
+        output &&
+      buttonBoolValues[bTitle]
     ) {
-      buttonBoolValues["heading"] = false;
+      buttonBoolValues[bTitle] = false;
       inputTextfromTextArea = inputTextfromTextArea.substr(
         0,
         inputTextfromTextArea.length - 3
@@ -263,11 +263,11 @@ const Editor = () => {
       inputTextfromTextArea += "# ";
       setTextValue(inputTextfromTextArea);
       return;
-    } else if (output === "## " && buttonBoolValues["heading"]) {
+    } else if (output === "## " && buttonBoolValues[bTitle]) {
       inputTextfromTextArea += output;
       setTextValue(inputTextfromTextArea);
       return;
-    } else if (output === "## " && !buttonBoolValues["heading"]) {
+    } else if (output === "## " && !buttonBoolValues[bTitle]) {
       if (
         inputTextfromTextArea.substring(inputTextfromTextArea.length - 2) ===
         "# "
@@ -276,10 +276,11 @@ const Editor = () => {
           0,
           inputTextfromTextArea.length - 2
         );
-        buttonBoolValues["heading"] = true;
+        buttonBoolValues[bTitle] = true;
         setTextValue(inputTextfromTextArea);
         return;
       } else {
+        buttonBoolValues[bTitle] = true;
         return;
       }
     }

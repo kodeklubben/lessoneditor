@@ -30,119 +30,133 @@ class ControlPanel extends React.Component {
   render() {
     return (
       <div className="ui knapper segment grid">
-        {buttonConfig.map(element => (
-          <div key={element.bTitle} className="ui icon buttons">
-            <Buttons
-              bTitle={element.bTitle}
-              icon={element.icon}
-              output={element.output}
-              title={element.title}
-              cursorIntON={element.cursorIntON}
-              cursorIntOFF={element.cursorIntOFF}
-              endOutput={element.endOutput}
-              onButtonClick={this.handleButtonClick}
-              shortcutKey={element.shortcut}
-              cname="ui button"
-            />
-          </div>
-        ))}
+        <div className="ui icon buttons">
+          {buttonConfig.map(element => (
+            <div key={element.bTitle} className="">
+              <Buttons
+                bTitle={element.bTitle}
+                icon={element.icon}
+                output={element.output}
+                title={element.title}
+                cursorIntON={element.cursorIntON}
+                cursorIntOFF={element.cursorIntOFF}
+                endOutput={element.endOutput}
+                onButtonClick={this.handleButtonClick}
+                shortcutKey={element.shortcut}
+                cname=""
+              />
+            </div>
+          ))}
+        </div>
         <div className="space" />
-        {buttonConfig2.map(element => (
-          <div key={element.bTitle} className="ui icon buttons">
-            <Buttons
-              bTitle={element.bTitle}
-              icon={element.icon}
-              output={element.output}
-              title={element.title}
-              cursorIntON={element.cursorIntON}
-              cursorIntOFF={element.cursorIntOFF}
-              endOutput={element.endOutput}
-              onButtonClick={this.handleButtonClick}
-              shortcutKey={element.shortcut}
-              cname="button"
-            />
-          </div>
-        ))}
+        <div className="ui icon buttons">
+          {buttonConfig2.map(element => (
+            <div key={element.bTitle} className="">
+              <Buttons
+                bTitle={element.bTitle}
+                icon={element.icon}
+                output={element.output}
+                title={element.title}
+                cursorIntON={element.cursorIntON}
+                cursorIntOFF={element.cursorIntOFF}
+                endOutput={element.endOutput}
+                onButtonClick={this.handleButtonClick}
+                shortcutKey={element.shortcut}
+                cname=""
+              />
+            </div>
+          ))}
+        </div>
         <div className="space" />
-        {buttonConfig3.map(element => (
-          <div key={element.bTitle} className="ui icon buttons">
-            <Buttons
-              bTitle={element.bTitle}
-              icon={element.icon}
-              output={element.output}
-              title={element.title}
-              cursorIntON={element.cursorIntON}
-              cursorIntOFF={element.cursorIntOFF}
-              endOutput={element.endOutput}
-              onButtonClick={this.handleButtonClick}
-              shortcutKey={element.shortcut}
-            />
-          </div>
-        ))}
+        <div className="ui icon buttons">
+          {buttonConfig3.map(element => (
+            <div key={element.bTitle} className="">
+              <Buttons
+                bTitle={element.bTitle}
+                icon={element.icon}
+                output={element.output}
+                title={element.title}
+                cursorIntON={element.cursorIntON}
+                cursorIntOFF={element.cursorIntOFF}
+                endOutput={element.endOutput}
+                onButtonClick={this.handleButtonClick}
+                shortcutKey={element.shortcut}
+              />
+            </div>
+          ))}
+        </div>
         <div className="space" />
-        {buttonConfig4.map(element => (
-          <div key={element.bTitle} className="ui icon buttons">
-            <Buttons
-              bTitle={element.bTitle}
-              icon={element.icon}
-              output={element.output}
-              title={element.title}
-              cursorIntON={element.cursorIntON}
-              cursorIntOFF={element.cursorIntOFF}
-              endOutput={element.endOutput}
-              onButtonClick={this.handleButtonClick}
-              shortcutKey={element.shortcut}
-            />
-          </div>
-        ))}
+        <div className="ui icon buttons">
+          {buttonConfig4.map(element => (
+            <div key={element.bTitle} className="">
+              <Buttons
+                bTitle={element.bTitle}
+                icon={element.icon}
+                output={element.output}
+                title={element.title}
+                cursorIntON={element.cursorIntON}
+                cursorIntOFF={element.cursorIntOFF}
+                endOutput={element.endOutput}
+                onButtonClick={this.handleButtonClick}
+                shortcutKey={element.shortcut}
+              />
+            </div>
+          ))}
+        </div>
         <div className="space" />
-        {buttonConfig5.map(element => (
-          <div key={element.bTitle} className="ui icon buttons">
-            <Buttons
-              bTitle={element.bTitle}
-              icon={element.icon}
-              output={element.output}
-              title={element.title}
-              cursorIntON={element.cursorIntON}
-              cursorIntOFF={element.cursorIntOFF}
-              endOutput={element.endOutput}
-              onButtonClick={this.handleButtonClick}
-              shortcutKey={element.shortcut}
-            />
-          </div>
-        ))}
+        <div className="ui icon buttons">
+          {buttonConfig5.map(element => (
+            <div key={element.bTitle} className="">
+              <Buttons
+                bTitle={element.bTitle}
+                icon={element.icon}
+                output={element.output}
+                title={element.title}
+                cursorIntON={element.cursorIntON}
+                cursorIntOFF={element.cursorIntOFF}
+                endOutput={element.endOutput}
+                onButtonClick={this.handleButtonClick}
+                shortcutKey={element.shortcut}
+              />
+            </div>
+          ))}
+        </div>
         <div className="space" />
-        {buttonConfig6.map(element => (
-          <div key={element.bTitle} className="ui icon buttons">
-            <Buttons
-              bTitle={element.bTitle}
-              icon={element.icon}
-              output={element.output}
-              title={element.title}
-              cursorIntON={element.cursorIntON}
-              cursorIntOFF={element.cursorIntOFF}
-              endOutput={element.endOutput}
-              onButtonClick={this.handleButtonClick}
-              shortcutKey={element.shortcut}
-            />
-          </div>
-        ))}
+        <div className="ui icon buttons">
+          {buttonConfig6.map(element => (
+            <div key={element.bTitle} className="">
+              <Buttons
+                bTitle={element.bTitle}
+                icon={element.icon}
+                output={element.output}
+                title={element.title}
+                cursorIntON={element.cursorIntON}
+                cursorIntOFF={element.cursorIntOFF}
+                endOutput={element.endOutput}
+                onButtonClick={this.handleButtonClick}
+                shortcutKey={element.shortcut}
+              />
+            </div>
+          ))}
+        </div>
         <div className="space" />
-        {buttonConfig7.map(element => (
-          <div key={element.bTitle} className="ui icon buttons">
-            <Buttons
-              bTitle={element.bTitle}
-              icon={element.icon}
-              output={element.output}
-              title={element.title}
-              cursorIntON={element.cursorIntON}
-              cursorIntOFF={element.cursorIntOFF}
-              endOutput={element.endOutput}
-              onButtonClick={this.handleButtonClick}
-              shortcutKey={element.shortcut}
-            />
-          </div>
-        ))}
+        <div className="ui icon buttons">
+          {buttonConfig7.map(element => (
+            <div key={element.bTitle} className="">
+              <Buttons
+                bTitle={element.bTitle}
+                icon={element.icon}
+                output={element.output}
+                title={element.title}
+                cursorIntON={element.cursorIntON}
+                cursorIntOFF={element.cursorIntOFF}
+                endOutput={element.endOutput}
+                onButtonClick={this.handleButtonClick}
+                shortcutKey={element.shortcut}
+              />
+            </div>
+          ))}
+        </div>
       </div>
     );
   }

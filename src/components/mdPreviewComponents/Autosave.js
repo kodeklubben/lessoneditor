@@ -23,7 +23,7 @@ const Autosave = props => {
 
   return (
     <div className="autosave">
-      <p>{autoSaveMessage}</p>
+      <p style={{ color: "grey" }}>{autoSaveMessage}</p>
     </div>
   );
 };

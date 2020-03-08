@@ -84,7 +84,7 @@ select {
   background-color: whitesmoke;
   border-radius: 5px;
   padding: 0.1vh;
-  margin: 0.7vh;
+  margin: 1vh;
   cursor: pointer;
   height: 2vh;
   width: max-content;
@@ -109,10 +109,8 @@ select {
 }
 
 .ui.knapper {
-  align-content: center;
-  height: 6vh;
-  width: 100%;
-  padding: 0.5vh;
+  border-style: solid;
+  border-color: grey;
 }
 
 .space {
