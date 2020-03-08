@@ -6,8 +6,7 @@ var autoSaveMessage = <br />;
 const Autosave = props => {
   // useEffect():  Koden kjører når komponenten oppdaterer, passer bra til å konfigurere nedtelling:
   React.useEffect(() => {
-    let updateAutosave =
-      props.counter >= 0 &&
+    props.counter >= 0 &&
       setTimeout(() => {
         props.setCounter(props.counter - 1);
         if (props.counter === 3) {
@@ -19,8 +18,6 @@ const Autosave = props => {
           autoSaveMessage = <br />;
         }
       }, 1000);
-
-    return () => clearTimeout(updateAutosave);
   });
 
   return (

@@ -215,7 +215,6 @@ const Editor = () => {
     // Load, save, undo, redo funksjoner
 
     if (bTitle === "load") {
-      alert("load");
       inputTextfromTextArea = storedTextValue;
       undo = [inputTextfromTextArea];
       setTextValue(inputTextfromTextArea);
