@@ -186,8 +186,18 @@ const Editor = () => {
     // 9 = "tab"
     if (e.keyCode === 9) {
       e.preventDefault();
-      inputTextfromTextArea = inputTextfromTextArea.concat("  ");
+      inputTextfromTextArea += "  ";
     }
+  };
+
+  const ifNewLine = () => {
+    return inputTextfromTextArea[inputTextfromTextArea.length - 1] === "\n" ||
+      inputTextfromTextArea === "" ||
+      inputTextfromTextArea.substring(inputTextfromTextArea.length - 3) ===
+        "## " ||
+      inputTextfromTextArea.substring(inputTextfromTextArea.length - 2) === "# "
+      ? true
+      : false;
   };
 
   // funksjon som konfigurerer hva som skjer når man trykker på knapper i teksteditor
@@ -250,38 +260,45 @@ const Editor = () => {
     }
 
     // Config for å gi "heading" flere verdier på en knapp
-    if (
-      output === "## " &&
-      inputTextfromTextArea.substring(inputTextfromTextArea.length - 3) ===
-        output &&
-      buttonBoolValues[bTitle]
-    ) {
-      buttonBoolValues[bTitle] = false;
-      inputTextfromTextArea = inputTextfromTextArea.substr(
-        0,
-        inputTextfromTextArea.length - 3
-      );
-      inputTextfromTextArea += "# ";
-      setTextValue(inputTextfromTextArea);
-      return;
-    } else if (output === "## " && buttonBoolValues[bTitle]) {
-      inputTextfromTextArea += output;
-      setTextValue(inputTextfromTextArea);
-      return;
-    } else if (output === "## " && !buttonBoolValues[bTitle]) {
-      if (
-        inputTextfromTextArea.substring(inputTextfromTextArea.length - 2) ===
-        "# "
-      ) {
-        inputTextfromTextArea = inputTextfromTextArea.substring(
-          0,
-          inputTextfromTextArea.length - 2
-        );
-        buttonBoolValues[bTitle] = true;
-        setTextValue(inputTextfromTextArea);
-        return;
+    if (bTitle === "heading") {
+      if (ifNewLine()) {
+        if (
+          output === "## " &&
+          inputTextfromTextArea.substring(inputTextfromTextArea.length - 3) ===
+            output &&
+          buttonBoolValues[bTitle]
+        ) {
+          buttonBoolValues[bTitle] = false;
+          inputTextfromTextArea = inputTextfromTextArea.substr(
+            0,
+            inputTextfromTextArea.length - 3
+          );
+          inputTextfromTextArea += "# ";
+          setTextValue(inputTextfromTextArea);
+          return;
+        } else if (output === "## " && buttonBoolValues[bTitle]) {
+          inputTextfromTextArea += output;
+          setTextValue(inputTextfromTextArea);
+          return;
+        } else if (output === "## " && !buttonBoolValues[bTitle]) {
+          if (
+            inputTextfromTextArea.substring(
+              inputTextfromTextArea.length - 2
+            ) === "# "
+          ) {
+            inputTextfromTextArea = inputTextfromTextArea.substring(
+              0,
+              inputTextfromTextArea.length - 2
+            );
+            buttonBoolValues[bTitle] = true;
+            setTextValue(inputTextfromTextArea);
+            return;
+          } else {
+            buttonBoolValues[bTitle] = true;
+            return;
+          }
+        }
       } else {
-        buttonBoolValues[bTitle] = true;
         return;
       }
     }
