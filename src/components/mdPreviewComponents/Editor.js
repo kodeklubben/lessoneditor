@@ -186,6 +186,21 @@ const Editor = () => {
     // 9 = "tab"
     if (e.keyCode === 9) {
       e.preventDefault();
+      // config for correct tab inside codeblock:
+      if (!boolButton["codeblock"]) {
+        let i = inputTextfromTextArea.substring(
+          0,
+          inputTextfromTextArea.length - 4
+        );
+        inputTextfromTextArea = i + "  \n" + temp;
+        setTextValue(inputTextfromTextArea);
+        setTimeout(() => {
+          editorRef.current.selectionStart -= 4;
+          editorRef.current.selectionEnd -= 4;
+        }, 0);
+
+        return;
+      }
       inputTextfromTextArea += "  ";
     }
   };
@@ -299,7 +314,14 @@ const Editor = () => {
       }
     }
 
-    if (bTitle === "heading" && !ifNewLine()) {
+    if (
+      bTitle === "heading" ||
+      (bTitle === "codeblock" && buttonBoolValues["codeblock"] && !ifNewLine())
+    ) {
+      return;
+    }
+
+    if (bTitle === "activity" || (bTitle === "intro" && ifNewLine())) {
       return;
     }
 
