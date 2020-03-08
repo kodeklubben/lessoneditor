@@ -45,7 +45,7 @@ var inputTextfromTextArea = "";
 var undo = [""];
 var redo = [];
 
-// autosave-lengde i sekunder
+// autosave-lengde i sekunder, må være over 3 sek:
 var autosaveLength = 30;
 
 // ___________________
