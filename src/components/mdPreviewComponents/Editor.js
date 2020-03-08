@@ -41,6 +41,8 @@ var OSspecificKey = "ctrl+";
 // dette fordi den da kan manipuleres uten å re-rendre siden hele tiden.
 var inputTextfromTextArea = "";
 
+var storedTextValue = "";
+
 // undo/redo - variabler.
 var undo = [""];
 var redo = [];
@@ -55,7 +57,6 @@ const Editor = () => {
   const [textValue, setTextValue] = useState("");
   const [mdValue, setMdValue] = useState("");
   const [boolButton, setBoolButton] = useState(buttonBoolValues);
-  const [storedTextValue, setStoredTextValue] = useState("");
 
   //Hack-variabler for å fjerne kompileringsfeilmeldinger:
   var test1 = textValue;
@@ -69,7 +70,7 @@ const Editor = () => {
 
   // autoSave funksjon kalles fra Autosave-komponent
   const autoSaveFn = () => {
-    setStoredTextValue(inputTextfromTextArea);
+    storedTextValue = inputTextfromTextArea;
   };
 
   // all config for å behandle tekst i textarea
@@ -214,6 +215,7 @@ const Editor = () => {
     // Load, save, undo, redo funksjoner
 
     if (bTitle === "load") {
+      alert("load");
       inputTextfromTextArea = storedTextValue;
       undo = [inputTextfromTextArea];
       setTextValue(inputTextfromTextArea);
@@ -222,7 +224,7 @@ const Editor = () => {
     }
 
     if (bTitle === "save") {
-      setStoredTextValue(inputTextfromTextArea);
+      storedTextValue = inputTextfromTextArea;
       return;
     }
 
