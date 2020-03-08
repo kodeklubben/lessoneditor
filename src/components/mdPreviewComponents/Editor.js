@@ -260,47 +260,47 @@ const Editor = () => {
     }
 
     // Config for å gi "heading" flere verdier på en knapp
-    if (bTitle === "heading") {
-      if (ifNewLine()) {
-        if (
-          output === "## " &&
-          inputTextfromTextArea.substring(inputTextfromTextArea.length - 3) ===
-            output &&
-          buttonBoolValues[bTitle]
-        ) {
-          buttonBoolValues[bTitle] = false;
-          inputTextfromTextArea = inputTextfromTextArea.substr(
-            0,
-            inputTextfromTextArea.length - 3
-          );
-          inputTextfromTextArea += "# ";
-          setTextValue(inputTextfromTextArea);
-          return;
-        } else if (output === "## " && buttonBoolValues[bTitle]) {
-          inputTextfromTextArea += output;
-          setTextValue(inputTextfromTextArea);
-          return;
-        } else if (output === "## " && !buttonBoolValues[bTitle]) {
-          if (
-            inputTextfromTextArea.substring(
-              inputTextfromTextArea.length - 2
-            ) === "# "
-          ) {
-            inputTextfromTextArea = inputTextfromTextArea.substring(
-              0,
-              inputTextfromTextArea.length - 2
-            );
-            buttonBoolValues[bTitle] = true;
-            setTextValue(inputTextfromTextArea);
-            return;
-          } else {
-            buttonBoolValues[bTitle] = true;
-            return;
-          }
-        }
-      } else {
+
+    if (ifNewLine()) {
+      if (
+        output === "## " &&
+        inputTextfromTextArea.substring(inputTextfromTextArea.length - 3) ===
+          output &&
+        buttonBoolValues[bTitle]
+      ) {
+        buttonBoolValues[bTitle] = false;
+        inputTextfromTextArea = inputTextfromTextArea.substr(
+          0,
+          inputTextfromTextArea.length - 3
+        );
+        inputTextfromTextArea += "# ";
+        setTextValue(inputTextfromTextArea);
         return;
+      } else if (output === "## " && buttonBoolValues[bTitle]) {
+        inputTextfromTextArea += output;
+        setTextValue(inputTextfromTextArea);
+        return;
+      } else if (output === "## " && !buttonBoolValues[bTitle]) {
+        if (
+          inputTextfromTextArea.substring(inputTextfromTextArea.length - 2) ===
+          "# "
+        ) {
+          inputTextfromTextArea = inputTextfromTextArea.substring(
+            0,
+            inputTextfromTextArea.length - 2
+          );
+          buttonBoolValues[bTitle] = true;
+          setTextValue(inputTextfromTextArea);
+          return;
+        } else {
+          buttonBoolValues[bTitle] = true;
+          return;
+        }
       }
+    }
+
+    if (bTitle === "heading" && !ifNewLine()) {
+      return;
     }
 
     // nuller ut verdi fra knapp-trykk om man trykker en gang til på knapp uten å ha skrevet noen tegn.
@@ -399,7 +399,7 @@ const Editor = () => {
     INTRO: () => handleButtonClick("intro", "{.intro}\n\n", null, null, ""),
     INLINE: () => handleButtonClick("inline", "``", 1, 1, ""),
     CODEBLOCK: () =>
-      handleButtonClick("codeblock", `${temp}\n\n${temp}`, 4, 0, "")
+      handleButtonClick("codeblock", `${temp}\n\n${temp}`, 4, 4, "\n")
   };
 
   return (

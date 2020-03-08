@@ -176,7 +176,7 @@ const buttonConfig7 = [
     title: "Code Block",
     cursorIntON: 4,
     cursorIntOFF: 4,
-    endOutput: "",
+    endOutput: "\n",
     shortcut: "k"
   }
 ];
