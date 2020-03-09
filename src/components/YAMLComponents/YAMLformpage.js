@@ -87,7 +87,7 @@ class YAMLformpage extends React.Component {
                 name="language"
                 onChange={this.props.myChangeHandler}
               >
-                <option value="nb">Norsk</option>
+                <option value="nb">Bokmål</option>
                 <option value="nn">Nynorsk</option>
                 <option value="en">Engelsk</option>
                 <option value="is">Islandsk</option>

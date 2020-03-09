@@ -20,9 +20,9 @@ class App extends React.Component {
             <FormComponent />
           </Route>
           <Route path="/editor">
-            <div className="controlPanelPlacement">
-              <Editor />
-            </div>
+            {/* <div className="controlPanelPlacement"> */}
+            <Editor />
+            {/* </div> */}
           </Route>
           <Route exact path="/endpage">
             <EndPage />

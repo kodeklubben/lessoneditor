@@ -5,7 +5,7 @@ const buttonConfig = [
     bTitle: "bold",
     icon: "bold",
     output: "****",
-    title: "",
+    title: "Bold",
     cursorIntON: 2,
     cursorIntOFF: 2,
     endOutput: "",
@@ -15,7 +15,7 @@ const buttonConfig = [
     bTitle: "italic",
     icon: "italic",
     output: "__ ",
-    title: "",
+    title: "Italic",
     cursorIntON: 2,
     cursorIntOFF: 2,
     endOutput: "",
@@ -25,17 +25,20 @@ const buttonConfig = [
     bTitle: "heading",
     icon: "heading",
     output: "## ",
-    title: "",
+    title: "Heading",
     cursorIntON: 2,
     cursorIntOFF: 2,
     endOutput: "",
     shortcut: "h"
-  },
+  }
+];
+
+const buttonConfig2 = [
   {
     bTitle: "undo",
     icon: "undo",
     output: "",
-    title: "",
+    title: "Undo",
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
@@ -45,57 +48,66 @@ const buttonConfig = [
     bTitle: "redo",
     icon: "redo",
     output: "",
-    title: "",
+    title: "Redo",
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
     shortcut: "shift+z"
-  },
+  }
+];
+
+const buttonConfig3 = [
   {
     bTitle: "new",
     icon: "file",
     output: "",
-    title: "",
+    title: "New",
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: "n"
+    shortcut: "shift+backspace"
   },
   {
     bTitle: "load",
     icon: "upload",
     output: "",
-    title: "",
+    title: "Load",
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: "l"
+    shortcut: "shift+l"
   },
   {
     bTitle: "save",
     icon: "save",
     output: "",
-    title: "",
+    title: "Save",
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: "s"
-  },
+    shortcut: "shift+s"
+  }
+];
+
+const buttonConfig4 = [
   {
     bTitle: "image",
     icon: "file image",
     output: "",
-    title: "",
+    title: "Image",
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
     shortcut: "p"
-  },
+  }
+];
+
+const buttonConfig5 = [
   {
     bTitle: "listUl",
     icon: "list ul",
     output: "- ",
-    title: "",
+    title: "List",
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
@@ -105,47 +117,53 @@ const buttonConfig = [
     bTitle: "listOl",
     icon: "list ol",
     output: "1. ",
-    title: "",
+    title: "Ordered List",
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: "o"
+    shortcut: "shift+u"
   },
   {
     bTitle: "checklist",
     icon: "tasks",
     output: "- [ ] ",
-    title: "",
+    title: "Checklist",
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: "t"
-  },
+    shortcut: "y"
+  }
+];
+
+const buttonConfig6 = [
   {
     bTitle: "activity",
     icon: "",
-    output: "{.activity}\n\n",
+    output: "{.activity}",
     title: "{.Activity}",
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: "a"
+    shortcut: "shift+a"
   },
   {
     bTitle: "intro",
     icon: "",
-    output: "{.intro}\n\n",
+    output: "{.intro}",
     title: "{.Intro}",
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: "o"
-  },
+    shortcut: "shift+i"
+  }
+];
+
+const buttonConfig7 = [
   {
     bTitle: "inline",
     icon: "terminal",
     output: "``",
-    title: "",
+    title: "Inline Code",
     cursorIntON: 1,
     cursorIntOFF: 1,
     endOutput: "",
@@ -155,11 +173,20 @@ const buttonConfig = [
     bTitle: "codeblock",
     icon: "code",
     output: `${temp}\n\n${temp}`,
-    title: "",
+    title: "Code Block",
     cursorIntON: 4,
-    endOutput: "",
+    cursorIntOFF: 4,
+    endOutput: "\n",
     shortcut: "k"
   }
 ];
 
-export default buttonConfig;
+export {
+  buttonConfig,
+  buttonConfig2,
+  buttonConfig3,
+  buttonConfig4,
+  buttonConfig5,
+  buttonConfig6,
+  buttonConfig7
+};

@@ -7,22 +7,29 @@ class Buttons extends React.Component {
       <div
         onClick={() =>
           this.props.onButtonClick(
+            this.props.bTitle,
             this.props.output,
             this.props.cursorIntON,
             this.props.cursorIntOFF,
-            this.props.bTitle,
             this.props.endOutput
           )
         }
+        className="buttonBorder"
       >
         <Popup
-          content={"ctrl+" + this.props.shortcutKey}
-          mouseEnterDelay={1000}
+          content={this.props.title + " (ctrl+" + this.props.shortcutKey + ")"}
+          mouseEnterDelay={250}
+          mouseLeaveDelay={250}
+          inverted
           trigger={
-            this.props.title ? (
-              <Button>{this.props.title}</Button>
+            this.props.icon ? (
+              <Button className={this.props.cname} labelPosition="left">
+                <Icon name={this.props.icon} />
+              </Button>
             ) : (
-              <Button icon={this.props.icon} />
+              <Button className={this.props.cname} labelPosition="left">
+                {this.props.title}
+              </Button>
             )
           }
         />

@@ -3,11 +3,8 @@ import React from "react";
 // meldingen i autosave
 var autoSaveMessage = <br />;
 
-// autosave-lengde i sekunder, må være over 3 sek:
-const autoSaveLength = 60;
 const Autosave = props => {
   // useEffect():  Koden kjører når komponenten oppdaterer, passer bra til å konfigurere nedtelling:
-
   React.useEffect(() => {
     props.counter >= 0 &&
       setTimeout(() => {
@@ -16,16 +13,16 @@ const Autosave = props => {
           autoSaveMessage = "autosaving document...";
         }
         if (props.counter === 0) {
-          props.autoSave();
-          props.setCounter(autoSaveLength);
+          props.autoSaveFn();
+          props.setCounter(props.autosaveLength);
           autoSaveMessage = <br />;
         }
       }, 1000);
   });
 
   return (
-    <div>
-      <p>{autoSaveMessage}</p>
+    <div className="autosave">
+      <p style={{ color: "grey" }}>{autoSaveMessage}</p>
     </div>
   );
 };

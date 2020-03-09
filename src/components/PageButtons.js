@@ -9,7 +9,7 @@ const PageButtons = props => {
         <Link to={props.prevValue}>{props.prevTitle}</Link>
       </button>
       <button
-        className="ui icon right labeled button toRight"
+        className="ui right floated icon right labeled button"
         type="button"
         onClick={props.mySubmitHandler}
       >
