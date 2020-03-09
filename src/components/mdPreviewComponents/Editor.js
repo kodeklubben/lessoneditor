@@ -321,7 +321,10 @@ const Editor = () => {
       return;
     }
 
-    if (bTitle === "activity" || (bTitle === "intro" && ifNewLine())) {
+    if (
+      (bTitle === "activity" && ifNewLine()) ||
+      (bTitle === "intro" && ifNewLine())
+    ) {
       return;
     }
 
