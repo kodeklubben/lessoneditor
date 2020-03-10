@@ -5,7 +5,6 @@ import MDPreview from "./MDPreview";
 import { mdParser } from "../../utils/mdParser";
 import ControlPanel from "./ControlPanel";
 import PageButtons from "../PageButtons";
-import Autosave from "./Autosave";
 // import { Redirect } from "react-router-dom";
 
 // variabler som sjekker om en knapp er trykket ned:
@@ -37,18 +36,14 @@ var charCounter = 0;
 // Variabel for å spesifisere hoved-hurtigtast til React Hotkeys (tastesnarveier)
 var OSspecificKey = "ctrl+";
 
-// egen variabel for input i textarea. Lagres som egen variabel før den pushes til statevariabel "textValue".
-// dette fordi den da kan manipuleres uten å re-rendre siden hele tiden.
-var inputTextfromTextArea = "";
-
 var storedTextValue = "";
 
 // undo/redo - variabler.
 var undo = [""];
 var redo = [];
 
-// // autosave-lengde i sekunder, må være over 3 sek:
-// var autosaveLength = 30;
+// meldingen i autosave
+var autoSaveMessage = <br />;
 
 // ___________________
 
@@ -65,26 +60,37 @@ class Editor extends React.Component {
 
     this.editorRef = React.createRef();
   }
+
+  componentDidMount() {
+    this.myCounter = setInterval(() => {
+      this.setState({ counter: this.state.counter + 1 });
+    }, 1000);
+  }
+
+  componentDidUpdate() {
+    if (this.state.counter === 2) {
+      autoSaveMessage = "document saved";
+    }
+    if (this.state.counter === 0) {
+      autoSaveMessage = "saving..";
+      storedTextValue = this.state.textValue;
+    }
+  }
+
   render() {
     // referanseVariabel (type: GetDocumentByID i vanlig JS) for Textarea-elementet i DOM.  Tillater å manipulere DOM i react
     // brukes her til å flytte fokus fra knapp tilbake til textarea
 
-    // autoSave funksjon kalles fra Autosave-komponent
-    const autoSaveFn = () => {
-      storedTextValue = inputTextfromTextArea;
-    };
-
     // all config for å behandle tekst i textarea
     const handleChange = textInput => {
       // lagrer inputtekst utfor state.
-      inputTextfromTextArea = textInput;
 
       // hvis tekstinput er mellomrom eller enter, lagres textinput til undo:
       if (
         textInput.charCodeAt(textInput.length - 1) === 32 ||
         textInput.charCodeAt(textInput.length - 1) === 10
       ) {
-        undo = [...undo, inputTextfromTextArea];
+        undo = [...undo, textInput];
       }
 
       // Teller input-tegn, og tvinger linjeskift hvis det passerer 80 tegn
@@ -95,13 +101,13 @@ class Editor extends React.Component {
       }
 
       if (charCounter === 80) {
-        inputTextfromTextArea += "\n";
+        this.setState({ textValue: textInput + "\n" });
         charCounter = 0;
       }
 
       // dytter tekstinput til state for å re-rendre siden.
-      this.setState({ textValue: inputTextfromTextArea });
-      this.setState({ mdValue: mdParser(inputTextfromTextArea) });
+      this.setState({ textValue: textInput });
+      this.setState({ mdValue: mdParser(textInput) });
       this.setState({ counter: 0 });
     };
 
@@ -190,12 +196,11 @@ class Editor extends React.Component {
         e.preventDefault();
         // config for correct tab inside codeblock:
         if (!this.boolButton["codeblock"]) {
-          let i = inputTextfromTextArea.substring(
+          let i = this.state.textValue.substring(
             0,
-            inputTextfromTextArea.length - 4
+            this.state.textValue.length - 4
           );
-          inputTextfromTextArea = i + "  \n" + temp;
-          this.setState({ textValue: inputTextfromTextArea });
+          this.setState({ textValue: i + "  \n" + temp });
           setTimeout(() => {
             this.editorRef.current.selectionStart -= 4;
             this.editorRef.current.selectionEnd -= 4;
@@ -203,17 +208,16 @@ class Editor extends React.Component {
 
           return;
         }
-        inputTextfromTextArea += "  ";
+        this.setState({ textValue: this.state.textValue + "  " });
       }
     };
 
     const ifNewLine = () => {
-      return inputTextfromTextArea[inputTextfromTextArea.length - 1] === "\n" ||
-        inputTextfromTextArea === "" ||
-        inputTextfromTextArea.substring(inputTextfromTextArea.length - 3) ===
+      return this.state.textValue[this.state.textValue.length - 1] === "\n" ||
+        this.state.textValue === "" ||
+        this.state.textValue.substring(this.state.textValue.length - 3) ===
           "## " ||
-        inputTextfromTextArea.substring(inputTextfromTextArea.length - 2) ===
-          "# "
+        this.state.textValue.substring(this.state.textValue.length - 2) === "# "
         ? true
         : false;
     };
@@ -232,26 +236,24 @@ class Editor extends React.Component {
 
       // fjerner all tekst i editor og undo/redo-variablene
       if (bTitle === "new") {
-        inputTextfromTextArea = "";
+        this.setState({ textValue: "" });
         undo = [""];
         redo = [];
-        this.setState({ textValue: inputTextfromTextArea });
-        this.setState({ mdValue: mdParser(inputTextfromTextArea) });
+        this.setState({ mdValue: mdParser(this.state.textValue) });
         return;
       }
 
       // Load, save, undo, redo funksjoner
 
       if (bTitle === "load") {
-        inputTextfromTextArea = storedTextValue;
-        undo = [inputTextfromTextArea];
-        this.setState({ textValue: inputTextfromTextArea });
-        this.setState({ mdValue: mdParser(inputTextfromTextArea) });
+        this.setState({ textValue: storedTextValue });
+        undo = [this.state.textValue];
+        this.setState({ mdValue: mdParser(this.state.textValue) });
         return;
       }
 
       if (bTitle === "save") {
-        storedTextValue = inputTextfromTextArea;
+        storedTextValue = this.state.textValue;
         return;
       }
 
@@ -259,10 +261,9 @@ class Editor extends React.Component {
         if (undo.length <= 0) {
           return;
         }
-        redo = [...redo, inputTextfromTextArea];
-        inputTextfromTextArea = undo.pop();
-        this.setState({ textValue: inputTextfromTextArea });
-        this.setState({ mdValue: mdParser(inputTextfromTextArea) });
+        redo = [...redo, this.state.textValue];
+        this.setState({ textValue: undo.pop() });
+        this.setState({ mdValue: mdParser(this.state.textValue) });
         return;
       }
 
@@ -270,10 +271,9 @@ class Editor extends React.Component {
         if (redo.length <= 0) {
           return;
         }
-        undo = [...undo, inputTextfromTextArea];
-        inputTextfromTextArea = redo.pop();
-        this.setState({ textValue: inputTextfromTextArea });
-        this.setState({ mdValue: mdParser(inputTextfromTextArea) });
+        undo = [...undo, this.state.textValue];
+        this.setState({ textValue: redo.pop() });
+        this.setState({ mdValue: mdParser(this.state.textValue) });
         return;
       }
 
@@ -282,34 +282,32 @@ class Editor extends React.Component {
       if (ifNewLine()) {
         if (
           output === "## " &&
-          inputTextfromTextArea.substring(inputTextfromTextArea.length - 3) ===
+          this.state.textValue.substring(this.state.textValue.length - 3) ===
             output &&
           buttonBoolValues[bTitle]
         ) {
           buttonBoolValues[bTitle] = false;
-          inputTextfromTextArea = inputTextfromTextArea.substr(
-            0,
-            inputTextfromTextArea.length - 3
-          );
-          inputTextfromTextArea += "# ";
-          this.setState({ textValue: inputTextfromTextArea });
+          this.setState({
+            textValue:
+              this.state.textValue.substr(0, this.state.textValue.length - 3) +
+              "# "
+          });
           return;
         } else if (output === "## " && buttonBoolValues[bTitle]) {
-          inputTextfromTextArea += output;
-          this.setState({ textValue: inputTextfromTextArea });
+          this.setState({ textValue: this.state.textValue + output });
           return;
         } else if (output === "## " && !buttonBoolValues[bTitle]) {
           if (
-            inputTextfromTextArea.substring(
-              inputTextfromTextArea.length - 2
-            ) === "# "
+            this.state.textValue.substring(this.state.textValue.length - 2) ===
+            "# "
           ) {
-            inputTextfromTextArea = inputTextfromTextArea.substring(
-              0,
-              inputTextfromTextArea.length - 2
-            );
+            this.setState({
+              textValue: this.state.textValue.substring(
+                0,
+                this.state.textValue.length - 2
+              )
+            });
             buttonBoolValues[bTitle] = true;
-            this.setState({ textValue: inputTextfromTextArea });
             return;
           } else {
             buttonBoolValues[bTitle] = true;
@@ -337,17 +335,18 @@ class Editor extends React.Component {
       // nuller ut verdi fra knapp-trykk om man trykker en gang til på knapp uten å ha skrevet noen tegn.
       // kanselerer da ut første knappetrykket.
       if (
-        inputTextfromTextArea.substring(
-          inputTextfromTextArea.length - output.length
+        this.state.textValue.substring(
+          this.state.textValue.length - output.length
         ) === output &&
         !buttonBoolValues[bTitle]
       ) {
-        inputTextfromTextArea = inputTextfromTextArea.substring(
-          0,
-          inputTextfromTextArea.length - output.length
-        );
+        this.setState({
+          textValue: this.state.textValue.substring(
+            0,
+            this.state.textValue.length - output.length
+          )
+        });
         buttonBoolValues[bTitle] = true;
-        this.setState({ textValue: inputTextfromTextArea });
         return;
       }
 
@@ -356,8 +355,7 @@ class Editor extends React.Component {
 
       if (buttonBoolValues[bTitle] === true) {
         buttonBoolValues[bTitle] = false;
-        inputTextfromTextArea = inputTextfromTextArea.concat(output);
-        this.setState({ textValue: inputTextfromTextArea });
+        this.setState({ textValue: this.state.textValue.concat(output) });
         setTimeout(() => {
           this.editorRef.current.selectionStart -= cursorIntON;
           this.editorRef.current.selectionEnd -= cursorIntON;
@@ -370,15 +368,15 @@ class Editor extends React.Component {
           this.editorRef.current.selectionStart += cursorIntOFF;
           this.editorRef.current.selectionEnd += cursorIntOFF;
           if (endOutput) {
-            inputTextfromTextArea = inputTextfromTextArea.concat(endOutput);
-            this.setState({ textValue: inputTextfromTextArea });
+            this.setState({
+              textValue: this.state.textValue.concat(endOutput)
+            });
           }
         }, 0);
         this.setState({ boolButton: buttonBoolValues });
         return;
       } else {
-        inputTextfromTextArea = inputTextfromTextArea.concat(output);
-        this.setState({ textValue: inputTextfromTextArea });
+        this.setState({ textValue: this.state.textValue.concat(output) });
         return;
       }
     };
@@ -433,10 +431,6 @@ class Editor extends React.Component {
         handleButtonClick("codeblock", `${temp}\n\n${temp}`, 4, 4, "\n")
     };
 
-    const setCounter = input => {
-      this.setState({ counter: input });
-    };
-
     return (
       <div className="Editor">
         <div className="controlPanelPlacement">
@@ -446,7 +440,7 @@ class Editor extends React.Component {
             <div className="column">
               <MDTextArea
                 editorRef={this.editorRef}
-                textValue={inputTextfromTextArea}
+                textValue={this.state.textValue}
                 onInputChange={handleChange}
                 handleButtonClick={handleButtonClick}
                 onTextareaKeyDown={onTextareaKeyDown}
@@ -460,11 +454,9 @@ class Editor extends React.Component {
           </div>
         </div>
         <div className="ui autosave container">
-          <Autosave
-            autoSaveFn={autoSaveFn}
-            counter={this.state.counter}
-            setCounter={setCounter}
-          />
+          <div className="autosave">
+            <p style={{ color: "grey" }}>{autoSaveMessage}</p>
+          </div>
         </div>
         <div className="ui container">
           <PageButtons
@@ -475,6 +467,7 @@ class Editor extends React.Component {
             mySubmitHandler={mySubmitHandler}
           />
         </div>
+        <p>{this.state.counter}</p>
       </div>
     );
   }
