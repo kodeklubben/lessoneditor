@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import "../../index.css";
 import MDTextArea from "./MDTextArea";
 import MDPreview from "./MDPreview";
@@ -65,6 +65,10 @@ class Editor extends React.Component {
     this.myCounter = setInterval(() => {
       this.setState({ counter: this.state.counter + 1 });
     }, 1000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.myCounter);
   }
 
   componentDidUpdate() {
@@ -315,6 +319,7 @@ class Editor extends React.Component {
         }
       }
 
+      //constraint button from working if not new line
       if (
         bTitle === "heading" ||
         (bTitle === "codeblock" &&
@@ -324,6 +329,7 @@ class Editor extends React.Component {
         return;
       }
 
+      //constraint button from working if new line
       if (
         (bTitle === "activity" && ifNewLine()) ||
         (bTitle === "intro" && ifNewLine())
@@ -352,16 +358,16 @@ class Editor extends React.Component {
       //  Konfig av knapper slik at de registrerer om de er trykket, og flytter tekst-markøren i henhold til hvordan MD-syntax ser ut
       // Konfig-data finnes i ./buttonConfig.js der tallverdi for hvor mye tekst-markøren skal flyttes er definert in "cursorIntON" og "cursorIntOFF"
 
-      if (buttonBoolValues[bTitle] === true) {
+      if (buttonBoolValues[bTitle]) {
         buttonBoolValues[bTitle] = false;
         this.setState({ textValue: this.state.textValue.concat(output) });
         setTimeout(() => {
           this.editorRef.current.selectionStart -= cursorIntON;
-          this.editorRef.current.selectionEnd -= cursorIntON;
+          this.editorRef.current.selectionEnd -= cursorIntOFF;
         }, 0);
         this.setState({ boolButton: buttonBoolValues });
         return;
-      } else if (buttonBoolValues[bTitle] === false) {
+      } else if (!buttonBoolValues[bTitle]) {
         buttonBoolValues[bTitle] = true;
         setTimeout(() => {
           this.editorRef.current.selectionStart += cursorIntOFF;
