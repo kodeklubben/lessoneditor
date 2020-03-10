@@ -68,10 +68,9 @@ class Editor extends React.Component {
   }
 
   componentDidUpdate() {
-    if (this.state.counter === 2) {
+    if (this.state.counter === 2 && this.state.textValue.length > 0) {
       autoSaveMessage = "document saved";
-    }
-    if (this.state.counter === 0) {
+    } else if (this.state.counter === 0) {
       autoSaveMessage = "saving..";
       storedTextValue = this.state.textValue;
     }
@@ -467,7 +466,6 @@ class Editor extends React.Component {
             mySubmitHandler={mySubmitHandler}
           />
         </div>
-        <p>{this.state.counter}</p>
       </div>
     );
   }
