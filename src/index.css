@@ -74,6 +74,14 @@ select {
   padding: 15px;
 }
 
+.imagePopup {
+  z-index: 3;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+}
+
 /* CSS for MDPreview */
 
 .column {

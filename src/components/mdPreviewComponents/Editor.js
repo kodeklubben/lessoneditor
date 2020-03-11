@@ -5,6 +5,7 @@ import MDPreview from "./MDPreview";
 import { mdParser } from "../../utils/mdParser";
 import ControlPanel from "./ControlPanel";
 import PageButtons from "../PageButtons";
+import ImagePopup from "./ImagePopup";
 // import { Redirect } from "react-router-dom";
 
 // variabler som sjekker om en knapp er trykket ned:
@@ -12,6 +13,7 @@ var buttonBoolValues = {
   bold: true,
   italic: true,
   heading: true,
+  strikethrough: true,
   undo: true,
   redo: true,
   new: true,
@@ -44,6 +46,8 @@ var redo = [];
 
 // meldingen i autosave
 var autoSaveMessage = <br />;
+
+var imagePopup = <br />;
 
 // ___________________
 
@@ -215,6 +219,27 @@ class Editor extends React.Component {
       }
     };
 
+    const imagePopupSubmitHandler = imagePopupInputValue => {
+      if (imagePopupInputValue) {
+        this.setState({
+          textValue:
+            this.state.textValue +
+            "\n![Bildebeskrivelse her](" +
+            imagePopupInputValue +
+            ")"
+        });
+
+        setTimeout(() => {
+          this.editorRef.current.selectionStart -=
+            imagePopupInputValue.length + 23;
+          this.editorRef.current.selectionEnd -=
+            imagePopupInputValue.length + 3;
+        }, 0);
+      }
+      imagePopup = <br />;
+      this.editorRef.current.focus();
+    };
+
     const ifNewLine = () => {
       return this.state.textValue[this.state.textValue.length - 1] === "\n" ||
         this.state.textValue === "" ||
@@ -277,6 +302,13 @@ class Editor extends React.Component {
         undo = [...undo, this.state.textValue];
         this.setState({ textValue: redo.pop() });
         this.setState({ mdValue: mdParser(this.state.textValue) });
+        return;
+      }
+
+      if (bTitle === "image") {
+        imagePopup = (
+          <ImagePopup imagePopupSubmitHandler={imagePopupSubmitHandler} />
+        );
         return;
       }
 
@@ -453,6 +485,7 @@ class Editor extends React.Component {
                 keyMap={keyMap}
               />
             </div>
+            {imagePopup}
             <div className="column">
               <MDPreview mdValue={this.state.mdValue} />
             </div>

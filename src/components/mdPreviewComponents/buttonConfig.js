@@ -30,6 +30,16 @@ const buttonConfig = [
     cursorIntOFF: 2,
     endOutput: "",
     shortcut: "h"
+  },
+  {
+    bTitle: "strikethrough",
+    icon: "strikethrough",
+    output: "~~~~",
+    title: "Strikethrough",
+    cursorIntON: 2,
+    cursorIntOFF: 2,
+    endOutput: "",
+    shortcut: "s"
   }
 ];
 
