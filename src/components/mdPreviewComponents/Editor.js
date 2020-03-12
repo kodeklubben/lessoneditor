@@ -252,7 +252,7 @@ class Editor extends React.Component {
       console.log(inputText[0]);
       return inputText[cursorPosition - 1] === "\n" ||
         inputText === "" ||
-        (inputText.charAt(cursorPosition) === "" && cursorPosition === 0) ||
+        cursorPosition === 0 ||
         inputText.slice(cursorPosition - 3, cursorPosition) === "## " ||
         inputText.slice(cursorPosition - 2, cursorPosition) === "# "
         ? true
@@ -472,6 +472,7 @@ class Editor extends React.Component {
       BOLD: OSspecificKey + "b",
       ITALIC: OSspecificKey + "i",
       HEADING: OSspecificKey + "h",
+      STRIKETHROUGH: OSspecificKey + "s",
       UNDO: OSspecificKey + "z",
       REDO: OSspecificKey + "shift+z",
       NEW: OSspecificKey + "shift+backspace",
@@ -491,8 +492,9 @@ class Editor extends React.Component {
     // kaller samme funksjon som når man trykker på tilsvarende knapper med tilsvarende verdier (finnes i buttonConfig.js)
     const handlers = {
       BOLD: () => handleButtonClick("bold", "****", 2, 2, ""),
-      ITALIC: () => handleButtonClick("italic", "__ ", 2, 2, ""),
-      HEADING: () => handleButtonClick("heading", "## ", 2, 2, ""),
+      ITALIC: () => handleButtonClick("italic", " __ ", 2, 2, ""),
+      HEADING: () => handleButtonClick("heading", "## ", null, null, ""),
+      STRIKETHROUGH: () => handleButtonClick("strikethrough", "~~~~", 2, 2, ""),
       UNDO: () => handleButtonClick("undo", "", null, null, ""),
       REDO: () => handleButtonClick("redo", "", null, null, ""),
       NEW: () => handleButtonClick("new", "", null, null, ""),
