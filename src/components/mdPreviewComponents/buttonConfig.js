@@ -14,7 +14,7 @@ const buttonConfig = [
   {
     bTitle: "italic",
     icon: "italic",
-    output: "__ ",
+    output: " __ ",
     title: "Italic",
     cursorIntON: 2,
     cursorIntOFF: 2,
@@ -185,7 +185,7 @@ const buttonConfig7 = [
     output: `${temp}\n\n${temp}`,
     title: "Code Block",
     cursorIntON: 4,
-    cursorIntOFF: 4,
+    cursorIntOFF: 5,
     endOutput: "\n",
     shortcut: "k"
   }

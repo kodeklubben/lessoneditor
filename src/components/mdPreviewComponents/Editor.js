@@ -29,6 +29,8 @@ var buttonBoolValues = {
   codeblock: true
 };
 
+const objectKeys = Object.keys(buttonBoolValues);
+
 // Hjelpevariabel for å formatere string taste-shortcut.
 const temp = "```";
 
@@ -43,6 +45,9 @@ var storedTextValue = "";
 // undo/redo - variabler.
 var undo = [""];
 var redo = [];
+
+var inputText = "";
+var cursorPosition = 0;
 
 // meldingen i autosave
 var autoSaveMessage = <br />;
@@ -62,6 +67,8 @@ class Editor extends React.Component {
       boolButton: buttonBoolValues
     };
 
+    // referanseVariabel (type: GetDocumentByID i vanlig JS) for Textarea-elementet i DOM.  Tillater å manipulere DOM i react
+    // brukes her til å flytte fokus fra knapp tilbake til textarea
     this.editorRef = React.createRef();
   }
 
@@ -85,42 +92,51 @@ class Editor extends React.Component {
   }
 
   render() {
-    // referanseVariabel (type: GetDocumentByID i vanlig JS) for Textarea-elementet i DOM.  Tillater å manipulere DOM i react
-    // brukes her til å flytte fokus fra knapp tilbake til textarea
-
     // all config for å behandle tekst i textarea
-    const handleChange = textInput => {
-      // lagrer inputtekst utfor state.
+    const handleChange = event => {
+      inputText = event.target.value;
 
-      // hvis tekstinput er mellomrom eller enter, lagres textinput til undo:
+      // hvis tekstinput er mellomrom eller enter, lagres event.target.value til undo:
       if (
-        textInput.charCodeAt(textInput.length - 1) === 32 ||
-        textInput.charCodeAt(textInput.length - 1) === 10
+        event.target.value.charCodeAt(event.target.value.length - 1) === 32 ||
+        event.target.value.charCodeAt(event.target.value.length - 1) === 10
       ) {
-        undo = [...undo, textInput];
+        undo = [...undo, inputText];
       }
 
       // Teller input-tegn, og tvinger linjeskift hvis det passerer 80 tegn
       charCounter += 1;
 
-      if (textInput.charCodeAt(textInput.length - 1) === 10) {
+      if (event.target.value.charCodeAt(event.target.value.length - 1) === 10) {
         charCounter = 0;
       }
 
       if (charCounter === 80) {
-        this.setState({ textValue: textInput + "\n" });
+        inputText += "\n";
         charCounter = 0;
       }
 
       // dytter tekstinput til state for å re-rendre siden.
-      this.setState({ textValue: textInput });
-      this.setState({ mdValue: mdParser(textInput) });
+      this.setState({ textValue: inputText });
+      this.setState({ mdValue: mdParser(inputText) });
       this.setState({ counter: 0 });
+    };
+
+    const onTextareaKeyUp = e => {
+      cursorPosition = e.target.selectionStart;
+    };
+
+    const onTextareaClick = e => {
+      for (let x in objectKeys) {
+        buttonBoolValues[x] = true;
+      }
     };
 
     // konfigurering for å fjerne default-funksjoner av tastekombinasjoner
     // brukes for å sette egne hurtigtaster i teksteditor.
     const onTextareaKeyDown = e => {
+      cursorPosition = e.target.selectionStart;
+
       // 66 = "b"
       if (e.ctrlKey && e.keyCode === 66) {
         e.preventDefault();
@@ -202,52 +218,53 @@ class Editor extends React.Component {
       if (e.keyCode === 9) {
         e.preventDefault();
         // config for correct tab inside codeblock:
-        if (!this.boolButton["codeblock"]) {
-          let i = this.state.textValue.substring(
-            0,
-            this.state.textValue.length - 4
-          );
-          this.setState({ textValue: i + "  \n" + temp });
-          setTimeout(() => {
-            this.editorRef.current.selectionStart -= 4;
-            this.editorRef.current.selectionEnd -= 4;
-          }, 0);
-
+        if (!buttonBoolValues["codeblock"]) {
+          let i = inputText.slice(0, cursorPosition - 4);
+          inputText = i + "  \n" + temp;
+          setCursorPosition(cursorPosition, cursorPosition);
           return;
         }
-        this.setState({ textValue: this.state.textValue + "  " });
+        inputText += "  ";
+        this.setState({ textValue: inputText });
       }
     };
 
+    // Vise, skjule image-button-popup
     const imagePopupSubmitHandler = imagePopupInputValue => {
       if (imagePopupInputValue) {
-        this.setState({
-          textValue:
-            this.state.textValue +
-            "\n![Bildebeskrivelse her](" +
-            imagePopupInputValue +
-            ")"
-        });
+        inputText += "\n![Bildebeskrivelse her](" + imagePopupInputValue + ")";
+        this.setState({ textValue: inputText });
 
         setTimeout(() => {
-          this.editorRef.current.selectionStart -=
-            imagePopupInputValue.length + 23;
-          this.editorRef.current.selectionEnd -=
-            imagePopupInputValue.length + 3;
+          this.editorRef.current.selectionStart =
+            cursorPosition - imagePopupInputValue.length + 23;
+          this.editorRef.current.selectionEnd =
+            cursorPosition - imagePopupInputValue.length + 3;
         }, 0);
       }
       imagePopup = <br />;
       this.editorRef.current.focus();
+      setCursorPosition(cursorPosition, cursorPosition);
     };
 
+    // litt logikk for å detektere linjeskift ++
     const ifNewLine = () => {
-      return this.state.textValue[this.state.textValue.length - 1] === "\n" ||
-        this.state.textValue === "" ||
-        this.state.textValue.substring(this.state.textValue.length - 3) ===
-          "## " ||
-        this.state.textValue.substring(this.state.textValue.length - 2) === "# "
+      console.log(inputText[0]);
+      return inputText[cursorPosition - 1] === "\n" ||
+        inputText === "" ||
+        (inputText.charAt(cursorPosition) === "" && cursorPosition === 0) ||
+        inputText.slice(cursorPosition - 3, cursorPosition) === "## " ||
+        inputText.slice(cursorPosition - 2, cursorPosition) === "# "
         ? true
         : false;
+    };
+
+    // angi markørposisjon i tekstfelt
+    const setCursorPosition = (positionStart, positionEnd) => {
+      setTimeout(() => {
+        this.editorRef.current.selectionStart = positionStart;
+        this.editorRef.current.selectionEnd = positionEnd;
+      }, 0);
     };
 
     // funksjon som konfigurerer hva som skjer når man trykker på knapper i teksteditor
@@ -261,27 +278,31 @@ class Editor extends React.Component {
     ) => {
       // flytte fokus til tekstvindu etter button-click
       this.editorRef.current.focus();
+      setCursorPosition(cursorPosition, cursorPosition);
 
       // fjerner all tekst i editor og undo/redo-variablene
       if (bTitle === "new") {
-        this.setState({ textValue: "" });
+        inputText = "";
         undo = [""];
         redo = [];
-        this.setState({ mdValue: mdParser(this.state.textValue) });
+        this.setState({ textValue: inputText });
+        this.setState({ mdValue: mdParser(inputText) });
         return;
       }
 
       // Load, save, undo, redo funksjoner
 
       if (bTitle === "load") {
-        this.setState({ textValue: storedTextValue });
-        undo = [this.state.textValue];
-        this.setState({ mdValue: mdParser(this.state.textValue) });
+        inputText = storedTextValue;
+        undo = [inputText];
+        this.setState({ textValue: inputText });
+        this.setState({ mdValue: mdParser(inputText) });
+        setCursorPosition(inputText.length, inputText.length);
         return;
       }
 
       if (bTitle === "save") {
-        storedTextValue = this.state.textValue;
+        storedTextValue = inputText;
         return;
       }
 
@@ -289,9 +310,11 @@ class Editor extends React.Component {
         if (undo.length <= 0) {
           return;
         }
-        redo = [...redo, this.state.textValue];
-        this.setState({ textValue: undo.pop() });
-        this.setState({ mdValue: mdParser(this.state.textValue) });
+        redo = [...redo, inputText];
+        inputText = undo.pop();
+        this.setState({ textValue: inputText });
+        this.setState({ mdValue: mdParser(inputText) });
+        setCursorPosition(inputText.length);
         return;
       }
 
@@ -299,9 +322,11 @@ class Editor extends React.Component {
         if (redo.length <= 0) {
           return;
         }
-        undo = [...undo, this.state.textValue];
-        this.setState({ textValue: redo.pop() });
-        this.setState({ mdValue: mdParser(this.state.textValue) });
+        undo = [...undo, inputText];
+        inputText = redo.pop();
+        this.setState({ textValue: inputText });
+        this.setState({ mdValue: mdParser(inputText) });
+        setCursorPosition(inputText.length);
         return;
       }
 
@@ -317,31 +342,36 @@ class Editor extends React.Component {
       if (ifNewLine()) {
         if (
           output === "## " &&
-          this.state.textValue.substring(this.state.textValue.length - 3) ===
-            output &&
+          inputText.slice(cursorPosition - 3, cursorPosition) === output &&
           buttonBoolValues[bTitle]
         ) {
           buttonBoolValues[bTitle] = false;
-          this.setState({
-            textValue:
-              this.state.textValue.substr(0, this.state.textValue.length - 3) +
-              "# "
-          });
+          inputText =
+            inputText.slice(0, cursorPosition - 3) +
+            "# " +
+            inputText.slice(cursorPosition);
+          this.setState({ textValue: inputText });
+          cursorPosition -= 1;
+          setCursorPosition(cursorPosition, cursorPosition);
           return;
         } else if (output === "## " && buttonBoolValues[bTitle]) {
-          this.setState({ textValue: this.state.textValue + output });
+          inputText =
+            inputText.slice(0, cursorPosition) +
+            output +
+            inputText.slice(cursorPosition);
+
+          this.setState({ textValue: inputText });
+          cursorPosition += output.length;
+          setCursorPosition(cursorPosition, cursorPosition);
           return;
         } else if (output === "## " && !buttonBoolValues[bTitle]) {
-          if (
-            this.state.textValue.substring(this.state.textValue.length - 2) ===
-            "# "
-          ) {
-            this.setState({
-              textValue: this.state.textValue.substring(
-                0,
-                this.state.textValue.length - 2
-              )
-            });
+          if (inputText.slice(cursorPosition - 2, cursorPosition) === "# ") {
+            inputText =
+              inputText.slice(0, cursorPosition - 2) +
+              inputText.slice(cursorPosition);
+            this.setState({ textValue: inputText });
+            cursorPosition -= 2;
+            setCursorPosition(cursorPosition, cursorPosition);
             buttonBoolValues[bTitle] = true;
             return;
           } else {
@@ -372,17 +402,18 @@ class Editor extends React.Component {
       // nuller ut verdi fra knapp-trykk om man trykker en gang til på knapp uten å ha skrevet noen tegn.
       // kanselerer da ut første knappetrykket.
       if (
-        this.state.textValue.substring(
-          this.state.textValue.length - output.length
+        inputText.slice(
+          cursorPosition + cursorIntON - output.length,
+          cursorPosition + cursorIntON
         ) === output &&
         !buttonBoolValues[bTitle]
       ) {
-        this.setState({
-          textValue: this.state.textValue.substring(
-            0,
-            this.state.textValue.length - output.length
-          )
-        });
+        inputText =
+          inputText.slice(0, cursorPosition + cursorIntON - output.length) +
+          inputText.slice(cursorPosition + cursorIntON);
+        this.setState({ textValue: inputText });
+        cursorPosition -= cursorIntON;
+        setCursorPosition(cursorPosition, cursorPosition);
         buttonBoolValues[bTitle] = true;
         return;
       }
@@ -392,28 +423,39 @@ class Editor extends React.Component {
 
       if (buttonBoolValues[bTitle]) {
         buttonBoolValues[bTitle] = false;
-        this.setState({ textValue: this.state.textValue.concat(output) });
-        setTimeout(() => {
-          this.editorRef.current.selectionStart -= cursorIntON;
-          this.editorRef.current.selectionEnd -= cursorIntOFF;
-        }, 0);
+        inputText =
+          inputText.slice(0, cursorPosition) +
+          output +
+          inputText.slice(cursorPosition);
+        this.setState({ textValue: inputText });
+        cursorPosition = cursorPosition + cursorIntON;
+        setCursorPosition(cursorPosition, cursorPosition);
         this.setState({ boolButton: buttonBoolValues });
         return;
       } else if (!buttonBoolValues[bTitle]) {
         buttonBoolValues[bTitle] = true;
-        setTimeout(() => {
-          this.editorRef.current.selectionStart += cursorIntOFF;
-          this.editorRef.current.selectionEnd += cursorIntOFF;
-          if (endOutput) {
-            this.setState({
-              textValue: this.state.textValue.concat(endOutput)
-            });
-          }
-        }, 0);
+        setCursorPosition(
+          cursorPosition + cursorIntON,
+          cursorPosition + cursorIntOFF
+        );
+        if (endOutput) {
+          inputText =
+            inputText.slice(0, cursorPosition + cursorIntOFF) +
+            endOutput +
+            inputText.slice(cursorPosition + cursorIntOFF);
+          this.setState({ textValue: inputText });
+          cursorPosition += cursorIntOFF;
+          setCursorPosition(cursorPosition, cursorPosition);
+        }
         this.setState({ boolButton: buttonBoolValues });
         return;
       } else {
-        this.setState({ textValue: this.state.textValue.concat(output) });
+        inputText =
+          inputText.slice(0, cursorPosition) +
+          output +
+          inputText.slice(cursorPosition);
+        this.setState({ textValue: inputText });
+        setCursorPosition(cursorPosition, cursorPosition);
         return;
       }
     };
@@ -481,6 +523,8 @@ class Editor extends React.Component {
                 onInputChange={handleChange}
                 handleButtonClick={handleButtonClick}
                 onTextareaKeyDown={onTextareaKeyDown}
+                onTextareaKeyUp={onTextareaKeyUp}
+                onTextareaClick={onTextareaClick}
                 handlers={handlers}
                 keyMap={keyMap}
               />
