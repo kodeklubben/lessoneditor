@@ -47,13 +47,18 @@ var storedTextValue = "";
 var undo = [""];
 var redo = [];
 
+var counter = 0;
+
+const setCounter = input => {
+  counter = input;
+};
+
 // autosave-lengde i sekunder, må være over 3 sek:
 var autosaveLength = 30;
 
 // ___________________
 
 const Editor = () => {
-  const [counter, setCounter] = useState(autosaveLength);
   const [textValue, setTextValue] = useState("");
   const [mdValue, setMdValue] = useState("");
   const [boolButton, setBoolButton] = useState(buttonBoolValues);
@@ -101,11 +106,14 @@ const Editor = () => {
     // dytter tekstinput til state for å re-rendre siden.
     setTextValue(inputTextfromTextArea);
     setMdValue(mdParser(inputTextfromTextArea));
+    setCounter(0);
   };
 
   // konfigurering for å fjerne default-funksjoner av tastekombinasjoner
   // brukes for å sette egne hurtigtaster i teksteditor.
   const onTextareaKeyDown = e => {
+    setCounter(0);
+
     // 66 = "b"
     if (e.ctrlKey && e.keyCode === 66) {
       e.preventDefault();
