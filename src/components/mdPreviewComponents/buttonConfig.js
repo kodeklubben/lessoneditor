@@ -26,8 +26,8 @@ const buttonConfig = [
     icon: "heading",
     output: "## ",
     title: "Heading",
-    cursorIntON: null,
-    cursorIntOFF: null,
+    cursorIntON: 0,
+    cursorIntOFF: 0,
     endOutput: "",
     shortcut: "h"
   },

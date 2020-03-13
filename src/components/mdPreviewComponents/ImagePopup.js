@@ -30,18 +30,11 @@ class ImagePopup extends React.Component {
             <Card.Content extra>
               <div className="ui two buttons">
                 <Button
-                  onClick={() => this.props.imagePopupSubmitHandler("")}
-                  basic
-                  color="red"
-                >
-                  Avbryt
-                </Button>
-                <Button
                   onClick={() =>
                     this.props.imagePopupSubmitHandler(this.state.inputValue)
                   }
                   basic
-                  color="green"
+                  color="grey"
                 >
                   OK
                 </Button>
