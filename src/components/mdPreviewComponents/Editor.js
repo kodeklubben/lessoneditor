@@ -93,6 +93,8 @@ class Editor extends React.Component {
   render() {
     // all config for å behandle tekst i textarea
     const handleChange = event => {
+      cursorPositionStart = event.target.selectionStart;
+      cursorPositionEnd = event.target.selectionEnd;
       inputText = event.target.value;
 
       // hvis tekstinput er mellomrom eller enter, lagres event.target.value til undo:
@@ -239,10 +241,13 @@ class Editor extends React.Component {
         e.preventDefault();
         // config for correct tab inside codeblock:
         if (!buttonBoolValues["codeblock"]) {
-          let i = inputText.slice(0, cursorPositionStart);
-          inputText = i + "  \n" + temp;
+          inputText =
+            inputText.slice(0, cursorPositionStart) +
+            "  " +
+            inputText.slice(cursorPositionStart);
           this.setState({ textValue: inputText });
-          setCursorPosition(cursorPositionStart + 2, cursorPositionStart + 2);
+          cursorPositionStart += 2;
+          setCursorPosition(cursorPositionStart, cursorPositionStart);
           return;
         }
         inputText += "  ";
@@ -253,7 +258,12 @@ class Editor extends React.Component {
     // Vise, skjule image-button-popup
     const imagePopupSubmitHandler = imagePopupInputValue => {
       if (imagePopupInputValue) {
-        inputText += "![Bildebeskrivelse her](" + imagePopupInputValue + ")";
+        inputText =
+          inputText.slice(0, cursorPositionStart) +
+          "![Bildebeskrivelse her](" +
+          imagePopupInputValue +
+          ")" +
+          inputText.slice(cursorPositionStart);
         this.setState({ textValue: inputText });
         this.editorRef.current.focus();
         cursorPositionStart += 2;
