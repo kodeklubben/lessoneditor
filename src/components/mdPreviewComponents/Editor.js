@@ -29,8 +29,6 @@ var buttonBoolValues = {
   codeblock: true
 };
 
-const objectKeys = Object.keys(buttonBoolValues);
-
 // Hjelpevariabel for å formatere string taste-shortcut.
 const temp = "```";
 
@@ -131,6 +129,26 @@ class Editor extends React.Component {
     const onTextareaClick = e => {
       cursorPositionStart = e.target.selectionStart;
       cursorPositionEnd = e.target.selectionEnd;
+
+      buttonBoolValues = {
+        bold: true,
+        italic: true,
+        heading: true,
+        strikethrough: true,
+        undo: true,
+        redo: true,
+        new: true,
+        load: true,
+        save: true,
+        image: true,
+        listUl: true,
+        listOl: true,
+        checklist: true,
+        activity: true,
+        intro: true,
+        inline: true,
+        codeblock: true
+      };
     };
 
     // konfigurering for å fjerne default-funksjoner av tastekombinasjoner
@@ -221,9 +239,10 @@ class Editor extends React.Component {
         e.preventDefault();
         // config for correct tab inside codeblock:
         if (!buttonBoolValues["codeblock"]) {
-          let i = inputText.slice(0, cursorPositionStart - 4);
+          let i = inputText.slice(0, cursorPositionStart);
           inputText = i + "  \n" + temp;
-          setCursorPosition(cursorPositionStart, cursorPositionStart);
+          this.setState({ textValue: inputText });
+          setCursorPosition(cursorPositionStart + 2, cursorPositionStart + 2);
           return;
         }
         inputText += "  ";
@@ -335,19 +354,6 @@ class Editor extends React.Component {
         return;
       }
 
-      if (output[0] === "{") {
-        console.log(buttonBoolValues);
-        if (buttonBoolValues[bTitle]) {
-          buttonBoolValues[bTitle] = false;
-          this.setState({ boolButton: buttonBoolValues });
-          inputText += output;
-          this.setState({ textValue: inputText });
-          cursorPositionEnd = cursorPositionStart += output.length;
-          setCursorPosition(cursorPositionStart, cursorPositionStart);
-          return;
-        }
-      }
-
       // Config for å gi "heading" flere verdier på en knapp
       if (ifNewLine()) {
         if (
@@ -419,20 +425,17 @@ class Editor extends React.Component {
       // nuller ut verdi fra knapp-trykk om man trykker en gang til på knapp uten å ha skrevet noen tegn.
       // kanselerer da ut første knappetrykket.
       if (
+        !buttonBoolValues[bTitle] &&
         inputText.slice(
-          cursorPositionStart + cursorIntON - output.length,
-          cursorPositionStart + cursorIntON
-        ) === output &&
-        !buttonBoolValues[bTitle]
+          cursorPositionStart - cursorIntON,
+          cursorPositionStart - cursorIntON + output.length
+        ) === output
       ) {
-        alert("kanselere");
         buttonBoolValues[bTitle] = true;
         this.setState({ boolButton: buttonBoolValues });
         inputText =
-          inputText.slice(
-            0,
-            cursorPositionStart + cursorIntON - output.length
-          ) + inputText.slice(cursorPositionStart + cursorIntON);
+          inputText.slice(0, cursorPositionStart - cursorIntON) +
+          inputText.slice(cursorPositionStart - cursorIntON + output.length);
         this.setState({ textValue: inputText });
         cursorPositionEnd = cursorPositionStart -= cursorIntON;
         setCursorPosition(cursorPositionStart, cursorPositionStart);
@@ -525,12 +528,11 @@ class Editor extends React.Component {
       LISTUL: () => handleButtonClick("listul", "- ", 0, 0, ""),
       LISTOL: () => handleButtonClick("listol", "1. ", 0, 0, ""),
       CHECKLIST: () => handleButtonClick("checklist", "- [ ]", 0, 0, ""),
-      ACTIVITY: () =>
-        handleButtonClick("activity", "{.activity}\n\n", 0, 0, ""),
-      INTRO: () => handleButtonClick("intro", "{.intro}\n\n", 0, 0, ""),
+      ACTIVITY: () => handleButtonClick("activity", "{.activity}", 0, 0, ""),
+      INTRO: () => handleButtonClick("intro", "{.intro}", 0, 0, ""),
       INLINE: () => handleButtonClick("inline", "``", 1, 1, ""),
       CODEBLOCK: () =>
-        handleButtonClick("codeblock", `${temp}\n\n${temp}`, 4, 4, "\n")
+        handleButtonClick("codeblock", `${temp}\n\n${temp}`, 4, 5, "\n")
     };
 
     return (
