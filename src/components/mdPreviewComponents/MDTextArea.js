@@ -14,8 +14,13 @@ const MDTextArea = props => {
         ref={props.editorRef}
         className="TextArea"
         value={props.textValue}
-        onChange={e => props.onInputChange(e.target.value)}
-        onKeyDown={e => props.onTextareaKeyDown(e)}
+        onChange={event => props.onInputChange(event)}
+        onKeyDown={event => props.onTextareaKeyDown(event)}
+        onKeyUp={event => props.onTextareaKeyUp(event)}
+        onClick={event => props.onTextareaClick(event)}
+        onTouchEnd={event => props.onTextareaClick(event)}
+        onSelect={event => props.onTextareaSelect(event)}
+        onWheel={event => props.onTextareaClick(event)}
       />
     </GlobalHotKeys>
   );
