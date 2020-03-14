@@ -133,7 +133,7 @@ class Editor extends React.Component {
       cursorPositionEnd = e.target.selectionEnd;
     };
 
-    const onTextareaClick = e => {
+    const onTextareaMouseDown = e => {
       cursorPositionStart = e.target.selectionStart;
       cursorPositionEnd = e.target.selectionEnd;
 
@@ -246,6 +246,7 @@ class Editor extends React.Component {
         e.preventDefault();
         // config for correct tab inside codeblock:
         if (!buttonBoolValues["codeblock"]) {
+          undo = [...undo, inputText];
           inputText =
             inputText.slice(0, cursorPositionStart) +
             "  " +
@@ -255,14 +256,45 @@ class Editor extends React.Component {
           setCursorPosition(cursorPositionStart, cursorPositionStart);
           return;
         }
+        undo = [...undo, inputText];
         inputText += "  ";
         this.setState({ textValue: inputText });
+      }
+
+      // 37, 38, 39, 40 = "arrow keys"
+      // cancel button on arrow buttonclick
+      if (
+        e.keyCode === 37 ||
+        e.keyCode === 38 ||
+        e.keyCode === 39 ||
+        e.keyCode === 40
+      ) {
+        buttonBoolValues = {
+          bold: true,
+          italic: true,
+          heading: true,
+          strikethrough: true,
+          undo: true,
+          redo: true,
+          new: true,
+          load: true,
+          save: true,
+          image: true,
+          listUl: true,
+          listOl: true,
+          checklist: true,
+          activity: true,
+          intro: true,
+          inline: true,
+          codeblock: true
+        };
       }
     };
 
     // Vise, skjule image-button-popup
     const imagePopupSubmitHandler = imagePopupInputValue => {
-      if (imagePopupInputValue) {
+      if (imagePopupInputValue !== "") {
+        undo = [...undo, inputText];
         inputText =
           inputText.slice(0, cursorPositionStart) +
           "![Bildebeskrivelse her](" +
@@ -275,6 +307,10 @@ class Editor extends React.Component {
         cursorPositionEnd += 22;
         setCursorPosition(cursorPositionStart, cursorPositionEnd);
         imagePopup = <br />;
+      } else {
+        imagePopup = <br />;
+        this.editorRef.current.focus();
+        setCursorPosition(cursorPositionStart, cursorPositionEnd);
       }
     };
 
@@ -379,6 +415,7 @@ class Editor extends React.Component {
         ) {
           buttonBoolValues[bTitle] = false;
           this.setState({ boolButton: buttonBoolValues });
+          undo = [...undo, inputText];
           inputText =
             inputText.slice(0, cursorPositionStart - 3) +
             "# " +
@@ -389,6 +426,7 @@ class Editor extends React.Component {
           setCursorPosition(cursorPositionStart, cursorPositionStart);
           return;
         } else if (output === "## " && buttonBoolValues[bTitle]) {
+          undo = [...undo, inputText];
           inputText =
             inputText.slice(0, cursorPositionStart) +
             output +
@@ -404,6 +442,7 @@ class Editor extends React.Component {
             inputText.slice(cursorPositionStart - 2, cursorPositionStart) ===
             "# "
           ) {
+            undo = [...undo, inputText];
             inputText =
               inputText.slice(0, cursorPositionStart - 2) +
               inputText.slice(cursorPositionStart);
@@ -451,6 +490,7 @@ class Editor extends React.Component {
       ) {
         buttonBoolValues[bTitle] = true;
         this.setState({ boolButton: buttonBoolValues });
+        undo = [...undo, inputText];
         inputText =
           inputText.slice(0, cursorPositionStart - cursorIntON) +
           inputText.slice(cursorPositionStart - cursorIntON + output.length);
@@ -485,6 +525,7 @@ class Editor extends React.Component {
             }
           }
           setCursorPosition(cursorPositionStart, cursorPositionEnd);
+          undo = [...undo, inputText];
           inputText =
             inputText.slice(0, cursorPositionStart) +
             output.slice(0, cursorIntON) +
@@ -501,6 +542,7 @@ class Editor extends React.Component {
         }
         buttonBoolValues[bTitle] = false;
         this.setState({ boolButton: buttonBoolValues });
+        undo = [...undo, inputText];
         inputText =
           inputText.slice(0, cursorPositionStart) +
           output +
@@ -511,6 +553,17 @@ class Editor extends React.Component {
         setCursorPosition(cursorPositionStart, cursorPositionStart);
         return;
       } else if (!buttonBoolValues[bTitle]) {
+        if (cursorPositionStart !== cursorPositionEnd) {
+          buttonBoolValues[bTitle] = true;
+          this.setState({ boolButton: buttonBoolValues });
+          inputText = undo[undo.length - 1];
+          this.setState({ textValue: inputText });
+          this.setState({ mdValue: mdParser(inputText) });
+          cursorPositionStart = cursorPositionEnd =
+            cursorPositionEnd - cursorIntON;
+          setCursorPosition(cursorPositionStart, cursorPositionEnd);
+          return;
+        }
         buttonBoolValues[bTitle] = true;
         this.setState({ boolButton: buttonBoolValues });
         setCursorPosition(
@@ -518,6 +571,7 @@ class Editor extends React.Component {
           cursorPositionEnd + cursorIntOFF
         );
         if (endOutput) {
+          undo = [...undo, inputText];
           inputText =
             inputText.slice(0, cursorPositionStart + cursorIntOFF) +
             endOutput +
@@ -571,7 +625,7 @@ class Editor extends React.Component {
     // kaller samme funksjon som når man trykker på tilsvarende knapper med tilsvarende verdier (finnes i buttonConfig.js)
     const handlers = {
       BOLD: () => handleButtonClick("bold", "****", 2, 2, ""),
-      ITALIC: () => handleButtonClick("italic", " __ ", 2, 2, ""),
+      ITALIC: () => handleButtonClick("italic", "**", 1, 1, ""),
       HEADING: () => handleButtonClick("heading", "## ", 0, 0, ""),
       STRIKETHROUGH: () => handleButtonClick("strikethrough", "~~~~", 2, 2, ""),
       UNDO: () => handleButtonClick("undo", "", 0, 0, ""),
@@ -604,7 +658,7 @@ class Editor extends React.Component {
                 handleButtonClick={handleButtonClick}
                 onTextareaKeyDown={onTextareaKeyDown}
                 onTextareaKeyUp={onTextareaKeyUp}
-                onTextareaClick={onTextareaClick}
+                onTextareaMouseDown={onTextareaMouseDown}
                 onTextareaSelect={onTextareaSelect}
                 handlers={handlers}
                 keyMap={keyMap}

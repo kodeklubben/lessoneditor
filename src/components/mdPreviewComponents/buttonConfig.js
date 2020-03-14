@@ -14,10 +14,10 @@ const buttonConfig = [
   {
     bTitle: "italic",
     icon: "italic",
-    output: " __ ",
+    output: "**",
     title: "Italic",
-    cursorIntON: 2,
-    cursorIntOFF: 2,
+    cursorIntON: 1,
+    cursorIntOFF: 1,
     endOutput: "",
     shortcut: "i"
   },

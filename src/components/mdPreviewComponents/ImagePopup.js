@@ -15,7 +15,11 @@ class ImagePopup extends React.Component {
     return (
       <Card.Group className="imagePopup">
         <Card>
-          <Form>
+          <Form
+            onSubmit={() =>
+              this.props.imagePopupSubmitHandler(this.state.inputValue)
+            }
+          >
             <Card.Content>
               <Form.Field>
                 <label>Link til bilde her:</label>
@@ -29,13 +33,7 @@ class ImagePopup extends React.Component {
             </Card.Content>
             <Card.Content extra>
               <div className="ui two buttons">
-                <Button
-                  onClick={() =>
-                    this.props.imagePopupSubmitHandler(this.state.inputValue)
-                  }
-                  basic
-                  color="grey"
-                >
+                <Button type="submit" basic color="grey">
                   OK
                 </Button>
               </div>
