@@ -246,6 +246,7 @@ class Editor extends React.Component {
         e.preventDefault();
         // config for correct tab inside codeblock:
         if (!buttonBoolValues["codeblock"]) {
+          undo = [...undo, inputText];
           inputText =
             inputText.slice(0, cursorPositionStart) +
             "  " +
@@ -255,6 +256,7 @@ class Editor extends React.Component {
           setCursorPosition(cursorPositionStart, cursorPositionStart);
           return;
         }
+        undo = [...undo, inputText];
         inputText += "  ";
         this.setState({ textValue: inputText });
       }
@@ -263,6 +265,7 @@ class Editor extends React.Component {
     // Vise, skjule image-button-popup
     const imagePopupSubmitHandler = imagePopupInputValue => {
       if (imagePopupInputValue) {
+        undo = [...undo, inputText];
         inputText =
           inputText.slice(0, cursorPositionStart) +
           "![Bildebeskrivelse her](" +
@@ -379,6 +382,7 @@ class Editor extends React.Component {
         ) {
           buttonBoolValues[bTitle] = false;
           this.setState({ boolButton: buttonBoolValues });
+          undo = [...undo, inputText];
           inputText =
             inputText.slice(0, cursorPositionStart - 3) +
             "# " +
@@ -389,6 +393,7 @@ class Editor extends React.Component {
           setCursorPosition(cursorPositionStart, cursorPositionStart);
           return;
         } else if (output === "## " && buttonBoolValues[bTitle]) {
+          undo = [...undo, inputText];
           inputText =
             inputText.slice(0, cursorPositionStart) +
             output +
@@ -404,6 +409,7 @@ class Editor extends React.Component {
             inputText.slice(cursorPositionStart - 2, cursorPositionStart) ===
             "# "
           ) {
+            undo = [...undo, inputText];
             inputText =
               inputText.slice(0, cursorPositionStart - 2) +
               inputText.slice(cursorPositionStart);
@@ -451,6 +457,7 @@ class Editor extends React.Component {
       ) {
         buttonBoolValues[bTitle] = true;
         this.setState({ boolButton: buttonBoolValues });
+        undo = [...undo, inputText];
         inputText =
           inputText.slice(0, cursorPositionStart - cursorIntON) +
           inputText.slice(cursorPositionStart - cursorIntON + output.length);
@@ -485,6 +492,7 @@ class Editor extends React.Component {
             }
           }
           setCursorPosition(cursorPositionStart, cursorPositionEnd);
+          undo = [...undo, inputText];
           inputText =
             inputText.slice(0, cursorPositionStart) +
             output.slice(0, cursorIntON) +
@@ -501,6 +509,7 @@ class Editor extends React.Component {
         }
         buttonBoolValues[bTitle] = false;
         this.setState({ boolButton: buttonBoolValues });
+        undo = [...undo, inputText];
         inputText =
           inputText.slice(0, cursorPositionStart) +
           output +
@@ -518,6 +527,7 @@ class Editor extends React.Component {
           cursorPositionEnd + cursorIntOFF
         );
         if (endOutput) {
+          undo = [...undo, inputText];
           inputText =
             inputText.slice(0, cursorPositionStart + cursorIntOFF) +
             endOutput +
