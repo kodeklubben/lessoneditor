@@ -681,6 +681,9 @@ class Editor extends React.Component {
       CHECKLIST: OSspecificKey + "y",
       ACTIVITY: OSspecificKey + "shift+a",
       INTRO: OSspecificKey + "shift+i",
+      CHECK: OSspecificKey + "shift+c",
+      PROTIP: OSspecificKey + "shift+p",
+      CHALLENGE: OSspecificKey + "shift+g",
       INLINE: OSspecificKey + "e",
       CODEBLOCK: OSspecificKey + "k"
     };
@@ -698,11 +701,15 @@ class Editor extends React.Component {
       LOAD: () => handleButtonClick("load", "", 0, 0, ""),
       SAVE: () => handleButtonClick("save", "", 0, 0, ""),
       IMAGE: () => handleButtonClick("image", "", 0, 0, ""),
-      LISTUL: () => handleButtonClick("listul", "- ", 0, 0, ""),
-      LISTOL: () => handleButtonClick("listol", "1. ", 0, 0, ""),
-      CHECKLIST: () => handleButtonClick("checklist", "- [ ]", 0, 0, ""),
-      ACTIVITY: () => handleButtonClick("activity", "{.activity}", 0, 0, ""),
-      INTRO: () => handleButtonClick("intro", "{.intro}", 0, 0, ""),
+      LISTUL: () => handleButtonClick("listul", "- ", 2, 0, ""),
+      LISTOL: () => handleButtonClick("listol", "1. ", 3, 0, ""),
+      CHECKLIST: () => handleButtonClick("listcheck", "- [ ] ", 6, 0, ""),
+      ACTIVITY: () => handleButtonClick("activity", "{.activity}", 11, 11, ""),
+      INTRO: () => handleButtonClick("intro", "{.intro}", 8, 8, ""),
+      CHECK: () => handleButtonClick("check", "{.check}", 8, 8, ""),
+      PROTIP: () => handleButtonClick("protip", "{.protip}", 9, 9, ""),
+      CHALLENGE: () =>
+        handleButtonClick("challenge", "{.challenge}", 12, 12, ""),
       INLINE: () => handleButtonClick("inline", "``", 1, 1, ""),
       CODEBLOCK: () =>
         handleButtonClick("codeblock", `${temp}\n\n${temp}`, 4, 5, "\n")
