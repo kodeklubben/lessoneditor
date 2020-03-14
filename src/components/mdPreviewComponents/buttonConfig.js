@@ -118,7 +118,7 @@ const buttonConfig5 = [
     icon: "list ul",
     output: "- ",
     title: "List",
-    cursorIntON: 0,
+    cursorIntON: 2,
     cursorIntOFF: 0,
     endOutput: "",
     shortcut: "u"
@@ -128,17 +128,17 @@ const buttonConfig5 = [
     icon: "list ol",
     output: "1. ",
     title: "Ordered List",
-    cursorIntON: 0,
+    cursorIntON: 3,
     cursorIntOFF: 0,
     endOutput: "",
     shortcut: "shift+u"
   },
   {
-    bTitle: "checklist",
+    bTitle: "listCheck",
     icon: "tasks",
     output: "- [ ] ",
     title: "Checklist",
-    cursorIntON: 0,
+    cursorIntON: 6,
     cursorIntOFF: 0,
     endOutput: "",
     shortcut: "y"
@@ -151,8 +151,8 @@ const buttonConfig6 = [
     icon: "",
     output: "{.activity}",
     title: "{.Activity}",
-    cursorIntON: 0,
-    cursorIntOFF: 0,
+    cursorIntON: 11,
+    cursorIntOFF: 11,
     endOutput: "",
     shortcut: "shift+a"
   },
@@ -161,10 +161,40 @@ const buttonConfig6 = [
     icon: "",
     output: "{.intro}",
     title: "{.Intro}",
-    cursorIntON: 0,
-    cursorIntOFF: 0,
+    cursorIntON: 8,
+    cursorIntOFF: 8,
     endOutput: "",
     shortcut: "shift+i"
+  },
+  {
+    bTitle: "check",
+    icon: "",
+    output: "{.check}",
+    title: "{.Check}",
+    cursorIntON: 8,
+    cursorIntOFF: 8,
+    endOutput: "",
+    shortcut: "shift+c"
+  },
+  {
+    bTitle: "protip",
+    icon: "",
+    output: "{.protip}",
+    title: "{.Protip}",
+    cursorIntON: 9,
+    cursorIntOFF: 9,
+    endOutput: "",
+    shortcut: "shift+p"
+  },
+  {
+    bTitle: "challenge",
+    icon: "",
+    output: "{.challenge}",
+    title: "{.Challenge}",
+    cursorIntON: 12,
+    cursorIntOFF: 12,
+    endOutput: "",
+    shortcut: "shift+g"
   }
 ];
 

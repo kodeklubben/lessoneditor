@@ -22,9 +22,12 @@ var buttonBoolValues = {
   image: true,
   listUl: true,
   listOl: true,
-  checklist: true,
+  listCheck: true,
   activity: true,
   intro: true,
+  check: true,
+  protip: true,
+  challenge: true,
   inline: true,
   codeblock: true
 };
@@ -39,6 +42,8 @@ var charCounter = 0;
 var OSspecificKey = "ctrl+";
 
 var storedTextValue = "";
+
+var listButtonValues = { bTitle: "", output: "", cursorInt: 0 };
 
 // undo/redo - variabler.
 var undo = [""];
@@ -91,6 +96,31 @@ class Editor extends React.Component {
   }
 
   render() {
+    const resetButtonOnOff = () => {
+      buttonBoolValues = {
+        bold: true,
+        italic: true,
+        heading: true,
+        strikethrough: true,
+        undo: true,
+        redo: true,
+        new: true,
+        load: true,
+        save: true,
+        image: true,
+        listUl: true,
+        listOl: true,
+        listCheck: true,
+        activity: true,
+        intro: true,
+        check: true,
+        protip: true,
+        challenge: true,
+        inline: true,
+        codeblock: true
+      };
+    };
+
     // all config for å behandle tekst i textarea
     const handleChange = event => {
       cursorPositionStart = event.target.selectionStart;
@@ -100,6 +130,7 @@ class Editor extends React.Component {
       // hvis tekstinput er mellomrom eller enter, lagres event.target.value til undo:
       if (
         event.target.value.charCodeAt(event.target.value.length - 1) === 32 ||
+        event.target.value.charCodeAt(event.target.value.length - 1) === 13 ||
         event.target.value.charCodeAt(event.target.value.length - 1) === 10
       ) {
         undo = [...undo, inputText];
@@ -137,25 +168,7 @@ class Editor extends React.Component {
       cursorPositionStart = e.target.selectionStart;
       cursorPositionEnd = e.target.selectionEnd;
 
-      buttonBoolValues = {
-        bold: true,
-        italic: true,
-        heading: true,
-        strikethrough: true,
-        undo: true,
-        redo: true,
-        new: true,
-        load: true,
-        save: true,
-        image: true,
-        listUl: true,
-        listOl: true,
-        checklist: true,
-        activity: true,
-        intro: true,
-        inline: true,
-        codeblock: true
-      };
+      resetButtonOnOff();
     };
 
     // konfigurering for å fjerne default-funksjoner av tastekombinasjoner
@@ -163,6 +176,43 @@ class Editor extends React.Component {
     const onTextareaKeyDown = e => {
       cursorPositionStart = e.target.selectionStart;
       cursorPositionEnd = e.target.selectionEnd;
+
+      // 13 = "enter"
+      if (e.keyCode === 13) {
+        if (!buttonBoolValues[listButtonValues["bTitle"]]) {
+          if (
+            inputText.slice(
+              cursorPositionStart - listButtonValues["cursorInt"],
+              cursorPositionStart
+            ) === listButtonValues["output"]
+          ) {
+            buttonBoolValues[listButtonValues["bTitle"]] = true;
+            this.setState({ boolButton: buttonBoolValues });
+            inputText =
+              inputText.slice(
+                0,
+                cursorPositionStart - listButtonValues["cursorInt"]
+              ) + inputText.slice(cursorPositionStart);
+            this.setState({ textValue: inputText });
+            setCursorPosition(
+              cursorPositionStart - listButtonValues["cursorInt"],
+              cursorPositionStart - listButtonValues["cursorInt"]
+            );
+            return;
+          }
+          inputText =
+            inputText.slice(0, cursorPositionStart) +
+            "\n" +
+            listButtonValues["output"] +
+            inputText.slice(cursorPositionStart);
+          this.setState({ textValue: inputText });
+          setCursorPosition(
+            cursorPositionStart + listButtonValues["cursorInt"] + 1,
+            cursorPositionStart + listButtonValues["cursorInt"] + 1
+          );
+          return;
+        }
+      }
 
       // 66 = "b"
       if (e.ctrlKey && e.keyCode === 66) {
@@ -252,13 +302,18 @@ class Editor extends React.Component {
             "  " +
             inputText.slice(cursorPositionStart);
           this.setState({ textValue: inputText });
+          this.setState({ mdValue: mdParser(inputText) });
           cursorPositionStart += 2;
           setCursorPosition(cursorPositionStart, cursorPositionStart);
           return;
         }
         undo = [...undo, inputText];
-        inputText += "  ";
+        inputText =
+          inputText.slice(0, cursorPositionStart) +
+          "  " +
+          inputText.slice(cursorPositionEnd);
         this.setState({ textValue: inputText });
+        this.setState({ mdValue: mdParser(inputText) });
       }
 
       // 37, 38, 39, 40 = "arrow keys"
@@ -269,25 +324,7 @@ class Editor extends React.Component {
         e.keyCode === 39 ||
         e.keyCode === 40
       ) {
-        buttonBoolValues = {
-          bold: true,
-          italic: true,
-          heading: true,
-          strikethrough: true,
-          undo: true,
-          redo: true,
-          new: true,
-          load: true,
-          save: true,
-          image: true,
-          listUl: true,
-          listOl: true,
-          checklist: true,
-          activity: true,
-          intro: true,
-          inline: true,
-          codeblock: true
-        };
+        resetButtonOnOff();
       }
     };
 
@@ -471,12 +508,16 @@ class Editor extends React.Component {
         return;
       }
 
-      //constraint button from working if new line
-      if (
-        (bTitle === "activity" && ifNewLine()) ||
-        (bTitle === "intro" && ifNewLine())
-      ) {
-        return;
+      //constraint button from working if new line or not end of line.
+      if (output[0] === "{" && buttonBoolValues[bTitle]) {
+        if (ifNewLine()) {
+          return;
+        }
+        if (inputText[cursorPositionEnd] !== undefined) {
+          if (inputText[cursorPositionEnd] !== "\n") {
+            return;
+          }
+        }
       }
 
       // nuller ut verdi fra knapp-trykk om man trykker en gang til på knapp uten å ha skrevet noen tegn.
@@ -499,6 +540,31 @@ class Editor extends React.Component {
         cursorPositionEnd = cursorPositionStart -= cursorIntON;
         setCursorPosition(cursorPositionStart, cursorPositionStart);
         return;
+      }
+
+      if (bTitle.slice(0, 4) === "list") {
+        if (!ifNewLine()) {
+          inputText =
+            inputText.slice(0, cursorPositionStart) +
+            "\n" +
+            inputText.slice(cursorPositionStart);
+          this.setState({ textValue: inputText });
+          cursorPositionStart++;
+          cursorPositionEnd++;
+          handleButtonClick(
+            bTitle,
+            output,
+            cursorIntON,
+            cursorIntOFF,
+            endOutput
+          );
+          return;
+        }
+        listButtonValues = {
+          bTitle: bTitle,
+          output: output,
+          cursorInt: cursorIntON
+        };
       }
 
       //  Konfig av knapper slik at de registrerer om de er trykket, og flytter tekst-markøren i henhold til hvordan MD-syntax ser ut
@@ -549,8 +615,11 @@ class Editor extends React.Component {
           inputText.slice(cursorPositionStart);
         this.setState({ textValue: inputText });
         this.setState({ mdValue: mdParser(inputText) });
-        cursorPositionStart = cursorPositionStart + cursorIntON;
-        setCursorPosition(cursorPositionStart, cursorPositionStart);
+        // cursorPositionStart = cursorPositionStart + cursorIntON;
+        setCursorPosition(
+          cursorPositionStart + cursorIntON,
+          cursorPositionStart + cursorIntON
+        );
         return;
       } else if (!buttonBoolValues[bTitle]) {
         if (cursorPositionStart !== cursorPositionEnd) {
@@ -559,15 +628,16 @@ class Editor extends React.Component {
           inputText = undo[undo.length - 1];
           this.setState({ textValue: inputText });
           this.setState({ mdValue: mdParser(inputText) });
-          cursorPositionStart = cursorPositionEnd =
-            cursorPositionEnd - cursorIntON;
-          setCursorPosition(cursorPositionStart, cursorPositionEnd);
+          setCursorPosition(
+            cursorPositionStart - cursorIntON,
+            cursorPositionEnd - cursorIntON
+          );
           return;
         }
         buttonBoolValues[bTitle] = true;
         this.setState({ boolButton: buttonBoolValues });
         setCursorPosition(
-          cursorPositionEnd + cursorIntOFF,
+          cursorPositionStart + cursorIntOFF,
           cursorPositionEnd + cursorIntOFF
         );
         if (endOutput) {
@@ -578,17 +648,11 @@ class Editor extends React.Component {
             inputText.slice(cursorPositionStart + cursorIntOFF);
           this.setState({ textValue: inputText });
           this.setState({ mdValue: mdParser(inputText) });
-          cursorPositionStart += cursorIntOFF;
-          setCursorPosition(cursorPositionStart, cursorPositionStart);
+          cursorPositionStart = cursorPositionEnd += cursorIntOFF;
+          setCursorPosition(cursorPositionStart, cursorPositionEnd);
         }
         return;
       } else {
-        // inputText =
-        //   inputText.slice(0, cursorPositionStart) +
-        //   output +
-        //   inputText.slice(cursorPositionStart);
-        // this.setState({ textValue: inputText });
-        // setCursorPosition(cursorPositionStart, cursorPositionStart);
         return;
       }
     };
