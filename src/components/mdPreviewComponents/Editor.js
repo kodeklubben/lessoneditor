@@ -128,6 +128,11 @@ class Editor extends React.Component {
       cursorPositionEnd = e.target.selectionEnd;
     };
 
+    const onTextareaSelect = e => {
+      cursorPositionStart = e.target.selectionStart;
+      cursorPositionEnd = e.target.selectionEnd;
+    };
+
     const onTextareaClick = e => {
       cursorPositionStart = e.target.selectionStart;
       cursorPositionEnd = e.target.selectionEnd;
@@ -379,6 +384,7 @@ class Editor extends React.Component {
             "# " +
             inputText.slice(cursorPositionStart);
           this.setState({ textValue: inputText });
+          this.setState({ mdValue: mdParser(inputText) });
           cursorPositionStart -= 1;
           setCursorPosition(cursorPositionStart, cursorPositionStart);
           return;
@@ -389,6 +395,7 @@ class Editor extends React.Component {
             inputText.slice(cursorPositionStart);
 
           this.setState({ textValue: inputText });
+          this.setState({ mdValue: mdParser(inputText) });
           cursorPositionStart += output.length;
           setCursorPosition(cursorPositionStart, cursorPositionStart);
           return;
@@ -401,6 +408,7 @@ class Editor extends React.Component {
               inputText.slice(0, cursorPositionStart - 2) +
               inputText.slice(cursorPositionStart);
             this.setState({ textValue: inputText });
+            this.setState({ mdValue: mdParser(inputText) });
             cursorPositionStart -= 2;
             setCursorPosition(cursorPositionStart, cursorPositionStart);
             buttonBoolValues[bTitle] = true;
@@ -447,6 +455,7 @@ class Editor extends React.Component {
           inputText.slice(0, cursorPositionStart - cursorIntON) +
           inputText.slice(cursorPositionStart - cursorIntON + output.length);
         this.setState({ textValue: inputText });
+        this.setState({ mdValue: mdParser(inputText) });
         cursorPositionEnd = cursorPositionStart -= cursorIntON;
         setCursorPosition(cursorPositionStart, cursorPositionStart);
         return;
@@ -456,6 +465,40 @@ class Editor extends React.Component {
       // Konfig-data finnes i ./buttonConfig.js der tallverdi for hvor mye tekst-markøren skal flyttes er definert in "cursorIntON" og "cursorIntOFF"
 
       if (buttonBoolValues[bTitle]) {
+        if (cursorPositionStart !== cursorPositionEnd) {
+          buttonBoolValues[bTitle] = false;
+          this.setState({ boolButton: buttonBoolValues });
+          let i = inputText.slice(cursorPositionStart, cursorPositionEnd);
+          while (
+            i[0] === " " ||
+            i[i.length - 1] === " " ||
+            i[0] === "\n" ||
+            i[i.length - 1] === "\n"
+          ) {
+            if (i[0] === " " || i[0] === "\n") {
+              i = i.slice(1);
+              cursorPositionStart += 1;
+            }
+            if (i[i.length - 1] === " " || i[i.length - 1] === "\n") {
+              i = i.slice(0, i.length - 2);
+              cursorPositionEnd -= 2;
+            }
+          }
+          setCursorPosition(cursorPositionStart, cursorPositionEnd);
+          inputText =
+            inputText.slice(0, cursorPositionStart) +
+            output.slice(0, cursorIntON) +
+            i +
+            output.slice(cursorIntON) +
+            inputText.slice(cursorPositionEnd);
+          this.setState({ textValue: inputText });
+          this.setState({ mdValue: mdParser(inputText) });
+          setCursorPosition(
+            cursorPositionStart + cursorIntON,
+            cursorPositionEnd + cursorIntON
+          );
+          return;
+        }
         buttonBoolValues[bTitle] = false;
         this.setState({ boolButton: buttonBoolValues });
         inputText =
@@ -463,6 +506,7 @@ class Editor extends React.Component {
           output +
           inputText.slice(cursorPositionStart);
         this.setState({ textValue: inputText });
+        this.setState({ mdValue: mdParser(inputText) });
         cursorPositionStart = cursorPositionStart + cursorIntON;
         setCursorPosition(cursorPositionStart, cursorPositionStart);
         return;
@@ -470,8 +514,8 @@ class Editor extends React.Component {
         buttonBoolValues[bTitle] = true;
         this.setState({ boolButton: buttonBoolValues });
         setCursorPosition(
-          cursorPositionStart + cursorIntOFF,
-          cursorPositionStart + cursorIntOFF
+          cursorPositionEnd + cursorIntOFF,
+          cursorPositionEnd + cursorIntOFF
         );
         if (endOutput) {
           inputText =
@@ -479,6 +523,7 @@ class Editor extends React.Component {
             endOutput +
             inputText.slice(cursorPositionStart + cursorIntOFF);
           this.setState({ textValue: inputText });
+          this.setState({ mdValue: mdParser(inputText) });
           cursorPositionStart += cursorIntOFF;
           setCursorPosition(cursorPositionStart, cursorPositionStart);
         }
@@ -560,6 +605,7 @@ class Editor extends React.Component {
                 onTextareaKeyDown={onTextareaKeyDown}
                 onTextareaKeyUp={onTextareaKeyUp}
                 onTextareaClick={onTextareaClick}
+                onTextareaSelect={onTextareaSelect}
                 handlers={handlers}
                 keyMap={keyMap}
               />

@@ -19,6 +19,8 @@ const MDTextArea = props => {
         onKeyUp={event => props.onTextareaKeyUp(event)}
         onClick={event => props.onTextareaClick(event)}
         onTouchEnd={event => props.onTextareaClick(event)}
+        onSelect={event => props.onTextareaSelect(event)}
+        onWheel={event => props.onTextareaClick(event)}
       />
     </GlobalHotKeys>
   );
