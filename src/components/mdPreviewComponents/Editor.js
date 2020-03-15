@@ -132,10 +132,6 @@ class Editor extends React.Component {
       // Teller input-tegn, og tvinger linjeskift hvis det passerer 80 tegn
       charCounter += 1;
 
-      if (event.target.value.charCodeAt(event.target.value.length - 1) === 10) {
-        charCounter = 0;
-      }
-
       if (charCounter === 80) {
         inputText += "\n";
         charCounter = 0;
@@ -170,7 +166,7 @@ class Editor extends React.Component {
       cursorPositionStart = e.target.selectionStart;
       cursorPositionEnd = e.target.selectionEnd;
 
-      // hvis tekstinput er mellomrom eller enter, lagres event.target.value til undo:
+      // hvis tekstinput er mellomrom eller enter, lagres inputText til undo:
       if (e.keyCode === 32) {
         undo = [...undo, inputText];
         undoCursorPosition.push(cursorPositionStart);
@@ -178,9 +174,10 @@ class Editor extends React.Component {
 
       // 13 = "enter"
       if (e.keyCode === 13) {
+        charCounter = 0;
         undo = [...undo, inputText];
         undoCursorPosition.push(cursorPositionStart);
-        if (!buttonBoolValues[listButtonValues["bTitle"]]) {
+        if (buttonBoolValues[listButtonValues["bTitle"]] === false) {
           if (
             inputText.slice(
               cursorPositionStart - listButtonValues["cursorInt"],
