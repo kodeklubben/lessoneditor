@@ -47,7 +47,9 @@ var listButtonValues = { bTitle: "", output: "", cursorInt: 0 };
 
 // undo/redo - variabler.
 var undo = [""];
+var undoCursorPosition = [];
 var redo = [];
+var redoCursorPosition = [];
 
 var inputText = "";
 var cursorPositionStart = 0;
@@ -127,15 +129,6 @@ class Editor extends React.Component {
       cursorPositionEnd = event.target.selectionEnd;
       inputText = event.target.value;
 
-      // hvis tekstinput er mellomrom eller enter, lagres event.target.value til undo:
-      if (
-        event.target.value.charCodeAt(event.target.value.length - 1) === 32 ||
-        event.target.value.charCodeAt(event.target.value.length - 1) === 13 ||
-        event.target.value.charCodeAt(event.target.value.length - 1) === 10
-      ) {
-        undo = [...undo, inputText];
-      }
-
       // Teller input-tegn, og tvinger linjeskift hvis det passerer 80 tegn
       charCounter += 1;
 
@@ -177,8 +170,16 @@ class Editor extends React.Component {
       cursorPositionStart = e.target.selectionStart;
       cursorPositionEnd = e.target.selectionEnd;
 
+      // hvis tekstinput er mellomrom eller enter, lagres event.target.value til undo:
+      if (e.keyCode === 32) {
+        undo = [...undo, inputText];
+        undoCursorPosition.push(cursorPositionStart);
+      }
+
       // 13 = "enter"
       if (e.keyCode === 13) {
+        undo = [...undo, inputText];
+        undoCursorPosition.push(cursorPositionStart);
         if (!buttonBoolValues[listButtonValues["bTitle"]]) {
           if (
             inputText.slice(
@@ -297,6 +298,7 @@ class Editor extends React.Component {
         // config for correct tab inside codeblock:
         if (!buttonBoolValues["codeblock"]) {
           undo = [...undo, inputText];
+          undoCursorPosition.push(cursorPositionStart);
           inputText =
             inputText.slice(0, cursorPositionStart) +
             "  " +
@@ -308,6 +310,7 @@ class Editor extends React.Component {
           return;
         }
         undo = [...undo, inputText];
+        undoCursorPosition.push(cursorPositionStart);
         inputText =
           inputText.slice(0, cursorPositionStart) +
           "  " +
@@ -332,6 +335,7 @@ class Editor extends React.Component {
     const imagePopupSubmitHandler = imagePopupInputValue => {
       if (imagePopupInputValue !== "") {
         undo = [...undo, inputText];
+        undoCursorPosition.push(cursorPositionStart);
         inputText =
           inputText.slice(0, cursorPositionStart) +
           "![Bildebeskrivelse her](" +
@@ -391,6 +395,7 @@ class Editor extends React.Component {
         redo = [];
         this.setState({ textValue: inputText });
         this.setState({ mdValue: mdParser(inputText) });
+        cursorPositionStart = cursorPositionEnd = 0;
         return;
       }
 
@@ -412,26 +417,32 @@ class Editor extends React.Component {
       }
 
       if (bTitle === "undo") {
+        let pos1 = undoCursorPosition.pop();
+        let pos2 = pos1;
         if (undo.length <= 0) {
           return;
         }
         redo = [...redo, inputText];
+        redoCursorPosition.push(cursorPositionStart);
         inputText = undo.pop();
         this.setState({ textValue: inputText });
         this.setState({ mdValue: mdParser(inputText) });
-        setCursorPosition(inputText.length, inputText.length);
+        setCursorPosition(pos1, pos2);
         return;
       }
 
       if (bTitle === "redo") {
+        let pos1 = redoCursorPosition.pop();
+        let pos2 = pos1;
         if (redo.length <= 0) {
           return;
         }
         undo = [...undo, inputText];
+        undoCursorPosition.push(cursorPositionStart);
         inputText = redo.pop();
         this.setState({ textValue: inputText });
         this.setState({ mdValue: mdParser(inputText) });
-        setCursorPosition(inputText.length, inputText.length);
+        setCursorPosition(pos1, pos2);
         return;
       }
 
@@ -453,6 +464,7 @@ class Editor extends React.Component {
           buttonBoolValues[bTitle] = false;
           this.setState({ boolButton: buttonBoolValues });
           undo = [...undo, inputText];
+          undoCursorPosition.push(cursorPositionStart);
           inputText =
             inputText.slice(0, cursorPositionStart - 3) +
             "# " +
@@ -464,6 +476,7 @@ class Editor extends React.Component {
           return;
         } else if (output === "## " && buttonBoolValues[bTitle]) {
           undo = [...undo, inputText];
+          undoCursorPosition.push(cursorPositionStart);
           inputText =
             inputText.slice(0, cursorPositionStart) +
             output +
@@ -480,6 +493,7 @@ class Editor extends React.Component {
             "# "
           ) {
             undo = [...undo, inputText];
+            undoCursorPosition.push(cursorPositionStart);
             inputText =
               inputText.slice(0, cursorPositionStart - 2) +
               inputText.slice(cursorPositionStart);
@@ -532,6 +546,7 @@ class Editor extends React.Component {
         buttonBoolValues[bTitle] = true;
         this.setState({ boolButton: buttonBoolValues });
         undo = [...undo, inputText];
+        undoCursorPosition.push(cursorPositionStart);
         inputText =
           inputText.slice(0, cursorPositionStart - cursorIntON) +
           inputText.slice(cursorPositionStart - cursorIntON + output.length);
@@ -592,6 +607,7 @@ class Editor extends React.Component {
           }
           setCursorPosition(cursorPositionStart, cursorPositionEnd);
           undo = [...undo, inputText];
+          undoCursorPosition.push(cursorPositionStart);
           inputText =
             inputText.slice(0, cursorPositionStart) +
             output.slice(0, cursorIntON) +
@@ -609,6 +625,7 @@ class Editor extends React.Component {
         buttonBoolValues[bTitle] = false;
         this.setState({ boolButton: buttonBoolValues });
         undo = [...undo, inputText];
+        undoCursorPosition.push(cursorPositionStart);
         inputText =
           inputText.slice(0, cursorPositionStart) +
           output +
@@ -642,6 +659,7 @@ class Editor extends React.Component {
         );
         if (endOutput) {
           undo = [...undo, inputText];
+          undoCursorPosition.push(cursorPositionStart);
           inputText =
             inputText.slice(0, cursorPositionStart + cursorIntOFF) +
             endOutput +
