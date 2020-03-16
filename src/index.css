@@ -66,12 +66,13 @@ select {
 
 .TextArea {
   width: 100%;
-  height: 100%;
+  height: 55em;
   outline: none;
   resize: none;
   /* overflow: auto; */
   border-radius: 5px;
   padding: 15px;
+  overflow: auto;
 }
 
 .imagePopup {
@@ -103,11 +104,12 @@ select {
 
 .MDPreview {
   width: 100%;
-  height: 100%;
+  height: 55em;
   border: 1px solid black;
   border-radius: 5px;
   background-color: white;
   padding: 15px;
+  overflow: scroll;
 }
 
 .ui.two.column.test.grid.container {
