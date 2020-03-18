@@ -9,7 +9,7 @@ body{
 }
 
 
-.RightBox{
+.LeftBox{
   width: 220px;
   height: 220px;
   padding: 10px;
@@ -26,7 +26,6 @@ body{
 }
 
 .informationTable{
-  line-height: 45px;
   font-family: Helvetica, sans-serif, Arial;
   line-height: 25px;
 }

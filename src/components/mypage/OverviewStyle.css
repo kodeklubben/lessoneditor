@@ -2,16 +2,15 @@
   margin: 0;
   padding: 0;
   background-color: white;
+  font-family: Helvetica, sans-serif, Arial;
+  line-height: 25px;
 }
 body{
   background-color: white !important;
-
 }
-
-
-.RightBox{
-  width: 220px;
-  height: 220px;
+.OverviewBox{
+  width: 50%;
+  height: 50%;
   padding: 10px;
   border: 1px solid grey;
   text-align: center;
@@ -25,20 +24,10 @@ body{
 
 }
 
-.informationTable{
-  line-height: 45px;
-  font-family: Helvetica, sans-serif, Arial;
-  line-height: 25px;
-}
 #header{
   background-color: #b1daae;
-  width: 200px;
+  width: 100%;
   padding: 10px;
   border-radius: 22px;
   text-align: center;
-}
-#text1, #text2, #text3{
-  margin-top: 25px;
-  line-height: 25px;
-  text-decoration: underline;
 }

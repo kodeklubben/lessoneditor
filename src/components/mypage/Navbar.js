@@ -19,6 +19,7 @@ function Navbar(){
               </ul>
               </div>
               <div className = "line">
+              
               </div>
         </div>
     </div>
