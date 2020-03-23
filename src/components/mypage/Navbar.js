@@ -13,13 +13,13 @@ function Navbar(){
           <div className = "navbar">
           <ul >
               <li > < a href = "https://www.kidsakoder.no/kodeklubben/kodeklubboversikt/" > Finn kodeklub </a></li >
-              <li > < a href = "https://www.kidsakoder.no/nyheter/" > Oppgaver </a></li >
+              <li > < a href = "https://oppgaver.kidsakoder.no/" > Oppgaver </a></li >
               <li > < a href = "https://www.kidsakoder.no/om-lkk/" > Hjem </a></li >
               <li > < a href = "#minside" > Min side </a></li >
               </ul>
               </div>
               <div className = "line">
-              
+
               </div>
         </div>
     </div>
