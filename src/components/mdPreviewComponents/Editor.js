@@ -162,18 +162,62 @@ class Editor extends React.Component {
 
     // konfigurering for å fjerne default-funksjoner av tastekombinasjoner
     // brukes for å sette egne hurtigtaster i teksteditor.
-    const onTextareaKeyDown = e => {
-      cursorPositionStart = e.target.selectionStart;
-      cursorPositionEnd = e.target.selectionEnd;
+    const onTextareaKeyDown = event => {
+      cursorPositionStart = event.target.selectionStart;
+      cursorPositionEnd = event.target.selectionEnd;
+
+      const b = event.ctrlKey && event.keyCode === 66;
+      const i = event.ctrlKey && event.keyCode === 73;
+      const h = event.ctrlKey && event.keyCode === 72;
+      const z = event.ctrlKey && event.keyCode === 188;
+      const zz = event.ctrlKey && event.shiftKey && event.keyCode === 188;
+      const backspace = event.ctrlKey && event.shiftKey && event.keyCode === 8;
+      const l = event.ctrlKey && event.shiftKey && event.keyCode === 76;
+      const s = event.ctrlKey && event.shiftKey && event.keyCode === 83;
+      const p = event.ctrlKey && event.keyCode === 80;
+      const u = event.ctrlKey && event.keyCode === 85;
+      const uu = event.ctrlKey && event.shiftKey && event.keyCode === 85;
+      const y = event.ctrlKey && event.keyCode === 89;
+      const a = event.ctrlKey && event.shiftKey && event.keyCode === 65;
+      const ii = event.ctrlKey && event.shiftKey && event.keyCode === 73;
+      const e = event.ctrlKey && event.keyCode === 69;
+      const k = event.ctrlKey && event.keyCode === 75;
+      const leftArrow = event.keyCode === 37;
+      const upArrow = event.keyCode === 38;
+      const rightArrow = event.keyCode === 39;
+      const downArrow = event.keyCode === 40;
+      const spacebar = event.keyCode === 32;
+      const enter = event.keyCode === 13;
+      const tab = event.keyCode === 9;
+
+      if (
+        b ||
+        i ||
+        h ||
+        z ||
+        zz ||
+        backspace ||
+        l ||
+        s ||
+        p ||
+        u ||
+        uu ||
+        y ||
+        a ||
+        ii ||
+        e ||
+        k
+      ) {
+        event.preventDefault();
+      }
 
       // hvis tekstinput er mellomrom eller enter, lagres inputText til undo:
-      if (e.keyCode === 32) {
+      if (spacebar) {
         undo = [...undo, inputText];
         undoCursorPosition.push(cursorPositionStart);
       }
 
-      // 13 = "enter"
-      if (e.keyCode === 13) {
+      if (enter) {
         charCounter = 0;
         undo = [...undo, inputText];
         undoCursorPosition.push(cursorPositionStart);
@@ -212,86 +256,8 @@ class Editor extends React.Component {
         }
       }
 
-      // 66 = "b"
-      if (e.ctrlKey && e.keyCode === 66) {
-        e.preventDefault();
-      }
-
-      // 73 = "i"
-      if (e.ctrlKey && e.keyCode === 73) {
-        e.preventDefault();
-      }
-
-      // 72 = "h"
-      if (e.ctrlKey && e.keyCode === 72) {
-        e.preventDefault();
-      }
-
-      // 188 = "z"
-      if (e.ctrlKey && e.keyCode === 188) {
-        e.preventDefault();
-      }
-
-      if (e.ctrlKey && e.shiftKey && e.keyCode === 188) {
-        e.preventDefault();
-      }
-
-      // 8 = "backspace"
-      if (e.ctrlKey && e.shiftKey && e.keyCode === 8) {
-        e.preventDefault();
-      }
-
-      // 76 = "l"
-      if (e.ctrlKey && e.shiftKey && e.keyCode === 76) {
-        e.preventDefault();
-      }
-
-      // 83 = "s"
-      if (e.ctrlKey && e.shiftKey && e.keyCode === 83) {
-        e.preventDefault();
-      }
-
-      // 80 = "p"
-      if (e.ctrlKey && e.keyCode === 80) {
-        e.preventDefault();
-      }
-
-      // 85 = "u"
-      if (e.ctrlKey && e.keyCode === 85) {
-        e.preventDefault();
-      }
-      if (e.ctrlKey && e.shiftKey && e.keyCode === 85) {
-        e.preventDefault();
-      }
-
-      // 89 = "y"
-      if (e.ctrlKey && e.keyCode === 89) {
-        e.preventDefault();
-      }
-
-      // 65 = "a"
-      if (e.ctrlKey && e.shiftKey && e.keyCode === 65) {
-        e.preventDefault();
-      }
-
-      // 73 = "i"
-      if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
-        e.preventDefault();
-      }
-
-      // 69 = "e"
-      if (e.ctrlKey && e.keyCode === 69) {
-        e.preventDefault();
-      }
-
-      // 75 = "k"
-      if (e.ctrlKey && e.keyCode === 75) {
-        e.preventDefault();
-      }
-
-      // 9 = "tab"
-      if (e.keyCode === 9) {
-        e.preventDefault();
+      if (tab) {
+        event.preventDefault();
         // config for correct tab inside codeblock:
         if (!buttonBoolValues["codeblock"]) {
           undo = [...undo, inputText];
@@ -316,14 +282,8 @@ class Editor extends React.Component {
         this.setState({ mdValue: mdParser(inputText) });
       }
 
-      // 37, 38, 39, 40 = "arrow keys"
       // cancel button on arrow buttonclick
-      if (
-        e.keyCode === 37 ||
-        e.keyCode === 38 ||
-        e.keyCode === 39 ||
-        e.keyCode === 40
-      ) {
+      if (leftArrow || upArrow || rightArrow || downArrow) {
         resetButtonOnOff();
       }
     };
