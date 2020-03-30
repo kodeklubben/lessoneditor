@@ -55,7 +55,6 @@ class FormComponent extends React.Component {
 
     console.log("YAML header: \n" + this.YAMLstateToString(this.state));
     console.log("\nYML-file: \n" + this.YMLstateToString(this.state));
-    console.log(this.state);
 
     // TODO: Send state-data to database
   };
