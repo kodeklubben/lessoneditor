@@ -1,11 +1,12 @@
 import React from "react";
 import FormPage from "./FormPage";
+import COURSELIST from "./coursesList";
 
 class FormComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      course: "Micro:it",
+      course: COURSELIST[0].courseTitle,
       title: "",
       author: "",
       translator: "",
@@ -55,6 +56,8 @@ class FormComponent extends React.Component {
 
     console.log("YAML header: \n" + this.YAMLstateToString(this.state));
     console.log("\nYML-file: \n" + this.YMLstateToString(this.state));
+
+    console.log(this.state);
 
     // TODO: Send state-data to database
   };

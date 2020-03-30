@@ -1,5 +1,5 @@
 import React from "react";
-import { COURSESLIST } from "./coursesList";
+import COURSESLIST from "./coursesList";
 
 const dropdownHeight = 32;
 
