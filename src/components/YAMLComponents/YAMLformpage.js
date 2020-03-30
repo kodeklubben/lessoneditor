@@ -1,4 +1,5 @@
 import React from "react";
+import { COURSESLIST } from "./coursesList";
 
 const dropdownHeight = 32;
 
@@ -65,17 +66,11 @@ class YAMLformpage extends React.Component {
                 name="course"
                 onChange={this.props.myChangeHandler}
               >
-                <option value="Micro:it">Micro:it</option>
-                <option value="Scratch">Scratch</option>
-                <option value="Python">Python</option>
-                <option value="Lego Mindstorms">Lego Mindstorms</option>
-                <option value="Web">Web</option>
-                <option value="Code Studio">Code Studio</option>
-                <option value="Processing">Processing</option>
-                <option value="Elm">Elm</option>
-                <option value="Computer Craft">Computer Craft</option>
-                <option value="App Inventor">App Inventor</option>
-                <option value="Arduino">Arduino</option>
+                {COURSESLIST.map(element => (
+                  <option key={element.courseTitle} value={element.courseTitle}>
+                    {element.courseTitle}
+                  </option>
+                ))}
               </select>
             </label>
           </div>

@@ -39,7 +39,7 @@ const temp = "```";
 var charCounter = 0;
 
 // Variabel for å spesifisere hoved-hurtigtast til React Hotkeys (tastesnarveier)
-var OSspecificKey = "ctrl+";
+const SHORTCUTKEY = "ctrl+";
 
 var storedTextValue = "";
 
@@ -166,22 +166,28 @@ class Editor extends React.Component {
       cursorPositionStart = event.target.selectionStart;
       cursorPositionEnd = event.target.selectionEnd;
 
-      const b = event.ctrlKey && event.keyCode === 66;
-      const i = event.ctrlKey && event.keyCode === 73;
-      const h = event.ctrlKey && event.keyCode === 72;
-      const z = event.ctrlKey && event.keyCode === 188;
-      const zz = event.ctrlKey && event.shiftKey && event.keyCode === 188;
-      const backspace = event.ctrlKey && event.shiftKey && event.keyCode === 8;
-      const l = event.ctrlKey && event.shiftKey && event.keyCode === 76;
-      const s = event.ctrlKey && event.shiftKey && event.keyCode === 83;
-      const p = event.ctrlKey && event.keyCode === 80;
-      const u = event.ctrlKey && event.keyCode === 85;
-      const uu = event.ctrlKey && event.shiftKey && event.keyCode === 85;
-      const y = event.ctrlKey && event.keyCode === 89;
-      const a = event.ctrlKey && event.shiftKey && event.keyCode === 65;
-      const ii = event.ctrlKey && event.shiftKey && event.keyCode === 73;
-      const e = event.ctrlKey && event.keyCode === 69;
-      const k = event.ctrlKey && event.keyCode === 75;
+      // ctrl as shortcutKey
+      const SHORTCUTKEYPRESS = event.ctrlKey;
+      // shift as shortcutKey2
+      const SHORTCUTKEYPRESS2 = event.shiftKey;
+
+      const b = SHORTCUTKEYPRESS && event.keyCode === 66;
+      const i = SHORTCUTKEYPRESS && event.keyCode === 73;
+      const h = SHORTCUTKEYPRESS && event.keyCode === 72;
+      const z = SHORTCUTKEYPRESS && event.keyCode === 188;
+      const zz = SHORTCUTKEYPRESS && SHORTCUTKEYPRESS2 && event.keyCode === 188;
+      const backspace =
+        SHORTCUTKEYPRESS && event.shiftKey && event.keyCode === 8;
+      const l = SHORTCUTKEYPRESS && SHORTCUTKEYPRESS2 && event.keyCode === 76;
+      const s = SHORTCUTKEYPRESS && SHORTCUTKEYPRESS2 && event.keyCode === 83;
+      const p = SHORTCUTKEYPRESS && event.keyCode === 80;
+      const u = SHORTCUTKEYPRESS && event.keyCode === 85;
+      const uu = SHORTCUTKEYPRESS && SHORTCUTKEYPRESS2 && event.keyCode === 85;
+      const y = SHORTCUTKEYPRESS && event.keyCode === 89;
+      const a = SHORTCUTKEYPRESS && SHORTCUTKEYPRESS2 && event.keyCode === 65;
+      const ii = SHORTCUTKEYPRESS && SHORTCUTKEYPRESS2 && event.keyCode === 73;
+      const e = SHORTCUTKEYPRESS && event.keyCode === 69;
+      const k = SHORTCUTKEYPRESS && event.keyCode === 75;
       const leftArrow = event.keyCode === 37;
       const upArrow = event.keyCode === 38;
       const rightArrow = event.keyCode === 39;
@@ -641,26 +647,26 @@ class Editor extends React.Component {
 
     // Kode for å lage snarveier på tastatur.
     const keyMap = {
-      BOLD: OSspecificKey + "b",
-      ITALIC: OSspecificKey + "i",
-      HEADING: OSspecificKey + "h",
-      STRIKETHROUGH: OSspecificKey + "s",
-      UNDO: OSspecificKey + "z",
-      REDO: OSspecificKey + "shift+z",
-      NEW: OSspecificKey + "shift+backspace",
-      LOAD: OSspecificKey + "shift+l",
-      SAVE: OSspecificKey + "shift+s",
-      IMAGE: OSspecificKey + "p",
-      LISTUL: OSspecificKey + "u",
-      LISTOL: OSspecificKey + "shift+u",
-      CHECKLIST: OSspecificKey + "y",
-      ACTIVITY: OSspecificKey + "shift+a",
-      INTRO: OSspecificKey + "shift+i",
-      CHECK: OSspecificKey + "shift+c",
-      PROTIP: OSspecificKey + "shift+p",
-      CHALLENGE: OSspecificKey + "shift+g",
-      INLINE: OSspecificKey + "e",
-      CODEBLOCK: OSspecificKey + "k"
+      BOLD: SHORTCUTKEY + "b",
+      ITALIC: SHORTCUTKEY + "i",
+      HEADING: SHORTCUTKEY + "h",
+      STRIKETHROUGH: SHORTCUTKEY + "s",
+      UNDO: SHORTCUTKEY + "z",
+      REDO: SHORTCUTKEY + "shift+z",
+      NEW: SHORTCUTKEY + "shift+backspace",
+      LOAD: SHORTCUTKEY + "shift+l",
+      SAVE: SHORTCUTKEY + "shift+s",
+      IMAGE: SHORTCUTKEY + "p",
+      LISTUL: SHORTCUTKEY + "u",
+      LISTOL: SHORTCUTKEY + "shift+u",
+      CHECKLIST: SHORTCUTKEY + "y",
+      ACTIVITY: SHORTCUTKEY + "shift+a",
+      INTRO: SHORTCUTKEY + "shift+i",
+      CHECK: SHORTCUTKEY + "shift+c",
+      PROTIP: SHORTCUTKEY + "shift+p",
+      CHALLENGE: SHORTCUTKEY + "shift+g",
+      INLINE: SHORTCUTKEY + "e",
+      CODEBLOCK: SHORTCUTKEY + "k"
     };
 
     // Hva som skjer når man trykker en hurtigtastetrykk.
