@@ -410,6 +410,54 @@ class Editor extends React.Component {
         return;
       }
 
+      // nuller ut verdi fra knapp-trykk om man trykker en gang til på knapp uten å ha skrevet noen tegn.
+      // kanselerer da ut første knappetrykket.
+      if (
+        !buttonBoolValues[bTitle] &&
+        inputText.slice(
+          cursorPositionStart - cursorIntON,
+          cursorPositionStart - cursorIntON + output.length
+        ) === output
+      ) {
+        buttonBoolValues[bTitle] = true;
+        this.setState({ boolButton: buttonBoolValues });
+        undo = [...undo, inputText];
+        undoCursorPosition.push(cursorPositionStart);
+        inputText =
+          inputText.slice(0, cursorPositionStart - cursorIntON) +
+          inputText.slice(cursorPositionStart - cursorIntON + output.length);
+        this.setState({ textValue: inputText });
+        this.setState({ mdValue: mdParser(inputText) });
+        cursorPositionEnd = cursorPositionStart -= cursorIntON;
+        setCursorPosition(cursorPositionStart, cursorPositionStart);
+        return;
+      }
+
+      if (bTitle.slice(0, 4) === "list") {
+        if (!ifNewLine()) {
+          inputText =
+            inputText.slice(0, cursorPositionStart) +
+            "\n" +
+            inputText.slice(cursorPositionStart);
+          this.setState({ textValue: inputText });
+          cursorPositionStart++;
+          cursorPositionEnd++;
+          handleButtonClick(
+            bTitle,
+            output,
+            cursorIntON,
+            cursorIntOFF,
+            endOutput
+          );
+          return;
+        }
+        listButtonValues = {
+          bTitle: bTitle,
+          output: output,
+          cursorInt: cursorIntON
+        };
+      }
+
       if (bTitle === "image") {
         imagePopup = (
           <ImagePopup imagePopupSubmitHandler={imagePopupSubmitHandler} />
@@ -498,54 +546,6 @@ class Editor extends React.Component {
         }
       }
 
-      // nuller ut verdi fra knapp-trykk om man trykker en gang til på knapp uten å ha skrevet noen tegn.
-      // kanselerer da ut første knappetrykket.
-      if (
-        !buttonBoolValues[bTitle] &&
-        inputText.slice(
-          cursorPositionStart - cursorIntON,
-          cursorPositionStart - cursorIntON + output.length
-        ) === output
-      ) {
-        buttonBoolValues[bTitle] = true;
-        this.setState({ boolButton: buttonBoolValues });
-        undo = [...undo, inputText];
-        undoCursorPosition.push(cursorPositionStart);
-        inputText =
-          inputText.slice(0, cursorPositionStart - cursorIntON) +
-          inputText.slice(cursorPositionStart - cursorIntON + output.length);
-        this.setState({ textValue: inputText });
-        this.setState({ mdValue: mdParser(inputText) });
-        cursorPositionEnd = cursorPositionStart -= cursorIntON;
-        setCursorPosition(cursorPositionStart, cursorPositionStart);
-        return;
-      }
-
-      if (bTitle.slice(0, 4) === "list") {
-        if (!ifNewLine()) {
-          inputText =
-            inputText.slice(0, cursorPositionStart) +
-            "\n" +
-            inputText.slice(cursorPositionStart);
-          this.setState({ textValue: inputText });
-          cursorPositionStart++;
-          cursorPositionEnd++;
-          handleButtonClick(
-            bTitle,
-            output,
-            cursorIntON,
-            cursorIntOFF,
-            endOutput
-          );
-          return;
-        }
-        listButtonValues = {
-          bTitle: bTitle,
-          output: output,
-          cursorInt: cursorIntON
-        };
-      }
-
       //  Konfig av knapper slik at de registrerer om de er trykket, og flytter tekst-markøren i henhold til hvordan MD-syntax ser ut
       // Konfig-data finnes i ./buttonConfig.js der tallverdi for hvor mye tekst-markøren skal flyttes er definert in "cursorIntON" og "cursorIntOFF"
 
@@ -603,6 +603,7 @@ class Editor extends React.Component {
         );
         return;
       } else if (!buttonBoolValues[bTitle]) {
+        alert("test3");
         if (cursorPositionStart !== cursorPositionEnd) {
           buttonBoolValues[bTitle] = true;
           this.setState({ boolButton: buttonBoolValues });
@@ -683,9 +684,9 @@ class Editor extends React.Component {
       LOAD: () => handleButtonClick("load", "", 0, 0, ""),
       SAVE: () => handleButtonClick("save", "", 0, 0, ""),
       IMAGE: () => handleButtonClick("image", "", 0, 0, ""),
-      LISTUL: () => handleButtonClick("listul", "- ", 2, 0, ""),
-      LISTOL: () => handleButtonClick("listol", "1. ", 3, 0, ""),
-      CHECKLIST: () => handleButtonClick("listcheck", "- [ ] ", 6, 0, ""),
+      LISTUL: () => handleButtonClick("listUl", "- ", 2, 0, ""),
+      LISTOL: () => handleButtonClick("listOl", "1. ", 3, 0, ""),
+      CHECKLIST: () => handleButtonClick("listCheck", "- [ ] ", 6, 0, ""),
       ACTIVITY: () => handleButtonClick("activity", "{.activity}", 11, 11, ""),
       INTRO: () => handleButtonClick("intro", "{.intro}", 8, 8, ""),
       CHECK: () => handleButtonClick("check", "{.check}", 8, 8, ""),
