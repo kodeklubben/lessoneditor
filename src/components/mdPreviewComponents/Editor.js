@@ -437,11 +437,61 @@ class Editor extends React.Component {
         if (!ifNewLine()) {
           inputText =
             inputText.slice(0, cursorPositionStart) +
-            "\n" +
+            "\n\n" +
             inputText.slice(cursorPositionStart);
           this.setState({ textValue: inputText });
-          cursorPositionStart++;
-          cursorPositionEnd++;
+          cursorPositionStart += 2;
+          cursorPositionEnd += 2;
+          handleButtonClick(
+            bTitle,
+            output,
+            cursorIntON,
+            cursorIntOFF,
+            endOutput
+          );
+          return;
+        }
+        listButtonValues = {
+          bTitle: bTitle,
+          output: output,
+          cursorInt: cursorIntON
+        };
+      }
+
+      if (bTitle === "codeblock" && buttonBoolValues["codeblock"]) {
+        if (!ifNewLine()) {
+          inputText =
+            inputText.slice(0, cursorPositionStart) +
+            "\n\n" +
+            inputText.slice(cursorPositionStart);
+          this.setState({ textValue: inputText });
+          cursorPositionStart += 2;
+          cursorPositionEnd += 2;
+          handleButtonClick(
+            bTitle,
+            output,
+            cursorIntON,
+            cursorIntOFF,
+            endOutput
+          );
+          return;
+        }
+        listButtonValues = {
+          bTitle: bTitle,
+          output: output,
+          cursorInt: cursorIntON
+        };
+      }
+
+      if (bTitle === "heading" && buttonBoolValues["heading"]) {
+        if (!ifNewLine()) {
+          inputText =
+            inputText.slice(0, cursorPositionStart) +
+            "\n\n" +
+            inputText.slice(cursorPositionStart);
+          this.setState({ textValue: inputText });
+          cursorPositionStart += 2;
+          cursorPositionEnd += 2;
           handleButtonClick(
             bTitle,
             output,
@@ -603,7 +653,6 @@ class Editor extends React.Component {
         );
         return;
       } else if (!buttonBoolValues[bTitle]) {
-        alert("test3");
         if (cursorPositionStart !== cursorPositionEnd) {
           buttonBoolValues[bTitle] = true;
           this.setState({ boolButton: buttonBoolValues });
