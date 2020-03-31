@@ -1,6 +1,8 @@
 import React from "react";
 import FormPage from "./FormPage";
-import COURSELIST from "./coursesList";
+
+import COURSELIST from "./settingsFiles/COURSELIST";
+import LANGUAGELIST from "./settingsFiles/LANGUAGELIST";
 
 class FormComponent extends React.Component {
   constructor(props) {
@@ -10,7 +12,7 @@ class FormComponent extends React.Component {
       title: "",
       author: "",
       translator: "",
-      language: "nb",
+      language: LANGUAGELIST[0].language[0],
       level: 1,
       license: "",
       tags: { topic: [], subject: [], grade: [] }

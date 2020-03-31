@@ -1,5 +1,7 @@
 import React from "react";
-import COURSESLIST from "./coursesList";
+
+import COURSESLIST from "./settingsFiles/COURSELIST";
+import LANGUAGELIST from "./settingsFiles/LANGUAGELIST";
 
 const dropdownHeight = 32;
 
@@ -82,13 +84,11 @@ class YAMLformpage extends React.Component {
                 name="language"
                 onChange={this.props.myChangeHandler}
               >
-                <option value="nb">Bokmål</option>
-                <option value="nn">Nynorsk</option>
-                <option value="en">Engelsk</option>
-                <option value="is">Islandsk</option>
-                {/* <option value="sv">Svensk</option>
-                <option value="da">Dansk</option>
-                <option value="hr">Kroatisk</option> */}
+                {LANGUAGELIST.map(element => (
+                  <option key={element.language[0]} value={element.language[0]}>
+                    {element.language[1]}
+                  </option>
+                ))}
               </select>
             </label>
           </div>

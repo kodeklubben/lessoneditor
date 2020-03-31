@@ -9,8 +9,7 @@ const COURSESLIST = [
   { courseTitle: "Elm" },
   { courseTitle: "Computer Craft" },
   { courseTitle: "App Inventor" },
-  { courseTitle: "Arduino" },
-  { courseTitle: "Bajs" }
+  { courseTitle: "Arduino" }
 ];
 
 export default COURSESLIST;

@@ -39,7 +39,8 @@ const temp = "```";
 var charCounter = 0;
 
 // Variabel for å spesifisere hoved-hurtigtast til React Hotkeys (tastesnarveier)
-const SHORTCUTKEY = "ctrl+";
+const SHORTCUTKEY = "ctrl";
+const SHORTCUTKEY2 = "shift";
 
 var storedTextValue = "";
 
@@ -121,6 +122,14 @@ class Editor extends React.Component {
         inline: true,
         codeblock: true
       };
+    };
+
+    // angi markørposisjon i tekstfelt
+    const setCursorPosition = (positionStart, positionEnd) => {
+      setTimeout(() => {
+        this.editorRef.current.selectionStart = positionStart;
+        this.editorRef.current.selectionEnd = positionEnd;
+      }, 0);
     };
 
     // all config for å behandle tekst i textarea
@@ -250,13 +259,13 @@ class Editor extends React.Component {
           }
           inputText =
             inputText.slice(0, cursorPositionStart) +
-            "\n" +
+            "\n\n" +
             listButtonValues["output"] +
             inputText.slice(cursorPositionStart);
           this.setState({ textValue: inputText });
           setCursorPosition(
-            cursorPositionStart + listButtonValues["cursorInt"] + 1,
-            cursorPositionStart + listButtonValues["cursorInt"] + 1
+            cursorPositionStart + listButtonValues["cursorInt"] + 2,
+            cursorPositionStart + listButtonValues["cursorInt"] + 2
           );
           return;
         }
@@ -316,14 +325,6 @@ class Editor extends React.Component {
         this.editorRef.current.focus();
         setCursorPosition(cursorPositionStart, cursorPositionEnd);
       }
-    };
-
-    // angi markørposisjon i tekstfelt
-    const setCursorPosition = (positionStart, positionEnd) => {
-      setTimeout(() => {
-        this.editorRef.current.selectionStart = positionStart;
-        this.editorRef.current.selectionEnd = positionEnd;
-      }, 0);
     };
 
     // litt logikk for å detektere linjeskift ++
@@ -647,26 +648,26 @@ class Editor extends React.Component {
 
     // Kode for å lage snarveier på tastatur.
     const keyMap = {
-      BOLD: SHORTCUTKEY + "b",
-      ITALIC: SHORTCUTKEY + "i",
-      HEADING: SHORTCUTKEY + "h",
-      STRIKETHROUGH: SHORTCUTKEY + "s",
-      UNDO: SHORTCUTKEY + "z",
-      REDO: SHORTCUTKEY + "shift+z",
-      NEW: SHORTCUTKEY + "shift+backspace",
-      LOAD: SHORTCUTKEY + "shift+l",
-      SAVE: SHORTCUTKEY + "shift+s",
-      IMAGE: SHORTCUTKEY + "p",
-      LISTUL: SHORTCUTKEY + "u",
-      LISTOL: SHORTCUTKEY + "shift+u",
-      CHECKLIST: SHORTCUTKEY + "y",
-      ACTIVITY: SHORTCUTKEY + "shift+a",
-      INTRO: SHORTCUTKEY + "shift+i",
-      CHECK: SHORTCUTKEY + "shift+c",
-      PROTIP: SHORTCUTKEY + "shift+p",
-      CHALLENGE: SHORTCUTKEY + "shift+g",
-      INLINE: SHORTCUTKEY + "e",
-      CODEBLOCK: SHORTCUTKEY + "k"
+      BOLD: SHORTCUTKEY + "+b",
+      ITALIC: SHORTCUTKEY + "+i",
+      HEADING: SHORTCUTKEY + "+h",
+      STRIKETHROUGH: SHORTCUTKEY + "+s",
+      UNDO: SHORTCUTKEY + "+z",
+      REDO: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+z",
+      NEW: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+backspace",
+      LOAD: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+l",
+      SAVE: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+s",
+      IMAGE: SHORTCUTKEY + "+p",
+      LISTUL: SHORTCUTKEY + "+u",
+      LISTOL: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+u",
+      CHECKLIST: SHORTCUTKEY + "+y",
+      ACTIVITY: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+a",
+      INTRO: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+i",
+      CHECK: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+c",
+      PROTIP: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+p",
+      CHALLENGE: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+g",
+      INLINE: SHORTCUTKEY + "+e",
+      CODEBLOCK: SHORTCUTKEY + "+k"
     };
 
     // Hva som skjer når man trykker en hurtigtastetrykk.
