@@ -269,6 +269,9 @@ class Editor extends React.Component {
           );
           return;
         }
+        if (!buttonBoolValues["heading"]) {
+          buttonBoolValues["heading"] = true;
+        }
       }
 
       if (tab) {
@@ -476,11 +479,6 @@ class Editor extends React.Component {
           );
           return;
         }
-        listButtonValues = {
-          bTitle: bTitle,
-          output: output,
-          cursorInt: cursorIntON
-        };
       }
 
       if (bTitle === "heading" && buttonBoolValues["heading"]) {
@@ -501,11 +499,6 @@ class Editor extends React.Component {
           );
           return;
         }
-        listButtonValues = {
-          bTitle: bTitle,
-          output: output,
-          cursorInt: cursorIntON
-        };
       }
 
       if (bTitle === "image") {
