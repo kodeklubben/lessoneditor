@@ -1,6 +1,5 @@
 import React from "react";
 import FormPage from "./FormPage";
-
 import COURSELIST from "./settingsFiles/COURSELIST";
 import LANGUAGELIST from "./settingsFiles/LANGUAGELIST";
 
@@ -55,12 +54,19 @@ class FormComponent extends React.Component {
 
   mySubmitHandler = event => {
     event.preventDefault();
+    //const for yml creation
+    const fs = require("browserify-fs");
 
+    //create yml file
+    fs.writeFile("lesson.yml", this.YMLstateToString(this.state), function(
+      err
+    ) {
+      if (err) throw err;
+    });
+
+    console.log("saved yml-file");
     console.log("YAML header: \n" + this.YAMLstateToString(this.state));
     console.log("\nYML-file: \n" + this.YMLstateToString(this.state));
-
-    console.log(this.state);
-
     // TODO: Send state-data to database
   };
 
