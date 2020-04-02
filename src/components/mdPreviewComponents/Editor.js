@@ -42,8 +42,10 @@ var charCounter = 0;
 const SHORTCUTKEY = "ctrl";
 const SHORTCUTKEY2 = "shift";
 
+// her lagres tekesten når teksten autolagres/lagres
 var storedTextValue = "";
 
+// denne variabelen er nødvendig for at liste-knappene skal gi ønsket oppførsel med linjeskift
 var listButtonValues = { bTitle: "", output: "", cursorInt: 0 };
 
 // undo/redo - variabler.
@@ -52,13 +54,17 @@ var undoCursorPosition = [];
 var redo = [];
 var redoCursorPosition = [];
 
+// her er inputText før den ender opp i state
 var inputText = "";
+
+// variabler for å spore pekere i tekstarea
 var cursorPositionStart = 0;
 var cursorPositionEnd = 0;
 
 // meldingen i autosave
 var autoSaveMessage = <br />;
 
+// placeholder tag for bilde-upload popup
 var imagePopup = <br />;
 
 // ___________________
@@ -79,16 +85,19 @@ class Editor extends React.Component {
     this.editorRef = React.createRef();
   }
 
+  // en teller som brukes i forbindelse med autolagring
   componentDidMount() {
     this.myCounter = setInterval(() => {
       this.setState({ counter: this.state.counter + 1 });
     }, 1000);
   }
 
+  // fjerner telleren
   componentWillUnmount() {
     clearInterval(this.myCounter);
   }
 
+  // autolagring etter et par sekunder uten at teksten oppdateres
   componentDidUpdate() {
     if (this.state.counter === 2 && this.state.textValue.length > 0) {
       autoSaveMessage = "document saved";
@@ -130,6 +139,13 @@ class Editor extends React.Component {
         this.editorRef.current.selectionStart = positionStart;
         this.editorRef.current.selectionEnd = positionEnd;
       }, 0);
+    };
+
+    // Submithandler,  kode for å sende tekst til backend skrives her her.
+    const mySubmitHandler = event => {
+      event.preventDefault();
+
+      // TODO: Send inputtext-data to database
     };
 
     // all config for å behandle tekst i textarea
@@ -232,6 +248,8 @@ class Editor extends React.Component {
         undoCursorPosition.push(cursorPositionStart);
       }
 
+      // når bruker trykker "enter" skal noen funksjoner ha egen oppførsel.
+      // som feks ny linje.
       if (enter) {
         charCounter = 0;
         undo = [...undo, inputText];
@@ -274,6 +292,8 @@ class Editor extends React.Component {
         }
       }
 
+      // tab skal gi to mellomrom indentering.  Også i kodeblokk.
+
       if (tab) {
         event.preventDefault();
         // config for correct tab inside codeblock:
@@ -300,7 +320,7 @@ class Editor extends React.Component {
         this.setState({ mdValue: mdParser(inputText) });
       }
 
-      // cancel button on arrow buttonclick
+      // kanselerer knappetrykk med piltaster
       if (leftArrow || upArrow || rightArrow || downArrow) {
         resetButtonOnOff();
       }
@@ -436,7 +456,12 @@ class Editor extends React.Component {
         return;
       }
 
-      if (bTitle.slice(0, 4) === "list") {
+      // gir linjeskift for enkelte knapper - om knapp trykkes og det ikke er ny linje
+      if (
+        bTitle.slice(0, 4) === "list" ||
+        (bTitle === "codeblock" && buttonBoolValues["codeblock"]) ||
+        (bTitle === "heading" && buttonBoolValues["heading"])
+      ) {
         if (!ifNewLine()) {
           inputText =
             inputText.slice(0, cursorPositionStart) +
@@ -454,53 +479,16 @@ class Editor extends React.Component {
           );
           return;
         }
-        listButtonValues = {
-          bTitle: bTitle,
-          output: output,
-          cursorInt: cursorIntON
-        };
-      }
-
-      if (bTitle === "codeblock" && buttonBoolValues["codeblock"]) {
-        if (!ifNewLine()) {
-          inputText =
-            inputText.slice(0, cursorPositionStart) +
-            "\n\n" +
-            inputText.slice(cursorPositionStart);
-          this.setState({ textValue: inputText });
-          cursorPositionStart += 2;
-          cursorPositionEnd += 2;
-          handleButtonClick(
-            bTitle,
-            output,
-            cursorIntON,
-            cursorIntOFF,
-            endOutput
-          );
-          return;
+        if (bTitle.slice(0, 4) === "list") {
+          listButtonValues = {
+            bTitle: bTitle,
+            output: output,
+            cursorInt: cursorIntON
+          };
         }
       }
 
-      if (bTitle === "heading" && buttonBoolValues["heading"]) {
-        if (!ifNewLine()) {
-          inputText =
-            inputText.slice(0, cursorPositionStart) +
-            "\n\n" +
-            inputText.slice(cursorPositionStart);
-          this.setState({ textValue: inputText });
-          cursorPositionStart += 2;
-          cursorPositionEnd += 2;
-          handleButtonClick(
-            bTitle,
-            output,
-            cursorIntON,
-            cursorIntOFF,
-            endOutput
-          );
-          return;
-        }
-      }
-
+      // hvis opplasting av bilde-knapp trykkes:
       if (bTitle === "image") {
         imagePopup = (
           <ImagePopup imagePopupSubmitHandler={imagePopupSubmitHandler} />
@@ -567,16 +555,6 @@ class Editor extends React.Component {
         }
       }
 
-      //constraint button from working if not new line
-      if (
-        bTitle === "heading" ||
-        (bTitle === "codeblock" &&
-          buttonBoolValues["codeblock"] &&
-          !ifNewLine())
-      ) {
-        return;
-      }
-
       //constraint button from working if new line or not end of line.
       if (output[0] === "{" && buttonBoolValues[bTitle]) {
         if (ifNewLine()) {
@@ -608,8 +586,8 @@ class Editor extends React.Component {
               cursorPositionStart += 1;
             }
             if (i[i.length - 1] === " " || i[i.length - 1] === "\n") {
-              i = i.slice(0, i.length - 2);
-              cursorPositionEnd -= 2;
+              i = i.slice(0, i.length - 1);
+              cursorPositionEnd -= 1;
             }
           }
           setCursorPosition(cursorPositionStart, cursorPositionEnd);
@@ -639,7 +617,6 @@ class Editor extends React.Component {
           inputText.slice(cursorPositionStart);
         this.setState({ textValue: inputText });
         this.setState({ mdValue: mdParser(inputText) });
-        // cursorPositionStart = cursorPositionStart + cursorIntON;
         setCursorPosition(
           cursorPositionStart + cursorIntON,
           cursorPositionStart + cursorIntON
@@ -680,13 +657,6 @@ class Editor extends React.Component {
       } else {
         return;
       }
-    };
-
-    // Submithandler,  kode for å sende tekst til backend skrives her her.
-    const mySubmitHandler = event => {
-      event.preventDefault();
-
-      // TODO: Send inputtext-data to database
     };
 
     // Kode for å lage snarveier på tastatur.
