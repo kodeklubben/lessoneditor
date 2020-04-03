@@ -22,9 +22,12 @@ var buttonBoolValues = {
   image: true,
   listUl: true,
   listOl: true,
-  checklist: true,
+  listCheck: true,
   activity: true,
   intro: true,
+  check: true,
+  protip: true,
+  challenge: true,
   inline: true,
   codeblock: true
 };
@@ -36,21 +39,32 @@ const temp = "```";
 var charCounter = 0;
 
 // Variabel for å spesifisere hoved-hurtigtast til React Hotkeys (tastesnarveier)
-var OSspecificKey = "ctrl+";
+const SHORTCUTKEY = "ctrl";
+const SHORTCUTKEY2 = "shift";
 
+// her lagres tekesten når teksten autolagres/lagres
 var storedTextValue = "";
+
+// denne variabelen er nødvendig for at liste-knappene skal gi ønsket oppførsel med linjeskift
+var listButtonValues = { bTitle: "", output: "", cursorInt: 0 };
 
 // undo/redo - variabler.
 var undo = [""];
+var undoCursorPosition = [];
 var redo = [];
+var redoCursorPosition = [];
 
+// her er inputText før den ender opp i state
 var inputText = "";
+
+// variabler for å spore pekere i tekstarea
 var cursorPositionStart = 0;
 var cursorPositionEnd = 0;
 
 // meldingen i autosave
 var autoSaveMessage = <br />;
 
+// placeholder tag for bilde-upload popup
 var imagePopup = <br />;
 
 // ___________________
@@ -71,16 +85,19 @@ class Editor extends React.Component {
     this.editorRef = React.createRef();
   }
 
+  // en teller som brukes i forbindelse med autolagring
   componentDidMount() {
     this.myCounter = setInterval(() => {
       this.setState({ counter: this.state.counter + 1 });
     }, 1000);
   }
 
+  // fjerner telleren
   componentWillUnmount() {
     clearInterval(this.myCounter);
   }
 
+  // autolagring etter et par sekunder uten at teksten oppdateres
   componentDidUpdate() {
     if (this.state.counter === 2 && this.state.textValue.length > 0) {
       autoSaveMessage = "document saved";
@@ -91,26 +108,54 @@ class Editor extends React.Component {
   }
 
   render() {
+    const resetButtonOnOff = () => {
+      buttonBoolValues = {
+        bold: true,
+        italic: true,
+        heading: true,
+        strikethrough: true,
+        undo: true,
+        redo: true,
+        new: true,
+        load: true,
+        save: true,
+        image: true,
+        listUl: true,
+        listOl: true,
+        listCheck: true,
+        activity: true,
+        intro: true,
+        check: true,
+        protip: true,
+        challenge: true,
+        inline: true,
+        codeblock: true
+      };
+    };
+
+    // angi markørposisjon i tekstfelt
+    const setCursorPosition = (positionStart, positionEnd) => {
+      setTimeout(() => {
+        this.editorRef.current.selectionStart = positionStart;
+        this.editorRef.current.selectionEnd = positionEnd;
+      }, 0);
+    };
+
+    // Submithandler,  kode for å sende tekst til backend skrives her her.
+    const mySubmitHandler = event => {
+      event.preventDefault();
+
+      // TODO: Send inputtext-data to database
+    };
+
     // all config for å behandle tekst i textarea
     const handleChange = event => {
       cursorPositionStart = event.target.selectionStart;
       cursorPositionEnd = event.target.selectionEnd;
       inputText = event.target.value;
 
-      // hvis tekstinput er mellomrom eller enter, lagres event.target.value til undo:
-      if (
-        event.target.value.charCodeAt(event.target.value.length - 1) === 32 ||
-        event.target.value.charCodeAt(event.target.value.length - 1) === 10
-      ) {
-        undo = [...undo, inputText];
-      }
-
       // Teller input-tegn, og tvinger linjeskift hvis det passerer 80 tegn
       charCounter += 1;
-
-      if (event.target.value.charCodeAt(event.target.value.length - 1) === 10) {
-        charCounter = 0;
-      }
 
       if (charCounter === 80) {
         inputText += "\n";
@@ -137,157 +182,146 @@ class Editor extends React.Component {
       cursorPositionStart = e.target.selectionStart;
       cursorPositionEnd = e.target.selectionEnd;
 
-      buttonBoolValues = {
-        bold: true,
-        italic: true,
-        heading: true,
-        strikethrough: true,
-        undo: true,
-        redo: true,
-        new: true,
-        load: true,
-        save: true,
-        image: true,
-        listUl: true,
-        listOl: true,
-        checklist: true,
-        activity: true,
-        intro: true,
-        inline: true,
-        codeblock: true
-      };
+      resetButtonOnOff();
     };
 
     // konfigurering for å fjerne default-funksjoner av tastekombinasjoner
     // brukes for å sette egne hurtigtaster i teksteditor.
-    const onTextareaKeyDown = e => {
-      cursorPositionStart = e.target.selectionStart;
-      cursorPositionEnd = e.target.selectionEnd;
+    const onTextareaKeyDown = event => {
+      cursorPositionStart = event.target.selectionStart;
+      cursorPositionEnd = event.target.selectionEnd;
 
-      // 66 = "b"
-      if (e.ctrlKey && e.keyCode === 66) {
-        e.preventDefault();
+      // ctrl as shortcutKey
+      const SHORTCUTKEYPRESS = event.ctrlKey;
+      // shift as shortcutKey2
+      const SHORTCUTKEYPRESS2 = event.shiftKey;
+
+      const b = SHORTCUTKEYPRESS && event.keyCode === 66;
+      const i = SHORTCUTKEYPRESS && event.keyCode === 73;
+      const h = SHORTCUTKEYPRESS && event.keyCode === 72;
+      const z = SHORTCUTKEYPRESS && event.keyCode === 188;
+      const zz = SHORTCUTKEYPRESS && SHORTCUTKEYPRESS2 && event.keyCode === 188;
+      const backspace =
+        SHORTCUTKEYPRESS && event.shiftKey && event.keyCode === 8;
+      const l = SHORTCUTKEYPRESS && SHORTCUTKEYPRESS2 && event.keyCode === 76;
+      const s = SHORTCUTKEYPRESS && SHORTCUTKEYPRESS2 && event.keyCode === 83;
+      const p = SHORTCUTKEYPRESS && event.keyCode === 80;
+      const u = SHORTCUTKEYPRESS && event.keyCode === 85;
+      const uu = SHORTCUTKEYPRESS && SHORTCUTKEYPRESS2 && event.keyCode === 85;
+      const y = SHORTCUTKEYPRESS && event.keyCode === 89;
+      const a = SHORTCUTKEYPRESS && SHORTCUTKEYPRESS2 && event.keyCode === 65;
+      const ii = SHORTCUTKEYPRESS && SHORTCUTKEYPRESS2 && event.keyCode === 73;
+      const e = SHORTCUTKEYPRESS && event.keyCode === 69;
+      const k = SHORTCUTKEYPRESS && event.keyCode === 75;
+      const leftArrow = event.keyCode === 37;
+      const upArrow = event.keyCode === 38;
+      const rightArrow = event.keyCode === 39;
+      const downArrow = event.keyCode === 40;
+      const spacebar = event.keyCode === 32;
+      const enter = event.keyCode === 13;
+      const tab = event.keyCode === 9;
+
+      if (
+        b ||
+        i ||
+        h ||
+        z ||
+        zz ||
+        backspace ||
+        l ||
+        s ||
+        p ||
+        u ||
+        uu ||
+        y ||
+        a ||
+        ii ||
+        e ||
+        k
+      ) {
+        event.preventDefault();
       }
 
-      // 73 = "i"
-      if (e.ctrlKey && e.keyCode === 73) {
-        e.preventDefault();
+      // hvis tekstinput er mellomrom eller enter, lagres inputText til undo:
+      if (spacebar) {
+        undo = [...undo, inputText];
+        undoCursorPosition.push(cursorPositionStart);
       }
 
-      // 72 = "h"
-      if (e.ctrlKey && e.keyCode === 72) {
-        e.preventDefault();
+      // når bruker trykker "enter" skal noen funksjoner ha egen oppførsel.
+      // som feks ny linje.
+      if (enter) {
+        charCounter = 0;
+        undo = [...undo, inputText];
+        undoCursorPosition.push(cursorPositionStart);
+        if (buttonBoolValues[listButtonValues["bTitle"]] === false) {
+          if (
+            inputText.slice(
+              cursorPositionStart - listButtonValues["cursorInt"],
+              cursorPositionStart
+            ) === listButtonValues["output"]
+          ) {
+            buttonBoolValues[listButtonValues["bTitle"]] = true;
+            this.setState({ boolButton: buttonBoolValues });
+            inputText =
+              inputText.slice(
+                0,
+                cursorPositionStart - listButtonValues["cursorInt"]
+              ) + inputText.slice(cursorPositionStart);
+            this.setState({ textValue: inputText });
+            setCursorPosition(
+              cursorPositionStart - listButtonValues["cursorInt"],
+              cursorPositionStart - listButtonValues["cursorInt"]
+            );
+            return;
+          }
+          inputText =
+            inputText.slice(0, cursorPositionStart) +
+            "\n\n" +
+            listButtonValues["output"] +
+            inputText.slice(cursorPositionStart);
+          this.setState({ textValue: inputText });
+          setCursorPosition(
+            cursorPositionStart + listButtonValues["cursorInt"] + 2,
+            cursorPositionStart + listButtonValues["cursorInt"] + 2
+          );
+          return;
+        }
+        if (!buttonBoolValues["heading"]) {
+          buttonBoolValues["heading"] = true;
+        }
       }
 
-      // 188 = "z"
-      if (e.ctrlKey && e.keyCode === 188) {
-        e.preventDefault();
-      }
-
-      if (e.ctrlKey && e.shiftKey && e.keyCode === 188) {
-        e.preventDefault();
-      }
-
-      // 8 = "backspace"
-      if (e.ctrlKey && e.shiftKey && e.keyCode === 8) {
-        e.preventDefault();
-      }
-
-      // 76 = "l"
-      if (e.ctrlKey && e.shiftKey && e.keyCode === 76) {
-        e.preventDefault();
-      }
-
-      // 83 = "s"
-      if (e.ctrlKey && e.shiftKey && e.keyCode === 83) {
-        e.preventDefault();
-      }
-
-      // 80 = "p"
-      if (e.ctrlKey && e.keyCode === 80) {
-        e.preventDefault();
-      }
-
-      // 85 = "u"
-      if (e.ctrlKey && e.keyCode === 85) {
-        e.preventDefault();
-      }
-      if (e.ctrlKey && e.shiftKey && e.keyCode === 85) {
-        e.preventDefault();
-      }
-
-      // 89 = "y"
-      if (e.ctrlKey && e.keyCode === 89) {
-        e.preventDefault();
-      }
-
-      // 65 = "a"
-      if (e.ctrlKey && e.shiftKey && e.keyCode === 65) {
-        e.preventDefault();
-      }
-
-      // 73 = "i"
-      if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
-        e.preventDefault();
-      }
-
-      // 69 = "e"
-      if (e.ctrlKey && e.keyCode === 69) {
-        e.preventDefault();
-      }
-
-      // 75 = "k"
-      if (e.ctrlKey && e.keyCode === 75) {
-        e.preventDefault();
-      }
-
-      // 9 = "tab"
-      if (e.keyCode === 9) {
-        e.preventDefault();
+      // tab skal gi to mellomrom indentering.  Også i kodeblokk.
+      if (tab) {
+        event.preventDefault();
         // config for correct tab inside codeblock:
         if (!buttonBoolValues["codeblock"]) {
           undo = [...undo, inputText];
+          undoCursorPosition.push(cursorPositionStart);
           inputText =
             inputText.slice(0, cursorPositionStart) +
             "  " +
             inputText.slice(cursorPositionStart);
           this.setState({ textValue: inputText });
+          this.setState({ mdValue: mdParser(inputText) });
           cursorPositionStart += 2;
           setCursorPosition(cursorPositionStart, cursorPositionStart);
           return;
         }
         undo = [...undo, inputText];
-        inputText += "  ";
+        undoCursorPosition.push(cursorPositionStart);
+        inputText =
+          inputText.slice(0, cursorPositionStart) +
+          "  " +
+          inputText.slice(cursorPositionEnd);
         this.setState({ textValue: inputText });
+        this.setState({ mdValue: mdParser(inputText) });
       }
 
-      // 37, 38, 39, 40 = "arrow keys"
-      // cancel button on arrow buttonclick
-      if (
-        e.keyCode === 37 ||
-        e.keyCode === 38 ||
-        e.keyCode === 39 ||
-        e.keyCode === 40
-      ) {
-        buttonBoolValues = {
-          bold: true,
-          italic: true,
-          heading: true,
-          strikethrough: true,
-          undo: true,
-          redo: true,
-          new: true,
-          load: true,
-          save: true,
-          image: true,
-          listUl: true,
-          listOl: true,
-          checklist: true,
-          activity: true,
-          intro: true,
-          inline: true,
-          codeblock: true
-        };
+      // kanselerer knappetrykk med piltaster
+      if (leftArrow || upArrow || rightArrow || downArrow) {
+        resetButtonOnOff();
       }
     };
 
@@ -295,6 +329,7 @@ class Editor extends React.Component {
     const imagePopupSubmitHandler = imagePopupInputValue => {
       if (imagePopupInputValue !== "") {
         undo = [...undo, inputText];
+        undoCursorPosition.push(cursorPositionStart);
         inputText =
           inputText.slice(0, cursorPositionStart) +
           "![Bildebeskrivelse her](" +
@@ -312,14 +347,6 @@ class Editor extends React.Component {
         this.editorRef.current.focus();
         setCursorPosition(cursorPositionStart, cursorPositionEnd);
       }
-    };
-
-    // angi markørposisjon i tekstfelt
-    const setCursorPosition = (positionStart, positionEnd) => {
-      setTimeout(() => {
-        this.editorRef.current.selectionStart = positionStart;
-        this.editorRef.current.selectionEnd = positionEnd;
-      }, 0);
     };
 
     // litt logikk for å detektere linjeskift ++
@@ -354,11 +381,11 @@ class Editor extends React.Component {
         redo = [];
         this.setState({ textValue: inputText });
         this.setState({ mdValue: mdParser(inputText) });
+        cursorPositionStart = cursorPositionEnd = 0;
         return;
       }
 
       // Load, save, undo, redo funksjoner
-
       if (bTitle === "load") {
         inputText = storedTextValue;
         undo = [inputText];
@@ -375,29 +402,91 @@ class Editor extends React.Component {
       }
 
       if (bTitle === "undo") {
+        let pos1 = undoCursorPosition.pop();
+        let pos2 = pos1;
         if (undo.length <= 0) {
           return;
         }
         redo = [...redo, inputText];
+        redoCursorPosition.push(cursorPositionStart);
         inputText = undo.pop();
         this.setState({ textValue: inputText });
         this.setState({ mdValue: mdParser(inputText) });
-        setCursorPosition(inputText.length, inputText.length);
+        setCursorPosition(pos1, pos2);
         return;
       }
 
       if (bTitle === "redo") {
+        let pos1 = redoCursorPosition.pop();
+        let pos2 = pos1;
         if (redo.length <= 0) {
           return;
         }
         undo = [...undo, inputText];
+        undoCursorPosition.push(cursorPositionStart);
         inputText = redo.pop();
         this.setState({ textValue: inputText });
         this.setState({ mdValue: mdParser(inputText) });
-        setCursorPosition(inputText.length, inputText.length);
+        setCursorPosition(pos1, pos2);
         return;
       }
 
+      // nuller ut verdi fra knapp-trykk om man trykker en gang til på knapp uten å ha skrevet noen tegn.
+      // kanselerer da ut første knappetrykket.
+      if (
+        !buttonBoolValues[bTitle] &&
+        inputText.slice(
+          cursorPositionStart - cursorIntON,
+          cursorPositionStart - cursorIntON + output.length
+        ) === output
+      ) {
+        buttonBoolValues[bTitle] = true;
+        this.setState({ boolButton: buttonBoolValues });
+        undo = [...undo, inputText];
+        undoCursorPosition.push(cursorPositionStart);
+        inputText =
+          inputText.slice(0, cursorPositionStart - cursorIntON) +
+          inputText.slice(cursorPositionStart - cursorIntON + output.length);
+        this.setState({ textValue: inputText });
+        this.setState({ mdValue: mdParser(inputText) });
+        cursorPositionEnd = cursorPositionStart -= cursorIntON;
+        setCursorPosition(cursorPositionStart, cursorPositionStart);
+        return;
+      }
+
+      // gir linjeskift for enkelte knapper - om knapp trykkes og det ikke allerede er ny linje
+      if (
+        bTitle.slice(0, 4) === "list" ||
+        (bTitle === "codeblock" && buttonBoolValues["codeblock"]) ||
+        (bTitle === "heading" && buttonBoolValues["heading"])
+      ) {
+        if (!ifNewLine()) {
+          inputText =
+            inputText.slice(0, cursorPositionStart) +
+            "\n\n" +
+            inputText.slice(cursorPositionStart);
+          this.setState({ textValue: inputText });
+          cursorPositionStart += 2;
+          cursorPositionEnd += 2;
+          handleButtonClick(
+            bTitle,
+            output,
+            cursorIntON,
+            cursorIntOFF,
+            endOutput
+          );
+          return;
+        }
+        if (bTitle.slice(0, 4) === "list") {
+          listButtonValues = {
+            bTitle: bTitle,
+            output: output,
+            cursorInt: cursorIntON
+          };
+        }
+      }
+
+      // hvis opplasting av bilde-knapp trykkes:
       if (bTitle === "image") {
         imagePopup = (
           <ImagePopup imagePopupSubmitHandler={imagePopupSubmitHandler} />
@@ -416,6 +505,7 @@ class Editor extends React.Component {
           buttonBoolValues[bTitle] = false;
           this.setState({ boolButton: buttonBoolValues });
           undo = [...undo, inputText];
+          undoCursorPosition.push(cursorPositionStart);
           inputText =
             inputText.slice(0, cursorPositionStart - 3) +
             "# " +
@@ -427,6 +517,7 @@ class Editor extends React.Component {
           return;
         } else if (output === "## " && buttonBoolValues[bTitle]) {
           undo = [...undo, inputText];
+          undoCursorPosition.push(cursorPositionStart);
           inputText =
             inputText.slice(0, cursorPositionStart) +
             output +
@@ -443,6 +534,7 @@ class Editor extends React.Component {
             "# "
           ) {
             undo = [...undo, inputText];
+            undoCursorPosition.push(cursorPositionStart);
             inputText =
               inputText.slice(0, cursorPositionStart - 2) +
               inputText.slice(cursorPositionStart);
@@ -461,49 +553,20 @@ class Editor extends React.Component {
         }
       }
 
-      //constraint button from working if not new line
-      if (
-        bTitle === "heading" ||
-        (bTitle === "codeblock" &&
-          buttonBoolValues["codeblock"] &&
-          !ifNewLine())
-      ) {
-        return;
-      }
-
-      //constraint button from working if new line
-      if (
-        (bTitle === "activity" && ifNewLine()) ||
-        (bTitle === "intro" && ifNewLine())
-      ) {
-        return;
-      }
-
-      // nuller ut verdi fra knapp-trykk om man trykker en gang til på knapp uten å ha skrevet noen tegn.
-      // kanselerer da ut første knappetrykket.
-      if (
-        !buttonBoolValues[bTitle] &&
-        inputText.slice(
-          cursorPositionStart - cursorIntON,
-          cursorPositionStart - cursorIntON + output.length
-        ) === output
-      ) {
-        buttonBoolValues[bTitle] = true;
-        this.setState({ boolButton: buttonBoolValues });
-        undo = [...undo, inputText];
-        inputText =
-          inputText.slice(0, cursorPositionStart - cursorIntON) +
-          inputText.slice(cursorPositionStart - cursorIntON + output.length);
-        this.setState({ textValue: inputText });
-        this.setState({ mdValue: mdParser(inputText) });
-        cursorPositionEnd = cursorPositionStart -= cursorIntON;
-        setCursorPosition(cursorPositionStart, cursorPositionStart);
-        return;
+      //constraint button from working if new line or not end of line.
+      if (output[0] === "{" && buttonBoolValues[bTitle]) {
+        if (ifNewLine()) {
+          return;
+        }
+        if (inputText[cursorPositionEnd] !== undefined) {
+          if (inputText[cursorPositionEnd] !== "\n") {
+            return;
+          }
+        }
       }
 
       //  Konfig av knapper slik at de registrerer om de er trykket, og flytter tekst-markøren i henhold til hvordan MD-syntax ser ut
       // Konfig-data finnes i ./buttonConfig.js der tallverdi for hvor mye tekst-markøren skal flyttes er definert in "cursorIntON" og "cursorIntOFF"
-
       if (buttonBoolValues[bTitle]) {
         if (cursorPositionStart !== cursorPositionEnd) {
           buttonBoolValues[bTitle] = false;
@@ -520,12 +583,13 @@ class Editor extends React.Component {
               cursorPositionStart += 1;
             }
             if (i[i.length - 1] === " " || i[i.length - 1] === "\n") {
-              i = i.slice(0, i.length - 2);
-              cursorPositionEnd -= 2;
+              i = i.slice(0, i.length - 1);
+              cursorPositionEnd -= 1;
             }
           }
           setCursorPosition(cursorPositionStart, cursorPositionEnd);
           undo = [...undo, inputText];
+          undoCursorPosition.push(cursorPositionStart);
           inputText =
             inputText.slice(0, cursorPositionStart) +
             output.slice(0, cursorIntON) +
@@ -543,14 +607,17 @@ class Editor extends React.Component {
         buttonBoolValues[bTitle] = false;
         this.setState({ boolButton: buttonBoolValues });
         undo = [...undo, inputText];
+        undoCursorPosition.push(cursorPositionStart);
         inputText =
           inputText.slice(0, cursorPositionStart) +
           output +
           inputText.slice(cursorPositionStart);
         this.setState({ textValue: inputText });
         this.setState({ mdValue: mdParser(inputText) });
-        cursorPositionStart = cursorPositionStart + cursorIntON;
-        setCursorPosition(cursorPositionStart, cursorPositionStart);
+        setCursorPosition(
+          cursorPositionStart + cursorIntON,
+          cursorPositionStart + cursorIntON
+        );
         return;
       } else if (!buttonBoolValues[bTitle]) {
         if (cursorPositionStart !== cursorPositionEnd) {
@@ -559,66 +626,58 @@ class Editor extends React.Component {
           inputText = undo[undo.length - 1];
           this.setState({ textValue: inputText });
           this.setState({ mdValue: mdParser(inputText) });
-          cursorPositionStart = cursorPositionEnd =
-            cursorPositionEnd - cursorIntON;
-          setCursorPosition(cursorPositionStart, cursorPositionEnd);
+          setCursorPosition(
+            cursorPositionStart - cursorIntON,
+            cursorPositionEnd - cursorIntON
+          );
           return;
         }
         buttonBoolValues[bTitle] = true;
         this.setState({ boolButton: buttonBoolValues });
         setCursorPosition(
-          cursorPositionEnd + cursorIntOFF,
+          cursorPositionStart + cursorIntOFF,
           cursorPositionEnd + cursorIntOFF
         );
         if (endOutput) {
           undo = [...undo, inputText];
+          undoCursorPosition.push(cursorPositionStart);
           inputText =
             inputText.slice(0, cursorPositionStart + cursorIntOFF) +
             endOutput +
             inputText.slice(cursorPositionStart + cursorIntOFF);
           this.setState({ textValue: inputText });
           this.setState({ mdValue: mdParser(inputText) });
-          cursorPositionStart += cursorIntOFF;
-          setCursorPosition(cursorPositionStart, cursorPositionStart);
+          cursorPositionStart = cursorPositionEnd += cursorIntOFF;
+          setCursorPosition(cursorPositionStart, cursorPositionEnd);
         }
         return;
       } else {
-        // inputText =
-        //   inputText.slice(0, cursorPositionStart) +
-        //   output +
-        //   inputText.slice(cursorPositionStart);
-        // this.setState({ textValue: inputText });
-        // setCursorPosition(cursorPositionStart, cursorPositionStart);
         return;
       }
     };
 
-    // Submithandler,  kode for å sende tekst til backend skrives her her.
-    const mySubmitHandler = event => {
-      event.preventDefault();
-
-      // TODO: Send inputtext-data to database
-    };
-
     // Kode for å lage snarveier på tastatur.
     const keyMap = {
-      BOLD: OSspecificKey + "b",
-      ITALIC: OSspecificKey + "i",
-      HEADING: OSspecificKey + "h",
-      STRIKETHROUGH: OSspecificKey + "s",
-      UNDO: OSspecificKey + "z",
-      REDO: OSspecificKey + "shift+z",
-      NEW: OSspecificKey + "shift+backspace",
-      LOAD: OSspecificKey + "shift+l",
-      SAVE: OSspecificKey + "shift+s",
-      IMAGE: OSspecificKey + "p",
-      LISTUL: OSspecificKey + "u",
-      LISTOL: OSspecificKey + "shift+u",
-      CHECKLIST: OSspecificKey + "y",
-      ACTIVITY: OSspecificKey + "shift+a",
-      INTRO: OSspecificKey + "shift+i",
-      INLINE: OSspecificKey + "e",
-      CODEBLOCK: OSspecificKey + "k"
+      BOLD: SHORTCUTKEY + "+b",
+      ITALIC: SHORTCUTKEY + "+i",
+      HEADING: SHORTCUTKEY + "+h",
+      STRIKETHROUGH: SHORTCUTKEY + "+s",
+      UNDO: SHORTCUTKEY + "+z",
+      REDO: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+z",
+      NEW: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+backspace",
+      LOAD: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+l",
+      SAVE: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+s",
+      IMAGE: SHORTCUTKEY + "+p",
+      LISTUL: SHORTCUTKEY + "+u",
+      LISTOL: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+u",
+      CHECKLIST: SHORTCUTKEY + "+y",
+      ACTIVITY: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+a",
+      INTRO: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+i",
+      CHECK: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+c",
+      PROTIP: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+p",
+      CHALLENGE: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+g",
+      INLINE: SHORTCUTKEY + "+e",
+      CODEBLOCK: SHORTCUTKEY + "+k"
     };
 
     // Hva som skjer når man trykker en hurtigtastetrykk.
@@ -634,11 +693,15 @@ class Editor extends React.Component {
       LOAD: () => handleButtonClick("load", "", 0, 0, ""),
       SAVE: () => handleButtonClick("save", "", 0, 0, ""),
       IMAGE: () => handleButtonClick("image", "", 0, 0, ""),
-      LISTUL: () => handleButtonClick("listul", "- ", 0, 0, ""),
-      LISTOL: () => handleButtonClick("listol", "1. ", 0, 0, ""),
-      CHECKLIST: () => handleButtonClick("checklist", "- [ ]", 0, 0, ""),
-      ACTIVITY: () => handleButtonClick("activity", "{.activity}", 0, 0, ""),
-      INTRO: () => handleButtonClick("intro", "{.intro}", 0, 0, ""),
+      LISTUL: () => handleButtonClick("listUl", "- ", 2, 0, ""),
+      LISTOL: () => handleButtonClick("listOl", "1. ", 3, 0, ""),
+      CHECKLIST: () => handleButtonClick("listCheck", "- [ ] ", 6, 0, ""),
+      ACTIVITY: () => handleButtonClick("activity", "{.activity}", 11, 11, ""),
+      INTRO: () => handleButtonClick("intro", "{.intro}", 8, 8, ""),
+      CHECK: () => handleButtonClick("check", "{.check}", 8, 8, ""),
+      PROTIP: () => handleButtonClick("protip", "{.protip}", 9, 9, ""),
+      CHALLENGE: () =>
+        handleButtonClick("challenge", "{.challenge}", 12, 12, ""),
       INLINE: () => handleButtonClick("inline", "``", 1, 1, ""),
       CODEBLOCK: () =>
         handleButtonClick("codeblock", `${temp}\n\n${temp}`, 4, 5, "\n")
@@ -648,7 +711,6 @@ class Editor extends React.Component {
       <div className="Editor">
         <div className="controlPanelPlacement">
           <ControlPanel handleButtonClick={handleButtonClick} />
-
           <div className="ui two column test grid container">
             <div className="column">
               <MDTextArea
