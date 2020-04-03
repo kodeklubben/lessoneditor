@@ -293,7 +293,6 @@ class Editor extends React.Component {
       }
 
       // tab skal gi to mellomrom indentering.  Også i kodeblokk.
-
       if (tab) {
         event.preventDefault();
         // config for correct tab inside codeblock:
@@ -387,7 +386,6 @@ class Editor extends React.Component {
       }
 
       // Load, save, undo, redo funksjoner
-
       if (bTitle === "load") {
         inputText = storedTextValue;
         undo = [inputText];
@@ -456,7 +454,7 @@ class Editor extends React.Component {
         return;
       }
 
-      // gir linjeskift for enkelte knapper - om knapp trykkes og det ikke er ny linje
+      // gir linjeskift for enkelte knapper - om knapp trykkes og det ikke allerede er ny linje
       if (
         bTitle.slice(0, 4) === "list" ||
         (bTitle === "codeblock" && buttonBoolValues["codeblock"]) ||
@@ -569,7 +567,6 @@ class Editor extends React.Component {
 
       //  Konfig av knapper slik at de registrerer om de er trykket, og flytter tekst-markøren i henhold til hvordan MD-syntax ser ut
       // Konfig-data finnes i ./buttonConfig.js der tallverdi for hvor mye tekst-markøren skal flyttes er definert in "cursorIntON" og "cursorIntOFF"
-
       if (buttonBoolValues[bTitle]) {
         if (cursorPositionStart !== cursorPositionEnd) {
           buttonBoolValues[bTitle] = false;
@@ -714,7 +711,6 @@ class Editor extends React.Component {
       <div className="Editor">
         <div className="controlPanelPlacement">
           <ControlPanel handleButtonClick={handleButtonClick} />
-
           <div className="ui two column test grid container">
             <div className="column">
               <MDTextArea
