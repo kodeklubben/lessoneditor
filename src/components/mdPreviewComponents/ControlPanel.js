@@ -1,82 +1,39 @@
+import {
+  buttonConfig,
+  buttonConfig2,
+  buttonConfig3,
+  buttonConfig4,
+  buttonConfig5,
+  buttonConfig6,
+  buttonConfig7
+} from "./buttonConfig.js";
 import React from "react";
-import Button from "./Button";
-
-const temp = "```";
-
-const buttonConfig = [
-  {
-    bTitle: "bold",
-    icon: "bold",
-    output: "****",
-    title: "",
-    cursorIntON: 2,
-    cursorIntOFF: 2,
-    endOutput: ""
-  },
-  {
-    bTitle: "italic",
-    icon: "italic",
-    output: "__ ",
-    title: "",
-    cursorIntON: 2,
-    cursorIntOFF: 2,
-    endOutput: ""
-  },
-  {
-    bTitle: "activity",
-    icon: "",
-    output: "{.activity}",
-    title: "Steg",
-    cursorIntON: 0,
-    cursorIntOFF: 0,
-    endOutput: "\n"
-  },
-  {
-    bTitle: "intro",
-    icon: "",
-    output: "{.intro}",
-    title: "Intro",
-    cursorIntON: 0,
-    cursorIntOFF: 0,
-    endOutput: "\n"
-  },
-  {
-    bTitle: "inline",
-    icon: "",
-    output: "``",
-    title: "Inline Code",
-    cursorIntON: 1,
-    cursorIntOFF: 1,
-    endOutput: ""
-  },
-  {
-    bTitle: "codeblock",
-    icon: "",
-    output: `${temp}\n\n${temp}`,
-    title: "Codeblock",
-    cursorIntON: 4,
-    endOutput: "\n"
-  }
-];
+import Buttons from "./Button";
 
 class ControlPanel extends React.Component {
-  handleButtonClick = (value, cursorIntON, cursorIntOFF, bTitle, endOutput) => {
+  handleButtonClick = (
+    bTitle,
+    output,
+    cursorIntON,
+    cursorIntOFF,
+    endOutput
+  ) => {
     this.props.handleButtonClick(
-      value,
+      bTitle,
+      output,
       cursorIntON,
       cursorIntOFF,
-      bTitle,
       endOutput
     );
   };
 
   render() {
     return (
-      <div className="Buttons">
-        <div className="ui segment six column grid">
+      <div className="ui knapper segment grid">
+        <div className="ui icon buttons">
           {buttonConfig.map(element => (
-            <div key={element.output} className="column">
-              <Button
+            <div key={element.bTitle} className="">
+              <Buttons
                 bTitle={element.bTitle}
                 icon={element.icon}
                 output={element.output}
@@ -85,6 +42,117 @@ class ControlPanel extends React.Component {
                 cursorIntOFF={element.cursorIntOFF}
                 endOutput={element.endOutput}
                 onButtonClick={this.handleButtonClick}
+                shortcutKey={element.shortcut}
+                cname=""
+              />
+            </div>
+          ))}
+        </div>
+        <div className="space" />
+        <div className="ui icon buttons">
+          {buttonConfig2.map(element => (
+            <div key={element.bTitle} className="">
+              <Buttons
+                bTitle={element.bTitle}
+                icon={element.icon}
+                output={element.output}
+                title={element.title}
+                cursorIntON={element.cursorIntON}
+                cursorIntOFF={element.cursorIntOFF}
+                endOutput={element.endOutput}
+                onButtonClick={this.handleButtonClick}
+                shortcutKey={element.shortcut}
+                cname=""
+              />
+            </div>
+          ))}
+        </div>
+        <div className="space" />
+        <div className="ui icon buttons">
+          {buttonConfig3.map(element => (
+            <div key={element.bTitle} className="">
+              <Buttons
+                bTitle={element.bTitle}
+                icon={element.icon}
+                output={element.output}
+                title={element.title}
+                cursorIntON={element.cursorIntON}
+                cursorIntOFF={element.cursorIntOFF}
+                endOutput={element.endOutput}
+                onButtonClick={this.handleButtonClick}
+                shortcutKey={element.shortcut}
+              />
+            </div>
+          ))}
+        </div>
+        <div className="space" />
+        <div className="ui icon buttons">
+          {buttonConfig4.map(element => (
+            <div key={element.bTitle} className="">
+              <Buttons
+                bTitle={element.bTitle}
+                icon={element.icon}
+                output={element.output}
+                title={element.title}
+                cursorIntON={element.cursorIntON}
+                cursorIntOFF={element.cursorIntOFF}
+                endOutput={element.endOutput}
+                onButtonClick={this.handleButtonClick}
+                shortcutKey={element.shortcut}
+              />
+            </div>
+          ))}
+        </div>
+        <div className="space" />
+        <div className="ui icon buttons">
+          {buttonConfig5.map(element => (
+            <div key={element.bTitle} className="">
+              <Buttons
+                bTitle={element.bTitle}
+                icon={element.icon}
+                output={element.output}
+                title={element.title}
+                cursorIntON={element.cursorIntON}
+                cursorIntOFF={element.cursorIntOFF}
+                endOutput={element.endOutput}
+                onButtonClick={this.handleButtonClick}
+                shortcutKey={element.shortcut}
+              />
+            </div>
+          ))}
+        </div>
+        <div className="space" />
+        <div className="ui icon buttons">
+          {buttonConfig6.map(element => (
+            <div key={element.bTitle} className="">
+              <Buttons
+                bTitle={element.bTitle}
+                icon={element.icon}
+                output={element.output}
+                title={element.title}
+                cursorIntON={element.cursorIntON}
+                cursorIntOFF={element.cursorIntOFF}
+                endOutput={element.endOutput}
+                onButtonClick={this.handleButtonClick}
+                shortcutKey={element.shortcut}
+              />
+            </div>
+          ))}
+        </div>
+        <div className="space" />
+        <div className="ui icon buttons">
+          {buttonConfig7.map(element => (
+            <div key={element.bTitle} className="">
+              <Buttons
+                bTitle={element.bTitle}
+                icon={element.icon}
+                output={element.output}
+                title={element.title}
+                cursorIntON={element.cursorIntON}
+                cursorIntOFF={element.cursorIntOFF}
+                endOutput={element.endOutput}
+                onButtonClick={this.handleButtonClick}
+                shortcutKey={element.shortcut}
               />
             </div>
           ))}

@@ -1,15 +1,17 @@
 import React from "react";
 import FormPage from "./FormPage";
+import COURSELIST from "./settingsFiles/COURSELIST";
+import LANGUAGELIST from "./settingsFiles/LANGUAGELIST";
 
 class FormComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      course: "Micro:it",
+      course: COURSELIST[0].courseTitle,
       title: "",
       author: "",
       translator: "",
-      language: "nb",
+      language: LANGUAGELIST[0].language[0],
       level: 1,
       license: "",
       tags: { topic: [], subject: [], grade: [] }
@@ -52,7 +54,6 @@ class FormComponent extends React.Component {
 
   mySubmitHandler = event => {
     event.preventDefault();
-
     //const for yml creation
     const fs = require("browserify-fs");
 
@@ -66,7 +67,6 @@ class FormComponent extends React.Component {
     console.log("saved yml-file");
     console.log("YAML header: \n" + this.YAMLstateToString(this.state));
     console.log("\nYML-file: \n" + this.YMLstateToString(this.state));
-
     // TODO: Send state-data to database
   };
 
