@@ -1,16 +1,25 @@
-import Markdown from 'markdown-it';
+import { headerSections } from "./markdown-it-plugins/markdown-it-header-sections";
+import { insertImg } from "./markdown-it-plugins/markdown-it-insert-img";
+import { generateChecklist } from "./markdown-it-plugins/markdown-it-checklist";
 
+const hljs = require("highlight.js");
 
-const md = new Markdown();
-const attrs = require('markdown-it-attrs');
-md.use(attrs);
+const md = require("markdown-it")({
+  langPrefix: "",
+  highlight: function(str, lang) {
+    if (lang && hljs.getLanguage(lang)) {
+      try {
+        return hljs.highlight(lang, str).value;
+      } catch (__) {}
+    }
+    return "";
+  }
+})
+  .use(require("markdown-it-attrs"), { allowedAttributes: ["class"] })
+  .use(headerSections)
+  .use(insertImg)
+  .use(generateChecklist);
 
-/*
-Todo: Add code for handling sections,
- lists and code (might be able to do
- this with markdown-it plugins).
-*/
-
-export const mdParser = (content) => {
-    return md.render(content);
+export const mdParser = content => {
+  return md.render(content);
 };
