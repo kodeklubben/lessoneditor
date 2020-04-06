@@ -7,9 +7,11 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "axios": "^0.19.2",
+    "browserify-fs": "1.0.0",
     "eslint": "6.8.0",
     "eslint-config-prettier": "6.10.0",
     "eslint-plugin-react": "7.18.3",
+    "highlight.js": "^9.18.1",
     "markdown-it": "^10.0.0",
     "markdown-it-attrs": "^3.0.2",
     "mongodb": "3.5.2",
@@ -21,8 +23,7 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.3.1",
     "semantic-ui-css": "^2.4.1",
-    "semantic-ui-react": "^0.88.2",
-    "browserify-fs": "1.0.0"
+    "semantic-ui-react": "^0.88.2"
   },
   "scripts": {
     "start": "react-scripts start",
