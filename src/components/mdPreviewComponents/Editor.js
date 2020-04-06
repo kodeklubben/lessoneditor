@@ -29,7 +29,7 @@ var buttonBoolValues = {
   protip: true,
   challenge: true,
   inline: true,
-  codeblock: true
+  codeblock: true,
 };
 
 // Hjelpevariabel for å formatere string taste-shortcut.
@@ -77,7 +77,7 @@ class Editor extends React.Component {
       counter: 0,
       textValue: "",
       mdValue: "",
-      boolButton: buttonBoolValues
+      boolButton: buttonBoolValues,
     };
 
     // referanseVariabel (type: GetDocumentByID i vanlig JS) for Textarea-elementet i DOM.  Tillater å manipulere DOM i react
@@ -129,7 +129,7 @@ class Editor extends React.Component {
         protip: true,
         challenge: true,
         inline: true,
-        codeblock: true
+        codeblock: true,
       };
     };
 
@@ -142,14 +142,14 @@ class Editor extends React.Component {
     };
 
     // Submithandler,  kode for å sende tekst til backend skrives her her.
-    const mySubmitHandler = event => {
+    const mySubmitHandler = (event) => {
       event.preventDefault();
 
       // TODO: Send inputtext-data to database
     };
 
     // all config for å behandle tekst i textarea
-    const handleChange = event => {
+    const handleChange = (event) => {
       cursorPositionStart = event.target.selectionStart;
       cursorPositionEnd = event.target.selectionEnd;
       inputText = event.target.value;
@@ -168,17 +168,17 @@ class Editor extends React.Component {
       this.setState({ counter: 0 });
     };
 
-    const onTextareaKeyUp = e => {
+    const onTextareaKeyUp = (e) => {
       cursorPositionStart = e.target.selectionStart;
       cursorPositionEnd = e.target.selectionEnd;
     };
 
-    const onTextareaSelect = e => {
+    const onTextareaSelect = (e) => {
       cursorPositionStart = e.target.selectionStart;
       cursorPositionEnd = e.target.selectionEnd;
     };
 
-    const onTextareaMouseDown = e => {
+    const onTextareaMouseDown = (e) => {
       cursorPositionStart = e.target.selectionStart;
       cursorPositionEnd = e.target.selectionEnd;
 
@@ -187,7 +187,7 @@ class Editor extends React.Component {
 
     // konfigurering for å fjerne default-funksjoner av tastekombinasjoner
     // brukes for å sette egne hurtigtaster i teksteditor.
-    const onTextareaKeyDown = event => {
+    const onTextareaKeyDown = (event) => {
       cursorPositionStart = event.target.selectionStart;
       cursorPositionEnd = event.target.selectionEnd;
 
@@ -269,6 +269,7 @@ class Editor extends React.Component {
                 cursorPositionStart - listButtonValues["cursorInt"]
               ) + inputText.slice(cursorPositionStart);
             this.setState({ textValue: inputText });
+            this.setState({ mdValue: mdParser(inputText) });
             setCursorPosition(
               cursorPositionStart - listButtonValues["cursorInt"],
               cursorPositionStart - listButtonValues["cursorInt"]
@@ -281,6 +282,7 @@ class Editor extends React.Component {
             listButtonValues["output"] +
             inputText.slice(cursorPositionStart);
           this.setState({ textValue: inputText });
+          this.setState({ mdValue: mdParser(inputText) });
           setCursorPosition(
             cursorPositionStart + listButtonValues["cursorInt"] + 2,
             cursorPositionStart + listButtonValues["cursorInt"] + 2
@@ -326,7 +328,7 @@ class Editor extends React.Component {
     };
 
     // Vise, skjule image-button-popup
-    const imagePopupSubmitHandler = imagePopupInputValue => {
+    const imagePopupSubmitHandler = (imagePopupInputValue) => {
       if (imagePopupInputValue !== "") {
         undo = [...undo, inputText];
         undoCursorPosition.push(cursorPositionStart);
@@ -481,7 +483,7 @@ class Editor extends React.Component {
           listButtonValues = {
             bTitle: bTitle,
             output: output,
-            cursorInt: cursorIntON
+            cursorInt: cursorIntON,
           };
         }
       }
@@ -677,7 +679,7 @@ class Editor extends React.Component {
       PROTIP: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+p",
       CHALLENGE: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+g",
       INLINE: SHORTCUTKEY + "+e",
-      CODEBLOCK: SHORTCUTKEY + "+k"
+      CODEBLOCK: SHORTCUTKEY + "+k",
     };
 
     // Hva som skjer når man trykker en hurtigtastetrykk.
@@ -704,7 +706,7 @@ class Editor extends React.Component {
         handleButtonClick("challenge", "{.challenge}", 12, 12, ""),
       INLINE: () => handleButtonClick("inline", "``", 1, 1, ""),
       CODEBLOCK: () =>
-        handleButtonClick("codeblock", `${temp}\n\n${temp}`, 4, 5, "\n")
+        handleButtonClick("codeblock", `${temp}\n\n${temp}`, 4, 5, "\n"),
     };
 
     return (
