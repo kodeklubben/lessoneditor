@@ -9,7 +9,7 @@ const buttonConfig = [
     cursorIntON: 2,
     cursorIntOFF: 2,
     endOutput: "",
-    shortcut: "ctrl+b"
+    shortcut: "ctrl+b",
   },
   {
     bTitle: "italic",
@@ -19,7 +19,7 @@ const buttonConfig = [
     cursorIntON: 1,
     cursorIntOFF: 1,
     endOutput: "",
-    shortcut: "ctrl+i"
+    shortcut: "ctrl+i",
   },
   {
     bTitle: "heading",
@@ -29,7 +29,7 @@ const buttonConfig = [
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: "ctrl+h"
+    shortcut: "ctrl+h",
   },
   {
     bTitle: "strikethrough",
@@ -39,8 +39,8 @@ const buttonConfig = [
     cursorIntON: 2,
     cursorIntOFF: 2,
     endOutput: "",
-    shortcut: "ctrl+s"
-  }
+    shortcut: "ctrl+s",
+  },
 ];
 
 const buttonConfig2 = [
@@ -52,7 +52,7 @@ const buttonConfig2 = [
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: "ctrl+z"
+    shortcut: "ctrl+z",
   },
   {
     bTitle: "redo",
@@ -62,8 +62,8 @@ const buttonConfig2 = [
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: "ctrl+shift+z"
-  }
+    shortcut: "ctrl+shift+z",
+  },
 ];
 
 const buttonConfig3 = [
@@ -75,7 +75,7 @@ const buttonConfig3 = [
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: "ctrl+shift+backspace"
+    shortcut: "ctrl+shift+backspace",
   },
   {
     bTitle: "load",
@@ -85,7 +85,7 @@ const buttonConfig3 = [
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: "ctrl+shift+l"
+    shortcut: "ctrl+shift+l",
   },
   {
     bTitle: "save",
@@ -95,8 +95,8 @@ const buttonConfig3 = [
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: "ctrl+shift+s"
-  }
+    shortcut: "ctrl+shift+s",
+  },
 ];
 
 const buttonConfig4 = [
@@ -108,8 +108,8 @@ const buttonConfig4 = [
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: "ctrl+p"
-  }
+    shortcut: "ctrl+p",
+  },
 ];
 
 const buttonConfig5 = [
@@ -121,7 +121,7 @@ const buttonConfig5 = [
     cursorIntON: 2,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: "ctrl+u"
+    shortcut: "ctrl+u",
   },
   {
     bTitle: "listOl",
@@ -131,7 +131,7 @@ const buttonConfig5 = [
     cursorIntON: 3,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: "ctrl+shift+u"
+    shortcut: "ctrl+shift+u",
   },
   {
     bTitle: "listCheck",
@@ -141,8 +141,8 @@ const buttonConfig5 = [
     cursorIntON: 6,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: "ctrl+y"
-  }
+    shortcut: "ctrl+y",
+  },
 ];
 
 const buttonConfig6 = [
@@ -150,52 +150,52 @@ const buttonConfig6 = [
     bTitle: "activity",
     icon: "",
     output: "{.activity}",
-    title: "{.Activity}",
+    title: "{Steg}",
     cursorIntON: 11,
     cursorIntOFF: 11,
     endOutput: "",
-    shortcut: "ctrl+shift+a"
+    shortcut: "ctrl+shift+a",
   },
   {
     bTitle: "intro",
     icon: "",
     output: "{.intro}",
-    title: "{.Intro}",
+    title: "{Intro}",
     cursorIntON: 8,
     cursorIntOFF: 8,
     endOutput: "",
-    shortcut: "ctrl+shift+i"
+    shortcut: "ctrl+shift+i",
   },
   {
     bTitle: "check",
     icon: "",
     output: "{.check}",
-    title: "{.Check}",
+    title: "{Flag}",
     cursorIntON: 8,
     cursorIntOFF: 8,
     endOutput: "",
-    shortcut: "ctrl+shift+c"
+    shortcut: "ctrl+shift+c",
   },
   {
     bTitle: "protip",
     icon: "",
     output: "{.protip}",
-    title: "{.Protip}",
+    title: "{Tips}",
     cursorIntON: 9,
     cursorIntOFF: 9,
     endOutput: "",
-    shortcut: "ctrl+shift+p"
+    shortcut: "ctrl+shift+p",
   },
   {
     bTitle: "challenge",
     icon: "",
     output: "{.challenge}",
-    title: "{.Challenge}",
+    title: "{Utfordring}",
     cursorIntON: 12,
     cursorIntOFF: 12,
     endOutput: "",
-    shortcut: "ctrl+shift+g"
-  }
+    shortcut: "ctrl+shift+g",
+  },
 ];
 
 const buttonConfig7 = [
@@ -207,7 +207,7 @@ const buttonConfig7 = [
     cursorIntON: 1,
     cursorIntOFF: 1,
     endOutput: "",
-    shortcut: "ctrl+e"
+    shortcut: "ctrl+e",
   },
   {
     bTitle: "codeblock",
@@ -217,8 +217,8 @@ const buttonConfig7 = [
     cursorIntON: 4,
     cursorIntOFF: 5,
     endOutput: "\n",
-    shortcut: "ctrl+k"
-  }
+    shortcut: "ctrl+k",
+  },
 ];
 
 export {
@@ -228,5 +228,5 @@ export {
   buttonConfig4,
   buttonConfig5,
   buttonConfig6,
-  buttonConfig7
+  buttonConfig7,
 };
