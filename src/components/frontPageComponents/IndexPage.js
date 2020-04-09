@@ -2,7 +2,7 @@ import React from "react";
 import "./style.css";
 import { Link } from "react-router-dom";
 
-export class IndexPage extends React.Component {
+export default class IndexPage extends React.Component {
   render() {
     return (
       <div className="StartPageContainer">
@@ -16,7 +16,7 @@ export class IndexPage extends React.Component {
         <div className="btnDiv">
           <button className="btn">
             {" "}
-            <Link to="">Min side</Link>{" "}
+            <Link to="/myPage">Min side</Link>{" "}
           </button>
           <button className="btn">
             <Link to="">Rediger en oppgave</Link>{" "}
