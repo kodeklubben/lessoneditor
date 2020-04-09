@@ -28,6 +28,8 @@ var buttonBoolValues = {
   check: true,
   protip: true,
   challenge: true,
+  flag: true,
+  try: true,
   inline: true,
   codeblock: true,
 };
@@ -558,16 +560,31 @@ class Editor extends React.Component {
         }
       }
 
-      //constraint button from working if new line or not end of line.
-      if (output[0] === "{" && buttonBoolValues[bTitle]) {
-        if (ifNewLine()) {
-          return;
-        }
-        if (inputText[cursorPositionEnd] !== undefined) {
-          if (inputText[cursorPositionEnd] !== "\n") {
-            return;
-          }
-        }
+      // //constraint button from working if new line or not end of line.
+      // if (output[0] === "{" && buttonBoolValues[bTitle]) {
+      //   if (ifNewLine()) {
+      //     return;
+      //   }
+      //   if (inputText[cursorPositionEnd] !== undefined) {
+      //     if (inputText[cursorPositionEnd] !== "\n") {
+      //       return;
+      //     }
+      //   }
+      // }
+
+      if (bTitle === "activity") {
+        buttonBoolValues[bTitle] = false;
+        this.setState({ boolButton: buttonBoolValues });
+        inputText =
+          inputText.slice(0, cursorPositionStart) +
+          output +
+          inputText.slice(cursorPositionStart);
+        this.setState({ textValue: inputText });
+        this.setState({ mdValue: mdParser(inputText) });
+        cursorPositionStart += 2;
+        cursorPositionEnd += 11;
+        setCursorPosition(cursorPositionStart, cursorPositionEnd);
+        return;
       }
 
       //  Konfig av knapper slik at de registrerer om de er trykket, og flytter tekst-markøren i henhold til hvordan MD-syntax ser ut
@@ -679,8 +696,10 @@ class Editor extends React.Component {
       ACTIVITY: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+a",
       INTRO: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+i",
       CHECK: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+c",
-      PROTIP: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+p",
+      PROTIP: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+t",
       CHALLENGE: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+g",
+      FLAG: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+f",
+      TRY: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+t",
       INLINE: SHORTCUTKEY + "+e",
       CODEBLOCK: SHORTCUTKEY + "+k",
     };
@@ -707,6 +726,8 @@ class Editor extends React.Component {
       PROTIP: () => handleButtonClick("protip", "{.protip}", 9, 9, ""),
       CHALLENGE: () =>
         handleButtonClick("challenge", "{.challenge}", 12, 12, ""),
+      FLAG: () => handleButtonClick("flag", "{.flag}", 7, 7, ""),
+      TRY: () => handleButtonClick("try", "{.try}", 7, 7, ""),
       INLINE: () => handleButtonClick("inline", "``", 1, 1, ""),
       CODEBLOCK: () =>
         handleButtonClick("codeblock", `${temp}\n\n${temp}`, 4, 5, "\n"),

@@ -149,7 +149,7 @@ const buttonConfig6 = [
   {
     bTitle: "activity",
     icon: "",
-    output: "{.activity}",
+    output: "# Tekst her {.activity}",
     title: "{Steg}",
     cursorIntON: 11,
     cursorIntOFF: 11,
@@ -170,7 +170,7 @@ const buttonConfig6 = [
     bTitle: "check",
     icon: "",
     output: "{.check}",
-    title: "{Flag}",
+    title: "{Checklist}",
     cursorIntON: 8,
     cursorIntOFF: 8,
     endOutput: "",
@@ -184,7 +184,7 @@ const buttonConfig6 = [
     cursorIntON: 9,
     cursorIntOFF: 9,
     endOutput: "",
-    shortcut: "ctrl+shift+p",
+    shortcut: "ctrl+shift+t",
   },
   {
     bTitle: "challenge",
@@ -195,6 +195,26 @@ const buttonConfig6 = [
     cursorIntOFF: 12,
     endOutput: "",
     shortcut: "ctrl+shift+g",
+  },
+  {
+    bTitle: "flag",
+    icon: "",
+    output: "{.flag}",
+    title: "{Flag}",
+    cursorIntON: 12,
+    cursorIntOFF: 12,
+    endOutput: "",
+    shortcut: "ctrl+shift+f",
+  },
+  {
+    bTitle: "try",
+    icon: "",
+    output: "{.try}",
+    title: "{Prøv Selv}",
+    cursorIntON: 12,
+    cursorIntOFF: 12,
+    endOutput: "",
+    shortcut: "ctrl+shift+p",
   },
 ];
 
