@@ -469,6 +469,7 @@ class Editor extends React.Component {
       // gir linjeskift for enkelte knapper - om knapp trykkes og det ikke allerede er ny linje
       if (
         bTitle.slice(0, 4) === "list" ||
+        output.slice(0, 11) === "# Tekst her" ||
         (bTitle === "codeblock" && buttonBoolValues["codeblock"]) ||
         (bTitle === "heading" && buttonBoolValues["heading"])
       ) {
