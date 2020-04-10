@@ -29,6 +29,7 @@ const FormPage = props => {
               prevValue="/"
               nextValue="/editor"
               mySubmitHandler={props.mySubmitHandler}
+              state={props.state}
             />
           </div>
         </form>

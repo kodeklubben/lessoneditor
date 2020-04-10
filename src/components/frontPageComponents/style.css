@@ -8,15 +8,43 @@ body {
   margin-top: 2em;
 }
 
-.btn {
-  font-size: 24px;
+.link {
   text-align: center;
-  width: 20%;
+  width: 100%;
   min-height: 70px;
   margin-right: auto;
   margin-left: auto;
   margin-top: 1em;
   border-radius: 22px;
+  outline: none;
+}
+
+.btn {
+  color: #265732;
+  background-color: whitesmoke;
+  font-size: 24px;
+  text-align: center;
+  width: 50%;
+  min-height: 70px;
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 1em;
+  border-radius: 22px;
+  outline: none;
+}
+
+.btn:hover {
+  color: #265732;
+  background-color: rgb(231, 231, 231);
+  font-size: 24px;
+  text-align: center;
+  width: 50%;
+  min-height: 70px;
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 1em;
+  border-radius: 22px;
+  outline: none;
 }
 
 ul {

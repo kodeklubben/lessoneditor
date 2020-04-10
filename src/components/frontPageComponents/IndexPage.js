@@ -14,14 +14,14 @@ export class IndexPage extends React.Component {
           <p id="author">Harold Abelson </p>
         </div>
         <div className="btnDiv">
-          <button className="btn">
-            <Link to="">Min side</Link>
-          </button>
-          <button className="btn">
-            <Link to="">Rediger en oppgave</Link>
-          </button>
-          <Link to="/createNewLesson" className="btn">
-            <button>Lag ny oppgave</button>
+          <Link to="" className="link">
+            <button className="btn">Min side</button>
+          </Link>
+          <Link to="" className="link">
+            <button className="btn">Rediger en oppgave</button>
+          </Link>
+          <Link to="/createNewLesson" className="link">
+            <button className="btn">Lag ny oppgave</button>
           </Link>
         </div>
       </div>

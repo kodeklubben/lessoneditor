@@ -79,7 +79,8 @@ class Editor extends React.Component {
       counter: 0,
       textValue: "",
       mdValue: "",
-      boolButton: buttonBoolValues
+      boolButton: buttonBoolValues,
+      redirect: null
     };
 
     // referanseVariabel (type: GetDocumentByID i vanlig JS) for Textarea-elementet i DOM.  Tillater å manipulere DOM i react
@@ -148,6 +149,10 @@ class Editor extends React.Component {
     // Submithandler,  kode for å sende tekst til backend skrives her her.
     const mySubmitHandler = event => {
       event.preventDefault();
+
+      console.log("text submitted");
+
+      this.setState({ redirect: "/endpage" });
 
       // TODO: Send inputtext-data to database
     };
@@ -335,8 +340,10 @@ class Editor extends React.Component {
     // Vise, skjule image-button-popup
     const imagePopupSubmitHandler = imagePopupInputValue => {
       if (imagePopupInputValue !== "") {
-        undo = [...undo, inputText];
-        undoCursorPosition.push(cursorPositionStart);
+        if (inputText !== undo[undo.length - 1]) {
+          undo = [...undo, inputText];
+          undoCursorPosition.push(cursorPositionStart);
+        }
         inputText =
           inputText.slice(0, cursorPositionStart) +
           "![Bildebeskrivelse her](" +
@@ -450,8 +457,10 @@ class Editor extends React.Component {
       ) {
         buttonBoolValues[bTitle] = true;
         this.setState({ boolButton: buttonBoolValues });
-        undo = [...undo, inputText];
-        undoCursorPosition.push(cursorPositionStart);
+        if (inputText !== undo[undo.length - 1]) {
+          undo = [...undo, inputText];
+          undoCursorPosition.push(cursorPositionStart);
+        }
         inputText =
           inputText.slice(0, cursorPositionStart - cursorIntON) +
           inputText.slice(cursorPositionStart - cursorIntON + output.length);
@@ -465,6 +474,7 @@ class Editor extends React.Component {
       // gir linjeskift for enkelte knapper - om knapp trykkes og det ikke allerede er ny linje
       if (
         bTitle.slice(0, 4) === "list" ||
+        output.slice(0, 11) === "# Tekst her" ||
         (bTitle === "codeblock" && buttonBoolValues["codeblock"]) ||
         (bTitle === "heading" && buttonBoolValues["heading"])
       ) {
@@ -513,8 +523,10 @@ class Editor extends React.Component {
         ) {
           buttonBoolValues[bTitle] = false;
           this.setState({ boolButton: buttonBoolValues });
-          undo = [...undo, inputText];
-          undoCursorPosition.push(cursorPositionStart);
+          if (inputText !== undo[undo.length - 1]) {
+            undo = [...undo, inputText];
+            undoCursorPosition.push(cursorPositionStart);
+          }
           inputText =
             inputText.slice(0, cursorPositionStart - 3) +
             "# " +
@@ -525,8 +537,10 @@ class Editor extends React.Component {
           setCursorPosition(cursorPositionStart, cursorPositionStart);
           return;
         } else if (output === "## " && buttonBoolValues[bTitle]) {
-          undo = [...undo, inputText];
-          undoCursorPosition.push(cursorPositionStart);
+          if (inputText !== undo[undo.length - 1]) {
+            undo = [...undo, inputText];
+            undoCursorPosition.push(cursorPositionStart);
+          }
           inputText =
             inputText.slice(0, cursorPositionStart) +
             output +
@@ -542,8 +556,10 @@ class Editor extends React.Component {
             inputText.slice(cursorPositionStart - 2, cursorPositionStart) ===
             "# "
           ) {
-            undo = [...undo, inputText];
-            undoCursorPosition.push(cursorPositionStart);
+            if (inputText !== undo[undo.length - 1]) {
+              undo = [...undo, inputText];
+              undoCursorPosition.push(cursorPositionStart);
+            }
             inputText =
               inputText.slice(0, cursorPositionStart - 2) +
               inputText.slice(cursorPositionStart);
@@ -574,9 +590,13 @@ class Editor extends React.Component {
       //   }
       // }
 
-      if (bTitle === "activity") {
+      if (output.slice(0, 11) === "# Tekst her" && buttonBoolValues[bTitle]) {
         buttonBoolValues[bTitle] = false;
         this.setState({ boolButton: buttonBoolValues });
+        if (inputText !== undo[undo.length - 1]) {
+          undo = [...undo, inputText];
+          undoCursorPosition.push(cursorPositionStart);
+        }
         inputText =
           inputText.slice(0, cursorPositionStart) +
           output +
@@ -612,8 +632,10 @@ class Editor extends React.Component {
             }
           }
           setCursorPosition(cursorPositionStart, cursorPositionEnd);
-          undo = [...undo, inputText];
-          undoCursorPosition.push(cursorPositionStart);
+          if (inputText !== undo[undo.length - 1]) {
+            undo = [...undo, inputText];
+            undoCursorPosition.push(cursorPositionStart);
+          }
           inputText =
             inputText.slice(0, cursorPositionStart) +
             output.slice(0, cursorIntON) +
@@ -630,8 +652,10 @@ class Editor extends React.Component {
         }
         buttonBoolValues[bTitle] = false;
         this.setState({ boolButton: buttonBoolValues });
-        undo = [...undo, inputText];
-        undoCursorPosition.push(cursorPositionStart);
+        if (inputText !== undo[undo.length - 1]) {
+          undo = [...undo, inputText];
+          undoCursorPosition.push(cursorPositionStart);
+        }
         inputText =
           inputText.slice(0, cursorPositionStart) +
           output +
@@ -663,8 +687,10 @@ class Editor extends React.Component {
           cursorPositionEnd + cursorIntOFF
         );
         if (endOutput) {
-          undo = [...undo, inputText];
-          undoCursorPosition.push(cursorPositionStart);
+          if (inputText !== undo[undo.length - 1]) {
+            undo = [...undo, inputText];
+            undoCursorPosition.push(cursorPositionStart);
+          }
           inputText =
             inputText.slice(0, cursorPositionStart + cursorIntOFF) +
             endOutput +
@@ -722,59 +748,72 @@ class Editor extends React.Component {
       LISTUL: () => handleButtonClick("listUl", "- ", 2, 0, ""),
       LISTOL: () => handleButtonClick("listOl", "1. ", 3, 0, ""),
       CHECKLIST: () => handleButtonClick("listCheck", "- [ ] ", 6, 0, ""),
-      ACTIVITY: () => handleButtonClick("activity", "{.activity}", 11, 11, ""),
-      INTRO: () => handleButtonClick("intro", "{.intro}", 8, 8, ""),
-      CHECK: () => handleButtonClick("check", "{.check}", 8, 8, ""),
-      PROTIP: () => handleButtonClick("protip", "{.protip}", 9, 9, ""),
+      ACTIVITY: () =>
+        handleButtonClick("activity", "# Tekst her {.activity}", 0, 12, ""),
+      INTRO: () =>
+        handleButtonClick("intro", "# Tekst her {.intro}", 0, 12, ""),
+      CHECK: () =>
+        handleButtonClick("check", "# Tekst her {.check}", 0, 12, ""),
+      PROTIP: () =>
+        handleButtonClick("protip", "# Tekst her {.protip}\n#", 0, 13, ""),
       CHALLENGE: () =>
-        handleButtonClick("challenge", "{.challenge}", 12, 12, ""),
-      FLAG: () => handleButtonClick("flag", "{.flag}", 7, 7, ""),
-      TRY: () => handleButtonClick("try", "{.try}", 7, 7, ""),
+        handleButtonClick(
+          "challenge",
+          "# Tekst her {.challenge}\n#",
+          0,
+          13,
+          ""
+        ),
+      FLAG: () => handleButtonClick("flag", "# Tekst her {.flag}", 0, 12, ""),
+      TRY: () => handleButtonClick("try", "# Tekst her {.try}", 0, 12, ""),
       INLINE: () => handleButtonClick("inline", "``", 1, 1, ""),
       CODEBLOCK: () =>
         handleButtonClick("codeblock", `${temp}\n\n${temp}`, 4, 5, "\n")
     };
 
     return (
-      <div className="Editor">
-        <div className="controlPanelPlacement">
-          <ControlPanel handleButtonClick={handleButtonClick} />
-          <div className="ui two column test grid container">
-            <div className="column">
-              <MDTextArea
-                editorRef={this.editorRef}
-                textValue={this.state.textValue}
-                onInputChange={handleChange}
-                handleButtonClick={handleButtonClick}
-                onTextareaKeyDown={onTextareaKeyDown}
-                onTextareaKeyUp={onTextareaKeyUp}
-                onTextareaMouseDown={onTextareaMouseDown}
-                onTextareaSelect={onTextareaSelect}
-                handlers={handlers}
-                keyMap={keyMap}
-              />
-            </div>
-            {imagePopup}
-            <div className="column">
-              <MDPreview mdValue={this.state.mdValue} />
+      <form onSubmit={mySubmitHandler}>
+        <div className="Editor">
+          <div className="controlPanelPlacement">
+            <ControlPanel handleButtonClick={handleButtonClick} />
+            <div className="ui two column test grid container">
+              <div className="column">
+                <MDTextArea
+                  editorRef={this.editorRef}
+                  textValue={this.state.textValue}
+                  onInputChange={handleChange}
+                  handleButtonClick={handleButtonClick}
+                  onTextareaKeyDown={onTextareaKeyDown}
+                  onTextareaKeyUp={onTextareaKeyUp}
+                  onTextareaMouseDown={onTextareaMouseDown}
+                  onTextareaSelect={onTextareaSelect}
+                  handlers={handlers}
+                  keyMap={keyMap}
+                />
+              </div>
+              {imagePopup}
+              <div className="column">
+                <MDPreview mdValue={this.state.mdValue} />
+              </div>
             </div>
           </div>
-        </div>
-        <div className="ui autosave container">
-          <div className="autosave">
-            <p style={{ color: "grey" }}>{autoSaveMessage}</p>
+          <div className="ui autosave container">
+            <div className="autosave">
+              <p style={{ color: "grey" }}>{autoSaveMessage}</p>
+            </div>
+          </div>
+          <div className="ui container">
+            <PageButtons
+              prevTitle="Tilbake"
+              nextTitle="Submit"
+              prevValue="/createNewLesson"
+              nextValue="/endpage"
+              mySubmitHandler={mySubmitHandler}
+              state={this.state}
+            />
           </div>
         </div>
-        <div className="ui container">
-          <PageButtons
-            prevTitle="Tilbake"
-            nextTitle="Submit"
-            prevValue="/createNewLesson"
-            nextValue="/endpage"
-            mySubmitHandler={mySubmitHandler}
-          />
-        </div>
-      </div>
+      </form>
     );
   }
 }

@@ -1,32 +1,3 @@
-/* body {
-  margin: 0;
-  font-family: "Helvetica Neue", "Helvetica N", Arial, sans-serif;
-  font-size: 16px;
-  line-height: 1.42857;
-  color: #333;
-  background-color: #b1daae;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-} */
-
-/* code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
-} */
-
-/* div {
-  display: block;
-} */
-
-/* .App {
-  display: flex;
-  overflow-x: hidden;
-  min-height: 100vh;
-  background-color: #b1daae;
-} */
-
-/* CSS YAML Formpage */
-
 select {
   cursor: pointer;
 }
@@ -37,10 +8,6 @@ select {
 
 /* CSS for Editor */
 
-/* .editorFormbuttons {
-  margin-top: -10em;
-} */
-
 .test {
   height: 75vh;
 }
@@ -48,14 +15,6 @@ select {
 .ui.formbutton.container {
   margin-top: 10vh !important;
 }
-
-/* .controlPanelPlacement {
-  margin-top: -8em;
-  width: auto;
-  height: auto;
-  background-color: white;
-  padding: 10em;
-} */
 
 .Editor {
   width: 98%;
@@ -227,7 +186,7 @@ ul {
 /* List styling */
 
 ul li::before {
-  content: " ";
+  content: "\A0";
   border-radius: 20px;
   border: 3px solid #abdbea;
   padding: 8px;
