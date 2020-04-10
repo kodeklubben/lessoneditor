@@ -1,5 +1,8 @@
 import React from "react";
 
+import COURSESLIST from "./settingsFiles/COURSELIST";
+import LANGUAGELIST from "./settingsFiles/LANGUAGELIST";
+
 const dropdownHeight = 32;
 
 class YAMLformpage extends React.Component {
@@ -11,6 +14,7 @@ class YAMLformpage extends React.Component {
             <label>
               <h3>Tittel:</h3>
               <input
+                required
                 type="text"
                 name="title"
                 placeholder="Tittel"
@@ -23,6 +27,7 @@ class YAMLformpage extends React.Component {
             <label>
               <h3>Forfatter:</h3>
               <input
+                required
                 type="text"
                 name="author"
                 placeholder="Navn"
@@ -65,17 +70,11 @@ class YAMLformpage extends React.Component {
                 name="course"
                 onChange={this.props.myChangeHandler}
               >
-                <option value="Micro:it">Micro:it</option>
-                <option value="Scratch">Scratch</option>
-                <option value="Python">Python</option>
-                <option value="Lego Mindstorms">Lego Mindstorms</option>
-                <option value="Web">Web</option>
-                <option value="Code Studio">Code Studio</option>
-                <option value="Processing">Processing</option>
-                <option value="Elm">Elm</option>
-                <option value="Computer Craft">Computer Craft</option>
-                <option value="App Inventor">App Inventor</option>
-                <option value="Arduino">Arduino</option>
+                {COURSESLIST.map(element => (
+                  <option key={element.courseTitle} value={element.courseTitle}>
+                    {element.courseTitle}
+                  </option>
+                ))}
               </select>
             </label>
           </div>
@@ -87,13 +86,11 @@ class YAMLformpage extends React.Component {
                 name="language"
                 onChange={this.props.myChangeHandler}
               >
-                <option value="nb">Bokmål</option>
-                <option value="nn">Nynorsk</option>
-                <option value="en">Engelsk</option>
-                <option value="is">Islandsk</option>
-                {/* <option value="sv">Svensk</option>
-                <option value="da">Dansk</option>
-                <option value="hr">Kroatisk</option> */}
+                {LANGUAGELIST.map(element => (
+                  <option key={element.language[0]} value={element.language[0]}>
+                    {element.language[1]}
+                  </option>
+                ))}
               </select>
             </label>
           </div>

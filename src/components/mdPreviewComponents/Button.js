@@ -17,7 +17,7 @@ class Buttons extends React.Component {
         className="buttonBorder"
       >
         <Popup
-          content={this.props.title + " (ctrl+" + this.props.shortcutKey + ")"}
+          content={this.props.title + " (" + this.props.shortcutKey + ")"}
           mouseEnterDelay={250}
           mouseLeaveDelay={250}
           inverted
