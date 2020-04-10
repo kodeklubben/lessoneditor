@@ -15,15 +15,14 @@ export class IndexPage extends React.Component {
         </div>
         <div className="btnDiv">
           <button className="btn">
-            {" "}
-            <Link to="">Min side</Link>{" "}
+            <Link to="">Min side</Link>
           </button>
           <button className="btn">
-            <Link to="">Rediger en oppgave</Link>{" "}
+            <Link to="">Rediger en oppgave</Link>
           </button>
-          <button className="btn">
-            <Link to="/createNewLesson">Lag ny oppgave </Link>{" "}
-          </button>
+          <Link to="/createNewLesson" className="btn">
+            <button>Lag ny oppgave</button>
+          </Link>
         </div>
       </div>
     );

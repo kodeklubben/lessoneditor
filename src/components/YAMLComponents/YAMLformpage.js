@@ -14,6 +14,7 @@ class YAMLformpage extends React.Component {
             <label>
               <h3>Tittel:</h3>
               <input
+                required
                 type="text"
                 name="title"
                 placeholder="Tittel"
@@ -26,6 +27,7 @@ class YAMLformpage extends React.Component {
             <label>
               <h3>Forfatter:</h3>
               <input
+                required
                 type="text"
                 name="author"
                 placeholder="Navn"
