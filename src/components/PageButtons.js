@@ -10,10 +10,11 @@ const PageButtons = props => {
           {props.prevTitle}
         </button>
       </Link>
-      <Link to={props.nextValue}>
+      <Link to={props.nextValue} onSubmit={props.mySubmitHandler}>
         <button
           className="ui right floated icon right labeled button"
-          type="button"
+          type="submit"
+          onSubmit={props.mySubmitHandler}
         >
           <i aria-hidden="true" className="right arrow icon" />
           {props.nextTitle}

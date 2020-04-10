@@ -14,7 +14,7 @@ class YAMLformpage extends React.Component {
             <label>
               <h3>Tittel:</h3>
               <input
-                required
+                autoComplete="off"
                 type="text"
                 name="title"
                 placeholder="Tittel"
@@ -27,7 +27,7 @@ class YAMLformpage extends React.Component {
             <label>
               <h3>Forfatter:</h3>
               <input
-                required
+                autoComplete="off"
                 type="text"
                 name="author"
                 placeholder="Navn"
@@ -40,6 +40,7 @@ class YAMLformpage extends React.Component {
             <label>
               <h3>Oversatt av:</h3>
               <input
+                autoComplete="off"
                 type="text"
                 name="translator"
                 placeholder="Navn"
@@ -52,6 +53,7 @@ class YAMLformpage extends React.Component {
             <label>
               <h3>Lisens:</h3>
               <input
+                autoComplete="off"
                 type="text"
                 name="license"
                 placeholder="Lisens"
