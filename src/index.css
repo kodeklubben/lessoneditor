@@ -66,11 +66,7 @@ select {
 
 .TextArea {
   width: 100%;
-<<<<<<< HEAD
   height: 100%;
-=======
-  height: 52em;
->>>>>>> 58f85a7af74e27673aa4bdffe88acd1d936acb43
   outline: none;
   resize: none;
   /* overflow: auto; */
@@ -116,7 +112,7 @@ select {
 
 .MDPreview {
   width: 100%;
-  height: 52em;
+  height: 100%;
   border: 1px solid black;
   border-radius: 5px;
   background-color: white;
