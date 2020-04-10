@@ -3,18 +3,34 @@ import FormPage from "./FormPage";
 import COURSELIST from "./settingsFiles/COURSELIST";
 import LANGUAGELIST from "./settingsFiles/LANGUAGELIST";
 
+const INIT_PROPS = {
+  course: COURSELIST[0].courseTitle,
+  title: "",
+  titleErr: "",
+  author: "",
+  authorErr: "",
+  translator: "",
+  language: LANGUAGELIST[0].language[0],
+  level: 1,
+  license: "",
+  tags: { topic: [], subject: [], grade: [] }
+};
+
 class FormComponent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       course: COURSELIST[0].courseTitle,
       title: "",
+      titleErr: "",
       author: "",
+      authorErr: "",
       translator: "",
       language: LANGUAGELIST[0].language[0],
       level: 1,
       license: "",
-      tags: { topic: [], subject: [], grade: [] }
+      tags: { topic: [], subject: [], grade: [] },
+      redirect: null
     };
   }
 
@@ -52,22 +68,47 @@ class FormComponent extends React.Component {
     this.setState({ [nam]: val });
   };
 
+  validate = () => {
+    let titleErr = "";
+    let authorErr = "";
+
+    if (!this.state.title) {
+      titleErr = "Må skrive inn tittel";
+    }
+    if (!this.state.author) {
+      authorErr = "Må skrive inn forfatter";
+    }
+
+    if (titleErr || authorErr) {
+      this.setState({ titleErr, authorErr });
+      return false;
+    }
+
+    return true;
+  };
+
   mySubmitHandler = event => {
     event.preventDefault();
-    //const for yml creation
-    const fs = require("browserify-fs");
+    let notErr = this.validate();
 
-    //create yml file
-    fs.writeFile("lesson.yml", this.YMLstateToString(this.state), function(
-      err
-    ) {
-      if (err) throw err;
-    });
+    if (notErr) {
+      this.setState({ redirect: "/editor" });
 
-    console.log("saved yml-file");
-    console.log("YAML header: \n" + this.YAMLstateToString(this.state));
-    console.log("\nYML-file: \n" + this.YMLstateToString(this.state));
-    // TODO: Send state-data to database
+      //const for yml creation
+      const fs = require("browserify-fs");
+
+      //create yml file
+      fs.writeFile("lesson.yml", this.YMLstateToString(this.state), function(
+        err
+      ) {
+        if (err) throw err;
+      });
+
+      console.log("saved yml-file");
+      console.log("YAML header: \n" + this.YAMLstateToString(this.state));
+      console.log("\nYML-file: \n" + this.YMLstateToString(this.state));
+      // TODO: Send state-data to database
+    }
   };
 
   myCheckboxHandler = event => {

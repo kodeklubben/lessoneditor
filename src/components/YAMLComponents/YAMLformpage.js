@@ -22,6 +22,7 @@ class YAMLformpage extends React.Component {
                 onChange={this.props.myChangeHandler}
               />
             </label>
+            <div>{this.props.state.titleErr}</div>
           </div>
           <div className="field">
             <label>
@@ -35,6 +36,7 @@ class YAMLformpage extends React.Component {
                 onChange={this.props.myChangeHandler}
               />
             </label>
+            <div>{this.props.state.authorErr}</div>
           </div>
           <div className="field">
             <label>

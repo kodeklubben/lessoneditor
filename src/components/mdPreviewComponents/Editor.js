@@ -79,7 +79,8 @@ class Editor extends React.Component {
       counter: 0,
       textValue: "",
       mdValue: "",
-      boolButton: buttonBoolValues
+      boolButton: buttonBoolValues,
+      redirect: null
     };
 
     // referanseVariabel (type: GetDocumentByID i vanlig JS) for Textarea-elementet i DOM.  Tillater å manipulere DOM i react
@@ -148,6 +149,10 @@ class Editor extends React.Component {
     // Submithandler,  kode for å sende tekst til backend skrives her her.
     const mySubmitHandler = event => {
       event.preventDefault();
+
+      console.log("text submitted");
+
+      this.setState({ redirect: "/endpage" });
 
       // TODO: Send inputtext-data to database
     };
@@ -767,45 +772,48 @@ class Editor extends React.Component {
     };
 
     return (
-      <div className="Editor">
-        <div className="controlPanelPlacement">
-          <ControlPanel handleButtonClick={handleButtonClick} />
-          <div className="ui two column test grid container">
-            <div className="column">
-              <MDTextArea
-                editorRef={this.editorRef}
-                textValue={this.state.textValue}
-                onInputChange={handleChange}
-                handleButtonClick={handleButtonClick}
-                onTextareaKeyDown={onTextareaKeyDown}
-                onTextareaKeyUp={onTextareaKeyUp}
-                onTextareaMouseDown={onTextareaMouseDown}
-                onTextareaSelect={onTextareaSelect}
-                handlers={handlers}
-                keyMap={keyMap}
-              />
-            </div>
-            {imagePopup}
-            <div className="column">
-              <MDPreview mdValue={this.state.mdValue} />
+      <form onSubmit={mySubmitHandler}>
+        <div className="Editor">
+          <div className="controlPanelPlacement">
+            <ControlPanel handleButtonClick={handleButtonClick} />
+            <div className="ui two column test grid container">
+              <div className="column">
+                <MDTextArea
+                  editorRef={this.editorRef}
+                  textValue={this.state.textValue}
+                  onInputChange={handleChange}
+                  handleButtonClick={handleButtonClick}
+                  onTextareaKeyDown={onTextareaKeyDown}
+                  onTextareaKeyUp={onTextareaKeyUp}
+                  onTextareaMouseDown={onTextareaMouseDown}
+                  onTextareaSelect={onTextareaSelect}
+                  handlers={handlers}
+                  keyMap={keyMap}
+                />
+              </div>
+              {imagePopup}
+              <div className="column">
+                <MDPreview mdValue={this.state.mdValue} />
+              </div>
             </div>
           </div>
-        </div>
-        <div className="ui autosave container">
-          <div className="autosave">
-            <p style={{ color: "grey" }}>{autoSaveMessage}</p>
+          <div className="ui autosave container">
+            <div className="autosave">
+              <p style={{ color: "grey" }}>{autoSaveMessage}</p>
+            </div>
+          </div>
+          <div className="ui container">
+            <PageButtons
+              prevTitle="Tilbake"
+              nextTitle="Submit"
+              prevValue="/createNewLesson"
+              nextValue="/endpage"
+              mySubmitHandler={mySubmitHandler}
+              state={this.state}
+            />
           </div>
         </div>
-        <div className="ui container">
-          <PageButtons
-            prevTitle="Tilbake"
-            nextTitle="Submit"
-            prevValue="/createNewLesson"
-            nextValue="/endpage"
-            mySubmitHandler={mySubmitHandler}
-          />
-        </div>
-      </div>
+      </form>
     );
   }
 }
