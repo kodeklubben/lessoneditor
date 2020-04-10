@@ -28,8 +28,11 @@ var buttonBoolValues = {
   check: true,
   protip: true,
   challenge: true,
+<<<<<<< HEAD
   flag: true,
   try: true,
+=======
+>>>>>>> 58f85a7af74e27673aa4bdffe88acd1d936acb43
   inline: true,
   codeblock: true,
 };
@@ -79,7 +82,11 @@ class Editor extends React.Component {
       counter: 0,
       textValue: "",
       mdValue: "",
+<<<<<<< HEAD
       boolButton: buttonBoolValues,
+=======
+      boolButton: buttonBoolValues
+>>>>>>> 58f85a7af74e27673aa4bdffe88acd1d936acb43
     };
 
     // referanseVariabel (type: GetDocumentByID i vanlig JS) for Textarea-elementet i DOM.  Tillater å manipulere DOM i react
@@ -131,7 +138,11 @@ class Editor extends React.Component {
         protip: true,
         challenge: true,
         inline: true,
+<<<<<<< HEAD
         codeblock: true,
+=======
+        codeblock: true
+>>>>>>> 58f85a7af74e27673aa4bdffe88acd1d936acb43
       };
     };
 
@@ -144,14 +155,22 @@ class Editor extends React.Component {
     };
 
     // Submithandler,  kode for å sende tekst til backend skrives her her.
+<<<<<<< HEAD
     const mySubmitHandler = (event) => {
+=======
+    const mySubmitHandler = event => {
+>>>>>>> 58f85a7af74e27673aa4bdffe88acd1d936acb43
       event.preventDefault();
 
       // TODO: Send inputtext-data to database
     };
 
     // all config for å behandle tekst i textarea
+<<<<<<< HEAD
     const handleChange = (event) => {
+=======
+    const handleChange = event => {
+>>>>>>> 58f85a7af74e27673aa4bdffe88acd1d936acb43
       cursorPositionStart = event.target.selectionStart;
       cursorPositionEnd = event.target.selectionEnd;
       inputText = event.target.value;
@@ -170,17 +189,29 @@ class Editor extends React.Component {
       this.setState({ counter: 0 });
     };
 
+<<<<<<< HEAD
     const onTextareaKeyUp = (e) => {
+=======
+    const onTextareaKeyUp = e => {
+>>>>>>> 58f85a7af74e27673aa4bdffe88acd1d936acb43
       cursorPositionStart = e.target.selectionStart;
       cursorPositionEnd = e.target.selectionEnd;
     };
 
+<<<<<<< HEAD
     const onTextareaSelect = (e) => {
+=======
+    const onTextareaSelect = e => {
+>>>>>>> 58f85a7af74e27673aa4bdffe88acd1d936acb43
       cursorPositionStart = e.target.selectionStart;
       cursorPositionEnd = e.target.selectionEnd;
     };
 
+<<<<<<< HEAD
     const onTextareaMouseDown = (e) => {
+=======
+    const onTextareaMouseDown = e => {
+>>>>>>> 58f85a7af74e27673aa4bdffe88acd1d936acb43
       cursorPositionStart = e.target.selectionStart;
       cursorPositionEnd = e.target.selectionEnd;
 
@@ -189,7 +220,11 @@ class Editor extends React.Component {
 
     // konfigurering for å fjerne default-funksjoner av tastekombinasjoner
     // brukes for å sette egne hurtigtaster i teksteditor.
+<<<<<<< HEAD
     const onTextareaKeyDown = (event) => {
+=======
+    const onTextareaKeyDown = event => {
+>>>>>>> 58f85a7af74e27673aa4bdffe88acd1d936acb43
       cursorPositionStart = event.target.selectionStart;
       cursorPositionEnd = event.target.selectionEnd;
 
@@ -257,7 +292,10 @@ class Editor extends React.Component {
         undo = [...undo, inputText];
         undoCursorPosition.push(cursorPositionStart);
         if (buttonBoolValues[listButtonValues["bTitle"]] === false) {
+<<<<<<< HEAD
           event.preventDefault();
+=======
+>>>>>>> 58f85a7af74e27673aa4bdffe88acd1d936acb43
           if (
             inputText.slice(
               cursorPositionStart - listButtonValues["cursorInt"],
@@ -272,7 +310,10 @@ class Editor extends React.Component {
                 cursorPositionStart - listButtonValues["cursorInt"]
               ) + inputText.slice(cursorPositionStart);
             this.setState({ textValue: inputText });
+<<<<<<< HEAD
             this.setState({ mdValue: mdParser(inputText) });
+=======
+>>>>>>> 58f85a7af74e27673aa4bdffe88acd1d936acb43
             setCursorPosition(
               cursorPositionStart - listButtonValues["cursorInt"],
               cursorPositionStart - listButtonValues["cursorInt"]
@@ -285,7 +326,10 @@ class Editor extends React.Component {
             listButtonValues["output"] +
             inputText.slice(cursorPositionStart);
           this.setState({ textValue: inputText });
+<<<<<<< HEAD
           this.setState({ mdValue: mdParser(inputText) });
+=======
+>>>>>>> 58f85a7af74e27673aa4bdffe88acd1d936acb43
           setCursorPosition(
             cursorPositionStart + listButtonValues["cursorInt"] + 2,
             cursorPositionStart + listButtonValues["cursorInt"] + 2
@@ -331,7 +375,11 @@ class Editor extends React.Component {
     };
 
     // Vise, skjule image-button-popup
+<<<<<<< HEAD
     const imagePopupSubmitHandler = (imagePopupInputValue) => {
+=======
+    const imagePopupSubmitHandler = imagePopupInputValue => {
+>>>>>>> 58f85a7af74e27673aa4bdffe88acd1d936acb43
       if (imagePopupInputValue !== "") {
         undo = [...undo, inputText];
         undoCursorPosition.push(cursorPositionStart);
@@ -342,7 +390,10 @@ class Editor extends React.Component {
           ")" +
           inputText.slice(cursorPositionStart);
         this.setState({ textValue: inputText });
+<<<<<<< HEAD
         this.setState({ mdValue: mdParser(inputText) });
+=======
+>>>>>>> 58f85a7af74e27673aa4bdffe88acd1d936acb43
         this.editorRef.current.focus();
         cursorPositionStart += 2;
         cursorPositionEnd += 22;
@@ -472,7 +523,10 @@ class Editor extends React.Component {
             "\n\n" +
             inputText.slice(cursorPositionStart);
           this.setState({ textValue: inputText });
+<<<<<<< HEAD
           this.setState({ mdValue: mdParser(inputText) });
+=======
+>>>>>>> 58f85a7af74e27673aa4bdffe88acd1d936acb43
           cursorPositionStart += 2;
           cursorPositionEnd += 2;
           handleButtonClick(
@@ -488,7 +542,11 @@ class Editor extends React.Component {
           listButtonValues = {
             bTitle: bTitle,
             output: output,
+<<<<<<< HEAD
             cursorInt: cursorIntON,
+=======
+            cursorInt: cursorIntON
+>>>>>>> 58f85a7af74e27673aa4bdffe88acd1d936acb43
           };
         }
       }
@@ -560,6 +618,7 @@ class Editor extends React.Component {
         }
       }
 
+<<<<<<< HEAD
       // //constraint button from working if new line or not end of line.
       // if (output[0] === "{" && buttonBoolValues[bTitle]) {
       //   if (ifNewLine()) {
@@ -585,6 +644,18 @@ class Editor extends React.Component {
         cursorPositionEnd += 11;
         setCursorPosition(cursorPositionStart, cursorPositionEnd);
         return;
+=======
+      //constraint button from working if new line or not end of line.
+      if (output[0] === "{" && buttonBoolValues[bTitle]) {
+        if (ifNewLine()) {
+          return;
+        }
+        if (inputText[cursorPositionEnd] !== undefined) {
+          if (inputText[cursorPositionEnd] !== "\n") {
+            return;
+          }
+        }
+>>>>>>> 58f85a7af74e27673aa4bdffe88acd1d936acb43
       }
 
       //  Konfig av knapper slik at de registrerer om de er trykket, og flytter tekst-markøren i henhold til hvordan MD-syntax ser ut
@@ -696,12 +767,19 @@ class Editor extends React.Component {
       ACTIVITY: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+a",
       INTRO: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+i",
       CHECK: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+c",
+<<<<<<< HEAD
       PROTIP: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+t",
       CHALLENGE: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+g",
       FLAG: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+f",
       TRY: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+t",
       INLINE: SHORTCUTKEY + "+e",
       CODEBLOCK: SHORTCUTKEY + "+k",
+=======
+      PROTIP: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+p",
+      CHALLENGE: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+g",
+      INLINE: SHORTCUTKEY + "+e",
+      CODEBLOCK: SHORTCUTKEY + "+k"
+>>>>>>> 58f85a7af74e27673aa4bdffe88acd1d936acb43
     };
 
     // Hva som skjer når man trykker en hurtigtastetrykk.
@@ -726,11 +804,17 @@ class Editor extends React.Component {
       PROTIP: () => handleButtonClick("protip", "{.protip}", 9, 9, ""),
       CHALLENGE: () =>
         handleButtonClick("challenge", "{.challenge}", 12, 12, ""),
+<<<<<<< HEAD
       FLAG: () => handleButtonClick("flag", "{.flag}", 7, 7, ""),
       TRY: () => handleButtonClick("try", "{.try}", 7, 7, ""),
       INLINE: () => handleButtonClick("inline", "``", 1, 1, ""),
       CODEBLOCK: () =>
         handleButtonClick("codeblock", `${temp}\n\n${temp}`, 4, 5, "\n"),
+=======
+      INLINE: () => handleButtonClick("inline", "``", 1, 1, ""),
+      CODEBLOCK: () =>
+        handleButtonClick("codeblock", `${temp}\n\n${temp}`, 4, 5, "\n")
+>>>>>>> 58f85a7af74e27673aa4bdffe88acd1d936acb43
     };
 
     return (

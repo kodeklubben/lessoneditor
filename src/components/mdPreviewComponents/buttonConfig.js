@@ -9,7 +9,11 @@ const buttonConfig = [
     cursorIntON: 2,
     cursorIntOFF: 2,
     endOutput: "",
+<<<<<<< HEAD
     shortcut: "ctrl+b",
+=======
+    shortcut: "ctrl+b"
+>>>>>>> 58f85a7af74e27673aa4bdffe88acd1d936acb43
   },
   {
     bTitle: "italic",
@@ -19,7 +23,11 @@ const buttonConfig = [
     cursorIntON: 1,
     cursorIntOFF: 1,
     endOutput: "",
+<<<<<<< HEAD
     shortcut: "ctrl+i",
+=======
+    shortcut: "ctrl+i"
+>>>>>>> 58f85a7af74e27673aa4bdffe88acd1d936acb43
   },
   {
     bTitle: "heading",
@@ -29,7 +37,11 @@ const buttonConfig = [
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
+<<<<<<< HEAD
     shortcut: "ctrl+h",
+=======
+    shortcut: "ctrl+h"
+>>>>>>> 58f85a7af74e27673aa4bdffe88acd1d936acb43
   },
   {
     bTitle: "strikethrough",
@@ -39,8 +51,13 @@ const buttonConfig = [
     cursorIntON: 2,
     cursorIntOFF: 2,
     endOutput: "",
+<<<<<<< HEAD
     shortcut: "ctrl+s",
   },
+=======
+    shortcut: "ctrl+s"
+  }
+>>>>>>> 58f85a7af74e27673aa4bdffe88acd1d936acb43
 ];
 
 const buttonConfig2 = [
@@ -52,7 +69,11 @@ const buttonConfig2 = [
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
+<<<<<<< HEAD
     shortcut: "ctrl+z",
+=======
+    shortcut: "ctrl+z"
+>>>>>>> 58f85a7af74e27673aa4bdffe88acd1d936acb43
   },
   {
     bTitle: "redo",
@@ -62,8 +83,13 @@ const buttonConfig2 = [
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
+<<<<<<< HEAD
     shortcut: "ctrl+shift+z",
   },
+=======
+    shortcut: "ctrl+shift+z"
+  }
+>>>>>>> 58f85a7af74e27673aa4bdffe88acd1d936acb43
 ];
 
 const buttonConfig3 = [
@@ -75,7 +101,11 @@ const buttonConfig3 = [
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
+<<<<<<< HEAD
     shortcut: "ctrl+shift+backspace",
+=======
+    shortcut: "ctrl+shift+backspace"
+>>>>>>> 58f85a7af74e27673aa4bdffe88acd1d936acb43
   },
   {
     bTitle: "load",
@@ -85,7 +115,11 @@ const buttonConfig3 = [
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
+<<<<<<< HEAD
     shortcut: "ctrl+shift+l",
+=======
+    shortcut: "ctrl+shift+l"
+>>>>>>> 58f85a7af74e27673aa4bdffe88acd1d936acb43
   },
   {
     bTitle: "save",
@@ -95,8 +129,13 @@ const buttonConfig3 = [
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
+<<<<<<< HEAD
     shortcut: "ctrl+shift+s",
   },
+=======
+    shortcut: "ctrl+shift+s"
+  }
+>>>>>>> 58f85a7af74e27673aa4bdffe88acd1d936acb43
 ];
 
 const buttonConfig4 = [
@@ -108,8 +147,13 @@ const buttonConfig4 = [
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
+<<<<<<< HEAD
     shortcut: "ctrl+p",
   },
+=======
+    shortcut: "ctrl+p"
+  }
+>>>>>>> 58f85a7af74e27673aa4bdffe88acd1d936acb43
 ];
 
 const buttonConfig5 = [
@@ -121,7 +165,11 @@ const buttonConfig5 = [
     cursorIntON: 2,
     cursorIntOFF: 0,
     endOutput: "",
+<<<<<<< HEAD
     shortcut: "ctrl+u",
+=======
+    shortcut: "ctrl+u"
+>>>>>>> 58f85a7af74e27673aa4bdffe88acd1d936acb43
   },
   {
     bTitle: "listOl",
@@ -131,7 +179,11 @@ const buttonConfig5 = [
     cursorIntON: 3,
     cursorIntOFF: 0,
     endOutput: "",
+<<<<<<< HEAD
     shortcut: "ctrl+shift+u",
+=======
+    shortcut: "ctrl+shift+u"
+>>>>>>> 58f85a7af74e27673aa4bdffe88acd1d936acb43
   },
   {
     bTitle: "listCheck",
@@ -141,55 +193,94 @@ const buttonConfig5 = [
     cursorIntON: 6,
     cursorIntOFF: 0,
     endOutput: "",
+<<<<<<< HEAD
     shortcut: "ctrl+y",
   },
+=======
+    shortcut: "ctrl+y"
+  }
+>>>>>>> 58f85a7af74e27673aa4bdffe88acd1d936acb43
 ];
 
 const buttonConfig6 = [
   {
     bTitle: "activity",
     icon: "",
+<<<<<<< HEAD
     output: "# Tekst her {.activity}",
     title: "{Steg}",
     cursorIntON: 11,
     cursorIntOFF: 11,
     endOutput: "",
     shortcut: "ctrl+shift+a",
+=======
+    output: "{.activity}",
+    title: "{.Activity}",
+    cursorIntON: 11,
+    cursorIntOFF: 11,
+    endOutput: "",
+    shortcut: "ctrl+shift+a"
+>>>>>>> 58f85a7af74e27673aa4bdffe88acd1d936acb43
   },
   {
     bTitle: "intro",
     icon: "",
     output: "{.intro}",
+<<<<<<< HEAD
     title: "{Intro}",
     cursorIntON: 8,
     cursorIntOFF: 8,
     endOutput: "",
     shortcut: "ctrl+shift+i",
+=======
+    title: "{.Intro}",
+    cursorIntON: 8,
+    cursorIntOFF: 8,
+    endOutput: "",
+    shortcut: "ctrl+shift+i"
+>>>>>>> 58f85a7af74e27673aa4bdffe88acd1d936acb43
   },
   {
     bTitle: "check",
     icon: "",
     output: "{.check}",
+<<<<<<< HEAD
     title: "{Checklist}",
     cursorIntON: 8,
     cursorIntOFF: 8,
     endOutput: "",
     shortcut: "ctrl+shift+c",
+=======
+    title: "{.Check}",
+    cursorIntON: 8,
+    cursorIntOFF: 8,
+    endOutput: "",
+    shortcut: "ctrl+shift+c"
+>>>>>>> 58f85a7af74e27673aa4bdffe88acd1d936acb43
   },
   {
     bTitle: "protip",
     icon: "",
     output: "{.protip}",
+<<<<<<< HEAD
     title: "{Tips}",
     cursorIntON: 9,
     cursorIntOFF: 9,
     endOutput: "",
     shortcut: "ctrl+shift+t",
+=======
+    title: "{.Protip}",
+    cursorIntON: 9,
+    cursorIntOFF: 9,
+    endOutput: "",
+    shortcut: "ctrl+shift+p"
+>>>>>>> 58f85a7af74e27673aa4bdffe88acd1d936acb43
   },
   {
     bTitle: "challenge",
     icon: "",
     output: "{.challenge}",
+<<<<<<< HEAD
     title: "{Utfordring}",
     cursorIntON: 12,
     cursorIntOFF: 12,
@@ -216,6 +307,14 @@ const buttonConfig6 = [
     endOutput: "",
     shortcut: "ctrl+shift+p",
   },
+=======
+    title: "{.Challenge}",
+    cursorIntON: 12,
+    cursorIntOFF: 12,
+    endOutput: "",
+    shortcut: "ctrl+shift+g"
+  }
+>>>>>>> 58f85a7af74e27673aa4bdffe88acd1d936acb43
 ];
 
 const buttonConfig7 = [
@@ -227,7 +326,11 @@ const buttonConfig7 = [
     cursorIntON: 1,
     cursorIntOFF: 1,
     endOutput: "",
+<<<<<<< HEAD
     shortcut: "ctrl+e",
+=======
+    shortcut: "ctrl+e"
+>>>>>>> 58f85a7af74e27673aa4bdffe88acd1d936acb43
   },
   {
     bTitle: "codeblock",
@@ -237,8 +340,13 @@ const buttonConfig7 = [
     cursorIntON: 4,
     cursorIntOFF: 5,
     endOutput: "\n",
+<<<<<<< HEAD
     shortcut: "ctrl+k",
   },
+=======
+    shortcut: "ctrl+k"
+  }
+>>>>>>> 58f85a7af74e27673aa4bdffe88acd1d936acb43
 ];
 
 export {
@@ -248,5 +356,9 @@ export {
   buttonConfig4,
   buttonConfig5,
   buttonConfig6,
+<<<<<<< HEAD
   buttonConfig7,
+=======
+  buttonConfig7
+>>>>>>> 58f85a7af74e27673aa4bdffe88acd1d936acb43
 };
