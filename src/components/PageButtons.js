@@ -18,8 +18,8 @@ const PageButtons = props => {
 
       <button
         className="ui right floated icon right labeled button"
-        type="submit"
-        onSubmit={props.mySubmitHandler}
+        type="button"
+        onClick={props.mySubmitHandler}
       >
         <i aria-hidden="true" className="right arrow icon" />
         {props.nextTitle}
