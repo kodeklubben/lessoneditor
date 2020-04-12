@@ -9,7 +9,7 @@ import ImagePopup from "./ImagePopup";
 // import { Redirect } from "react-router-dom";
 
 // variabler som sjekker om en knapp er trykket ned:
-var buttonBoolValues = {
+var isButtonOn = {
   bold: true,
   italic: true,
   heading: true,
@@ -79,7 +79,7 @@ class Editor extends React.Component {
       counter: 0,
       textValue: "",
       mdValue: "",
-      boolButton: buttonBoolValues,
+      buttonValues: isButtonOn,
       redirect: null
     };
 
@@ -111,8 +111,8 @@ class Editor extends React.Component {
   }
 
   render() {
-    const resetButtonOnOff = () => {
-      buttonBoolValues = {
+    const resetButtons = () => {
+      isButtonOn = {
         bold: true,
         italic: true,
         heading: true,
@@ -191,7 +191,7 @@ class Editor extends React.Component {
       cursorPositionStart = e.target.selectionStart;
       cursorPositionEnd = e.target.selectionEnd;
 
-      resetButtonOnOff();
+      resetButtons();
     };
 
     // konfigurering for å fjerne default-funksjoner av tastekombinasjoner
@@ -263,7 +263,7 @@ class Editor extends React.Component {
         charCounter = 0;
         undo = [...undo, inputText];
         undoCursorPosition.push(cursorPositionStart);
-        if (buttonBoolValues[listButtonValues["bTitle"]] === false) {
+        if (isButtonOn[listButtonValues["bTitle"]] === false) {
           event.preventDefault();
           if (
             inputText.slice(
@@ -271,8 +271,8 @@ class Editor extends React.Component {
               cursorPositionStart
             ) === listButtonValues["output"]
           ) {
-            buttonBoolValues[listButtonValues["bTitle"]] = true;
-            this.setState({ boolButton: buttonBoolValues });
+            isButtonOn[listButtonValues["bTitle"]] = true;
+            this.setState({ buttonValues: isButtonOn });
             inputText =
               inputText.slice(
                 0,
@@ -299,8 +299,8 @@ class Editor extends React.Component {
           );
           return;
         }
-        if (!buttonBoolValues["heading"]) {
-          buttonBoolValues["heading"] = true;
+        if (!isButtonOn["heading"]) {
+          isButtonOn["heading"] = true;
         }
       }
 
@@ -308,7 +308,7 @@ class Editor extends React.Component {
       if (tab) {
         event.preventDefault();
         // config for correct tab inside codeblock:
-        if (!buttonBoolValues["codeblock"]) {
+        if (!isButtonOn["codeblock"]) {
           undo = [...undo, inputText];
           undoCursorPosition.push(cursorPositionStart);
           inputText =
@@ -333,7 +333,7 @@ class Editor extends React.Component {
 
       // kanselerer knappetrykk med piltaster
       if (leftArrow || upArrow || rightArrow || downArrow) {
-        resetButtonOnOff();
+        resetButtons();
       }
     };
 
@@ -374,6 +374,16 @@ class Editor extends React.Component {
         inputText.slice(cursorPositionStart - 2, cursorPositionStart) === "# "
         ? true
         : false;
+    };
+
+    const setTextValue = textValue => {
+      this.setState({ textValue });
+    };
+    const setMdValue = mdValue => {
+      this.setState({ mdValue });
+    };
+    const setButtonValues = buttonValues => {
+      this.setState({ buttonValues });
     };
 
     // funksjon som konfigurerer hva som skjer når man trykker på knapper i teksteditor
@@ -449,14 +459,14 @@ class Editor extends React.Component {
       // nuller ut verdi fra knapp-trykk om man trykker en gang til på knapp uten å ha skrevet noen tegn.
       // kanselerer da ut første knappetrykket.
       if (
-        !buttonBoolValues[bTitle] &&
+        !isButtonOn[bTitle] &&
         inputText.slice(
           cursorPositionStart - cursorIntON,
           cursorPositionStart - cursorIntON + output.length
         ) === output
       ) {
-        buttonBoolValues[bTitle] = true;
-        this.setState({ boolButton: buttonBoolValues });
+        isButtonOn[bTitle] = true;
+        this.setState({ buttonValues: isButtonOn });
         if (inputText !== undo[undo.length - 1]) {
           undo = [...undo, inputText];
           undoCursorPosition.push(cursorPositionStart);
@@ -475,8 +485,8 @@ class Editor extends React.Component {
       if (
         bTitle.slice(0, 4) === "list" ||
         output.slice(0, 11) === "# Tekst her" ||
-        (bTitle === "codeblock" && buttonBoolValues["codeblock"]) ||
-        (bTitle === "heading" && buttonBoolValues["heading"])
+        (bTitle === "codeblock" && isButtonOn["codeblock"]) ||
+        (bTitle === "heading" && isButtonOn["heading"])
       ) {
         if (!ifNewLine()) {
           inputText =
@@ -519,10 +529,10 @@ class Editor extends React.Component {
           output === "## " &&
           inputText.slice(cursorPositionStart - 3, cursorPositionStart) ===
             output &&
-          buttonBoolValues[bTitle]
+          isButtonOn[bTitle]
         ) {
-          buttonBoolValues[bTitle] = false;
-          this.setState({ boolButton: buttonBoolValues });
+          isButtonOn[bTitle] = false;
+          this.setState({ buttonValues: isButtonOn });
           if (inputText !== undo[undo.length - 1]) {
             undo = [...undo, inputText];
             undoCursorPosition.push(cursorPositionStart);
@@ -536,7 +546,7 @@ class Editor extends React.Component {
           cursorPositionStart -= 1;
           setCursorPosition(cursorPositionStart, cursorPositionStart);
           return;
-        } else if (output === "## " && buttonBoolValues[bTitle]) {
+        } else if (output === "## " && isButtonOn[bTitle]) {
           if (inputText !== undo[undo.length - 1]) {
             undo = [...undo, inputText];
             undoCursorPosition.push(cursorPositionStart);
@@ -551,7 +561,7 @@ class Editor extends React.Component {
           cursorPositionStart += output.length;
           setCursorPosition(cursorPositionStart, cursorPositionStart);
           return;
-        } else if (output === "## " && !buttonBoolValues[bTitle]) {
+        } else if (output === "## " && !isButtonOn[bTitle]) {
           if (
             inputText.slice(cursorPositionStart - 2, cursorPositionStart) ===
             "# "
@@ -567,12 +577,12 @@ class Editor extends React.Component {
             this.setState({ mdValue: mdParser(inputText) });
             cursorPositionStart -= 2;
             setCursorPosition(cursorPositionStart, cursorPositionStart);
-            buttonBoolValues[bTitle] = true;
-            this.setState({ boolButton: buttonBoolValues });
+            isButtonOn[bTitle] = true;
+            this.setState({ buttonValues: isButtonOn });
             return;
           } else {
-            buttonBoolValues[bTitle] = true;
-            this.setState({ boolButton: buttonBoolValues });
+            isButtonOn[bTitle] = true;
+            this.setState({ buttonValues: isButtonOn });
             return;
           }
         }
@@ -590,9 +600,9 @@ class Editor extends React.Component {
       //   }
       // }
 
-      if (output.slice(0, 11) === "# Tekst her" && buttonBoolValues[bTitle]) {
-        buttonBoolValues[bTitle] = false;
-        this.setState({ boolButton: buttonBoolValues });
+      if (output.slice(0, 11) === "# Tekst her" && isButtonOn[bTitle]) {
+        isButtonOn[bTitle] = false;
+        this.setState({ buttonValues: isButtonOn });
         if (inputText !== undo[undo.length - 1]) {
           undo = [...undo, inputText];
           undoCursorPosition.push(cursorPositionStart);
@@ -611,10 +621,10 @@ class Editor extends React.Component {
 
       //  Konfig av knapper slik at de registrerer om de er trykket, og flytter tekst-markøren i henhold til hvordan MD-syntax ser ut
       // Konfig-data finnes i ./buttonConfig.js der tallverdi for hvor mye tekst-markøren skal flyttes er definert in "cursorIntON" og "cursorIntOFF"
-      if (buttonBoolValues[bTitle]) {
+      if (isButtonOn[bTitle]) {
         if (cursorPositionStart !== cursorPositionEnd) {
-          buttonBoolValues[bTitle] = false;
-          this.setState({ boolButton: buttonBoolValues });
+          isButtonOn[bTitle] = false;
+          this.setState({ buttonValues: isButtonOn });
           let i = inputText.slice(cursorPositionStart, cursorPositionEnd);
           while (
             i[0] === " " ||
@@ -650,8 +660,8 @@ class Editor extends React.Component {
           );
           return;
         }
-        buttonBoolValues[bTitle] = false;
-        this.setState({ boolButton: buttonBoolValues });
+        isButtonOn[bTitle] = false;
+        this.setState({ buttonValues: isButtonOn });
         if (inputText !== undo[undo.length - 1]) {
           undo = [...undo, inputText];
           undoCursorPosition.push(cursorPositionStart);
@@ -667,10 +677,10 @@ class Editor extends React.Component {
           cursorPositionStart + cursorIntON
         );
         return;
-      } else if (!buttonBoolValues[bTitle]) {
+      } else if (!isButtonOn[bTitle]) {
         if (cursorPositionStart !== cursorPositionEnd) {
-          buttonBoolValues[bTitle] = true;
-          this.setState({ boolButton: buttonBoolValues });
+          isButtonOn[bTitle] = true;
+          this.setState({ buttonValues: isButtonOn });
           inputText = undo[undo.length - 1];
           this.setState({ textValue: inputText });
           this.setState({ mdValue: mdParser(inputText) });
@@ -680,8 +690,8 @@ class Editor extends React.Component {
           );
           return;
         }
-        buttonBoolValues[bTitle] = true;
-        this.setState({ boolButton: buttonBoolValues });
+        isButtonOn[bTitle] = true;
+        this.setState({ buttonValues: isButtonOn });
         setCursorPosition(
           cursorPositionStart + cursorIntOFF,
           cursorPositionEnd + cursorIntOFF
@@ -774,7 +784,19 @@ class Editor extends React.Component {
     return (
       <div className="Editor">
         <div className="controlPanelPlacement">
-          <ControlPanel handleButtonClick={handleButtonClick} />
+          <ControlPanel
+            handleButtonClick={handleButtonClick}
+            editorRef={this.editorRef}
+            setTextValue={setTextValue}
+            setMdValue={setMdValue}
+            setButtonValues={setButtonValues}
+            setCursorPosition={setCursorPosition}
+            undo={undo}
+            undoCursorPosition={undoCursorPosition}
+            redo={redo}
+            redoCursorPosition={redoCursorPosition}
+          />
+
           <div className="ui two column test grid container">
             <div className="column">
               <MDTextArea

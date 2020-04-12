@@ -43,7 +43,7 @@ const emphasis = [
   }
 ];
 
-const buttonConfig2 = [
+const undoRedo = [
   {
     bTitle: "undo",
     icon: "undo",
@@ -66,7 +66,7 @@ const buttonConfig2 = [
   }
 ];
 
-const buttonConfig3 = [
+const saveLoadNew = [
   {
     bTitle: "new",
     icon: "file",
@@ -99,7 +99,7 @@ const buttonConfig3 = [
   }
 ];
 
-const buttonConfig4 = [
+const image = [
   {
     bTitle: "image",
     icon: "file image",
@@ -112,7 +112,7 @@ const buttonConfig4 = [
   }
 ];
 
-const buttonConfig5 = [
+const lists = [
   {
     bTitle: "listUl",
     icon: "list ul",
@@ -145,7 +145,7 @@ const buttonConfig5 = [
   }
 ];
 
-const buttonConfig6 = [
+const sections = [
   {
     bTitle: "activity",
     icon: "",
@@ -218,7 +218,7 @@ const buttonConfig6 = [
   }
 ];
 
-const buttonConfig7 = [
+const code = [
   {
     bTitle: "inline",
     icon: "terminal",
@@ -241,12 +241,4 @@ const buttonConfig7 = [
   }
 ];
 
-export {
-  emphasis,
-  buttonConfig2,
-  buttonConfig3,
-  buttonConfig4,
-  buttonConfig5,
-  buttonConfig6,
-  buttonConfig7
-};
+export { emphasis, undoRedo, saveLoadNew, image, lists, sections, code };
