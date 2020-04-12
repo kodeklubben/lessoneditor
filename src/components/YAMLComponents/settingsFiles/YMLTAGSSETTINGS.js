@@ -1,72 +1,26 @@
+import {
+  GRADE as grades,
+  SUBJECT as subjects,
+  TOPIC as topics
+} from "./languages/formpage_NO";
+
 const GRADE_SUBTAG = "grade";
 const SUBJECT_SUBTAG = "subject";
 const TOPIC_SUBTAG = "topic";
 
 const GRADE = {
-  name: [
-    "Barnehage",
-    "1.-4. klasse",
-    "5.-7. klasse",
-    "8.-10. klasse",
-    "Videregående Skole"
-  ],
-  value: ["preschool", "primary", "secondary", "junior", "senior"]
+  name: Object.values(grades),
+  value: Object.keys(grades)
 };
 
 const SUBJECT = {
-  name: [
-    "Matematikk",
-    "Naturfag",
-    "Programmering",
-    "Teknologi",
-    "Musikk",
-    "Norsk",
-    "Engelsk",
-    "Kunst og Håndverk",
-    "Samfunnsfag"
-  ],
-  value: [
-    "mathematics",
-    "science",
-    "programming",
-    "technology",
-    "music",
-    "first_language",
-    "english",
-    "arts_and_crafts",
-    "social_science"
-  ]
+  name: Object.values(subjects),
+  value: Object.keys(subjects)
 };
 
 const TOPIC = {
-  name: [
-    "Animasjon",
-    "App",
-    "Blokkbasert",
-    "Elektronikk",
-    "Kryptografi",
-    "Lyd",
-    "Minecraft",
-    "Nettside",
-    "Robot",
-    "Spill",
-    "Stegbasert",
-    "Tekstbasert"
-  ],
-  value: [
-    "animation",
-    "app",
-    "block_based",
-    "electronics",
-    "cryptography",
-    "sound",
-    "minecraft",
-    "web",
-    "robot",
-    "game",
-    "step_based",
-    "text_based"
-  ]
+  name: Object.values(topics),
+  value: Object.keys(topics)
 };
 
 const gradeSettings = [];

@@ -1,7 +1,7 @@
 import React from "react";
 import FormPage from "./FormPage";
 import COURSELIST from "./settingsFiles/COURSELIST";
-import LANGUAGELIST from "./settingsFiles/LANGUAGELIST";
+import { LANGUAGES } from "./settingsFiles/languages/formpage_NO";
 
 const TITLE_ERROR = "Må skrive inn tittel";
 const AUTHOR_ERROR = "Må skrive inn forfatter";
@@ -16,7 +16,7 @@ class FormComponent extends React.Component {
       author: "",
       authorErr: "",
       translator: "",
-      language: LANGUAGELIST[0].language[0],
+      language: Object.keys(LANGUAGES[0]),
       level: 1,
       license: "",
       tags: { topic: [], subject: [], grade: [] },

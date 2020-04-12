@@ -6,9 +6,19 @@ import { mdParser } from "../../utils/mdParser";
 import ControlPanel from "./ControlPanel";
 import PageButtons from "../PageButtons";
 import ImagePopup from "./ImagePopup";
-// import { Redirect } from "react-router-dom";
+import * as GUI_TEKST from "./settingsFiles/languages/editor_NO";
+import {
+  KEY,
+  emphasis,
+  undoRedo,
+  saveLoadNew,
+  image,
+  lists,
+  sections,
+  code
+} from "./settingsFiles/buttonConfig";
 
-// variabler som sjekker om en knapp er trykket ned:
+// check if buttons is pressed
 var isButtonOn = {
   bold: true,
   italic: true,
@@ -23,50 +33,41 @@ var isButtonOn = {
   listUl: true,
   listOl: true,
   listCheck: true,
-  activity: true,
-  intro: true,
-  check: true,
-  protip: true,
-  challenge: true,
-  flag: true,
-  try: true,
+  sec_activity: true,
+  sec_intro: true,
+  sec_check: true,
+  sec_protip: true,
+  sec_challenge: true,
+  sec_flag: true,
+  sec_try: true,
   inline: true,
   codeblock: true
 };
 
-// Hjelpevariabel for å formatere string taste-shortcut.
-const temp = "```";
-
-// Teller input-tegn for automatisk linjeksift etter 80 tegn
+// Count input char for automatic newline at 80 chars
 var charCounter = 0;
 
-// Variabel for å spesifisere hoved-hurtigtast til React Hotkeys (tastesnarveier)
-const SHORTCUTKEY = "ctrl";
-const SHORTCUTKEY2 = "shift";
-
-// her lagres tekesten når teksten autolagres/lagres
 var storedTextValue = "";
 
-// denne variabelen er nødvendig for at liste-knappene skal gi ønsket oppførsel med linjeskift
+// helper variable to make list buttons work (atKeyDown : enter)
 var listButtonValues = { bTitle: "", output: "", cursorInt: 0 };
 
-// undo/redo - variabler.
 var undo = [""];
 var undoCursorPosition = [];
 var redo = [];
 var redoCursorPosition = [];
 
-// her er inputText før den ender opp i state
+// temporary store inputtext before updating state
 var inputText = "";
 
-// variabler for å spore pekere i tekstarea
+// variables to help find cursor in textarea
 var cursorPositionStart = 0;
 var cursorPositionEnd = 0;
 
-// meldingen i autosave
+// autosave message, gets updated by autosave
 var autoSaveMessage = <br />;
 
-// placeholder tag for bilde-upload popup
+// placeholder tag for picture-upload popup
 var imagePopup = <br />;
 
 // ___________________
@@ -83,29 +84,28 @@ class Editor extends React.Component {
       redirect: null
     };
 
-    // referanseVariabel (type: GetDocumentByID i vanlig JS) for Textarea-elementet i DOM.  Tillater å manipulere DOM i react
-    // brukes her til å flytte fokus fra knapp tilbake til textarea
+    // refs are used to find elements in the DOM (simular to document.getElementbyID)
     this.editorRef = React.createRef();
   }
 
-  // en teller som brukes i forbindelse med autolagring
+  // counts seconds.  Used with autosave. (simulate backend communication latency)
   componentDidMount() {
     this.myCounter = setInterval(() => {
       this.setState({ counter: this.state.counter + 1 });
     }, 1000);
   }
 
-  // fjerner telleren
+  // remove counter
   componentWillUnmount() {
     clearInterval(this.myCounter);
   }
 
-  // autolagring etter et par sekunder uten at teksten oppdateres
+  // auto save after a couple of seconds
   componentDidUpdate() {
     if (this.state.counter === 2 && this.state.textValue.length > 0) {
-      autoSaveMessage = "document saved";
+      autoSaveMessage = GUI_TEKST.SAVED;
     } else if (this.state.counter === 0) {
-      autoSaveMessage = "saving..";
+      autoSaveMessage = GUI_TEKST.SAVING;
       storedTextValue = this.state.textValue;
     }
   }
@@ -126,19 +126,20 @@ class Editor extends React.Component {
         listUl: true,
         listOl: true,
         listCheck: true,
-        activity: true,
-        intro: true,
-        check: true,
-        protip: true,
-        challenge: true,
-        flag: true,
-        try: true,
+        sec_activity: true,
+        sec_intro: true,
+        sec_check: true,
+        sec_protip: true,
+        sec_challenge: true,
+        sec_flag: true,
+        sec_try: true,
         inline: true,
         codeblock: true
       };
+      this.setState({ buttonValues: isButtonOn });
     };
 
-    // angi markørposisjon i tekstfelt
+    // sets cursor in textarea
     const setCursorPosition = (positionStart, positionEnd) => {
       setTimeout(() => {
         this.editorRef.current.selectionStart = positionStart;
@@ -146,7 +147,7 @@ class Editor extends React.Component {
       }, 0);
     };
 
-    // Submithandler,  kode for å sende tekst til backend skrives her her.
+    // Submithandler
     const mySubmitHandler = event => {
       event.preventDefault();
 
@@ -157,13 +158,13 @@ class Editor extends React.Component {
       // TODO: Send inputtext-data to database
     };
 
-    // all config for å behandle tekst i textarea
+    // all config for handling text on input
     const handleChange = event => {
       cursorPositionStart = event.target.selectionStart;
       cursorPositionEnd = event.target.selectionEnd;
       inputText = event.target.value;
 
-      // Teller input-tegn, og tvinger linjeskift hvis det passerer 80 tegn
+      // Counts input char. New line if 80
       charCounter += 1;
 
       if (charCounter === 80) {
@@ -171,7 +172,6 @@ class Editor extends React.Component {
         charCounter = 0;
       }
 
-      // dytter tekstinput til state for å re-rendre siden.
       this.setState({ textValue: inputText });
       this.setState({ mdValue: mdParser(inputText) });
       this.setState({ counter: 0 });
@@ -194,11 +194,13 @@ class Editor extends React.Component {
       resetButtons();
     };
 
-    // konfigurering for å fjerne default-funksjoner av tastekombinasjoner
-    // brukes for å sette egne hurtigtaster i teksteditor.
+    // KEYBOARD SHORTCUT SETTINGS
     const onTextareaKeyDown = event => {
       cursorPositionStart = event.target.selectionStart;
       cursorPositionEnd = event.target.selectionEnd;
+
+      // settings for keyboard shortcuts
+      // !!REMEMBER to update ./settingsFiles/buttonConfig.js if settings here are changed!!
 
       // ctrl as shortcutKey
       const SHORTCUTKEYPRESS = event.ctrlKey;
@@ -251,14 +253,13 @@ class Editor extends React.Component {
         event.preventDefault();
       }
 
-      // hvis tekstinput er mellomrom eller enter, lagres inputText til undo:
+      // if spacebar, update undo
       if (spacebar) {
         undo = [...undo, inputText];
         undoCursorPosition.push(cursorPositionStart);
       }
 
-      // når bruker trykker "enter" skal noen funksjoner ha egen oppførsel.
-      // som feks ny linje.
+      // if input is enter, update undo and do list functions if list.
       if (enter) {
         charCounter = 0;
         undo = [...undo, inputText];
@@ -304,7 +305,7 @@ class Editor extends React.Component {
         }
       }
 
-      // tab skal gi to mellomrom indentering.  Også i kodeblokk.
+      // tab gives to char ident space. Also in codeblock
       if (tab) {
         event.preventDefault();
         // config for correct tab inside codeblock:
@@ -331,13 +332,13 @@ class Editor extends React.Component {
         this.setState({ mdValue: mdParser(inputText) });
       }
 
-      // kanselerer knappetrykk med piltaster
+      // reset buttons if arrow keys are pressed
       if (leftArrow || upArrow || rightArrow || downArrow) {
         resetButtons();
       }
     };
 
-    // Vise, skjule image-button-popup
+    // Show/hide image popup
     const imagePopupSubmitHandler = imagePopupInputValue => {
       if (imagePopupInputValue !== "") {
         if (inputText !== undo[undo.length - 1]) {
@@ -346,7 +347,9 @@ class Editor extends React.Component {
         }
         inputText =
           inputText.slice(0, cursorPositionStart) +
-          "![Bildebeskrivelse her](" +
+          "![" +
+          GUI_TEKST.PHOTO_TEXT +
+          "](" +
           imagePopupInputValue +
           ")" +
           inputText.slice(cursorPositionStart);
@@ -354,7 +357,7 @@ class Editor extends React.Component {
         this.setState({ mdValue: mdParser(inputText) });
         this.editorRef.current.focus();
         cursorPositionStart += 2;
-        cursorPositionEnd += 22;
+        cursorPositionEnd += GUI_TEKST.PHOTO_TEXT.length + 2;
         setCursorPosition(cursorPositionStart, cursorPositionEnd);
         imagePopup = <br />;
       } else {
@@ -364,7 +367,7 @@ class Editor extends React.Component {
       }
     };
 
-    // litt logikk for å detektere linjeskift ++
+    // detect new line and heading value
     const ifNewLine = () => {
       return inputText[cursorPositionStart - 1] === "\n" ||
         inputText === "" ||
@@ -376,18 +379,7 @@ class Editor extends React.Component {
         : false;
     };
 
-    const setTextValue = textValue => {
-      this.setState({ textValue });
-    };
-    const setMdValue = mdValue => {
-      this.setState({ mdValue });
-    };
-    const setButtonValues = buttonValues => {
-      this.setState({ buttonValues });
-    };
-
-    // funksjon som konfigurerer hva som skjer når man trykker på knapper i teksteditor
-    // hurtigtast-trykk sendes også til denne funksjonen
+    // Button press config method. Keyboard shortcuts also use this method.
     const handleButtonClick = (
       bTitle,
       output,
@@ -395,11 +387,11 @@ class Editor extends React.Component {
       cursorIntOFF,
       endOutput
     ) => {
-      // flytte fokus til tekstvindu etter button-click
+      // move focus to textarea after button click
       this.editorRef.current.focus();
       setCursorPosition(cursorPositionStart, cursorPositionStart);
 
-      // fjerner all tekst i editor og undo/redo-variablene
+      // remove all text in textarea and undo/redo variable
       if (bTitle === "new") {
         inputText = "";
         undo = [""];
@@ -410,7 +402,7 @@ class Editor extends React.Component {
         return;
       }
 
-      // Load, save, undo, redo funksjoner
+      // Load, save, undo, redo methods
       if (bTitle === "load") {
         inputText = storedTextValue;
         undo = [inputText];
@@ -456,8 +448,7 @@ class Editor extends React.Component {
         return;
       }
 
-      // nuller ut verdi fra knapp-trykk om man trykker en gang til på knapp uten å ha skrevet noen tegn.
-      // kanselerer da ut første knappetrykket.
+      // cancel button value if pressed second time without textinput
       if (
         !isButtonOn[bTitle] &&
         inputText.slice(
@@ -481,10 +472,10 @@ class Editor extends React.Component {
         return;
       }
 
-      // gir linjeskift for enkelte knapper - om knapp trykkes og det ikke allerede er ny linje
+      // make new line if some buttons ares pressed, and it is not allready new line
       if (
         bTitle.slice(0, 4) === "list" ||
-        output.slice(0, 11) === "# Tekst her" ||
+        bTitle.slice(0, 4) === "sec_" ||
         (bTitle === "codeblock" && isButtonOn["codeblock"]) ||
         (bTitle === "heading" && isButtonOn["heading"])
       ) {
@@ -515,7 +506,7 @@ class Editor extends React.Component {
         }
       }
 
-      // hvis opplasting av bilde-knapp trykkes:
+      // image button setting
       if (bTitle === "image") {
         imagePopup = (
           <ImagePopup imagePopupSubmitHandler={imagePopupSubmitHandler} />
@@ -523,7 +514,7 @@ class Editor extends React.Component {
         return;
       }
 
-      // Config for å gi "heading" flere verdier på en knapp
+      // Give heading button multiple values
       if (ifNewLine()) {
         if (
           output === "## " &&
@@ -588,19 +579,8 @@ class Editor extends React.Component {
         }
       }
 
-      // //constraint button from working if new line or not end of line.
-      // if (output[0] === "{" && buttonBoolValues[bTitle]) {
-      //   if (ifNewLine()) {
-      //     return;
-      //   }
-      //   if (inputText[cursorPositionEnd] !== undefined) {
-      //     if (inputText[cursorPositionEnd] !== "\n") {
-      //       return;
-      //     }
-      //   }
-      // }
-
-      if (output.slice(0, 11) === "# Tekst her" && isButtonOn[bTitle]) {
+      // insert section text
+      if (bTitle.slice(0, 4) === "sec_" && isButtonOn[bTitle]) {
         isButtonOn[bTitle] = false;
         this.setState({ buttonValues: isButtonOn });
         if (inputText !== undo[undo.length - 1]) {
@@ -614,18 +594,22 @@ class Editor extends React.Component {
         this.setState({ textValue: inputText });
         this.setState({ mdValue: mdParser(inputText) });
         cursorPositionStart += 2;
-        cursorPositionEnd += 11;
+        cursorPositionEnd += GUI_TEKST.SEC_TEXT.length + 2;
         setCursorPosition(cursorPositionStart, cursorPositionEnd);
         return;
       }
 
-      //  Konfig av knapper slik at de registrerer om de er trykket, og flytter tekst-markøren i henhold til hvordan MD-syntax ser ut
-      // Konfig-data finnes i ./buttonConfig.js der tallverdi for hvor mye tekst-markøren skal flyttes er definert in "cursorIntON" og "cursorIntOFF"
+      //  Button config to insert markdown syntax on button press
+      // Config values can be find in :
+      // ./settingsFile/buttonConfig.js
       if (isButtonOn[bTitle]) {
         if (cursorPositionStart !== cursorPositionEnd) {
           isButtonOn[bTitle] = false;
           this.setState({ buttonValues: isButtonOn });
           let i = inputText.slice(cursorPositionStart, cursorPositionEnd);
+
+          // if text is selected with " " it need to be removed before insert markdown syntax
+          // and update cursorPosition at the same time
           while (
             i[0] === " " ||
             i[i.length - 1] === " " ||
@@ -716,86 +700,217 @@ class Editor extends React.Component {
       }
     };
 
-    // Kode for å lage snarveier på tastatur.
+    // Make keyboard shortcuts with React Hotkeys
+    // config in ./settingsFiles/buttonConfig.js
     const keyMap = {
-      BOLD: SHORTCUTKEY + "+b",
-      ITALIC: SHORTCUTKEY + "+i",
-      HEADING: SHORTCUTKEY + "+h",
-      STRIKETHROUGH: SHORTCUTKEY + "+s",
-      UNDO: SHORTCUTKEY + "+z",
-      REDO: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+z",
-      NEW: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+backspace",
-      LOAD: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+l",
-      SAVE: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+s",
-      IMAGE: SHORTCUTKEY + "+p",
-      LISTUL: SHORTCUTKEY + "+u",
-      LISTOL: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+u",
-      CHECKLIST: SHORTCUTKEY + "+y",
-      ACTIVITY: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+a",
-      INTRO: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+i",
-      CHECK: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+c",
-      PROTIP: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+t",
-      CHALLENGE: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+g",
-      FLAG: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+f",
-      TRY: SHORTCUTKEY + "+" + SHORTCUTKEY2 + "+t",
-      INLINE: SHORTCUTKEY + "+e",
-      CODEBLOCK: SHORTCUTKEY + "+k"
+      BOLD: KEY.bold,
+      ITALIC: KEY.italic,
+      HEADING: KEY.heading,
+      STRIKETHROUGH: KEY.strikethrough,
+      UNDO: KEY.undo,
+      REDO: KEY.redo,
+      NEW: KEY.new,
+      LOAD: KEY.load,
+      SAVE: KEY.save,
+      IMAGE: KEY.image,
+      LISTUL: KEY.listUl,
+      LISTOL: KEY.listOl,
+      CHECKLIST: KEY.listCheck,
+      ACTIVITY: KEY.activity,
+      INTRO: KEY.intro,
+      CHECK: KEY.check,
+      PROTIP: KEY.protip,
+      CHALLENGE: KEY.challenge,
+      FLAG: KEY.flag,
+      TRY: KEY.try,
+      INLINE: KEY.inline,
+      CODEBLOCK: KEY.codeBlock
     };
 
-    // Hva som skjer når man trykker en hurtigtastetrykk.
-    // kaller samme funksjon som når man trykker på tilsvarende knapper med tilsvarende verdier (finnes i buttonConfig.js)
+    //keyboard shortcut actions.  Settings in ./settingsFiles/buttonConfig.js
     const handlers = {
-      BOLD: () => handleButtonClick("bold", "****", 2, 2, ""),
-      ITALIC: () => handleButtonClick("italic", "**", 1, 1, ""),
-      HEADING: () => handleButtonClick("heading", "## ", 0, 0, ""),
-      STRIKETHROUGH: () => handleButtonClick("strikethrough", "~~~~", 2, 2, ""),
-      UNDO: () => handleButtonClick("undo", "", 0, 0, ""),
-      REDO: () => handleButtonClick("redo", "", 0, 0, ""),
-      NEW: () => handleButtonClick("new", "", 0, 0, ""),
-      LOAD: () => handleButtonClick("load", "", 0, 0, ""),
-      SAVE: () => handleButtonClick("save", "", 0, 0, ""),
-      IMAGE: () => handleButtonClick("image", "", 0, 0, ""),
-      LISTUL: () => handleButtonClick("listUl", "- ", 2, 0, ""),
-      LISTOL: () => handleButtonClick("listOl", "1. ", 3, 0, ""),
-      CHECKLIST: () => handleButtonClick("listCheck", "- [ ] ", 6, 0, ""),
+      BOLD: () =>
+        handleButtonClick(
+          emphasis[0].bTitle,
+          emphasis[0].output,
+          emphasis[0].cursorIntON,
+          emphasis[0].cursorIntOFF,
+          emphasis[0].endOutput
+        ),
+      ITALIC: () =>
+        handleButtonClick(
+          emphasis[1].bTitle,
+          emphasis[1].output,
+          emphasis[1].cursorIntON,
+          emphasis[1].cursorIntOFF,
+          emphasis[1].endOutput
+        ),
+      HEADING: () =>
+        handleButtonClick(
+          emphasis[2].bTitle,
+          emphasis[2].output,
+          emphasis[2].cursorIntON,
+          emphasis[2].cursorIntOFF,
+          emphasis[2].endOutput
+        ),
+      STRIKETHROUGH: () =>
+        handleButtonClick(
+          emphasis[3].bTitle,
+          emphasis[3].output,
+          emphasis[3].cursorIntON,
+          emphasis[3].cursorIntOFF,
+          emphasis[3].endOutput
+        ),
+      UNDO: () =>
+        handleButtonClick(
+          undoRedo[0].bTitle,
+          undoRedo[0].output,
+          undoRedo[0].cursorIntON,
+          undoRedo[0].cursorIntOFF,
+          undoRedo[0].endOutput
+        ),
+      REDO: () =>
+        handleButtonClick(
+          undoRedo[1].bTitle,
+          undoRedo[1].output,
+          undoRedo[1].cursorIntON,
+          undoRedo[1].cursorIntOFF,
+          undoRedo[1].endOutput
+        ),
+      NEW: () =>
+        handleButtonClick(
+          saveLoadNew[0].bTitle,
+          saveLoadNew[0].output,
+          saveLoadNew[0].cursorIntON,
+          saveLoadNew[0].cursorIntOFF,
+          saveLoadNew[0].endOutput
+        ),
+      LOAD: () =>
+        handleButtonClick(
+          saveLoadNew[1].bTitle,
+          saveLoadNew[1].output,
+          saveLoadNew[1].cursorIntON,
+          saveLoadNew[1].cursorIntOFF,
+          saveLoadNew[1].endOutput
+        ),
+      SAVE: () =>
+        handleButtonClick(
+          saveLoadNew[2].bTitle,
+          saveLoadNew[2].output,
+          saveLoadNew[2].cursorIntON,
+          saveLoadNew[2].cursorIntOFF,
+          saveLoadNew[2].endOutput
+        ),
+      IMAGE: () =>
+        handleButtonClick(
+          image[0].bTitle,
+          image[0].output,
+          image[0].cursorIntON,
+          image[0].cursorIntOFF,
+          image[0].endOutput
+        ),
+      LISTUL: () =>
+        handleButtonClick(
+          lists[0].bTitle,
+          lists[0].output,
+          lists[0].cursorIntON,
+          lists[0].cursorIntOFF,
+          lists[0].endOutput
+        ),
+      LISTOL: () =>
+        handleButtonClick(
+          lists[1].bTitle,
+          lists[1].output,
+          lists[1].cursorIntON,
+          lists[1].cursorIntOFF,
+          lists[1].endOutput
+        ),
+      CHECKLIST: () =>
+        handleButtonClick(
+          lists[2].bTitle,
+          lists[2].output,
+          lists[2].cursorIntON,
+          lists[2].cursorIntOFF,
+          lists[2].endOutput
+        ),
       ACTIVITY: () =>
-        handleButtonClick("activity", "# Tekst her {.activity}", 0, 12, ""),
+        handleButtonClick(
+          sections[0].bTitle,
+          sections[0].output,
+          sections[0].cursorIntON,
+          sections[0].cursorIntOFF,
+          sections[0].endOutput
+        ),
       INTRO: () =>
-        handleButtonClick("intro", "# Tekst her {.intro}", 0, 12, ""),
+        handleButtonClick(
+          sections[1].bTitle,
+          sections[1].output,
+          sections[1].cursorIntON,
+          sections[1].cursorIntOFF,
+          sections[1].endOutput
+        ),
       CHECK: () =>
-        handleButtonClick("check", "# Tekst her {.check}", 0, 12, ""),
+        handleButtonClick(
+          sections[2].bTitle,
+          sections[2].output,
+          sections[2].cursorIntON,
+          sections[2].cursorIntOFF,
+          sections[2].endOutput
+        ),
       PROTIP: () =>
-        handleButtonClick("protip", "# Tekst her {.protip}\n#", 0, 13, ""),
+        handleButtonClick(
+          sections[3].bTitle,
+          sections[3].output,
+          sections[3].cursorIntON,
+          sections[3].cursorIntOFF,
+          sections[3].endOutput
+        ),
       CHALLENGE: () =>
         handleButtonClick(
-          "challenge",
-          "# Tekst her {.challenge}\n#",
-          0,
-          13,
-          ""
+          sections[4].bTitle,
+          sections[4].output,
+          sections[4].cursorIntON,
+          sections[4].cursorIntOFF,
+          sections[4].endOutput
         ),
-      FLAG: () => handleButtonClick("flag", "# Tekst her {.flag}", 0, 12, ""),
-      TRY: () => handleButtonClick("try", "# Tekst her {.try}", 0, 12, ""),
-      INLINE: () => handleButtonClick("inline", "``", 1, 1, ""),
+      FLAG: () =>
+        handleButtonClick(
+          sections[5].bTitle,
+          sections[5].output,
+          sections[5].cursorIntON,
+          sections[5].cursorIntOFF,
+          sections[5].endOutput
+        ),
+      TRY: () =>
+        handleButtonClick(
+          sections[6].bTitle,
+          sections[6].output,
+          sections[6].cursorIntON,
+          sections[6].cursorIntOFF,
+          sections[6].endOutput
+        ),
+      INLINE: () =>
+        handleButtonClick(
+          code[0].bTitle,
+          code[0].output,
+          code[0].cursorIntON,
+          code[0].cursorIntOFF,
+          code[0].endOutput
+        ),
       CODEBLOCK: () =>
-        handleButtonClick("codeblock", `${temp}\n\n${temp}`, 4, 5, "\n")
+        handleButtonClick(
+          code[1].bTitle,
+          code[1].output,
+          code[1].cursorIntON,
+          code[1].cursorIntOFF,
+          code[1].endOutput
+        )
     };
 
     return (
       <div className="Editor">
         <div className="controlPanelPlacement">
-          <ControlPanel
-            handleButtonClick={handleButtonClick}
-            editorRef={this.editorRef}
-            setTextValue={setTextValue}
-            setMdValue={setMdValue}
-            setButtonValues={setButtonValues}
-            setCursorPosition={setCursorPosition}
-            undo={undo}
-            undoCursorPosition={undoCursorPosition}
-            redo={redo}
-            redoCursorPosition={redoCursorPosition}
-          />
+          <ControlPanel handleButtonClick={handleButtonClick} />
 
           <div className="ui two column test grid container">
             <div className="column">
