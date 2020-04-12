@@ -1,79 +1,77 @@
+/* eslint no-eval: 0 */
+
 import React from "react";
 
 import COURSESLIST from "./settingsFiles/COURSELIST";
 import LANGUAGELIST from "./settingsFiles/LANGUAGELIST";
 
-const dropdownHeight = 32;
+const INPUT_TEKST = [
+  {
+    heading: "Tittel:",
+    name: "title",
+    placeholder: "Tittel",
+    value: "this.props.state.title",
+    validate: "this.props.state.titleErr"
+  },
+  {
+    heading: "Forfatter:",
+    name: "author",
+    placeholder: "Navn",
+    value: "this.props.state.author",
+    validate: "this.props.state.authorErr"
+  },
+  {
+    heading: "Oversatt av:",
+    name: "translator",
+    placeholder: "Navn",
+    value: "this.props.state.translator"
+  },
+  {
+    heading: "Lisens:",
+    name: "license",
+    placeholder: "Lisens",
+    value: "this.props.state.license"
+  }
+];
+
+const COURSE = { heading: "Kurs:", name: "course" };
+const LANGUAGE = { heading: "Språk:", name: "language" };
+const LEVEL = { heading: "Nivå:", name: "level" };
+
+const LEVEL_VALUES = [
+  { name: "Introduksjon", value: 1 },
+  { name: "Nybegynner", value: 2 },
+  { name: "Erfaren", value: 3 },
+  { name: "Ekspert", value: 4 }
+];
 
 class YAMLformpage extends React.Component {
   render() {
     return (
       <div className="ui grid">
         <div className="eight wide column">
-          <div className="field">
-            <label>
-              <h3>Tittel:</h3>
-              <input
-                autoComplete="off"
-                type="text"
-                name="title"
-                placeholder="Tittel"
-                value={this.props.state.title}
-                onChange={this.props.myChangeHandler}
-              />
-            </label>
-            <div>{this.props.state.titleErr}</div>
-          </div>
-          <div className="field">
-            <label>
-              <h3>Forfatter:</h3>
-              <input
-                autoComplete="off"
-                type="text"
-                name="author"
-                placeholder="Navn"
-                value={this.props.state.author}
-                onChange={this.props.myChangeHandler}
-              />
-            </label>
-            <div>{this.props.state.authorErr}</div>
-          </div>
-          <div className="field">
-            <label>
-              <h3>Oversatt av:</h3>
-              <input
-                autoComplete="off"
-                type="text"
-                name="translator"
-                placeholder="Navn"
-                value={this.props.state.translator}
-                onChange={this.props.myChangeHandler}
-              />
-            </label>
-          </div>
-          <div className="field">
-            <label>
-              <h3>Lisens:</h3>
-              <input
-                autoComplete="off"
-                type="text"
-                name="license"
-                placeholder="Lisens"
-                value={this.props.state.license}
-                onChange={this.props.myChangeHandler}
-              />
-            </label>
-          </div>
+          {INPUT_TEKST.map(element => (
+            <div key={element.name} className="field">
+              <label>
+                <h3>{element.heading}</h3>
+                <input
+                  autoComplete="off"
+                  type="text"
+                  name={element.name}
+                  placeholder={element.placeholder}
+                  value={eval(element.value)}
+                  onChange={this.props.myChangeHandler}
+                />
+              </label>
+              {element.validate ? <div>{eval(element.validate)}</div> : null}
+            </div>
+          ))}
         </div>
         <div className="eight wide column">
           <div className="field">
             <label>
-              <h3>Kurs:</h3>
-              <select
-                style={{ height: dropdownHeight }}
-                name="course"
-                onChange={this.props.myChangeHandler}
-              >
+              <h3>{COURSE.heading}</h3>
+              <select name={COURSE.name} onChange={this.props.myChangeHandler}>
                 {COURSESLIST.map(element => (
                   <option key={element.courseTitle} value={element.courseTitle}>
                     {element.courseTitle}
@@ -84,10 +82,9 @@ class YAMLformpage extends React.Component {
           </div>
           <div className="field">
             <label>
-              <h3>Språk:</h3>
+              <h3>{LANGUAGE.heading}</h3>
               <select
-                style={{ height: dropdownHeight }}
-                name="language"
+                name={LANGUAGE.name}
                 onChange={this.props.myChangeHandler}
               >
                 {LANGUAGELIST.map(element => (
@@ -100,16 +97,13 @@ class YAMLformpage extends React.Component {
           </div>
           <div className="field">
             <label>
-              <h3>Nivå:</h3>
-              <select
-                style={{ height: dropdownHeight }}
-                name="level"
-                onChange={this.props.myChangeHandler}
-              >
-                <option value={1}>Introduksjon</option>
-                <option value={2}>Nybegynner</option>
-                <option value={3}>Erfaren</option>
-                <option value={4}>Ekspert</option>
+              <h3>{LEVEL.heading}</h3>
+              <select name={LEVEL.name} onChange={this.props.myChangeHandler}>
+                {LEVEL_VALUES.map(element => (
+                  <option key={element.value} value={element.value}>
+                    {element.name}
+                  </option>
+                ))}
               </select>
             </label>
           </div>

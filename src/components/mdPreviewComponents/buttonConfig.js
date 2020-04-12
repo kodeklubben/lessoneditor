@@ -1,6 +1,6 @@
 const temp = "```";
 
-const buttonConfig = [
+const emphasis = [
   {
     bTitle: "bold",
     icon: "bold",
@@ -242,7 +242,7 @@ const buttonConfig7 = [
 ];
 
 export {
-  buttonConfig,
+  emphasis,
   buttonConfig2,
   buttonConfig3,
   buttonConfig4,

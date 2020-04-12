@@ -1,7 +1,10 @@
 import React from "react";
 import YAMLformPage from "./YAMLformpage";
-import YMLformPage from "./YMLfilePage";
+import YMLfilePage from "./YMLfilePage";
 import PageButtons from "../PageButtons";
+
+const BACKBUTTON_TITLE = "Tilbake";
+const NEXTBUTTON_TITLE = "Neste";
 
 const FormPage = props => {
   return (
@@ -15,7 +18,7 @@ const FormPage = props => {
             state={props.state}
           />
           <div className="ui container">
-            <YMLformPage
+            <YMLfilePage
               mySubmitHandler={props.mySubmitHandler}
               myChangeHandler={props.myChangeHandler}
               myCheckboxHandler={props.myCheckboxHandler}
@@ -24,8 +27,8 @@ const FormPage = props => {
           </div>
           <div className="ui formbutton container">
             <PageButtons
-              prevTitle="Tilbake"
-              nextTitle="Neste"
+              prevTitle={BACKBUTTON_TITLE}
+              nextTitle={NEXTBUTTON_TITLE}
               prevValue="/"
               nextValue="/editor"
               mySubmitHandler={props.mySubmitHandler}

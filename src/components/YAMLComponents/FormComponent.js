@@ -3,18 +3,8 @@ import FormPage from "./FormPage";
 import COURSELIST from "./settingsFiles/COURSELIST";
 import LANGUAGELIST from "./settingsFiles/LANGUAGELIST";
 
-const INIT_PROPS = {
-  course: COURSELIST[0].courseTitle,
-  title: "",
-  titleErr: "",
-  author: "",
-  authorErr: "",
-  translator: "",
-  language: LANGUAGELIST[0].language[0],
-  level: 1,
-  license: "",
-  tags: { topic: [], subject: [], grade: [] }
-};
+const TITLE_ERROR = "Må skrive inn tittel";
+const AUTHOR_ERROR = "Må skrive inn forfatter";
 
 class FormComponent extends React.Component {
   constructor(props) {
@@ -62,23 +52,16 @@ class FormComponent extends React.Component {
     );
   };
 
-  myChangeHandler = event => {
-    let nam = event.target.name;
-    let val = event.target.value;
-    this.setState({ [nam]: val });
-  };
-
   validate = () => {
     let titleErr = "";
     let authorErr = "";
 
     if (!this.state.title) {
-      titleErr = "Må skrive inn tittel";
+      titleErr = TITLE_ERROR;
     }
     if (!this.state.author) {
-      authorErr = "Må skrive inn forfatter";
+      authorErr = AUTHOR_ERROR;
     }
-
     if (titleErr || authorErr) {
       this.setState({ titleErr, authorErr });
       return false;
@@ -94,21 +77,16 @@ class FormComponent extends React.Component {
     if (notErr) {
       this.setState({ redirect: "/editor" });
 
-      //const for yml creation
-      const fs = require("browserify-fs");
-
-      //create yml file
-      fs.writeFile("lesson.yml", this.YMLstateToString(this.state), function(
-        err
-      ) {
-        if (err) throw err;
-      });
-
-      console.log("saved yml-file");
       console.log("YAML header: \n" + this.YAMLstateToString(this.state));
       console.log("\nYML-file: \n" + this.YMLstateToString(this.state));
       // TODO: Send state-data to database
     }
+  };
+
+  myChangeHandler = event => {
+    let nam = event.target.name;
+    let val = event.target.value;
+    this.setState({ [nam]: val });
   };
 
   myCheckboxHandler = event => {

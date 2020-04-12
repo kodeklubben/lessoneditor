@@ -1,5 +1,5 @@
 import {
-  buttonConfig,
+  emphasis,
   buttonConfig2,
   buttonConfig3,
   buttonConfig4,
@@ -31,7 +31,7 @@ class ControlPanel extends React.Component {
     return (
       <div className="ui knapper segment grid">
         <div className="ui icon buttons">
-          {buttonConfig.map(element => (
+          {emphasis.map(element => (
             <div key={element.bTitle} className="">
               <Buttons
                 bTitle={element.bTitle}
