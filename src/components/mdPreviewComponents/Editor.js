@@ -940,8 +940,8 @@ class Editor extends React.Component {
         </div>
         <div className="ui container">
           <PageButtons
-            prevTitle="Tilbake"
-            nextTitle="Submit"
+            prevTitle={GUI_TEKST.NAV_BUTTONS.prev}
+            nextTitle={GUI_TEKST.NAV_BUTTONS.submit}
             prevValue="/createNewLesson"
             nextValue="/endpage"
             mySubmitHandler={mySubmitHandler}

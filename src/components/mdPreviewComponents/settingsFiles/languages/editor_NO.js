@@ -8,6 +8,13 @@ const PHOTO_TEXT = "Bildebeskrivelse her";
 // section-buttens text message
 const SEC_TEXT = "Tekst her";
 
+// Page navigation buttons
+const NAV_BUTTONS = {
+  prev: "Tilbake",
+  next: "Neste",
+  submit: "Sende inn"
+};
+
 // Button Names
 const BUTTON_TITLE = {
   bold: "Fet",
@@ -34,4 +41,4 @@ const BUTTON_TITLE = {
   codeblock: "Code Block"
 };
 
-export { SAVING, SAVED, PHOTO_TEXT, SEC_TEXT, BUTTON_TITLE };
+export { SAVING, SAVED, PHOTO_TEXT, SEC_TEXT, BUTTON_TITLE, NAV_BUTTONS };

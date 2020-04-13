@@ -14,6 +14,13 @@ const LANGUAGES = [
   }
 ];
 
+// Page navigation buttons
+const NAV_BUTTONS = {
+  prev: "Tilbake",
+  next: "Neste",
+  submit: "Sende inn"
+};
+
 // YML page text
 const YML_TEXT = {
   topic: "Tema:",
@@ -81,4 +88,4 @@ const TOPIC = {
   text_based: "Tekstbasert"
 };
 
-export { GRADE, SUBJECT, TOPIC, LANGUAGES, FORM_TEXT, YML_TEXT };
+export { GRADE, SUBJECT, TOPIC, LANGUAGES, FORM_TEXT, YML_TEXT, NAV_BUTTONS };

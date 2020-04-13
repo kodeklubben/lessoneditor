@@ -174,6 +174,7 @@ const lists = [
   }
 ];
 
+// !! bTitle - first chars must be "sec_" !!
 const sections = [
   {
     bTitle: "sec_activity",

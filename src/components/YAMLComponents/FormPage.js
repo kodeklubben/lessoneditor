@@ -2,9 +2,7 @@ import React from "react";
 import YAMLformPage from "./YAMLformpage";
 import YMLfilePage from "./YMLfilePage";
 import PageButtons from "../PageButtons";
-
-const BACKBUTTON_TITLE = "Tilbake";
-const NEXTBUTTON_TITLE = "Neste";
+import { NAV_BUTTONS } from "./settingsFiles/languages/formpage_NO";
 
 const FormPage = props => {
   return (
@@ -27,8 +25,8 @@ const FormPage = props => {
           </div>
           <div className="ui formbutton container">
             <PageButtons
-              prevTitle={BACKBUTTON_TITLE}
-              nextTitle={NEXTBUTTON_TITLE}
+              prevTitle={NAV_BUTTONS.prev}
+              nextTitle={NAV_BUTTONS.next}
               prevValue="/"
               nextValue="/editor"
               mySubmitHandler={props.mySubmitHandler}
