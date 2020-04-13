@@ -6,7 +6,13 @@ import { mdParser } from "../../utils/mdParser";
 import ControlPanel from "./ControlPanel";
 import PageButtons from "../PageButtons";
 import ImagePopup from "./ImagePopup";
-import * as GUI_TEKST from "./settingsFiles/languages/editor_NO";
+import {
+  SAVING,
+  SAVED,
+  SECTION_TEXT,
+  PHOTO_TEXT,
+  NAV_BUTTONS
+} from "./settingsFiles/languages/editor_NO";
 import {
   SHORTCUTKEY,
   KEY_COMBINATIONS as KEY,
@@ -45,6 +51,7 @@ var isButtonOn = {
   codeblock: true
 };
 
+// dynamic list with all the keyboard shortcut chars from ./settingFiles/buttonConfig.js
 var shortcutKeys = [];
 for (let i = 0; i < Object.values(KEY).length; i++) {
   shortcutKeys.push(Object.values(KEY)[i][Object.values(KEY)[i].length - 1]);
@@ -109,9 +116,9 @@ class Editor extends React.Component {
   // auto save after a couple of seconds
   componentDidUpdate() {
     if (this.state.counter === 2 && this.state.textValue.length > 0) {
-      autoSaveMessage = GUI_TEKST.SAVED;
+      autoSaveMessage = SAVED;
     } else if (this.state.counter === 0) {
-      autoSaveMessage = GUI_TEKST.SAVING;
+      autoSaveMessage = SAVING;
       storedTextValue = this.state.textValue;
     }
   }
@@ -208,7 +215,7 @@ class Editor extends React.Component {
       if (
         (event.ctrlKey && SHORTCUTKEY === "ctrl") ||
         (event.altKey && SHORTCUTKEY === "alt") ||
-        (event.metaKey && SHORTCUTKEY === "meta") ||
+        (event.metaKey && SHORTCUTKEY === "command") ||
         (event.shiftKey && SHORTCUTKEY === "shift")
       ) {
         if (shortcutKeys.includes(event.key)) {
@@ -316,7 +323,7 @@ class Editor extends React.Component {
         inputText =
           inputText.slice(0, cursorPositionStart) +
           "![" +
-          GUI_TEKST.PHOTO_TEXT +
+          PHOTO_TEXT +
           "](" +
           imagePopupInputValue +
           ")" +
@@ -325,7 +332,7 @@ class Editor extends React.Component {
         this.setState({ mdValue: mdParser(inputText) });
         this.editorRef.current.focus();
         cursorPositionStart += 2;
-        cursorPositionEnd += GUI_TEKST.PHOTO_TEXT.length + 2;
+        cursorPositionEnd += PHOTO_TEXT.length + 2;
         setCursorPosition(cursorPositionStart, cursorPositionEnd);
         imagePopup = <br />;
       } else {
@@ -562,7 +569,7 @@ class Editor extends React.Component {
         this.setState({ textValue: inputText });
         this.setState({ mdValue: mdParser(inputText) });
         cursorPositionStart += 2;
-        cursorPositionEnd += GUI_TEKST.SEC_TEXT.length + 2;
+        cursorPositionEnd += SECTION_TEXT.length + 2;
         setCursorPosition(cursorPositionStart, cursorPositionEnd);
         return;
       }
@@ -909,8 +916,8 @@ class Editor extends React.Component {
         </div>
         <div className="ui container">
           <PageButtons
-            prevTitle={GUI_TEKST.NAV_BUTTONS.prev}
-            nextTitle={GUI_TEKST.NAV_BUTTONS.submit}
+            prevTitle={NAV_BUTTONS.prev}
+            nextTitle={NAV_BUTTONS.submit}
             prevValue="/createNewLesson"
             nextValue="/endpage"
             mySubmitHandler={mySubmitHandler}
