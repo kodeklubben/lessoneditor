@@ -90,6 +90,7 @@ class Editor extends React.Component {
     super(props);
 
     this.state = {
+      images: [],
       counter: 0,
       textValue: "",
       mdValue: "",
@@ -212,6 +213,9 @@ class Editor extends React.Component {
       cursorPositionStart = event.target.selectionStart;
       cursorPositionEnd = event.target.selectionEnd;
 
+      console.log(this.state);
+
+      // prevents default value on shortcut keys
       if (
         (event.ctrlKey && SHORTCUTKEY === "ctrl") ||
         (event.altKey && SHORTCUTKEY === "alt") ||
@@ -311,6 +315,10 @@ class Editor extends React.Component {
       ) {
         resetButtons();
       }
+    };
+
+    const storeImage = image => {
+      this.setState(prevState => ({ images: [...prevState.images, image] }));
     };
 
     // Show/hide image popup
@@ -484,7 +492,10 @@ class Editor extends React.Component {
       // image button setting
       if (bTitle === "image") {
         imagePopup = (
-          <ImagePopup imagePopupSubmitHandler={imagePopupSubmitHandler} />
+          <ImagePopup
+            imagePopupSubmitHandler={imagePopupSubmitHandler}
+            storeImage={storeImage}
+          />
         );
         return;
       }
