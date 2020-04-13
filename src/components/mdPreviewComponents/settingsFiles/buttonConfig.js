@@ -2,31 +2,64 @@ import * as GUI_TEXT from "./languages/editor_NO";
 
 const temp = "```";
 
+// SHORTCUTKEY options: "ctrl", "shift", "alt", "option", "command"
 const SHORTCUTKEY = "ctrl";
 const SHORTCUTKEY2 = "shift";
-const KEY = {
-  bold: `${SHORTCUTKEY}+b`,
-  italic: `${SHORTCUTKEY}+i`,
-  heading: `${SHORTCUTKEY}+h`,
-  strikethrough: `${SHORTCUTKEY}+s`,
-  undo: `${SHORTCUTKEY}+z`,
-  redo: `${SHORTCUTKEY}+${SHORTCUTKEY2}+z`,
-  new: `${SHORTCUTKEY}+${SHORTCUTKEY2}+backspace`,
-  load: `${SHORTCUTKEY}+${SHORTCUTKEY2}+l`,
-  save: `${SHORTCUTKEY}+${SHORTCUTKEY2}+s`,
-  image: `${SHORTCUTKEY}+p`,
-  listUl: `${SHORTCUTKEY}+u`,
-  listOl: `${SHORTCUTKEY}+${SHORTCUTKEY2}+u`,
-  listCheck: `${SHORTCUTKEY}+y`,
-  activity: `${SHORTCUTKEY}+${SHORTCUTKEY2}+a`,
-  intro: `${SHORTCUTKEY}+${SHORTCUTKEY2}+i`,
-  check: `${SHORTCUTKEY}+${SHORTCUTKEY2}+c`,
-  protip: `${SHORTCUTKEY}+${SHORTCUTKEY2}+t`,
-  challenge: `${SHORTCUTKEY}+${SHORTCUTKEY2}+g`,
-  flag: `${SHORTCUTKEY}+${SHORTCUTKEY2}+f`,
-  try: `${SHORTCUTKEY}+${SHORTCUTKEY2}+p`,
-  inLine: `${SHORTCUTKEY}+e`,
-  codeBlock: `${SHORTCUTKEY}+k`
+const pls = "+";
+
+const chars = {
+  a: "a",
+  b: "b",
+  c: "c",
+  d: "d",
+  e: "e",
+  f: "f",
+  g: "g",
+  h: "h",
+  i: "i",
+  j: "j",
+  k: "k",
+  l: "l",
+  m: "m",
+  n: "n",
+  o: "o",
+  p: "p",
+  q: "q",
+  r: "r",
+  s: "s",
+  t: "t",
+  u: "u",
+  v: "v",
+  w: "w",
+  x: "x",
+  y: "y",
+  z: "z"
+};
+
+// SHORTCUTKEYS config
+const KEY_COMBINATIONS = {
+  bold: [SHORTCUTKEY, pls, chars.b],
+  italic: [SHORTCUTKEY, pls, chars.i],
+  heading: [SHORTCUTKEY, pls, chars.h],
+  strikethrough: [SHORTCUTKEY, pls, chars.s],
+  undo: [SHORTCUTKEY, pls, chars.z],
+  redo: [SHORTCUTKEY, pls, SHORTCUTKEY2, pls, chars.z],
+  new: [SHORTCUTKEY, pls, SHORTCUTKEY2, pls, chars.n],
+  load: [SHORTCUTKEY, pls, SHORTCUTKEY2, pls, chars.l],
+  save: [SHORTCUTKEY, pls, SHORTCUTKEY2, pls, chars.s],
+  image: [SHORTCUTKEY, pls, chars.p],
+  listul: [SHORTCUTKEY, pls, chars.u],
+  listol: [SHORTCUTKEY, pls, SHORTCUTKEY2, pls, chars.u],
+  listcheck: [SHORTCUTKEY, pls, chars.y],
+  activity: [SHORTCUTKEY, pls, SHORTCUTKEY2, pls, chars.a],
+  intro: [SHORTCUTKEY, pls, SHORTCUTKEY2, pls, chars.i],
+  check: [SHORTCUTKEY, pls, SHORTCUTKEY2, pls, chars.c],
+  protip: [SHORTCUTKEY, pls, SHORTCUTKEY2, pls, chars.p],
+  challenge: [SHORTCUTKEY, pls, SHORTCUTKEY2, pls, chars.g],
+  flag: [SHORTCUTKEY, pls, SHORTCUTKEY2, pls, chars.f],
+  try: [SHORTCUTKEY, pls, SHORTCUTKEY2, pls, chars.p],
+  inline: [SHORTCUTKEY, pls, chars.e],
+  codeblock: [SHORTCUTKEY, pls, chars.k]
 };
 
 const emphasis = [
@@ -38,7 +71,7 @@ const emphasis = [
     cursorIntON: 2,
     cursorIntOFF: 2,
     endOutput: "",
-    shortcut: KEY.bold
+    shortcut: KEY_COMBINATIONS.bold.join("")
   },
   {
     bTitle: "italic",
@@ -48,7 +81,7 @@ const emphasis = [
     cursorIntON: 1,
     cursorIntOFF: 1,
     endOutput: "",
-    shortcut: KEY.italic
+    shortcut: KEY_COMBINATIONS.italic.join("")
   },
   {
     bTitle: "heading",
@@ -58,7 +91,7 @@ const emphasis = [
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: KEY.heading
+    shortcut: KEY_COMBINATIONS.heading.join("")
   },
   {
     bTitle: "strikethrough",
@@ -68,7 +101,7 @@ const emphasis = [
     cursorIntON: 2,
     cursorIntOFF: 2,
     endOutput: "",
-    shortcut: KEY.strikethrough
+    shortcut: KEY_COMBINATIONS.strikethrough.join("")
   }
 ];
 
@@ -81,7 +114,7 @@ const undoRedo = [
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: KEY.undo
+    shortcut: KEY_COMBINATIONS.undo.join("")
   },
   {
     bTitle: "redo",
@@ -91,7 +124,7 @@ const undoRedo = [
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: KEY.redo
+    shortcut: KEY_COMBINATIONS.redo.join("")
   }
 ];
 
@@ -104,7 +137,7 @@ const saveLoadNew = [
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: KEY.new
+    shortcut: KEY_COMBINATIONS.new.join("")
   },
   {
     bTitle: "load",
@@ -114,7 +147,7 @@ const saveLoadNew = [
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: KEY.load
+    shortcut: KEY_COMBINATIONS.load.join("")
   },
   {
     bTitle: "save",
@@ -124,7 +157,7 @@ const saveLoadNew = [
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: KEY.save
+    shortcut: KEY_COMBINATIONS.save.join("")
   }
 ];
 
@@ -137,7 +170,7 @@ const image = [
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: KEY.image
+    shortcut: KEY_COMBINATIONS.image.join("")
   }
 ];
 
@@ -150,7 +183,7 @@ const lists = [
     cursorIntON: 2,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: KEY.listUl
+    shortcut: KEY_COMBINATIONS.listul.join("")
   },
   {
     bTitle: "listOl",
@@ -160,7 +193,7 @@ const lists = [
     cursorIntON: 3,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: KEY.listOl
+    shortcut: KEY_COMBINATIONS.listol.join("")
   },
   {
     bTitle: "listCheck",
@@ -170,21 +203,21 @@ const lists = [
     cursorIntON: 6,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: KEY.listCheck
+    shortcut: KEY_COMBINATIONS.listcheck.join("")
   }
 ];
 
-// !! bTitle - first chars must be "sec_" !!
+// !! bTitle - first chars must be "sec_" when in sections!!
 const sections = [
   {
     bTitle: "sec_activity",
     icon: "",
-    output: "# " + GUI_TEXT.SEC_TEXT + " {.activity}",
+    output: "# " + GUI_TEXT.SEC_TEXT + " {.activity}\n",
     title: GUI_TEXT.BUTTON_TITLE.activity,
     cursorIntON: 0,
     cursorIntOFF: 12,
     endOutput: "",
-    shortcut: KEY.activity
+    shortcut: KEY_COMBINATIONS.activity.join("")
   },
   {
     bTitle: "sec_intro",
@@ -194,7 +227,7 @@ const sections = [
     cursorIntON: 0,
     cursorIntOFF: 12,
     endOutput: "",
-    shortcut: KEY.intro
+    shortcut: KEY_COMBINATIONS.intro.join("")
   },
   {
     bTitle: "sec_check",
@@ -204,7 +237,7 @@ const sections = [
     cursorIntON: 0,
     cursorIntOFF: 12,
     endOutput: "",
-    shortcut: KEY.check
+    shortcut: KEY_COMBINATIONS.check.join("")
   },
   {
     bTitle: "sec_protip",
@@ -214,7 +247,7 @@ const sections = [
     cursorIntON: 0,
     cursorIntOFF: 13,
     endOutput: "#",
-    shortcut: KEY.protip
+    shortcut: KEY_COMBINATIONS.protip.join("")
   },
   {
     bTitle: "sec_challenge",
@@ -224,7 +257,7 @@ const sections = [
     cursorIntON: 0,
     cursorIntOFF: 13,
     endOutput: "",
-    shortcut: KEY.challenge
+    shortcut: KEY_COMBINATIONS.challenge.join("")
   },
   {
     bTitle: "sec_flag",
@@ -234,7 +267,7 @@ const sections = [
     cursorIntON: 0,
     cursorIntOFF: 12,
     endOutput: "",
-    shortcut: KEY.flag
+    shortcut: KEY_COMBINATIONS.flag.join("")
   },
   {
     bTitle: "sec_try",
@@ -244,7 +277,7 @@ const sections = [
     cursorIntON: 0,
     cursorIntOFF: 12,
     endOutput: "",
-    shortcut: KEY.try
+    shortcut: KEY_COMBINATIONS.try.join("")
   }
 ];
 
@@ -257,7 +290,7 @@ const code = [
     cursorIntON: 1,
     cursorIntOFF: 1,
     endOutput: "",
-    shortcut: KEY.inLine
+    shortcut: KEY_COMBINATIONS.inline.join("")
   },
   {
     bTitle: "codeblock",
@@ -267,7 +300,7 @@ const code = [
     cursorIntON: 4,
     cursorIntOFF: 5,
     endOutput: "\n",
-    shortcut: KEY.codeBlock
+    shortcut: KEY_COMBINATIONS.codeblock.join("")
   }
 ];
 
@@ -279,7 +312,7 @@ export {
   lists,
   sections,
   code,
-  KEY,
+  KEY_COMBINATIONS,
   SHORTCUTKEY,
   SHORTCUTKEY2
 };

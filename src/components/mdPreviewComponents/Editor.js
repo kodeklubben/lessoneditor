@@ -8,7 +8,8 @@ import PageButtons from "../PageButtons";
 import ImagePopup from "./ImagePopup";
 import * as GUI_TEKST from "./settingsFiles/languages/editor_NO";
 import {
-  KEY,
+  SHORTCUTKEY,
+  KEY_COMBINATIONS as KEY,
   emphasis,
   undoRedo,
   saveLoadNew,
@@ -43,6 +44,11 @@ var isButtonOn = {
   inline: true,
   codeblock: true
 };
+
+var shortcutKeys = [];
+for (let i = 0; i < Object.values(KEY).length; i++) {
+  shortcutKeys.push(Object.values(KEY)[i][Object.values(KEY)[i].length - 1]);
+}
 
 // Count input char for automatic newline at 80 chars
 var charCounter = 0;
@@ -199,68 +205,25 @@ class Editor extends React.Component {
       cursorPositionStart = event.target.selectionStart;
       cursorPositionEnd = event.target.selectionEnd;
 
-      // settings for keyboard shortcuts
-      // !!REMEMBER to update ./settingsFiles/buttonConfig.js if settings here are changed!!
-
-      // ctrl as shortcutKey
-      const SHORTCUTKEYPRESS = event.ctrlKey;
-      // shift as shortcutKey2
-      const SHORTCUTKEYPRESS2 = event.shiftKey;
-
-      const b = SHORTCUTKEYPRESS && event.keyCode === 66;
-      const i = SHORTCUTKEYPRESS && event.keyCode === 73;
-      const h = SHORTCUTKEYPRESS && event.keyCode === 72;
-      const z = SHORTCUTKEYPRESS && event.keyCode === 188;
-      const zz = SHORTCUTKEYPRESS && SHORTCUTKEYPRESS2 && event.keyCode === 188;
-      const backspace =
-        SHORTCUTKEYPRESS && event.shiftKey && event.keyCode === 8;
-      const l = SHORTCUTKEYPRESS && SHORTCUTKEYPRESS2 && event.keyCode === 76;
-      const s = SHORTCUTKEYPRESS && SHORTCUTKEYPRESS2 && event.keyCode === 83;
-      const p = SHORTCUTKEYPRESS && event.keyCode === 80;
-      const u = SHORTCUTKEYPRESS && event.keyCode === 85;
-      const uu = SHORTCUTKEYPRESS && SHORTCUTKEYPRESS2 && event.keyCode === 85;
-      const y = SHORTCUTKEYPRESS && event.keyCode === 89;
-      const a = SHORTCUTKEYPRESS && SHORTCUTKEYPRESS2 && event.keyCode === 65;
-      const ii = SHORTCUTKEYPRESS && SHORTCUTKEYPRESS2 && event.keyCode === 73;
-      const e = SHORTCUTKEYPRESS && event.keyCode === 69;
-      const k = SHORTCUTKEYPRESS && event.keyCode === 75;
-      const leftArrow = event.keyCode === 37;
-      const upArrow = event.keyCode === 38;
-      const rightArrow = event.keyCode === 39;
-      const downArrow = event.keyCode === 40;
-      const spacebar = event.keyCode === 32;
-      const enter = event.keyCode === 13;
-      const tab = event.keyCode === 9;
-
       if (
-        b ||
-        i ||
-        h ||
-        z ||
-        zz ||
-        backspace ||
-        l ||
-        s ||
-        p ||
-        u ||
-        uu ||
-        y ||
-        a ||
-        ii ||
-        e ||
-        k
+        (event.ctrlKey && SHORTCUTKEY === "ctrl") ||
+        (event.altKey && SHORTCUTKEY === "alt") ||
+        (event.metaKey && SHORTCUTKEY === "meta") ||
+        (event.shiftKey && SHORTCUTKEY === "shift")
       ) {
-        event.preventDefault();
+        if (shortcutKeys.includes(event.key)) {
+          event.preventDefault();
+        }
       }
 
       // if spacebar, update undo
-      if (spacebar) {
+      if (event.key === " ") {
         undo = [...undo, inputText];
         undoCursorPosition.push(cursorPositionStart);
       }
 
       // if input is enter, update undo and do list functions if list.
-      if (enter) {
+      if (event.key === "Enter") {
         charCounter = 0;
         undo = [...undo, inputText];
         undoCursorPosition.push(cursorPositionStart);
@@ -306,7 +269,7 @@ class Editor extends React.Component {
       }
 
       // tab gives to char ident space. Also in codeblock
-      if (tab) {
+      if (event.key === "Tab") {
         event.preventDefault();
         // config for correct tab inside codeblock:
         if (!isButtonOn["codeblock"]) {
@@ -333,7 +296,12 @@ class Editor extends React.Component {
       }
 
       // reset buttons if arrow keys are pressed
-      if (leftArrow || upArrow || rightArrow || downArrow) {
+      if (
+        event.key === "ArrowLeft" ||
+        event.key === "ArrowUp" ||
+        event.key === "ArrowRight" ||
+        event.key === "ArrowDown"
+      ) {
         resetButtons();
       }
     };
@@ -703,31 +671,32 @@ class Editor extends React.Component {
     // Make keyboard shortcuts with React Hotkeys
     // config in ./settingsFiles/buttonConfig.js
     const keyMap = {
-      BOLD: KEY.bold,
-      ITALIC: KEY.italic,
-      HEADING: KEY.heading,
-      STRIKETHROUGH: KEY.strikethrough,
-      UNDO: KEY.undo,
-      REDO: KEY.redo,
-      NEW: KEY.new,
-      LOAD: KEY.load,
-      SAVE: KEY.save,
-      IMAGE: KEY.image,
-      LISTUL: KEY.listUl,
-      LISTOL: KEY.listOl,
-      CHECKLIST: KEY.listCheck,
-      ACTIVITY: KEY.activity,
-      INTRO: KEY.intro,
-      CHECK: KEY.check,
-      PROTIP: KEY.protip,
-      CHALLENGE: KEY.challenge,
-      FLAG: KEY.flag,
-      TRY: KEY.try,
-      INLINE: KEY.inline,
-      CODEBLOCK: KEY.codeBlock
+      BOLD: KEY.bold.join(""),
+      ITALIC: KEY.italic.join(""),
+      HEADING: KEY.heading.join(""),
+      STRIKETHROUGH: KEY.strikethrough.join(""),
+      UNDO: KEY.undo.join(""),
+      REDO: KEY.redo.join(""),
+      NEW: KEY.new.join(""),
+      LOAD: KEY.load.join(""),
+      SAVE: KEY.save.join(""),
+      IMAGE: KEY.image.join(""),
+      LISTUL: KEY.listul.join(""),
+      LISTOL: KEY.listol.join(""),
+      CHECKLIST: KEY.listcheck.join(""),
+      ACTIVITY: KEY.activity.join(""),
+      INTRO: KEY.intro.join(""),
+      CHECK: KEY.check.join(""),
+      PROTIP: KEY.protip.join(""),
+      CHALLENGE: KEY.challenge.join(""),
+      FLAG: KEY.flag.join(""),
+      TRY: KEY.try.join(""),
+      INLINE: KEY.inline.join(""),
+      CODEBLOCK: KEY.codeblock.join("")
     };
 
     //keyboard shortcut actions.  Settings in ./settingsFiles/buttonConfig.js
+    // SORRY FOR WET CODE. NEED HELP MAKING THIS DRY
     const handlers = {
       BOLD: () =>
         handleButtonClick(
