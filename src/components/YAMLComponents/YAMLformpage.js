@@ -1,9 +1,7 @@
 import React from "react";
 
 import COURSESLIST from "./settingsFiles/COURSELIST";
-import LANGUAGELIST from "./settingsFiles/LANGUAGELIST";
-
-const dropdownHeight = 32;
+import { LANGUAGES, FORM_TEXT } from "./settingsFiles/languages/formpage_NO";
 
 class YAMLformpage extends React.Component {
   render() {
@@ -12,40 +10,40 @@ class YAMLformpage extends React.Component {
         <div className="eight wide column">
           <div className="field">
             <label>
-              <h3>Tittel:</h3>
+              <h3>{FORM_TEXT.TITLE.heading}</h3>
               <input
                 autoComplete="off"
                 type="text"
                 name="title"
-                placeholder="Tittel"
+                placeholder={FORM_TEXT.TITLE.placeholder}
                 value={this.props.state.title}
                 onChange={this.props.myChangeHandler}
               />
             </label>
-            <div>{this.props.state.titleErr}</div>
+            <div style={{ color: "red" }}>{this.props.state.titleErr}</div>
           </div>
           <div className="field">
             <label>
-              <h3>Forfatter:</h3>
+              <h3>{FORM_TEXT.AUTHOR.heading}</h3>
               <input
                 autoComplete="off"
                 type="text"
                 name="author"
-                placeholder="Navn"
+                placeholder={FORM_TEXT.AUTHOR.placeholder}
                 value={this.props.state.author}
                 onChange={this.props.myChangeHandler}
               />
             </label>
-            <div>{this.props.state.authorErr}</div>
+            <div style={{ color: "red" }}>{this.props.state.authorErr}</div>
           </div>
           <div className="field">
             <label>
-              <h3>Oversatt av:</h3>
+              <h3>{FORM_TEXT.TRANSLATOR.heading}</h3>
               <input
                 autoComplete="off"
                 type="text"
                 name="translator"
-                placeholder="Navn"
+                placeholder={FORM_TEXT.TRANSLATOR.placeholder}
                 value={this.props.state.translator}
                 onChange={this.props.myChangeHandler}
               />
@@ -53,12 +51,12 @@ class YAMLformpage extends React.Component {
           </div>
           <div className="field">
             <label>
-              <h3>Lisens:</h3>
+              <h3>{FORM_TEXT.LICENSE.heading}</h3>
               <input
                 autoComplete="off"
                 type="text"
                 name="license"
-                placeholder="Lisens"
+                placeholder={FORM_TEXT.LICENSE.placeholder}
                 value={this.props.state.license}
                 onChange={this.props.myChangeHandler}
               />
@@ -68,12 +66,8 @@ class YAMLformpage extends React.Component {
         <div className="eight wide column">
           <div className="field">
             <label>
-              <h3>Kurs:</h3>
-              <select
-                style={{ height: dropdownHeight }}
-                name="course"
-                onChange={this.props.myChangeHandler}
-              >
+              <h3>{FORM_TEXT.COURSE.heading}</h3>
+              <select name="course" onChange={this.props.myChangeHandler}>
                 {COURSESLIST.map(element => (
                   <option key={element.courseTitle} value={element.courseTitle}>
                     {element.courseTitle}
@@ -84,15 +78,14 @@ class YAMLformpage extends React.Component {
           </div>
           <div className="field">
             <label>
-              <h3>Språk:</h3>
-              <select
-                style={{ height: dropdownHeight }}
-                name="language"
-                onChange={this.props.myChangeHandler}
-              >
-                {LANGUAGELIST.map(element => (
-                  <option key={element.language[0]} value={element.language[0]}>
-                    {element.language[1]}
+              <h3>{FORM_TEXT.LANGUAGE.heading}</h3>
+              <select name="language" onChange={this.props.myChangeHandler}>
+                {LANGUAGES.map(element => (
+                  <option
+                    key={Object.keys(element)}
+                    value={Object.keys(element)}
+                  >
+                    {Object.values(element)}
                   </option>
                 ))}
               </select>
@@ -100,16 +93,13 @@ class YAMLformpage extends React.Component {
           </div>
           <div className="field">
             <label>
-              <h3>Nivå:</h3>
-              <select
-                style={{ height: dropdownHeight }}
-                name="level"
-                onChange={this.props.myChangeHandler}
-              >
-                <option value={1}>Introduksjon</option>
-                <option value={2}>Nybegynner</option>
-                <option value={3}>Erfaren</option>
-                <option value={4}>Ekspert</option>
+              <h3>{FORM_TEXT.LEVEL.heading}</h3>
+              <select name="level" onChange={this.props.myChangeHandler}>
+                {FORM_TEXT.LEVEL_VALUES.map(element => (
+                  <option key={element.value} value={element.value}>
+                    {element.name}
+                  </option>
+                ))}
               </select>
             </label>
           </div>
