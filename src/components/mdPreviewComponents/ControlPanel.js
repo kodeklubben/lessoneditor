@@ -122,7 +122,7 @@ class ControlPanel extends React.Component {
         <div className="space" />
         <div className="ui icon buttons">
           {sections.map(element => (
-            <div key={element.bTitle} className="">
+            <div key={element.bTitle} className="sections">
               <Buttons
                 bTitle={element.bTitle}
                 icon={element.icon}
