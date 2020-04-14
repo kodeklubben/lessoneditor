@@ -2,6 +2,16 @@ import React from "react";
 import { Button, Icon, Popup } from "semantic-ui-react";
 
 class Buttons extends React.Component {
+  isDisabled = false;
+
+  componentDidUpdate() {
+    if (window.screen.width < 700) {
+      this.isDisabled = true;
+    } else {
+      this.isDisabled = false;
+    }
+  }
+
   render() {
     return (
       <div
@@ -21,6 +31,7 @@ class Buttons extends React.Component {
           mouseEnterDelay={250}
           mouseLeaveDelay={250}
           inverted
+          disabled={this.isDisabled}
           trigger={
             this.props.icon ? (
               <Button className={this.props.cname} labelPosition="left">

@@ -33,7 +33,7 @@ const BUTTON_TITLE = {
   activity: "{Steg}",
   intro: "{Intro}",
   check: "{Sjekkliste}",
-  tips: "{Tips}",
+  protip: "{Tips}",
   challenge: "{Utfordring}",
   flag: "{Flag}",
   try: "{Prøv Selv}",

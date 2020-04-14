@@ -2,34 +2,32 @@ select {
   cursor: pointer;
 }
 
-.ui.container {
+/* .ui.container {
   margin-top: 5vh;
-}
+} */
 
 /* CSS for Editor */
 
-.test {
+/* .test {
   height: 75vh;
-}
+} */
 
-.ui.formbutton.container {
-  margin-top: 10vh !important;
-}
+/* .ui.formbutton.container {
+  margin-top: 10vh;
+} */
 
-.Editor {
+/* .Editor {
   width: 98%;
   margin: auto;
-}
+} */
 
 /* CSS for TextArea */
 
 .TextArea {
   width: 100%;
-  height: 100%;
-  max-height: 720px;
+  height: 75vh;
   outline: none;
   resize: none;
-  /* overflow: auto; */
   border-radius: 5px;
   padding: 15px;
   overflow: auto;
@@ -53,9 +51,9 @@ select {
 
 /* CSS for MDPreview */
 
-.column {
+/* .column {
   max-width: 100%;
-}
+} */
 
 .buttonBorder {
   background-color: whitesmoke;
@@ -72,39 +70,61 @@ select {
 
 .MDPreview {
   width: 100%;
-  height: 100%;
-  max-height: 720px;
+  height: 75vh;
   border: 1px solid black;
   border-radius: 5px;
   background-color: white;
   padding: 15px;
-  overflow: scroll;
+  overflow: auto;
 }
 
-.ui.two.column.test.grid.container {
-  width: 100% !important;
+@media only screen and (max-width: 700px) {
+  .MDPreview {
+    display: none;
+  }
+
+  .sections {
+    display: none;
+  }
+  .popup {
+    display: none;
+  }
+
+  .TextArea {
+    width: 200%;
+    height: 75vh;
+    margin-left: 1.5vh !important;
+    outline: none;
+    resize: none;
+    border-radius: 5px;
+    overflow: auto;
+  }
+}
+
+/* .ui.two.column.test.grid.container {
+  width: 100%;
   margin-top: -1vh;
   margin-bottom: -7vh;
-}
+} */
 
-.ui.knapper {
+/* .ui.knapper {
   border-style: solid;
   border-color: grey;
-}
-
+} */
+/* 
 .space {
   width: 5vh;
-}
+} */
 
-.ui.autosave {
+/* .ui.autosave {
   margin-top: 7vh;
   margin-bottom: -2vh;
-  margin-left: 2vh !important;
-}
+  margin-left: 2vh;
+} */
 
-.button.segment {
+/* .button.segment {
   margin-left: 3vh;
-}
+} */
 
 /*This is the important css for the preview*/
 

@@ -900,7 +900,7 @@ class Editor extends React.Component {
         <div className="controlPanelPlacement">
           <ControlPanel handleButtonClick={handleButtonClick} />
 
-          <div className="ui two column test grid container">
+          <div className="ui two column grid">
             <div className="column">
               <MDTextArea
                 editorRef={this.editorRef}
