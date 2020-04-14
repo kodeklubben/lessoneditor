@@ -213,8 +213,6 @@ class Editor extends React.Component {
       cursorPositionStart = event.target.selectionStart;
       cursorPositionEnd = event.target.selectionEnd;
 
-      console.log(this.state);
-
       // prevents default value on shortcut keys
       if (
         (event.ctrlKey && SHORTCUTKEY === "ctrl") ||
@@ -323,7 +321,7 @@ class Editor extends React.Component {
 
     // Show/hide image popup
     const imagePopupSubmitHandler = imagePopupInputValue => {
-      if (imagePopupInputValue !== "") {
+      if (imagePopupInputValue) {
         if (inputText !== undo[undo.length - 1]) {
           undo = [...undo, inputText];
           undoCursorPosition.push(cursorPositionStart);
@@ -343,6 +341,9 @@ class Editor extends React.Component {
         cursorPositionEnd += PHOTO_TEXT.length + 2;
         setCursorPosition(cursorPositionStart, cursorPositionEnd);
         imagePopup = <br />;
+        setTimeout(() => {
+          console.log(this.state.images);
+        }, 100);
       } else {
         imagePopup = <br />;
         this.editorRef.current.focus();

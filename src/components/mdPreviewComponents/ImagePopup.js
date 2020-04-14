@@ -20,6 +20,9 @@ class ImagePopup extends React.Component {
     } else {
       this.props.storeImage(event.target.files[0]);
       this.setState({ toBigMessage: "" });
+      this.props.imagePopupSubmitHandler(
+        "bildet er lastet opp til frontend (sjekk console for utskrift av state)"
+      );
     }
   };
 
