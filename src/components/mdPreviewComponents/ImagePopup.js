@@ -50,7 +50,7 @@ class ImagePopup extends React.Component {
                   accept=".jpg,.jpeg,.png,.gif"
                   onChange={this.fileSelectedHandler}
                 />
-                <div style={{ color: "red" }}>{this.state.toBigMessage}</div>
+                <div className="errorMessage">{this.state.toBigMessage}</div>
               </Form.Field>
             </Card.Content>
             <Card.Content extra>

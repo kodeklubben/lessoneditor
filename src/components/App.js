@@ -1,4 +1,3 @@
-import "./App.css";
 import React from "react";
 import FormComponent from "./YAMLComponents/FormComponent";
 import EndPage from "./frontPageComponents/EndPage";

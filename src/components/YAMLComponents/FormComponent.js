@@ -104,7 +104,7 @@ class FormComponent extends React.Component {
 
   render() {
     return (
-      <div className="FromComponent">
+      <div>
         <FormPage
           mySubmitHandler={this.mySubmitHandler}
           myChangeHandler={this.myChangeHandler}

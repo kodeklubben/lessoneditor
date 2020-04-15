@@ -125,6 +125,17 @@ class Editor extends React.Component {
   }
 
   render() {
+    // Submithandler
+    const mySubmitHandler = event => {
+      event.preventDefault();
+
+      console.log("text submitted");
+
+      this.setState({ redirect: "/endpage" });
+
+      // TODO: Send inputtext-data to database
+    };
+
     const resetButtons = () => {
       isButtonOn = {
         bold: true,
@@ -159,17 +170,6 @@ class Editor extends React.Component {
         this.editorRef.current.selectionStart = positionStart;
         this.editorRef.current.selectionEnd = positionEnd;
       }, 0);
-    };
-
-    // Submithandler
-    const mySubmitHandler = event => {
-      event.preventDefault();
-
-      console.log("text submitted");
-
-      this.setState({ redirect: "/endpage" });
-
-      // TODO: Send inputtext-data to database
     };
 
     // all config for handling text on input
@@ -896,10 +896,9 @@ class Editor extends React.Component {
     };
 
     return (
-      <div className="Editor">
-        <div className="controlPanelPlacement">
+      <div>
+        <div>
           <ControlPanel handleButtonClick={handleButtonClick} />
-
           <div className="ui two column grid">
             <div className="column">
               <MDTextArea
@@ -921,10 +920,8 @@ class Editor extends React.Component {
             </div>
           </div>
         </div>
-        <div className="ui autosave container">
-          <div className="autosave">
-            <p style={{ color: "grey" }}>{autoSaveMessage}</p>
-          </div>
+        <div className="ui container">
+          <p style={{ color: "grey" }}>{autoSaveMessage}</p>
         </div>
         <div className="ui container">
           <PageButtons

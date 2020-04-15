@@ -6,9 +6,9 @@ import { LANGUAGES, FORM_TEXT } from "./settingsFiles/languages/formpage_NO";
 class YAMLformpage extends React.Component {
   render() {
     return (
-      <div className="ui grid">
-        <div className="eight wide column">
-          <div className="field">
+      <div className="ui two column grid">
+        <div className="column">
+          <div className="">
             <label>
               <h3>{FORM_TEXT.TITLE.heading}</h3>
               <input
@@ -22,7 +22,7 @@ class YAMLformpage extends React.Component {
             </label>
             <div style={{ color: "red" }}>{this.props.state.titleErr}</div>
           </div>
-          <div className="field">
+          <div className="">
             <label>
               <h3>{FORM_TEXT.AUTHOR.heading}</h3>
               <input
@@ -36,7 +36,7 @@ class YAMLformpage extends React.Component {
             </label>
             <div style={{ color: "red" }}>{this.props.state.authorErr}</div>
           </div>
-          <div className="field">
+          <div className="">
             <label>
               <h3>{FORM_TEXT.TRANSLATOR.heading}</h3>
               <input
@@ -49,7 +49,7 @@ class YAMLformpage extends React.Component {
               />
             </label>
           </div>
-          <div className="field">
+          <div className="">
             <label>
               <h3>{FORM_TEXT.LICENSE.heading}</h3>
               <input
@@ -63,8 +63,8 @@ class YAMLformpage extends React.Component {
             </label>
           </div>
         </div>
-        <div className="eight wide column">
-          <div className="field">
+        <div className="column">
+          <div className="">
             <label>
               <h3>{FORM_TEXT.COURSE.heading}</h3>
               <select name="course" onChange={this.props.myChangeHandler}>
@@ -76,7 +76,7 @@ class YAMLformpage extends React.Component {
               </select>
             </label>
           </div>
-          <div className="field">
+          <div className="">
             <label>
               <h3>{FORM_TEXT.LANGUAGE.heading}</h3>
               <select name="language" onChange={this.props.myChangeHandler}>
@@ -91,7 +91,7 @@ class YAMLformpage extends React.Component {
               </select>
             </label>
           </div>
-          <div className="field">
+          <div className="">
             <label>
               <h3>{FORM_TEXT.LEVEL.heading}</h3>
               <select name="level" onChange={this.props.myChangeHandler}>
