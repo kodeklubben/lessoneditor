@@ -6,7 +6,7 @@ import {
   lists,
   sections,
   code
-} from "./settingsFiles/buttonConfig.js";
+} from "../settingsFiles/buttonConfig.js";
 import React from "react";
 import Buttons from "./Button";
 
@@ -29,7 +29,7 @@ class ControlPanel extends React.Component {
 
   render() {
     return (
-      <div className="ui knapper segment grid">
+      <div className="ui segment grid">
         <div className="ui icon buttons">
           {emphasis.map(element => (
             <div key={element.bTitle} className="">

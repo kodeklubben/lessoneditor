@@ -1,10 +1,11 @@
 import React from "react";
-import "../../index.css";
+import "./smallscreen.css";
 import MDTextArea from "./MDTextArea";
 import MDPreview from "./MDPreview";
-import { mdParser } from "../../utils/mdParser";
+import { mdParser } from "../../../utils/mdParser";
 import ControlPanel from "./ControlPanel";
-import PageButtons from "../PageButtons";
+import ControlPanel2 from "./ControlPanel2";
+import PageButtons from "../../PageButtons";
 import ImagePopup from "./ImagePopup";
 import {
   SAVING,
@@ -12,18 +13,7 @@ import {
   SECTION_TEXT,
   PHOTO_TEXT,
   NAV_BUTTONS
-} from "./settingsFiles/languages/editor_NO";
-import {
-  SHORTCUTKEY,
-  KEY_COMBINATIONS as KEY,
-  emphasis,
-  undoRedo,
-  saveLoadNew,
-  image,
-  lists,
-  sections,
-  code
-} from "./settingsFiles/buttonConfig";
+} from "../settingsFiles/languages/editor_NO";
 
 // check if buttons is pressed
 var isButtonOn = {
@@ -50,12 +40,6 @@ var isButtonOn = {
   inline: true,
   codeblock: true
 };
-
-// dynamic list with all the keyboard shortcut chars from ./settingFiles/buttonConfig.js
-var shortcutKeys = [];
-for (let i = 0; i < Object.values(KEY).length; i++) {
-  shortcutKeys.push(Object.values(KEY)[i][Object.values(KEY)[i].length - 1]);
-}
 
 // Count input char for automatic newline at 80 chars
 var charCounter = 0;
@@ -90,6 +74,7 @@ class Editor extends React.Component {
     super(props);
 
     this.state = {
+      showPreview: false,
       images: [],
       counter: 0,
       textValue: "",
@@ -116,6 +101,9 @@ class Editor extends React.Component {
 
   // auto save after a couple of seconds
   componentDidUpdate() {
+    if (window.innerWidth > 700) {
+      this.props.update();
+    }
     if (this.state.counter === 2 && this.state.textValue.length > 0) {
       autoSaveMessage = SAVED;
     } else if (this.state.counter === 0) {
@@ -125,6 +113,17 @@ class Editor extends React.Component {
   }
 
   render() {
+    // Submithandler
+    const mySubmitHandler = event => {
+      event.preventDefault();
+
+      console.log("text submitted");
+
+      this.setState({ redirect: "/endpage" });
+
+      // TODO: Send inputtext-data to database
+    };
+
     const resetButtons = () => {
       isButtonOn = {
         bold: true,
@@ -159,17 +158,6 @@ class Editor extends React.Component {
         this.editorRef.current.selectionStart = positionStart;
         this.editorRef.current.selectionEnd = positionEnd;
       }, 0);
-    };
-
-    // Submithandler
-    const mySubmitHandler = event => {
-      event.preventDefault();
-
-      console.log("text submitted");
-
-      this.setState({ redirect: "/endpage" });
-
-      // TODO: Send inputtext-data to database
     };
 
     // all config for handling text on input
@@ -212,18 +200,6 @@ class Editor extends React.Component {
     const onTextareaKeyDown = event => {
       cursorPositionStart = event.target.selectionStart;
       cursorPositionEnd = event.target.selectionEnd;
-
-      // prevents default value on shortcut keys
-      if (
-        (event.ctrlKey && SHORTCUTKEY === "ctrl") ||
-        (event.altKey && SHORTCUTKEY === "alt") ||
-        (event.metaKey && SHORTCUTKEY === "command") ||
-        (event.shiftKey && SHORTCUTKEY === "shift")
-      ) {
-        if (shortcutKeys.includes(event.key)) {
-          event.preventDefault();
-        }
-      }
 
       // if spacebar, update undo
       if (event.key === " ") {
@@ -687,254 +663,44 @@ class Editor extends React.Component {
       }
     };
 
-    // Make keyboard shortcuts with React Hotkeys
-    // config in ./settingsFiles/buttonConfig.js
-    const keyMap = {
-      BOLD: KEY.bold.join(""),
-      ITALIC: KEY.italic.join(""),
-      HEADING: KEY.heading.join(""),
-      STRIKETHROUGH: KEY.strikethrough.join(""),
-      UNDO: KEY.undo.join(""),
-      REDO: KEY.redo.join(""),
-      NEW: KEY.new.join(""),
-      LOAD: KEY.load.join(""),
-      SAVE: KEY.save.join(""),
-      IMAGE: KEY.image.join(""),
-      LISTUL: KEY.listul.join(""),
-      LISTOL: KEY.listol.join(""),
-      CHECKLIST: KEY.listcheck.join(""),
-      ACTIVITY: KEY.activity.join(""),
-      INTRO: KEY.intro.join(""),
-      CHECK: KEY.check.join(""),
-      PROTIP: KEY.protip.join(""),
-      CHALLENGE: KEY.challenge.join(""),
-      FLAG: KEY.flag.join(""),
-      TRY: KEY.try.join(""),
-      INLINE: KEY.inline.join(""),
-      CODEBLOCK: KEY.codeblock.join("")
-    };
-
-    //keyboard shortcut actions.  Settings in ./settingsFiles/buttonConfig.js
-    // SORRY FOR WET CODE. NEED HELP MAKING THIS DRY
-    const handlers = {
-      BOLD: () =>
-        handleButtonClick(
-          emphasis[0].bTitle,
-          emphasis[0].output,
-          emphasis[0].cursorIntON,
-          emphasis[0].cursorIntOFF,
-          emphasis[0].endOutput
-        ),
-      ITALIC: () =>
-        handleButtonClick(
-          emphasis[1].bTitle,
-          emphasis[1].output,
-          emphasis[1].cursorIntON,
-          emphasis[1].cursorIntOFF,
-          emphasis[1].endOutput
-        ),
-      HEADING: () =>
-        handleButtonClick(
-          emphasis[2].bTitle,
-          emphasis[2].output,
-          emphasis[2].cursorIntON,
-          emphasis[2].cursorIntOFF,
-          emphasis[2].endOutput
-        ),
-      STRIKETHROUGH: () =>
-        handleButtonClick(
-          emphasis[3].bTitle,
-          emphasis[3].output,
-          emphasis[3].cursorIntON,
-          emphasis[3].cursorIntOFF,
-          emphasis[3].endOutput
-        ),
-      UNDO: () =>
-        handleButtonClick(
-          undoRedo[0].bTitle,
-          undoRedo[0].output,
-          undoRedo[0].cursorIntON,
-          undoRedo[0].cursorIntOFF,
-          undoRedo[0].endOutput
-        ),
-      REDO: () =>
-        handleButtonClick(
-          undoRedo[1].bTitle,
-          undoRedo[1].output,
-          undoRedo[1].cursorIntON,
-          undoRedo[1].cursorIntOFF,
-          undoRedo[1].endOutput
-        ),
-      NEW: () =>
-        handleButtonClick(
-          saveLoadNew[0].bTitle,
-          saveLoadNew[0].output,
-          saveLoadNew[0].cursorIntON,
-          saveLoadNew[0].cursorIntOFF,
-          saveLoadNew[0].endOutput
-        ),
-      LOAD: () =>
-        handleButtonClick(
-          saveLoadNew[1].bTitle,
-          saveLoadNew[1].output,
-          saveLoadNew[1].cursorIntON,
-          saveLoadNew[1].cursorIntOFF,
-          saveLoadNew[1].endOutput
-        ),
-      SAVE: () =>
-        handleButtonClick(
-          saveLoadNew[2].bTitle,
-          saveLoadNew[2].output,
-          saveLoadNew[2].cursorIntON,
-          saveLoadNew[2].cursorIntOFF,
-          saveLoadNew[2].endOutput
-        ),
-      IMAGE: () =>
-        handleButtonClick(
-          image[0].bTitle,
-          image[0].output,
-          image[0].cursorIntON,
-          image[0].cursorIntOFF,
-          image[0].endOutput
-        ),
-      LISTUL: () =>
-        handleButtonClick(
-          lists[0].bTitle,
-          lists[0].output,
-          lists[0].cursorIntON,
-          lists[0].cursorIntOFF,
-          lists[0].endOutput
-        ),
-      LISTOL: () =>
-        handleButtonClick(
-          lists[1].bTitle,
-          lists[1].output,
-          lists[1].cursorIntON,
-          lists[1].cursorIntOFF,
-          lists[1].endOutput
-        ),
-      CHECKLIST: () =>
-        handleButtonClick(
-          lists[2].bTitle,
-          lists[2].output,
-          lists[2].cursorIntON,
-          lists[2].cursorIntOFF,
-          lists[2].endOutput
-        ),
-      ACTIVITY: () =>
-        handleButtonClick(
-          sections[0].bTitle,
-          sections[0].output,
-          sections[0].cursorIntON,
-          sections[0].cursorIntOFF,
-          sections[0].endOutput
-        ),
-      INTRO: () =>
-        handleButtonClick(
-          sections[1].bTitle,
-          sections[1].output,
-          sections[1].cursorIntON,
-          sections[1].cursorIntOFF,
-          sections[1].endOutput
-        ),
-      CHECK: () =>
-        handleButtonClick(
-          sections[2].bTitle,
-          sections[2].output,
-          sections[2].cursorIntON,
-          sections[2].cursorIntOFF,
-          sections[2].endOutput
-        ),
-      PROTIP: () =>
-        handleButtonClick(
-          sections[3].bTitle,
-          sections[3].output,
-          sections[3].cursorIntON,
-          sections[3].cursorIntOFF,
-          sections[3].endOutput
-        ),
-      CHALLENGE: () =>
-        handleButtonClick(
-          sections[4].bTitle,
-          sections[4].output,
-          sections[4].cursorIntON,
-          sections[4].cursorIntOFF,
-          sections[4].endOutput
-        ),
-      FLAG: () =>
-        handleButtonClick(
-          sections[5].bTitle,
-          sections[5].output,
-          sections[5].cursorIntON,
-          sections[5].cursorIntOFF,
-          sections[5].endOutput
-        ),
-      TRY: () =>
-        handleButtonClick(
-          sections[6].bTitle,
-          sections[6].output,
-          sections[6].cursorIntON,
-          sections[6].cursorIntOFF,
-          sections[6].endOutput
-        ),
-      INLINE: () =>
-        handleButtonClick(
-          code[0].bTitle,
-          code[0].output,
-          code[0].cursorIntON,
-          code[0].cursorIntOFF,
-          code[0].endOutput
-        ),
-      CODEBLOCK: () =>
-        handleButtonClick(
-          code[1].bTitle,
-          code[1].output,
-          code[1].cursorIntON,
-          code[1].cursorIntOFF,
-          code[1].endOutput
-        )
+    const returnPreview = () => {
+      if (!this.state.showPreview) {
+        this.setState({ showPreview: true });
+      } else {
+        this.setState({ showPreview: false });
+      }
     };
 
     return (
-      <div className="Editor">
-        <div className="controlPanelPlacement">
-          <ControlPanel handleButtonClick={handleButtonClick} />
-
-          <div className="ui two column grid">
-            <div className="column">
-              <MDTextArea
-                editorRef={this.editorRef}
-                textValue={this.state.textValue}
-                onInputChange={handleChange}
-                handleButtonClick={handleButtonClick}
-                onTextareaKeyDown={onTextareaKeyDown}
-                onTextareaKeyUp={onTextareaKeyUp}
-                onTextareaMouseDown={onTextareaMouseDown}
-                onTextareaSelect={onTextareaSelect}
-                handlers={handlers}
-                keyMap={keyMap}
-              />
+      <div>
+        <div>
+          <ControlPanel
+            returnPreview={returnPreview}
+            handleButtonClick={handleButtonClick}
+          />
+          <div className="">
+            <div className="">
+              {!this.state.showPreview ? (
+                <MDTextArea
+                  editorRef={this.editorRef}
+                  textValue={this.state.textValue}
+                  onInputChange={handleChange}
+                  handleButtonClick={handleButtonClick}
+                  onTextareaKeyDown={onTextareaKeyDown}
+                  onTextareaKeyUp={onTextareaKeyUp}
+                  onTextareaMouseDown={onTextareaMouseDown}
+                  onTextareaSelect={onTextareaSelect}
+                  autoSaveMessage={autoSaveMessage}
+                />
+              ) : (
+                <MDPreview mdValue={this.state.mdValue} />
+              )}
             </div>
             {imagePopup}
-            <div className="column">
-              <MDPreview mdValue={this.state.mdValue} />
-            </div>
           </div>
-        </div>
-        <div className="ui autosave container">
-          <div className="autosave">
-            <p style={{ color: "grey" }}>{autoSaveMessage}</p>
-          </div>
-        </div>
-        <div className="ui container">
-          <PageButtons
-            prevTitle={NAV_BUTTONS.prev}
-            nextTitle={NAV_BUTTONS.submit}
-            prevValue="/createNewLesson"
-            nextValue="/endpage"
-            mySubmitHandler={mySubmitHandler}
-            state={this.state}
-          />
+          <footer>
+            <ControlPanel2 handleButtonClick={handleButtonClick} />
+          </footer>
         </div>
       </div>
     );

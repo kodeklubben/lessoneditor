@@ -5,7 +5,7 @@ class Buttons extends React.Component {
   isDisabled = false;
 
   componentDidUpdate() {
-    if (window.screen.width < 700) {
+    if (window.innerWidth < 700) {
       this.isDisabled = true;
     } else {
       this.isDisabled = false;
