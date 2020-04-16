@@ -2,10 +2,6 @@ select {
   cursor: pointer;
 }
 
-body {
-  overflow: hidden;
-}
-
 /* CSS for ImagePopup component */
 
 .imagePopup {
