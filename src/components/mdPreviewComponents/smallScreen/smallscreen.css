@@ -1,0 +1,249 @@
+select {
+  cursor: pointer;
+}
+
+body {
+  overflow: hidden;
+}
+
+/* CSS for ImagePopup component */
+
+.imagePopup {
+  z-index: 3;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+}
+
+.imagePopup {
+  z-index: 3;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+}
+
+.errorMessage {
+  color: red;
+}
+
+/* CSS for TextArea */
+
+.TextArea {
+  width: 100%;
+  height: 65vh;
+  outline: none;
+  resize: none;
+  border-radius: 5px;
+  padding: 15px;
+  overflow: auto;
+}
+
+.TextAreaSmall {
+  position: absolute;
+  width: 100%;
+  height: 65vh;
+  outline: none;
+  resize: none;
+  padding: 15px;
+  overflow: auto;
+  border-color: white;
+}
+
+footer {
+  bottom: 0%;
+  width: 100%;
+  position: absolute;
+}
+
+/* CSS for TextArea Buttons */
+
+.buttonBorder {
+  cursor: pointer;
+  padding: 1vh 2vh 1vh 2vh;
+}
+
+.dropdown {
+  padding-top: 0.8vh;
+}
+
+.dropdownItem {
+  padding-top: 1vh;
+}
+
+/* CSS for MDPreview */
+
+.MDPreviewSmall {
+  width: 100%;
+  height: 65vh;
+  background-color: white;
+  padding: 15px;
+  overflow: auto;
+}
+
+/*This is the important css for the preview*/
+
+/* Previewer */
+
+ul {
+  display: flex;
+  flex-direction: column;
+  background-color: inherit;
+}
+
+.section_intro h1 {
+  font-size: 41px;
+}
+
+.section_activity h1 {
+  color: #fff;
+  background: #349946;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.section_flag {
+  border-top: 3px dotted #e6862d;
+  padding-bottom: 20px;
+  margin: 0 20px;
+}
+
+.section_flag h2,
+.section_flag h3 {
+  color: #36a137;
+  margin: 0 10px;
+  padding-top: 15px;
+  padding-bottom: 10px;
+}
+
+.section_flag h2 img {
+  height: 40px;
+  vertical-align: text-bottom;
+  padding-right: 10px;
+}
+
+.section_challenge {
+  border: 3px solid #00b1da;
+  border-radius: 12px;
+  padding-bottom: 10px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.section_challenge h2,
+.section_challenge h3 {
+  color: #fff;
+  background: #00b1da;
+  padding-left: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-top: 0;
+}
+
+.section_check h2,
+.section_check h3 {
+  padding-top: 4px;
+  padding-bottom: 9px;
+}
+
+.section_check h2 img {
+  height: 40px;
+  vertical-align: text-bottom;
+  padding-right: 10px;
+}
+
+.section_protip {
+  border: 3px solid #ff7f00;
+  background: #fff99d;
+  border-radius: 12px;
+  padding: 0 20px 20px;
+  margin: 20px 0;
+}
+
+/* List styling */
+
+ul li::before {
+  content: "\A0";
+  border-radius: 20px;
+  border: 3px solid #abdbea;
+  padding: 8px;
+  float: left;
+  margin-left: -40px;
+  margin-top: 2px;
+}
+
+/* Checkbox styling */
+
+.contains-checklist .checklist-item::before {
+  opacity: 0;
+}
+
+.contains-checklist input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+}
+
+.contains-checklist input[type="checkbox"] + label {
+  position: relative;
+  font-weight: normal;
+  margin-left: 0;
+}
+
+.contains-checklist input[type="checkbox"] + label::before {
+  content: "\A0";
+  display: inline-block;
+  visibility: visible;
+  width: 1.3em;
+  height: 1.3em;
+  margin: 0 0.6em 0 -2.2em;
+  line-height: 1.1em;
+  border: 3px solid #abdbea;
+  border-radius: 3px;
+}
+
+.contains-checklist input[type="checkbox"]:checked + label::before {
+  content: "\2714";
+  line-height: 1.1em;
+  padding-left: 0.1em;
+}
+
+/*Codeblock styling */
+code {
+  padding: 2px 4px;
+  font-size: 90%;
+  color: #c7254e;
+  background-color: #f9f2f4;
+  border-radius: 4px;
+}
+
+code {
+  padding: 2px 4px;
+  font-size: 90%;
+  color: #c7254e;
+  background-color: #f9f2f4;
+  border-radius: 4px;
+}
+
+pre {
+  display: block;
+  padding: 10.5px;
+  margin: 0 0 11px;
+  font-size: 15px;
+  line-height: 1.42857;
+  color: #333;
+  word-break: break-all;
+  word-wrap: break-word;
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+pre code {
+  padding: 0;
+  font-size: inherit;
+  color: inherit;
+  white-space: pre-wrap;
+  background-color: transparent;
+  border-radius: 0;
+}

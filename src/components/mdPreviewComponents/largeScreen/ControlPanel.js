@@ -6,7 +6,7 @@ import {
   lists,
   sections,
   code
-} from "./settingsFiles/buttonConfig.js";
+} from "../settingsFiles/buttonConfig.js";
 import React from "react";
 import Buttons from "./Button";
 
