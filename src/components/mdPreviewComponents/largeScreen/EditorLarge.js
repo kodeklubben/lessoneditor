@@ -115,7 +115,7 @@ class Editor extends React.Component {
 
   // auto save after a couple of seconds
   componentDidUpdate() {
-    if (window.innerWidth < 700) {
+    if (window.innerHeight / window.innerWidth > 1) {
       this.props.update();
     }
     if (this.state.counter === 2 && this.state.textValue.length > 0) {
