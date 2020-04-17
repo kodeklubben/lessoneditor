@@ -155,9 +155,8 @@ class Editor extends React.Component {
     };
 
     const setUndo = () => {
-      console.log(undo[undo.length - 1]);
-      undo.push(inputText);
-      undoCursorPosition.push(cursorPositionStart);
+      undo = [...undo, inputText];
+      undoCursorPosition = [...undoCursorPosition, cursorPositionStart];
     };
 
     // sets cursor in textarea
@@ -173,6 +172,14 @@ class Editor extends React.Component {
       cursorPositionStart = event.target.selectionStart;
       cursorPositionEnd = event.target.selectionEnd;
       inputText = event.target.value;
+      redo = [];
+
+      // some textAreaKeyDown events don't work on smartphones
+      // need to make event trigger for those cases here
+      // if spacebar, update undo
+      if (inputText[inputText.length - 1] === " ") {
+        setUndo();
+      }
 
       // Counts input char. New line if 80
       charCounter += 1;
@@ -190,14 +197,6 @@ class Editor extends React.Component {
     const onTextareaKeyUp = event => {
       cursorPositionStart = event.target.selectionStart;
       cursorPositionEnd = event.target.selectionEnd;
-
-      // some textAreaKeyDown events don't work on smartphones
-      // need to make event trigger for those cases here
-
-      // if spacebar, update undo
-      if (event.key === " " || event.keyCode === 32) {
-        setUndo();
-      }
     };
 
     const onTextareaSelect = e => {
@@ -389,7 +388,7 @@ class Editor extends React.Component {
           return;
         }
 
-        redo.push(inputText);
+        redo = [...redo, inputText];
         redoCursorPosition.push(cursorPositionStart);
 
         inputText = undo.pop();
