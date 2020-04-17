@@ -1,10 +1,8 @@
 import React from "react";
+import "./formpage.css";
 import FormPage from "./FormPage";
 import COURSELIST from "./settingsFiles/COURSELIST";
 import { LANGUAGES } from "./settingsFiles/languages/formpage_NO";
-
-const TITLE_ERROR = "Må skrive inn tittel";
-const AUTHOR_ERROR = "Må skrive inn forfatter";
 
 class FormComponent extends React.Component {
   constructor(props) {
@@ -20,7 +18,8 @@ class FormComponent extends React.Component {
       level: 1,
       license: "",
       tags: { topic: [], subject: [], grade: [] },
-      redirect: null
+      redirect: null,
+      pageNumber: 1
     };
   }
 
@@ -52,44 +51,24 @@ class FormComponent extends React.Component {
     );
   };
 
-  validate = () => {
-    let titleErr = "";
-    let authorErr = "";
-
-    if (!this.state.title) {
-      titleErr = TITLE_ERROR;
-    }
-    if (!this.state.author) {
-      authorErr = AUTHOR_ERROR;
-    }
-    if (titleErr || authorErr) {
-      this.setState({ titleErr, authorErr });
-      return false;
-    }
-
-    return true;
-  };
-
-  mySubmitHandler = event => {
+  submitHandler = event => {
     event.preventDefault();
-    let notErr = this.validate();
+    console.log(event);
 
-    if (notErr) {
-      this.setState({ redirect: "/editor" });
+    this.setState({ redirect: "/editor" });
 
-      console.log("YAML header: \n" + this.YAMLstateToString(this.state));
-      console.log("\nYML-file: \n" + this.YMLstateToString(this.state));
-      // TODO: Send state-data to database
-    }
+    console.log("YAML header: \n" + this.YAMLstateToString(this.state));
+    console.log("\nYML-file: \n" + this.YMLstateToString(this.state));
+    // TODO: Send state-data to database
   };
 
-  myChangeHandler = event => {
+  changeHandler = event => {
     let nam = event.target.name;
     let val = event.target.value;
     this.setState({ [nam]: val });
   };
 
-  myCheckboxHandler = event => {
+  checkboxHandler = event => {
     let name = event.target.name;
     let value = event.target.value;
 
@@ -102,13 +81,28 @@ class FormComponent extends React.Component {
     this.setState({ tags: i });
   };
 
+  setPageNumber = input => {
+    this.setState({ pageNumber: input });
+  };
+
+  setErr = (titleErr, authorErr) => {
+    if (titleErr) {
+      this.setState({ titleErr });
+    }
+    if (authorErr) {
+      this.setState({ authorErr });
+    }
+  };
+
   render() {
     return (
       <div>
         <FormPage
-          mySubmitHandler={this.mySubmitHandler}
-          myChangeHandler={this.myChangeHandler}
-          myCheckboxHandler={this.myCheckboxHandler}
+          submitHandler={this.submitHandler}
+          changeHandler={this.changeHandler}
+          checkboxHandler={this.checkboxHandler}
+          setPageNumber={this.setPageNumber}
+          setErr={this.setErr}
           state={this.state}
         />
       </div>
