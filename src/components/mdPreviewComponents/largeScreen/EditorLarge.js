@@ -89,6 +89,7 @@ class Editor extends React.Component {
     super(props);
 
     this.state = {
+      test: "test",
       images: [],
       counter: 0,
       textValue: "",
@@ -931,6 +932,7 @@ class Editor extends React.Component {
             nextTitle={NAV_BUTTONS.submit}
             prevValue="/createNewLesson"
             nextValue="/endpage"
+            setPageNumber={null}
             mySubmitHandler={mySubmitHandler}
             state={this.state}
           />
