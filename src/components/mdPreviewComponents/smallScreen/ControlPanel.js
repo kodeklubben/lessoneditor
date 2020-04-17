@@ -9,9 +9,14 @@ import {
 } from "../settingsFiles/buttonConfig.js";
 import React from "react";
 import Buttons from "./Button";
+import { Link, Redirect } from "react-router-dom";
 import { Icon, Button, Dropdown, Divider } from "semantic-ui-react";
 
 class ControlPanel extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
   handleButtonClick = (
     bTitle,
     output,
@@ -33,44 +38,34 @@ class ControlPanel extends React.Component {
   };
 
   render() {
+    if (this.props.state.redirect) {
+      return <Redirect to={this.props.state.redirect} />;
+    }
     return (
       <div className="ui segment grid">
-        <div className="ui icon buttons">
-          {undoRedo.map(element => (
-            <div key={element.bTitle} className="">
-              <Buttons
-                bTitle={element.bTitle}
-                icon={element.icon}
-                output={element.output}
-                title={element.title}
-                cursorIntON={element.cursorIntON}
-                cursorIntOFF={element.cursorIntOFF}
-                endOutput={element.endOutput}
-                onButtonClick={this.handleButtonClick}
-                shortcutKey={element.shortcut}
-              />
-            </div>
-          ))}
-        </div>
-
+        <div />
         <div className="ui icon buttons">
           <Button labelPosition="left" onClick={this.onButtonClick}>
             <Icon name="eye" />
           </Button>
         </div>
+        <div />
+        {undoRedo.map(element => (
+          <Buttons
+            bTitle={element.bTitle}
+            icon={element.icon}
+            output={element.output}
+            title={element.title}
+            cursorIntON={element.cursorIntON}
+            cursorIntOFF={element.cursorIntOFF}
+            endOutput={element.endOutput}
+            onButtonClick={this.handleButtonClick}
+            shortcutKey={element.shortcut}
+          />
+        ))}
+        <div />
 
         <div className="ui icon buttons">
-          <Buttons
-            bTitle={saveLoadNew[0].bTitle}
-            icon={saveLoadNew[0].icon}
-            output={saveLoadNew[0].output}
-            title={saveLoadNew[0].title}
-            cursorIntON={saveLoadNew[0].cursorIntON}
-            cursorIntOFF={saveLoadNew[0].cursorIntOFF}
-            endOutput={saveLoadNew[0].endOutput}
-            onButtonClick={this.handleButtonClick}
-            shortcutKey={saveLoadNew[0].shortcut}
-          />
           <Buttons
             bTitle={image[0].bTitle}
             icon={image[0].icon}
@@ -83,6 +78,13 @@ class ControlPanel extends React.Component {
             shortcutKey={image[0].shortcut}
           />
         </div>
+        <button
+          className="ui right floated icon right  column button floatRight"
+          type="button"
+          onClick={this.props.mySubmitHandler}
+        >
+          <i aria-hidden="true" className="right arrow icon" />
+        </button>
       </div>
     );
   }

@@ -5,8 +5,9 @@ import MDPreview from "./MDPreview";
 import { mdParser } from "../../../utils/mdParser";
 import ControlPanel from "./ControlPanel";
 import ControlPanel2 from "./ControlPanel2";
+import ControlPanelPreview from "./ControlPanelPreview";
 import PageButtons from "../../PageButtons";
-import ImagePopup from "./ImagePopup";
+import ImagePopup from "../ImagePopup";
 import {
   SAVING,
   SAVED,
@@ -101,7 +102,7 @@ class Editor extends React.Component {
 
   // auto save after a couple of seconds
   componentDidUpdate() {
-    if (window.innerWidth > 700) {
+    if (window.innerWidth > 700 && window.innerHeight / window.innerWidth < 1) {
       this.props.update();
     }
     if (this.state.counter === 2 && this.state.textValue.length > 0) {
@@ -201,14 +202,16 @@ class Editor extends React.Component {
       cursorPositionStart = event.target.selectionStart;
       cursorPositionEnd = event.target.selectionEnd;
 
+      console.log(event.keyCode);
+
       // if spacebar, update undo
-      if (event.key === " ") {
+      if (event.key === " " || event.keyCode === 32) {
         undo = [...undo, inputText];
         undoCursorPosition.push(cursorPositionStart);
       }
 
       // if input is enter, update undo and do list functions if list.
-      if (event.key === "Enter") {
+      if (event.key === "Enter" || event.keyCode === 13) {
         charCounter = 0;
         undo = [...undo, inputText];
         undoCursorPosition.push(cursorPositionStart);
@@ -673,14 +676,19 @@ class Editor extends React.Component {
 
     return (
       <div>
-        <div>
-          <ControlPanel
-            returnPreview={returnPreview}
-            handleButtonClick={handleButtonClick}
-          />
-          <div className="">
+        {!this.state.showPreview ? (
+          <div>
+            <ControlPanel
+              returnPreview={returnPreview}
+              handleButtonClick={handleButtonClick}
+              nextTitle={NAV_BUTTONS.submit}
+              prevValue="/createNewLesson"
+              nextValue="/endpage"
+              mySubmitHandler={mySubmitHandler}
+              state={this.state}
+            />
             <div className="">
-              {!this.state.showPreview ? (
+              <div className="">
                 <MDTextArea
                   editorRef={this.editorRef}
                   textValue={this.state.textValue}
@@ -692,16 +700,26 @@ class Editor extends React.Component {
                   onTextareaSelect={onTextareaSelect}
                   autoSaveMessage={autoSaveMessage}
                 />
-              ) : (
-                <MDPreview mdValue={this.state.mdValue} />
-              )}
+              </div>
+              {imagePopup}
             </div>
-            {imagePopup}
+            <footer>
+              <ControlPanel2 handleButtonClick={handleButtonClick} />
+            </footer>
           </div>
-          <footer>
-            <ControlPanel2 handleButtonClick={handleButtonClick} />
-          </footer>
-        </div>
+        ) : (
+          <div>
+            <ControlPanelPreview
+              returnPreview={returnPreview}
+              handleButtonClick={handleButtonClick}
+            />
+            <div className="">
+              <div className="">
+                <MDPreview mdValue={this.state.mdValue} />
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   }

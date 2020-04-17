@@ -11,7 +11,7 @@ class MarkdownEditor extends React.Component {
       images: [],
       text: ""
     };
-    if (window.innerWidth < 700) {
+    if (window.innerHeight / window.innerWidth > 1) {
       smallScreen = true;
     } else {
       smallScreen = false;
@@ -19,7 +19,7 @@ class MarkdownEditor extends React.Component {
   }
 
   componentDidUpdate() {
-    if (window.innerWidth < 700) {
+    if (window.innerHeight / window.innerWidth > 1) {
       smallScreen = true;
     } else {
       smallScreen = false;

@@ -61,11 +61,15 @@ footer {
 }
 
 .dropdown {
-  padding-top: 0.8vh;
+  padding-top: 0.93vh;
 }
 
 .dropdownItem {
   padding-top: 1vh;
+}
+
+.floatRight {
+  padding-right: 4em !important;
 }
 
 /* CSS for MDPreview */

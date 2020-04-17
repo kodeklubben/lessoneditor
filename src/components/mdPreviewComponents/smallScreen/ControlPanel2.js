@@ -48,7 +48,7 @@ class ControlPanel extends React.Component {
             </div>
           ))}
         </div>
-        <p></p>
+        <div />
         <Dropdown icon="list ul" floating className="ui icon dropdown">
           <Dropdown.Menu>
             {lists.map(element => (
@@ -68,7 +68,7 @@ class ControlPanel extends React.Component {
             ))}
           </Dropdown.Menu>
         </Dropdown>
-
+        <div />
         <Dropdown
           icon="list alternate outline"
           floating
@@ -78,7 +78,6 @@ class ControlPanel extends React.Component {
             {sections.map(element => (
               <Dropdown.Item
                 className="dropdownItem"
-                icon={element.icon}
                 onClick={() =>
                   this.handleButtonClick(
                     element.bTitle,
