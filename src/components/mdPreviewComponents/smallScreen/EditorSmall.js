@@ -7,7 +7,7 @@ import ControlPanel from "./ControlPanel";
 import ControlPanel2 from "./ControlPanel2";
 import ControlPanelPreview from "./ControlPanelPreview";
 import PageButtons from "../../PageButtons";
-import ImagePopup from "./ImagePopup";
+import ImagePopup from "../ImagePopup";
 import {
   SAVING,
   SAVED,
@@ -202,14 +202,16 @@ class Editor extends React.Component {
       cursorPositionStart = event.target.selectionStart;
       cursorPositionEnd = event.target.selectionEnd;
 
+      console.log(event.keyCode);
+
       // if spacebar, update undo
-      if (event.key === " ") {
+      if (event.key === " " || event.keyCode === 32) {
         undo = [...undo, inputText];
         undoCursorPosition.push(cursorPositionStart);
       }
 
       // if input is enter, update undo and do list functions if list.
-      if (event.key === "Enter") {
+      if (event.key === "Enter" || event.keyCode === 13) {
         charCounter = 0;
         undo = [...undo, inputText];
         undoCursorPosition.push(cursorPositionStart);

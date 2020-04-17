@@ -4,7 +4,7 @@ import MDPreview from "./MDPreview";
 import { mdParser } from "../../../utils/mdParser";
 import ControlPanel from "./ControlPanel";
 import PageButtons from "../../PageButtons";
-import ImagePopup from "./ImagePopup";
+import ImagePopup from "../ImagePopup";
 import {
   SAVING,
   SAVED,

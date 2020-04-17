@@ -61,7 +61,7 @@ footer {
 }
 
 .dropdown {
-  padding-top: 0.8vh;
+  padding-top: 0.93vh;
 }
 
 .dropdownItem {
@@ -70,10 +70,6 @@ footer {
 
 .floatRight {
   padding-right: 4em !important;
-}
-
-i {
-  margin-left: 50px !important;
 }
 
 /* CSS for MDPreview */
