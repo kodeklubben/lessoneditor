@@ -42,7 +42,7 @@ class ControlPanel extends React.Component {
       return <Redirect to={this.props.state.redirect} />;
     }
     return (
-      <div className="ui segment grid">
+      <div className="ui segment grid buttonBorder">
         <div />
         <div className="ui icon buttons">
           <Button labelPosition="left" onClick={this.onButtonClick}>
