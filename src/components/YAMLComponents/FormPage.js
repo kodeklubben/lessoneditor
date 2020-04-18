@@ -10,10 +10,10 @@ const FormPage = props => {
   const renderFormPage = () => {
     if (props.state.pageNumber === 1) {
       return (
-        <div className="ui middle aligned center aligned grid">
+        <div className="">
           <Page1 changeHandler={props.changeHandler} state={props.state} />
 
-          <div className="ui container">
+          <div className="">
             <PageButtons
               prevTitle={NAV_BUTTONS.prev}
               nextTitle={NAV_BUTTONS.next}
