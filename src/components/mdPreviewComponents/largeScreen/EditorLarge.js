@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { addText } from "../../../actions";
+import { addText, parseMD } from "../../../actions";
 import MDTextArea from "./MDTextArea";
 import MDPreview from "./MDPreview";
 import { mdParser } from "../../../utils/mdParser";
@@ -198,7 +198,7 @@ class Editor extends React.Component {
       }
 
       this.props.addText(inputText);
-      this.setState({ mdValue: mdParser(inputText) });
+      this.props.parseMD(mdParser(inputText));
       this.setState({ counter: 0 });
     };
 
@@ -261,7 +261,7 @@ class Editor extends React.Component {
                 cursorPositionStart - listButtonValues["cursorInt"]
               ) + inputText.slice(cursorPositionStart);
             this.props.addText(inputText);
-            this.setState({ mdValue: mdParser(inputText) });
+            this.props.parseMD(mdParser(inputText));
             setCursorPosition(
               cursorPositionStart - listButtonValues["cursorInt"],
               cursorPositionStart - listButtonValues["cursorInt"]
@@ -274,7 +274,7 @@ class Editor extends React.Component {
             listButtonValues["output"] +
             inputText.slice(cursorPositionStart);
           this.props.addText(inputText);
-          this.setState({ mdValue: mdParser(inputText) });
+          this.props.parseMD(mdParser(inputText));
           setCursorPosition(
             cursorPositionStart + listButtonValues["cursorInt"] + 2,
             cursorPositionStart + listButtonValues["cursorInt"] + 2
@@ -297,7 +297,7 @@ class Editor extends React.Component {
             "  " +
             inputText.slice(cursorPositionStart);
           this.props.addText(inputText);
-          this.setState({ mdValue: mdParser(inputText) });
+          this.props.parseMD(mdParser(inputText));
           cursorPositionStart += 2;
           setCursorPosition(cursorPositionStart, cursorPositionStart);
           return;
@@ -308,7 +308,7 @@ class Editor extends React.Component {
           "  " +
           inputText.slice(cursorPositionEnd);
         this.props.addText(inputText);
-        this.setState({ mdValue: mdParser(inputText) });
+        this.props.parseMD(mdParser(inputText));
       }
 
       // reset buttons if arrow keys are pressed
@@ -339,7 +339,7 @@ class Editor extends React.Component {
           ")" +
           inputText.slice(cursorPositionStart);
         this.props.addText(inputText);
-        this.setState({ mdValue: mdParser(inputText) });
+        this.props.parseMD(mdParser(inputText));
         this.editorRef.current.focus();
         cursorPositionStart += 2;
         cursorPositionEnd += PHOTO_TEXT.length + 2;
@@ -385,7 +385,7 @@ class Editor extends React.Component {
         undo = [""];
         redo = [];
         this.props.addText(inputText);
-        this.setState({ mdValue: mdParser(inputText) });
+        this.props.parseMD(mdParser(inputText));
         cursorPositionStart = cursorPositionEnd = 0;
         return;
       }
@@ -396,7 +396,7 @@ class Editor extends React.Component {
         undo = [inputText];
         redo = [inputText];
         this.props.addText(inputText);
-        this.setState({ mdValue: mdParser(inputText) });
+        this.props.parseMD(mdParser(inputText));
         setCursorPosition(inputText.length, inputText.length);
         return;
       }
@@ -416,7 +416,7 @@ class Editor extends React.Component {
         redoCursorPosition.push(cursorPositionStart);
         inputText = undo.pop();
         this.props.addText(inputText);
-        this.setState({ mdValue: mdParser(inputText) });
+        this.props.parseMD(mdParser(inputText));
         setCursorPosition(pos1, pos2);
         return;
       }
@@ -430,7 +430,7 @@ class Editor extends React.Component {
         setUndo();
         inputText = redo.pop();
         this.props.addText(inputText);
-        this.setState({ mdValue: mdParser(inputText) });
+        this.props.parseMD(mdParser(inputText));
         setCursorPosition(pos1, pos2);
         return;
       }
@@ -452,7 +452,7 @@ class Editor extends React.Component {
           inputText.slice(0, cursorPositionStart - cursorIntON) +
           inputText.slice(cursorPositionStart - cursorIntON + output.length);
         this.props.addText(inputText);
-        this.setState({ mdValue: mdParser(inputText) });
+        this.props.parseMD(mdParser(inputText));
         cursorPositionEnd = cursorPositionStart -= cursorIntON;
         setCursorPosition(cursorPositionStart, cursorPositionStart);
         return;
@@ -471,7 +471,7 @@ class Editor extends React.Component {
             "\n\n" +
             inputText.slice(cursorPositionStart);
           this.props.addText(inputText);
-          this.setState({ mdValue: mdParser(inputText) });
+          this.props.parseMD(mdParser(inputText));
           cursorPositionStart += 2;
           cursorPositionEnd += 2;
           handleButtonClick(
@@ -519,7 +519,7 @@ class Editor extends React.Component {
             "# " +
             inputText.slice(cursorPositionStart);
           this.props.addText(inputText);
-          this.setState({ mdValue: mdParser(inputText) });
+          this.props.parseMD(mdParser(inputText));
           cursorPositionStart -= 1;
           setCursorPosition(cursorPositionStart, cursorPositionStart);
           return;
@@ -531,7 +531,7 @@ class Editor extends React.Component {
             inputText.slice(cursorPositionStart);
 
           this.props.addText(inputText);
-          this.setState({ mdValue: mdParser(inputText) });
+          this.props.parseMD(mdParser(inputText));
           cursorPositionStart += output.length;
           setCursorPosition(cursorPositionStart, cursorPositionStart);
           return;
@@ -545,7 +545,7 @@ class Editor extends React.Component {
               inputText.slice(0, cursorPositionStart - 2) +
               inputText.slice(cursorPositionStart);
             this.props.addText(inputText);
-            this.setState({ mdValue: mdParser(inputText) });
+            this.props.parseMD(mdParser(inputText));
             cursorPositionStart -= 2;
             setCursorPosition(cursorPositionStart, cursorPositionStart);
             isButtonOn[bTitle] = true;
@@ -569,7 +569,7 @@ class Editor extends React.Component {
           output +
           inputText.slice(cursorPositionStart);
         this.props.addText(inputText);
-        this.setState({ mdValue: mdParser(inputText) });
+        this.props.parseMD(mdParser(inputText));
         cursorPositionStart += 2;
         cursorPositionEnd += SECTION_TEXT.length + 2;
         setCursorPosition(cursorPositionStart, cursorPositionEnd);
@@ -611,7 +611,7 @@ class Editor extends React.Component {
             output.slice(cursorIntON) +
             inputText.slice(cursorPositionEnd);
           this.props.addText(inputText);
-          this.setState({ mdValue: mdParser(inputText) });
+          this.props.parseMD(mdParser(inputText));
           setCursorPosition(
             cursorPositionStart + cursorIntON,
             cursorPositionEnd + cursorIntON
@@ -626,7 +626,7 @@ class Editor extends React.Component {
           output +
           inputText.slice(cursorPositionStart);
         this.props.addText(inputText);
-        this.setState({ mdValue: mdParser(inputText) });
+        this.props.parseMD(mdParser(inputText));
         setCursorPosition(
           cursorPositionStart + cursorIntON,
           cursorPositionStart + cursorIntON
@@ -638,7 +638,7 @@ class Editor extends React.Component {
           this.setState({ buttonValues: isButtonOn });
           inputText = undo[undo.length - 1];
           this.props.addText(inputText);
-          this.setState({ mdValue: mdParser(inputText) });
+          this.props.parseMD(mdParser(inputText));
           setCursorPosition(
             cursorPositionStart - cursorIntON,
             cursorPositionEnd - cursorIntON
@@ -658,7 +658,7 @@ class Editor extends React.Component {
             endOutput +
             inputText.slice(cursorPositionStart + cursorIntOFF);
           this.props.addText(inputText);
-          this.setState({ mdValue: mdParser(inputText) });
+          this.props.parseMD(mdParser(inputText));
           cursorPositionStart = cursorPositionEnd += cursorIntOFF;
           setCursorPosition(cursorPositionStart, cursorPositionEnd);
         }
@@ -920,7 +920,7 @@ class Editor extends React.Component {
 }
 
 const mapStateToProps = state => {
-  return { mdText: state.mdText };
+  return { mdText: state.mdText, parseMD: state.parseMD };
 };
 
-export default connect(mapStateToProps, { addText })(Editor);
+export default connect(mapStateToProps, { addText, parseMD })(Editor);
