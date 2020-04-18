@@ -4,17 +4,20 @@ select {
 
 /* CSS for ImagePopup component */
 
-.imagePopup {
-  z-index: 3;
-  top: 20%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+.transparente {
+  height: 150%;
+  width: 150%;
+  z-index: 2;
+  background-color: rgba(0, 0, 0, 0.6);
   position: absolute;
+
+  top: -10%;
+  left: -25%;
 }
 
 .imagePopup {
   z-index: 3;
-  top: 20%;
+  top: 30%;
   left: 50%;
   transform: translate(-50%, -50%);
   position: absolute;
@@ -56,6 +59,7 @@ footer {
 /* CSS for TextArea Buttons */
 
 .buttonBorder {
+  background-color: #b1daae !important;
   cursor: pointer;
   padding: 1vh 2vh 1vh 2vh;
 }

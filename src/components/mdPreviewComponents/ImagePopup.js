@@ -26,41 +26,43 @@ class ImagePopup extends React.Component {
 
   render() {
     return (
-      <Card.Group className="imagePopup">
-        <Card>
-          <Form
-            onSubmit={() =>
-              this.props.imagePopupSubmitHandler(this.state.inputValue)
-            }
-          >
-            <Card.Content>
-              <Form.Field>
-                <label>Link til bilde her:</label>
-                <input
-                  autoFocus
-                  onChange={this.onInputChange}
-                  value={this.state.inputValue}
-                  placeholder="Image URL"
-                />
-                <label>Last opp bilde her:</label>
-                <input
-                  type="file"
-                  accept=".jpg,.jpeg,.png,.gif"
-                  onChange={this.fileSelectedHandler}
-                />
-                <div className="errorMessage">{this.state.toBigMessage}</div>
-              </Form.Field>
-            </Card.Content>
-            <Card.Content extra>
-              <div className="ui two buttons">
-                <Button type="submit" basic color="grey">
-                  OK
-                </Button>
-              </div>
-            </Card.Content>
-          </Form>
-        </Card>
-      </Card.Group>
+      <div className="transparente">
+        <Card.Group className="imagePopup">
+          <Card>
+            <Form
+              onSubmit={() =>
+                this.props.imagePopupSubmitHandler(this.state.inputValue)
+              }
+            >
+              <Card.Content>
+                <Form.Field>
+                  <label>Link til bilde her:</label>
+                  <input
+                    autoFocus
+                    onChange={this.onInputChange}
+                    value={this.state.inputValue}
+                    placeholder="Image URL"
+                  />
+                  <label>Last opp bilde her:</label>
+                  <input
+                    type="file"
+                    accept=".jpg,.jpeg,.png,.gif"
+                    onChange={this.fileSelectedHandler}
+                  />
+                  <div className="errorMessage">{this.state.toBigMessage}</div>
+                </Form.Field>
+              </Card.Content>
+              <Card.Content extra>
+                <div className="ui two buttons">
+                  <Button type="submit" basic color="grey">
+                    OK
+                  </Button>
+                </div>
+              </Card.Content>
+            </Form>
+          </Card>
+        </Card.Group>
+      </div>
     );
   }
 }
