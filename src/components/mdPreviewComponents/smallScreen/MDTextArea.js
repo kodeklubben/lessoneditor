@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from "react-redux";
 import { GlobalHotKeys, configure } from "react-hotkeys";
 
 // konfigurerer HotKeys-React
@@ -13,7 +14,7 @@ const MDTextArea = props => {
         autoFocus
         ref={props.editorRef}
         className="TextAreaSmall"
-        value={props.textValue}
+        value={props.mdText}
         onChange={event => props.onInputChange(event)}
         onKeyDown={event => props.onTextareaKeyDown(event)}
         onKeyUp={event => props.onTextareaKeyUp(event)}
@@ -26,4 +27,8 @@ const MDTextArea = props => {
   );
 };
 
-export default MDTextArea;
+const mapStateToProps = state => {
+  return { mdText: state.mdText };
+};
+
+export default connect(mapStateToProps)(MDTextArea);
