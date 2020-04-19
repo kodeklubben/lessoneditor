@@ -5,9 +5,9 @@
 }
 
 .gAuth {
-  float: top;
-
-  margin: 1vh;
+  float: right;
+  width: 100%;
+  margin: auto;
 }
 
 .center {

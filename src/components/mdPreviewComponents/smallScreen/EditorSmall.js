@@ -158,7 +158,10 @@ class Editor extends React.Component {
     };
 
     const setUndo = () => {
-      if (undo[cursorPositionStart] !== inputText) {
+      if (
+        undo[undo.length - 1] !== inputText &&
+        undoCursorPosition !== cursorPositionStart
+      ) {
         undo.push(inputText);
         undoCursorPosition.push(cursorPositionStart);
       }
@@ -183,8 +186,8 @@ class Editor extends React.Component {
       // need to make event trigger for those cases here
       // if spacebar, update undo
       if (
-        inputText[inputText.length - 1] === " " ||
-        inputText[inputText.length - 1] === "\n"
+        inputText[cursorPositionStart - 1] === " " ||
+        inputText[cursorPositionStart - 1] === "\n"
       ) {
         setUndo();
       }
@@ -224,14 +227,10 @@ class Editor extends React.Component {
       cursorPositionStart = event.target.selectionStart;
       cursorPositionEnd = event.target.selectionEnd;
 
-      if (event.key === " " || event.keyCode === 32) {
-        setUndo();
-      }
-
       if (event.key === "Enter" || event.keyCode === 13) {
         // if input is enter, update undo and do list functions if list.
         charCounter = 0;
-        setUndo();
+
         if (isButtonOn[listButtonValues["bTitle"]] === false) {
           event.preventDefault();
           if (
