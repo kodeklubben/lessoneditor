@@ -4,6 +4,21 @@
   margin-top: 2em;
 }
 
+.gAuth {
+  float: top;
+
+  margin: 1vh;
+}
+
+.center {
+  text-align: center;
+  width: 50%;
+  min-height: 70px;
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 1em;
+}
+
 .link {
   text-align: center;
   width: 100%;

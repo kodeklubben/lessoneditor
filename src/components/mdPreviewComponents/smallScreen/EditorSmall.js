@@ -1,5 +1,6 @@
-import React from "react";
 import "./smallscreen.css";
+import React from "react";
+import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { addText, parseMD } from "../../../actions";
 import MDTextArea from "./MDTextArea";
@@ -10,6 +11,7 @@ import ControlPanel2 from "./ControlPanel2";
 import ControlPanelPreview from "./ControlPanelPreview";
 import PageButtons from "../../PageButtons";
 import ImagePopup from "../ImagePopup";
+import GoogleAuth from "../../GoogleAuth";
 import {
   SAVING,
   SAVED,
@@ -156,8 +158,10 @@ class Editor extends React.Component {
     };
 
     const setUndo = () => {
-      undo = [...undo, inputText];
-      undoCursorPosition = [...undoCursorPosition, cursorPositionStart];
+      if (undo[cursorPositionStart] !== inputText) {
+        undo.push(inputText);
+        undoCursorPosition.push(cursorPositionStart);
+      }
     };
 
     // sets cursor in textarea
@@ -178,7 +182,10 @@ class Editor extends React.Component {
       // some textAreaKeyDown events don't work on smartphones
       // need to make event trigger for those cases here
       // if spacebar, update undo
-      if (inputText[inputText.length - 1] === " ") {
+      if (
+        inputText[inputText.length - 1] === " " ||
+        inputText[inputText.length - 1] === "\n"
+      ) {
         setUndo();
       }
 
@@ -217,8 +224,12 @@ class Editor extends React.Component {
       cursorPositionStart = event.target.selectionStart;
       cursorPositionEnd = event.target.selectionEnd;
 
-      // if input is enter, update undo and do list functions if list.
+      if (event.key === " " || event.keyCode === 32) {
+        setUndo();
+      }
+
       if (event.key === "Enter" || event.keyCode === 13) {
+        // if input is enter, update undo and do list functions if list.
         charCounter = 0;
         setUndo();
         if (isButtonOn[listButtonValues["bTitle"]] === false) {
@@ -389,7 +400,7 @@ class Editor extends React.Component {
           return;
         }
 
-        redo = [...redo, inputText];
+        redo.push(inputText);
         redoCursorPosition.push(cursorPositionStart);
 
         inputText = undo.pop();
@@ -652,8 +663,11 @@ class Editor extends React.Component {
       }
     };
 
-    return (
+    return this.props.isSignedIn ? (
       <div>
+        <div className="gAuth">
+          <GoogleAuth />
+        </div>
         {!this.state.showPreview ? (
           <div>
             <ControlPanel
@@ -699,12 +713,18 @@ class Editor extends React.Component {
           </div>
         )}
       </div>
+    ) : (
+      <Redirect to="/" />
     );
   }
 }
 
 const mapStateToProps = state => {
-  return { mdText: state.mdText, parseMD: state.parseMD };
+  return {
+    mdText: state.mdText,
+    parseMD: state.parseMD,
+    isSignedIn: state.auth.isSignedIn
+  };
 };
 
 export default connect(mapStateToProps, { addText, parseMD })(Editor);

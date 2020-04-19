@@ -1,4 +1,5 @@
 import React from "react";
+import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { addText, parseMD } from "../../../actions";
 import MDTextArea from "./MDTextArea";
@@ -7,6 +8,7 @@ import { mdParser } from "../../../utils/mdParser";
 import ControlPanel from "./ControlPanel";
 import PageButtons from "../../PageButtons";
 import ImagePopup from "../ImagePopup";
+import GoogleAuth from "../../GoogleAuth";
 import {
   SAVING,
   SAVED,
@@ -876,8 +878,11 @@ class Editor extends React.Component {
         )
     };
 
-    return (
+    return this.props.isSignedIn ? (
       <div>
+        <div className="gAuth">
+          <GoogleAuth />
+        </div>
         <div>
           <ControlPanel handleButtonClick={handleButtonClick} />
           <div className="ui two column grid">
@@ -915,12 +920,18 @@ class Editor extends React.Component {
           />
         </div>
       </div>
+    ) : (
+      <Redirect to="/" />
     );
   }
 }
 
 const mapStateToProps = state => {
-  return { mdText: state.mdText, parseMD: state.parseMD };
+  return {
+    mdText: state.mdText,
+    parseMD: state.parseMD,
+    isSignedIn: state.auth.isSignedIn
+  };
 };
 
 export default connect(mapStateToProps, { addText, parseMD })(Editor);
