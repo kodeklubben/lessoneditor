@@ -30,8 +30,8 @@ const YML_TEXT = {
 
 // FORM TEXT
 const FORM_TEXT = {
-  TITLE: { heading: "Tittel:", placeholder: "Tittel" },
-  AUTHOR: { heading: "Forfatter:", placeholder: "Navn" },
+  TITLE: { heading: "* Tittel:", placeholder: "Tittel" },
+  AUTHOR: { heading: "* Forfatter:", placeholder: "Navn" },
   TRANSLATOR: {
     heading: "Oversatt av:",
     placeholder: "Navn"

@@ -1,8 +1,11 @@
-import React from "react";
 import "./formpage.css";
+import React from "react";
+import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
 import FormPage from "./FormPage";
 import COURSELIST from "./settingsFiles/COURSELIST";
 import { LANGUAGES } from "./settingsFiles/languages/formpage_NO";
+import GoogleAuth from "../GoogleAuth";
 
 class FormComponent extends React.Component {
   constructor(props) {
@@ -95,8 +98,11 @@ class FormComponent extends React.Component {
   };
 
   render() {
-    return (
+    return this.props.isSignedIn ? (
       <div>
+        <div className="gAuth">
+          <GoogleAuth />
+        </div>
         <FormPage
           submitHandler={this.submitHandler}
           changeHandler={this.changeHandler}
@@ -106,8 +112,16 @@ class FormComponent extends React.Component {
           state={this.state}
         />
       </div>
+    ) : (
+      <Redirect to="/" />
     );
   }
 }
 
-export default FormComponent;
+const mapStateToProps = state => {
+  return {
+    isSignedIn: state.auth.isSignedIn
+  };
+};
+
+export default connect(mapStateToProps)(FormComponent);

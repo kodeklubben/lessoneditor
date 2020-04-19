@@ -3,7 +3,7 @@ import FormComponent from "./YAMLComponents/FormComponent";
 import EndPage from "./frontPageComponents/EndPage";
 import MarkdownEditor from "./mdPreviewComponents/MarkdownEditor";
 // import Editor from "./mdPreviewComponents/Editor";
-import { IndexPage } from "./frontPageComponents/IndexPage";
+import IndexPage from "./frontPageComponents/IndexPage";
 import { BrowserRouter, Route } from "react-router-dom";
 
 const App = () => {
