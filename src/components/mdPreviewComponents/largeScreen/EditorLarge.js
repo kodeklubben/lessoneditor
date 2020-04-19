@@ -120,9 +120,6 @@ class Editor extends React.Component {
 
   // auto save after a couple of seconds
   componentDidUpdate() {
-    if (window.innerHeight / window.innerWidth > 1) {
-      this.props.update();
-    }
     if (this.state.counter === 2 && this.state.textValue.length > 0) {
       autoSaveMessage = SAVED;
     } else if (this.state.counter === 0) {
@@ -132,6 +129,7 @@ class Editor extends React.Component {
   }
 
   render() {
+    console.log(this.state.counter);
     // Submithandler
     const mySubmitHandler = event => {
       event.preventDefault();
