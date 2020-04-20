@@ -93,7 +93,7 @@ class Editor extends React.Component {
     super(props);
 
     this.state = {
-      test: "test",
+      test: true,
       images: [],
       counter: 0,
       textValue: "",
