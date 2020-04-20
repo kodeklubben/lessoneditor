@@ -19,6 +19,7 @@ class ImagePopup extends React.Component {
       this.setState({ toBigMessage: "Bildet kan ikke være over 5mb" });
     } else {
       this.props.storeImage(event.target.files[0]);
+      console.log(event.target.files[0]);
       this.setState({ toBigMessage: "" });
       this.props.imagePopupSubmitHandler("./" + event.target.files[0].name);
     }

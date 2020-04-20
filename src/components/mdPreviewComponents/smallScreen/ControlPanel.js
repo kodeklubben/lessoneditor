@@ -1,3 +1,8 @@
+import React from "react";
+import { connect } from "react-redux";
+import Buttons from "./Button";
+import { Link, Redirect } from "react-router-dom";
+import { Icon, Button, Dropdown, Divider } from "semantic-ui-react";
 import {
   emphasis,
   undoRedo,
@@ -7,16 +12,8 @@ import {
   sections,
   code
 } from "../settingsFiles/buttonConfig.js";
-import React from "react";
-import Buttons from "./Button";
-import { Link, Redirect } from "react-router-dom";
-import { Icon, Button, Dropdown, Divider } from "semantic-ui-react";
 
 class ControlPanel extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   handleButtonClick = (
     bTitle,
     output,
@@ -78,6 +75,12 @@ class ControlPanel extends React.Component {
             shortcutKey={image[0].shortcut}
           />
         </div>
+
+        <div className="column">
+          <i class="user icon"></i>
+          {this.props.firstName}
+        </div>
+
         <button
           className="ui right floated icon right  column button floatRight"
           type="button"
@@ -90,4 +93,10 @@ class ControlPanel extends React.Component {
   }
 }
 
-export default ControlPanel;
+const mapStateToProps = state => {
+  return {
+    firstName: state.auth.firstName
+  };
+};
+
+export default connect(mapStateToProps)(ControlPanel);

@@ -110,7 +110,7 @@ class Editor extends React.Component {
   componentDidMount() {
     this.myCounter = setInterval(() => {
       this.setState({ counter: this.state.counter + 1 });
-    }, 1000);
+    }, 500);
   }
 
   // remove counter
@@ -120,16 +120,18 @@ class Editor extends React.Component {
 
   // auto save after a couple of seconds
   componentDidUpdate() {
-    if (this.state.counter === 2 && this.state.textValue.length > 0) {
+    if (this.state.counter === 4 && this.props.mdText.length > 0) {
       autoSaveMessage = SAVED;
     } else if (this.state.counter === 0) {
       autoSaveMessage = SAVING;
-      storedTextValue = this.state.textValue;
+      storedTextValue = this.props.mdText;
+    }
+    if (window.innerWidth < 700 && window.innerHeight / window.innerWidth > 1) {
+      this.props.update();
     }
   }
 
   render() {
-    console.log(this.state.counter);
     // Submithandler
     const mySubmitHandler = event => {
       event.preventDefault();
@@ -878,9 +880,6 @@ class Editor extends React.Component {
 
     return this.props.isSignedIn ? (
       <div>
-        <div className="gAuth">
-          <GoogleAuth />
-        </div>
         <div>
           <ControlPanel handleButtonClick={handleButtonClick} />
           <div className="ui two column grid">
@@ -928,7 +927,8 @@ const mapStateToProps = state => {
   return {
     mdText: state.mdText,
     parseMD: state.parseMD,
-    isSignedIn: state.auth.isSignedIn
+    isSignedIn: state.auth.isSignedIn,
+    firstName: state.auth.firstName
   };
 };
 

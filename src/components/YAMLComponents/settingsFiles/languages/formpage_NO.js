@@ -23,24 +23,24 @@ const NAV_BUTTONS = {
 
 // YML page text
 const YML_TEXT = {
-  topic: "Tema:",
-  subject: "Fag:",
-  grade: "Klassetrinn:"
+  topic: "Tema",
+  subject: "Fag",
+  grade: "Klassetrinn"
 };
 
 // FORM TEXT
 const FORM_TEXT = {
-  TITLE: { heading: "* Tittel:", placeholder: "Tittel" },
-  AUTHOR: { heading: "* Forfatter:", placeholder: "Navn" },
+  TITLE: { heading: "Tittel", placeholder: "Tittel" },
+  AUTHOR: { heading: "Forfatter", placeholder: "Navn" },
   TRANSLATOR: {
-    heading: "Oversatt av:",
+    heading: "Oversatt av",
     placeholder: "Navn"
   },
   LICENSE: {
-    heading: "Lisens:",
+    heading: "Lisens",
     placeholder: "Lisens"
   },
-  COURSE: { heading: "Kurs:" },
+  COURSE: { heading: "Kurs" },
   LANGUAGE: { heading: "Språk:" },
   LEVEL: { heading: "Nivå:" },
   LEVEL_VALUES: [
