@@ -1,5 +1,5 @@
 import React from "react";
-
+import { connect } from "react-redux";
 import Page1 from "./Page1";
 import Page2 from "./Page2";
 import Page3 from "./Page3";
@@ -80,7 +80,19 @@ const FormPage = props => {
     }
   };
 
-  return renderFormPage();
+  return (
+    <div className="column">
+      <i class="user icon"></i>
+      {props.firstName}
+      {renderFormPage()}
+    </div>
+  );
 };
 
-export default FormPage;
+const mapStateToProps = state => {
+  return {
+    firstName: state.auth.firstName
+  };
+};
+
+export default connect(mapStateToProps)(FormPage);

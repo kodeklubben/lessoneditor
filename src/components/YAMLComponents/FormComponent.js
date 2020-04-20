@@ -100,9 +100,6 @@ class FormComponent extends React.Component {
   render() {
     return this.props.isSignedIn ? (
       <div className="test2">
-        <div className="gAuth">
-          <GoogleAuth />
-        </div>
         <div className="formWidth">
           <FormPage
             submitHandler={this.submitHandler}
