@@ -1,3 +1,6 @@
+import React from "react";
+import { connect } from "react-redux";
+import Buttons from "./Button";
 import {
   emphasis,
   undoRedo,
@@ -7,8 +10,6 @@ import {
   sections,
   code
 } from "../settingsFiles/buttonConfig.js";
-import React from "react";
-import Buttons from "./Button";
 
 class ControlPanel extends React.Component {
   handleButtonClick = (
@@ -155,9 +156,19 @@ class ControlPanel extends React.Component {
             </div>
           ))}
         </div>
+        <div className="column">
+          <i class="user icon"></i>
+          {this.props.firstName}
+        </div>
       </div>
     );
   }
 }
 
-export default ControlPanel;
+const mapStateToProps = state => {
+  return {
+    firstName: state.auth.firstName
+  };
+};
+
+export default connect(mapStateToProps)(ControlPanel);

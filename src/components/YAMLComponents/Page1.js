@@ -3,11 +3,48 @@ import React from "react";
 import { LANGUAGES, FORM_TEXT } from "./settingsFiles/languages/formpage_NO";
 
 const Page1 = props => {
+  const [inputvalue, setInputvalue] = React.useState(false);
+
+  const license = !inputvalue ? (
+    <div className="">
+      <div className="field">
+        <div className="test3">
+          <h3>Lisens:</h3>
+          <button
+            className="ui mini button"
+            onClick={() => setInputvalue(true)}
+          >
+            Endre?
+          </button>
+        </div>
+
+        <p style={{ marginBottom: "1em" }}>Lisenstekst</p>
+      </div>
+    </div>
+  ) : (
+    <div className="field">
+      <label>
+        <h3>{FORM_TEXT.LICENSE.heading}</h3>
+        <input
+          autoComplete="off"
+          type="text"
+          name="license"
+          placeholder={FORM_TEXT.LICENSE.placeholder}
+          value={props.state.license}
+          onChange={props.changeHandler}
+        />
+      </label>
+    </div>
+  );
+
   return (
     <div className="">
-      <div className="">
+      <div className="field">
         <label>
-          <h3>{FORM_TEXT.AUTHOR.heading}</h3>
+          <h3>
+            {FORM_TEXT.AUTHOR.heading}
+            <inline className="test"> (nødvendig)</inline>
+          </h3>
           <input
             autoComplete="off"
             type="text"
@@ -19,7 +56,7 @@ const Page1 = props => {
         </label>
         <div className="validateError">{props.state.authorErr}</div>
       </div>
-      <div className="">
+      <div className="field">
         <label>
           <h3>{FORM_TEXT.TRANSLATOR.heading}</h3>
           <input
@@ -32,13 +69,13 @@ const Page1 = props => {
           />
         </label>
       </div>
-      <div className="">
+      <div className="field">
         <label>
           <h3>{FORM_TEXT.LANGUAGE.heading}</h3>
           <select
             name="language"
             onChange={props.changeHandler}
-            className="item"
+            className="ui dropdown"
           >
             {LANGUAGES.map(element => (
               <option key={Object.keys(element)} value={Object.keys(element)}>
@@ -48,19 +85,7 @@ const Page1 = props => {
           </select>
         </label>
       </div>
-      <div className="">
-        <label>
-          <h3>{FORM_TEXT.LICENSE.heading}</h3>
-          <input
-            autoComplete="off"
-            type="text"
-            name="license"
-            placeholder={FORM_TEXT.LICENSE.placeholder}
-            value={props.state.license}
-            onChange={props.changeHandler}
-          />
-        </label>
-      </div>
+      {license}
     </div>
   );
 };

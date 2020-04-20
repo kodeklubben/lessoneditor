@@ -96,7 +96,7 @@ class Editor extends React.Component {
   componentDidMount() {
     this.myCounter = setInterval(() => {
       this.setState({ counter: this.state.counter + 1 });
-    }, 1000);
+    }, 500);
   }
 
   // remove counter
@@ -109,11 +109,11 @@ class Editor extends React.Component {
     if (window.innerWidth > 700 && window.innerHeight / window.innerWidth < 1) {
       this.props.update();
     }
-    if (this.state.counter === 2 && this.state.textValue.length > 0) {
+    if (this.state.counter === 4 && this.props.mdText.length > 0) {
       autoSaveMessage = SAVED;
     } else if (this.state.counter === 0) {
       autoSaveMessage = SAVING;
-      storedTextValue = this.state.textValue;
+      storedTextValue = this.props.mdText;
     }
   }
 
@@ -664,9 +664,6 @@ class Editor extends React.Component {
 
     return this.props.isSignedIn ? (
       <div>
-        <div className="gAuth">
-          <GoogleAuth />
-        </div>
         {!this.state.showPreview ? (
           <div>
             <ControlPanel
@@ -722,7 +719,8 @@ const mapStateToProps = state => {
   return {
     mdText: state.mdText,
     parseMD: state.parseMD,
-    isSignedIn: state.auth.isSignedIn
+    isSignedIn: state.auth.isSignedIn,
+    firstName: state.auth.firstName
   };
 };
 

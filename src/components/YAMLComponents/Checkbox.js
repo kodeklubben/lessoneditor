@@ -7,7 +7,7 @@ class Checkbox extends React.Component {
 
   render() {
     return (
-      <div className="">
+      <div className="ui checkbox">
         <input
           type="checkbox"
           name={this.props.subtag}

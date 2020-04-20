@@ -47,23 +47,31 @@ const PageButtons = props => {
   };
 
   return (
-    <div>
+    <div className="ui form">
       {props.state.pageNumber === 1 || props.state.test === "test" ? (
         <Link to={props.prevValue}>
-          <button className="" type="button" onClick={() => onClickHandler(-1)}>
+          <button
+            className="ui button"
+            type="button"
+            onClick={() => onClickHandler(-1)}
+          >
             <i aria-hidden="true" className="" />
             {props.prevTitle}
           </button>
         </Link>
       ) : (
-        <button className="" type="button" onClick={() => onClickHandler(-1)}>
+        <button
+          className="ui button"
+          type="button"
+          onClick={() => onClickHandler(-1)}
+        >
           <i aria-hidden="true" className="" />
           {props.prevTitle}
         </button>
       )}
 
       <button
-        className=""
+        className="ui button"
         type="button"
         onClick={event => onClickHandler(1, event)}
       >

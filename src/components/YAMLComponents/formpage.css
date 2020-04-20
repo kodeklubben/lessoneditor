@@ -3,3 +3,34 @@
 .validateError {
   color: red;
 }
+
+.test {
+  color: rgb(175, 175, 175);
+}
+
+.test2 {
+  display: flex;
+  flex-direction: column;
+}
+
+.test3 {
+  display: flex;
+  flex-direction: row;
+  margin: auto;
+  margin-bottom: -1em;
+}
+
+.checkbox {
+  margin: 1vh;
+}
+
+.ui.mini.button {
+  height: 2em;
+  padding: auto;
+  margin-left: 4em;
+}
+
+.formWidth {
+  margin: 10%;
+  margin-top: 9%;
+}

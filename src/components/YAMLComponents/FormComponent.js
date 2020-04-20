@@ -99,18 +99,20 @@ class FormComponent extends React.Component {
 
   render() {
     return this.props.isSignedIn ? (
-      <div>
+      <div className="test2">
         <div className="gAuth">
           <GoogleAuth />
         </div>
-        <FormPage
-          submitHandler={this.submitHandler}
-          changeHandler={this.changeHandler}
-          checkboxHandler={this.checkboxHandler}
-          setPageNumber={this.setPageNumber}
-          setErr={this.setErr}
-          state={this.state}
-        />
+        <div className="formWidth">
+          <FormPage
+            submitHandler={this.submitHandler}
+            changeHandler={this.changeHandler}
+            checkboxHandler={this.checkboxHandler}
+            setPageNumber={this.setPageNumber}
+            setErr={this.setErr}
+            state={this.state}
+          />
+        </div>
       </div>
     ) : (
       <Redirect to="/" />

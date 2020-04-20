@@ -11,9 +11,12 @@ import { NAV_BUTTONS } from "./settingsFiles/languages/formpage_NO";
 const Page3 = props => {
   return (
     <div className="">
-      <div className="">
+      <div className="field">
         <label>
-          <h3>{FORM_TEXT.TITLE.heading}</h3>
+          <h3>
+            {FORM_TEXT.TITLE.heading}
+            <inline className="test"> (nødvendig)</inline>
+          </h3>
           <input
             autoComplete="off"
             type="text"
@@ -25,14 +28,16 @@ const Page3 = props => {
         </label>
         <div className="validateError">{props.state.titleErr}</div>
       </div>
-      <div className="">
-        <div className="">
-          <h3>{YML_TEXT.subject}</h3>
-          <YMLtagsSubject checkboxHandler={props.checkboxHandler} />
-        </div>
-        <div className="">
-          <h3>{YML_TEXT.topic}</h3>
-          <YMLtagsTopic checkboxHandler={props.checkboxHandler} />
+      <div className="field">
+        <div className="ui two column grid">
+          <div className="column">
+            <h3>{YML_TEXT.subject}</h3>
+            <YMLtagsSubject checkboxHandler={props.checkboxHandler} />
+          </div>
+          <div className="column">
+            <h3>{YML_TEXT.topic}</h3>
+            <YMLtagsTopic checkboxHandler={props.checkboxHandler} />
+          </div>
         </div>
       </div>
     </div>

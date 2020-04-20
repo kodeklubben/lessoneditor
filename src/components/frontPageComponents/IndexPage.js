@@ -22,6 +22,14 @@ const IndexPage = props => {
             </p>
             <p id="author">Harold Abelson </p>
           </div>
+          <div
+            style={{
+              margin: "20, 20, 5, 20",
+              textAlign: "center"
+            }}
+          >
+            <h2>Velkommen {props.firstName}</h2>
+          </div>
           <div className="btnDiv">
             <Link to="" className="link">
               <button className="btn">Min side</button>
@@ -56,7 +64,7 @@ const IndexPage = props => {
 };
 
 const mapStateToProps = state => {
-  return { isSignedIn: state.auth.isSignedIn };
+  return { isSignedIn: state.auth.isSignedIn, firstName: state.auth.firstName };
 };
 
 export default connect(mapStateToProps)(IndexPage);

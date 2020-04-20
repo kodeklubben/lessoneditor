@@ -8,7 +8,7 @@ import Checkbox from "./Checkbox";
 
 const YMLtagsGrade = props => {
   return (
-    <div>
+    <div className="">
       {gradeSettings.map(element => (
         <Checkbox
           key={element.value}
@@ -24,7 +24,7 @@ const YMLtagsGrade = props => {
 
 const YMLtagsSubject = props => {
   return (
-    <div>
+    <div className="">
       {subjectSettings.map(element => (
         <Checkbox
           key={element.value}
@@ -40,7 +40,7 @@ const YMLtagsSubject = props => {
 
 const YMLtagsTopic = props => {
   return (
-    <div>
+    <div className="">
       {topicSettings.map(element => (
         <Checkbox
           key={element.value}

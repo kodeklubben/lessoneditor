@@ -10,7 +10,7 @@ const FormPage = props => {
   const renderFormPage = () => {
     if (props.state.pageNumber === 1) {
       return (
-        <div className="">
+        <div className="ui segment form">
           <Page1 changeHandler={props.changeHandler} state={props.state} />
 
           <div className="">
@@ -29,7 +29,7 @@ const FormPage = props => {
       );
     } else if (props.state.pageNumber === 2) {
       return (
-        <div className="">
+        <div className="ui segment form">
           <form className="" onSubmit={props.submitHandler}>
             <Page2
               changeHandler={props.changeHandler}
@@ -54,7 +54,7 @@ const FormPage = props => {
       );
     } else if (props.state.pageNumber === 3) {
       return (
-        <div className="">
+        <div className="ui segment form">
           <form className="" onSubmit={props.submitHandler}>
             <Page3
               changeHandler={props.changeHandler}
