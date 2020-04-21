@@ -20,7 +20,7 @@ class ControlPanel extends React.Component {
     return (
       <div className="ui segment grid ">
         <div />
-        <div className="ui icon buttons buttonBorder">
+        <div className="ui icon buttons buttonBorderSmall">
           <Button labelPosition="left" onClick={this.onButtonClick}>
             <Icon name="eye" />
           </Button>

@@ -43,9 +43,10 @@ const Page1 = props => {
         <label>
           <h3>
             {FORM_TEXT.AUTHOR.heading}
-            <inline className="test"> (nødvendig)</inline>
+            <span className="test"> (nødvendig)</span>
           </h3>
           <input
+            autoFocus
             autoComplete="off"
             type="text"
             name="author"
@@ -60,7 +61,7 @@ const Page1 = props => {
         <label>
           <h3>
             {FORM_TEXT.TRANSLATOR.heading}
-            <inline className="test"> (valgfritt)</inline>
+            <span className="test"> (valgfritt)</span>
           </h3>
           <input
             autoComplete="off"
@@ -76,7 +77,7 @@ const Page1 = props => {
         <label>
           <h3>
             {FORM_TEXT.LANGUAGE.heading}
-            <inline className="test"> (valgfritt)</inline>
+            <span className="test"> (valgfritt)</span>
           </h3>
           <select
             name="language"

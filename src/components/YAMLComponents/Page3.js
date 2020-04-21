@@ -15,9 +15,10 @@ const Page3 = props => {
         <label>
           <h3>
             {FORM_TEXT.TITLE.heading}
-            <inline className="test"> (nødvendig)</inline>
+            <span className="test"> (nødvendig)</span>
           </h3>
           <input
+            autoFocus
             autoComplete="off"
             type="text"
             name="title"

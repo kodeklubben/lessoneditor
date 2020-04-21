@@ -41,8 +41,8 @@ const FORM_TEXT = {
     placeholder: "Lisens"
   },
   COURSE: { heading: "Kurs" },
-  LANGUAGE: { heading: "Språk:" },
-  LEVEL: { heading: "Nivå:" },
+  LANGUAGE: { heading: "Språk" },
+  LEVEL: { heading: "Nivå" },
   LEVEL_VALUES: [
     { name: "Introduksjon", value: 1 },
     { name: "Nybegynner", value: 2 },

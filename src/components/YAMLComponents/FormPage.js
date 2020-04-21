@@ -11,20 +11,22 @@ const FormPage = props => {
     if (props.state.pageNumber === 1) {
       return (
         <div className="ui segment form">
-          <Page1 changeHandler={props.changeHandler} state={props.state} />
+          <form className="" onSubmit={props.submitHandler}>
+            <Page1 changeHandler={props.changeHandler} state={props.state} />
 
-          <div className="">
-            <PageButtons
-              prevTitle={NAV_BUTTONS.prev}
-              nextTitle={NAV_BUTTONS.next}
-              prevValue="/"
-              submitHandler={props.submitHandler}
-              setPageNumber={props.setPageNumber}
-              err="author"
-              setErr={props.setErr}
-              state={props.state}
-            />
-          </div>
+            <div className="">
+              <PageButtons
+                prevTitle={NAV_BUTTONS.prev}
+                nextTitle={NAV_BUTTONS.next}
+                prevValue="/"
+                submitHandler={props.submitHandler}
+                setPageNumber={props.setPageNumber}
+                err="author"
+                setErr={props.setErr}
+                state={props.state}
+              />
+            </div>
+          </form>
         </div>
       );
     } else if (props.state.pageNumber === 2) {
@@ -82,7 +84,7 @@ const FormPage = props => {
 
   return (
     <div className="column">
-      <i class="user icon"></i>
+      <i className="user icon"></i>
       {props.firstName}
       {renderFormPage()}
     </div>

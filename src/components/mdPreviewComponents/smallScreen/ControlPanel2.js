@@ -30,7 +30,7 @@ class ControlPanel extends React.Component {
 
   render() {
     return (
-      <div className="ui segment grid buttonBorder">
+      <div className="ui segment grid buttonBorderSmall">
         <div className="ui icon buttons">
           {emphasis.map(element => (
             <div key={element.bTitle} className="">
