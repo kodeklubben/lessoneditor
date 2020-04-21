@@ -19,7 +19,7 @@ class FormComponent extends React.Component {
       translator: "",
       language: Object.keys(LANGUAGES[0]),
       level: 1,
-      license: "",
+      license: "MIT",
       tags: { topic: [], subject: [], grade: [] },
       redirect: null,
       pageNumber: 1

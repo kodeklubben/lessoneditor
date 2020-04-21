@@ -58,7 +58,10 @@ const Page1 = props => {
       </div>
       <div className="field">
         <label>
-          <h3>{FORM_TEXT.TRANSLATOR.heading}</h3>
+          <h3>
+            {FORM_TEXT.TRANSLATOR.heading}
+            <inline className="test"> (valgfritt)</inline>
+          </h3>
           <input
             autoComplete="off"
             type="text"
@@ -71,7 +74,10 @@ const Page1 = props => {
       </div>
       <div className="field">
         <label>
-          <h3>{FORM_TEXT.LANGUAGE.heading}</h3>
+          <h3>
+            {FORM_TEXT.LANGUAGE.heading}
+            <inline className="test"> (valgfritt)</inline>
+          </h3>
           <select
             name="language"
             onChange={props.changeHandler}
