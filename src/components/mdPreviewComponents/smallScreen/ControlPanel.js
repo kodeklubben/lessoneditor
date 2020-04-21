@@ -76,12 +76,17 @@ class ControlPanel extends React.Component {
           />
         </div>
 
-        <div className="column">
-          <i class="user icon"></i>
-          {this.props.firstName}
+        <div
+          style={{ marginTop: "11px", marginBottom: "-11px" }}
+          className="column"
+        >
+          <i class="user icon">
+            <p>{this.props.firstName}</p>
+          </i>
         </div>
 
         <button
+          style={{ marginRight: "-30px" }}
           className="ui right floated icon right  column button floatRight"
           type="button"
           onClick={this.props.mySubmitHandler}

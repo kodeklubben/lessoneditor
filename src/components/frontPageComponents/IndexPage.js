@@ -22,6 +22,7 @@ const IndexPage = props => {
             </p>
             <p id="author">Harold Abelson </p>
           </div>
+          <div style={{ margin: "45px" }} />
           <div
             style={{
               margin: "20, 20, 5, 20",
@@ -53,6 +54,7 @@ const IndexPage = props => {
             </p>
             <p id="author">Harold Abelson </p>
           </div>
+          <div style={{}} />
           <div
             style={{
               marginTop: "10vh",
@@ -62,7 +64,7 @@ const IndexPage = props => {
             }}
             className="ui container"
           >
-            <h3>Logg inn:</h3>
+            <h2>Logg inn:</h2>
           </div>
           <div className="center">
             <GoogleAuth />
