@@ -18,7 +18,7 @@ const Page1 = props => {
           </button>
         </div>
 
-        <p style={{ marginBottom: "1em" }}>Lisenstekst</p>
+        <p style={{ marginBottom: "1em" }}>MIT</p>
       </div>
     </div>
   ) : (
