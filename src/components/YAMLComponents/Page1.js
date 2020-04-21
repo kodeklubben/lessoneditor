@@ -9,12 +9,12 @@ const Page1 = props => {
     <div className="">
       <div className="field">
         <div className="test3">
-          <h3>Lisens:</h3>
+          <h3>{FORM_TEXT.LICENSE.heading}</h3>
           <button
             className="ui mini button"
             onClick={() => setInputvalue(true)}
           >
-            Endre?
+            <p className="smallButton">Endre?</p>
           </button>
         </div>
 

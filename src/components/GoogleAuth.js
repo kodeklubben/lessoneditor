@@ -2,6 +2,8 @@ import React from "react";
 import { connect } from "react-redux";
 import { signIn, signOut } from "../actions";
 
+var profile = null;
+
 class GoogleAuth extends React.Component {
   componentDidMount() {
     window.gapi.load("client:auth2", () => {
@@ -13,7 +15,7 @@ class GoogleAuth extends React.Component {
         })
         .then(async () => {
           this.auth = await window.gapi.auth2.getAuthInstance();
-
+          profile = await this.auth.currentUser.get().getBasicProfile();
           this.onAuthChange(this.auth.isSignedIn.get());
           this.auth.isSignedIn.listen(this.onAuthChange);
         });
@@ -22,11 +24,7 @@ class GoogleAuth extends React.Component {
 
   onAuthChange = isSignedIn => {
     if (isSignedIn) {
-      console.log(this.auth.currentUser.get());
-      this.props.signIn(
-        this.auth.currentUser.get().getId(),
-        this.auth.currentUser.je.Pt.pW
-      );
+      this.props.signIn(profile.getId(), profile.getGivenName());
     } else {
       this.props.signOut();
     }

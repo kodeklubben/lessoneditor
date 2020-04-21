@@ -53,6 +53,17 @@ const IndexPage = props => {
             </p>
             <p id="author">Harold Abelson </p>
           </div>
+          <div
+            style={{
+              marginTop: "10vh",
+              marginBottom: "2vh",
+              alignItems: "center",
+              textAlign: "center"
+            }}
+            className="ui container"
+          >
+            <h3>Logg inn:</h3>
+          </div>
           <div className="center">
             <GoogleAuth />
           </div>
