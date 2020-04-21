@@ -17,14 +17,14 @@ class GoogleAuth extends React.Component {
           this.auth = await window.gapi.auth2.getAuthInstance();
           profile = await this.auth.currentUser.get().getBasicProfile();
           this.onAuthChange(await this.auth.isSignedIn.get());
-          await this.auth.isSignedIn.listen(this.onAuthChange);
+          this.auth.isSignedIn.listen(this.onAuthChange);
         });
     });
   }
 
-  onAuthChange = isSignedIn => {
+  onAuthChange = async isSignedIn => {
     if (isSignedIn) {
-      this.props.signIn(profile.getId(), profile.getGivenName());
+      this.props.signIn(await profile.getId(), await profile.getGivenName());
     } else {
       this.props.signOut();
     }
