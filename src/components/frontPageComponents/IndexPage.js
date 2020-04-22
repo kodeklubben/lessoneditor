@@ -32,7 +32,7 @@ const IndexPage = props => {
             <h2>Velkommen {props.firstName}</h2>
           </div>
           <div className="btnDiv">
-            <Link to="" className="link">
+            <Link to="/myPage" className="link">
               <button className="btn">Min side</button>
             </Link>
             <Link to="" className="link">
