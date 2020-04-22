@@ -1,4 +1,4 @@
-*{
+/* *{
   margin: 0;
   padding: 0;
   background-color: white;
@@ -6,10 +6,9 @@
 body{
   background-color: white !important;
 
-}
+} */
 
-
-.LeftBox{
+.LeftBox {
   width: 220px;
   height: 220px;
   padding: 10px;
@@ -21,22 +20,23 @@ body{
   left: 0;
   right: 0;
   margin: auto;
-  border-radius:24px;
-
+  border-radius: 24px;
 }
 
-.informationTable{
+.informationTable {
   font-family: Helvetica, sans-serif, Arial;
   line-height: 25px;
 }
-#header{
+#header {
   background-color: #b1daae;
   width: 200px;
   padding: 10px;
   border-radius: 22px;
   text-align: center;
 }
-#text1, #text2, #text3{
+#text1,
+#text2,
+#text3 {
   margin-top: 25px;
   line-height: 25px;
   text-decoration: underline;

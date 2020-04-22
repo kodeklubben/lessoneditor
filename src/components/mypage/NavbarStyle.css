@@ -1,4 +1,4 @@
-*{
+/* *{
   margin: 0;
   padding: 0;
   text-decoration: none;
@@ -8,9 +8,9 @@
 body{
   background-color: #eee;
   font:13px/1.65em "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
+} */
 
-ul li{
+ul li {
   list-style: none;
   display: inline-block;
   float: right;
@@ -18,46 +18,40 @@ ul li{
   text-align: center;
 }
 
-
-ul li a{
+ul li a {
   display: block;
   color: #444;
   font-weight: 100;
   padding: 0 20px;
 }
 
-.navbar{
+.navbar {
   font-size: 24px;
   font-family: "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
   color: black;
   float: right;
-
-
 }
 
 ul li a:hover {
-    text-decoration: underline;
-    text-decoration-color: green;
-    font-size:1.5em;
-    color: #444;
+  text-decoration: underline;
+  text-decoration-color: green;
+  font-size: 1.5em;
+  color: #444;
 }
-.navbar-container{
+.navbar-container {
   width: 100%;
   height: 100px;
   background-color: #fff;
   border-bottom: 10px solid #b1daae;
-
 }
 
-.logo{
-    float: left;
-    height: 100%;
-    width: 20%;
-
+.logo {
+  float: left;
+  height: 100%;
+  width: 20%;
 }
-.logo img{
-    /*border: 1px solid green;*/
-    height: 100%;
-    width: 100%;
-
+.logo img {
+  /*border: 1px solid green;*/
+  height: 100%;
+  width: 100%;
 }
