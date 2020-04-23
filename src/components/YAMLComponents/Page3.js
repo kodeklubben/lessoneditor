@@ -10,7 +10,7 @@ import { NAV_BUTTONS } from "./settingsFiles/languages/formpage_NO";
 
 const Page3 = props => {
   return (
-    <div className="">
+    <div className="ui large form">
       <div className="ui grid">
         <div className="sixteen wide column">
           <div className="field">

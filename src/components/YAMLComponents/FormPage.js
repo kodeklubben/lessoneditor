@@ -83,17 +83,25 @@ const FormPage = props => {
   };
 
   return props.imageUrl ? (
-    <div className="column">
-      <span style={{ marginRight: "6px" }}>{props.firstName}</span>
-      <img
-        className="ui avatar image"
-        src={props.imageUrl}
-        alt="useImage"
-      ></img>
-      {renderFormPage()}
+    <div className="">
+      <div className="">
+        <div clasName="ui grid">
+          <div className="ten wide row">
+            <div className="column">
+              <span style={{ marginRight: "6px" }}>{props.firstName}</span>
+              <img
+                className="ui avatar image"
+                src={props.imageUrl}
+                alt="useImage"
+              ></img>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="">{renderFormPage()}</div>
     </div>
   ) : (
-    <div className="column">
+    <div className="">
       <span style={{ marginRight: "6px" }}>{props.firstName}</span>
       <i className="user icon"></i>
       {renderFormPage()}

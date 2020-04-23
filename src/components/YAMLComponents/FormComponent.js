@@ -19,7 +19,7 @@ class FormComponent extends React.Component {
       translator: "",
       language: Object.keys(LANGUAGES[0]),
       level: 1,
-      license: "MIT",
+      license: "Code Club World Limited Terms of Service",
       tags: { topic: [], subject: [], grade: [] },
       redirect: null,
       pageNumber: 1
@@ -99,17 +99,15 @@ class FormComponent extends React.Component {
 
   render() {
     return this.props.isSignedIn ? (
-      <div className="test2">
-        <div className="formWidth">
-          <FormPage
-            submitHandler={this.submitHandler}
-            changeHandler={this.changeHandler}
-            checkboxHandler={this.checkboxHandler}
-            setPageNumber={this.setPageNumber}
-            setErr={this.setErr}
-            state={this.state}
-          />
-        </div>
+      <div className="">
+        <FormPage
+          submitHandler={this.submitHandler}
+          changeHandler={this.changeHandler}
+          checkboxHandler={this.checkboxHandler}
+          setPageNumber={this.setPageNumber}
+          setErr={this.setErr}
+          state={this.state}
+        />
       </div>
     ) : (
       <Redirect to="/" />

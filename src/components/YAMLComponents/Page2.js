@@ -11,7 +11,7 @@ import { NAV_BUTTONS } from "./settingsFiles/languages/formpage_NO";
 
 const Page2 = props => {
   return (
-    <div className="">
+    <div className="ui large form">
       <div className="field">
         <label>
           <h3>{FORM_TEXT.COURSE.heading}</h3>
