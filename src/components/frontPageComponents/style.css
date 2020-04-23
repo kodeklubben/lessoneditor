@@ -1,132 +1,163 @@
-body{
-    background-color: #b1daae;
+.btnDiv {
+  display: flex;
+  flex-direction: column;
+  margin-top: 2em;
 }
 
-.btnDiv {
-    display: flex;
-    flex-direction: column;
-    margin-top: 2em;
+.gAuth {
+  width: 100%;
+  margin: auto;
+  float: right;
+}
+
+.center {
+  text-align: center;
+  width: 50%;
+  min-height: 70px;
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 1em;
+}
+
+.link {
+  text-align: center;
+  width: 100%;
+  min-height: 70px;
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 1em;
+  border-radius: 22px;
+  outline: none;
 }
 
 .btn {
-    font-size: 24px;
-    text-align: center;
-    width: 20%;
-    min-height: 70px;
-    margin-right: auto;
-    margin-left: auto;
-    margin-top: 1em;
-    border-radius: 22px;
+  color: #265732;
+  background-color: whitesmoke;
+  font-size: 24px;
+  text-align: center;
+  width: 50%;
+  min-height: 70px;
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 1em;
+  border-radius: 22px;
+  outline: none;
 }
 
+.btn:hover {
+  color: #265732;
+  background-color: rgb(231, 231, 231);
+  font-size: 24px;
+  text-align: center;
+  width: 50%;
+  min-height: 70px;
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 1em;
+  border-radius: 22px;
+  outline: none;
+}
 
 ul {
-    list-style-type: none;
-    overflow: hidden;
-    background-color: white;
-    width: 100%;
+  list-style-type: none;
+  overflow: hidden;
+  background-color: white;
+  width: 100%;
 }
 
 li {
-    float: left;
-    padding: 0 15px;
+  float: left;
+  padding: 0 15px;
 }
 
 li a {
-    display: block;
-    color: white;
-    text-align: center;
-    padding: 26px ;
-    text-decoration: none;
-    color: black;
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 26px;
+  text-decoration: none;
+  color: black;
 }
-.navbar{
-    float: right;
-    height: 100%;
-    /*border: 1px solid blue;*/
-    right: 0;
-    padding-right: 15px;
-
+.navbar {
+  float: right;
+  height: 100%;
+  /*border: 1px solid blue;*/
+  right: 0;
+  padding-right: 15px;
 }
-.navbar-container{
-    top: 0;
-    margin: 0;
-    padding: 0;
-    height: 100px;
-    /*border: 1px solid red;*/
-    background-color: white;
+.navbar-container {
+  top: 0;
+  margin: 0;
+  padding: 0;
+  height: 100px;
+  /*border: 1px solid red;*/
+  background-color: white;
 }
 li a:hover {
-    text-decoration: underline;
-    text-decoration-color: green;
-    font-size:1.5em;
+  text-decoration: underline;
+  text-decoration-color: green;
+  font-size: 1.5em;
 }
-.logo{
-    float: left;
-    height: 100%;
-    width: 20%;
-
+.logo {
+  float: left;
+  height: 100%;
+  width: 20%;
 }
-.logo img{
-    /*border: 1px solid green;*/
-    height: 100%;
-    width: 100%;
-
+.logo img {
+  /*border: 1px solid green;*/
+  height: 100%;
+  width: 100%;
 }
 
-.Clear{
-    float: both;
-
+.Clear {
+  float: both;
 }
-.StartPageContainer{
-    /*border: 1px solid red;*/
-    height: 600px;
-    display: flex;
-    flex-direction: column;
-    margin-top: 100px;
+.StartPageContainer {
+  /*border: 1px solid red;*/
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+  margin-top: 100px;
 }
-.closeBtn{
-    font-size: 24px;
-    background-color: #F0F0F0;
-    text-align: center;
-    width: 40%;
-    margin-left: 40%;
-    margin-right: 20%;
-    top: 120px;
-    height: 60px;
-    width: 300px;
-    border-radius: 22px;
-    color: grey;
-
+.closeBtn {
+  font-size: 24px;
+  background-color: #f0f0f0;
+  text-align: center;
+  width: 40%;
+  margin-left: 40%;
+  margin-right: 20%;
+  top: 120px;
+  height: 60px;
+  width: 300px;
+  border-radius: 22px;
+  color: grey;
 }
-.greeting{
-    text-align: center;
-    font-size: 30px;
-    margin:130px;
-    color: #999999;
-    text-align: center;
-    position: relative;
-    top: 80px;
-    font-family: Helvetica, sans-serif, Arial;
-    line-height: 15px;
+.greeting {
+  text-align: center;
+  font-size: 30px;
+  margin: 130px;
+  color: #999999;
+  text-align: center;
+  position: relative;
+  top: 80px;
+  font-family: Helvetica, sans-serif, Arial;
+  line-height: 15px;
 }
 
-#author{
-    font-size: 16px;
-    font-family: Helvetica, sans-serif, Arial;
-    text-align: right;
-    margin-right: 27%;
-
+#author {
+  font-size: 16px;
+  font-family: Helvetica, sans-serif, Arial;
+  text-align: right;
+  margin-right: 27%;
 }
 
-.quote{
-    text-align: center;
-    font-size: 30px;
-    color: #265732;
-    font-family: cursive;
-
+.quote {
+  text-align: center;
+  font-size: 30px;
+  color: #265732;
+  font-family: cursive;
 }
 
 a {
-    color: #265732;
+  color: #265732;
 }

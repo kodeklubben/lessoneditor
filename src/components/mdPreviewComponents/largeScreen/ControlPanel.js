@@ -1,14 +1,15 @@
-import {
-  buttonConfig,
-  buttonConfig2,
-  buttonConfig3,
-  buttonConfig4,
-  buttonConfig5,
-  buttonConfig6,
-  buttonConfig7
-} from "./buttonConfig.js";
 import React from "react";
+import { connect } from "react-redux";
 import Buttons from "./Button";
+import {
+  emphasis,
+  undoRedo,
+  saveLoadNew,
+  image,
+  lists,
+  sections,
+  code
+} from "../settingsFiles/buttonConfig.js";
 
 class ControlPanel extends React.Component {
   handleButtonClick = (
@@ -29,47 +30,9 @@ class ControlPanel extends React.Component {
 
   render() {
     return (
-      <div className="ui knapper segment grid">
+      <div className="ui segment grid buttonBorder">
         <div className="ui icon buttons">
-          {buttonConfig.map(element => (
-            <div key={element.bTitle} className="">
-              <Buttons
-                bTitle={element.bTitle}
-                icon={element.icon}
-                output={element.output}
-                title={element.title}
-                cursorIntON={element.cursorIntON}
-                cursorIntOFF={element.cursorIntOFF}
-                endOutput={element.endOutput}
-                onButtonClick={this.handleButtonClick}
-                shortcutKey={element.shortcut}
-                cname=""
-              />
-            </div>
-          ))}
-        </div>
-        <div className="space" />
-        <div className="ui icon buttons">
-          {buttonConfig2.map(element => (
-            <div key={element.bTitle} className="">
-              <Buttons
-                bTitle={element.bTitle}
-                icon={element.icon}
-                output={element.output}
-                title={element.title}
-                cursorIntON={element.cursorIntON}
-                cursorIntOFF={element.cursorIntOFF}
-                endOutput={element.endOutput}
-                onButtonClick={this.handleButtonClick}
-                shortcutKey={element.shortcut}
-                cname=""
-              />
-            </div>
-          ))}
-        </div>
-        <div className="space" />
-        <div className="ui icon buttons">
-          {buttonConfig3.map(element => (
+          {emphasis.map(element => (
             <div key={element.bTitle} className="">
               <Buttons
                 bTitle={element.bTitle}
@@ -87,7 +50,7 @@ class ControlPanel extends React.Component {
         </div>
         <div className="space" />
         <div className="ui icon buttons">
-          {buttonConfig4.map(element => (
+          {undoRedo.map(element => (
             <div key={element.bTitle} className="">
               <Buttons
                 bTitle={element.bTitle}
@@ -105,7 +68,7 @@ class ControlPanel extends React.Component {
         </div>
         <div className="space" />
         <div className="ui icon buttons">
-          {buttonConfig5.map(element => (
+          {saveLoadNew.map(element => (
             <div key={element.bTitle} className="">
               <Buttons
                 bTitle={element.bTitle}
@@ -123,7 +86,7 @@ class ControlPanel extends React.Component {
         </div>
         <div className="space" />
         <div className="ui icon buttons">
-          {buttonConfig6.map(element => (
+          {image.map(element => (
             <div key={element.bTitle} className="">
               <Buttons
                 bTitle={element.bTitle}
@@ -141,7 +104,7 @@ class ControlPanel extends React.Component {
         </div>
         <div className="space" />
         <div className="ui icon buttons">
-          {buttonConfig7.map(element => (
+          {lists.map(element => (
             <div key={element.bTitle} className="">
               <Buttons
                 bTitle={element.bTitle}
@@ -156,10 +119,56 @@ class ControlPanel extends React.Component {
               />
             </div>
           ))}
+        </div>
+        <div className="space" />
+        <div className="ui icon buttons">
+          {sections.map(element => (
+            <div key={element.bTitle} className="sections">
+              <Buttons
+                bTitle={element.bTitle}
+                icon={element.icon}
+                output={element.output}
+                title={element.title}
+                cursorIntON={element.cursorIntON}
+                cursorIntOFF={element.cursorIntOFF}
+                endOutput={element.endOutput}
+                onButtonClick={this.handleButtonClick}
+                shortcutKey={element.shortcut}
+              />
+            </div>
+          ))}
+        </div>
+        <div className="space" />
+        <div className="ui icon buttons">
+          {code.map(element => (
+            <div key={element.bTitle} className="">
+              <Buttons
+                bTitle={element.bTitle}
+                icon={element.icon}
+                output={element.output}
+                title={element.title}
+                cursorIntON={element.cursorIntON}
+                cursorIntOFF={element.cursorIntOFF}
+                endOutput={element.endOutput}
+                onButtonClick={this.handleButtonClick}
+                shortcutKey={element.shortcut}
+              />
+            </div>
+          ))}
+        </div>
+        <div className="column">
+          <i class="user icon"></i>
+          {this.props.firstName}
         </div>
       </div>
     );
   }
 }
 
-export default ControlPanel;
+const mapStateToProps = state => {
+  return {
+    firstName: state.auth.firstName
+  };
+};
+
+export default connect(mapStateToProps)(ControlPanel);

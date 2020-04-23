@@ -1,7 +1,11 @@
+import "./formpage.css";
 import React from "react";
+import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
 import FormPage from "./FormPage";
 import COURSELIST from "./settingsFiles/COURSELIST";
-import LANGUAGELIST from "./settingsFiles/LANGUAGELIST";
+import { LANGUAGES } from "./settingsFiles/languages/formpage_NO";
+import GoogleAuth from "../GoogleAuth";
 
 class FormComponent extends React.Component {
   constructor(props) {
@@ -9,12 +13,16 @@ class FormComponent extends React.Component {
     this.state = {
       course: COURSELIST[0].courseTitle,
       title: "",
+      titleErr: "",
       author: "",
+      authorErr: "",
       translator: "",
-      language: LANGUAGELIST[0].language[0],
+      language: Object.keys(LANGUAGES[0]),
       level: 1,
-      license: "",
-      tags: { topic: [], subject: [], grade: [] }
+      license: "MIT",
+      tags: { topic: [], subject: [], grade: [] },
+      redirect: null,
+      pageNumber: 1
     };
   }
 
@@ -46,31 +54,24 @@ class FormComponent extends React.Component {
     );
   };
 
-  myChangeHandler = event => {
-    let nam = event.target.name;
-    let val = event.target.value;
-    this.setState({ [nam]: val });
-  };
-
-  mySubmitHandler = event => {
+  submitHandler = event => {
     event.preventDefault();
-    //const for yml creation
-    const fs = require("browserify-fs");
+    console.log(event);
 
-    //create yml file
-    fs.writeFile("lesson.yml", this.YMLstateToString(this.state), function(
-      err
-    ) {
-      if (err) throw err;
-    });
+    this.setState({ redirect: "/editor" });
 
-    console.log("saved yml-file");
     console.log("YAML header: \n" + this.YAMLstateToString(this.state));
     console.log("\nYML-file: \n" + this.YMLstateToString(this.state));
     // TODO: Send state-data to database
   };
 
-  myCheckboxHandler = event => {
+  changeHandler = event => {
+    let nam = event.target.name;
+    let val = event.target.value;
+    this.setState({ [nam]: val });
+  };
+
+  checkboxHandler = event => {
     let name = event.target.name;
     let value = event.target.value;
 
@@ -83,18 +84,43 @@ class FormComponent extends React.Component {
     this.setState({ tags: i });
   };
 
+  setPageNumber = input => {
+    this.setState({ pageNumber: input });
+  };
+
+  setErr = (titleErr, authorErr) => {
+    if (titleErr) {
+      this.setState({ titleErr });
+    }
+    if (authorErr) {
+      this.setState({ authorErr });
+    }
+  };
+
   render() {
-    return (
-      <div className="FromComponent">
-        <FormPage
-          mySubmitHandler={this.mySubmitHandler}
-          myChangeHandler={this.myChangeHandler}
-          myCheckboxHandler={this.myCheckboxHandler}
-          state={this.state}
-        />
+    return this.props.isSignedIn ? (
+      <div className="test2">
+        <div className="formWidth">
+          <FormPage
+            submitHandler={this.submitHandler}
+            changeHandler={this.changeHandler}
+            checkboxHandler={this.checkboxHandler}
+            setPageNumber={this.setPageNumber}
+            setErr={this.setErr}
+            state={this.state}
+          />
+        </div>
       </div>
+    ) : (
+      <Redirect to="/" />
     );
   }
 }
 
-export default FormComponent;
+const mapStateToProps = state => {
+  return {
+    isSignedIn: state.auth.isSignedIn
+  };
+};
+
+export default connect(mapStateToProps)(FormComponent);
