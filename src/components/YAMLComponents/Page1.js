@@ -26,6 +26,7 @@ const Page1 = props => {
       <label>
         <h3>{FORM_TEXT.LICENSE.heading}</h3>
         <input
+          style={{ marginTop: "-20px" }}
           autoComplete="off"
           type="text"
           name="license"
@@ -43,7 +44,7 @@ const Page1 = props => {
         <label>
           <h3>
             {FORM_TEXT.AUTHOR.heading}
-            <span className="test"> (nødvendig)</span>
+            <span className="test"> (obligatorisk)</span>
           </h3>
           <input
             autoFocus
@@ -75,10 +76,7 @@ const Page1 = props => {
       </div>
       <div className="field">
         <label>
-          <h3>
-            {FORM_TEXT.LANGUAGE.heading}
-            <span className="test"> (valgfritt)</span>
-          </h3>
+          <h3>{FORM_TEXT.LANGUAGE.heading}</h3>
           <select
             name="language"
             onChange={props.changeHandler}

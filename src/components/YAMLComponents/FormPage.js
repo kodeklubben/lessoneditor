@@ -104,7 +104,8 @@ const FormPage = props => {
 const mapStateToProps = state => {
   return {
     firstName: state.auth.firstName,
-    imageUrl: state.auth.imageUrl
+    imageUrl: state.auth.imageUrl,
+    email: state.auth.email
   };
 };
 
