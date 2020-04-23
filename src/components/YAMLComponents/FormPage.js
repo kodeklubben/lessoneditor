@@ -82,10 +82,20 @@ const FormPage = props => {
     }
   };
 
-  return (
+  return props.imageUrl ? (
     <div className="column">
+      <span style={{ marginRight: "6px" }}>{props.firstName}</span>
+      <img
+        className="ui avatar image"
+        src={props.imageUrl}
+        alt="useImage"
+      ></img>
+      {renderFormPage()}
+    </div>
+  ) : (
+    <div className="column">
+      <span style={{ marginRight: "6px" }}>{props.firstName}</span>
       <i className="user icon"></i>
-      {props.firstName}
       {renderFormPage()}
     </div>
   );
@@ -93,7 +103,8 @@ const FormPage = props => {
 
 const mapStateToProps = state => {
   return {
-    firstName: state.auth.firstName
+    firstName: state.auth.firstName,
+    imageUrl: state.auth.imageUrl
   };
 };
 

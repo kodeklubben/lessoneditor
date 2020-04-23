@@ -8,10 +8,10 @@ export const parseMD = text => {
   return { type: PARSE_MD, payload: text };
 };
 
-export const signIn = (userId, firstName) => {
+export const signIn = (userId, firstName, lastName, imageUrl) => {
   return {
     type: SIGN_IN,
-    payload: { userId, firstName }
+    payload: { userId, firstName, lastName, imageUrl }
   };
 };
 

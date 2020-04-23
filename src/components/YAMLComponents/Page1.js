@@ -92,6 +92,7 @@ const Page1 = props => {
           </select>
         </label>
       </div>
+      <div style={{ marginBottom: "75px" }}></div>
       {license}
     </div>
   );

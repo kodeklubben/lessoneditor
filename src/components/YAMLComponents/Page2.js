@@ -45,10 +45,22 @@ const Page2 = props => {
         </label>
       </div>
       <div className="ui grid">
-        <div className="column">
-          <h3>{YML_TEXT.grade}</h3>
-          <YMLtagsGrade checkboxHandler={props.checkboxHandler} />
+        <div className="eight wide column">
+          <div className="field">
+            <label>
+              <h3 className="">{YML_TEXT.grade}</h3>
+            </label>
+            <div
+              style={{ marginBottom: "20px", padding: "10px" }}
+              className="ui segment"
+            >
+              <div className="ui stackable two column grid">
+                <YMLtagsGrade checkboxHandler={props.checkboxHandler} />
+              </div>
+            </div>
+          </div>
         </div>
+        <div className="eight wide column"></div>
       </div>
     </div>
   );
