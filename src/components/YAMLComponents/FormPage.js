@@ -61,6 +61,7 @@ const FormPage = props => {
             <Page3
               changeHandler={props.changeHandler}
               checkboxHandler={props.checkboxHandler}
+              selectDropdownHandler={props.selectDropdownHandler}
               state={props.state}
             />
 

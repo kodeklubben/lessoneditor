@@ -5,7 +5,7 @@ const SAVED = "dokument er lagret";
 // imagePopup text
 const PHOTO_TEXT = "Bildebeskrivelse her";
 
-// section-buttens text message
+// section-buttons text message
 const SECTION_TEXT = "Tekst her";
 
 // Page navigation buttons
@@ -33,7 +33,8 @@ const BUTTON_TITLE = {
   activity: "{Steg}",
   intro: "{Intro}",
   check: "{Sjekkliste}",
-  protip: "{Tips}",
+  tip: "{Tips}",
+  protip: "{ProTips}",
   challenge: "{Utfordring}",
   flag: "{Flag}",
   try: "{Prøv Selv}",

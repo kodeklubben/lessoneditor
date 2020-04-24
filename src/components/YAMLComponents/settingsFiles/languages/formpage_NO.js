@@ -38,7 +38,7 @@ const FORM_TEXT = {
   },
   LICENSE: {
     heading: "Lisens",
-    placeholder: "standard: MIT"
+    placeholder: "standard: CC BY-SA 4.0"
   },
   COURSE: { heading: "Kurs" },
   LANGUAGE: { heading: "Språk" },
