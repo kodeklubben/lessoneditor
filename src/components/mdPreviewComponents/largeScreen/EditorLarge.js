@@ -129,7 +129,7 @@ class Editor extends React.Component {
       autoSaveMessage = SAVING;
       storedTextValue = this.props.mdText;
     }
-    if (window.innerHeight / window.innerWidth > 1.4) {
+    if (window.outerHeight / window.outerWidth > 1.4) {
       this.props.update();
     }
   }
