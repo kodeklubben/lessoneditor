@@ -10,7 +10,7 @@ body{
   font:13px/1.65em "HelveticaNeue", "Helvetica Neue", Helvetica, Arial, sans-serif;
 } */
 
-ul li {
+.navbar ul li {
   list-style: none;
   display: inline-block;
   float: right;
@@ -18,7 +18,7 @@ ul li {
   text-align: center;
 }
 
-ul li a {
+.navbar ul li a {
   display: block;
   color: #444;
   font-weight: 100;
@@ -32,7 +32,7 @@ ul li a {
   float: right;
 }
 
-ul li a:hover {
+.navbar ul li a:hover {
   text-decoration: underline;
   text-decoration-color: green;
   font-size: 1.5em;
