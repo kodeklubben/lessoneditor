@@ -107,7 +107,7 @@ class Editor extends React.Component {
 
   // auto save after a couple of seconds
   componentDidUpdate() {
-    if (window.innerWidth > 700 && window.innerHeight / window.innerWidth < 1) {
+    if (window.innerHeight / window.innerWidth < 1) {
       this.props.update();
     }
     if (this.state.counter === 4 && this.props.mdText.length > 0) {
@@ -720,8 +720,7 @@ const mapStateToProps = state => {
   return {
     mdText: state.mdText,
     parseMD: state.parseMD,
-    isSignedIn: state.auth.isSignedIn,
-    firstName: state.auth.firstName
+    isSignedIn: state.auth.isSignedIn
   };
 };
 

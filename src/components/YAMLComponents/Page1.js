@@ -68,7 +68,7 @@ const Page1 = props => {
             type="text"
             name="license"
             placeholder={FORM_TEXT.LICENSE.placeholder}
-            value={props.state.license}
+            // value={props.state.license}
             onChange={props.changeHandler}
           />
         </label>
