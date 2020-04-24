@@ -198,7 +198,7 @@ const lists = [
   {
     bTitle: "listCheck",
     icon: "tasks",
-    output: "- [ ] ",
+    output: "- [\u0020] ",
     title: BUTTON_TITLE.listCheck,
     cursorIntON: 6,
     cursorIntOFF: 0,

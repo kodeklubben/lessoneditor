@@ -75,8 +75,7 @@ function removeMarkdown(token) {
   if (
     token.content.includes("[ ] ") ||
     token.content.includes("[x] ") ||
-    token.content.includes("[X] ") ||
-    token.content.indexOf("[&nbsp;] ")
+    token.content.includes("[X] ")
   ) {
     token.content = token.content.substring(4, token.content.length);
   }
@@ -104,7 +103,6 @@ function startsWithTodoMarkdown(token) {
   return (
     token.content.indexOf("[ ] ") === 0 ||
     token.content.indexOf("[x] ") === 0 ||
-    token.content.indexOf("[X] ") === 0 ||
-    token.content.indexOf("[&nbsp;] ")
+    token.content.indexOf("[X] ") === 0
   );
 }

@@ -92,7 +92,7 @@ select {
 
 /* Previewer */
 
-ul {
+.MDPreview ul, ol {
   display: flex;
   flex-direction: column;
   background-color: inherit;
@@ -169,8 +169,8 @@ ul {
 
 /* List styling */
 
-ul li::before {
-  content: "\A0";
+.MDPreview ul li::before {
+  content: " ";
   border-radius: 20px;
   border: 3px solid #abdbea;
   padding: 8px;
@@ -215,7 +215,7 @@ ul li::before {
 }
 
 /*Codeblock styling */
-code {
+.MDPreview code {
   padding: 2px 4px;
   font-size: 90%;
   color: #c7254e;
@@ -223,15 +223,7 @@ code {
   border-radius: 4px;
 }
 
-code {
-  padding: 2px 4px;
-  font-size: 90%;
-  color: #c7254e;
-  background-color: #f9f2f4;
-  border-radius: 4px;
-}
-
-pre {
+.MDPreview pre {
   display: block;
   padding: 10.5px;
   margin: 0 0 11px;
@@ -245,7 +237,7 @@ pre {
   border-radius: 4px;
 }
 
-pre code {
+.MDPreview pre code {
   padding: 0;
   font-size: inherit;
   color: inherit;
