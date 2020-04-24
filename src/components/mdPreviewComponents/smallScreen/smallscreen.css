@@ -2,6 +2,14 @@ select {
   cursor: pointer;
 }
 
+/* ControlPanel  */
+
+@media only screen and (max-width: 955px) {
+  .sections {
+    display: none;
+  }
+}
+
 /* CSS for ImagePopup component */
 
 .transparente {
@@ -103,10 +111,10 @@ footer {
 }
 
 /*This is the important css for the preview*/
-
 /* Previewer */
 
-.MDPreview ul, ol {
+.MDPreview ul,
+ol {
   display: flex;
   flex-direction: column;
   background-color: inherit;

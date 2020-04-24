@@ -1,5 +1,8 @@
 import { BUTTON_TITLE, SECTION_TEXT } from "./languages/editor_NO";
 
+// !!!!
+// if new buttons are added remember to update buttons-state in editor.js
+
 const temp = "```";
 
 // SHORTCUTKEY options: "ctrl", "shift", "alt", "option", "command"
@@ -54,6 +57,7 @@ const KEY_COMBINATIONS = {
   activity: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.a],
   intro: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.i],
   check: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.c],
+  tip: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.o],
   protip: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.p],
   challenge: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.g],
   flag: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.f],
@@ -207,65 +211,77 @@ const lists = [
   }
 ];
 
-// !! bTitle - first chars must be "sec_" when in sections!!
+// !! bTitle - first chars must be "sec_" when in sections,
+// if new buttons are added remember to update buttons-state in editor.js
+
 const sections = [
   {
     bTitle: "sec_activity",
     icon: "",
-    output: "# " + SECTION_TEXT + " {.activity}\n",
+    output: "# " + SECTION_TEXT + " {.activity}\n\n",
     title: BUTTON_TITLE.activity,
     cursorIntON: 0,
-    cursorIntOFF: 12,
+    cursorIntOFF: 14,
     endOutput: "",
     shortcut: KEY_COMBINATIONS.activity.join("")
   },
   {
     bTitle: "sec_intro",
     icon: "",
-    output: "# " + SECTION_TEXT + " {.intro}",
+    output: "# " + SECTION_TEXT + " {.intro}\n\n",
     title: BUTTON_TITLE.intro,
     cursorIntON: 0,
-    cursorIntOFF: 12,
+    cursorIntOFF: 11,
     endOutput: "",
     shortcut: KEY_COMBINATIONS.intro.join("")
   },
   {
     bTitle: "sec_check",
     icon: "",
-    output: "# " + SECTION_TEXT + " {.check}",
+    output: "## " + SECTION_TEXT + " {.check}\n\n",
     title: BUTTON_TITLE.check,
     cursorIntON: 0,
-    cursorIntOFF: 12,
+    cursorIntOFF: 11,
     endOutput: "",
     shortcut: KEY_COMBINATIONS.check.join("")
   },
   {
+    bTitle: "sec_tip",
+    icon: "",
+    output: "# {.tip}\n\n",
+    title: BUTTON_TITLE.tip,
+    cursorIntON: 0,
+    cursorIntOFF: 10,
+    endOutput: "\n#\n\n",
+    shortcut: KEY_COMBINATIONS.tip.join("")
+  },
+  {
     bTitle: "sec_protip",
     icon: "",
-    output: "# " + SECTION_TEXT + " {.protip}\n#",
+    output: "# {.protip}\n\n",
     title: BUTTON_TITLE.protip,
     cursorIntON: 0,
     cursorIntOFF: 13,
-    endOutput: "#",
+    endOutput: "\n#\n\n",
     shortcut: KEY_COMBINATIONS.protip.join("")
   },
   {
     bTitle: "sec_challenge",
     icon: "",
-    output: "# " + SECTION_TEXT + " {.challenge}\n#",
+    output: "# {.challenge}\n\n",
     title: BUTTON_TITLE.challenge,
     cursorIntON: 0,
-    cursorIntOFF: 13,
-    endOutput: "",
+    cursorIntOFF: 16,
+    endOutput: "\n#\n\n",
     shortcut: KEY_COMBINATIONS.challenge.join("")
   },
   {
     bTitle: "sec_flag",
     icon: "",
-    output: "# " + SECTION_TEXT + " {.flag}",
+    output: "## " + SECTION_TEXT + " {.flag}\n\n",
     title: BUTTON_TITLE.flag,
     cursorIntON: 0,
-    cursorIntOFF: 12,
+    cursorIntOFF: 10,
     endOutput: "",
     shortcut: KEY_COMBINATIONS.flag.join("")
   },

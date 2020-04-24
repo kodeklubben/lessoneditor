@@ -141,7 +141,7 @@ class ControlPanel extends React.Component {
         <div className="space" />
         <div className="ui icon buttons">
           {code.map(element => (
-            <div key={element.bTitle} className="">
+            <div key={element.bTitle} className="sections">
               <Buttons
                 bTitle={element.bTitle}
                 icon={element.icon}
@@ -156,7 +156,7 @@ class ControlPanel extends React.Component {
             </div>
           ))}
         </div>
-        <div className="right floated one wide column">
+        <div className="right floated two wide column">
           <div
             style={{ marginTop: "-50px", marginRight: "-1000px" }}
             className="ui avatar image"

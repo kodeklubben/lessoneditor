@@ -38,6 +38,7 @@ var isButtonOn = {
   sec_activity: true,
   sec_intro: true,
   sec_check: true,
+  sec_tip: true,
   sec_protip: true,
   sec_challenge: true,
   sec_flag: true,
@@ -48,6 +49,8 @@ var isButtonOn = {
 
 // Count input char for automatic newline at 80 chars
 var charCounter = 0;
+
+var orderedListIndex = 2;
 
 var storedTextValue = "";
 
@@ -107,7 +110,7 @@ class Editor extends React.Component {
 
   // auto save after a couple of seconds
   componentDidUpdate() {
-    if (window.innerHeight / window.innerWidth < 1) {
+    if (window.innerHeight / window.innerWidth < 1.4) {
       this.props.update();
     }
     if (this.state.counter === 4 && this.props.mdText.length > 0) {
@@ -148,6 +151,7 @@ class Editor extends React.Component {
         sec_activity: true,
         sec_intro: true,
         sec_check: true,
+        sec_tip: true,
         sec_protip: true,
         sec_challenge: true,
         sec_flag: true,
@@ -197,7 +201,11 @@ class Editor extends React.Component {
       charCounter += 1;
 
       if (charCounter === 80) {
-        inputText += "\n";
+        inputText =
+          inputText.slice(0, cursorPositionStart) +
+          "\n" +
+          inputText.slice(cursorPositionStart);
+        setCursorPosition(cursorPositionStart + 1, cursorPositionEnd + 1);
         charCounter = 0;
       }
 
@@ -228,17 +236,22 @@ class Editor extends React.Component {
       cursorPositionStart = event.target.selectionStart;
       cursorPositionEnd = event.target.selectionEnd;
 
-      if (event.key === "Enter" || event.keyCode === 13) {
-        // if input is enter, update undo and do list functions if list.
+      // if input is enter, update undo and do list functions if list.
+      if (event.key === "Enter") {
         charCounter = 0;
-
-        if (isButtonOn[listButtonValues["bTitle"]] === false) {
+        setUndo();
+        if (!isButtonOn[listButtonValues["bTitle"]]) {
           event.preventDefault();
           if (
             inputText.slice(
               cursorPositionStart - listButtonValues["cursorInt"],
               cursorPositionStart
-            ) === listButtonValues["output"]
+            ) === listButtonValues["output"] ||
+            inputText.slice(
+              cursorPositionStart - listButtonValues["cursorInt"],
+              cursorPositionStart
+            ) ===
+              orderedListIndex - 1 + ". "
           ) {
             isButtonOn[listButtonValues["bTitle"]] = true;
             this.setState({ buttonValues: isButtonOn });
@@ -253,6 +266,22 @@ class Editor extends React.Component {
               cursorPositionStart - listButtonValues["cursorInt"],
               cursorPositionStart - listButtonValues["cursorInt"]
             );
+            orderedListIndex = 2;
+            return;
+          }
+          if (listButtonValues["bTitle"] === "listOl") {
+            inputText =
+              inputText.slice(0, cursorPositionStart) +
+              "\n\n" +
+              (orderedListIndex + ". ") +
+              inputText.slice(cursorPositionStart);
+            this.props.addText(inputText);
+            this.props.parseMD(mdParser(inputText));
+            setCursorPosition(
+              cursorPositionStart + listButtonValues["cursorInt"] + 2,
+              cursorPositionStart + listButtonValues["cursorInt"] + 2
+            );
+            orderedListIndex++;
             return;
           }
           inputText =
@@ -268,6 +297,7 @@ class Editor extends React.Component {
           );
           return;
         }
+        // needed to make heading button give multiple outputs on enter t
         if (!isButtonOn["heading"]) {
           isButtonOn["heading"] = true;
         }
@@ -470,6 +500,8 @@ class Editor extends React.Component {
           );
           return;
         }
+        // save list values to listButtonValues
+        // to make list work with "enter-key" in onTextareaKeyDown --> "enter"
         if (bTitle.slice(0, 4) === "list") {
           listButtonValues = {
             bTitle: bTitle,
@@ -557,8 +589,20 @@ class Editor extends React.Component {
           inputText.slice(cursorPositionStart);
         this.props.addText(inputText);
         this.props.parseMD(mdParser(inputText));
-        cursorPositionStart += 2;
-        cursorPositionEnd += SECTION_TEXT.length + 2;
+        if (output.slice(0, 2) === "##") {
+          cursorPositionStart += 3;
+          cursorPositionEnd += SECTION_TEXT.length + 3;
+        } else if (
+          bTitle === "sec_tip" ||
+          bTitle === "sec_protip" ||
+          bTitle === "sec_challenge"
+        ) {
+          cursorPositionStart += cursorIntOFF;
+          cursorPositionEnd += cursorIntOFF;
+        } else {
+          cursorPositionStart += 2;
+          cursorPositionEnd += SECTION_TEXT.length + 2;
+        }
         setCursorPosition(cursorPositionStart, cursorPositionEnd);
         return;
       }

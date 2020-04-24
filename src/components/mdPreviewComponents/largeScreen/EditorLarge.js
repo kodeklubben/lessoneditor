@@ -46,6 +46,7 @@ var isButtonOn = {
   sec_activity: true,
   sec_intro: true,
   sec_check: true,
+  sec_tip: true,
   sec_protip: true,
   sec_challenge: true,
   sec_flag: true,
@@ -62,6 +63,8 @@ for (let i = 0; i < Object.values(KEY).length; i++) {
 
 // Count input char for automatic newline at 80 chars
 var charCounter = 0;
+
+var orderedListIndex = 2;
 
 var storedTextValue = "";
 
@@ -126,7 +129,7 @@ class Editor extends React.Component {
       autoSaveMessage = SAVING;
       storedTextValue = this.props.mdText;
     }
-    if (window.innerHeight / window.innerWidth > 1) {
+    if (window.innerHeight / window.innerWidth > 1.4) {
       this.props.update();
     }
   }
@@ -161,6 +164,7 @@ class Editor extends React.Component {
         sec_activity: true,
         sec_intro: true,
         sec_check: true,
+        sec_tip: true,
         sec_protip: true,
         sec_challenge: true,
         sec_flag: true,
@@ -195,7 +199,11 @@ class Editor extends React.Component {
       charCounter += 1;
 
       if (charCounter === 80) {
-        inputText += "\n";
+        inputText =
+          inputText.slice(0, cursorPositionStart) +
+          "\n" +
+          inputText.slice(cursorPositionStart);
+        setCursorPosition(cursorPositionStart + 1, cursorPositionEnd + 1);
         charCounter = 0;
       }
 
@@ -247,13 +255,18 @@ class Editor extends React.Component {
       if (event.key === "Enter") {
         charCounter = 0;
         setUndo();
-        if (isButtonOn[listButtonValues["bTitle"]] === false) {
+        if (!isButtonOn[listButtonValues["bTitle"]]) {
           event.preventDefault();
           if (
             inputText.slice(
               cursorPositionStart - listButtonValues["cursorInt"],
               cursorPositionStart
-            ) === listButtonValues["output"]
+            ) === listButtonValues["output"] ||
+            inputText.slice(
+              cursorPositionStart - listButtonValues["cursorInt"],
+              cursorPositionStart
+            ) ===
+              orderedListIndex - 1 + ". "
           ) {
             isButtonOn[listButtonValues["bTitle"]] = true;
             this.setState({ buttonValues: isButtonOn });
@@ -268,6 +281,22 @@ class Editor extends React.Component {
               cursorPositionStart - listButtonValues["cursorInt"],
               cursorPositionStart - listButtonValues["cursorInt"]
             );
+            orderedListIndex = 2;
+            return;
+          }
+          if (listButtonValues["bTitle"] === "listOl") {
+            inputText =
+              inputText.slice(0, cursorPositionStart) +
+              "\n\n" +
+              (orderedListIndex + ". ") +
+              inputText.slice(cursorPositionStart);
+            this.props.addText(inputText);
+            this.props.parseMD(mdParser(inputText));
+            setCursorPosition(
+              cursorPositionStart + listButtonValues["cursorInt"] + 2,
+              cursorPositionStart + listButtonValues["cursorInt"] + 2
+            );
+            orderedListIndex++;
             return;
           }
           inputText =
@@ -283,6 +312,7 @@ class Editor extends React.Component {
           );
           return;
         }
+        // needed to make heading button give multiple outputs on enter t
         if (!isButtonOn["heading"]) {
           isButtonOn["heading"] = true;
         }
@@ -447,9 +477,7 @@ class Editor extends React.Component {
       ) {
         isButtonOn[bTitle] = true;
         this.setState({ buttonValues: isButtonOn });
-        if (inputText !== undo[undo.length - 1]) {
-          setUndo();
-        }
+        setUndo();
         inputText =
           inputText.slice(0, cursorPositionStart - cursorIntON) +
           inputText.slice(cursorPositionStart - cursorIntON + output.length);
@@ -463,7 +491,7 @@ class Editor extends React.Component {
       // make new line if some buttons ares pressed, and it is not allready new line
       if (
         bTitle.slice(0, 4) === "list" ||
-        bTitle.slice(0, 4) === "sec_" ||
+        (bTitle.slice(0, 4) === "sec_" && isButtonOn[bTitle]) ||
         (bTitle === "codeblock" && isButtonOn["codeblock"]) ||
         (bTitle === "heading" && isButtonOn["heading"])
       ) {
@@ -572,8 +600,20 @@ class Editor extends React.Component {
           inputText.slice(cursorPositionStart);
         this.props.addText(inputText);
         this.props.parseMD(mdParser(inputText));
-        cursorPositionStart += 2;
-        cursorPositionEnd += SECTION_TEXT.length + 2;
+        if (output.slice(0, 2) === "##") {
+          cursorPositionStart += 3;
+          cursorPositionEnd += SECTION_TEXT.length + 3;
+        } else if (
+          bTitle === "sec_tip" ||
+          bTitle === "sec_protip" ||
+          bTitle === "sec_challenge"
+        ) {
+          cursorPositionStart += cursorIntOFF;
+          cursorPositionEnd += cursorIntOFF;
+        } else {
+          cursorPositionStart += 2;
+          cursorPositionEnd += SECTION_TEXT.length + 2;
+        }
         setCursorPosition(cursorPositionStart, cursorPositionEnd);
         return;
       }

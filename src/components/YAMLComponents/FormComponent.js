@@ -19,7 +19,7 @@ class FormComponent extends React.Component {
       translator: "",
       language: Object.keys(LANGUAGES[0]),
       level: 1,
-      license: "MIT",
+      license: "CC BY-SA 4.0",
       tags: { topic: [], subject: [], grade: [] },
       redirect: null,
       pageNumber: 1
@@ -65,7 +65,7 @@ class FormComponent extends React.Component {
     // TODO: Send state-data to database
   };
 
-  changeHandler = event => {
+  changeHandler = (event, data) => {
     let nam = event.target.name;
     let val = event.target.value;
     this.setState({ [nam]: val });
@@ -82,6 +82,19 @@ class FormComponent extends React.Component {
       i[name].push(value);
     }
     this.setState({ tags: i });
+  };
+
+  selectDropdownHandler = (event, data) => {
+    if (data) {
+      let name = data.subtag;
+      let value = data.value;
+
+      let i = this.state.tags;
+
+      i[name] = value;
+
+      this.setState({ tags: i });
+    }
   };
 
   setPageNumber = input => {
@@ -104,6 +117,7 @@ class FormComponent extends React.Component {
           submitHandler={this.submitHandler}
           changeHandler={this.changeHandler}
           checkboxHandler={this.checkboxHandler}
+          selectDropdownHandler={this.selectDropdownHandler}
           setPageNumber={this.setPageNumber}
           setErr={this.setErr}
           state={this.state}

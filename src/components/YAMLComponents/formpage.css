@@ -29,6 +29,19 @@ h3 {
   margin-bottom: -1em;
 }
 
+#smallScreen {
+  display: none;
+}
+
+@media only screen and (max-width: 770px) {
+  #smallScreen {
+    display: inline;
+  }
+  #bigScreen {
+    display: none;
+  }
+}
+
 .checkbox {
   margin: 1vh;
 }
