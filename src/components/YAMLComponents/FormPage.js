@@ -83,17 +83,30 @@ const FormPage = props => {
   };
 
   return (
-    <div className="column">
-      <i className="user icon"></i>
-      {props.firstName}
-      {renderFormPage()}
+    <div className="ui grid ">
+      <div className="row">
+        <div className="right floated three wide column">
+          <div style={{ marginBottom: "-35px" }} className="ui avatar image">
+            {props.imageUrl ? (
+              <img src={props.imageUrl} alt="useImage"></img>
+            ) : (
+              <i className="user icon"></i>
+            )}
+          </div>
+        </div>
+      </div>
+      <div className="row">
+        <div className="sixteen wide centered column">{renderFormPage()}</div>
+      </div>
     </div>
   );
 };
 
 const mapStateToProps = state => {
   return {
-    firstName: state.auth.firstName
+    firstName: state.auth.firstName,
+    imageUrl: state.auth.imageUrl,
+    email: state.auth.email
   };
 };
 

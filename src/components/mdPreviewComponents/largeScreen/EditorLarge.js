@@ -126,7 +126,7 @@ class Editor extends React.Component {
       autoSaveMessage = SAVING;
       storedTextValue = this.props.mdText;
     }
-    if (window.innerWidth < 700 && window.innerHeight / window.innerWidth > 1) {
+    if (window.innerHeight / window.innerWidth > 1) {
       this.props.update();
     }
   }
@@ -927,8 +927,7 @@ const mapStateToProps = state => {
   return {
     mdText: state.mdText,
     parseMD: state.parseMD,
-    isSignedIn: state.auth.isSignedIn,
-    firstName: state.auth.firstName
+    isSignedIn: state.auth.isSignedIn
   };
 };
 

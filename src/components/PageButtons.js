@@ -1,8 +1,7 @@
 import React from "react";
 import { Link, Redirect } from "react-router-dom";
 
-const TITLE_ERROR = "Må skrive inn tittel";
-const AUTHOR_ERROR = "Må skrive inn forfatter";
+const VALIDATION_ERROR = "* må fylles ut";
 
 const PageButtons = props => {
   if (props.state.redirect) {
@@ -14,10 +13,10 @@ const PageButtons = props => {
     let authorErr = "";
 
     if (!props.state.title) {
-      titleErr = TITLE_ERROR;
+      titleErr = VALIDATION_ERROR;
     }
     if (!props.state.author) {
-      authorErr = AUTHOR_ERROR;
+      authorErr = VALIDATION_ERROR;
     }
 
     if (titleErr && props.err === "title") {

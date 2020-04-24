@@ -38,7 +38,7 @@ const FORM_TEXT = {
   },
   LICENSE: {
     heading: "Lisens",
-    placeholder: "Lisens"
+    placeholder: "standard: MIT"
   },
   COURSE: { heading: "Kurs" },
   LANGUAGE: { heading: "Språk" },

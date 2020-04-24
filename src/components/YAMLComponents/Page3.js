@@ -10,34 +10,53 @@ import { NAV_BUTTONS } from "./settingsFiles/languages/formpage_NO";
 
 const Page3 = props => {
   return (
-    <div className="">
-      <div className="field">
-        <label>
-          <h3>
-            {FORM_TEXT.TITLE.heading}
-            <span className="test"> (nødvendig)</span>
-          </h3>
-          <input
-            autoFocus
-            autoComplete="off"
-            type="text"
-            name="title"
-            placeholder={FORM_TEXT.TITLE.placeholder}
-            value={props.state.title}
-            onChange={props.changeHandler}
-          />
-        </label>
+    <div className="ui large form">
+      <div className="ui grid">
+        <div className="sixteen wide column">
+          <div className="field">
+            <label>
+              <h3>
+                {FORM_TEXT.TITLE.heading}
+                <span className="test"> (nødvendig)</span>
+              </h3>
+            </label>
+            <input
+              autoFocus
+              autoComplete="off"
+              type="text"
+              name="title"
+              placeholder={FORM_TEXT.TITLE.placeholder}
+              value={props.state.title}
+              onChange={props.changeHandler}
+            />
+          </div>
+        </div>
         <div className="validateError">{props.state.titleErr}</div>
       </div>
-      <div className="field">
-        <div className="ui two column grid">
-          <div className="column">
-            <h3>{YML_TEXT.subject}</h3>
-            <YMLtagsSubject checkboxHandler={props.checkboxHandler} />
+
+      <div className="ui grid">
+        <div className="eight wide column">
+          <div className="field">
+            <label>
+              <h3>{YML_TEXT.subject}</h3>
+            </label>
+            <div className="ui segment">
+              <div className="ui stackable two column grid">
+                <YMLtagsSubject checkboxHandler={props.checkboxHandler} />
+              </div>
+            </div>
           </div>
-          <div className="column">
-            <h3>{YML_TEXT.topic}</h3>
-            <YMLtagsTopic checkboxHandler={props.checkboxHandler} />
+        </div>
+        <div className="eight wide column">
+          <div className="field">
+            <label>
+              <h3>{YML_TEXT.topic}</h3>
+            </label>
+            <div className="ui segment">
+              <div className="ui stackable two column grid">
+                <YMLtagsTopic checkboxHandler={props.checkboxHandler} />
+              </div>
+            </div>
           </div>
         </div>
       </div>

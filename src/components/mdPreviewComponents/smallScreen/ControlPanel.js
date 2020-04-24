@@ -78,11 +78,15 @@ class ControlPanel extends React.Component {
 
         <div
           style={{ marginTop: "11px", marginBottom: "-11px" }}
-          className="column"
+          className="right floated two wide column"
         >
-          <i class="user icon">
-            <p>{this.props.firstName}</p>
-          </i>
+          <div className="ui avatar image">
+            {this.props.imageUrl ? (
+              <img src={this.props.imageUrl} alt="useImage"></img>
+            ) : (
+              <i className="user icon"></i>
+            )}
+          </div>
         </div>
 
         <button
@@ -100,7 +104,7 @@ class ControlPanel extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    firstName: state.auth.firstName
+    imageUrl: state.auth.imageUrl
   };
 };
 

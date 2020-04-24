@@ -6,8 +6,8 @@ var profile = null;
 
 class GoogleAuth extends React.Component {
   componentDidMount() {
-    window.gapi.load("client:auth2", () => {
-      window.gapi.client
+    window.gapi.load("client:auth2", async () => {
+      await window.gapi.client
         .init({
           clientId:
             "761801565638-d9i95vs7s4hrgo6u542taddpo66hrf04.apps.googleusercontent.com",
@@ -16,15 +16,21 @@ class GoogleAuth extends React.Component {
         .then(async () => {
           this.auth = await window.gapi.auth2.getAuthInstance();
           profile = await this.auth.currentUser.get().getBasicProfile();
-          await this.onAuthChange(this.auth.isSignedIn.get());
-          await this.auth.isSignedIn.listen(this.onAuthChange);
+          this.onAuthChange(await this.auth.isSignedIn.get());
+          this.auth.isSignedIn.listen(this.onAuthChange);
         });
     });
   }
 
-  onAuthChange = async isSignedIn => {
+  onAuthChange = isSignedIn => {
     if (isSignedIn) {
-      await this.props.signIn(profile.getId(), profile.getGivenName());
+      this.props.signIn(
+        profile.getId(),
+        profile.getGivenName(),
+        profile.getFamilyName(),
+        profile.getImageUrl(),
+        profile.getEmail()
+      );
     } else {
       this.props.signOut();
     }

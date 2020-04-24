@@ -3,47 +3,13 @@ import React from "react";
 import { LANGUAGES, FORM_TEXT } from "./settingsFiles/languages/formpage_NO";
 
 const Page1 = props => {
-  const [inputvalue, setInputvalue] = React.useState(false);
-
-  const license = !inputvalue ? (
-    <div className="">
-      <div className="field">
-        <div className="test3">
-          <h3>{FORM_TEXT.LICENSE.heading}</h3>
-          <button
-            className="ui mini button"
-            onClick={() => setInputvalue(true)}
-          >
-            <p className="smallButton">Endre?</p>
-          </button>
-        </div>
-
-        <p style={{ marginBottom: "1em" }}>MIT</p>
-      </div>
-    </div>
-  ) : (
-    <div className="field">
-      <label>
-        <h3>{FORM_TEXT.LICENSE.heading}</h3>
-        <input
-          autoComplete="off"
-          type="text"
-          name="license"
-          placeholder={FORM_TEXT.LICENSE.placeholder}
-          value={props.state.license}
-          onChange={props.changeHandler}
-        />
-      </label>
-    </div>
-  );
-
   return (
     <div className="">
       <div className="field">
         <label>
           <h3>
             {FORM_TEXT.AUTHOR.heading}
-            <span className="test"> (nødvendig)</span>
+            <span className="test"> (obligatorisk)</span>
           </h3>
           <input
             autoFocus
@@ -75,10 +41,7 @@ const Page1 = props => {
       </div>
       <div className="field">
         <label>
-          <h3>
-            {FORM_TEXT.LANGUAGE.heading}
-            <span className="test"> (valgfritt)</span>
-          </h3>
+          <h3>{FORM_TEXT.LANGUAGE.heading}</h3>
           <select
             name="language"
             onChange={props.changeHandler}
@@ -92,7 +55,24 @@ const Page1 = props => {
           </select>
         </label>
       </div>
-      {license}
+      <div style={{ marginBottom: "75px" }}></div>
+      <div className="field">
+        <label>
+          <h3>
+            {FORM_TEXT.LICENSE.heading}
+            <span className="test"> (valgfritt)</span>
+          </h3>
+          <input
+            style={{ marginTop: "-20px" }}
+            autoComplete="off"
+            type="text"
+            name="license"
+            placeholder={FORM_TEXT.LICENSE.placeholder}
+            // value={props.state.license}
+            onChange={props.changeHandler}
+          />
+        </label>
+      </div>
     </div>
   );
 };

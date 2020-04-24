@@ -10,13 +10,15 @@ const YMLtagsGrade = props => {
   return (
     <div className="">
       {gradeSettings.map(element => (
-        <Checkbox
-          key={element.value}
-          name={element.name}
-          value={element.value}
-          subtag={element.subtag}
-          onCheck={props.checkboxHandler}
-        />
+        <div className="column">
+          <Checkbox
+            key={element.value}
+            name={element.name}
+            value={element.value}
+            subtag={element.subtag}
+            onCheck={props.checkboxHandler}
+          />
+        </div>
       ))}
     </div>
   );
@@ -24,33 +26,37 @@ const YMLtagsGrade = props => {
 
 const YMLtagsSubject = props => {
   return (
-    <div className="">
+    <React.Fragment>
       {subjectSettings.map(element => (
-        <Checkbox
-          key={element.value}
-          name={element.name}
-          value={element.value}
-          subtag={element.subtag}
-          onCheck={props.checkboxHandler}
-        />
+        <div className="column">
+          <Checkbox
+            key={element.value}
+            name={element.name}
+            value={element.value}
+            subtag={element.subtag}
+            onCheck={props.checkboxHandler}
+          />
+        </div>
       ))}
-    </div>
+    </React.Fragment>
   );
 };
 
 const YMLtagsTopic = props => {
   return (
-    <div className="">
+    <React.Fragment>
       {topicSettings.map(element => (
-        <Checkbox
-          key={element.value}
-          name={element.name}
-          value={element.value}
-          subtag={element.subtag}
-          onCheck={props.checkboxHandler}
-        />
+        <div className="column">
+          <Checkbox
+            key={element.value}
+            name={element.name}
+            value={element.value}
+            subtag={element.subtag}
+            onCheck={props.checkboxHandler}
+          />
+        </div>
       ))}
-    </div>
+    </React.Fragment>
   );
 };
 
