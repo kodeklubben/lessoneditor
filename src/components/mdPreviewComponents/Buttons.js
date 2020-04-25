@@ -12,7 +12,10 @@ class Buttons extends React.Component {
       window.innerHeight / window.innerWidth > 1.4
     ) {
       this.smallScreen = true;
-    } else {
+    } else if (
+      window.innerWidth > 600 ||
+      window.innerHeight / window.innerWidth < 1.4
+    ) {
       this.smallScreen = false;
     }
   }
@@ -27,7 +30,7 @@ class Buttons extends React.Component {
   handleOpen = () => {
     this.timeout = setTimeout(() => {
       this.setState({ isOpen: false });
-    }, 1500);
+    }, 2000);
   };
 
   handleClose = () => {
@@ -47,11 +50,8 @@ class Buttons extends React.Component {
           basic
           size="tiny"
           style={{
-            width: "3vh",
-            height: "1vh",
             backgroundColor: "rgba(0,0,0,0.8"
           }}
-          position="bottom center"
           open={this.state.isOpen}
           onOpen={this.handleOpen}
           onClose={this.handleClose}
@@ -60,8 +60,7 @@ class Buttons extends React.Component {
               <Button
                 style={{ backgroundColor: "#b1daae" }}
                 onTouchStart={this.handleButtonPress}
-                onTouchEnd={this.handleButtonRelease}
-                onMouseDown={this.handleButtonPress}
+                onTouchEnd={this.handleClose}
                 onClick={() =>
                   this.props.onButtonClick(
                     this.props.bTitle,
@@ -77,6 +76,8 @@ class Buttons extends React.Component {
             ) : (
               <Button
                 style={{ backgroundColor: "#b1daae" }}
+                onTouchStart={this.handleButtonPress}
+                onTouchEnd={this.handleClose}
                 onClick={() =>
                   this.props.onButtonClick(
                     this.props.bTitle,
