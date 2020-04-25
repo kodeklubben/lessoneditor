@@ -1,5 +1,5 @@
 import React from "react";
-import "./style.css";
+// import "./style.css";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import GoogleAuth from "../GoogleAuth";

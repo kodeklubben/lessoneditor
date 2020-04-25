@@ -111,7 +111,8 @@ class FormComponent extends React.Component {
   };
 
   render() {
-    return this.props.isSignedIn ? (
+    // return this.props.isSignedIn ? (
+    return (
       <div className="">
         <FormPage
           submitHandler={this.submitHandler}
@@ -123,9 +124,10 @@ class FormComponent extends React.Component {
           state={this.state}
         />
       </div>
-    ) : (
-      <Redirect to="/" />
     );
+    // : (
+    //   <Redirect to="/" />
+    // );
   }
 }
 

@@ -8,7 +8,6 @@ import { mdParser } from "../../../utils/mdParser";
 import ControlPanel from "./ControlPanel";
 import PageButtons from "../../PageButtons";
 import ImagePopup from "../ImagePopup";
-import GoogleAuth from "../../GoogleAuth";
 import {
   SAVING,
   SAVED,
@@ -123,17 +122,17 @@ class Editor extends React.Component {
 
   // auto save after a couple of seconds
   componentDidUpdate() {
-    if (this.state.counter === 4 && this.props.mdText.length > 0) {
-      autoSaveMessage = SAVED;
-    } else if (this.state.counter === 0) {
-      autoSaveMessage = SAVING;
-      storedTextValue = this.props.mdText;
-    }
     if (
       window.innerWidth < 600 ||
       window.innerHeight / window.innerWidth > 1.4
     ) {
       this.props.update();
+    }
+    if (this.state.counter === 4 && this.props.mdText.length > 0) {
+      autoSaveMessage = SAVED;
+    } else if (this.state.counter === 0) {
+      autoSaveMessage = SAVING;
+      storedTextValue = this.props.mdText;
     }
   }
 
@@ -179,8 +178,13 @@ class Editor extends React.Component {
     };
 
     const setUndo = () => {
-      undo.push(inputText);
-      undoCursorPosition.push(cursorPositionStart);
+      if (
+        undo[undo.length - 1] !== inputText &&
+        undoCursorPosition !== cursorPositionStart
+      ) {
+        undo.push(inputText);
+        undoCursorPosition.push(cursorPositionStart);
+      }
     };
 
     // sets cursor in textarea
@@ -197,6 +201,16 @@ class Editor extends React.Component {
       cursorPositionEnd = event.target.selectionEnd;
       inputText = event.target.value;
       redo = [];
+
+      // some textAreaKeyDown events don't work on smartphones
+      // need to make event trigger for those cases here
+      // if spacebar, update undo
+      if (
+        inputText[cursorPositionStart - 1] === " " ||
+        inputText[cursorPositionStart - 1] === "\n"
+      ) {
+        setUndo();
+      }
 
       // Counts input char. New line if 80
       charCounter += 1;
@@ -516,6 +530,8 @@ class Editor extends React.Component {
           );
           return;
         }
+        // save list values to listButtonValues
+        // to make list work with "enter-key" in onTextareaKeyDown --> "enter"
         if (bTitle.slice(0, 4) === "list") {
           listButtonValues = {
             bTitle: bTitle,
@@ -921,7 +937,8 @@ class Editor extends React.Component {
         )
     };
 
-    return this.props.isSignedIn ? (
+    // return this.props.isSignedIn ? (
+    return (
       <div>
         <div>
           <ControlPanel handleButtonClick={handleButtonClick} />
@@ -960,9 +977,10 @@ class Editor extends React.Component {
           />
         </div>
       </div>
-    ) : (
-      <Redirect to="/" />
     );
+    // : (
+    //   <Redirect to="/" />
+    // );
   }
 }
 

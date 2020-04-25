@@ -39,30 +39,32 @@ class ControlPanel extends React.Component {
       return <Redirect to={this.props.state.redirect} />;
     }
     return (
-      <div className="ui segment grid buttonBorderSmall">
-        <div />
-        <div className="ui icon buttons">
-          <Button labelPosition="left" onClick={this.onButtonClick}>
-            <Icon name="eye" />
-          </Button>
-        </div>
-        <div />
-        {undoRedo.map(element => (
-          <Buttons
-            bTitle={element.bTitle}
-            icon={element.icon}
-            output={element.output}
-            title={element.title}
-            cursorIntON={element.cursorIntON}
-            cursorIntOFF={element.cursorIntOFF}
-            endOutput={element.endOutput}
-            onButtonClick={this.handleButtonClick}
-            shortcutKey={element.shortcut}
+      <div className="ui ten column grid">
+        <div className="ui icon buttons column">
+          <Button
+            icon="eye"
+            labelPosition="left"
+            onClick={this.onButtonClick}
           />
-        ))}
-        <div />
+        </div>
 
-        <div className="ui icon buttons">
+        {undoRedo.map(element => (
+          <div className="ui icon buttons column">
+            <Buttons
+              bTitle={element.bTitle}
+              icon={element.icon}
+              output={element.output}
+              title={element.title}
+              cursorIntON={element.cursorIntON}
+              cursorIntOFF={element.cursorIntOFF}
+              endOutput={element.endOutput}
+              onButtonClick={this.handleButtonClick}
+              shortcutKey={element.shortcut}
+            />
+          </div>
+        ))}
+
+        <div className="ui icon buttons column">
           <Buttons
             bTitle={image[0].bTitle}
             icon={image[0].icon}
@@ -76,10 +78,7 @@ class ControlPanel extends React.Component {
           />
         </div>
 
-        <div
-          style={{ marginTop: "11px", marginBottom: "-11px" }}
-          className="right floated three wide column"
-        >
+        <div className="column">
           <div className="ui avatar image">
             {this.props.imageUrl ? (
               <img src={this.props.imageUrl} alt="useImage"></img>
@@ -88,15 +87,15 @@ class ControlPanel extends React.Component {
             )}
           </div>
         </div>
-
-        <button
-          style={{ marginRight: "-30px" }}
-          className="ui right floated icon right  column button floatRight"
-          type="button"
-          onClick={this.props.mySubmitHandler}
-        >
-          <i aria-hidden="true" className="right arrow icon" />
-        </button>
+        <div className="right floated column">
+          <button
+            className="ui icon right button"
+            type="button"
+            onClick={this.props.mySubmitHandler}
+          >
+            <i aria-hidden="true" className="right arrow icon" />
+          </button>
+        </div>
       </div>
     );
   }

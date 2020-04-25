@@ -1,38 +1,5 @@
 /* Form style */
 
-body {
-  background-color: rgb(255, 255, 255);
-  max-width: 1200px;
-  margin: auto;
-}
-.validateError {
-  color: red;
-}
-
-.test {
-  color: rgb(175, 175, 175);
-}
-
-.ui.segment.form {
-  background-color: rgb(247, 247, 247);
-}
-
-.ui.form {
-  height: 600px;
-}
-
-h3 {
-  margin-bottom: 30px;
-  margin-top: 4px !important;
-}
-
-.test3 {
-  display: flex;
-  flex-direction: row;
-  margin: auto;
-  margin-bottom: -1em;
-}
-
 #smallScreen {
   display: none;
 }
@@ -44,31 +11,7 @@ h3 {
   #bigScreen {
     display: none;
   }
-}
-
-.checkbox {
-  margin: 1vh;
-}
-
-.ui.mini.button {
-  background-color: #b1daae;
-  height: 3em;
-  margin-left: 4em;
-}
-
-.ui.mini.button:hover {
-  background-color: #7c947a;
-  height: 3em;
-  padding: auto;
-  margin-left: 4em;
-}
-
-.formWidth {
-  margin: 10%;
-  margin-top: 9%;
-}
-
-.smallButton {
-  vertical-align: top !important;
-  padding-bottom: 60px !important;
+  .ui.form {
+    height: 600px;
+  }
 }

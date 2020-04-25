@@ -1,4 +1,4 @@
-import "./smallscreen.css";
+// import "./smallscreen.css";
 import React from "react";
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
@@ -11,7 +11,6 @@ import ControlPanel2 from "./ControlPanel2";
 import ControlPanelPreview from "./ControlPanelPreview";
 import PageButtons from "../../PageButtons";
 import ImagePopup from "../ImagePopup";
-import GoogleAuth from "../../GoogleAuth";
 import {
   SAVING,
   SAVED,
@@ -19,6 +18,17 @@ import {
   PHOTO_TEXT,
   NAV_BUTTONS
 } from "../settingsFiles/languages/editor_NO";
+import {
+  SHORTCUTKEY,
+  KEY_COMBINATIONS as KEY,
+  emphasis,
+  undoRedo,
+  saveLoadNew,
+  image,
+  lists,
+  sections,
+  code
+} from "../settingsFiles/buttonConfig";
 
 // check if buttons is pressed
 var isButtonOn = {
@@ -46,6 +56,12 @@ var isButtonOn = {
   inline: true,
   codeblock: true
 };
+
+// dynamic list with all the keyboard shortcut chars from ./settingFiles/buttonConfig.js
+var shortcutKeys = [];
+for (let i = 0; i < Object.values(KEY).length; i++) {
+  shortcutKeys.push(Object.values(KEY)[i][Object.values(KEY)[i].length - 1]);
+}
 
 // Count input char for automatic newline at 80 chars
 var charCounter = 0;
@@ -238,6 +254,23 @@ class Editor extends React.Component {
     const onTextareaKeyDown = event => {
       cursorPositionStart = event.target.selectionStart;
       cursorPositionEnd = event.target.selectionEnd;
+
+      // prevents default value on shortcut keys
+      if (
+        (event.ctrlKey && SHORTCUTKEY === "ctrl") ||
+        (event.altKey && SHORTCUTKEY === "alt") ||
+        (event.metaKey && SHORTCUTKEY === "command") ||
+        (event.shiftKey && SHORTCUTKEY === "shift")
+      ) {
+        if (shortcutKeys.includes(event.key)) {
+          event.preventDefault();
+        }
+      }
+
+      // if spacebar, update undo
+      if (event.key === " ") {
+        setUndo();
+      }
 
       // if input is enter, update undo and do list functions if list.
       if (event.key === "Enter") {
@@ -481,7 +514,7 @@ class Editor extends React.Component {
       // make new line if some buttons ares pressed, and it is not allready new line
       if (
         bTitle.slice(0, 4) === "list" ||
-        bTitle.slice(0, 4) === "sec_" ||
+        (bTitle.slice(0, 4) === "sec_" && isButtonOn[bTitle]) ||
         (bTitle === "codeblock" && isButtonOn["codeblock"]) ||
         (bTitle === "heading" && isButtonOn["heading"])
       ) {
@@ -702,6 +735,214 @@ class Editor extends React.Component {
       }
     };
 
+    // Make keyboard shortcuts with React Hotkeys
+    // config in ./settingsFiles/buttonConfig.js
+    const keyMap = {
+      BOLD: KEY.bold.join(""),
+      ITALIC: KEY.italic.join(""),
+      HEADING: KEY.heading.join(""),
+      STRIKETHROUGH: KEY.strikethrough.join(""),
+      UNDO: KEY.undo.join(""),
+      REDO: KEY.redo.join(""),
+      NEW: KEY.new.join(""),
+      LOAD: KEY.load.join(""),
+      SAVE: KEY.save.join(""),
+      IMAGE: KEY.image.join(""),
+      LISTUL: KEY.listul.join(""),
+      LISTOL: KEY.listol.join(""),
+      CHECKLIST: KEY.listcheck.join(""),
+      ACTIVITY: KEY.activity.join(""),
+      INTRO: KEY.intro.join(""),
+      CHECK: KEY.check.join(""),
+      PROTIP: KEY.protip.join(""),
+      CHALLENGE: KEY.challenge.join(""),
+      FLAG: KEY.flag.join(""),
+      TRY: KEY.try.join(""),
+      INLINE: KEY.inline.join(""),
+      CODEBLOCK: KEY.codeblock.join("")
+    };
+
+    //keyboard shortcut actions.  Settings in ./settingsFiles/buttonConfig.js
+    // SORRY FOR WET CODE. NEED HELP MAKING THIS DRY
+    const handlers = {
+      BOLD: () =>
+        handleButtonClick(
+          emphasis[0].bTitle,
+          emphasis[0].output,
+          emphasis[0].cursorIntON,
+          emphasis[0].cursorIntOFF,
+          emphasis[0].endOutput
+        ),
+      ITALIC: () =>
+        handleButtonClick(
+          emphasis[1].bTitle,
+          emphasis[1].output,
+          emphasis[1].cursorIntON,
+          emphasis[1].cursorIntOFF,
+          emphasis[1].endOutput
+        ),
+      HEADING: () =>
+        handleButtonClick(
+          emphasis[2].bTitle,
+          emphasis[2].output,
+          emphasis[2].cursorIntON,
+          emphasis[2].cursorIntOFF,
+          emphasis[2].endOutput
+        ),
+      STRIKETHROUGH: () =>
+        handleButtonClick(
+          emphasis[3].bTitle,
+          emphasis[3].output,
+          emphasis[3].cursorIntON,
+          emphasis[3].cursorIntOFF,
+          emphasis[3].endOutput
+        ),
+      UNDO: () =>
+        handleButtonClick(
+          undoRedo[0].bTitle,
+          undoRedo[0].output,
+          undoRedo[0].cursorIntON,
+          undoRedo[0].cursorIntOFF,
+          undoRedo[0].endOutput
+        ),
+      REDO: () =>
+        handleButtonClick(
+          undoRedo[1].bTitle,
+          undoRedo[1].output,
+          undoRedo[1].cursorIntON,
+          undoRedo[1].cursorIntOFF,
+          undoRedo[1].endOutput
+        ),
+      NEW: () =>
+        handleButtonClick(
+          saveLoadNew[0].bTitle,
+          saveLoadNew[0].output,
+          saveLoadNew[0].cursorIntON,
+          saveLoadNew[0].cursorIntOFF,
+          saveLoadNew[0].endOutput
+        ),
+      LOAD: () =>
+        handleButtonClick(
+          saveLoadNew[1].bTitle,
+          saveLoadNew[1].output,
+          saveLoadNew[1].cursorIntON,
+          saveLoadNew[1].cursorIntOFF,
+          saveLoadNew[1].endOutput
+        ),
+      SAVE: () =>
+        handleButtonClick(
+          saveLoadNew[2].bTitle,
+          saveLoadNew[2].output,
+          saveLoadNew[2].cursorIntON,
+          saveLoadNew[2].cursorIntOFF,
+          saveLoadNew[2].endOutput
+        ),
+      IMAGE: () =>
+        handleButtonClick(
+          image[0].bTitle,
+          image[0].output,
+          image[0].cursorIntON,
+          image[0].cursorIntOFF,
+          image[0].endOutput
+        ),
+      LISTUL: () =>
+        handleButtonClick(
+          lists[0].bTitle,
+          lists[0].output,
+          lists[0].cursorIntON,
+          lists[0].cursorIntOFF,
+          lists[0].endOutput
+        ),
+      LISTOL: () =>
+        handleButtonClick(
+          lists[1].bTitle,
+          lists[1].output,
+          lists[1].cursorIntON,
+          lists[1].cursorIntOFF,
+          lists[1].endOutput
+        ),
+      CHECKLIST: () =>
+        handleButtonClick(
+          lists[2].bTitle,
+          lists[2].output,
+          lists[2].cursorIntON,
+          lists[2].cursorIntOFF,
+          lists[2].endOutput
+        ),
+      ACTIVITY: () =>
+        handleButtonClick(
+          sections[0].bTitle,
+          sections[0].output,
+          sections[0].cursorIntON,
+          sections[0].cursorIntOFF,
+          sections[0].endOutput
+        ),
+      INTRO: () =>
+        handleButtonClick(
+          sections[1].bTitle,
+          sections[1].output,
+          sections[1].cursorIntON,
+          sections[1].cursorIntOFF,
+          sections[1].endOutput
+        ),
+      CHECK: () =>
+        handleButtonClick(
+          sections[2].bTitle,
+          sections[2].output,
+          sections[2].cursorIntON,
+          sections[2].cursorIntOFF,
+          sections[2].endOutput
+        ),
+      PROTIP: () =>
+        handleButtonClick(
+          sections[3].bTitle,
+          sections[3].output,
+          sections[3].cursorIntON,
+          sections[3].cursorIntOFF,
+          sections[3].endOutput
+        ),
+      CHALLENGE: () =>
+        handleButtonClick(
+          sections[4].bTitle,
+          sections[4].output,
+          sections[4].cursorIntON,
+          sections[4].cursorIntOFF,
+          sections[4].endOutput
+        ),
+      FLAG: () =>
+        handleButtonClick(
+          sections[5].bTitle,
+          sections[5].output,
+          sections[5].cursorIntON,
+          sections[5].cursorIntOFF,
+          sections[5].endOutput
+        ),
+      TRY: () =>
+        handleButtonClick(
+          sections[6].bTitle,
+          sections[6].output,
+          sections[6].cursorIntON,
+          sections[6].cursorIntOFF,
+          sections[6].endOutput
+        ),
+      INLINE: () =>
+        handleButtonClick(
+          code[0].bTitle,
+          code[0].output,
+          code[0].cursorIntON,
+          code[0].cursorIntOFF,
+          code[0].endOutput
+        ),
+      CODEBLOCK: () =>
+        handleButtonClick(
+          code[1].bTitle,
+          code[1].output,
+          code[1].cursorIntON,
+          code[1].cursorIntOFF,
+          code[1].endOutput
+        )
+    };
+
     const returnPreview = () => {
       if (!this.state.showPreview) {
         this.setState({ showPreview: true });
@@ -710,7 +951,8 @@ class Editor extends React.Component {
       }
     };
 
-    return this.props.isSignedIn ? (
+    // return this.props.isSignedIn ? (
+    return (
       <div>
         {!this.state.showPreview ? (
           <div>
@@ -757,9 +999,10 @@ class Editor extends React.Component {
           </div>
         )}
       </div>
-    ) : (
-      <Redirect to="/" />
     );
+    // : (
+    //   <Redirect to="/" />
+    // );
   }
 }
 
