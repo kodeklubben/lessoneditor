@@ -87,7 +87,7 @@ const FormPage = props => {
     <div className="ui grid ">
       <div className="row">
         <div className="right floated three wide column">
-          <div style={{ marginBottom: "-35px" }} className="ui avatar image">
+          <div className="ui avatar image">
             {props.imageUrl ? (
               <img src={props.imageUrl} alt="useImage"></img>
             ) : (

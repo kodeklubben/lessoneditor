@@ -1,12 +1,11 @@
+// import "./smallscreen.css";
 import React from "react";
-import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import { addText, parseMD } from "../../../actions";
 import MDTextArea from "./MDTextArea";
 import MDPreview from "./MDPreview";
 import { mdParser } from "../../../utils/mdParser";
-import ControlPanel from "./ControlPanel";
-import PageButtons from "../../PageButtons";
+import ControlPanel from "./controlpanel/ControlPanel";
 import ImagePopup from "../ImagePopup";
 import {
   SAVING,
@@ -100,8 +99,7 @@ class Editor extends React.Component {
       counter: 0,
       textValue: "",
       mdValue: "",
-      buttonValues: isButtonOn,
-      redirect: null
+      buttonValues: isButtonOn
     };
 
     // refs are used to find elements in the DOM (simular to document.getElementbyID)
@@ -122,12 +120,6 @@ class Editor extends React.Component {
 
   // auto save after a couple of seconds
   componentDidUpdate() {
-    if (
-      window.innerWidth < 600 ||
-      window.innerHeight / window.innerWidth > 1.4
-    ) {
-      this.props.update();
-    }
     if (this.state.counter === 4 && this.props.mdText.length > 0) {
       autoSaveMessage = SAVED;
     } else if (this.state.counter === 0) {
@@ -229,9 +221,9 @@ class Editor extends React.Component {
       this.setState({ counter: 0 });
     };
 
-    const onTextareaKeyUp = e => {
-      cursorPositionStart = e.target.selectionStart;
-      cursorPositionEnd = e.target.selectionEnd;
+    const onTextareaKeyUp = event => {
+      cursorPositionStart = event.target.selectionStart;
+      cursorPositionEnd = event.target.selectionEnd;
     };
 
     const onTextareaSelect = e => {
@@ -461,8 +453,10 @@ class Editor extends React.Component {
         if (undo.length <= 0) {
           return;
         }
+
         redo.push(inputText);
         redoCursorPosition.push(cursorPositionStart);
+
         inputText = undo.pop();
         this.props.addText(inputText);
         this.props.parseMD(mdParser(inputText));
@@ -940,42 +934,29 @@ class Editor extends React.Component {
     // return this.props.isSignedIn ? (
     return (
       <div>
-        <div>
-          <ControlPanel handleButtonClick={handleButtonClick} />
-          <div className="ui two column grid">
-            <div className="column">
-              <MDTextArea
-                editorRef={this.editorRef}
-                onInputChange={handleChange}
-                handleButtonClick={handleButtonClick}
-                onTextareaKeyDown={onTextareaKeyDown}
-                onTextareaKeyUp={onTextareaKeyUp}
-                onTextareaMouseDown={onTextareaMouseDown}
-                onTextareaSelect={onTextareaSelect}
-                handlers={handlers}
-                keyMap={keyMap}
-              />
-            </div>
-            {imagePopup}
-            <div className="column">
-              <MDPreview mdValue={this.state.mdValue} />
-            </div>
-          </div>
-        </div>
-        <div className="ui container">
-          <p style={{ color: "grey" }}>{autoSaveMessage}</p>
-        </div>
-        <div className="ui container">
-          <PageButtons
-            prevTitle={NAV_BUTTONS.prev}
-            nextTitle={NAV_BUTTONS.submit}
-            prevValue="/createNewLesson"
-            nextValue="/endpage"
-            setPageNumber={null}
-            mySubmitHandler={mySubmitHandler}
-            state={this.state}
-          />
-        </div>
+        <ControlPanel
+          handleButtonClick={handleButtonClick}
+          nextTitle={NAV_BUTTONS.submit}
+          prevValue="/createNewLesson"
+          nextValue="/endpage"
+          mySubmitHandler={mySubmitHandler}
+          state={this.state}
+        />
+        <MDTextArea
+          editorRef={this.editorRef}
+          textValue={this.state.textValue}
+          onInputChange={handleChange}
+          handleButtonClick={handleButtonClick}
+          onTextareaKeyDown={onTextareaKeyDown}
+          onTextareaKeyUp={onTextareaKeyUp}
+          onTextareaMouseDown={onTextareaMouseDown}
+          onTextareaSelect={onTextareaSelect}
+          autoSaveMessage={autoSaveMessage}
+          handlers={handlers}
+          keyMap={keyMap}
+        />
+        {imagePopup}
+        <MDPreview mdValue={this.state.mdValue} />
       </div>
     );
     // : (

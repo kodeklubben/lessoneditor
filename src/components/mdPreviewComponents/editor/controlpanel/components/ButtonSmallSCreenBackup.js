@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Icon } from "semantic-ui-react";
+import { Button } from "semantic-ui-react";
 
 class Buttons extends React.Component {
   render() {
@@ -9,7 +9,6 @@ class Buttons extends React.Component {
           <Button
             icon={this.props.icon}
             className=""
-            labelPosition="left"
             onClick={() =>
               this.props.onButtonClick(
                 this.props.bTitle,
