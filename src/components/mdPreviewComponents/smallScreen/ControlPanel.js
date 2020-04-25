@@ -78,7 +78,7 @@ class ControlPanel extends React.Component {
 
         <div
           style={{ marginTop: "11px", marginBottom: "-11px" }}
-          className="right floated two wide column"
+          className="right floated three wide column"
         >
           <div className="ui avatar image">
             {this.props.imageUrl ? (

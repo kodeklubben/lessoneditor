@@ -17,6 +17,10 @@ body {
   background-color: rgb(247, 247, 247);
 }
 
+.ui.form {
+  height: 600px;
+}
+
 h3 {
   margin-bottom: 30px;
   margin-top: 4px !important;
