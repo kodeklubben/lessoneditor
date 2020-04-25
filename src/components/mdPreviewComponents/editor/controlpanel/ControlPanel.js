@@ -35,13 +35,17 @@ class ControlPanel extends React.Component {
         <div className="ui sixteen column grid">
           <div className="column">
             <CPButton
-              onButtonClick={() => {
-                return 2 + 2;
-              }}
+              bTitle=""
               icon="eye"
+              output=""
+              title="Forhåndsvisning"
+              cursorIntON=""
+              cursorIntOFF=""
+              endOutput=""
+              onButtonClick={this.handleButtonClick}
+              shortcutKey=""
             />
           </div>
-
           {undoRedo.map(element => (
             <div key={element.bTitle} className="column">
               <CPButton

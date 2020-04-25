@@ -1,18 +1,21 @@
 import React from "react";
 import { Button, Icon, Popup } from "semantic-ui-react";
 
-class CPButton extends React.Component {
+class Buttons extends React.Component {
   state = { isOpen: false };
 
   smallScreen = false;
 
   componentDidUpdate() {
     if (
-      window.innerWidth < 700 ||
+      window.innerWidth < 600 ||
       window.innerHeight / window.innerWidth > 1.4
     ) {
       this.smallScreen = true;
-    } else {
+    } else if (
+      window.innerWidth > 600 ||
+      window.innerHeight / window.innerWidth < 1.4
+    ) {
       this.smallScreen = false;
     }
   }
@@ -27,11 +30,11 @@ class CPButton extends React.Component {
   handleOpen = () => {
     this.timeout = setTimeout(() => {
       this.setState({ isOpen: false });
-    }, 1500);
+    }, 2000);
   };
 
   handleClose = () => {
-    this.setState({ isOpen: false });
+    // this.setState({ isOpen: false });
     clearTimeout(this.timeout);
     clearTimeout(this.buttonPressTimer);
   };
@@ -40,22 +43,22 @@ class CPButton extends React.Component {
     return this.smallScreen ? (
       <React.Fragment>
         <Popup
-          content={this.props.title + " (" + this.props.shortcutKey + ")"}
-          mouseEnterDelay={250}
-          mouseLeaveDelay={250}
+          content={this.props.title}
           inverted
           basic
           size="tiny"
-          position="bottom center"
+          style={{
+            backgroundColor: "rgba(0,0,0,0.8"
+          }}
           open={this.state.isOpen}
           onOpen={this.handleOpen}
           onClose={this.handleClose}
           trigger={
             this.props.icon ? (
               <Button
+                style={{ backgroundColor: "#b1daae" }}
                 onTouchStart={this.handleButtonPress}
-                onTouchEnd={this.handleButtonRelease}
-                onMouseDown={this.handleButtonPress}
+                onTouchEnd={this.handleClose}
                 onClick={() =>
                   this.props.onButtonClick(
                     this.props.bTitle,
@@ -70,6 +73,9 @@ class CPButton extends React.Component {
               </Button>
             ) : (
               <Button
+                style={{ backgroundColor: "#b1daae" }}
+                onTouchStart={this.handleButtonPress}
+                onTouchEnd={this.handleClose}
                 onClick={() =>
                   this.props.onButtonClick(
                     this.props.bTitle,
@@ -93,12 +99,17 @@ class CPButton extends React.Component {
           mouseEnterDelay={250}
           mouseLeaveDelay={250}
           inverted
-          basic
           size="tiny"
+          style={{
+            width: "3vh",
+            height: "1vh",
+            backgroundColor: "rgba(0,0,0,0.8"
+          }}
           position="bottom center"
           trigger={
             this.props.icon ? (
               <Button
+                style={{ backgroundColor: "#b1daae" }}
                 onTouchStart={this.handleButtonPress}
                 onTouchEnd={this.handleButtonRelease}
                 onMouseDown={this.handleButtonPress}
@@ -116,6 +127,7 @@ class CPButton extends React.Component {
               </Button>
             ) : (
               <Button
+                style={{ backgroundColor: "#b1daae" }}
                 onClick={() =>
                   this.props.onButtonClick(
                     this.props.bTitle,
@@ -140,4 +152,4 @@ class CPButton extends React.Component {
   }
 }
 
-export default CPButton;
+export default Buttons;
