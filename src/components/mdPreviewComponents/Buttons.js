@@ -34,7 +34,6 @@ class Buttons extends React.Component {
   };
 
   handleClose = () => {
-    this.setState({ isOpen: false });
     clearTimeout(this.timeout);
     clearTimeout(this.buttonPressTimer);
   };
