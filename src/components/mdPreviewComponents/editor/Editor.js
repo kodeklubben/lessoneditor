@@ -94,11 +94,8 @@ class Editor extends React.Component {
     super(props);
 
     this.state = {
-      test: true,
       images: [],
       counter: 0,
-      textValue: "",
-      mdValue: "",
       buttonValues: isButtonOn
     };
 
@@ -750,7 +747,7 @@ class Editor extends React.Component {
       CODEBLOCK: KEY.codeblock.join("")
     };
 
-    //keyboard shortcut actions.  Settings in ./settingsFiles/buttonConfig.js
+    // keyboard shortcut actions.  Settings in ./settingsFiles/buttonConfig.js
     // SORRY FOR WET CODE. NEED HELP MAKING THIS DRY
     const handlers = {
       BOLD: () =>
@@ -940,11 +937,9 @@ class Editor extends React.Component {
           prevValue="/createNewLesson"
           nextValue="/endpage"
           mySubmitHandler={mySubmitHandler}
-          state={this.state}
         />
         <MDTextArea
           editorRef={this.editorRef}
-          textValue={this.state.textValue}
           onInputChange={handleChange}
           handleButtonClick={handleButtonClick}
           onTextareaKeyDown={onTextareaKeyDown}
@@ -956,7 +951,7 @@ class Editor extends React.Component {
           keyMap={keyMap}
         />
         {imagePopup}
-        <MDPreview mdValue={this.state.mdValue} />
+        <MDPreview />
       </div>
     );
     // : (
