@@ -85,15 +85,15 @@ const FormPage = props => {
   };
 
   return (
-    <div className="ui grid ">
-      <div className="row">
-        <div className="right floated three wide column">
-          <ProfileMenu />
-        </div>
+    <div className="ui sixteen column grid">
+      <div
+        style={{ margin: "auto", padding: "auto" }}
+        className="right floated three wide column"
+      >
+        <ProfileMenu />
       </div>
-      <div className="row">
-        <div className="sixteen wide centered column">{renderFormPage()}</div>
-      </div>
+
+      <div className="sixteen wide centered column">{renderFormPage()}</div>
     </div>
   );
 };

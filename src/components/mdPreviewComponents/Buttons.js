@@ -25,6 +25,9 @@ class Buttons extends React.Component {
       () => this.setState({ isOpen: true }),
       500
     );
+    this.buttonPressTimer2 = setTimeout(() => {
+      this.handleOpen();
+    }, 500);
   };
 
   handleOpen = () => {
@@ -34,8 +37,9 @@ class Buttons extends React.Component {
   };
 
   handleClose = () => {
-    clearTimeout(this.timeout);
+    // this.setState({ isOpen: false });
     clearTimeout(this.buttonPressTimer);
+    clearTimeout(this.buttonPressTimer2);
   };
 
   responsiveCP = () => {
@@ -47,6 +51,7 @@ class Buttons extends React.Component {
           mouseLeaveDelay={250}
           inverted
           basic
+          offset="0, -50px"
           size="tiny"
           style={{
             backgroundColor: "rgba(0,0,0,0.8"

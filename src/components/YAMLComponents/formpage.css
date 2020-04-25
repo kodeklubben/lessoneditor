@@ -18,7 +18,7 @@ body {
 }
 
 .ui.form {
-  height: 600px;
+  max-height: 84vh;
 }
 
 h3 {

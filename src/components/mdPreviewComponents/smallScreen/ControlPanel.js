@@ -83,20 +83,21 @@ class ControlPanel extends React.Component {
         </div>
 
         <div
-          style={{ marginTop: "11px", marginBottom: "-11px" }}
+          style={{ margin: "auto" }}
           className="right floated three wide column"
         >
           <ProfileMenu />
         </div>
 
         <button
-          style={{ marginRight: "-40px" }}
-          className="ui right floated icon right  column button floatRight"
+          style={{ margin: "auto" }}
+          className="ui right floated icon right  column"
           type="button"
           onClick={this.props.mySubmitHandler}
         >
           <i aria-hidden="true" className="right arrow icon" />
         </button>
+        <div style={{ margin: "auto" }} />
       </div>
     );
   }
