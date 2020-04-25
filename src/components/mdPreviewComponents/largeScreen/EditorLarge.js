@@ -516,6 +516,8 @@ class Editor extends React.Component {
           );
           return;
         }
+        // save list values to listButtonValues
+        // to make list work with "enter-key" in onTextareaKeyDown --> "enter"
         if (bTitle.slice(0, 4) === "list") {
           listButtonValues = {
             bTitle: bTitle,

@@ -481,7 +481,7 @@ class Editor extends React.Component {
       // make new line if some buttons ares pressed, and it is not allready new line
       if (
         bTitle.slice(0, 4) === "list" ||
-        bTitle.slice(0, 4) === "sec_" ||
+        (bTitle.slice(0, 4) === "sec_" && isButtonOn[bTitle]) ||
         (bTitle === "codeblock" && isButtonOn["codeblock"]) ||
         (bTitle === "heading" && isButtonOn["heading"])
       ) {
