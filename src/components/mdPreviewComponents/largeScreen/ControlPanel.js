@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import Buttons from "./Button";
+import Buttons from "../Buttons";
+import ProfileMenu from "../../ProfileMenu";
 import {
   emphasis,
   undoRedo,
@@ -157,16 +158,7 @@ class ControlPanel extends React.Component {
           ))}
         </div>
         <div className="right floated two wide column">
-          <div
-            style={{ marginTop: "-50px", marginRight: "-1000px" }}
-            className="ui avatar image"
-          >
-            {this.props.imageUrl ? (
-              <img src={this.props.imageUrl} alt="useImage"></img>
-            ) : (
-              <i className="user icon"></i>
-            )}
-          </div>
+          <ProfileMenu />
         </div>
       </div>
     );

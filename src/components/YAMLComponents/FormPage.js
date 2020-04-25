@@ -5,6 +5,7 @@ import Page2 from "./Page2";
 import Page3 from "./Page3";
 import PageButtons from "../PageButtons";
 import { NAV_BUTTONS } from "./settingsFiles/languages/formpage_NO";
+import ProfileMenu from "../ProfileMenu";
 
 const FormPage = props => {
   const renderFormPage = () => {
@@ -87,13 +88,7 @@ const FormPage = props => {
     <div className="ui grid ">
       <div className="row">
         <div className="right floated three wide column">
-          <div style={{ marginBottom: "-35px" }} className="ui avatar image">
-            {props.imageUrl ? (
-              <img src={props.imageUrl} alt="useImage"></img>
-            ) : (
-              <i className="user icon"></i>
-            )}
-          </div>
+          <ProfileMenu />
         </div>
       </div>
       <div className="row">

@@ -6,7 +6,7 @@ import {
   code
 } from "../settingsFiles/buttonConfig.js";
 import React from "react";
-import Button from "./Button";
+import Button from "../Buttons";
 import { Icon, Dropdown, Divider } from "semantic-ui-react";
 
 const test = "{ }";

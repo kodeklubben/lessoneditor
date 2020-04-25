@@ -8,7 +8,7 @@ import {
   code
 } from "../settingsFiles/buttonConfig.js";
 import React from "react";
-import Buttons from "./Button";
+import Buttons from "../Buttons";
 import { Icon, Button, Dropdown, Divider } from "semantic-ui-react";
 
 class ControlPanel extends React.Component {

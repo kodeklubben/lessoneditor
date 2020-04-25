@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import Buttons from "./Button";
+import Buttons from "../Buttons";
+import ProfileMenu from "../../ProfileMenu";
 import { Link, Redirect } from "react-router-dom";
 import { Icon, Button, Dropdown, Divider } from "semantic-ui-react";
 import {
@@ -80,17 +81,11 @@ class ControlPanel extends React.Component {
           style={{ marginTop: "11px", marginBottom: "-11px" }}
           className="right floated three wide column"
         >
-          <div className="ui avatar image">
-            {this.props.imageUrl ? (
-              <img src={this.props.imageUrl} alt="useImage"></img>
-            ) : (
-              <i className="user icon"></i>
-            )}
-          </div>
+          <ProfileMenu />
         </div>
 
         <button
-          style={{ marginRight: "-30px" }}
+          style={{ marginRight: "-40px" }}
           className="ui right floated icon right  column button floatRight"
           type="button"
           onClick={this.props.mySubmitHandler}
