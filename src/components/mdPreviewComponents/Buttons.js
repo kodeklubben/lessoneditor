@@ -43,7 +43,7 @@ class Buttons extends React.Component {
     return this.smallScreen ? (
       <React.Fragment>
         <Popup
-          content={this.props.title + " (" + this.props.shortcutKey + ")"}
+          content={this.props.title}
           mouseEnterDelay={250}
           mouseLeaveDelay={250}
           inverted

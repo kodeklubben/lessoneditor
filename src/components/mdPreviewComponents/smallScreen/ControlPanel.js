@@ -40,14 +40,20 @@ class ControlPanel extends React.Component {
       return <Redirect to={this.props.state.redirect} />;
     }
     return (
-      <div className="ui segment grid buttonBorderSmall">
+      <div className="ui segment ten column grid buttonBorderSmall">
         <div />
-        <div className="ui icon buttons">
-          <Button labelPosition="left" onClick={this.onButtonClick}>
-            <Icon name="eye" />
-          </Button>
-        </div>
-        <div />
+        <Buttons
+          bTitle=""
+          icon="eye"
+          output=""
+          title="Forhåndsvisning"
+          cursorIntON=""
+          cursorIntOFF=""
+          endOutput=""
+          onButtonClick={this.onButtonClick}
+          shortcutKey=""
+        />
+
         {undoRedo.map(element => (
           <Buttons
             bTitle={element.bTitle}
@@ -61,7 +67,6 @@ class ControlPanel extends React.Component {
             shortcutKey={element.shortcut}
           />
         ))}
-        <div />
 
         <div className="ui icon buttons">
           <Buttons
