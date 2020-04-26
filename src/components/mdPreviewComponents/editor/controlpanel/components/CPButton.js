@@ -25,6 +25,9 @@ class Buttons extends React.Component {
       () => this.setState({ isOpen: true }),
       500
     );
+    this.buttonPressTimer2 = setTimeout(() => {
+      this.handleOpen();
+    }, 500);
   };
 
   handleOpen = () => {
@@ -35,8 +38,8 @@ class Buttons extends React.Component {
 
   handleClose = () => {
     // this.setState({ isOpen: false });
-    clearTimeout(this.timeout);
     clearTimeout(this.buttonPressTimer);
+    clearTimeout(this.buttonPressTimer2);
   };
 
   responsiveCP = () => {
