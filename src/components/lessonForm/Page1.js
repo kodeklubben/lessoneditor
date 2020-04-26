@@ -55,7 +55,6 @@ const Page1 = props => {
           </select>
         </label>
       </div>
-      <div style={{ marginBottom: "75px" }}></div>
       <div className="field">
         <label>
           <h3>
@@ -63,7 +62,6 @@ const Page1 = props => {
             <span className="test"> (valgfritt)</span>
           </h3>
           <input
-            style={{ marginTop: "-20px" }}
             autoComplete="off"
             type="text"
             name="license"

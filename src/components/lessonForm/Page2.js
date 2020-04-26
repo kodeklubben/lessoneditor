@@ -6,12 +6,9 @@ import { YML_TEXT } from "./settingsFiles/languages/formpage_NO";
 import COURSESLIST from "./settingsFiles/COURSELIST";
 import { FORM_TEXT } from "./settingsFiles/languages/formpage_NO";
 
-import PageButtons from "../PageButtons";
-import { NAV_BUTTONS } from "./settingsFiles/languages/formpage_NO";
-
 const Page2 = props => {
   return (
-    <div className="ui large form">
+    <div className="">
       <div className="field">
         <label>
           <h3>{FORM_TEXT.COURSE.heading}</h3>
@@ -50,10 +47,7 @@ const Page2 = props => {
             <label>
               <h3 className="">{YML_TEXT.grade}</h3>
             </label>
-            <div
-              style={{ marginBottom: "20px", padding: "10px" }}
-              className="ui segment"
-            >
+            <div className="ui segment">
               <div className="ui stackable two column grid">
                 <YMLtagsGrade checkboxHandler={props.checkboxHandler} />
               </div>

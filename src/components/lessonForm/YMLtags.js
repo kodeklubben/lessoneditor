@@ -10,9 +10,8 @@ const YMLtagsGrade = props => {
   return (
     <div className="">
       {gradeSettings.map(element => (
-        <div className="column">
+        <div key={element.value} className="column">
           <Checkbox
-            key={element.value}
             name={element.name}
             value={element.value}
             subtag={element.subtag}
@@ -28,9 +27,8 @@ const YMLtagsSubject = props => {
   return (
     <React.Fragment>
       {subjectSettings.map(element => (
-        <div className="column">
+        <div key={element.value} className="column">
           <Checkbox
-            key={element.value}
             name={element.name}
             value={element.value}
             subtag={element.subtag}
@@ -46,9 +44,8 @@ const YMLtagsTopic = props => {
   return (
     <React.Fragment>
       {topicSettings.map(element => (
-        <div className="column">
+        <div key={element.value} className="column">
           <Checkbox
-            key={element.value}
             name={element.name}
             value={element.value}
             subtag={element.subtag}

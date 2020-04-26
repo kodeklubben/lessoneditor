@@ -1,5 +1,5 @@
 import React from "react";
-import "./style.css";
+// import "./style.css";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import GoogleAuth from "../GoogleAuth";
@@ -22,13 +22,8 @@ const IndexPage = props => {
             </p>
             <p id="author">Harold Abelson </p>
           </div>
-          <div style={{ margin: "45px" }} />
-          <div
-            style={{
-              margin: "20, 20, 5, 20",
-              textAlign: "center"
-            }}
-          >
+          <div />
+          <div>
             <h2>Velkommen {props.firstName}</h2>
           </div>
           <div className="btnDiv">
@@ -54,16 +49,8 @@ const IndexPage = props => {
             </p>
             <p id="author">Harold Abelson </p>
           </div>
-          <div style={{}} />
-          <div
-            style={{
-              marginTop: "10vh",
-              marginBottom: "2vh",
-              alignItems: "center",
-              textAlign: "center"
-            }}
-            className="ui container"
-          >
+          <div />
+          <div className="ui container">
             <h2>Logg inn:</h2>
           </div>
           <div className="center">
