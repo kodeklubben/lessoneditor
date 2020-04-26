@@ -4,8 +4,11 @@ select {
 
 /* ControlPanel  */
 
-@media only screen and (max-width: 955px) {
-  .sections {
+@media only screen and (max-width: 800px) {
+  #sections {
+    display: none;
+  }
+  #code {
     display: none;
   }
 }

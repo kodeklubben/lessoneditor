@@ -624,8 +624,6 @@ class Editor extends React.Component {
       }
 
       //  Button config to insert markdown syntax on button press
-      // Config values can be find in :
-      // ./settingsFile/buttonConfig.js
       if (isButtonOn[bTitle]) {
         if (cursorPositionStart !== cursorPositionEnd) {
           isButtonOn[bTitle] = false;
@@ -717,6 +715,7 @@ class Editor extends React.Component {
 
     // Make keyboard shortcuts with React Hotkeys
     // config in ./settingsFiles/buttonConfig.js
+    // new buttons needs to be added manually, with names from buttonconfig.
     const keyMap = {
       BOLD: KEY.bold.join(""),
       ITALIC: KEY.italic.join(""),
@@ -734,6 +733,7 @@ class Editor extends React.Component {
       ACTIVITY: KEY.activity.join(""),
       INTRO: KEY.intro.join(""),
       CHECK: KEY.check.join(""),
+      TIP: KEY.tip.join(""),
       PROTIP: KEY.protip.join(""),
       CHALLENGE: KEY.challenge.join(""),
       FLAG: KEY.flag.join(""),
@@ -742,7 +742,9 @@ class Editor extends React.Component {
       CODEBLOCK: KEY.codeblock.join("")
     };
 
-    //keyboard shortcut actions.  Settings in ./settingsFiles/buttonConfig.js
+    // keyboard shortcut actions.  Settings in ./settingsFiles/buttonConfig.js
+    // for the moment these settings needs to be set manually here and in
+    // button-config.
     // SORRY FOR WET CODE. NEED HELP MAKING THIS DRY
     const handlers = {
       BOLD: () =>
@@ -873,7 +875,7 @@ class Editor extends React.Component {
           sections[2].cursorIntOFF,
           sections[2].endOutput
         ),
-      PROTIP: () =>
+      TIP: () =>
         handleButtonClick(
           sections[3].bTitle,
           sections[3].output,
@@ -881,7 +883,7 @@ class Editor extends React.Component {
           sections[3].cursorIntOFF,
           sections[3].endOutput
         ),
-      CHALLENGE: () =>
+      PROTIP: () =>
         handleButtonClick(
           sections[4].bTitle,
           sections[4].output,
@@ -889,7 +891,7 @@ class Editor extends React.Component {
           sections[4].cursorIntOFF,
           sections[4].endOutput
         ),
-      FLAG: () =>
+      CHALLENGE: () =>
         handleButtonClick(
           sections[5].bTitle,
           sections[5].output,
@@ -897,13 +899,21 @@ class Editor extends React.Component {
           sections[5].cursorIntOFF,
           sections[5].endOutput
         ),
-      TRY: () =>
+      FLAG: () =>
         handleButtonClick(
           sections[6].bTitle,
           sections[6].output,
           sections[6].cursorIntON,
           sections[6].cursorIntOFF,
           sections[6].endOutput
+        ),
+      TRY: () =>
+        handleButtonClick(
+          sections[7].bTitle,
+          sections[7].output,
+          sections[7].cursorIntON,
+          sections[7].cursorIntOFF,
+          sections[7].endOutput
         ),
       INLINE: () =>
         handleButtonClick(

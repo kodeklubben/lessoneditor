@@ -61,7 +61,7 @@ const KEY_COMBINATIONS = {
   protip: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.p],
   challenge: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.g],
   flag: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.f],
-  try: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.p],
+  try: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.t],
   inline: [SHORTCUTKEY, plus, chars.e],
   codeblock: [SHORTCUTKEY, plus, chars.k]
 };

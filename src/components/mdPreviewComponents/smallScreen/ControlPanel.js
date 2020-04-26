@@ -90,7 +90,7 @@ class ControlPanel extends React.Component {
         </div>
 
         <button
-          style={{ margin: "auto" }}
+          style={{ margin: "auto", backgroundColor: "#dad3ae" }}
           className="ui right floated icon right  column"
           type="button"
           onClick={this.props.mySubmitHandler}
