@@ -104,8 +104,6 @@ class Buttons extends React.Component {
           inverted
           size="tiny"
           style={{
-            width: "3vh",
-            height: "1vh",
             backgroundColor: "rgba(0,0,0,0.8"
           }}
           position="bottom center"

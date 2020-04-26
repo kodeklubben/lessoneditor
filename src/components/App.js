@@ -1,7 +1,7 @@
 import React from "react";
-import FormComponent from "./YAMLComponents/FormComponent";
+import FormComponent from "./lessonForm/FormComponent";
 import EndPage from "./frontPageComponents/EndPage";
-import Editor from "./mdPreviewComponents/editor/Editor";
+import Editor from "./mdTextEditor/editor/Editor";
 import IndexPage from "./frontPageComponents/IndexPage";
 import Overview from "./mypage/Overview";
 import { BrowserRouter, Route } from "react-router-dom";

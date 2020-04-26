@@ -3,7 +3,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { addText, parseMD } from "../../../actions";
 import MDTextArea from "./MDTextArea";
-import MDPreview from "./MDPreview";
+import MDPreview from "../mdPreview/MDPreview";
 import { mdParser } from "../../../utils/mdParser";
 import ControlPanel from "./controlpanel/ControlPanel";
 import ImagePopup from "../ImagePopup";
@@ -739,6 +739,7 @@ class Editor extends React.Component {
       ACTIVITY: KEY.activity.join(""),
       INTRO: KEY.intro.join(""),
       CHECK: KEY.check.join(""),
+      TIP: KEY.tip.join(""),
       PROTIP: KEY.protip.join(""),
       CHALLENGE: KEY.challenge.join(""),
       FLAG: KEY.flag.join(""),
@@ -748,8 +749,10 @@ class Editor extends React.Component {
     };
 
     // keyboard shortcut actions.  Settings in ./settingsFiles/buttonConfig.js
+    // needs to be updated manually with same parameters as buttonConfig
     // SORRY FOR WET CODE. NEED HELP MAKING THIS DRY
     const handlers = {
+      // emphasis
       BOLD: () =>
         handleButtonClick(
           emphasis[0].bTitle,
@@ -782,6 +785,8 @@ class Editor extends React.Component {
           emphasis[3].cursorIntOFF,
           emphasis[3].endOutput
         ),
+
+      //undoRedo
       UNDO: () =>
         handleButtonClick(
           undoRedo[0].bTitle,
@@ -798,6 +803,8 @@ class Editor extends React.Component {
           undoRedo[1].cursorIntOFF,
           undoRedo[1].endOutput
         ),
+
+      //saveLoadNew
       NEW: () =>
         handleButtonClick(
           saveLoadNew[0].bTitle,
@@ -822,6 +829,8 @@ class Editor extends React.Component {
           saveLoadNew[2].cursorIntOFF,
           saveLoadNew[2].endOutput
         ),
+
+      //image
       IMAGE: () =>
         handleButtonClick(
           image[0].bTitle,
@@ -830,6 +839,8 @@ class Editor extends React.Component {
           image[0].cursorIntOFF,
           image[0].endOutput
         ),
+
+      //lists
       LISTUL: () =>
         handleButtonClick(
           lists[0].bTitle,
@@ -854,6 +865,8 @@ class Editor extends React.Component {
           lists[2].cursorIntOFF,
           lists[2].endOutput
         ),
+
+      //sections
       ACTIVITY: () =>
         handleButtonClick(
           sections[0].bTitle,
@@ -878,7 +891,7 @@ class Editor extends React.Component {
           sections[2].cursorIntOFF,
           sections[2].endOutput
         ),
-      PROTIP: () =>
+      TIP: () =>
         handleButtonClick(
           sections[3].bTitle,
           sections[3].output,
@@ -886,7 +899,7 @@ class Editor extends React.Component {
           sections[3].cursorIntOFF,
           sections[3].endOutput
         ),
-      CHALLENGE: () =>
+      PROTIP: () =>
         handleButtonClick(
           sections[4].bTitle,
           sections[4].output,
@@ -894,7 +907,7 @@ class Editor extends React.Component {
           sections[4].cursorIntOFF,
           sections[4].endOutput
         ),
-      FLAG: () =>
+      CHALLENGE: () =>
         handleButtonClick(
           sections[5].bTitle,
           sections[5].output,
@@ -902,7 +915,7 @@ class Editor extends React.Component {
           sections[5].cursorIntOFF,
           sections[5].endOutput
         ),
-      TRY: () =>
+      FLAG: () =>
         handleButtonClick(
           sections[6].bTitle,
           sections[6].output,
@@ -910,6 +923,16 @@ class Editor extends React.Component {
           sections[6].cursorIntOFF,
           sections[6].endOutput
         ),
+      TRY: () =>
+        handleButtonClick(
+          sections[7].bTitle,
+          sections[7].output,
+          sections[7].cursorIntON,
+          sections[7].cursorIntOFF,
+          sections[7].endOutput
+        ),
+
+      //code
       INLINE: () =>
         handleButtonClick(
           code[0].bTitle,
