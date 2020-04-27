@@ -2,6 +2,7 @@ import "./editor.css";
 import React from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
+import { Button, Icon, Popup } from "semantic-ui-react";
 import { addText, parseMD } from "../../../actions";
 import MDTextArea from "./MDTextArea";
 import MDPreview from "../mdPreview/MDPreview";
@@ -971,14 +972,11 @@ class Editor extends React.Component {
       this.state.preview ? (
         <div className="ui grid">
           <div className="row">
-            <ControlPanel
-              handleButtonClick={handleButtonClick}
-              nextTitle={NAV_BUTTONS.submit}
-              prevValue="/createNewLesson"
-              nextValue="/endpage"
-              submitHandler={submitHandler}
-              handlePreview={handlePreview}
-            />
+            <div className="column">
+              <Button style={{}} onClick={() => handlePreview(true)}>
+                <Icon name="eye" />
+              </Button>
+            </div>
           </div>
           <div
             id="MDPreview"

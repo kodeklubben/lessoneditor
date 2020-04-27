@@ -3,6 +3,7 @@ import "./style.css";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import GoogleAuth from "../GoogleAuth";
+import ProfileMenu from "../ProfileMenu";
 
 const IndexPage = props => {
   const indPage = () => {
@@ -11,10 +12,10 @@ const IndexPage = props => {
         <div className="StartPageContainer">
           <div className="ui right aligned grid">
             <div className="right floated column">
-              <GoogleAuth />
+              <ProfileMenu />
             </div>
           </div>
-
+          <div style={{ margin: "1rem" }} />
           <div className="quote">
             <p>
               "Programs must be written for people to read, and only
@@ -23,9 +24,7 @@ const IndexPage = props => {
             <p id="author">Harold Abelson </p>
           </div>
           <div />
-          <div>
-            <h2>Velkommen {props.firstName}</h2>
-          </div>
+
           <div className="btnDiv">
             <Link to="/myPage" className="link">
               <button className="btn">Min side</button>
@@ -50,9 +49,7 @@ const IndexPage = props => {
             <p id="author">Harold Abelson </p>
           </div>
           <div />
-          <div className="ui container">
-            <h2>Logg inn:</h2>
-          </div>
+          <div className="ui center container" />
           <div className="center">
             <GoogleAuth />
           </div>

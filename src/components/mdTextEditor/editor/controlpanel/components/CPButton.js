@@ -99,16 +99,11 @@ class Buttons extends React.Component {
           mouseEnterDelay={250}
           mouseLeaveDelay={250}
           inverted
-          size="tiny"
-          style={{}}
-          position="bottom center"
           trigger={
             this.props.icon ? (
               <Button
-                style={{}}
                 onTouchStart={this.handleButtonPress}
                 onTouchEnd={this.handleButtonRelease}
-                onMouseDown={this.handleButtonPress}
                 onClick={() =>
                   this.props.onButtonClick(
                     this.props.bTitle,
@@ -123,7 +118,6 @@ class Buttons extends React.Component {
               </Button>
             ) : (
               <Button
-                style={{}}
                 onClick={() =>
                   this.props.onButtonClick(
                     this.props.bTitle,

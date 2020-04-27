@@ -1,4 +1,4 @@
-/* Form style */
+/* Responsive style */
 
 #smallScreen {
   display: none;
@@ -34,27 +34,35 @@
   margin-bottom: -1.3rem;
 }
 
+#smallTopicField {
+  margin-top: 5rem;
+}
+
 /* form  */
 .ui.form {
-  height: 35rem;
+  height: 31rem;
 }
 
 #formBorder {
-  margin-top: 2rem;
+  margin-top: 5rem;
 }
 
 .field {
   margin-bottom: 2rem !important;
 }
 
+#licenseField {
+  margin-top: 8rem;
+}
+
 /* Checkbox segment height */
 
 #subjectCheckbox {
-  height: 25rem !important;
-}
-#levelCheckbox {
   height: 20rem !important;
 }
+#levelCheckbox {
+  height: 15rem !important;
+}
 #topicCheckbox {
-  height: 25rem !important;
+  height: 20rem !important;
 }

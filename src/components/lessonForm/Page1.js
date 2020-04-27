@@ -56,7 +56,7 @@ const Page1 = props => {
             </select>
           </label>
         </div>
-        <div className="field">
+        <div id="licenseField" className="field">
           <label>
             <h3 className="formLabel">
               {FORM_TEXT.LICENSE.heading}

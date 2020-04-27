@@ -24,15 +24,32 @@ const ProfileMenu = props => {
         }
         position="bottom center"
         on="click"
-        style={{
-          backgroundColor: "rgba(0,0,0,0.0)",
-          border: "none",
-          borderColoer: "rgba(0,0,0,0.0)",
-          width: "14vh"
-        }}
+        style={{}}
         pinned
         content={
-          <div style={{ position: "left" }}>
+          <div
+            style={{
+              position: "left",
+              borderRadius: "5px"
+            }}
+          >
+            <div className="ui ">
+              {props.imageUrl ? (
+                <img
+                  className="ui circular centered image"
+                  src={props.imageUrl}
+                  alt="useImage"
+                ></img>
+              ) : (
+                <div className="ui avatar image">
+                  <i className="user icon"></i>
+                </div>
+              )}
+            </div>
+            <div style={{ marginTop: "1rem" }} />
+            <h2>{props.firstName + " " + props.lastName}</h2>
+            <p style={{ marginTop: "-1rem" }}>{props.email}</p>
+            <div style={{ marginTop: "3rem" }} />
             <GoogleAuth />
           </div>
         }
@@ -43,7 +60,10 @@ const ProfileMenu = props => {
 
 const mapStateToProps = state => {
   return {
-    imageUrl: state.auth.imageUrl
+    imageUrl: state.auth.imageUrl,
+    firstName: state.auth.firstName,
+    lastName: state.auth.lastName,
+    email: state.auth.email
   };
 };
 export default connect(mapStateToProps)(ProfileMenu);
