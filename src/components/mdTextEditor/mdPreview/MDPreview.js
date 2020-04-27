@@ -5,7 +5,7 @@ class MDPreview extends React.Component {
   render() {
     return (
       <div
-        className="MDPreviewSmall"
+        className="MDPreview"
         dangerouslySetInnerHTML={{ __html: this.props.parseMD }}
       />
     );

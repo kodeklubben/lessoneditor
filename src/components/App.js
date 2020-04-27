@@ -12,9 +12,9 @@ const App = () => {
       <BrowserRouter>
         <div>
           <Route exact path="/" component={IndexPage} />
-          <Route path="/myPage" component={Overview} />
-          <Route path="/createNewLesson" component={FormComponent} />
-          <Route path="/editor" component={Editor} />
+          <Route exact path="/myPage" component={Overview} />
+          <Route exact path="/createNewLesson" component={FormComponent} />
+          <Route exact path="/editor" component={Editor} />
           <Route exact path="/endpage" component={EndPage} />
         </div>
       </BrowserRouter>

@@ -1,12 +1,14 @@
-// import "./smallscreen.css";
+import "./editor.css";
 import React from "react";
 import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
 import { addText, parseMD } from "../../../actions";
 import MDTextArea from "./MDTextArea";
 import MDPreview from "../mdPreview/MDPreview";
 import { mdParser } from "../../../utils/mdParser";
 import ControlPanel from "./controlpanel/ControlPanel";
 import ImagePopup from "../ImagePopup";
+import PageButtons from "../../PageButtons";
 import {
   SAVING,
   SAVED,
@@ -94,9 +96,13 @@ class Editor extends React.Component {
     super(props);
 
     this.state = {
+      preview: false,
+      isEditor: true,
+      editorRedirect: "",
       images: [],
       counter: 0,
-      buttonValues: isButtonOn
+      buttonValues: isButtonOn,
+      redirect: null
     };
 
     // refs are used to find elements in the DOM (simular to document.getElementbyID)
@@ -127,7 +133,7 @@ class Editor extends React.Component {
 
   render() {
     // Submithandler
-    const mySubmitHandler = event => {
+    const submitHandler = event => {
       event.preventDefault();
 
       console.log("text submitted");
@@ -750,7 +756,7 @@ class Editor extends React.Component {
 
     // keyboard shortcut actions.  Settings in ./settingsFiles/buttonConfig.js
     // needs to be updated manually with same parameters as buttonConfig
-    // SORRY FOR WET CODE. NEED HELP MAKING THIS DRY
+    // SORRY FOR WET CODE AND MANUAL UPDATE. NEED HELP FIXING THIS
     const handlers = {
       // emphasis
       BOLD: () =>
@@ -951,35 +957,83 @@ class Editor extends React.Component {
         )
     };
 
-    // return this.props.isSignedIn ? (
-    return (
-      <div>
-        <ControlPanel
-          handleButtonClick={handleButtonClick}
-          nextTitle={NAV_BUTTONS.submit}
-          prevValue="/createNewLesson"
-          nextValue="/endpage"
-          mySubmitHandler={mySubmitHandler}
-        />
-        <MDTextArea
-          editorRef={this.editorRef}
-          onInputChange={handleChange}
-          handleButtonClick={handleButtonClick}
-          onTextareaKeyDown={onTextareaKeyDown}
-          onTextareaKeyUp={onTextareaKeyUp}
-          onTextareaMouseDown={onTextareaMouseDown}
-          onTextareaSelect={onTextareaSelect}
-          autoSaveMessage={autoSaveMessage}
-          handlers={handlers}
-          keyMap={keyMap}
-        />
-        {imagePopup}
-        <MDPreview />
-      </div>
+    const handlePreview = event => {
+      if (event) {
+        if (this.state.preview) {
+          this.setState({ preview: false });
+        } else {
+          this.setState({ preview: true });
+        }
+      }
+    };
+
+    return this.props.isSignedIn ? (
+      this.state.preview ? (
+        <div className="ui grid">
+          <div className="row">
+            <ControlPanel
+              handleButtonClick={handleButtonClick}
+              nextTitle={NAV_BUTTONS.submit}
+              prevValue="/createNewLesson"
+              nextValue="/endpage"
+              submitHandler={submitHandler}
+              handlePreview={handlePreview}
+            />
+          </div>
+          <div
+            id="MDPreview"
+            style={{ display: "block" }}
+            className="eight wide column"
+          >
+            <MDPreview />
+          </div>
+        </div>
+      ) : (
+        <div className="ui grid">
+          <div className="row">
+            <ControlPanel
+              handleButtonClick={handleButtonClick}
+              nextTitle={NAV_BUTTONS.submit}
+              prevValue="/createNewLesson"
+              nextValue="/endpage"
+              submitHandler={submitHandler}
+              handlePreview={handlePreview}
+            />
+          </div>
+          <div id="MDTextArea" className="eight wide column">
+            <MDTextArea
+              editorRef={this.editorRef}
+              onInputChange={handleChange}
+              handleButtonClick={handleButtonClick}
+              onTextareaKeyDown={onTextareaKeyDown}
+              onTextareaKeyUp={onTextareaKeyUp}
+              onTextareaMouseDown={onTextareaMouseDown}
+              onTextareaSelect={onTextareaSelect}
+              autoSaveMessage={autoSaveMessage}
+              handlers={handlers}
+              keyMap={keyMap}
+            />
+          </div>
+          {imagePopup}
+          <div id="MDPreview" className="eight wide column">
+            <MDPreview />
+          </div>
+          <div className="row">
+            <PageButtons
+              prevTitle={NAV_BUTTONS.prev}
+              nextTitle={NAV_BUTTONS.submit}
+              prevValue="/createNewLesson"
+              nextValue="/endpage"
+              setPageNumber={null}
+              submitHandler={submitHandler}
+              state={this.state}
+            />
+          </div>
+        </div>
+      )
+    ) : (
+      <Redirect to="/" />
     );
-    // : (
-    //   <Redirect to="/" />
-    // );
   }
 }
 

@@ -26,7 +26,7 @@ class ImagePopup extends React.Component {
   render() {
     return (
       <div className="transparent">
-        <div className="">
+        <div className="imagePopup">
           <div className="">
             <form
               onSubmit={() =>

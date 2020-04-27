@@ -12,167 +12,156 @@ import {
   code
 } from "../../settingsFiles/buttonConfig";
 
-class ControlPanel extends React.Component {
-  handleButtonClick = (
+const ControlPanel = props => {
+  const handleButtonClick = (
     bTitle,
     output,
     cursorIntON,
     cursorIntOFF,
     endOutput
   ) => {
-    this.props.handleButtonClick(
-      bTitle,
-      output,
-      cursorIntON,
-      cursorIntOFF,
-      endOutput
-    );
+    if (bTitle === "preview") {
+      props.handlePreview(true);
+    } else {
+      props.handleButtonClick(
+        bTitle,
+        output,
+        cursorIntON,
+        cursorIntOFF,
+        endOutput
+      );
+    }
   };
 
-  render() {
-    return (
-      <div className="">
-        <div className="ui sixteen column grid">
-          <div className="column">
-            <CPButton
-              bTitle=""
-              icon="eye"
-              output=""
-              title="Forhåndsvisning"
-              cursorIntON=""
-              cursorIntOFF=""
-              endOutput=""
-              onButtonClick={this.handleButtonClick}
-              shortcutKey=""
-            />
-          </div>
-          {undoRedo.map(element => (
-            <div key={element.bTitle} className="column">
-              <CPButton
-                bTitle={element.bTitle}
-                icon={element.icon}
-                output={element.output}
-                title={element.title}
-                cursorIntON={element.cursorIntON}
-                cursorIntOFF={element.cursorIntOFF}
-                endOutput={element.endOutput}
-                onButtonClick={this.handleButtonClick}
-                shortcutKey={element.shortcut}
-              />
-            </div>
-          ))}
-
-          {emphasis.map(element => (
-            <div key={element.bTitle} className="column">
-              <CPButton
-                bTitle={element.bTitle}
-                icon={element.icon}
-                output={element.output}
-                title={element.title}
-                cursorIntON={element.cursorIntON}
-                cursorIntOFF={element.cursorIntOFF}
-                endOutput={element.endOutput}
-                onButtonClick={this.handleButtonClick}
-                shortcutKey={element.shortcut}
-              />
-            </div>
-          ))}
-
-          {lists.map(element => (
-            <div key={element.bTitle} className="column">
-              <CPButton
-                bTitle={element.bTitle}
-                icon={element.icon}
-                output={element.output}
-                title={element.title}
-                cursorIntON={element.cursorIntON}
-                cursorIntOFF={element.cursorIntOFF}
-                endOutput={element.endOutput}
-                onButtonClick={this.handleButtonClick}
-                shortcutKey={element.shortcut}
-              />
-            </div>
-          ))}
-
-          {image.map(element => (
-            <div key={element.bTitle} className="column">
-              <CPButton
-                bTitle={element.bTitle}
-                icon={element.icon}
-                output={element.output}
-                title={element.title}
-                cursorIntON={element.cursorIntON}
-                cursorIntOFF={element.cursorIntOFF}
-                endOutput={element.endOutput}
-                onButtonClick={this.handleButtonClick}
-                shortcutKey={element.shortcut}
-              />
-            </div>
-          ))}
-
-          {saveLoadNew.map(element => (
-            <div key={element.bTitle} className="column">
-              <CPButton
-                bTitle={element.bTitle}
-                icon={element.icon}
-                output={element.output}
-                title={element.title}
-                cursorIntON={element.cursorIntON}
-                cursorIntOFF={element.cursorIntOFF}
-                endOutput={element.endOutput}
-                onButtonClick={this.handleButtonClick}
-                shortcutKey={element.shortcut}
-              />
-            </div>
-          ))}
-          <div className="column">
-            <ProfileMenu />
-          </div>
-          <div className="column">
-            <CPButton
-              icon="right arrow"
-              onClick={this.props.mySubmitHandler}
-            ></CPButton>
-          </div>
-        </div>
-
-        <div className="ui sixteen column grid">
-          {sections.map(element => (
-            <div key={element.bTitle} className="two wide column">
-              <CPButton
-                bTitle={element.bTitle}
-                icon={element.icon}
-                output={element.output}
-                title={element.title}
-                cursorIntON={element.cursorIntON}
-                cursorIntOFF={element.cursorIntOFF}
-                endOutput={element.endOutput}
-                onButtonClick={this.handleButtonClick}
-                shortcutKey={element.shortcut}
-              />
-            </div>
-          ))}
-
-          {code.map(element => (
-            <div key={element.bTitle} className="column">
-              <CPButton
-                bTitle={element.bTitle}
-                icon={element.icon}
-                output={element.output}
-                title={element.title}
-                cursorIntON={element.cursorIntON}
-                cursorIntOFF={element.cursorIntOFF}
-                endOutput={element.endOutput}
-                onButtonClick={this.handleButtonClick}
-                shortcutKey={element.shortcut}
-              />
-            </div>
-          ))}
-        </div>
+  return (
+    <React.Fragment>
+      <div className="preview">
+        <CPButton
+          bTitle="preview"
+          icon="eye"
+          output=""
+          title="Forhåndsvisning"
+          cursorIntON=""
+          cursorIntOFF=""
+          endOutput=""
+          onButtonClick={handleButtonClick}
+          shortcutKey=""
+        />
       </div>
-    );
-  }
-}
+      <div className="row">
+        {undoRedo.map(element => (
+          <CPButton
+            bTitle={element.bTitle}
+            icon={element.icon}
+            output={element.output}
+            title={element.title}
+            cursorIntON={element.cursorIntON}
+            cursorIntOFF={element.cursorIntOFF}
+            endOutput={element.endOutput}
+            onButtonClick={handleButtonClick}
+            shortcutKey={element.shortcut}
+          />
+        ))}
+      </div>
+
+      <div className="row">
+        {emphasis.map(element => (
+          <CPButton
+            bTitle={element.bTitle}
+            icon={element.icon}
+            output={element.output}
+            title={element.title}
+            cursorIntON={element.cursorIntON}
+            cursorIntOFF={element.cursorIntOFF}
+            endOutput={element.endOutput}
+            onButtonClick={handleButtonClick}
+            shortcutKey={element.shortcut}
+          />
+        ))}
+      </div>
+      <div className="row">
+        {lists.map(element => (
+          <CPButton
+            bTitle={element.bTitle}
+            icon={element.icon}
+            output={element.output}
+            title={element.title}
+            cursorIntON={element.cursorIntON}
+            cursorIntOFF={element.cursorIntOFF}
+            endOutput={element.endOutput}
+            onButtonClick={handleButtonClick}
+            shortcutKey={element.shortcut}
+          />
+        ))}
+      </div>
+      <div className="row">
+        {image.map(element => (
+          <CPButton
+            bTitle={element.bTitle}
+            icon={element.icon}
+            output={element.output}
+            title={element.title}
+            cursorIntON={element.cursorIntON}
+            cursorIntOFF={element.cursorIntOFF}
+            endOutput={element.endOutput}
+            onButtonClick={handleButtonClick}
+            shortcutKey={element.shortcut}
+          />
+        ))}
+      </div>
+
+      <div id="saveLoad" className="row">
+        {saveLoadNew.map(element => (
+          <CPButton
+            bTitle={element.bTitle}
+            icon={element.icon}
+            output={element.output}
+            title={element.title}
+            cursorIntON={element.cursorIntON}
+            cursorIntOFF={element.cursorIntOFF}
+            endOutput={element.endOutput}
+            onButtonClick={handleButtonClick}
+            shortcutKey={element.shortcut}
+          />
+        ))}
+      </div>
+      <div className="column">
+        <ProfileMenu />
+      </div>
+
+      <div id="sections" className="row">
+        {sections.map(element => (
+          <CPButton
+            bTitle={element.bTitle}
+            icon={element.icon}
+            output={element.output}
+            title={element.title}
+            cursorIntON={element.cursorIntON}
+            cursorIntOFF={element.cursorIntOFF}
+            endOutput={element.endOutput}
+            onButtonClick={handleButtonClick}
+            shortcutKey={element.shortcut}
+          />
+        ))}
+      </div>
+      <div id="code" className="row">
+        {code.map(element => (
+          <CPButton
+            bTitle={element.bTitle}
+            icon={element.icon}
+            output={element.output}
+            title={element.title}
+            cursorIntON={element.cursorIntON}
+            cursorIntOFF={element.cursorIntOFF}
+            endOutput={element.endOutput}
+            onButtonClick={handleButtonClick}
+            shortcutKey={element.shortcut}
+          />
+        ))}
+      </div>
+    </React.Fragment>
+  );
+};
 
 const mapStateToProps = state => {
   return {

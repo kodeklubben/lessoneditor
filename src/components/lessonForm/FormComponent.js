@@ -1,6 +1,7 @@
 import "./formpage.css";
 import React from "react";
 import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
 import FormPage from "./FormPage";
 import COURSELIST from "./settingsFiles/COURSELIST";
 import { LANGUAGES } from "./settingsFiles/languages/formpage_NO";
@@ -53,8 +54,7 @@ class FormComponent extends React.Component {
   };
 
   submitHandler = event => {
-    event.preventDefault();
-    console.log(event);
+    // event.preventDefault();
 
     this.setState({ redirect: "/editor" });
 
@@ -109,8 +109,7 @@ class FormComponent extends React.Component {
   };
 
   render() {
-    // return this.props.isSignedIn ? (
-    return (
+    return this.props.isSignedIn ? (
       <div className="">
         <FormPage
           submitHandler={this.submitHandler}
@@ -122,10 +121,9 @@ class FormComponent extends React.Component {
           state={this.state}
         />
       </div>
+    ) : (
+      <Redirect to="/" />
     );
-    // : (
-    //   <Redirect to="/" />
-    // );
   }
 }
 

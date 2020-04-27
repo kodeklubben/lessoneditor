@@ -37,7 +37,6 @@ class Buttons extends React.Component {
   };
 
   handleClose = () => {
-    // this.setState({ isOpen: false });
     clearTimeout(this.buttonPressTimer);
     clearTimeout(this.buttonPressTimer2);
   };
@@ -50,16 +49,14 @@ class Buttons extends React.Component {
           inverted
           basic
           size="tiny"
-          style={{
-            backgroundColor: "rgba(0,0,0,0.8"
-          }}
+          style={{}}
           open={this.state.isOpen}
           onOpen={this.handleOpen}
           onClose={this.handleClose}
           trigger={
             this.props.icon ? (
               <Button
-                style={{ backgroundColor: "#b1daae" }}
+                style={{}}
                 onTouchStart={this.handleButtonPress}
                 onTouchEnd={this.handleClose}
                 onClick={() =>
@@ -76,7 +73,7 @@ class Buttons extends React.Component {
               </Button>
             ) : (
               <Button
-                style={{ backgroundColor: "#b1daae" }}
+                style={{}}
                 onTouchStart={this.handleButtonPress}
                 onTouchEnd={this.handleClose}
                 onClick={() =>
@@ -103,14 +100,12 @@ class Buttons extends React.Component {
           mouseLeaveDelay={250}
           inverted
           size="tiny"
-          style={{
-            backgroundColor: "rgba(0,0,0,0.8"
-          }}
+          style={{}}
           position="bottom center"
           trigger={
             this.props.icon ? (
               <Button
-                style={{ backgroundColor: "#b1daae" }}
+                style={{}}
                 onTouchStart={this.handleButtonPress}
                 onTouchEnd={this.handleButtonRelease}
                 onMouseDown={this.handleButtonPress}
@@ -128,7 +123,7 @@ class Buttons extends React.Component {
               </Button>
             ) : (
               <Button
-                style={{ backgroundColor: "#b1daae" }}
+                style={{}}
                 onClick={() =>
                   this.props.onButtonClick(
                     this.props.bTitle,
