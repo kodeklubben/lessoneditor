@@ -179,6 +179,19 @@ const image = [
   }
 ];
 
+const preview = [
+  {
+    bTitle: "preview",
+    icon: "eye",
+    output: "",
+    title: BUTTON_TITLE.preview,
+    cursorIntON: 0,
+    cursorIntOFF: 0,
+    endOutput: "",
+    shortcut: KEY_COMBINATIONS.preview.join("")
+  }
+];
+
 const lists = [
   {
     bTitle: "listUl",
@@ -327,6 +340,7 @@ export {
   saveLoadNew,
   image,
   lists,
+  preview,
   sections,
   code,
   KEY_COMBINATIONS,

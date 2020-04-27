@@ -69,16 +69,14 @@ const Page3 = props => {
 
           <div className="validateError">{props.state.titleErr}</div>
         </div>
-        <div id="bigScreen" className="three fields">
+        <div id="bigScreen" className="two fields">
           <div className="field">
             <label>
               <h3 className="formLabel">{YML_TEXT.subject}</h3>
             </label>
             <div id="subjectCheckbox" className="ui segment">
               <div className="ui grid">
-                <div className="four wide column">
-                  <YMLtagsSubject checkboxHandler={props.checkboxHandler} />
-                </div>
+                <YMLtagsSubject checkboxHandler={props.checkboxHandler} />
               </div>
             </div>
           </div>
@@ -99,7 +97,7 @@ const Page3 = props => {
 
         {/* Only if smallScreen */}
         <div id="smallScreen" className="ui container">
-          <div className="field">
+          <div id="smallSubjectField" className="field">
             <label>
               <h3 className="formLabel">{YML_TEXT.subject}</h3>
             </label>
@@ -116,7 +114,7 @@ const Page3 = props => {
             </div>
           </div>
 
-          <div className="field">
+          <div id="smallTopicField" className="field">
             <label>
               <h3 className="formLabel">{YML_TEXT.topic}</h3>
             </label>

@@ -78,7 +78,7 @@ const FormPage = props => {
 
   return (
     <div className="ui grid">
-      <div id="formBorder" className="row">
+      <div id="formBorder" className="right aligned row">
         <div id="profileMenu" className="right floated three wide column">
           <ProfileMenu />
         </div>

@@ -7,6 +7,7 @@ import {
   undoRedo,
   saveLoadNew,
   image,
+  preview,
   lists,
   sections,
   code
@@ -37,15 +38,15 @@ const ControlPanel = props => {
     <React.Fragment>
       <div className="preview">
         <CPButton
-          bTitle="preview"
-          icon="eye"
-          output=""
-          title="Forhåndsvisning"
-          cursorIntON=""
-          cursorIntOFF=""
-          endOutput=""
+          bTitle={preview[0].bTitle}
+          icon={preview[0].icon}
+          output={preview[0].output}
+          title={preview[0].title}
+          cursorIntON={preview[0].cursorIntON}
+          cursorIntOFF={preview[0].cursorIntOFF}
+          endOutput={preview[0].endOutput}
           onButtonClick={handleButtonClick}
-          shortcutKey=""
+          shortcutKey={preview[0].shortcut}
         />
       </div>
       <div className="row">
