@@ -11,74 +11,66 @@ const FormPage = props => {
   const renderFormPage = () => {
     if (props.state.pageNumber === 1) {
       return (
-        <div className="ui segment form">
-          <form className="formTag" onSubmit={props.submitHandler}>
+        <div>
+          <div className="ui segment">
             <Page1 changeHandler={props.changeHandler} state={props.state} />
-
-            <div className="">
-              <PageButtons
-                prevTitle={NAV_BUTTONS.prev}
-                nextTitle={NAV_BUTTONS.next}
-                prevValue="/"
-                submitHandler={props.submitHandler}
-                setPageNumber={props.setPageNumber}
-                err="author"
-                setErr={props.setErr}
-                state={props.state}
-              />
-            </div>
-          </form>
+          </div>
+          <PageButtons
+            prevTitle={NAV_BUTTONS.prev}
+            nextTitle={NAV_BUTTONS.next}
+            prevValue="/"
+            submitHandler={props.submitHandler}
+            setPageNumber={props.setPageNumber}
+            err="author"
+            setErr={props.setErr}
+            state={props.state}
+          />
         </div>
       );
     } else if (props.state.pageNumber === 2) {
       return (
-        <div className="ui segment form">
-          <form className="" onSubmit={props.submitHandler}>
+        <div>
+          <div className="ui segment">
             <Page2
               changeHandler={props.changeHandler}
               checkboxHandler={props.checkboxHandler}
               state={props.state}
             />
-
-            <div className="">
-              <PageButtons
-                prevTitle={NAV_BUTTONS.prev}
-                nextTitle={NAV_BUTTONS.next}
-                prevValue="/"
-                submitHandler={props.submitHandler}
-                setPageNumber={props.setPageNumber}
-                err=""
-                setErr={props.setErr}
-                state={props.state}
-              />
-            </div>
-          </form>
+          </div>
+          <PageButtons
+            prevTitle={NAV_BUTTONS.prev}
+            nextTitle={NAV_BUTTONS.next}
+            prevValue="/"
+            submitHandler={props.submitHandler}
+            setPageNumber={props.setPageNumber}
+            err=""
+            setErr={props.setErr}
+            state={props.state}
+          />
         </div>
       );
     } else if (props.state.pageNumber === 3) {
       return (
-        <div className="ui segment form">
-          <form className="" onSubmit={props.submitHandler}>
+        <div>
+          <div className="ui segment">
             <Page3
               changeHandler={props.changeHandler}
               checkboxHandler={props.checkboxHandler}
               selectDropdownHandler={props.selectDropdownHandler}
               state={props.state}
             />
+          </div>
 
-            <div className="">
-              <PageButtons
-                prevTitle={NAV_BUTTONS.prev}
-                nextTitle={NAV_BUTTONS.next}
-                prevValue="/"
-                submitHandler={props.submitHandler}
-                setPageNumber={props.setPageNumber}
-                err="title"
-                setErr={props.setErr}
-                state={props.state}
-              />
-            </div>
-          </form>
+          <PageButtons
+            prevTitle={NAV_BUTTONS.prev}
+            nextTitle={NAV_BUTTONS.next}
+            prevValue="/"
+            submitHandler={props.submitHandler}
+            setPageNumber={props.setPageNumber}
+            err="title"
+            setErr={props.setErr}
+            state={props.state}
+          />
         </div>
       );
     }
@@ -86,7 +78,7 @@ const FormPage = props => {
 
   return (
     <div className="ui grid">
-      <div className="row">
+      <div id="formBorder" className="row">
         <div id="profileMenu" className="right floated three wide column">
           <ProfileMenu />
         </div>

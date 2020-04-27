@@ -12,9 +12,26 @@ select {
     display: none;
   }
 
+  .preview {
+    display: block !important;
+  }
+
   #saveLoad {
     display: none;
   }
+  #MDPreview {
+    display: none;
+  }
+  #MDTextArea {
+    width: 100% !important;
+  }
+  #MDPreview {
+    width: 100% !important;
+  }
+}
+
+.preview {
+  display: none;
 }
 
 /* CSS for ImagePopup component */

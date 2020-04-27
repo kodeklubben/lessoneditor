@@ -63,7 +63,8 @@ const KEY_COMBINATIONS = {
   flag: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.f],
   try: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.t],
   inline: [SHORTCUTKEY, plus, chars.e],
-  codeblock: [SHORTCUTKEY, plus, chars.k]
+  codeblock: [SHORTCUTKEY, plus, chars.k],
+  preview: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.y]
 };
 
 const emphasis = [

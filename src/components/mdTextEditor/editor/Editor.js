@@ -96,6 +96,7 @@ class Editor extends React.Component {
     super(props);
 
     this.state = {
+      preview: false,
       isEditor: true,
       editorRedirect: "",
       images: [],
@@ -956,47 +957,80 @@ class Editor extends React.Component {
         )
     };
 
+    const handlePreview = event => {
+      if (event) {
+        if (this.state.preview) {
+          this.setState({ preview: false });
+        } else {
+          this.setState({ preview: true });
+        }
+      }
+    };
+
     return this.props.isSignedIn ? (
-      <div className="ui grid">
-        <div className="row">
-          <ControlPanel
-            handleButtonClick={handleButtonClick}
-            nextTitle={NAV_BUTTONS.submit}
-            prevValue="/createNewLesson"
-            nextValue="/endpage"
-            submitHandler={submitHandler}
-          />
+      this.state.preview ? (
+        <div className="ui grid">
+          <div className="row">
+            <ControlPanel
+              handleButtonClick={handleButtonClick}
+              nextTitle={NAV_BUTTONS.submit}
+              prevValue="/createNewLesson"
+              nextValue="/endpage"
+              submitHandler={submitHandler}
+              handlePreview={handlePreview}
+            />
+          </div>
+          <div
+            id="MDPreview"
+            style={{ display: "block" }}
+            className="eight wide column"
+          >
+            <MDPreview />
+          </div>
         </div>
-        <div className="eight wide column">
-          <MDTextArea
-            editorRef={this.editorRef}
-            onInputChange={handleChange}
-            handleButtonClick={handleButtonClick}
-            onTextareaKeyDown={onTextareaKeyDown}
-            onTextareaKeyUp={onTextareaKeyUp}
-            onTextareaMouseDown={onTextareaMouseDown}
-            onTextareaSelect={onTextareaSelect}
-            autoSaveMessage={autoSaveMessage}
-            handlers={handlers}
-            keyMap={keyMap}
-          />
+      ) : (
+        <div className="ui grid">
+          <div className="row">
+            <ControlPanel
+              handleButtonClick={handleButtonClick}
+              nextTitle={NAV_BUTTONS.submit}
+              prevValue="/createNewLesson"
+              nextValue="/endpage"
+              submitHandler={submitHandler}
+              handlePreview={handlePreview}
+            />
+          </div>
+          <div id="MDTextArea" className="eight wide column">
+            <MDTextArea
+              editorRef={this.editorRef}
+              onInputChange={handleChange}
+              handleButtonClick={handleButtonClick}
+              onTextareaKeyDown={onTextareaKeyDown}
+              onTextareaKeyUp={onTextareaKeyUp}
+              onTextareaMouseDown={onTextareaMouseDown}
+              onTextareaSelect={onTextareaSelect}
+              autoSaveMessage={autoSaveMessage}
+              handlers={handlers}
+              keyMap={keyMap}
+            />
+          </div>
+          {imagePopup}
+          <div id="MDPreview" className="eight wide column">
+            <MDPreview />
+          </div>
+          <div className="row">
+            <PageButtons
+              prevTitle={NAV_BUTTONS.prev}
+              nextTitle={NAV_BUTTONS.submit}
+              prevValue="/createNewLesson"
+              nextValue="/endpage"
+              setPageNumber={null}
+              submitHandler={submitHandler}
+              state={this.state}
+            />
+          </div>
         </div>
-        {imagePopup}
-        <div className="eight wide column">
-          <MDPreview />
-        </div>
-        <div className="row">
-          <PageButtons
-            prevTitle={NAV_BUTTONS.prev}
-            nextTitle={NAV_BUTTONS.submit}
-            prevValue="/createNewLesson"
-            nextValue="/endpage"
-            setPageNumber={null}
-            submitHandler={submitHandler}
-            state={this.state}
-          />
-        </div>
-      </div>
+      )
     ) : (
       <Redirect to="/" />
     );

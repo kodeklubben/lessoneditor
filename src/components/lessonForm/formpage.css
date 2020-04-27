@@ -33,3 +33,28 @@
   margin-top: 1rem;
   margin-bottom: -1.3rem;
 }
+
+/* form  */
+.ui.form {
+  height: 35rem;
+}
+
+#formBorder {
+  margin-top: 2rem;
+}
+
+.field {
+  margin-bottom: 2rem !important;
+}
+
+/* Checkbox segment height */
+
+#subjectCheckbox {
+  height: 25rem !important;
+}
+#levelCheckbox {
+  height: 20rem !important;
+}
+#topicCheckbox {
+  height: 25rem !important;
+}
