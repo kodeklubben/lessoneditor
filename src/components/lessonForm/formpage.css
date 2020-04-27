@@ -12,3 +12,24 @@
     display: none;
   }
 }
+
+.validateError {
+  color: red;
+}
+
+.requiredText {
+  color: #717171;
+}
+
+.optionalText {
+  color: rgb(182, 182, 182);
+}
+
+.formLabel {
+  margin: auto;
+}
+
+#profileMenu {
+  margin-top: 1rem;
+  margin-bottom: -1.3rem;
+}

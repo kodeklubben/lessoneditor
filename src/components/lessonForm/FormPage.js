@@ -12,7 +12,7 @@ const FormPage = props => {
     if (props.state.pageNumber === 1) {
       return (
         <div className="ui segment form">
-          <form className="" onSubmit={props.submitHandler}>
+          <form className="formTag" onSubmit={props.submitHandler}>
             <Page1 changeHandler={props.changeHandler} state={props.state} />
 
             <div className="">
@@ -85,12 +85,15 @@ const FormPage = props => {
   };
 
   return (
-    <div className="ui grid ">
-      <div className="right floated column">
-        <ProfileMenu />
+    <div className="ui grid">
+      <div className="row">
+        <div id="profileMenu" className="right floated three wide column">
+          <ProfileMenu />
+        </div>
+        <div className="column" />
       </div>
       <div className="row">
-        <div className="sixteen wide centered column">{renderFormPage()}</div>
+        <div className="fourteen wide centered column">{renderFormPage()}</div>
       </div>
     </div>
   );

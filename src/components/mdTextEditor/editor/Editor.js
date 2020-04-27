@@ -1,6 +1,7 @@
 import "./editor.css";
 import React from "react";
 import { connect } from "react-redux";
+import { Redirect } from "react-router-dom";
 import { addText, parseMD } from "../../../actions";
 import MDTextArea from "./MDTextArea";
 import MDPreview from "../mdPreview/MDPreview";

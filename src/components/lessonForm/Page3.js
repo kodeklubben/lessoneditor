@@ -48,14 +48,14 @@ for (let i = 0; i < topicLen; i++) {
 
 const Page3 = props => {
   return (
-    <div className="">
+    <React.Fragment>
       <div className="ui grid">
         <div className="sixteen wide column">
           <div className="field">
             <label>
-              <h3>
+              <h3 className="formLabel">
                 {FORM_TEXT.TITLE.heading}
-                <span className="test"> (obligatorisk)</span>
+                <span className="requiredText"> (obligatorisk)</span>
               </h3>
             </label>
             <input
@@ -73,10 +73,10 @@ const Page3 = props => {
       </div>
 
       <div id="bigScreen" className="ui grid">
-        <div className="eight wide column">
-          <div className="field">
+        <div className="row">
+          <div className="column">
             <label>
-              <h3>{YML_TEXT.subject}</h3>
+              <h3 className="formLabel">{YML_TEXT.subject}</h3>
             </label>
             <div className="ui segment">
               <div className="ui stackable two column grid">
@@ -88,7 +88,7 @@ const Page3 = props => {
         <div className="eight wide column">
           <div className="field">
             <label>
-              <h3>{YML_TEXT.topic}</h3>
+              <h3 className="formLabel">{YML_TEXT.topic}</h3>
             </label>
             <div className="ui segment">
               <div className="ui stackable two column grid">
@@ -101,10 +101,10 @@ const Page3 = props => {
 
       {/* Only if smallScreen */}
       <div id="smallScreen" className="ui grid">
-        <div className="sixteen wide column">
-          <div className="field">
+        <div className="row">
+          <div className="eight wide column">
             <label>
-              <h3>{YML_TEXT.subject}</h3>
+              <h3 className="formLabel">{YML_TEXT.subject}</h3>
             </label>
             <div>
               <Dropdown
@@ -120,10 +120,10 @@ const Page3 = props => {
           </div>
         </div>
 
-        <div className="sixteen wide column">
-          <div className="field">
+        <div className="row">
+          <div className="eight wide column">
             <label>
-              <h3>{YML_TEXT.topic}</h3>
+              <h3 className="formLabel">{YML_TEXT.topic}</h3>
             </label>
             <div>
               <Dropdown
@@ -139,7 +139,7 @@ const Page3 = props => {
           </div>
         </div>
       </div>
-    </div>
+    </React.Fragment>
   );
 };
 

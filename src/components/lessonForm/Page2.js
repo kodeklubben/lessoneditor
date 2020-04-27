@@ -8,10 +8,10 @@ import { FORM_TEXT } from "./settingsFiles/languages/formpage_NO";
 
 const Page2 = props => {
   return (
-    <div className="">
+    <React.Fragment>
       <div className="field">
         <label>
-          <h3>{FORM_TEXT.COURSE.heading}</h3>
+          <h3 className="formLabel">{FORM_TEXT.COURSE.heading}</h3>
           <select
             className="ui dropdown"
             name="course"
@@ -27,7 +27,7 @@ const Page2 = props => {
       </div>
       <div className="field">
         <label>
-          <h3>{FORM_TEXT.LEVEL.heading}</h3>
+          <h3 className="formLabel">{FORM_TEXT.LEVEL.heading}</h3>
           <select
             className="ui dropdown"
             name="level"
@@ -45,7 +45,7 @@ const Page2 = props => {
         <div className="eight wide column">
           <div className="field">
             <label>
-              <h3 className="">{YML_TEXT.grade}</h3>
+              <h3 className="formLabel">{YML_TEXT.grade}</h3>
             </label>
             <div className="ui segment">
               <div className="ui stackable two column grid">
@@ -56,7 +56,7 @@ const Page2 = props => {
         </div>
         <div className="eight wide column"></div>
       </div>
-    </div>
+    </React.Fragment>
   );
 };
 
