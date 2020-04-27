@@ -37,7 +37,6 @@ class Buttons extends React.Component {
   };
 
   handleClose = () => {
-    // this.setState({ isOpen: false });
     clearTimeout(this.buttonPressTimer);
     clearTimeout(this.buttonPressTimer2);
   };
@@ -47,22 +46,17 @@ class Buttons extends React.Component {
       <React.Fragment>
         <Popup
           content={this.props.title}
-          mouseEnterDelay={250}
-          mouseLeaveDelay={250}
           inverted
           basic
-          offset="0, -50px"
           size="tiny"
-          style={{
-            backgroundColor: "rgba(0,0,0,0.8"
-          }}
+          style={{}}
           open={this.state.isOpen}
           onOpen={this.handleOpen}
           onClose={this.handleClose}
           trigger={
             this.props.icon ? (
               <Button
-                style={{ backgroundColor: "#b1daae" }}
+                style={{}}
                 onTouchStart={this.handleButtonPress}
                 onTouchEnd={this.handleClose}
                 onClick={() =>
@@ -79,7 +73,7 @@ class Buttons extends React.Component {
               </Button>
             ) : (
               <Button
-                style={{ backgroundColor: "#b1daae" }}
+                style={{}}
                 onTouchStart={this.handleButtonPress}
                 onTouchEnd={this.handleClose}
                 onClick={() =>
@@ -105,20 +99,11 @@ class Buttons extends React.Component {
           mouseEnterDelay={250}
           mouseLeaveDelay={250}
           inverted
-          size="tiny"
-          style={{
-            width: "3vh",
-            height: "1vh",
-            backgroundColor: "rgba(0,0,0,0.8"
-          }}
-          position="bottom center"
           trigger={
             this.props.icon ? (
               <Button
-                style={{ backgroundColor: "#b1daae" }}
                 onTouchStart={this.handleButtonPress}
                 onTouchEnd={this.handleButtonRelease}
-                onMouseDown={this.handleButtonPress}
                 onClick={() =>
                   this.props.onButtonClick(
                     this.props.bTitle,
@@ -133,7 +118,6 @@ class Buttons extends React.Component {
               </Button>
             ) : (
               <Button
-                style={{ backgroundColor: "#b1daae" }}
                 onClick={() =>
                   this.props.onButtonClick(
                     this.props.bTitle,

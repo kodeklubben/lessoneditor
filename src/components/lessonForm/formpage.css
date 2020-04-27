@@ -1,0 +1,68 @@
+/* Responsive style */
+
+#smallScreen {
+  display: none;
+}
+
+@media only screen and (max-width: 770px) {
+  #smallScreen {
+    display: inline;
+  }
+  #bigScreen {
+    display: none;
+  }
+}
+
+.validateError {
+  color: red;
+}
+
+.requiredText {
+  color: #717171;
+}
+
+.optionalText {
+  color: rgb(182, 182, 182);
+}
+
+.formLabel {
+  margin: auto;
+}
+
+#profileMenu {
+  margin-top: 1rem;
+  margin-bottom: -1.3rem;
+}
+
+#smallTopicField {
+  margin-top: 5rem;
+}
+
+/* form  */
+.ui.form {
+  height: 31rem;
+}
+
+#formBorder {
+  margin-top: 5rem;
+}
+
+.field {
+  margin-bottom: 2rem !important;
+}
+
+#licenseField {
+  margin-top: 8rem;
+}
+
+/* Checkbox segment height */
+
+#subjectCheckbox {
+  height: 20rem !important;
+}
+#levelCheckbox {
+  height: 15rem !important;
+}
+#topicCheckbox {
+  height: 20rem !important;
+}

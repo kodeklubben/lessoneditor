@@ -38,6 +38,10 @@ const PageButtons = props => {
       props.submitHandler(event);
       return;
     }
+    if (notErr && props.state.isEditor) {
+      props.submitHandler(event);
+      return;
+    }
     if (notErr || input < 1) {
       props.setPageNumber(props.state.pageNumber + input);
     } else {
@@ -46,8 +50,8 @@ const PageButtons = props => {
   };
 
   return (
-    <div className="ui form">
-      {props.state.pageNumber === 1 || props.state.test ? (
+    <React.Fragment>
+      {props.state.pageNumber === 1 || props.state.isEditor ? (
         <Link to="/">
           <button className="ui button" type="button">
             <i aria-hidden="true" className="" />
@@ -73,7 +77,7 @@ const PageButtons = props => {
         <i aria-hidden="true" className="" />
         {props.nextTitle}
       </button>
-    </div>
+    </React.Fragment>
   );
 };
 

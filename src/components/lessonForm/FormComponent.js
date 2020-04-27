@@ -5,7 +5,6 @@ import { Redirect } from "react-router-dom";
 import FormPage from "./FormPage";
 import COURSELIST from "./settingsFiles/COURSELIST";
 import { LANGUAGES } from "./settingsFiles/languages/formpage_NO";
-import GoogleAuth from "../GoogleAuth";
 
 class FormComponent extends React.Component {
   constructor(props) {
@@ -55,8 +54,7 @@ class FormComponent extends React.Component {
   };
 
   submitHandler = event => {
-    event.preventDefault();
-    console.log(event);
+    // event.preventDefault();
 
     this.setState({ redirect: "/editor" });
 
