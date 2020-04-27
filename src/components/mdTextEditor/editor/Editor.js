@@ -955,8 +955,7 @@ class Editor extends React.Component {
         )
     };
 
-    // return this.props.isSignedIn ? (
-    return (
+    return this.props.isSignedIn ? (
       <div className="ui grid">
         <div className="row">
           <ControlPanel
@@ -997,10 +996,9 @@ class Editor extends React.Component {
           />
         </div>
       </div>
+    ) : (
+      <Redirect to="/" />
     );
-    // ) : (
-    //   <Redirect to="/" />
-    // );
   }
 }
 
