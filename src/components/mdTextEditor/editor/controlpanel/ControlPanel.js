@@ -49,6 +49,7 @@ const ControlPanel = props => {
           shortcutKey={preview[0].shortcut}
         />
       </div>
+      <div style={{ margin: "auto" }} />
       <div className="row">
         {undoRedo.map(element => (
           <CPButton
@@ -64,7 +65,7 @@ const ControlPanel = props => {
           />
         ))}
       </div>
-
+      <div style={{ margin: "auto" }} />
       <div className="row">
         {emphasis.map(element => (
           <CPButton
@@ -80,6 +81,7 @@ const ControlPanel = props => {
           />
         ))}
       </div>
+      <div style={{ margin: "auto" }} />
       <div className="row">
         {lists.map(element => (
           <CPButton
@@ -95,6 +97,7 @@ const ControlPanel = props => {
           />
         ))}
       </div>
+      <div style={{ margin: "auto" }} />
       <div className="row">
         {image.map(element => (
           <CPButton
@@ -110,7 +113,7 @@ const ControlPanel = props => {
           />
         ))}
       </div>
-
+      <div style={{ margin: "auto" }} />
       <div id="saveLoad" className="row">
         {saveLoadNew.map(element => (
           <CPButton
@@ -126,10 +129,11 @@ const ControlPanel = props => {
           />
         ))}
       </div>
+      <div style={{ margin: "auto" }} />
       <div className="column">
         <ProfileMenu />
       </div>
-
+      <div style={{ margin: "auto" }} />
       <div id="sections" className="row">
         {sections.map(element => (
           <CPButton
@@ -145,6 +149,7 @@ const ControlPanel = props => {
           />
         ))}
       </div>
+      <div style={{ margin: "auto" }} />
       <div id="code" className="row">
         {code.map(element => (
           <CPButton

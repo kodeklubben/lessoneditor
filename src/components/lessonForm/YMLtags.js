@@ -10,12 +10,14 @@ const YMLtagsGrade = props => {
   return (
     <React.Fragment>
       {gradeSettings.map(element => (
-        <Checkbox
-          name={element.name}
-          value={element.value}
-          subtag={element.subtag}
-          onCheck={props.checkboxHandler}
-        />
+        <div className="column">
+          <Checkbox
+            name={element.name}
+            value={element.value}
+            subtag={element.subtag}
+            onCheck={props.checkboxHandler}
+          />
+        </div>
       ))}
     </React.Fragment>
   );
@@ -25,12 +27,14 @@ const YMLtagsSubject = props => {
   return (
     <React.Fragment>
       {subjectSettings.map(element => (
-        <Checkbox
-          name={element.name}
-          value={element.value}
-          subtag={element.subtag}
-          onCheck={props.checkboxHandler}
-        />
+        <div className="column">
+          <Checkbox
+            name={element.name}
+            value={element.value}
+            subtag={element.subtag}
+            onCheck={props.checkboxHandler}
+          />
+        </div>
       ))}
     </React.Fragment>
   );
@@ -40,12 +44,14 @@ const YMLtagsTopic = props => {
   return (
     <React.Fragment>
       {topicSettings.map(element => (
-        <Checkbox
-          name={element.name}
-          value={element.value}
-          subtag={element.subtag}
-          onCheck={props.checkboxHandler}
-        />
+        <div className="column">
+          <Checkbox
+            name={element.name}
+            value={element.value}
+            subtag={element.subtag}
+            onCheck={props.checkboxHandler}
+          />
+        </div>
       ))}
     </React.Fragment>
   );

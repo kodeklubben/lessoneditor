@@ -54,7 +54,7 @@ const Page2 = props => {
               className="ui segment"
             >
               <div className="ui grid">
-                <div className="four wide column">
+                <div className="stackable column">
                   <YMLtagsGrade checkboxHandler={props.checkboxHandler} />
                 </div>
               </div>

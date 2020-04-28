@@ -50,7 +50,7 @@ const Page3 = props => {
   return (
     <React.Fragment>
       <div className="ui form">
-        <div className="field">
+        <div id="titleField" className="field">
           <label>
             <h3 className="formLabel">
               {FORM_TEXT.TITLE.heading}
@@ -76,7 +76,9 @@ const Page3 = props => {
             </label>
             <div id="subjectCheckbox" className="ui segment">
               <div className="ui grid">
-                <YMLtagsSubject checkboxHandler={props.checkboxHandler} />
+                <div className="stackable two column row">
+                  <YMLtagsSubject checkboxHandler={props.checkboxHandler} />
+                </div>
               </div>
             </div>
           </div>
@@ -87,7 +89,7 @@ const Page3 = props => {
             </label>
             <div id="topicCheckbox" className="ui segment">
               <div className="ui grid">
-                <div className="four wide column">
+                <div className="stackable two column row">
                   <YMLtagsTopic checkboxHandler={props.checkboxHandler} />
                 </div>
               </div>
