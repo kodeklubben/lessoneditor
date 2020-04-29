@@ -49,8 +49,8 @@ const ControlPanel = props => {
           shortcutKey={preview[0].shortcut}
         />
       </div>
-
-      <div className="row">
+      <div style={{ marginRight: "1.5rem" }} />
+      {/* <div className="row">
         <div className="ui buttons">
           {undoRedo.map(element => (
             <CPButton
@@ -67,7 +67,7 @@ const ControlPanel = props => {
           ))}
         </div>
       </div>
-      <div style={{ marginRight: "4rem" }} />
+      <div style={{ marginRight: "4rem" }} /> */}
       <div className="row">
         <div className="ui buttons">
           {emphasis.map(element => (
@@ -85,7 +85,7 @@ const ControlPanel = props => {
           ))}
         </div>
       </div>
-      <div style={{ marginRight: "4rem" }} />
+      <div style={{ marginRight: "1.5rem" }} />
       <div className="row">
         <div className="ui buttons">
           {lists.map(element => (
@@ -103,8 +103,8 @@ const ControlPanel = props => {
           ))}
         </div>
       </div>
-      <div style={{ marginRight: "4rem" }} />
-      <div className="row">
+      {/* <div style={{ marginRight: "4rem" }} /> */}
+      {/* <div className="row">
         <div className="ui buttons">
           {image.map(element => (
             <CPButton
@@ -121,7 +121,7 @@ const ControlPanel = props => {
           ))}
         </div>
       </div>
-      <div style={{ marginRight: "4rem" }} />
+      <div style={{ marginRight: "4rem" }} /> */}
     </React.Fragment>
   );
 };

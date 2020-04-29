@@ -2,6 +2,9 @@ select {
   cursor: pointer;
 }
 
+@media only screen and (max-width: 770px) {
+}
+
 /* ControlPanel  */
 
 @media only screen and (max-width: 955px) {
@@ -16,36 +19,82 @@ select {
     display: none;
   }
 
-  .preview {
+  /* .preview {
     display: block !important;
-  }
+  } */
 
   #saveLoad {
     display: none;
   }
-  #MDPreview {
+  /* #MDPreview {
     display: none;
+  } */
+
+  #controlPanelContainer {
+    max-height: 9rem;
+    padding-left: 2em;
+    margin-bottom: -1rem;
+    touch-action: manipulation;
   }
-  #MDTextArea {
-    width: 100% !important;
+
+  #editor {
+    margin-top: 0rem !important;
   }
-  #MDPreview {
-    width: 100% !important;
+
+  #textEditorContainer {
+    width: 100%;
+    padding-top: 1rem;
+    padding-right: 0rem !important;
+    touch-action: manipulation;
+  }
+  .TextArea {
+    width: 220% !important;
+    height: 100%;
+    min-height: 30em !important;
+    outline: none;
+    margin-left: 0em !important;
+    margin-bottom: -1.2em;
+    margin-right: -0em !important;
+    resize: none;
+    padding: 5em;
+    overflow: auto;
+    border-color: white;
+    touch-action: manipulation;
+  }
+
+  .MDPreview {
+    width: 220%;
+    height: 100%;
+    min-height: 30em !important;
+    margin-right: -1em !important;
+    margin-bottom: -1.2em !important;
+    margin-left: -1em !important;
+    max-height: 65rem !important;
+    background-color: white;
+    padding: 5em;
+    overflow: auto;
+    touch-action: manipulation;
   }
 }
 
-.preview {
+/* .preview {
   display: none;
-}
+} */
 
 #textEditorContainer {
   width: 100%;
   padding-top: 1rem;
+  touch-action: manipulation;
 }
 
-#controlPanel {
+#editor {
+  margin-top: 5rem;
+}
+
+#controlPanelContainer {
   max-height: 9rem;
   margin-bottom: -1rem;
+  touch-action: manipulation;
 }
 
 /* CSS for ImagePopup component */
@@ -97,9 +146,10 @@ select {
   margin-bottom: -1.2em;
   margin-right: -2em !important;
   resize: none;
-  padding: 15px;
+  padding: 2em;
   overflow: auto;
   border-color: white;
+  touch-action: manipulation;
 }
 
 /* CSS for TextArea Buttons */
@@ -115,6 +165,7 @@ select {
   margin-left: -1em !important;
   max-height: 65rem !important;
   background-color: white;
-  padding: 15px;
+  padding: 2em;
   overflow: auto;
+  touch-action: manipulation;
 }

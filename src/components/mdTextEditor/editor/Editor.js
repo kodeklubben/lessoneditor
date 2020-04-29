@@ -976,7 +976,7 @@ class Editor extends React.Component {
 
     return this.props.isSignedIn ? (
       this.state.preview ? (
-        <div className="ui grid">
+        <div id="preview" className="ui grid">
           <div className="right aligned row">
             <div id="profileMenu" className="right floated three wide column">
               <ProfileMenu />
@@ -999,7 +999,7 @@ class Editor extends React.Component {
           </div>
         </div>
       ) : (
-        <div style={{ overflow: "hidden" }} className="ui grid">
+        <div id="editor" style={{ overflow: "hidden" }} className="ui grid">
           <div className="right aligned row">
             <div id="profileMenu" className="right floated three wide column">
               <ProfileMenu />
@@ -1013,7 +1013,7 @@ class Editor extends React.Component {
           >
             <div className="ui two column grid">
               <div
-                id="controlPanel"
+                id="controlPanelContainer"
                 style={{ backgroundColor: "#b1daae", borderRadius: "5px" }}
                 className="row"
               >
