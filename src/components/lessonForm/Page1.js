@@ -5,7 +5,7 @@ import { LANGUAGES, FORM_TEXT } from "./settingsFiles/languages/formpage_NO";
 const Page1 = props => {
   return (
     <React.Fragment>
-      <div className="ui form">
+      <form className="ui form">
         <div className="field">
           <label>
             <h3 className="formLabel">
@@ -26,10 +26,7 @@ const Page1 = props => {
         </div>
         <div className="field">
           <label>
-            <h3 className="formLabel">
-              {FORM_TEXT.TRANSLATOR.heading}
-              <span className="optionalText"> (valgfritt)</span>
-            </h3>
+            <h3 className="formLabel">{FORM_TEXT.TRANSLATOR.heading}</h3>
             <input
               autoComplete="off"
               type="text"
@@ -58,10 +55,7 @@ const Page1 = props => {
         </div>
         <div id="licenseField" className="field">
           <label>
-            <h3 className="formLabel">
-              {FORM_TEXT.LICENSE.heading}
-              <span className="optionalText"> (valgfritt)</span>
-            </h3>
+            <h3 className="formLabel">{FORM_TEXT.LICENSE.heading}</h3>
             <input
               autoComplete="off"
               type="text"
@@ -72,7 +66,7 @@ const Page1 = props => {
             />
           </label>
         </div>
-      </div>
+      </form>
     </React.Fragment>
   );
 };

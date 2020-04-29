@@ -12,7 +12,7 @@ const FormPage = props => {
     if (props.state.pageNumber === 1) {
       return (
         <div>
-          <div className="ui segment">
+          <div className="ui segment formColor">
             <Page1 changeHandler={props.changeHandler} state={props.state} />
           </div>
           <PageButtons
@@ -30,7 +30,7 @@ const FormPage = props => {
     } else if (props.state.pageNumber === 2) {
       return (
         <div>
-          <div className="ui segment">
+          <div className="ui segment formColor">
             <Page2
               changeHandler={props.changeHandler}
               checkboxHandler={props.checkboxHandler}
@@ -52,7 +52,7 @@ const FormPage = props => {
     } else if (props.state.pageNumber === 3) {
       return (
         <div>
-          <div className="ui segment">
+          <div className="ui segment formColor">
             <Page3
               changeHandler={props.changeHandler}
               checkboxHandler={props.checkboxHandler}
@@ -77,15 +77,15 @@ const FormPage = props => {
   };
 
   return (
-    <div className="ui grid">
-      <div id="formBorder" className="right aligned row">
+    <div id="formPage" className="ui grid">
+      <div className="right aligned row">
         <div id="profileMenu" className="right floated three wide column">
           <ProfileMenu />
         </div>
         <div className="column" />
       </div>
       <div className="row">
-        <div className="fourteen wide centered column">{renderFormPage()}</div>
+        <div className="centered column">{renderFormPage()}</div>
       </div>
     </div>
   );

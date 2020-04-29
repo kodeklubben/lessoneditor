@@ -49,7 +49,7 @@ for (let i = 0; i < topicLen; i++) {
 const Page3 = props => {
   return (
     <React.Fragment>
-      <div className="ui form">
+      <form className="ui form">
         <div id="titleField" className="field">
           <label>
             <h3 className="formLabel">
@@ -74,7 +74,11 @@ const Page3 = props => {
             <label>
               <h3 className="formLabel">{YML_TEXT.subject}</h3>
             </label>
-            <div id="subjectCheckbox" className="ui segment">
+            <div
+              id="subjectCheckbox"
+              style={{ marginTop: "0px" }}
+              className="ui segment"
+            >
               <div className="ui grid">
                 <div className="stackable two column row">
                   <YMLtagsSubject checkboxHandler={props.checkboxHandler} />
@@ -87,7 +91,11 @@ const Page3 = props => {
             <label>
               <h3 className="formLabel">{YML_TEXT.topic}</h3>
             </label>
-            <div id="topicCheckbox" className="ui segment">
+            <div
+              id="topicCheckbox"
+              style={{ marginTop: "0px" }}
+              className="ui segment"
+            >
               <div className="ui grid">
                 <div className="stackable two column row">
                   <YMLtagsTopic checkboxHandler={props.checkboxHandler} />
@@ -133,7 +141,7 @@ const Page3 = props => {
             </div>
           </div>
         </div>
-      </div>
+      </form>
     </React.Fragment>
   );
 };

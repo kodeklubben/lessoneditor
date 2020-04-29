@@ -110,17 +110,15 @@ class FormComponent extends React.Component {
 
   render() {
     return this.props.isSignedIn ? (
-      <div className="">
-        <FormPage
-          submitHandler={this.submitHandler}
-          changeHandler={this.changeHandler}
-          checkboxHandler={this.checkboxHandler}
-          selectDropdownHandler={this.selectDropdownHandler}
-          setPageNumber={this.setPageNumber}
-          setErr={this.setErr}
-          state={this.state}
-        />
-      </div>
+      <FormPage
+        submitHandler={this.submitHandler}
+        changeHandler={this.changeHandler}
+        checkboxHandler={this.checkboxHandler}
+        selectDropdownHandler={this.selectDropdownHandler}
+        setPageNumber={this.setPageNumber}
+        setErr={this.setErr}
+        state={this.state}
+      />
     ) : (
       <Redirect to="/" />
     );

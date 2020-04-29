@@ -11,6 +11,9 @@
   #bigScreen {
     display: none;
   }
+  #formPage {
+    margin-top: 0rem !important;
+  }
 }
 
 .validateError {
@@ -19,10 +22,6 @@
 
 .requiredText {
   color: #717171;
-}
-
-.optionalText {
-  color: rgb(182, 182, 182);
 }
 
 .formLabel {
@@ -43,8 +42,12 @@
   height: 30rem;
 }
 
-#formBorder {
+#formPage {
   margin-top: 5rem;
+}
+
+.ui.segment.formColor {
+  background-color: #eef7ee;
 }
 
 .field {

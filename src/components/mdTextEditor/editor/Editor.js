@@ -8,6 +8,7 @@ import MDTextArea from "./MDTextArea";
 import MDPreview from "../mdPreview/MDPreview";
 import { mdParser } from "../../../utils/mdParser";
 import ControlPanel from "./controlpanel/ControlPanel";
+import ProfileMenu from "../../ProfileMenu";
 import ImagePopup from "../ImagePopup";
 import PageButtons from "../../PageButtons";
 import {
@@ -730,6 +731,7 @@ class Editor extends React.Component {
     // Make keyboard shortcuts with React Hotkeys
     // config in ./settingsFiles/buttonConfig.js
     const keyMap = {
+      PREVIEW: KEY.preview.join(""),
       BOLD: KEY.bold.join(""),
       ITALIC: KEY.italic.join(""),
       HEADING: KEY.heading.join(""),
@@ -759,6 +761,9 @@ class Editor extends React.Component {
     // needs to be updated manually with same parameters as buttonConfig
     // SORRY FOR WET CODE AND MANUAL UPDATE. NEED HELP FIXING THIS
     const handlers = {
+      // preview button
+      PREVIEW: () => handlePreview(true),
+
       // emphasis
       BOLD: () =>
         handleButtonClick(
@@ -971,9 +976,15 @@ class Editor extends React.Component {
     return this.props.isSignedIn ? (
       this.state.preview ? (
         <div className="ui grid">
+          <div className="right aligned row">
+            <div id="profileMenu" className="right floated three wide column">
+              <ProfileMenu />
+            </div>
+            <div className="column" />
+          </div>
           <div className="row">
             <div className="column">
-              <Button style={{}} onClick={() => handlePreview(true)}>
+              <Button onClick={() => handlePreview(true)}>
                 <Icon name="eye" />
               </Button>
             </div>
@@ -988,33 +999,44 @@ class Editor extends React.Component {
         </div>
       ) : (
         <div className="ui grid">
-          <div className="row">
-            <ControlPanel
-              handleButtonClick={handleButtonClick}
-              nextTitle={NAV_BUTTONS.submit}
-              prevValue="/createNewLesson"
-              nextValue="/endpage"
-              submitHandler={submitHandler}
-              handlePreview={handlePreview}
-            />
+          <div className="right aligned row">
+            <div id="profileMenu" className="right floated three wide column">
+              <ProfileMenu />
+            </div>
+            <div className="column" />
           </div>
-          <div id="MDTextArea" className="eight wide column">
-            <MDTextArea
-              editorRef={this.editorRef}
-              onInputChange={handleChange}
-              handleButtonClick={handleButtonClick}
-              onTextareaKeyDown={onTextareaKeyDown}
-              onTextareaKeyUp={onTextareaKeyUp}
-              onTextareaMouseDown={onTextareaMouseDown}
-              onTextareaSelect={onTextareaSelect}
-              autoSaveMessage={autoSaveMessage}
-              handlers={handlers}
-              keyMap={keyMap}
-            />
-          </div>
-          {imagePopup}
-          <div id="MDPreview" className="eight wide column">
-            <MDPreview />
+          <div id="textEditorContainer" className="ui segment">
+            <div className="ui two column grid">
+              <div className="row">
+                <ControlPanel
+                  handleButtonClick={handleButtonClick}
+                  nextTitle={NAV_BUTTONS.submit}
+                  prevValue="/createNewLesson"
+                  nextValue="/endpage"
+                  submitHandler={submitHandler}
+                  handlePreview={handlePreview}
+                />
+              </div>
+              <div id="MDTextArea" className="column">
+                <MDTextArea
+                  editorRef={this.editorRef}
+                  onInputChange={handleChange}
+                  handleButtonClick={handleButtonClick}
+                  onTextareaKeyDown={onTextareaKeyDown}
+                  onTextareaKeyUp={onTextareaKeyUp}
+                  onTextareaMouseDown={onTextareaMouseDown}
+                  onTextareaSelect={onTextareaSelect}
+                  autoSaveMessage={autoSaveMessage}
+                  handlers={handlers}
+                  keyMap={keyMap}
+                />
+              </div>
+              {imagePopup}
+              <div id="divider" />
+              <div id="MDPreview" className="column">
+                <MDPreview />
+              </div>
+            </div>
           </div>
           <div className="row">
             <PageButtons

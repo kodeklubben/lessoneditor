@@ -49,121 +49,131 @@ const ControlPanel = props => {
           shortcutKey={preview[0].shortcut}
         />
       </div>
-      <div style={{ margin: "auto" }} />
+
       <div className="row">
-        {undoRedo.map(element => (
-          <CPButton
-            bTitle={element.bTitle}
-            icon={element.icon}
-            output={element.output}
-            title={element.title}
-            cursorIntON={element.cursorIntON}
-            cursorIntOFF={element.cursorIntOFF}
-            endOutput={element.endOutput}
-            onButtonClick={handleButtonClick}
-            shortcutKey={element.shortcut}
-          />
-        ))}
+        <div className="ui buttons">
+          {undoRedo.map(element => (
+            <CPButton
+              bTitle={element.bTitle}
+              icon={element.icon}
+              output={element.output}
+              title={element.title}
+              cursorIntON={element.cursorIntON}
+              cursorIntOFF={element.cursorIntOFF}
+              endOutput={element.endOutput}
+              onButtonClick={handleButtonClick}
+              shortcutKey={element.shortcut}
+            />
+          ))}
+        </div>
       </div>
-      <div style={{ margin: "auto" }} />
+
       <div className="row">
-        {emphasis.map(element => (
-          <CPButton
-            bTitle={element.bTitle}
-            icon={element.icon}
-            output={element.output}
-            title={element.title}
-            cursorIntON={element.cursorIntON}
-            cursorIntOFF={element.cursorIntOFF}
-            endOutput={element.endOutput}
-            onButtonClick={handleButtonClick}
-            shortcutKey={element.shortcut}
-          />
-        ))}
+        <div className="ui buttons">
+          {emphasis.map(element => (
+            <CPButton
+              bTitle={element.bTitle}
+              icon={element.icon}
+              output={element.output}
+              title={element.title}
+              cursorIntON={element.cursorIntON}
+              cursorIntOFF={element.cursorIntOFF}
+              endOutput={element.endOutput}
+              onButtonClick={handleButtonClick}
+              shortcutKey={element.shortcut}
+            />
+          ))}
+        </div>
       </div>
-      <div style={{ margin: "auto" }} />
+
       <div className="row">
-        {lists.map(element => (
-          <CPButton
-            bTitle={element.bTitle}
-            icon={element.icon}
-            output={element.output}
-            title={element.title}
-            cursorIntON={element.cursorIntON}
-            cursorIntOFF={element.cursorIntOFF}
-            endOutput={element.endOutput}
-            onButtonClick={handleButtonClick}
-            shortcutKey={element.shortcut}
-          />
-        ))}
+        <div className="ui buttons">
+          {lists.map(element => (
+            <CPButton
+              bTitle={element.bTitle}
+              icon={element.icon}
+              output={element.output}
+              title={element.title}
+              cursorIntON={element.cursorIntON}
+              cursorIntOFF={element.cursorIntOFF}
+              endOutput={element.endOutput}
+              onButtonClick={handleButtonClick}
+              shortcutKey={element.shortcut}
+            />
+          ))}
+        </div>
       </div>
-      <div style={{ margin: "auto" }} />
+
       <div className="row">
-        {image.map(element => (
-          <CPButton
-            bTitle={element.bTitle}
-            icon={element.icon}
-            output={element.output}
-            title={element.title}
-            cursorIntON={element.cursorIntON}
-            cursorIntOFF={element.cursorIntOFF}
-            endOutput={element.endOutput}
-            onButtonClick={handleButtonClick}
-            shortcutKey={element.shortcut}
-          />
-        ))}
+        <div className="ui buttons">
+          {image.map(element => (
+            <CPButton
+              bTitle={element.bTitle}
+              icon={element.icon}
+              output={element.output}
+              title={element.title}
+              cursorIntON={element.cursorIntON}
+              cursorIntOFF={element.cursorIntOFF}
+              endOutput={element.endOutput}
+              onButtonClick={handleButtonClick}
+              shortcutKey={element.shortcut}
+            />
+          ))}
+        </div>
       </div>
-      <div style={{ margin: "auto" }} />
+
       <div id="saveLoad" className="row">
-        {saveLoadNew.map(element => (
-          <CPButton
-            bTitle={element.bTitle}
-            icon={element.icon}
-            output={element.output}
-            title={element.title}
-            cursorIntON={element.cursorIntON}
-            cursorIntOFF={element.cursorIntOFF}
-            endOutput={element.endOutput}
-            onButtonClick={handleButtonClick}
-            shortcutKey={element.shortcut}
-          />
-        ))}
+        <div className="ui buttons">
+          {saveLoadNew.map(element => (
+            <CPButton
+              bTitle={element.bTitle}
+              icon={element.icon}
+              output={element.output}
+              title={element.title}
+              cursorIntON={element.cursorIntON}
+              cursorIntOFF={element.cursorIntOFF}
+              endOutput={element.endOutput}
+              onButtonClick={handleButtonClick}
+              shortcutKey={element.shortcut}
+            />
+          ))}
+        </div>
       </div>
-      <div style={{ margin: "auto" }} />
-      <div className="column">
-        <ProfileMenu />
-      </div>
-      <div style={{ margin: "auto" }} />
+
       <div id="sections" className="row">
-        {sections.map(element => (
-          <CPButton
-            bTitle={element.bTitle}
-            icon={element.icon}
-            output={element.output}
-            title={element.title}
-            cursorIntON={element.cursorIntON}
-            cursorIntOFF={element.cursorIntOFF}
-            endOutput={element.endOutput}
-            onButtonClick={handleButtonClick}
-            shortcutKey={element.shortcut}
-          />
-        ))}
+        <div className="ui buttons">
+          {sections.map(element => (
+            <CPButton
+              bTitle={element.bTitle}
+              icon={element.icon}
+              output={element.output}
+              title={element.title}
+              cursorIntON={element.cursorIntON}
+              cursorIntOFF={element.cursorIntOFF}
+              endOutput={element.endOutput}
+              onButtonClick={handleButtonClick}
+              shortcutKey={element.shortcut}
+            />
+          ))}
+        </div>
       </div>
-      <div style={{ margin: "auto" }} />
+
       <div id="code" className="row">
-        {code.map(element => (
-          <CPButton
-            bTitle={element.bTitle}
-            icon={element.icon}
-            output={element.output}
-            title={element.title}
-            cursorIntON={element.cursorIntON}
-            cursorIntOFF={element.cursorIntOFF}
-            endOutput={element.endOutput}
-            onButtonClick={handleButtonClick}
-            shortcutKey={element.shortcut}
-          />
-        ))}
+        <div className="ui buttons">
+          {code.map(element => (
+            <CPButton
+              bTitle={element.bTitle}
+              icon={element.icon}
+              output={element.output}
+              title={element.title}
+              cursorIntON={element.cursorIntON}
+              cursorIntOFF={element.cursorIntOFF}
+              endOutput={element.endOutput}
+              onButtonClick={handleButtonClick}
+              shortcutKey={element.shortcut}
+            />
+          ))}
+        </div>
       </div>
     </React.Fragment>
   );
