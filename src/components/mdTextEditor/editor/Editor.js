@@ -967,99 +967,78 @@ class Editor extends React.Component {
     const handlePreview = event => {
       if (event) {
         if (this.state.preview) {
+          alert("notPreview");
+
           this.setState({ preview: false });
-        } else {
+        } else if (!this.state.preview) {
+          alert("Preview");
+
           this.setState({ preview: true });
         }
       }
     };
 
     return this.props.isSignedIn ? (
-      this.state.preview ? (
-        <div id="preview" className="ui grid">
-          <div className="right aligned row">
-            <div id="profileMenu" className="right floated three wide column">
-              <ProfileMenu />
-            </div>
-            <div className="column" />
+      <div id="editor" style={{ overflow: "hidden" }} className="ui grid">
+        <div className="right aligned row">
+          <div id="profileMenu" className="right floated three wide column">
+            <ProfileMenu />
           </div>
-          <div className="row">
-            <div className="column">
-              <Button onClick={() => handlePreview(true)}>
-                <Icon name="eye" />
-              </Button>
+          <div className="column" />
+        </div>
+        <div
+          id="textEditorContainer"
+          style={{ backgroundColor: "#eef7ee" }}
+          className="ui segment"
+        >
+          <div className="ui two column grid">
+            <div
+              id="controlPanelContainer"
+              style={{ backgroundColor: "#b1daae", borderRadius: "5px" }}
+              className="row"
+            >
+              <ControlPanel
+                handleButtonClick={handleButtonClick}
+                nextTitle={NAV_BUTTONS.submit}
+                prevValue="/createNewLesson"
+                nextValue="/endpage"
+                submitHandler={submitHandler}
+                handlePreview={handlePreview}
+              />
             </div>
-          </div>
-          <div
-            id="MDPreview"
-            style={{ display: "block" }}
-            className="eight wide column"
-          >
-            <MDPreview />
+            <div id="MDTextArea" className="column">
+              <MDTextArea
+                editorRef={this.editorRef}
+                onInputChange={handleChange}
+                handleButtonClick={handleButtonClick}
+                onTextareaKeyDown={onTextareaKeyDown}
+                onTextareaKeyUp={onTextareaKeyUp}
+                onTextareaMouseDown={onTextareaMouseDown}
+                onTextareaSelect={onTextareaSelect}
+                autoSaveMessage={autoSaveMessage}
+                handlers={handlers}
+                keyMap={keyMap}
+              />
+            </div>
+            {imagePopup}
+            {/* <div id="divider" /> */}
+            <div id="MDPreview" className="column">
+              <MDPreview />
+            </div>
           </div>
         </div>
-      ) : (
-        <div id="editor" style={{ overflow: "hidden" }} className="ui grid">
-          <div className="right aligned row">
-            <div id="profileMenu" className="right floated three wide column">
-              <ProfileMenu />
-            </div>
-            <div className="column" />
-          </div>
-          <div
-            id="textEditorContainer"
-            style={{ backgroundColor: "#eef7ee" }}
-            className="ui segment"
-          >
-            <div className="ui two column grid">
-              <div
-                id="controlPanelContainer"
-                style={{ backgroundColor: "#b1daae", borderRadius: "5px" }}
-                className="row"
-              >
-                <ControlPanel
-                  handleButtonClick={handleButtonClick}
-                  nextTitle={NAV_BUTTONS.submit}
-                  prevValue="/createNewLesson"
-                  nextValue="/endpage"
-                  submitHandler={submitHandler}
-                  handlePreview={handlePreview}
-                />
-              </div>
-              <div id="MDTextArea" className="column">
-                <MDTextArea
-                  editorRef={this.editorRef}
-                  onInputChange={handleChange}
-                  handleButtonClick={handleButtonClick}
-                  onTextareaKeyDown={onTextareaKeyDown}
-                  onTextareaKeyUp={onTextareaKeyUp}
-                  onTextareaMouseDown={onTextareaMouseDown}
-                  onTextareaSelect={onTextareaSelect}
-                  autoSaveMessage={autoSaveMessage}
-                  handlers={handlers}
-                  keyMap={keyMap}
-                />
-              </div>
-              {imagePopup}
-              {/* <div id="divider" /> */}
-              <div id="MDPreview" className="column">
-                <MDPreview />
-              </div>
-            </div>
-          </div>
-          <div className="row">
-            <PageButtons
-              prevTitle={NAV_BUTTONS.prev}
-              nextTitle={NAV_BUTTONS.submit}
-              prevValue="/createNewLesson"
-              nextValue="/endpage"
-              setPageNumber={null}
-              submitHandler={submitHandler}
-              state={this.state}
-            />
-          </div>
+        <div className="row">
+          <PageButtons
+            prevTitle={NAV_BUTTONS.prev}
+            nextTitle={NAV_BUTTONS.submit}
+            prevValue="/createNewLesson"
+            nextValue="/endpage"
+            setPageNumber={null}
+            submitHandler={submitHandler}
+            state={this.state}
+          />
         </div>
-      )
+      </div>
     ) : (
       <Redirect to="/" />
     );

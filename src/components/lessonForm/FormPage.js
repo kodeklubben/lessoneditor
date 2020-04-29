@@ -85,7 +85,7 @@ const FormPage = props => {
         <div className="column" />
       </div>
       <div className="row">
-        <div className="centered column">{renderFormPage()}</div>
+        <div className="fourteen wide centered column">{renderFormPage()}</div>
       </div>
     </div>
   );

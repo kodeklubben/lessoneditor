@@ -19,26 +19,22 @@ select {
     display: none;
   }
 
-  /* .preview {
+  .preview {
     display: block !important;
-  } */
+  }
 
   #saveLoad {
     display: none;
   }
-  /* #MDPreview {
+  #MDPreview {
     display: none;
-  } */
+  }
 
   #controlPanelContainer {
     max-height: 9rem;
     padding-left: 2em;
     margin-bottom: -1rem;
     touch-action: manipulation;
-  }
-
-  #editor {
-    margin-top: 0rem !important;
   }
 
   #textEditorContainer {
@@ -48,7 +44,7 @@ select {
     touch-action: manipulation;
   }
   .TextArea {
-    width: 220% !important;
+    width: 210% !important;
     height: 100%;
     min-height: 30em !important;
     outline: none;
@@ -63,7 +59,7 @@ select {
   }
 
   .MDPreview {
-    width: 220%;
+    width: 200%;
     height: 100%;
     min-height: 30em !important;
     margin-right: -1em !important;
@@ -77,9 +73,9 @@ select {
   }
 }
 
-/* .preview {
+.preview {
   display: none;
-} */
+}
 
 #textEditorContainer {
   width: 100%;
@@ -88,11 +84,12 @@ select {
 }
 
 #editor {
-  margin-top: 5rem;
+  margin-top: 0px;
 }
 
 #controlPanelContainer {
   max-height: 9rem;
+  padding-left: 1rem;
   margin-bottom: -1rem;
   touch-action: manipulation;
 }
@@ -138,13 +135,14 @@ select {
 } */
 
 .TextArea {
-  width: 102%;
+  width: 100%;
   height: 100%;
-  min-height: 40em;
+  min-height: 50em;
+  max-height: 65rem !important;
   outline: none;
-  margin-left: -1em;
+  /* margin-left: -1em;
   margin-bottom: -1.2em;
-  margin-right: -2em !important;
+  margin-right: -2em !important; */
   resize: none;
   padding: 2em;
   overflow: auto;
@@ -157,13 +155,13 @@ select {
 /* CSS for MDPreview */
 
 .MDPreview {
-  width: 104.8%;
+  width: 100%;
   height: 100%;
-  min-height: 40em;
-  margin-right: -1em !important;
+  min-height: 50em;
+  /* margin-right: -1em !important;
   margin-bottom: -1.2em !important;
-  margin-left: -1em !important;
-  max-height: 65rem !important;
+  margin-left: -1em !important; */
+  max-height: 65em !important;
   background-color: white;
   padding: 2em;
   overflow: auto;
