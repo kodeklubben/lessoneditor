@@ -39,7 +39,13 @@ select {
 }
 
 #textEditorContainer {
-  padding: 3rem;
+  width: 100%;
+  padding-top: 1rem;
+}
+
+#controlPanel {
+  max-height: 9rem;
+  margin-bottom: -1rem;
 }
 
 /* CSS for ImagePopup component */
@@ -69,24 +75,27 @@ select {
 
 /* CSS for TextArea */
 
-#divider {
+/* #divider {
   z-index: 3;
-  background-color: rgb(226, 224, 224);
-  height: 80%;
+  background-color: b1daae;
+  height: 73%;
   width: 2px;
   margin: 0px;
   padding: 0px;
-  top: 60%;
+  top: 57%;
   left: 50%;
   transform: translate(-50%, -50%);
   position: absolute;
-}
+} */
 
 .TextArea {
-  width: 100%;
+  width: 102%;
   height: 100%;
-  min-height: 50vh;
+  min-height: 40em;
   outline: none;
+  margin-left: -1em;
+  margin-bottom: -1.2em;
+  margin-right: -2em !important;
   resize: none;
   padding: 15px;
   overflow: auto;
@@ -98,8 +107,12 @@ select {
 /* CSS for MDPreview */
 
 .MDPreview {
-  width: 100%;
+  width: 104.8%;
   height: 100%;
+  min-height: 40em;
+  margin-right: -1em !important;
+  margin-bottom: -1.2em !important;
+  margin-left: -1em !important;
   max-height: 65rem !important;
   background-color: white;
   padding: 15px;

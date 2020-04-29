@@ -136,7 +136,7 @@ class Editor extends React.Component {
   render() {
     // Submithandler
     const submitHandler = event => {
-      event.preventDefault();
+      // event.preventDefault();
 
       console.log("text submitted");
 
@@ -680,13 +680,14 @@ class Editor extends React.Component {
         }
         isButtonOn[bTitle] = false;
         this.setState({ buttonValues: isButtonOn });
-        setUndo();
+
         inputText =
           inputText.slice(0, cursorPositionStart) +
           output +
           inputText.slice(cursorPositionStart);
         this.props.addText(inputText);
         this.props.parseMD(mdParser(inputText));
+        setUndo();
         setCursorPosition(
           cursorPositionStart + cursorIntON,
           cursorPositionStart + cursorIntON
@@ -998,16 +999,24 @@ class Editor extends React.Component {
           </div>
         </div>
       ) : (
-        <div className="ui grid">
+        <div style={{ overflow: "hidden" }} className="ui grid">
           <div className="right aligned row">
             <div id="profileMenu" className="right floated three wide column">
               <ProfileMenu />
             </div>
             <div className="column" />
           </div>
-          <div id="textEditorContainer" className="ui segment">
+          <div
+            id="textEditorContainer"
+            style={{ backgroundColor: "#eef7ee" }}
+            className="ui segment"
+          >
             <div className="ui two column grid">
-              <div className="row">
+              <div
+                id="controlPanel"
+                style={{ backgroundColor: "#b1daae", borderRadius: "5px" }}
+                className="row"
+              >
                 <ControlPanel
                   handleButtonClick={handleButtonClick}
                   nextTitle={NAV_BUTTONS.submit}
@@ -1032,7 +1041,7 @@ class Editor extends React.Component {
                 />
               </div>
               {imagePopup}
-              <div id="divider" />
+              {/* <div id="divider" /> */}
               <div id="MDPreview" className="column">
                 <MDPreview />
               </div>

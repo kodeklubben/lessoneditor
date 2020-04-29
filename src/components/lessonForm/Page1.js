@@ -5,7 +5,7 @@ import { LANGUAGES, FORM_TEXT } from "./settingsFiles/languages/formpage_NO";
 const Page1 = props => {
   return (
     <React.Fragment>
-      <form className="ui form">
+      <div className="ui form">
         <div className="field">
           <label>
             <h3 className="formLabel">
@@ -66,7 +66,7 @@ const Page1 = props => {
             />
           </label>
         </div>
-      </form>
+      </div>
     </React.Fragment>
   );
 };

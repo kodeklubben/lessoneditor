@@ -56,7 +56,7 @@ class Buttons extends React.Component {
           trigger={
             this.props.icon ? (
               <Button
-                style={{}}
+                style={{ backgroundColor: "#b1daae" }}
                 onTouchStart={this.handleButtonPress}
                 onTouchEnd={this.handleClose}
                 onClick={() =>
@@ -73,7 +73,7 @@ class Buttons extends React.Component {
               </Button>
             ) : (
               <Button
-                style={{}}
+                style={{ backgroundColor: "#b1daae" }}
                 onTouchStart={this.handleButtonPress}
                 onTouchEnd={this.handleClose}
                 onClick={() =>
@@ -102,6 +102,7 @@ class Buttons extends React.Component {
           trigger={
             this.props.icon ? (
               <Button
+                style={{ backgroundColor: "#b1daae" }}
                 onTouchStart={this.handleButtonPress}
                 onTouchEnd={this.handleButtonRelease}
                 onClick={() =>
@@ -118,6 +119,7 @@ class Buttons extends React.Component {
               </Button>
             ) : (
               <Button
+                style={{ backgroundColor: "#b1daae" }}
                 onClick={() =>
                   this.props.onButtonClick(
                     this.props.bTitle,

@@ -67,7 +67,7 @@ const ControlPanel = props => {
           ))}
         </div>
       </div>
-
+      <div style={{ marginRight: "4rem" }} />
       <div className="row">
         <div className="ui buttons">
           {emphasis.map(element => (
@@ -85,7 +85,7 @@ const ControlPanel = props => {
           ))}
         </div>
       </div>
-
+      <div style={{ marginRight: "4rem" }} />
       <div className="row">
         <div className="ui buttons">
           {lists.map(element => (
@@ -103,7 +103,7 @@ const ControlPanel = props => {
           ))}
         </div>
       </div>
-
+      <div style={{ marginRight: "4rem" }} />
       <div className="row">
         <div className="ui buttons">
           {image.map(element => (
@@ -121,8 +121,21 @@ const ControlPanel = props => {
           ))}
         </div>
       </div>
+      <div style={{ marginRight: "4rem" }} />
+    </React.Fragment>
+  );
+};
 
-      <div id="saveLoad" className="row">
+const mapStateToProps = state => {
+  return {
+    imageUrl: state.auth.imageUrl
+  };
+};
+
+export default connect(mapStateToProps)(ControlPanel);
+
+{
+  /* <div id="saveLoad" className="row">
         <div className="ui buttons">
           {saveLoadNew.map(element => (
             <CPButton
@@ -139,7 +152,7 @@ const ControlPanel = props => {
           ))}
         </div>
       </div>
-
+      <div style={{ marginRight: "4rem" }} />
       <div id="sections" className="row">
         <div className="ui buttons">
           {sections.map(element => (
@@ -157,7 +170,7 @@ const ControlPanel = props => {
           ))}
         </div>
       </div>
-
+      <div style={{ marginRight: "4rem" }} />
       <div id="code" className="row">
         <div className="ui buttons">
           {code.map(element => (
@@ -174,15 +187,5 @@ const ControlPanel = props => {
             />
           ))}
         </div>
-      </div>
-    </React.Fragment>
-  );
-};
-
-const mapStateToProps = state => {
-  return {
-    imageUrl: state.auth.imageUrl
-  };
-};
-
-export default connect(mapStateToProps)(ControlPanel);
+      </div> */
+}

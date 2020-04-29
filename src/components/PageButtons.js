@@ -31,15 +31,15 @@ const PageButtons = props => {
     return true;
   };
 
-  const onClickHandler = (input, event) => {
+  const onClickHandler = input => {
     let notErr = validate();
 
     if (notErr && props.state.pageNumber === 3) {
-      props.submitHandler(event);
+      props.submitHandler(true);
       return;
     }
     if (notErr && props.state.isEditor) {
-      props.submitHandler(event);
+      props.submitHandler(true);
       return;
     }
     if (notErr || input < 1) {
@@ -71,8 +71,8 @@ const PageButtons = props => {
 
       <button
         className="ui button"
-        type="button"
-        onClick={event => onClickHandler(1, event)}
+        type="text"
+        onClick={() => onClickHandler(1)}
       >
         <i aria-hidden="true" className="" />
         {props.nextTitle}
