@@ -68,8 +68,6 @@ class FormComponent extends React.Component {
   };
 
   submitHandler = event => {
-    event.preventDefault();
-
     this.setState({ redirect: "/editor" });
 
     console.log("YAML header: \n" + this.YAMLstateToString(this.state));

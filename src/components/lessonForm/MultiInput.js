@@ -4,6 +4,7 @@ class MultiInput extends React.Component {
   constructor(props) {
     super(props);
     this.myRef = React.createRef();
+    this.state = { test: false };
   }
 
   handleClick = event => {
@@ -12,8 +13,11 @@ class MultiInput extends React.Component {
       let temp = { [i]: [...this.props.inputArray, this.props.inputValue] };
       this.props.multiInputHandler(temp, event.target.name);
     }
-
-    this.myRef.current.focus();
+    if (!this.props.inputValue && !this.state.test) {
+      this.setState({ test: true });
+    } else {
+      this.setState({ test: false });
+    }
   };
 
   removeClickHandler = (name, value) => {
@@ -23,7 +27,6 @@ class MultiInput extends React.Component {
     tempArray.splice(index, 1);
     let temp = { [i]: tempArray };
     this.props.multiInputHandler(temp, name);
-    this.myRef.current.focus();
   };
 
   render() {
@@ -35,33 +38,43 @@ class MultiInput extends React.Component {
             <span className="requiredText"> {this.props.required}</span>
           </h3>
 
-          {this.props.autofocus ? (
-            <input
-              autoFocus
-              ref={this.myRef}
-              autoComplete="off"
-              type="text"
-              name={this.props.name}
-              placeholder={this.props.placeholder}
-              value={this.props.inputValue}
-              onChange={this.props.changeHandler}
-            />
+          {!this.props.inputArray.length > 0 || this.state.test === true ? (
+            this.props.autofocus ? (
+              <input
+                autoFocus
+                ref={this.myRef}
+                autoComplete="off"
+                type="text"
+                name={this.props.name}
+                placeholder={this.props.placeholder}
+                value={this.props.inputValue}
+                onChange={this.props.changeHandler}
+                onKeyUp={e => (e.key === "Enter" ? this.handleClick(e) : "")}
+                onBlur={e => this.handleClick(e)}
+              />
+            ) : (
+              <input
+                ref={this.myRef}
+                autoComplete="off"
+                type="text"
+                name={this.props.name}
+                placeholder={this.props.placeholder}
+                value={this.props.inputValue}
+                onChange={this.props.changeHandler}
+                onKeyUp={e => (e.key === "Enter" ? this.handleClick(e) : "")}
+                onBlur={e => this.handleClick(e)}
+              />
+            )
           ) : (
-            <input
-              ref={this.myRef}
-              autoComplete="off"
-              type="text"
-              name={this.props.name}
-              placeholder={this.props.placeholder}
-              value={this.props.inputValue}
-              onChange={this.props.changeHandler}
-            />
+            ""
           )}
+
           <div style={{ margin: "0.5rem" }}>
             {this.props.inputArray.map(element => (
               <button
                 id="removeNameButton"
                 style={{
+                  height: "2.5rem",
                   marginRight: "1rem",
                   backgroundColor: "white"
                 }}
@@ -77,14 +90,14 @@ class MultiInput extends React.Component {
           </div>
           {this.props.validateMessage ? (
             <div className="validateError">{this.props.validateMessage}</div>
-          ) : this.props.inputValue || this.props.inputArray.length > 0 ? (
+          ) : this.props.inputArray.length > 0 ? (
             <button
               name={this.props.name}
               type="button"
               className="ui mini button"
               onClick={e => this.handleClick(e)}
             >
-              Legge til flere?
+              Legge til
             </button>
           ) : (
             ""
