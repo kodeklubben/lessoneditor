@@ -16,13 +16,13 @@ class MultiInput extends React.Component {
     this.myRef.current.focus();
   };
 
-  removeClickHandler = event => {
-    let i = event.target.name + "List";
+  removeClickHandler = (name, value) => {
+    let i = name + "List";
     let tempArray = this.props.inputArray;
-    let index = this.props.inputArray.indexOf(event.target.value);
+    let index = this.props.inputArray.indexOf(value);
     tempArray.splice(index, 1);
     let temp = { [i]: tempArray };
-    this.props.multiInputHandler(temp, event.target.name);
+    this.props.multiInputHandler(temp, name);
     this.myRef.current.focus();
   };
 
@@ -60,13 +60,12 @@ class MultiInput extends React.Component {
           <div style={{ margin: "0.5rem" }}>
             {this.props.inputArray.map(element => (
               <button
-                style={{ marginRight: "2rem" }}
+                style={{ marginRight: "1rem" }}
                 type="button"
                 key={element}
-                name={this.props.name}
-                className="ui labeled button"
-                value={element}
-                onClick={event => this.removeClickHandler(event)}
+                onClick={() =>
+                  this.removeClickHandler(this.props.name, element)
+                }
               >
                 <i className="x icon"></i> {element}
               </button>
