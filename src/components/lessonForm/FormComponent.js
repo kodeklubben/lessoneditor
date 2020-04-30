@@ -27,37 +27,42 @@ class FormComponent extends React.Component {
     };
   }
 
-  YMLstateToString = state => {
+  YMLstateToString = ({ level, license, tags }) => {
     return (
       "level: " +
-      state.level +
-      (state.license ? "\nlicense: " + state.license : "") +
-      (state.tags.topic.length > 0 ||
-      state.tags.subject.length > 0 ||
-      state.tags.grade.length > 0
+      level +
+      (license ? "\nlicense: " + license : "") +
+      (tags.topic.length > 0 || tags.subject.length > 0 || tags.grade.length > 0
         ? "\ntags:\n    " +
-          (state.tags.topic.length > 0
-            ? "topic: [" + state.tags.topic + "]\n    "
+          (tags.topic.length > 0 ? "topic: [" + tags.topic + "]\n    " : "") +
+          (tags.subject.length > 0
+            ? "subject: [" + tags.subject + "]\n    "
             : "") +
-          (state.tags.subject.length > 0
-            ? "subject: [" + state.tags.subject + "]\n    "
-            : "") +
-          (state.tags.grade.length > 0
-            ? "grade: [" + state.tags.grade + "]"
-            : "")
+          (tags.grade.length > 0 ? "grade: [" + tags.grade + "]" : "")
         : "")
     );
   };
 
-  YAMLstateToString = state => {
+  YAMLstateToString = ({
+    title,
+    author,
+    authorList,
+    translator,
+    translatorList,
+    language
+  }) => {
     return (
       "---\ntitle: " +
-      state.title +
-      "\nauthor: " +
-      state.author +
-      (state.translator ? "\ntranslator: " + state.translator : "") +
+      title +
+      (authorList.length > 0
+        ? "\nauthor: " + authorList.join(" og ")
+        : "\nauthor: " + author) +
+      (translatorList.length > 0
+        ? "\ntranslator: " + translatorList.join(" og ")
+        : "") +
+      (translator ? "\ntranslator: " + translator : "") +
       "\nlanguage: " +
-      state.language +
+      language +
       "\n---"
     );
   };
