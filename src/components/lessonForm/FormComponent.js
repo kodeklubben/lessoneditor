@@ -32,13 +32,20 @@ class FormComponent extends React.Component {
       "level: " +
       state.level +
       (state.license ? "\nlicense: " + state.license : "") +
-      "\ntags:\n    topic: [" +
-      state.tags.topic +
-      "]\n    subject: [" +
-      state.tags.subject +
-      "]\n    grade: [" +
-      state.tags.grade +
-      "]"
+      (state.tags.topic.length > 0 ||
+      state.tags.subject.length > 0 ||
+      state.tags.grade.length > 0
+        ? "\ntags:\n    " +
+          (state.tags.topic.length > 0
+            ? "topic: [" + state.tags.topic + "]\n    "
+            : "") +
+          (state.tags.subject.length > 0
+            ? "subject: [" + state.tags.subject + "]\n    "
+            : "") +
+          (state.tags.grade.length > 0
+            ? "grade: [" + state.tags.grade + "]"
+            : "")
+        : "")
     );
   };
 
