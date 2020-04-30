@@ -50,7 +50,7 @@ const ControlPanel = props => {
         />
       </div>
       <div style={{ marginRight: "1.5rem" }} />
-      {/* <div className="row">
+      <div className="row">
         <div className="ui buttons">
           {undoRedo.map(element => (
             <CPButton
@@ -67,7 +67,7 @@ const ControlPanel = props => {
           ))}
         </div>
       </div>
-      <div style={{ marginRight: "4rem" }} /> */}
+      <div style={{ marginRight: "1.5rem" }} />
       <div className="row">
         <div className="ui buttons">
           {emphasis.map(element => (

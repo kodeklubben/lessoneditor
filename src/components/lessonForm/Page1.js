@@ -1,11 +1,12 @@
 import React from "react";
+import MultiInput from "./MultiInput";
 
 import { LANGUAGES, FORM_TEXT } from "./settingsFiles/languages/formpage_NO";
 
 const Page1 = props => {
   return (
     <React.Fragment>
-      <div className="ui form">
+      <form className="ui form">
         <div className="field">
           <label>
             <h3 className="formLabel">
@@ -24,6 +25,11 @@ const Page1 = props => {
           </label>
           <div className="validateError">{props.state.authorErr}</div>
         </div>
+        {/* <MultiInput
+          title={FORM_TEXT.AUTHOR.heading}
+          required="(obligatorisk)"
+          placeholder={FORM_TEXT.AUTHOR.placeholder}
+        /> */}
         <div className="field">
           <label>
             <h3 className="formLabel">{FORM_TEXT.TRANSLATOR.heading}</h3>
@@ -37,6 +43,11 @@ const Page1 = props => {
             />
           </label>
         </div>
+        {/* <MultiInput
+          title={FORM_TEXT.TRANSLATOR.heading}
+          required="(obligatorisk)"
+          placeholder={FORM_TEXT.TRANSLATOR.placeholder}
+        /> */}
         <div className="field">
           <label>
             <h3 className="formLabel">{FORM_TEXT.LANGUAGE.heading}</h3>
@@ -66,7 +77,7 @@ const Page1 = props => {
             />
           </label>
         </div>
-      </div>
+      </form>
     </React.Fragment>
   );
 };

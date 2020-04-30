@@ -71,7 +71,7 @@ const PageButtons = props => {
 
       <button
         className="ui button"
-        type="text"
+        type="button"
         onClick={() => onClickHandler(1)}
       >
         <i aria-hidden="true" className="" />
