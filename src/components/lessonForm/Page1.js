@@ -7,7 +7,7 @@ const Page1 = props => {
   return (
     <React.Fragment>
       <form className="ui form">
-        <div className="field">
+        {/* <div className="field">
           <label>
             <h3 className="formLabel">
               {FORM_TEXT.AUTHOR.heading}
@@ -24,13 +24,20 @@ const Page1 = props => {
             />
           </label>
           <div className="validateError">{props.state.authorErr}</div>
-        </div>
-        {/* <MultiInput
+        </div> */}
+        <MultiInput
+          changeHandler={props.changeHandler}
+          multiInputHandler={props.multiInputHandler}
+          name="author"
           title={FORM_TEXT.AUTHOR.heading}
+          inputArray={props.state.authorList}
+          inputValue={props.state.author}
+          validateMessage={props.state.err}
+          autofocus="autofocus"
           required="(obligatorisk)"
           placeholder={FORM_TEXT.AUTHOR.placeholder}
-        /> */}
-        <div className="field">
+        />
+        {/* <div className="field">
           <label>
             <h3 className="formLabel">{FORM_TEXT.TRANSLATOR.heading}</h3>
             <input
@@ -42,12 +49,16 @@ const Page1 = props => {
               onChange={props.changeHandler}
             />
           </label>
-        </div>
-        {/* <MultiInput
+        </div> */}
+        <MultiInput
+          changeHandler={props.changeHandler}
+          multiInputHandler={props.multiInputHandler}
+          name="translator"
           title={FORM_TEXT.TRANSLATOR.heading}
-          required="(obligatorisk)"
+          inputArray={props.state.translatorList}
+          inputValue={props.state.translator}
           placeholder={FORM_TEXT.TRANSLATOR.placeholder}
-        /> */}
+        />
         <div className="field">
           <label>
             <h3 className="formLabel">{FORM_TEXT.LANGUAGE.heading}</h3>

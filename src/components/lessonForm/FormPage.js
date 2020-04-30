@@ -13,7 +13,11 @@ const FormPage = props => {
       return (
         <div>
           <div className="ui segment formColor">
-            <Page1 changeHandler={props.changeHandler} state={props.state} />
+            <Page1
+              changeHandler={props.changeHandler}
+              multiInputHandler={props.multiInputHandler}
+              state={props.state}
+            />
           </div>
           <PageButtons
             prevTitle={NAV_BUTTONS.prev}
@@ -43,7 +47,6 @@ const FormPage = props => {
             prevValue="/"
             submitHandler={props.submitHandler}
             setPageNumber={props.setPageNumber}
-            err=""
             setErr={props.setErr}
             state={props.state}
           />

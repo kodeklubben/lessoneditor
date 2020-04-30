@@ -9,22 +9,18 @@ const PageButtons = props => {
   }
 
   const validate = () => {
-    let titleErr = "";
-    let authorErr = "";
+    let err = "";
 
-    if (!props.state.title) {
-      titleErr = VALIDATION_ERROR;
+    if (!props.state.title && props.err === "title") {
+      err = VALIDATION_ERROR;
     }
-    if (!props.state.author) {
-      authorErr = VALIDATION_ERROR;
+    if (!props.state.authorList.length > 0 && props.err === "author") {
+      if (props.state.author) return true;
+      err = VALIDATION_ERROR;
     }
 
-    if (titleErr && props.err === "title") {
-      props.setErr(titleErr, "");
-      return false;
-    }
-    if (authorErr && props.err === "author") {
-      props.setErr("", authorErr);
+    if (err) {
+      props.setErr(err);
       return false;
     }
 
@@ -32,7 +28,9 @@ const PageButtons = props => {
   };
 
   const onClickHandler = input => {
-    let notErr = validate();
+    if (input > 0) {
+      var notErr = validate();
+    }
 
     if (notErr && props.state.pageNumber === 3) {
       props.submitHandler(true);

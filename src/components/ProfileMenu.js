@@ -15,7 +15,10 @@ const ProfileMenu = props => {
         trigger={
           <div className="ui avatar image">
             {props.imageUrl ? (
-              <img src={props.imageUrl} alt="useImage"></img>
+              <div>
+                <img src={props.imageUrl} alt="useImage"></img>
+                <i className="angle down icon"></i>
+              </div>
             ) : (
               <div className="ui avatar image">
                 <i className="user icon"></i>
@@ -36,11 +39,13 @@ const ProfileMenu = props => {
           >
             <div className="ui ">
               {props.imageUrl ? (
-                <img
-                  className="ui circular centered image"
-                  src={props.imageUrl}
-                  alt="useImage"
-                ></img>
+                <div>
+                  <img
+                    className="ui circular centered image"
+                    src={props.imageUrl}
+                    alt="useImage"
+                  ></img>
+                </div>
               ) : (
                 <div className="ui avatar image">
                   <i className="user icon"></i>

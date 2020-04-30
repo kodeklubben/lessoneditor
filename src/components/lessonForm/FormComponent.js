@@ -12,10 +12,12 @@ class FormComponent extends React.Component {
     this.state = {
       course: COURSELIST[0].courseTitle,
       title: "",
-      titleErr: "",
+      err: "",
       author: "",
+      authorList: [],
       authorErr: "",
       translator: "",
+      translatorList: [],
       language: Object.keys(LANGUAGES[0]),
       level: 1,
       license: "CC BY-SA 4.0",
@@ -63,10 +65,17 @@ class FormComponent extends React.Component {
     // TODO: Send state-data to database
   };
 
-  changeHandler = (event, data) => {
+  changeHandler = event => {
     let nam = event.target.name;
     let val = event.target.value;
     this.setState({ [nam]: val });
+    if (this.state.author) this.setState({ err: "" });
+    if (this.state.title) this.setState({ err: "" });
+  };
+
+  multiInputHandler = (object, field) => {
+    this.setState(object);
+    this.setState({ [field]: "" });
   };
 
   checkboxHandler = event => {
@@ -97,15 +106,11 @@ class FormComponent extends React.Component {
 
   setPageNumber = input => {
     this.setState({ pageNumber: input });
+    this.setState({ err: "" });
   };
 
-  setErr = (titleErr, authorErr) => {
-    if (titleErr) {
-      this.setState({ titleErr });
-    }
-    if (authorErr) {
-      this.setState({ authorErr });
-    }
+  setErr = err => {
+    this.setState({ err });
   };
 
   render() {
@@ -114,6 +119,7 @@ class FormComponent extends React.Component {
         submitHandler={this.submitHandler}
         changeHandler={this.changeHandler}
         checkboxHandler={this.checkboxHandler}
+        multiInputHandler={this.multiInputHandler}
         selectDropdownHandler={this.selectDropdownHandler}
         setPageNumber={this.setPageNumber}
         setErr={this.setErr}

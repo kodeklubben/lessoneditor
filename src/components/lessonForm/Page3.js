@@ -49,7 +49,7 @@ for (let i = 0; i < topicLen; i++) {
 const Page3 = props => {
   return (
     <React.Fragment>
-      <div className="ui form">
+      <form className="ui form">
         <div id="titleField" className="field">
           <label>
             <h3 className="formLabel">
@@ -67,7 +67,7 @@ const Page3 = props => {
             onChange={props.changeHandler}
           />
 
-          <div className="validateError">{props.state.titleErr}</div>
+          <div className="validateError">{props.state.err}</div>
         </div>
         <div id="bigScreen" className="two fields">
           <div className="field">
@@ -141,7 +141,7 @@ const Page3 = props => {
             </div>
           </div>
         </div>
-      </div>
+      </form>
     </React.Fragment>
   );
 };
