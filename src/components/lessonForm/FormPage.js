@@ -22,8 +22,6 @@ const FormPage = props => {
           <PageButtons
             prevTitle={NAV_BUTTONS.prev}
             nextTitle={NAV_BUTTONS.next}
-            prevValue="/"
-            submitHandler={props.submitHandler}
             setPageNumber={props.setPageNumber}
             err="author"
             setErr={props.setErr}
@@ -44,8 +42,6 @@ const FormPage = props => {
           <PageButtons
             prevTitle={NAV_BUTTONS.prev}
             nextTitle={NAV_BUTTONS.next}
-            prevValue="/"
-            submitHandler={props.submitHandler}
             setPageNumber={props.setPageNumber}
             setErr={props.setErr}
             state={props.state}
@@ -67,7 +63,6 @@ const FormPage = props => {
           <PageButtons
             prevTitle={NAV_BUTTONS.prev}
             nextTitle={NAV_BUTTONS.next}
-            prevValue="/"
             submitHandler={props.submitHandler}
             setPageNumber={props.setPageNumber}
             err="title"

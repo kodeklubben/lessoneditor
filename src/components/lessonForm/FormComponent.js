@@ -68,7 +68,7 @@ class FormComponent extends React.Component {
   };
 
   submitHandler = event => {
-    // event.preventDefault();
+    event.preventDefault();
 
     this.setState({ redirect: "/editor" });
 

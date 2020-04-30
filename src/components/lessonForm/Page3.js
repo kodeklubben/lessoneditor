@@ -49,7 +49,7 @@ for (let i = 0; i < topicLen; i++) {
 const Page3 = props => {
   return (
     <React.Fragment>
-      <form className="ui form">
+      <div className="ui form">
         <div id="titleField" className="field">
           <label>
             <h3 className="formLabel">
@@ -141,7 +141,7 @@ const Page3 = props => {
             </div>
           </div>
         </div>
-      </form>
+      </div>
     </React.Fragment>
   );
 };
