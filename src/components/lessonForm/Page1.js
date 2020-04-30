@@ -65,7 +65,7 @@ const Page1 = props => {
             <select
               name="language"
               onChange={props.changeHandler}
-              className="ui fluid dropdown"
+              className="ui dropdown"
             >
               {LANGUAGES.map(element => (
                 <option key={Object.keys(element)} value={Object.keys(element)}>

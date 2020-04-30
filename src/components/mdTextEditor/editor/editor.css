@@ -2,7 +2,76 @@ select {
   cursor: pointer;
 }
 
-@media only screen and (max-width: 770px) {
+@media only screen and (max-height: 630px) {
+  .TextArea {
+    width: 100%;
+    height: 25rem !important;
+
+    max-height: 25rem !important;
+    outline: none;
+    /* margin-left: -1em;
+    margin-bottom: -1.2em;
+    margin-right: -2em !important; */
+    resize: none;
+    padding: 2em;
+    overflow: auto;
+    border-color: white;
+    touch-action: manipulation;
+  }
+
+  /* CSS for TextArea Buttons */
+
+  /* CSS for MDPreview */
+
+  .MDPreview {
+    width: 100%;
+    height: 10rem !important;
+
+    max-height: 10rem !important;
+    /* margin-right: -1em !important;
+    margin-bottom: -1.2em !important;
+    margin-left: -1em !important; */
+    background-color: white;
+    padding: 2em;
+    overflow: auto;
+    touch-action: manipulation;
+  }
+}
+
+@media only screen and (max-height: 890px) {
+  .TextArea {
+    width: 100%;
+    height: 30rem;
+
+    max-height: 30rem !important;
+    outline: none;
+    /* margin-left: -1em;
+    margin-bottom: -1.2em;
+    margin-right: -2em !important; */
+    resize: none;
+    padding: 2em;
+    overflow: auto;
+    border-color: white;
+    touch-action: manipulation;
+  }
+
+  /* CSS for TextArea Buttons */
+
+  /* CSS for MDPreview */
+
+  .MDPreview {
+    width: 100%;
+    height: 30rem;
+
+    max-height: 30rem !important;
+    /* margin-right: -1em !important;
+    margin-bottom: -1.2em !important;
+    margin-left: -1em !important; */
+    background-color: white;
+    padding: 2em;
+    overflow: auto;
+    touch-action: manipulation;
+  }
 }
 
 /* ControlPanel  */
@@ -45,8 +114,8 @@ select {
   }
   .TextArea {
     width: 210% !important;
-    height: 100%;
-    min-height: 30em !important;
+    height: 30rem;
+
     outline: none;
     margin-left: 0em !important;
     margin-bottom: -1.2em;
@@ -60,8 +129,8 @@ select {
 
   .MDPreview {
     width: 200%;
-    height: 100%;
-    min-height: 30em !important;
+    height: 30rem;
+
     margin-right: -1em !important;
     margin-bottom: -1.2em !important;
     margin-left: -1em !important;
@@ -89,7 +158,8 @@ select {
 
 #controlPanelContainer {
   max-height: 9rem;
-  padding-left: 1rem;
+
+  padding-left: 2rem;
   margin-bottom: -1rem;
   touch-action: manipulation;
 }
@@ -136,9 +206,9 @@ select {
 
 .TextArea {
   width: 100%;
-  height: 100%;
-  min-height: 35rem;
-  max-height: 45rem;
+  height: 50rem;
+
+  max-height: 50rem;
   outline: none;
   /* margin-left: -1em;
   margin-bottom: -1.2em;
@@ -156,12 +226,12 @@ select {
 
 .MDPreview {
   width: 100%;
-  height: 100%;
-  min-height: 35rem;
+  height: 50rem;
+
+  max-height: 50rem;
   /* margin-right: -1em !important;
   margin-bottom: -1.2em !important;
   margin-left: -1em !important; */
-  max-height: 45rem;
   background-color: white;
   padding: 2em;
   overflow: auto;

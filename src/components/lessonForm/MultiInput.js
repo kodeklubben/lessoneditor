@@ -3,7 +3,6 @@ import React from "react";
 class MultiInput extends React.Component {
   constructor(props) {
     super(props);
-
     this.myRef = React.createRef();
   }
 
@@ -13,6 +12,7 @@ class MultiInput extends React.Component {
       let temp = { [i]: [...this.props.inputArray, this.props.inputValue] };
       this.props.multiInputHandler(temp, event.target.name);
     }
+
     this.myRef.current.focus();
   };
 
@@ -60,7 +60,11 @@ class MultiInput extends React.Component {
           <div style={{ margin: "0.5rem" }}>
             {this.props.inputArray.map(element => (
               <button
-                style={{ marginRight: "1rem" }}
+                id="removeNameButton"
+                style={{
+                  marginRight: "1rem",
+                  backgroundColor: "white"
+                }}
                 type="button"
                 key={element}
                 onClick={() =>

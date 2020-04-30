@@ -13,6 +13,11 @@
   }
   #formPage {
     margin-top: 0rem !important;
+    overflow: hidden;
+  }
+  .ui.form {
+    height: 29rem !important;
+    overflow: hidden;
   }
 }
 
@@ -40,10 +45,16 @@
 /* form  */
 .ui.form {
   height: 35rem;
+  overflow: hidden;
+}
+
+#removeNameButton {
+  border-radius: 5px !important;
 }
 
 #formPage {
   margin-top: 5rem;
+  overflow: hidden;
 }
 
 .ui.segment.formColor {
@@ -55,7 +66,7 @@
 }
 
 #licenseField {
-  margin-top: 6rem;
+  margin-top: 4rem;
 }
 
 #titleField {

@@ -36,7 +36,7 @@ const ControlPanel = props => {
 
   return (
     <React.Fragment>
-      <div className="preview">
+      {/* <div className="preview">
         <CPButton
           bTitle={preview[0].bTitle}
           icon={preview[0].icon}
@@ -49,7 +49,7 @@ const ControlPanel = props => {
           shortcutKey={preview[0].shortcut}
         />
       </div>
-      <div style={{ marginRight: "1.5rem" }} />
+      <div style={{ marginRight: "1.5rem" }} /> */}
       <div className="row">
         <div className="ui buttons">
           {undoRedo.map(element => (

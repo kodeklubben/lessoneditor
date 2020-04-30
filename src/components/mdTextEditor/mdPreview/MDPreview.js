@@ -5,6 +5,7 @@ const MDPreview = props => {
   return (
     <div
       className="MDPreview"
+      id="mdpreview"
       dangerouslySetInnerHTML={{ __html: props.parseMD }}
     />
   );
