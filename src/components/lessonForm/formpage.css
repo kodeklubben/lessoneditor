@@ -18,6 +18,7 @@
   .ui.form {
     height: 29rem !important;
     overflow: hidden;
+    padding: 0px !important;
   }
 }
 
@@ -46,6 +47,7 @@
 .ui.form {
   height: 35rem;
   overflow: hidden;
+  padding: 5rem;
 }
 
 #removeNameButton {
