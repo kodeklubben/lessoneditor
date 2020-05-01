@@ -56,7 +56,11 @@ class Buttons extends React.Component {
           trigger={
             this.props.icon ? (
               <Button
-                style={{ backgroundColor: "#b1daae", marginBottom: "0.1rem" }}
+                style={{
+                  backgroundColor: "#b1daae",
+                  marginBottom: "0.1rem",
+                  margin: "-0.7rem"
+                }}
                 onTouchStart={this.handleButtonPress}
                 onTouchEnd={this.handleClose}
                 onClick={() =>

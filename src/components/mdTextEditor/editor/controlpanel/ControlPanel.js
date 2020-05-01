@@ -36,7 +36,7 @@ const ControlPanel = props => {
 
   return (
     <React.Fragment>
-      {/* <div className="preview">
+      <div className="preview">
         <CPButton
           bTitle={preview[0].bTitle}
           icon={preview[0].icon}
@@ -49,9 +49,9 @@ const ControlPanel = props => {
           shortcutKey={preview[0].shortcut}
         />
       </div>
-      <div style={{ marginRight: "1.5rem" }} /> */}
+      <div style={{ marginRight: "1.5rem" }} />
       <div className="row">
-        <div className="ui buttons">
+        <div id="undoRedo" className="ui buttons">
           {undoRedo.map(element => (
             <CPButton
               bTitle={element.bTitle}
@@ -69,7 +69,7 @@ const ControlPanel = props => {
       </div>
       <div style={{ marginRight: "1.5rem" }} />
       <div className="row">
-        <div className="ui buttons">
+        <div id="emphasis" className="ui buttons">
           {emphasis.map(element => (
             <CPButton
               bTitle={element.bTitle}
@@ -87,7 +87,7 @@ const ControlPanel = props => {
       </div>
       <div style={{ marginRight: "1.5rem" }} />
       <div className="row">
-        <div className="ui buttons">
+        <div id="lists" className="ui buttons">
           {lists.map(element => (
             <CPButton
               bTitle={element.bTitle}
@@ -104,8 +104,8 @@ const ControlPanel = props => {
         </div>
       </div>
       {/* <div style={{ marginRight: "4rem" }} /> */}
-      {/* <div className="row">
-        <div className="ui buttons">
+      <div className="row">
+        <div id="image" className="ui buttons">
           {image.map(element => (
             <CPButton
               bTitle={element.bTitle}
@@ -121,7 +121,7 @@ const ControlPanel = props => {
           ))}
         </div>
       </div>
-      <div style={{ marginRight: "4rem" }} /> */}
+      <div style={{ marginRight: "4rem" }} />
     </React.Fragment>
   );
 };

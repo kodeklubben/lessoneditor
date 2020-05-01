@@ -978,7 +978,8 @@ class Editor extends React.Component {
       }
     };
 
-    return this.props.isSignedIn ? (
+    // return this.props.isSignedIn ? (
+    return (
       <div id="editor" style={{ overflow: "hidden" }} className="ui grid">
         <div className="right aligned row">
           <div id="profileMenu" className="right floated three wide column">
@@ -992,11 +993,7 @@ class Editor extends React.Component {
           className="ui segment"
         >
           <div className="ui two column grid">
-            <div
-              id="controlPanelContainer"
-              style={{ backgroundColor: "#b1daae", borderRadius: "5px" }}
-              className="row"
-            >
+            <div id="controlPanelContainer" className="row">
               <ControlPanel
                 handleButtonClick={handleButtonClick}
                 nextTitle={NAV_BUTTONS.submit}
@@ -1027,7 +1024,7 @@ class Editor extends React.Component {
             </div>
           </div>
         </div>
-        <div className="row">
+        <div id="editorPagebuttons" className="row">
           <PageButtons
             prevTitle={NAV_BUTTONS.prev}
             nextTitle={NAV_BUTTONS.submit}
@@ -1039,9 +1036,10 @@ class Editor extends React.Component {
           />
         </div>
       </div>
-    ) : (
-      <Redirect to="/" />
     );
+    // ) : (
+    //   <Redirect to="/" />
+    // );
   }
 }
 

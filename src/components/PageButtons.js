@@ -51,7 +51,7 @@ const PageButtons = props => {
     <React.Fragment>
       {props.state.pageNumber === 1 || props.state.isEditor ? (
         <Link to="/">
-          <button className="ui button" type="button">
+          <button id="backButton" className="ui button" type="button">
             <i aria-hidden="true" className="" />
             {props.prevTitle}
           </button>
