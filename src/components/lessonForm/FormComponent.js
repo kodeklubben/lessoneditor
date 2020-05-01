@@ -54,13 +54,18 @@ class FormComponent extends React.Component {
     return (
       "---\ntitle: " +
       title +
-      (authorList.length > 0
+      (authorList.length > 0 && author
+        ? "\nauthor: " + authorList.join(" og ") + " og " + author
+        : authorList.length > 0
         ? "\nauthor: " + authorList.join(" og ")
         : "\nauthor: " + author) +
-      (translatorList.length > 0
+      (translatorList.length > 0 && translator
+        ? "\ntranslator: " + translatorList.join(" og ") + " og " + translator
+        : translatorList.length > 0
         ? "\ntranslator: " + translatorList.join(" og ")
+        : translator
+        ? "\ntranslator: " + translator
         : "") +
-      (translator ? "\ntranslator: " + translator : "") +
       "\nlanguage: " +
       language +
       "\n---"

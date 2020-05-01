@@ -24,44 +24,31 @@
 
 /* MultiInput */
 
-.row.multiInputContainer {
+#multiInputContainer {
   margin-bottom: 1rem;
 }
 
+#addNameButtonChild {
+  pointer-events: none;
+}
+
 .inputField {
+  width: 100%;
+  max-width: 100% !important;
   display: flex;
   flex-direction: row;
-  background-color: white;
-  border-style: solid;
-  border-width: 0.5px;
-  border-radius: 5px;
-  border-color: rgb(216, 216, 216);
+  flex-wrap: initial;
+
   height: 2.7rem;
 }
 
 .formInput {
-  height: 2.5rem;
-  width: 85% !important;
-  border-color: white !important;
-  outline: none;
+  min-width: 40% !important;
   position: relative;
-
-  padding: 0px !important;
-  top: 0.1rem;
-  left: 1rem;
-  float: left;
 }
-/* 
-.removeNameButtons {
-  margin: 0.5rem;
-  width: 70%;
-  height: 2.7rem;
-  position: relative;
-  top: 0rem;
-  left: -0.5rem;
-} */
 
 #removeNameButton {
+  position: relative;
   z-index: 1;
   min-width: max-content;
   align-content: flex-start;
@@ -69,10 +56,7 @@
 }
 
 #addNameButton {
-  z-index: 2;
-  position: relative;
-  top: -2.4rem;
-  left: 56.9rem;
+  position: static;
 }
 
 /* ############################# */
