@@ -4,20 +4,20 @@ class MultiInput extends React.Component {
   constructor(props) {
     super(props);
     this.myRef = React.createRef();
-    this.state = { test: false };
   }
 
   handleClick = event => {
     if (this.props.inputValue) {
+      this.inputTextLength += this.props.inputValue.length;
       let i = event.target.name + "List";
       let temp = { [i]: [...this.props.inputArray, this.props.inputValue] };
       this.props.multiInputHandler(temp, event.target.name);
     }
-    if (!this.props.inputValue && !this.state.test) {
-      this.setState({ test: true });
-    } else {
-      this.setState({ test: false });
-    }
+
+    this.inputOrder += 1;
+    this.removeNameButtonOrder += 1;
+
+    if (this.myRef.current) this.myRef.current.focus();
   };
 
   removeClickHandler = (name, value) => {
@@ -27,22 +27,31 @@ class MultiInput extends React.Component {
     tempArray.splice(index, 1);
     let temp = { [i]: tempArray };
     this.props.multiInputHandler(temp, name);
+
+    this.inputOrder -= 1;
+    this.removeNameButtonOrder -= 1;
+
+    if (this.myRef.current) this.myRef.current.focus();
   };
+
+  inputOrder = 1;
+  removeNameButtonOrder = 0;
 
   render() {
     return (
       <React.Fragment>
-        <div style={{ marginBottom: "1rem" }} className="row">
+        <div className="row multiInputContainer">
           <h3 className="formLabel">
             {this.props.title}
             <span className="requiredText"> {this.props.required}</span>
           </h3>
-
-          {!this.props.inputArray.length > 0 || this.state.test === true ? (
-            this.props.autofocus ? (
+          <div className="inputField">
+            {this.props.autofocus ? (
               <input
-                autoFocus
+                className="formInput"
+                style={{ order: this.inputOrder }}
                 ref={this.myRef}
+                autoFocus
                 autoComplete="off"
                 type="text"
                 name={this.props.name}
@@ -54,6 +63,8 @@ class MultiInput extends React.Component {
               />
             ) : (
               <input
+                className="formInput"
+                style={{ order: this.inputOrder }}
                 ref={this.myRef}
                 autoComplete="off"
                 type="text"
@@ -64,20 +75,12 @@ class MultiInput extends React.Component {
                 onKeyUp={e => (e.key === "Enter" ? this.handleClick(e) : "")}
                 onBlur={e => this.handleClick(e)}
               />
-            )
-          ) : (
-            ""
-          )}
-
-          <div style={{ margin: "0.5rem" }}>
+            )}
+            {/* <div className="removeNameButtons"> */}
             {this.props.inputArray.map(element => (
               <button
+                style={{ order: this.removeNameButtonOrder }}
                 id="removeNameButton"
-                style={{
-                  height: "2.5rem",
-                  marginRight: "1rem",
-                  backgroundColor: "white"
-                }}
                 type="button"
                 key={element}
                 onClick={() =>
@@ -87,11 +90,13 @@ class MultiInput extends React.Component {
                 <i className="x icon"></i> {element}
               </button>
             ))}
+            {/* </div> */}
           </div>
           {this.props.validateMessage ? (
             <div className="validateError">{this.props.validateMessage}</div>
-          ) : this.props.inputArray.length > 0 ? (
+          ) : (
             <button
+              id="addNameButton"
               name={this.props.name}
               type="button"
               className="ui mini button"
@@ -99,8 +104,6 @@ class MultiInput extends React.Component {
             >
               Legge til
             </button>
-          ) : (
-            ""
           )}
         </div>
       </React.Fragment>

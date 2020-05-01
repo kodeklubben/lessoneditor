@@ -22,6 +22,61 @@
   }
 }
 
+/* MultiInput */
+
+.row.multiInputContainer {
+  margin-bottom: 1rem;
+}
+
+.inputField {
+  display: flex;
+  flex-direction: row;
+  background-color: white;
+  border-style: solid;
+  border-width: 0.5px;
+  border-radius: 5px;
+  border-color: rgb(216, 216, 216);
+  height: 2.7rem;
+}
+
+.formInput {
+  height: 2.5rem;
+  width: 85% !important;
+  border-color: white !important;
+  outline: none;
+  position: relative;
+
+  padding: 0px !important;
+  top: 0.1rem;
+  left: 1rem;
+  float: left;
+}
+/* 
+.removeNameButtons {
+  margin: 0.5rem;
+  width: 70%;
+  height: 2.7rem;
+  position: relative;
+  top: 0rem;
+  left: -0.5rem;
+} */
+
+#removeNameButton {
+  z-index: 1;
+  min-width: max-content;
+  align-content: flex-start;
+  background-color: white;
+}
+
+#addNameButton {
+  z-index: 2;
+  position: relative;
+  top: -2.4rem;
+  left: 56.9rem;
+}
+
+/* ############################# */
+
 .validateError {
   color: red;
 }
@@ -79,7 +134,7 @@
   margin: 0.5rem;
 }
 
-/* Checkbox segment height */
+/* Checkbox segments height */
 
 #subjectCheckbox {
   height: 16rem !important;
