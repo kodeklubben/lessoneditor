@@ -272,7 +272,10 @@ class Editor extends React.Component {
       if (event.key === "Enter") {
         charCounter = 0;
         setUndo();
-        if (!isButtonOn[listButtonValues["bTitle"]]) {
+        if (
+          !isButtonOn[listButtonValues["bTitle"]] &&
+          listButtonValues["bTitle"]
+        ) {
           event.preventDefault();
           if (
             inputText.slice(
@@ -302,6 +305,7 @@ class Editor extends React.Component {
             return;
           }
           if (listButtonValues["bTitle"] === "listOl") {
+            alert("4");
             inputText =
               inputText.slice(0, cursorPositionStart) +
               "\n\n" +
@@ -316,6 +320,7 @@ class Editor extends React.Component {
             orderedListIndex++;
             return;
           }
+          alert("5");
           inputText =
             inputText.slice(0, cursorPositionStart) +
             "\n\n" +
@@ -683,6 +688,7 @@ class Editor extends React.Component {
         }
         isButtonOn[bTitle] = false;
         this.setState({ buttonValues: isButtonOn });
+
         inputText =
           inputText.slice(0, cursorPositionStart) +
           output +

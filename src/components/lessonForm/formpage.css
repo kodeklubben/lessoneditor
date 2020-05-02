@@ -37,25 +37,37 @@
   max-width: 100% !important;
   display: flex;
   flex-direction: row;
-  flex-wrap: initial;
-
   height: 2.7rem;
 }
 
-.formInput {
-  min-width: 40% !important;
+.inputField input {
   position: relative;
+  width: 100%;
+}
+
+.x.icon {
+  color: rgb(156, 156, 156);
+}
+
+#formInput {
+  position: static;
 }
 
 #removeNameButton {
-  position: relative;
+  border-style: none !important;
   z-index: 1;
+  display: flex;
+  align-self: center;
+  align-items: center;
+  justify-content: center;
   min-width: max-content;
-  align-content: flex-start;
-  background-color: white;
+  border-style: solid;
+  border-color: rgb(160, 160, 160);
+  border-width: 1px;
 }
 
 #addNameButton {
+  z-index: 1;
   position: static;
 }
 
