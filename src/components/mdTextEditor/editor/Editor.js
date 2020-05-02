@@ -688,7 +688,6 @@ class Editor extends React.Component {
         }
         isButtonOn[bTitle] = false;
         this.setState({ buttonValues: isButtonOn });
-
         inputText =
           inputText.slice(0, cursorPositionStart) +
           output +
