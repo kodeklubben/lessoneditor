@@ -1,12 +1,13 @@
 import React from "react";
+import MultiInput from "./MultiInput";
 
 import { LANGUAGES, FORM_TEXT } from "./settingsFiles/languages/formpage_NO";
 
 const Page1 = props => {
   return (
     <React.Fragment>
-      <div className="ui form">
-        <div className="field">
+      <form className="ui form">
+        {/* <div className="field">
           <label>
             <h3 className="formLabel">
               {FORM_TEXT.AUTHOR.heading}
@@ -23,13 +24,22 @@ const Page1 = props => {
             />
           </label>
           <div className="validateError">{props.state.authorErr}</div>
-        </div>
-        <div className="field">
+        </div> */}
+        <MultiInput
+          changeHandler={props.changeHandler}
+          multiInputHandler={props.multiInputHandler}
+          name="author"
+          title={FORM_TEXT.AUTHOR.heading}
+          inputArray={props.state.authorList}
+          inputValue={props.state.author}
+          validateMessage={props.state.err}
+          autofocus="autofocus"
+          required="(obligatorisk)"
+          placeholder={FORM_TEXT.AUTHOR.placeholder}
+        />
+        {/* <div className="field">
           <label>
-            <h3 className="formLabel">
-              {FORM_TEXT.TRANSLATOR.heading}
-              <span className="optionalText"> (valgfritt)</span>
-            </h3>
+            <h3 className="formLabel">{FORM_TEXT.TRANSLATOR.heading}</h3>
             <input
               autoComplete="off"
               type="text"
@@ -39,14 +49,23 @@ const Page1 = props => {
               onChange={props.changeHandler}
             />
           </label>
-        </div>
+        </div> */}
+        <MultiInput
+          changeHandler={props.changeHandler}
+          multiInputHandler={props.multiInputHandler}
+          name="translator"
+          title={FORM_TEXT.TRANSLATOR.heading}
+          inputArray={props.state.translatorList}
+          inputValue={props.state.translator}
+          placeholder={FORM_TEXT.TRANSLATOR.placeholder}
+        />
         <div className="field">
           <label>
             <h3 className="formLabel">{FORM_TEXT.LANGUAGE.heading}</h3>
             <select
               name="language"
               onChange={props.changeHandler}
-              className="ui fluid dropdown"
+              className="ui dropdown"
             >
               {LANGUAGES.map(element => (
                 <option key={Object.keys(element)} value={Object.keys(element)}>
@@ -58,10 +77,7 @@ const Page1 = props => {
         </div>
         <div id="licenseField" className="field">
           <label>
-            <h3 className="formLabel">
-              {FORM_TEXT.LICENSE.heading}
-              <span className="optionalText"> (valgfritt)</span>
-            </h3>
+            <h3 className="formLabel">{FORM_TEXT.LICENSE.heading}</h3>
             <input
               autoComplete="off"
               type="text"
@@ -72,7 +88,7 @@ const Page1 = props => {
             />
           </label>
         </div>
-      </div>
+      </form>
     </React.Fragment>
   );
 };

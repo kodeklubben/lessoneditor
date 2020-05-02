@@ -9,33 +9,35 @@ const PageButtons = props => {
   }
 
   const validate = () => {
-    let titleErr = "";
-    let authorErr = "";
+    let err = "";
 
-    if (!props.state.title) {
-      titleErr = VALIDATION_ERROR;
+    if (!props.state.title && props.err === "title") {
+      err = VALIDATION_ERROR;
     }
-    if (!props.state.author) {
-      authorErr = VALIDATION_ERROR;
+    if (!props.state.authorList.length > 0 && props.err === "author") {
+      if (props.state.author) return true;
+      err = VALIDATION_ERROR;
     }
 
-    if (titleErr && props.err === "title") {
-      props.setErr(titleErr, "");
-      return false;
-    }
-    if (authorErr && props.err === "author") {
-      props.setErr("", authorErr);
+    if (err) {
+      props.setErr(err);
       return false;
     }
 
     return true;
   };
 
-  const onClickHandler = (input, event) => {
-    let notErr = validate();
+  const onClickHandler = input => {
+    if (input > 0) {
+      var notErr = validate();
+    }
 
     if (notErr && props.state.pageNumber === 3) {
-      props.submitHandler(event);
+      props.submitHandler(true);
+      return;
+    }
+    if (notErr && props.state.isEditor) {
+      props.submitHandler(true);
       return;
     }
     if (notErr && props.state.isEditor) {
@@ -53,7 +55,7 @@ const PageButtons = props => {
     <React.Fragment>
       {props.state.pageNumber === 1 || props.state.isEditor ? (
         <Link to="/">
-          <button className="ui button" type="button">
+          <button id="backButton" className="ui button" type="button">
             <i aria-hidden="true" className="" />
             {props.prevTitle}
           </button>
@@ -72,7 +74,7 @@ const PageButtons = props => {
       <button
         className="ui button"
         type="button"
-        onClick={event => onClickHandler(1, event)}
+        onClick={() => onClickHandler(1)}
       >
         <i aria-hidden="true" className="" />
         {props.nextTitle}

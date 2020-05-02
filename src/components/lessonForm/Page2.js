@@ -9,7 +9,7 @@ import { FORM_TEXT } from "./settingsFiles/languages/formpage_NO";
 const Page2 = props => {
   return (
     <React.Fragment>
-      <div className="ui form">
+      <form className="ui form">
         <div className="field">
           <label>
             <h3 className="formLabel">{FORM_TEXT.COURSE.heading}</h3>
@@ -54,7 +54,7 @@ const Page2 = props => {
               className="ui segment"
             >
               <div className="ui grid">
-                <div className="four wide column">
+                <div className="stackable column">
                   <YMLtagsGrade checkboxHandler={props.checkboxHandler} />
                 </div>
               </div>
@@ -62,7 +62,7 @@ const Page2 = props => {
           </div>
           <div className="field" />
         </div>
-      </div>
+      </form>
     </React.Fragment>
   );
 };

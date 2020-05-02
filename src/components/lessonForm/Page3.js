@@ -50,7 +50,7 @@ const Page3 = props => {
   return (
     <React.Fragment>
       <div className="ui form">
-        <div className="field">
+        <div id="titleField" className="field">
           <label>
             <h3 className="formLabel">
               {FORM_TEXT.TITLE.heading}
@@ -67,16 +67,22 @@ const Page3 = props => {
             onChange={props.changeHandler}
           />
 
-          <div className="validateError">{props.state.titleErr}</div>
+          <div className="validateError">{props.state.err}</div>
         </div>
         <div id="bigScreen" className="two fields">
           <div className="field">
             <label>
               <h3 className="formLabel">{YML_TEXT.subject}</h3>
             </label>
-            <div id="subjectCheckbox" className="ui segment">
+            <div
+              id="subjectCheckbox"
+              style={{ marginTop: "0px" }}
+              className="ui segment"
+            >
               <div className="ui grid">
-                <YMLtagsSubject checkboxHandler={props.checkboxHandler} />
+                <div className="stackable two column row">
+                  <YMLtagsSubject checkboxHandler={props.checkboxHandler} />
+                </div>
               </div>
             </div>
           </div>
@@ -85,9 +91,13 @@ const Page3 = props => {
             <label>
               <h3 className="formLabel">{YML_TEXT.topic}</h3>
             </label>
-            <div id="topicCheckbox" className="ui segment">
+            <div
+              id="topicCheckbox"
+              style={{ marginTop: "0px" }}
+              className="ui segment"
+            >
               <div className="ui grid">
-                <div className="four wide column">
+                <div className="stackable two column row">
                   <YMLtagsTopic checkboxHandler={props.checkboxHandler} />
                 </div>
               </div>

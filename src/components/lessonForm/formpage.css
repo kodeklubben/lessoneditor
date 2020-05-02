@@ -11,7 +11,55 @@
   #bigScreen {
     display: none;
   }
+  #formPage {
+    margin-top: 0rem !important;
+    overflow: hidden;
+  }
+  .ui.form {
+    height: 29rem !important;
+    overflow: hidden;
+    padding: 0px !important;
+  }
 }
+
+/* MultiInput */
+
+#multiInputContainer {
+  margin-bottom: 1rem;
+}
+
+#addNameButtonChild {
+  pointer-events: none;
+}
+
+.inputField {
+  width: 100%;
+  max-width: 100% !important;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: initial;
+
+  height: 2.7rem;
+}
+
+.formInput {
+  min-width: 40% !important;
+  position: relative;
+}
+
+#removeNameButton {
+  position: relative;
+  z-index: 1;
+  min-width: max-content;
+  align-content: flex-start;
+  background-color: white;
+}
+
+#addNameButton {
+  position: static;
+}
+
+/* ############################# */
 
 .validateError {
   color: red;
@@ -19,10 +67,6 @@
 
 .requiredText {
   color: #717171;
-}
-
-.optionalText {
-  color: rgb(182, 182, 182);
 }
 
 .formLabel {
@@ -40,11 +84,22 @@
 
 /* form  */
 .ui.form {
-  height: 31rem;
+  height: 35rem;
+  overflow: hidden;
+  padding: 5rem;
 }
 
-#formBorder {
+#removeNameButton {
+  border-radius: 5px !important;
+}
+
+#formPage {
   margin-top: 5rem;
+  overflow: hidden;
+}
+
+.ui.segment.formColor {
+  background-color: #eef7ee;
 }
 
 .field {
@@ -52,17 +107,25 @@
 }
 
 #licenseField {
-  margin-top: 8rem;
+  margin-top: 4rem;
 }
 
-/* Checkbox segment height */
+#titleField {
+  margin-bottom: 4rem !important;
+}
+
+.ui.checkbox {
+  margin: 0.5rem;
+}
+
+/* Checkbox segments height */
 
 #subjectCheckbox {
-  height: 20rem !important;
+  height: 16rem !important;
 }
 #levelCheckbox {
-  height: 15rem !important;
+  height: 14rem !important;
 }
 #topicCheckbox {
-  height: 20rem !important;
+  height: 16rem !important;
 }

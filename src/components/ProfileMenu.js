@@ -3,6 +3,9 @@ import { connect } from "react-redux";
 import { Popup } from "semantic-ui-react";
 import GoogleAuth from "./GoogleAuth";
 
+import { Link } from "react-router-dom";
+
+
 const ProfileMenu = props => {
   return (
     <React.Fragment>
@@ -35,11 +38,15 @@ const ProfileMenu = props => {
           >
             <div className="ui ">
               {props.imageUrl ? (
-                <img
-                  className="ui circular centered image"
-                  src={props.imageUrl}
-                  alt="useImage"
-                ></img>
+
+                <div>
+                  <img
+                    className="ui circular centered image"
+                    src={props.imageUrl}
+                    alt="useImage"
+                  ></img>
+                </div>
+
               ) : (
                 <div className="ui avatar image">
                   <i className="user icon"></i>
@@ -49,6 +56,11 @@ const ProfileMenu = props => {
             <div style={{ marginTop: "1rem" }} />
             <h2>{props.firstName + " " + props.lastName}</h2>
             <p style={{ marginTop: "-1rem" }}>{props.email}</p>
+            <Link to="/myPage">
+              <h4 style={{ color: "black", textDecoration: "underline" }}>
+                Min side
+              </h4>
+            </Link>
             <div style={{ marginTop: "3rem" }} />
             <GoogleAuth />
           </div>

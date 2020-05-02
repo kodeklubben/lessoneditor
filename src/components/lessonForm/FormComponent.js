@@ -12,10 +12,12 @@ class FormComponent extends React.Component {
     this.state = {
       course: COURSELIST[0].courseTitle,
       title: "",
-      titleErr: "",
+      err: "",
       author: "",
+      authorList: [],
       authorErr: "",
       translator: "",
+      translatorList: [],
       language: Object.keys(LANGUAGES[0]),
       level: 1,
       license: "CC BY-SA 4.0",
@@ -25,37 +27,52 @@ class FormComponent extends React.Component {
     };
   }
 
-  YMLstateToString = state => {
+  YMLstateToString = ({ level, license, tags }) => {
     return (
       "level: " +
-      state.level +
-      (state.license ? "\nlicense: " + state.license : "") +
-      "\ntags:\n    topic: [" +
-      state.tags.topic +
-      "]\n    subject: [" +
-      state.tags.subject +
-      "]\n    grade: [" +
-      state.tags.grade +
-      "]"
+      level +
+      (license ? "\nlicense: " + license : "") +
+      (tags.topic.length > 0 || tags.subject.length > 0 || tags.grade.length > 0
+        ? "\ntags:\n    " +
+          (tags.topic.length > 0 ? "topic: [" + tags.topic + "]\n    " : "") +
+          (tags.subject.length > 0
+            ? "subject: [" + tags.subject + "]\n    "
+            : "") +
+          (tags.grade.length > 0 ? "grade: [" + tags.grade + "]" : "")
+        : "")
     );
   };
 
-  YAMLstateToString = state => {
+  YAMLstateToString = ({
+    title,
+    author,
+    authorList,
+    translator,
+    translatorList,
+    language
+  }) => {
     return (
       "---\ntitle: " +
-      state.title +
-      "\nauthor: " +
-      state.author +
-      (state.translator ? "\ntranslator: " + state.translator : "") +
+      title +
+      (authorList.length > 0 && author
+        ? "\nauthor: " + authorList.join(" og ") + " og " + author
+        : authorList.length > 0
+        ? "\nauthor: " + authorList.join(" og ")
+        : "\nauthor: " + author) +
+      (translatorList.length > 0 && translator
+        ? "\ntranslator: " + translatorList.join(" og ") + " og " + translator
+        : translatorList.length > 0
+        ? "\ntranslator: " + translatorList.join(" og ")
+        : translator
+        ? "\ntranslator: " + translator
+        : "") +
       "\nlanguage: " +
-      state.language +
+      language +
       "\n---"
     );
   };
 
   submitHandler = event => {
-    // event.preventDefault();
-
     this.setState({ redirect: "/editor" });
 
     console.log("YAML header: \n" + this.YAMLstateToString(this.state));
@@ -63,10 +80,17 @@ class FormComponent extends React.Component {
     // TODO: Send state-data to database
   };
 
-  changeHandler = (event, data) => {
+  changeHandler = event => {
     let nam = event.target.name;
     let val = event.target.value;
     this.setState({ [nam]: val });
+    if (this.state.author) this.setState({ err: "" });
+    if (this.state.title) this.setState({ err: "" });
+  };
+
+  multiInputHandler = (object, field) => {
+    this.setState(object);
+    this.setState({ [field]: "" });
   };
 
   checkboxHandler = event => {
@@ -97,30 +121,25 @@ class FormComponent extends React.Component {
 
   setPageNumber = input => {
     this.setState({ pageNumber: input });
+    this.setState({ err: "" });
   };
 
-  setErr = (titleErr, authorErr) => {
-    if (titleErr) {
-      this.setState({ titleErr });
-    }
-    if (authorErr) {
-      this.setState({ authorErr });
-    }
+  setErr = err => {
+    this.setState({ err });
   };
 
   render() {
     return this.props.isSignedIn ? (
-      <div className="">
-        <FormPage
-          submitHandler={this.submitHandler}
-          changeHandler={this.changeHandler}
-          checkboxHandler={this.checkboxHandler}
-          selectDropdownHandler={this.selectDropdownHandler}
-          setPageNumber={this.setPageNumber}
-          setErr={this.setErr}
-          state={this.state}
-        />
-      </div>
+      <FormPage
+        submitHandler={this.submitHandler}
+        changeHandler={this.changeHandler}
+        checkboxHandler={this.checkboxHandler}
+        multiInputHandler={this.multiInputHandler}
+        selectDropdownHandler={this.selectDropdownHandler}
+        setPageNumber={this.setPageNumber}
+        setErr={this.setErr}
+        state={this.state}
+      />
     ) : (
       <Redirect to="/" />
     );

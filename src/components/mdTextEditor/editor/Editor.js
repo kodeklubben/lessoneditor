@@ -8,6 +8,7 @@ import MDTextArea from "./MDTextArea";
 import MDPreview from "../mdPreview/MDPreview";
 import { mdParser } from "../../../utils/mdParser";
 import ControlPanel from "./controlpanel/ControlPanel";
+import ProfileMenu from "../../ProfileMenu";
 import ImagePopup from "../ImagePopup";
 import PageButtons from "../../PageButtons";
 import {
@@ -90,6 +91,9 @@ var autoSaveMessage = <br />;
 // placeholder tag for picture-upload popup
 var imagePopup = <br />;
 
+var textstyle = "";
+var mdstyle = "";
+
 // ___________________
 
 class Editor extends React.Component {
@@ -135,7 +139,7 @@ class Editor extends React.Component {
   render() {
     // Submithandler
     const submitHandler = event => {
-      event.preventDefault();
+      // event.preventDefault();
 
       console.log("text submitted");
 
@@ -679,13 +683,13 @@ class Editor extends React.Component {
         }
         isButtonOn[bTitle] = false;
         this.setState({ buttonValues: isButtonOn });
-        setUndo();
         inputText =
           inputText.slice(0, cursorPositionStart) +
           output +
           inputText.slice(cursorPositionStart);
         this.props.addText(inputText);
         this.props.parseMD(mdParser(inputText));
+        setUndo();
         setCursorPosition(
           cursorPositionStart + cursorIntON,
           cursorPositionStart + cursorIntON
@@ -730,6 +734,7 @@ class Editor extends React.Component {
     // Make keyboard shortcuts with React Hotkeys
     // config in ./settingsFiles/buttonConfig.js
     const keyMap = {
+      PREVIEW: KEY.preview.join(""),
       BOLD: KEY.bold.join(""),
       ITALIC: KEY.italic.join(""),
       HEADING: KEY.heading.join(""),
@@ -759,6 +764,9 @@ class Editor extends React.Component {
     // needs to be updated manually with same parameters as buttonConfig
     // SORRY FOR WET CODE AND MANUAL UPDATE. NEED HELP FIXING THIS
     const handlers = {
+      // preview button
+      PREVIEW: () => handlePreview(true),
+
       // emphasis
       BOLD: () =>
         handleButtonClick(
@@ -961,77 +969,129 @@ class Editor extends React.Component {
     const handlePreview = event => {
       if (event) {
         if (this.state.preview) {
+          textstyle = { display: "block", width: "200%" };
+          mdstyle = { display: "none", width: "0%" };
           this.setState({ preview: false });
-        } else {
+        } else if (!this.state.preview) {
+          textstyle = { display: "none", width: "0%" };
+          mdstyle = { display: "block", width: "200%" };
           this.setState({ preview: true });
         }
       }
     };
 
-    return this.props.isSignedIn ? (
-      this.state.preview ? (
-        <div className="ui grid">
-          <div className="row">
-            <div className="column">
-              <Button style={{}} onClick={() => handlePreview(true)}>
-                <Icon name="eye" />
-              </Button>
+    // return this.props.isSignedIn ? (
+    return this.state.preview ? (
+      <div id="editor" style={{ overflow: "hidden" }} className="ui grid">
+        <div className="right aligned row">
+          <div id="profileMenu" className="right floated three wide column">
+            <ProfileMenu />
+          </div>
+          <div className="column" />
+        </div>
+        <div
+          id="textEditorContainer"
+          style={{ backgroundColor: "#eef7ee" }}
+          className="ui segment"
+        >
+          <div className="ui two column grid">
+            <div id="controlPanelContainer" className="row">
+              <ControlPanel
+                handleButtonClick={handleButtonClick}
+                nextTitle={NAV_BUTTONS.submit}
+                prevValue="/createNewLesson"
+                nextValue="/endpage"
+                submitHandler={submitHandler}
+                handlePreview={handlePreview}
+              />
+            </div>
+            <div
+              style={{
+                display: "block",
+                width: "200%",
+                height: "5rem",
+                maxHeight: "5rem"
+              }}
+              id="MDPreview"
+              className="column"
+            >
+              <MDPreview />
             </div>
           </div>
-          <div
-            id="MDPreview"
-            style={{ display: "block" }}
-            className="eight wide column"
-          >
-            <MDPreview />
-          </div>
         </div>
-      ) : (
-        <div className="ui grid">
-          <div className="row">
-            <ControlPanel
-              handleButtonClick={handleButtonClick}
-              nextTitle={NAV_BUTTONS.submit}
-              prevValue="/createNewLesson"
-              nextValue="/endpage"
-              submitHandler={submitHandler}
-              handlePreview={handlePreview}
-            />
-          </div>
-          <div id="MDTextArea" className="eight wide column">
-            <MDTextArea
-              editorRef={this.editorRef}
-              onInputChange={handleChange}
-              handleButtonClick={handleButtonClick}
-              onTextareaKeyDown={onTextareaKeyDown}
-              onTextareaKeyUp={onTextareaKeyUp}
-              onTextareaMouseDown={onTextareaMouseDown}
-              onTextareaSelect={onTextareaSelect}
-              autoSaveMessage={autoSaveMessage}
-              handlers={handlers}
-              keyMap={keyMap}
-            />
-          </div>
-          {imagePopup}
-          <div id="MDPreview" className="eight wide column">
-            <MDPreview />
-          </div>
-          <div className="row">
-            <PageButtons
-              prevTitle={NAV_BUTTONS.prev}
-              nextTitle={NAV_BUTTONS.submit}
-              prevValue="/createNewLesson"
-              nextValue="/endpage"
-              setPageNumber={null}
-              submitHandler={submitHandler}
-              state={this.state}
-            />
-          </div>
+        <div id="editorPagebuttons" className="row">
+          <PageButtons
+            prevTitle={NAV_BUTTONS.prev}
+            nextTitle={NAV_BUTTONS.submit}
+            prevValue="/createNewLesson"
+            nextValue="/endpage"
+            setPageNumber={null}
+            submitHandler={submitHandler}
+            state={this.state}
+          />
         </div>
-      )
+      </div>
     ) : (
-      <Redirect to="/" />
+      <div id="editor" style={{ overflow: "hidden" }} className="ui grid">
+        <div className="right aligned row">
+          <div id="profileMenu" className="right floated three wide column">
+            <ProfileMenu />
+          </div>
+          <div className="column" />
+        </div>
+        <div
+          id="textEditorContainer"
+          style={{ backgroundColor: "#eef7ee" }}
+          className="ui segment"
+        >
+          <div className="ui two column grid">
+            <div id="controlPanelContainer" className="row">
+              <ControlPanel
+                handleButtonClick={handleButtonClick}
+                nextTitle={NAV_BUTTONS.submit}
+                prevValue="/createNewLesson"
+                nextValue="/endpage"
+                submitHandler={submitHandler}
+                handlePreview={handlePreview}
+              />
+            </div>
+            <div style={{ textstyle }} id="MDTextArea" className="column">
+              <MDTextArea
+                editorRef={this.editorRef}
+                onInputChange={handleChange}
+                handleButtonClick={handleButtonClick}
+                onTextareaKeyDown={onTextareaKeyDown}
+                onTextareaKeyUp={onTextareaKeyUp}
+                onTextareaMouseDown={onTextareaMouseDown}
+                onTextareaSelect={onTextareaSelect}
+                autoSaveMessage={autoSaveMessage}
+                handlers={handlers}
+                keyMap={keyMap}
+              />
+            </div>
+            {imagePopup}
+            {/* <div id="divider" /> */}
+            <div style={{ mdstyle }} id="MDPreview" className="column">
+              <MDPreview />
+            </div>
+          </div>
+        </div>
+        <div id="editorPagebuttons" className="row">
+          <PageButtons
+            prevTitle={NAV_BUTTONS.prev}
+            nextTitle={NAV_BUTTONS.submit}
+            prevValue="/createNewLesson"
+            nextValue="/endpage"
+            setPageNumber={null}
+            submitHandler={submitHandler}
+            state={this.state}
+          />
+        </div>
+      </div>
     );
+    // ) : (
+    //   <Redirect to="/" />
+    // );
   }
 }
 

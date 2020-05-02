@@ -12,14 +12,16 @@ const FormPage = props => {
     if (props.state.pageNumber === 1) {
       return (
         <div>
-          <div className="ui segment">
-            <Page1 changeHandler={props.changeHandler} state={props.state} />
+          <div className="ui segment formColor">
+            <Page1
+              changeHandler={props.changeHandler}
+              multiInputHandler={props.multiInputHandler}
+              state={props.state}
+            />
           </div>
           <PageButtons
             prevTitle={NAV_BUTTONS.prev}
             nextTitle={NAV_BUTTONS.next}
-            prevValue="/"
-            submitHandler={props.submitHandler}
             setPageNumber={props.setPageNumber}
             err="author"
             setErr={props.setErr}
@@ -30,7 +32,7 @@ const FormPage = props => {
     } else if (props.state.pageNumber === 2) {
       return (
         <div>
-          <div className="ui segment">
+          <div className="ui segment formColor">
             <Page2
               changeHandler={props.changeHandler}
               checkboxHandler={props.checkboxHandler}
@@ -40,10 +42,7 @@ const FormPage = props => {
           <PageButtons
             prevTitle={NAV_BUTTONS.prev}
             nextTitle={NAV_BUTTONS.next}
-            prevValue="/"
-            submitHandler={props.submitHandler}
             setPageNumber={props.setPageNumber}
-            err=""
             setErr={props.setErr}
             state={props.state}
           />
@@ -52,7 +51,7 @@ const FormPage = props => {
     } else if (props.state.pageNumber === 3) {
       return (
         <div>
-          <div className="ui segment">
+          <div className="ui segment formColor">
             <Page3
               changeHandler={props.changeHandler}
               checkboxHandler={props.checkboxHandler}
@@ -64,7 +63,6 @@ const FormPage = props => {
           <PageButtons
             prevTitle={NAV_BUTTONS.prev}
             nextTitle={NAV_BUTTONS.next}
-            prevValue="/"
             submitHandler={props.submitHandler}
             setPageNumber={props.setPageNumber}
             err="title"
@@ -77,8 +75,8 @@ const FormPage = props => {
   };
 
   return (
-    <div className="ui grid">
-      <div id="formBorder" className="right aligned row">
+    <div id="formPage" className="ui grid">
+      <div className="right aligned row">
         <div id="profileMenu" className="right floated three wide column">
           <ProfileMenu />
         </div>
