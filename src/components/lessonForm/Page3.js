@@ -113,6 +113,7 @@ const Page3 = props => {
             </label>
             <div>
               <Dropdown
+                search
                 placeholder="Velg fag"
                 fluid
                 multiple
@@ -130,6 +131,8 @@ const Page3 = props => {
             </label>
             <div>
               <Dropdown
+                search
+                upward
                 placeholder="Velg tema"
                 fluid
                 multiple
