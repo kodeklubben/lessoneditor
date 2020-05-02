@@ -40,10 +40,6 @@ const PageButtons = props => {
       props.submitHandler(true);
       return;
     }
-    if (notErr && props.state.isEditor) {
-      props.submitHandler(event);
-      return;
-    }
     if (notErr || input < 1) {
       props.setPageNumber(props.state.pageNumber + input);
     } else {

@@ -2,9 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { Popup } from "semantic-ui-react";
 import GoogleAuth from "./GoogleAuth";
-
 import { Link } from "react-router-dom";
-
 
 const ProfileMenu = props => {
   return (
@@ -36,7 +34,6 @@ const ProfileMenu = props => {
           >
             <div className="ui ">
               {props.imageUrl ? (
-
                 <div>
                   <img
                     className="ui circular centered image"
@@ -44,7 +41,6 @@ const ProfileMenu = props => {
                     alt="useImage"
                   ></img>
                 </div>
-
               ) : (
                 <div className="ui circular centered image">
                   <i className="user icon"></i>
