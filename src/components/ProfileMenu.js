@@ -2,7 +2,9 @@ import React from "react";
 import { connect } from "react-redux";
 import { Popup } from "semantic-ui-react";
 import GoogleAuth from "./GoogleAuth";
+
 import { Link } from "react-router-dom";
+
 
 const ProfileMenu = props => {
   return (
@@ -15,10 +17,7 @@ const ProfileMenu = props => {
         trigger={
           <div className="ui avatar image">
             {props.imageUrl ? (
-              <div>
-                <img src={props.imageUrl} alt="useImage"></img>
-                <i className="angle down icon"></i>
-              </div>
+              <img src={props.imageUrl} alt="useImage"></img>
             ) : (
               <div className="ui avatar image">
                 <i className="user icon"></i>
@@ -39,6 +38,7 @@ const ProfileMenu = props => {
           >
             <div className="ui ">
               {props.imageUrl ? (
+
                 <div>
                   <img
                     className="ui circular centered image"
@@ -46,6 +46,7 @@ const ProfileMenu = props => {
                     alt="useImage"
                   ></img>
                 </div>
+
               ) : (
                 <div className="ui avatar image">
                   <i className="user icon"></i>
