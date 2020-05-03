@@ -9,11 +9,13 @@ class ImagePopup extends React.Component {
     };
   }
 
-  onInputChange = e => {
-    this.setState({ inputValue: e.target.value });
+  onChangeHandler = event => {
+    event.preventDefault();
+    this.setState({ inputValue: event.target.value });
   };
 
   fileSelectedHandler = event => {
+    event.preventDefault();
     if (event.target.files && event.target.files[0].size > 5000000) {
       this.setState({ toBigMessage: "Bildet kan ikke være over 5mb" });
     } else {
@@ -26,40 +28,36 @@ class ImagePopup extends React.Component {
   render() {
     return (
       <div className="transparent">
-        <div className="imagePopup">
+        <form
+          className="imagePopup"
+          onSubmit={() =>
+            this.props.imagePopupSubmitHandler(this.state.inputValue)
+          }
+        >
+          <h1>Last opp bilde:</h1>
           <div className="">
-            <form
-              onSubmit={() =>
-                this.props.imagePopupSubmitHandler(this.state.inputValue)
-              }
-            >
-              <div className="">
-                <div className="">
-                  <label>Link til bilde her:</label>
-                  <input
-                    autoFocus
-                    onChange={this.onInputChange}
-                    value={this.state.inputValue}
-                    placeholder="Image URL"
-                  />
-                  <label>Last opp bilde her:</label>
-                  <input
-                    type="file"
-                    accept=".jpg,.jpeg,.png,.gif"
-                    onChange={this.fileSelectedHandler}
-                  />
-                  <div className="errorMessage">{this.state.toBigMessage}</div>
-                </div>
-              </div>
-
-              <div className="">
-                <button type="submit" basic color="grey">
-                  OK
-                </button>
-              </div>
-            </form>
+            <label>Link til bilde her:</label>
+            <input
+              autoFocus
+              onChange={e => this.onChangeHandler(e)}
+              value={this.state.inputValue}
+              placeholder="Image URL"
+            />
+            <label>Last opp bilde her:</label>
+            <input
+              type="file"
+              accept=".jpg,.jpeg,.png,.gif"
+              onChange={this.fileSelectedHandler}
+            />
+            <div className="errorMessage">{this.state.toBigMessage}</div>
           </div>
-        </div>
+
+          <div className="">
+            <button type="submit" basic color="grey">
+              OK
+            </button>
+          </div>
+        </form>
       </div>
     );
   }

@@ -305,7 +305,6 @@ class Editor extends React.Component {
             return;
           }
           if (listButtonValues["bTitle"] === "listOl") {
-            alert("4");
             inputText =
               inputText.slice(0, cursorPositionStart) +
               "\n\n" +
@@ -320,7 +319,7 @@ class Editor extends React.Component {
             orderedListIndex++;
             return;
           }
-          alert("5");
+
           inputText =
             inputText.slice(0, cursorPositionStart) +
             "\n\n" +
@@ -382,6 +381,7 @@ class Editor extends React.Component {
 
     // Show/hide image popup
     const imagePopupSubmitHandler = imagePopupInputValue => {
+      if (!imagePopupInputValue) return;
       if (imagePopupInputValue) {
         setUndo();
         inputText =
@@ -556,6 +556,7 @@ class Editor extends React.Component {
             storeImage={storeImage}
           />
         );
+        this.editorRef.current.blur();
         return;
       }
 
@@ -1039,6 +1040,7 @@ class Editor extends React.Component {
       </div>
     ) : (
       <div id="editor" style={{ overflow: "hidden" }} className="ui grid">
+        {imagePopup}
         <div className="right aligned row">
           <div id="profileMenu" className="right floated three wide column">
             <ProfileMenu />
@@ -1075,7 +1077,6 @@ class Editor extends React.Component {
                 keyMap={keyMap}
               />
             </div>
-            {imagePopup}
             {/* <div id="divider" /> */}
             <div style={{ mdstyle }} id="MDPreview" className="column">
               <MDPreview />

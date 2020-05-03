@@ -227,22 +227,22 @@ select {
 
 /* CSS for ImagePopup component */
 
-/* .transparent {
-  height: 150%;
-  width: 150%;
+.transparent {
+  height: 100%;
+  width: 100%;
   z-index: 2;
   background-color: rgba(0, 0, 0, 0.6);
   position: absolute;
 
-  top: -10%;
-  left: -25%;
-} */
+  top: 0%;
+  left: 0%;
+}
 
 .imagePopup {
   z-index: 3;
   top: 30%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  left: 20%;
+
   position: absolute;
 }
 
