@@ -380,8 +380,10 @@ class Editor extends React.Component {
     };
 
     // Show/hide image popup
-    const imagePopupSubmitHandler = imagePopupInputValue => {
-      if (!imagePopupInputValue) return;
+    const imagePopupSubmitHandler = (imagePopupInputValue, filename) => {
+      if (imagePopupInputValue.slice(0, 4) === "blob") {
+        var PHOTO_TEXT = filename;
+      }
       if (imagePopupInputValue) {
         setUndo();
         inputText =

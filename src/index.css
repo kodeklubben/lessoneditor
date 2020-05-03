@@ -83,6 +83,12 @@ ol {
   margin: 20px 0;
 }
 
+/* Image styling */
+
+.MDPreview p img {
+  width: 100%;
+}
+
 /* List styling */
 
 .MDPreview ul li::before {
