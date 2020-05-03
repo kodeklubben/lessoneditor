@@ -99,18 +99,6 @@ class MultiInput extends React.Component {
                 </span>
               </button>
             ))}
-
-            <button
-              style={{ order: this.inputOrder + 1 }}
-              icon
-              id="addNameButton"
-              className="ui icon button"
-              name={this.props.name}
-              type="button"
-              onClick={this.handleClick}
-            >
-              <i id="addNameButtonChild" className="plus icon" />
-            </button>
           </div>
           {this.props.validateMessage ? (
             <div className="validateError">{this.props.validateMessage}</div>
