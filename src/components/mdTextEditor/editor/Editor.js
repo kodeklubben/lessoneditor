@@ -382,14 +382,16 @@ class Editor extends React.Component {
     // Show/hide image popup
     const imagePopupSubmitHandler = (imagePopupInputValue, filename) => {
       if (imagePopupInputValue.slice(0, 4) === "blob") {
-        var PHOTO_TEXT = filename;
+        var TEST = filename;
+      } else {
+        TEST = PHOTO_TEXT;
       }
       if (imagePopupInputValue) {
         setUndo();
         inputText =
           inputText.slice(0, cursorPositionStart) +
           "![" +
-          PHOTO_TEXT +
+          TEST +
           "](" +
           imagePopupInputValue +
           ")" +
@@ -398,7 +400,7 @@ class Editor extends React.Component {
         this.props.parseMD(mdParser(inputText));
         this.editorRef.current.focus();
         cursorPositionStart += 2;
-        cursorPositionEnd += PHOTO_TEXT.length + 2;
+        cursorPositionEnd += TEST.length + 2;
         setCursorPosition(cursorPositionStart, cursorPositionEnd);
         imagePopup = <br />;
         setTimeout(() => {

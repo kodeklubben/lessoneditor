@@ -38,36 +38,51 @@ class ImagePopup extends React.Component {
 
   render() {
     return (
-      <div className="transparent">
-        <form className="imagePopup" onSubmit={this.mySubmitHandler}>
-          <h1>Last opp bilde:</h1>
-          <div className="">
-            <label>
-              Link til bilde her:
-              <input
-                autoFocus
-                onChange={e => this.onChangeHandler(e)}
-                value={this.state.inputValue}
-                placeholder="Image URL"
-              />
-            </label>
-            <label>
-              Last opp bilde her:
-              <input
-                type="file"
-                accept=".jpg,.jpeg,.png,.gif"
-                onChange={this.fileSelectedHandler}
-              />
-            </label>
-            <div className="errorMessage">{this.state.toBigMessage}</div>
-          </div>
+      <div
+        className="transparent"
+        // onClick={() => this.props.imagePopupSubmitHandler("")}
+      >
+        <div className="ui segment imagePopup">
+          <form
+            id="imagePopup"
+            className="ui form"
+            onSubmit={this.mySubmitHandler}
+          >
+            <h2>Bilder</h2>
+            <div className="equal width fields">
+              <div className="field">
+                <label>
+                  <input
+                    autoFocus
+                    onChange={e => this.onChangeHandler(e)}
+                    value={this.state.inputValue}
+                    placeholder="URL"
+                  />
+                </label>
+                <div style={{ margin: "1rem" }} />
+                <div className="field">
+                  <input
+                    type="file"
+                    accept=".jpg,.jpeg,.png,.gif"
+                    ref={this.fileUpload}
+                    onChange={this.fileSelectedHandler}
+                  />
 
-          <div className="">
-            <button type="submit" basic color="grey">
-              OK
-            </button>
-          </div>
-        </form>
+                  <div className="errorMessage">{this.state.toBigMessage}</div>
+                </div>
+              </div>
+            </div>
+            <div className="field">
+              <button
+                style={{ marginTop: "-15rem" }}
+                type="submit"
+                className="ui button"
+              >
+                OK
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     );
   }

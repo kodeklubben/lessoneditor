@@ -238,12 +238,16 @@ select {
   left: 0%;
 }
 
-.imagePopup {
-  z-index: 3;
-  top: 30%;
-  left: 20%;
+.ui.segment.imagePopup {
+  width: 40%;
 
-  position: absolute;
+  z-index: 3;
+  top: 15%;
+  left: 30%;
+  background-color: #eef7ee;
+  border: 5px solid #b1daae;
+  height: 50%;
+  position: relative;
 }
 
 .errorMessage {
