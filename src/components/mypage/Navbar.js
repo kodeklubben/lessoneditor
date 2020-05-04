@@ -6,22 +6,18 @@ import Logo from './logo.jpg';
 function Navbar(){
   return (
     <div>
-      <div className = "navbar-container">
-          <div className = "logo">
-              <img src={Logo} />
-          </div>
-          <div className = "navbar">
-          <ul >
-              <li > < a href = "https://www.kidsakoder.no/kodeklubben/kodeklubboversikt/" > Finn kodeklub </a></li >
-              <li > < a href = "https://oppgaver.kidsakoder.no/" > Oppgaver </a></li >
-              <li > < a href = "https://www.kidsakoder.no/om-lkk/" > Hjem </a></li >
-              <li > < a href = "#minside" > Min side </a></li >
-              </ul>
-              </div>
-              <div className = "line">
-
-              </div>
+      <div className="ui massive myNavbar stackable menu">
+        <div className=" logo">
+          <img alt='' src={Logo}/>
         </div>
+        <div className="right menu">
+        <a className="item" href = "https://www.kidsakoder.no/kodeklubben/kodeklubboversikt/">Finn kodeklub</a>
+        <a className="item" href = "https://oppgaver.kidsakoder.no/">Oppgaver</a>
+        <a className="item"  href = "https://www.kidsakoder.no/om-lkk/">Hjem</a>
+        <a className="item"  href = "#minside">Min side</a>
+        </div>
+        </div>
+        
     </div>
       )
 }

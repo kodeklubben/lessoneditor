@@ -4,20 +4,33 @@ import './ItemList.css'
 class ItemList extends Component {
     
     state = {
-        listitems: ["Oppgave 1", "Oppgave 2", "Oppgave 3"]
+        listitems: ["Oppgave 1", "Oppgave 2", "Oppgave 3", "Oppgave 4", "Oppgave 5"]
       };
 
     render() {
+      
+      const mystyle = {
+        
+        padding: "10px",
+        fontFamily: "Arial",
+        fontSize:"20px"
+        
+      };
         return (
             <React.Fragment>
             <div className=".container my-container">
-            <ul className="list-group">
+            <div className="ui middle aligned divided list">
               {this.state.listitems.map(listitem => (
-                <li className="list-group-item list-group-item-action" >
+                <div className="item" >
+                  <div className="right floated content">
+                  <div className="ui button">Rediger</div>
+                  </div>
+                  <div className="content" style={mystyle}>
                 {listitem}
-                </li>
+                </div>
+                </div>
               ))}
-            </ul>
+            </div>
             </div>
           </React.Fragment>
         );
