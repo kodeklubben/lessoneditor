@@ -1,5 +1,5 @@
 import React from "react";
-// import "./RightBoxStyle.css";
+import "./RightBoxStyleBckup.css";
 
 function RightBox() {
   return (
