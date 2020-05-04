@@ -103,7 +103,7 @@ const ControlPanel = props => {
           ))}
         </div>
       </div>
-      {/* <div style={{ marginRight: "4rem" }} /> */}
+      <div style={{ marginRight: "1.5rem" }} />
       <div className="row">
         <div id="image" className="ui buttons">
           {image.map(element => (

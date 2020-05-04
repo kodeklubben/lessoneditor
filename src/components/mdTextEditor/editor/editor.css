@@ -225,35 +225,6 @@ select {
   touch-action: manipulation;
 }
 
-/* CSS for ImagePopup component */
-
-.transparent {
-  height: 100%;
-  width: 100%;
-  z-index: 2;
-  background-color: rgba(0, 0, 0, 0.6);
-  position: absolute;
-
-  top: 0%;
-  left: 0%;
-}
-
-.ui.segment.imagePopup {
-  width: 40%;
-
-  z-index: 3;
-  top: 15%;
-  left: 30%;
-  background-color: #eef7ee;
-  border: 5px solid #b1daae;
-  height: 50%;
-  position: relative;
-}
-
-.errorMessage {
-  color: red;
-}
-
 /* CSS for TextArea */
 
 /* #divider {

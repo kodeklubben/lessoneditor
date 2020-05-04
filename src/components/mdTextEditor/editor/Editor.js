@@ -88,9 +88,6 @@ var cursorPositionEnd = 0;
 // autosave message, gets updated by autosave
 var autoSaveMessage = <br />;
 
-// placeholder tag for picture-upload popup
-var imagePopup = <br />;
-
 var textstyle = "";
 var mdstyle = "";
 
@@ -112,6 +109,7 @@ class Editor extends React.Component {
 
     // refs are used to find elements in the DOM (simular to document.getElementbyID)
     this.editorRef = React.createRef();
+    this.uploadImageRef = React.createRef();
   }
 
   // counts seconds.  Used with autosave. (simulate backend communication latency)
@@ -381,17 +379,12 @@ class Editor extends React.Component {
 
     // Show/hide image popup
     const imagePopupSubmitHandler = (imagePopupInputValue, filename) => {
-      if (imagePopupInputValue.slice(0, 4) === "blob") {
-        var TEST = filename;
-      } else {
-        TEST = PHOTO_TEXT;
-      }
       if (imagePopupInputValue) {
         setUndo();
         inputText =
           inputText.slice(0, cursorPositionStart) +
           "![" +
-          TEST +
+          filename +
           "](" +
           imagePopupInputValue +
           ")" +
@@ -400,14 +393,9 @@ class Editor extends React.Component {
         this.props.parseMD(mdParser(inputText));
         this.editorRef.current.focus();
         cursorPositionStart += 2;
-        cursorPositionEnd += TEST.length + 2;
+        cursorPositionEnd += filename.length + 2;
         setCursorPosition(cursorPositionStart, cursorPositionEnd);
-        imagePopup = <br />;
-        setTimeout(() => {
-          console.log(this.state.images);
-        }, 100);
       } else {
-        imagePopup = <br />;
         this.editorRef.current.focus();
         setCursorPosition(cursorPositionStart, cursorPositionEnd);
       }
@@ -554,13 +542,7 @@ class Editor extends React.Component {
 
       // image button setting
       if (bTitle === "image") {
-        imagePopup = (
-          <ImagePopup
-            imagePopupSubmitHandler={imagePopupSubmitHandler}
-            storeImage={storeImage}
-          />
-        );
-        this.editorRef.current.blur();
+        this.uploadImageRef.current.click();
         return;
       }
 
@@ -1044,7 +1026,12 @@ class Editor extends React.Component {
       </div>
     ) : (
       <div id="editor" style={{ overflow: "hidden" }} className="ui grid">
-        {imagePopup}
+        <ImagePopup
+          uploadImageRef={this.uploadImageRef}
+          editorRef={this.editorRef}
+          storeImage={storeImage}
+          imagePopupSubmitHandler={imagePopupSubmitHandler}
+        />
         <div className="right aligned row">
           <div id="profileMenu" className="right floated three wide column">
             <ProfileMenu />
