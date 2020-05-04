@@ -52,8 +52,8 @@ const KEY_COMBINATIONS = {
   save: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.s],
   image: [SHORTCUTKEY, plus, chars.p],
   listul: [SHORTCUTKEY, plus, chars.u],
-  listol: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.u],
-  listcheck: [SHORTCUTKEY, plus, chars.y],
+  listol: [SHORTCUTKEY, plus, chars.o],
+  listcheck: [SHORTCUTKEY, plus, chars.c],
   activity: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.a],
   intro: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.i],
   check: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.c],
@@ -61,9 +61,10 @@ const KEY_COMBINATIONS = {
   protip: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.p],
   challenge: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.g],
   flag: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.f],
-  try: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.p],
+  try: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.t],
   inline: [SHORTCUTKEY, plus, chars.e],
-  codeblock: [SHORTCUTKEY, plus, chars.k]
+  codeblock: [SHORTCUTKEY, plus, chars.k],
+  preview: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.y]
 };
 
 const emphasis = [
@@ -175,6 +176,19 @@ const image = [
     cursorIntOFF: 0,
     endOutput: "",
     shortcut: KEY_COMBINATIONS.image.join("")
+  }
+];
+
+const preview = [
+  {
+    bTitle: "preview",
+    icon: "eye",
+    output: "",
+    title: BUTTON_TITLE.preview,
+    cursorIntON: 0,
+    cursorIntOFF: 0,
+    endOutput: "",
+    shortcut: KEY_COMBINATIONS.preview.join("")
   }
 ];
 
@@ -326,6 +340,7 @@ export {
   saveLoadNew,
   image,
   lists,
+  preview,
   sections,
   code,
   KEY_COMBINATIONS,

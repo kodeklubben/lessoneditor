@@ -1,4 +1,10 @@
-import { ADD_TEXT, PARSE_MD, SIGN_IN, SIGN_OUT } from "./types";
+import {
+  ADD_TEXT,
+  PARSE_MD,
+  SIGN_IN,
+  SIGN_OUT,
+  ADD_FORM_VALUES
+} from "./types";
 
 export const addText = text => {
   return { type: ADD_TEXT, payload: text };
@@ -19,4 +25,8 @@ export const signOut = () => {
   return {
     type: SIGN_OUT
   };
+};
+
+export const formValues = values => {
+  return { type: ADD_FORM_VALUES, payload: values };
 };

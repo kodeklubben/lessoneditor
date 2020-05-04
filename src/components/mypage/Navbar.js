@@ -1,9 +1,8 @@
-import React from 'react';
-import "./NavbarStyle.css";
-import Logo from './logo.jpg';
+import React from "react";
+// import "./NavbarStyle.css";
+import Logo from "./logo.jpg";
 
-
-function Navbar(){
+function Navbar() {
   return (
     <div>
       <div className="ui massive myNavbar stackable menu">
@@ -19,6 +18,6 @@ function Navbar(){
         </div>
         
     </div>
-      )
+  );
 }
 export default Navbar;

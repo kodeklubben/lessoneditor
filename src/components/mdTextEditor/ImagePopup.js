@@ -1,5 +1,4 @@
 import React from "react";
-import { Button, Card, Form } from "semantic-ui-react";
 
 class ImagePopup extends React.Component {
   constructor(props) {
@@ -19,7 +18,6 @@ class ImagePopup extends React.Component {
       this.setState({ toBigMessage: "Bildet kan ikke være over 5mb" });
     } else {
       this.props.storeImage(event.target.files[0]);
-      console.log(event.target.files[0]);
       this.setState({ toBigMessage: "" });
       this.props.imagePopupSubmitHandler("./" + event.target.files[0].name);
     }
@@ -27,16 +25,16 @@ class ImagePopup extends React.Component {
 
   render() {
     return (
-      <div className="transparente">
-        <Card.Group className="imagePopup">
-          <Card>
-            <Form
+      <div className="transparent">
+        <div className="imagePopup">
+          <div className="">
+            <form
               onSubmit={() =>
                 this.props.imagePopupSubmitHandler(this.state.inputValue)
               }
             >
-              <Card.Content>
-                <Form.Field>
+              <div className="">
+                <div className="">
                   <label>Link til bilde her:</label>
                   <input
                     autoFocus
@@ -51,18 +49,17 @@ class ImagePopup extends React.Component {
                     onChange={this.fileSelectedHandler}
                   />
                   <div className="errorMessage">{this.state.toBigMessage}</div>
-                </Form.Field>
-              </Card.Content>
-              <Card.Content extra>
-                <div className="ui two buttons">
-                  <Button type="submit" basic color="grey">
-                    OK
-                  </Button>
                 </div>
-              </Card.Content>
-            </Form>
-          </Card>
-        </Card.Group>
+              </div>
+
+              <div className="">
+                <button type="submit" basic color="grey">
+                  OK
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
     );
   }

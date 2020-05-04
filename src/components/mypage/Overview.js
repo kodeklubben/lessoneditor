@@ -5,8 +5,7 @@ import ItemList from './ItemList'
 import LeftBox from './LeftBox';
 import RightBox from './RightBox';
 
-
-class Overview extends Component { 
+class Overview extends Component {
   render() {
   return (
 
@@ -35,5 +34,3 @@ class Overview extends Component {
 }
 }
 export default Overview;
-
-

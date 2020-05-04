@@ -27,6 +27,7 @@ const BUTTON_TITLE = {
   load: "Laste inn",
   save: "Lagre",
   image: "Bilde",
+  preview: "Forhåndsvisning",
   listUl: "Uordnet liste",
   listOl: "Ordnet liste",
   listCheck: "Sjekkliste",
