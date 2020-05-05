@@ -2,8 +2,18 @@
 The aim of this project was to create web application possibility for a teacher to make   new  lessons  for  LKK’swebsite,kidsakoder.no, without difficulty.
 Our minimal requirement is to have a basic functioning application where the teacher don’t have to have any knowledge with Git when they want to edit or create anexercise for LKK’s website.
 
+# Quick start
+Several quick start options are available:
+
+* Download the latest version of Node package manager (npm). 
+* Clone the repo: `git clone https://github.com/kodeklubben/lessoneditor.git`
+* Install all dependencies with [npm](https://www.npmjs.com/) `npm install`
+* Install all dependencies with [yarn](https://yarnpkg.com/) `yarn install`
+* Start the application with `npm start` or `yarn start`
 
 
+# What's included
+Within the download you'll find the following directories and files. By default node_modules folder will be added when you run `npm install`. You'll see something like this:
 
 ```bash
 ├───public
@@ -33,7 +43,11 @@ Our minimal requirement is to have a basic functioning application where the tea
 └───test
 ```
 
-
+# Running documentation locally
+1. Run `npm install` to install the Node.js dependencies
+2. Run `npm run test`
+3. Run `npm start`
+4. Open `http://localhost:3000/` in your browser,
 
 
 
