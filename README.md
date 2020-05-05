@@ -1,3 +1,44 @@
+# Overview and description
+The aim of this project was to create web application possibility for a teacher to make   new  lessons  for  LKK’swebsite,kidsakoder.no, without difficulty.
+Our minimal requirement is to have a basic functioning application where the teacher don’t have to have any knowledge with Git when they want to edit or create anexercise for LKK’s website.
+
+
+
+
+```bash
+├───public
+├───src
+│   ├───actions
+│   ├───api
+│   ├───components
+│   │   ├───frontPageComponents
+│   │   ├───lessonForm
+│   │   │   └───settingsFiles
+│   │   │       └───languages
+│   │   ├───mdPreviewComponents
+│   │   │   └───settingsFiles
+│   │   ├───mdTextEditor
+│   │   │   ├───editor
+│   │   │   │   └───controlpanel
+│   │   │   │       └───components
+│   │   │   ├───mdPreview
+│   │   │   └───settingsFiles
+│   │   │       └───languages
+│   │   ├───mypage
+│   │   └───YAMLComponents
+│   │       └───settingsFiles
+│   ├───reducers
+│   └───utils
+│       └───markdown-it-plugins
+└───test
+```
+
+
+
+
+
+
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
