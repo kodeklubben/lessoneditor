@@ -49,6 +49,20 @@ Within the download you'll find the following directories and files. By default 
 3. Run `npm start`
 4. Open `http://localhost:3000/` in your browser,
 
+# Project structure
+Our project build is based on two parts, a client part and a server part. The server part contains all the necessary REST API implementations needed for fetching data from the backend and the client part contains the frontend "user-based" actions like creat new lesson, browse the user's created lesson and edit existing lesson.
+
+## Node js + express (backend)
+An Express application is most often used as backend application in a client-server architecture whereas the client could
+be written in React.js, the server could be written in Express. We used express as our server.
+Express ensured that all middleware can respond to HTTP requests and routing tables were setup to respond to different actions
+based on the HTTP method.
+
+We used mongodb as our db. Mongodb is a schemaless database that is easy to setup and use, and is famous for scaling really well,
+perfect for an app that should be able to handle large amounts of data. To interface with mongodb we chose
+to use mongoose, which provides a lot of nice functionality such as validation functions. With this setup, we define our database
+model in mongoose schemas, and then we can easily do CRUD operations with mongoose methods.
+
 
 
 
