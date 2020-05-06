@@ -63,6 +63,15 @@ perfect for an app that should be able to handle large amounts of data. To inter
 to use mongoose, which provides a lot of nice functionality such as validation functions. With this setup, we define our database
 model in mongoose schemas, and then we can easily do CRUD operations with mongoose methods.
 
+## Redux
+Redux is a Javascript Library for managing application state. Redux provides a real time current state of the lesson with all the
+state variables that the app has at a given time. This helps keep control of how the lesson state changes overtime and it is also very useful when debugging.
+
+## Prop types 
+In addition we implemented the use of proptypes in our react component structures which is a form of validation that ensures
+the right type of props are always passed to a react component. It is not really a form of testing, but it helps maintain
+correctness in the app.
+
 
 
 
