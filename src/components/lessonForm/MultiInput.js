@@ -103,7 +103,7 @@ class MultiInput extends React.Component {
                 }
               >
                 <span>
-                  {element + " "} <i className="x icon"></i>
+                  {element} <i className="x icon"></i>
                 </span>
               </button>
             ))}

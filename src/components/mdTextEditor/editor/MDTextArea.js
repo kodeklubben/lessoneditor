@@ -13,7 +13,6 @@ const MDTextArea = props => {
       <textarea
         autoFocus
         ref={props.editorRef}
-        id="textarea"
         className="TextArea"
         value={props.mdText}
         onChange={event => props.onInputChange(event)}

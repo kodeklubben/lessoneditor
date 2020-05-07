@@ -1,275 +1,176 @@
-select {
-  cursor: pointer;
-}
+/* EDITOR */
 
-@media only screen and (max-height: 630px) {
-  .TextArea {
-    width: 100%;
-    height: 25rem !important;
-
-    max-height: 25rem !important;
-    outline: none;
-    /* margin-left: -1em;
-    margin-bottom: -1.2em;
-    margin-right: -2em !important; */
-    border-style: none !important;
-    border-color: white !important;
-    resize: none;
-    padding: 2em;
-    overflow: auto;
-    border-color: white;
-    touch-action: manipulation;
-  }
-
-  /* CSS for TextArea Buttons */
-
-  /* CSS for MDPreview */
-
-  .MDPreview {
-    width: 100%;
-    height: 10rem !important;
-
-    max-height: 10rem !important;
-    /* margin-right: -1em !important;
-    margin-bottom: -1.2em !important;
-    margin-left: -1em !important; */
-    border-style: none !important;
-    border-color: white !important;
-    padding: 2em;
-    overflow: auto;
-    touch-action: manipulation;
-  }
-}
-
-@media only screen and (max-height: 890px) {
-  .TextArea {
-    width: 100%;
-    height: 30rem;
-
-    max-height: 30rem !important;
-    outline: none;
-    /* margin-left: -1em;
-    margin-bottom: -1.2em;
-    margin-right: -2em !important; */
-
-    border-style: none !important;
-    border-color: white !important;
-    resize: none;
-    padding: 2em;
-    overflow: auto;
-
-    touch-action: manipulation;
-  }
-
-  /* CSS for TextArea Buttons */
-
-  /* CSS for MDPreview */
-
-  .MDPreview {
-    width: 100%;
-    height: 30rem;
-
-    max-height: 30rem !important;
-    /* margin-right: -1em !important;
-    margin-bottom: -1.2em !important;
-    margin-left: -1em !important; */
-    border-style: none !important;
-    border-color: white !important;
-    padding: 2em;
-    overflow: auto;
-    touch-action: manipulation;
-  }
-}
-
-/* ControlPanel  */
-
-@media only screen and (max-width: 955px) {
-  #sections {
-    display: none;
-  }
-  #code {
-    display: none;
-  }
-
-  #divider {
-    display: none;
-  }
-
-  .preview {
-    display: block !important;
-  }
-
-  #saveLoad {
-    display: none;
-  }
-  #MDPreview {
-    display: none;
-  }
-
-  #editorPagebuttons {
-    display: none;
-  }
-
-  #undoRedo {
-    z-index: 2;
-    position: fixed;
-    top: 1.5%;
-    left: 30%;
-  }
-
-  #emphasis {
-    z-index: 2;
-    position: fixed;
-    top: 89%;
-    left: 6%;
-  }
-
-  #lists {
-    z-index: 2;
-    position: fixed;
-    top: 89%;
-    left: 50%;
-  }
-
-  #image {
-    z-index: 2;
-    position: fixed;
-    top: 1.5%;
-    left: 60%;
-  }
-
-  .preview {
-    display: block;
-    z-index: 2;
-    position: fixed;
-    top: 1.3%;
-    left: 6%;
-  }
-
-  #profileMenu {
-    z-index: 2;
-    position: fixed;
-    top: -1%;
-    left: 80%;
-  }
-
-  #controlPanelContainer {
-    max-height: 9rem;
-
-    margin-bottom: -1rem;
-    touch-action: manipulation;
-    background-color: white;
-    border-radius: 5px;
-  }
-
-  #textEditorContainer {
-    width: 100%;
-    padding-top: 1rem;
-    padding-right: 0rem !important;
-    touch-action: manipulation;
-  }
-  .TextArea {
-    width: 100% !important;
-    height: 160% !important;
-    position: fixed;
-    top: 10%;
-    left: 0%;
-    outline: none;
-    margin-left: 0em !important;
-    margin-bottom: -1.2em;
-    margin-right: -0em !important;
-    resize: none;
-    padding: 5em;
-    overflow: auto;
-    border-style: none !important;
-    border-color: white;
-    touch-action: manipulation;
-  }
-
-  .MDPreview {
-    width: 200%;
-    height: 10rem;
-    max-height: 10rem !important;
-    position: fixed;
-    top: 10%;
-    left: 0%;
-    margin-right: -1em !important;
-    margin-bottom: -1.2em !important;
-    margin-left: -1em !important;
-    max-height: 65rem !important;
-    background-color: white;
-    padding: 5em;
-    overflow: auto;
-    touch-action: manipulation;
-  }
-}
-
-.preview {
+.upperContainerLarge {
   display: none;
 }
 
-#textEditorContainer {
-  width: 100%;
-  padding-top: 1rem;
-  touch-action: manipulation;
+.flexContainer {
+  display: flex;
+  height: 90vh;
+  flex-direction: column;
 }
-
-#editor {
-  margin-top: 0px;
-}
-
-#controlPanelContainer {
-  max-height: 9rem;
-  padding-left: 2rem;
-  margin-bottom: -1rem;
-  touch-action: manipulation;
-}
-
-/* CSS for TextArea */
-
-/* #divider {
-  z-index: 3;
-  background-color: b1daae;
-  height: 73%;
-  width: 2px;
-  margin: 0px;
-  padding: 0px;
-  top: 57%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  position: absolute;
-} */
 
 .TextArea {
-  width: 100%;
-  height: 50rem;
-
-  max-height: 50rem;
+  width: 93vw;
   outline: none;
-  /* margin-left: -1em;
-  margin-bottom: -1.2em;
-  margin-right: -2em !important; */
+  margin: 1rem;
+  padding: 1rem;
   resize: none;
-  padding: 2em;
   overflow: auto;
   border-color: white;
   touch-action: manipulation;
 }
 
-/* CSS for TextArea Buttons */
+.preview {
+  display: flex;
+}
 
-/* CSS for MDPreview */
-
-.MDPreview {
-  width: 100%;
-  height: 50rem;
-
-  max-height: 50rem;
-  /* margin-right: -1em !important;
-  margin-bottom: -1.2em !important;
-  margin-left: -1em !important; */
+.PreviewArea {
+  margin: 1rem;
+  padding: 1rem;
+  width: 93vw;
+  display: block;
   background-color: white;
-  padding: 2em;
   overflow: auto;
   touch-action: manipulation;
+}
+
+.customButtons {
+  display: none;
+}
+
+.editor {
+  padding: 1rem;
+}
+
+.textWindows {
+  order: 2;
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+}
+
+.textWindow {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.previewWindow {
+  display: none;
+  width: 100%;
+  height: 100%;
+}
+
+.emphasis {
+  display: flex;
+  flex-flow: row nowrap;
+}
+.lists {
+  display: none;
+  flex-flow: row nowrap;
+}
+
+.profileMenu {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-end;
+}
+
+.textEditorContainer {
+  background-color: #eef7ee;
+}
+
+/* CONTROL PANEL */
+
+.upperContainer {
+  order: 1;
+  margin-bottom: auto;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.bottomContainer {
+  order: 3;
+  margin-top: auto;
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+@media only screen and (min-width: 768px) {
+  /* For desktop: */
+  .space {
+    margin-left: 1em;
+  }
+
+  .upperContainer {
+    display: none;
+  }
+
+  .bottomContainer {
+    display: none;
+  }
+
+  .upperContainerLarge {
+    margin-top: 0.8rem;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+  }
+
+  .customButtons {
+    display: none;
+    flex-flow: row nowrap;
+    justify-content: flex-end;
+  }
+  .CPButton {
+    background-color: #b1daae !important;
+  }
+
+  /* EDITOR */
+  .PreviewArea {
+    padding: 1rem;
+    margin: 1rem;
+    display: block;
+    background-color: white;
+    overflow: auto;
+    touch-action: manipulation;
+  }
+  .TextArea {
+    outline: none;
+    padding: 1rem;
+    margin: 1rem;
+    resize: none;
+    overflow: auto;
+    border-color: white;
+    touch-action: manipulation;
+  }
+
+  .textWindows {
+    order: 3;
+  }
+
+  .preview {
+    display: none;
+  }
+
+  .textWindow {
+    display: flex;
+    width: 50%;
+    height: 100%;
+  }
+
+  .previewWindow {
+    display: flex !important;
+    width: 50%;
+    height: 100%;
+  }
+}
+
+.CPButton {
+  background-color: #b1daae !important;
 }

@@ -88,9 +88,6 @@ var cursorPositionEnd = 0;
 // autosave message, gets updated by autosave
 var autoSaveMessage = <br />;
 
-var textstyle = "";
-var mdstyle = "";
-
 // ___________________
 
 class Editor extends React.Component {
@@ -960,101 +957,41 @@ class Editor extends React.Component {
     };
 
     const handlePreview = event => {
-      if (event) {
-        if (this.state.preview) {
-          textstyle = { display: "block", width: "200%" };
-          mdstyle = { display: "none", width: "0%" };
-          this.setState({ preview: false });
-        } else if (!this.state.preview) {
-          textstyle = { display: "none", width: "0%" };
-          mdstyle = { display: "block", width: "200%" };
-          this.setState({ preview: true });
-        }
+      if (this.state.preview) {
+        this.setState({ preview: false });
+        return false;
+      } else if (!this.state.preview) {
+        this.setState({ preview: true });
+        this.editorRef.current.focus();
+        setCursorPosition(cursorPositionStart, cursorPositionEnd);
+        return true;
       }
     };
 
     // return this.props.isSignedIn ? (
-    return this.state.preview ? (
-      <div id="editor" style={{ overflow: "hidden" }} className="ui grid">
-        <div className="right aligned row">
-          <div id="profileMenu" className="right floated three wide column">
-            <ProfileMenu />
-          </div>
-          <div className="column" />
-        </div>
-        <div
-          id="textEditorContainer"
-          style={{ backgroundColor: "#eef7ee" }}
-          className="ui segment"
-        >
-          <div className="ui two column grid">
-            <div id="controlPanelContainer" className="row">
-              <ControlPanel
-                handleButtonClick={handleButtonClick}
-                nextTitle={NAV_BUTTONS.submit}
-                prevValue="/createNewLesson"
-                nextValue="/endpage"
-                submitHandler={submitHandler}
-                handlePreview={handlePreview}
-              />
-            </div>
-            <div
-              style={{
-                display: "block",
-                width: "200%",
-                height: "5rem",
-                maxHeight: "5rem"
-              }}
-              id="MDPreview"
-              className="column"
-            >
-              <MDPreview />
-            </div>
-          </div>
-        </div>
-        <div id="editorPagebuttons" className="row">
-          <PageButtons
-            prevTitle={NAV_BUTTONS.prev}
-            nextTitle={NAV_BUTTONS.submit}
-            prevValue="/createNewLesson"
-            nextValue="/endpage"
-            setPageNumber={null}
-            submitHandler={submitHandler}
-            state={this.state}
-          />
-        </div>
-      </div>
-    ) : (
-      <div id="editor" style={{ overflow: "hidden" }} className="ui grid">
+    return (
+      <div className="editor">
         <ImagePopup
           uploadImageRef={this.uploadImageRef}
           editorRef={this.editorRef}
           storeImage={storeImage}
           imagePopupSubmitHandler={imagePopupSubmitHandler}
         />
-        <div className="right aligned row">
-          <div id="profileMenu" className="right floated three wide column">
-            <ProfileMenu />
-          </div>
-          <div className="column" />
+
+        <div className="profileMenu">
+          <ProfileMenu />
         </div>
-        <div
-          id="textEditorContainer"
-          style={{ backgroundColor: "#eef7ee" }}
-          className="ui segment"
-        >
-          <div className="ui two column grid">
-            <div id="controlPanelContainer" className="row">
-              <ControlPanel
-                handleButtonClick={handleButtonClick}
-                nextTitle={NAV_BUTTONS.submit}
-                prevValue="/createNewLesson"
-                nextValue="/endpage"
-                submitHandler={submitHandler}
-                handlePreview={handlePreview}
-              />
-            </div>
-            <div style={{ textstyle }} id="MDTextArea" className="column">
+
+        <div className="textEditorContainer">
+          <ControlPanel
+            editorRef={this.editorRef}
+            handleButtonClick={handleButtonClick}
+            nextTitle={NAV_BUTTONS.submit}
+            prevValue="/createNewLesson"
+            nextValue="/endpage"
+            submitHandler={submitHandler}
+            handlePreview={handlePreview}
+            MDTextArea={
               <MDTextArea
                 editorRef={this.editorRef}
                 onInputChange={handleChange}
@@ -1067,23 +1004,9 @@ class Editor extends React.Component {
                 handlers={handlers}
                 keyMap={keyMap}
               />
-            </div>
-            {/* <div id="divider" /> */}
-            <div style={{ mdstyle }} id="MDPreview" className="column">
-              <MDPreview />
-            </div>
-          </div>
-        </div>
-        <div id="editorPagebuttons" className="row">
-          <PageButtons
-            prevTitle={NAV_BUTTONS.prev}
-            nextTitle={NAV_BUTTONS.submit}
-            prevValue="/createNewLesson"
-            nextValue="/endpage"
-            setPageNumber={null}
-            submitHandler={submitHandler}
-            state={this.state}
-          />
+            }
+            MDPreview={<MDPreview />}
+          ></ControlPanel>
         </div>
       </div>
     );
@@ -1102,3 +1025,19 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps, { addText, parseMD })(Editor);
+
+//  TO_BE_DELETED:
+
+{
+  /* <div id="editorPagebuttons" className="row">
+<PageButtons
+  prevTitle={NAV_BUTTONS.prev}
+  nextTitle={NAV_BUTTONS.submit}
+  prevValue="/createNewLesson"
+  nextValue="/endpage"
+  setPageNumber={null}
+  submitHandler={submitHandler}
+  state={this.state}
+/>
+</div> */
+}

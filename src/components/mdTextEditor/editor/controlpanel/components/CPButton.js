@@ -7,15 +7,9 @@ class Buttons extends React.Component {
   smallScreen = false;
 
   componentDidUpdate() {
-    if (
-      window.innerWidth < 600 ||
-      window.innerHeight / window.innerWidth > 1.4
-    ) {
+    if (window.innerWidth < 768) {
       this.smallScreen = true;
-    } else if (
-      window.innerWidth > 600 ||
-      window.innerHeight / window.innerWidth < 1.4
-    ) {
+    } else if (window.innerWidth > 768) {
       this.smallScreen = false;
     }
   }
@@ -56,11 +50,7 @@ class Buttons extends React.Component {
           trigger={
             this.props.icon ? (
               <Button
-                style={{
-                  backgroundColor: "#b1daae",
-                  marginBottom: "0.1rem",
-                  margin: "-0.7rem"
-                }}
+                className="CPButton"
                 onTouchStart={this.handleButtonPress}
                 onTouchEnd={this.handleClose}
                 onClick={() =>
@@ -77,7 +67,7 @@ class Buttons extends React.Component {
               </Button>
             ) : (
               <Button
-                style={{ backgroundColor: "#b1daae", margin: "-0.3rem" }}
+                className="CPButton"
                 onTouchStart={this.handleButtonPress}
                 onTouchEnd={this.handleClose}
                 onClick={() =>
@@ -106,7 +96,7 @@ class Buttons extends React.Component {
           trigger={
             this.props.icon ? (
               <Button
-                style={{ backgroundColor: "#b1daae", margin: "-0.3rem" }}
+                className="CPButton"
                 onTouchStart={this.handleButtonPress}
                 onTouchEnd={this.handleButtonRelease}
                 onClick={() =>
@@ -123,7 +113,7 @@ class Buttons extends React.Component {
               </Button>
             ) : (
               <Button
-                style={{ backgroundColor: "#b1daae", margin: "-0.3rem" }}
+                className="CPButton"
                 onClick={() =>
                   this.props.onButtonClick(
                     this.props.bTitle,
