@@ -6,8 +6,10 @@
 
 .flexContainer {
   display: flex;
-  height: 85vh;
+  height: 80vh;
   flex-direction: column;
+  overflow: hidden;
+  touch-action: manipulation;
 }
 
 .TextArea {
