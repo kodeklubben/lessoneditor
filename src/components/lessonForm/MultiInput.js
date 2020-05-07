@@ -26,6 +26,10 @@ class MultiInput extends React.Component {
     this.handleClick(e);
   };
 
+  inputClick = () => {
+    this.textInput.focus();
+  };
+
   removeClickHandler = (name, value) => {
     let i = name + "List";
     let tempArray = this.props.inputArray;
@@ -63,6 +67,8 @@ class MultiInput extends React.Component {
                   name={this.props.name}
                   placeholder={this.props.placeholder}
                   value={this.props.inputValue}
+                  onClick={this.inputClick}
+                  onTouchStart={this.inputClick}
                   onChange={this.props.changeHandler}
                   onKeyUp={e => (e.key === "Enter" ? this.handleClick(e) : "")}
                   onBlur={e => this.onBlur(e)}
@@ -76,6 +82,8 @@ class MultiInput extends React.Component {
                   name={this.props.name}
                   placeholder={this.props.placeholder}
                   value={this.props.inputValue}
+                  onClick={this.inputClick}
+                  onTouchStart={this.inputClick}
                   onChange={this.props.changeHandler}
                   onKeyUp={e => (e.key === "Enter" ? this.handleClick(e) : "")}
                   onBlur={e => this.onBlur(e)}
@@ -95,22 +103,10 @@ class MultiInput extends React.Component {
                 }
               >
                 <span>
-                  {element + " "} <i className="x icon"></i>
+                  {element} <i className="x icon"></i>
                 </span>
               </button>
             ))}
-
-            <button
-              style={{ order: this.inputOrder + 1 }}
-              icon
-              id="addNameButton"
-              className="ui icon button"
-              name={this.props.name}
-              type="button"
-              onClick={this.handleClick}
-            >
-              <i id="addNameButtonChild" className="plus icon" />
-            </button>
           </div>
           {this.props.validateMessage ? (
             <div className="validateError">{this.props.validateMessage}</div>

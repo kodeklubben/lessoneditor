@@ -9,58 +9,35 @@ class ImagePopup extends React.Component {
     };
   }
 
-  onInputChange = e => {
-    this.setState({ inputValue: e.target.value });
-  };
-
   fileSelectedHandler = event => {
-    if (event.target.files && event.target.files[0].size > 5000000) {
-      this.setState({ toBigMessage: "Bildet kan ikke være over 5mb" });
-    } else {
-      this.props.storeImage(event.target.files[0]);
-      this.setState({ toBigMessage: "" });
-      this.props.imagePopupSubmitHandler("./" + event.target.files[0].name);
+    try {
+      if (event.target.files && event.target.files[0].size > 4000000) {
+        this.props.imagePopupSubmitHandler("Bildet kan ikke være over 5mb", "");
+      } else {
+        let imageUrl = URL.createObjectURL(event.target.files[0]);
+        let fileName = event.target.files[0].name;
+        this.props.storeImage(event.target.files[0]);
+        this.setState({ toBigMessage: "" });
+        this.props.imagePopupSubmitHandler(imageUrl, "filnavn: " + fileName);
+        imageUrl = "";
+        fileName = "";
+        this.setState({ inputValue: "", toBigMessage: "" });
+      }
+    } catch (err) {
+      console.log(err);
+      this.props.editorRef.current.focus();
     }
   };
 
   render() {
     return (
-      <div className="transparent">
-        <div className="imagePopup">
-          <div className="">
-            <form
-              onSubmit={() =>
-                this.props.imagePopupSubmitHandler(this.state.inputValue)
-              }
-            >
-              <div className="">
-                <div className="">
-                  <label>Link til bilde her:</label>
-                  <input
-                    autoFocus
-                    onChange={this.onInputChange}
-                    value={this.state.inputValue}
-                    placeholder="Image URL"
-                  />
-                  <label>Last opp bilde her:</label>
-                  <input
-                    type="file"
-                    accept=".jpg,.jpeg,.png,.gif"
-                    onChange={this.fileSelectedHandler}
-                  />
-                  <div className="errorMessage">{this.state.toBigMessage}</div>
-                </div>
-              </div>
-
-              <div className="">
-                <button type="submit" basic color="grey">
-                  OK
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
+      <input
+        style={{ display: "none" }}
+        type="file"
+        accept=".jpg,.jpeg,.png,.gif"
+        ref={this.props.uploadImageRef}
+        onChange={this.fileSelectedHandler}
+      />
     );
   }
 }

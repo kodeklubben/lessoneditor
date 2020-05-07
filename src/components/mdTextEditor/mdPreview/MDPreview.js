@@ -4,8 +4,7 @@ import { connect } from "react-redux";
 const MDPreview = props => {
   return (
     <div
-      className="MDPreview"
-      id="mdpreview"
+      className="PreviewArea"
       dangerouslySetInnerHTML={{ __html: props.parseMD }}
     />
   );
