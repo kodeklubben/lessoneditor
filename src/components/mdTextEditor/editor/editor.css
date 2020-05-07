@@ -6,7 +6,7 @@
 
 .flexContainer {
   display: flex;
-  height: 90vh;
+  height: 85vh;
   flex-direction: column;
 }
 
