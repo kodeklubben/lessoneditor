@@ -129,12 +129,12 @@ const ControlPanel = props => {
           </div>
 
           <div className="space" />
-          <div className="showCustom">
+          <div style={{ display: showTextArea }} className="showCustom">
             <CPButton
               bTitle="showCustom"
               icon=""
               output=""
-              title="{}"
+              title="{ }"
               cursorIntON=""
               cursorIntOFF=""
               endOutput=""
@@ -257,12 +257,12 @@ const ControlPanel = props => {
             ))}
           </div>
           <div className="space" />
-          <div className="showCustom">
+          <div style={{ display: showTextArea }} className="showCustom">
             <CPButton
               bTitle="showCustom"
               icon=""
               output=""
-              title="{}"
+              title="{ }"
               cursorIntON=""
               cursorIntOFF=""
               endOutput=""

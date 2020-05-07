@@ -967,8 +967,7 @@ class Editor extends React.Component {
       }
     };
 
-    // return this.props.isSignedIn ? (
-    return (
+    return this.props.isSignedIn ? (
       <div className="editor">
         <ImagePopup
           uploadImageRef={this.uploadImageRef}
@@ -1008,10 +1007,9 @@ class Editor extends React.Component {
           ></ControlPanel>
         </div>
       </div>
+    ) : (
+      <Redirect to="/" />
     );
-    // ) : (
-    //   <Redirect to="/" />
-    // );
   }
 }
 

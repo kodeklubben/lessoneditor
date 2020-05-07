@@ -6,7 +6,7 @@
 
 .flexContainer {
   display: flex;
-  height: 80vh;
+  height: 78vh;
   flex-direction: column;
   overflow: hidden;
   touch-action: manipulation;
@@ -117,6 +117,13 @@
 
 @media only screen and (min-width: 768px) {
   /* For desktop: */
+  .flexContainer {
+    display: flex;
+    height: 90vh;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
   .space {
     margin-left: 1em;
   }
@@ -148,7 +155,7 @@
   .customButtons {
     display: none;
     flex-flow: row nowrap;
-    justify-content: flex-end;
+    justify-content: space-between;
   }
   .CPButton {
     background-color: #b1daae !important;
@@ -199,8 +206,8 @@
 }
 
 .ui.buttons.sections #custom {
-  background-color: #e2ffe0 !important;
+  background-color: #d8f0d6 !important;
 }
 .ui.buttons.code #custom {
-  background-color: #e2ffe0 !important;
+  background-color: #d8f0d6 !important;
 }
