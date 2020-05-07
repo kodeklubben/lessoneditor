@@ -103,7 +103,7 @@
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-evenly;
 }
 
 .bottomContainer {
@@ -112,7 +112,7 @@
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: space-evenly;
 }
 
 @media only screen and (min-width: 768px) {
@@ -120,6 +120,7 @@
   .flexContainer {
     display: flex;
     height: 90vh;
+    max-height: 90vh;
     flex-direction: column;
     overflow: hidden;
   }
@@ -182,6 +183,7 @@
 
   .textWindows {
     order: 3;
+    max-height: 85vh;
   }
 
   .preview {

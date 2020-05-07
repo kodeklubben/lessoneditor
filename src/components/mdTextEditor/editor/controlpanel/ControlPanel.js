@@ -128,7 +128,6 @@ const ControlPanel = props => {
             ))}
           </div>
 
-          <div className="space" />
           <div style={{ display: showTextArea }} className="showCustom">
             <CPButton
               bTitle="showCustom"
