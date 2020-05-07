@@ -57,6 +57,8 @@ var isButtonOn = {
   codeblock: true
 };
 
+var preview = false;
+
 // dynamic list with all the keyboard shortcut chars from ./settingFiles/buttonConfig.js
 var shortcutKeys = [];
 for (let i = 0; i < Object.values(KEY).length; i++) {
@@ -95,7 +97,6 @@ class Editor extends React.Component {
     super(props);
 
     this.state = {
-      preview: false,
       isEditor: true,
       editorRedirect: "",
       images: [],
@@ -957,13 +958,11 @@ class Editor extends React.Component {
     };
 
     const handlePreview = event => {
-      if (this.state.preview) {
-        this.setState({ preview: false });
+      if (this.preview) {
+        this.preview = false;
         return false;
-      } else if (!this.state.preview) {
-        this.setState({ preview: true });
-        this.editorRef.current.focus();
-        setCursorPosition(cursorPositionStart, cursorPositionEnd);
+      } else if (!this.preview) {
+        this.preview = true;
         return true;
       }
     };

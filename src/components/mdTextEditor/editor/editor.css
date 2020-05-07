@@ -36,7 +36,19 @@
 }
 
 .customButtons {
+  order: 2;
+
   display: none;
+  flex-flow: column;
+  justify-content: flex-end;
+}
+.ui.buttons.sections {
+  display: flex;
+  flex-direction: column;
+}
+.ui.buttons.code {
+  display: flex;
+  flex-direction: column;
 }
 
 .editor {
@@ -44,7 +56,7 @@
 }
 
 .textWindows {
-  order: 2;
+  order: 3;
   display: flex;
   flex-direction: row;
   flex: 1;
@@ -93,7 +105,7 @@
 }
 
 .bottomContainer {
-  order: 3;
+  order: 4;
   margin-top: auto;
   display: flex;
   flex-flow: row nowrap;
@@ -105,6 +117,15 @@
   /* For desktop: */
   .space {
     margin-left: 1em;
+  }
+
+  .ui.buttons.sections {
+    display: flex;
+    flex-direction: row;
+  }
+  .ui.buttons.code {
+    display: flex;
+    flex-direction: row;
   }
 
   .upperContainer {
@@ -173,4 +194,11 @@
 
 .CPButton {
   background-color: #b1daae !important;
+}
+
+.ui.buttons.sections #custom {
+  background-color: #e2ffe0 !important;
+}
+.ui.buttons.code #custom {
+  background-color: #e2ffe0 !important;
 }

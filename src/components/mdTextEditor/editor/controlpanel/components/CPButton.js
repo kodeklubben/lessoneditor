@@ -50,6 +50,7 @@ class Buttons extends React.Component {
           trigger={
             this.props.icon ? (
               <Button
+                id="custom"
                 className="CPButton"
                 onTouchStart={this.handleButtonPress}
                 onTouchEnd={this.handleClose}
@@ -67,6 +68,7 @@ class Buttons extends React.Component {
               </Button>
             ) : (
               <Button
+                id="custom"
                 className="CPButton"
                 onTouchStart={this.handleButtonPress}
                 onTouchEnd={this.handleClose}
@@ -96,6 +98,7 @@ class Buttons extends React.Component {
           trigger={
             this.props.icon ? (
               <Button
+                id="custom"
                 className="CPButton"
                 onTouchStart={this.handleButtonPress}
                 onTouchEnd={this.handleButtonRelease}
@@ -113,6 +116,7 @@ class Buttons extends React.Component {
               </Button>
             ) : (
               <Button
+                id="custom"
                 className="CPButton"
                 onClick={() =>
                   this.props.onButtonClick(

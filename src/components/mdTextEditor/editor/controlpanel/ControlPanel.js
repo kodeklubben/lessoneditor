@@ -24,7 +24,21 @@ const ControlPanel = props => {
   ) => {
     if (bTitle === "preview") {
       previewOnOff(props.handlePreview());
+      props.handleButtonClick(
+        bTitle,
+        output,
+        cursorIntON,
+        cursorIntOFF,
+        endOutput
+      );
+    } else if (bTitle === "showCustom") {
+      if (showCustom === "none") {
+        setShowCustom("flex");
+      } else {
+        setShowCustom("none");
+      }
     } else {
+      setShowCustom("none");
       props.handleButtonClick(
         bTitle,
         output,
@@ -37,15 +51,24 @@ const ControlPanel = props => {
 
   const [showTextArea, setShowTextArea] = React.useState("");
   const [showPreviewArea, setShowPreviewArea] = React.useState("");
+  const [showCustom, setShowCustom] = React.useState("none");
 
   const previewOnOff = buttonPress => {
     if (buttonPress) {
       setShowTextArea("none");
       setShowPreviewArea("flex");
     } else {
-      props.editorRef.current.focus();
       setShowTextArea("flex");
       setShowPreviewArea("none");
+    }
+  };
+
+  const customOnOff = e => {
+    e.preventDefault();
+    if (showCustom === "none") {
+      setShowCustom("flex");
+    } else {
+      setShowCustom("none");
     }
   };
 
@@ -103,6 +126,21 @@ const ControlPanel = props => {
                 shortcutKey={element.shortcut}
               />
             ))}
+          </div>
+
+          <div className="space" />
+          <div className="showCustom">
+            <CPButton
+              bTitle="showCustom"
+              icon=""
+              output=""
+              title="{}"
+              cursorIntON=""
+              cursorIntOFF=""
+              endOutput=""
+              onButtonClick={handleButtonClick}
+              shortcutKey=""
+            />
           </div>
         </div>
         <div className="textWindows">
@@ -218,9 +256,23 @@ const ControlPanel = props => {
               />
             ))}
           </div>
+          <div className="space" />
+          <div className="showCustom">
+            <CPButton
+              bTitle="showCustom"
+              icon=""
+              output=""
+              title="{}"
+              cursorIntON=""
+              cursorIntOFF=""
+              endOutput=""
+              onButtonClick={handleButtonClick}
+              shortcutKey=""
+            />
+          </div>
         </div>
 
-        <div className="customButtons">
+        <div style={{ display: showCustom }} className="customButtons">
           <div className="space" />
           <div className="ui buttons sections">
             {sections.map(element => (
@@ -237,7 +289,6 @@ const ControlPanel = props => {
               />
             ))}
           </div>
-
           <div className="space" />
           <div className="ui buttons code">
             {code.map(element => (
