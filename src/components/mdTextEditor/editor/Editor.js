@@ -141,6 +141,8 @@ class Editor extends React.Component {
 
       this.setState({ redirect: "/endpage" });
 
+      console.log(this.state.redirect);
+
       // TODO: Send inputtext-data to database
     };
 
@@ -989,6 +991,7 @@ class Editor extends React.Component {
             nextValue="/endpage"
             submitHandler={submitHandler}
             handlePreview={handlePreview}
+            redirect={this.state.redirect}
             MDTextArea={
               <MDTextArea
                 editorRef={this.editorRef}
@@ -1022,19 +1025,3 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps, { addText, parseMD })(Editor);
-
-//  TO_BE_DELETED:
-
-{
-  /* <div id="editorPagebuttons" className="row">
-<PageButtons
-  prevTitle={NAV_BUTTONS.prev}
-  nextTitle={NAV_BUTTONS.submit}
-  prevValue="/createNewLesson"
-  nextValue="/endpage"
-  setPageNumber={null}
-  submitHandler={submitHandler}
-  state={this.state}
-/>
-</div> */
-}

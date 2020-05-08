@@ -1,7 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 import CPButton from "./components/CPButton";
-import ProfileMenu from "../../../ProfileMenu";
 import {
   emphasis,
   undoRedo,
@@ -12,9 +11,15 @@ import {
   sections,
   code
 } from "../../settingsFiles/buttonConfig";
-import { Input } from "semantic-ui-react";
+import { Redirect } from "react-router-dom";
 
 const ControlPanel = props => {
+  const submitHandler = () => {
+    props.submitHandler();
+
+    setRedirect("/endpage");
+  };
+
   const handleButtonClick = (
     bTitle,
     output,
@@ -52,6 +57,7 @@ const ControlPanel = props => {
   const [showTextArea, setShowTextArea] = React.useState("");
   const [showPreviewArea, setShowPreviewArea] = React.useState("");
   const [showCustom, setShowCustom] = React.useState("none");
+  const [redirect, setRedirect] = React.useState("");
 
   const previewOnOff = buttonPress => {
     if (buttonPress) {
@@ -63,16 +69,9 @@ const ControlPanel = props => {
     }
   };
 
-  const customOnOff = e => {
-    e.preventDefault();
-    if (showCustom === "none") {
-      setShowCustom("flex");
-    } else {
-      setShowCustom("none");
-    }
-  };
-
-  return (
+  return redirect ? (
+    <Redirect to="/endpage" />
+  ) : (
     <React.Fragment>
       {/*small screen */}
       <div className="flexContainer">
@@ -141,7 +140,14 @@ const ControlPanel = props => {
               shortcutKey=""
             />
           </div>
+
+          <div className="submitButton">
+            <button className="ui icon button" onClick={submitHandler}>
+              <i className="arrow right icon" />
+            </button>
+          </div>
         </div>
+
         <div className="textWindows">
           <div style={{ display: showTextArea }} className="textWindow">
             {props.MDTextArea}
@@ -268,6 +274,11 @@ const ControlPanel = props => {
               onButtonClick={handleButtonClick}
               shortcutKey=""
             />
+          </div>
+          <div className="submitButton">
+            <button className="ui icon button submit" onClick={submitHandler}>
+              <i className="arrow right icon" />
+            </button>
           </div>
         </div>
 
