@@ -83,9 +83,15 @@ ol {
   margin: 20px 0;
 }
 
+/* Image styling */
+
+.PreviewArea p img {
+  width: 100%;
+}
+
 /* List styling */
 
-.MDPreview ul li::before {
+.PreviewArea ul li::before {
   content: " ";
   border-radius: 20px;
   border: 3px solid #abdbea;
@@ -131,7 +137,7 @@ ol {
 }
 
 /*Codeblock styling */
-.MDPreview code {
+.PreviewArea code {
   padding: 2px 4px;
   font-size: 90%;
   color: #c7254e;
@@ -139,7 +145,7 @@ ol {
   border-radius: 4px;
 }
 
-.MDPreview pre {
+.PreviewArea pre {
   display: block;
   padding: 10.5px;
   margin: 0 0 11px;
@@ -153,7 +159,7 @@ ol {
   border-radius: 4px;
 }
 
-.MDPreview pre code {
+.PreviewArea pre code {
   padding: 0;
   font-size: inherit;
   color: inherit;

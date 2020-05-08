@@ -1,3 +1,4 @@
+import "./profileMenu.css";
 import React from "react";
 import { connect } from "react-redux";
 import { Popup } from "semantic-ui-react";
@@ -13,9 +14,13 @@ const ProfileMenu = props => {
         hover
         size="tiny"
         trigger={
-          <div className="ui avatar image">
+          <div>
             {props.imageUrl ? (
-              <img src={props.imageUrl} alt="useImage"></img>
+              <img
+                className="triggerImage"
+                src={props.imageUrl}
+                alt="useImage"
+              ></img>
             ) : (
               <i className="user icon"></i>
             )}
