@@ -31,6 +31,7 @@
   padding: 1rem;
   width: 93vw;
   height: 69vh;
+  word-wrap: break-word;
   background-color: white;
   overflow: auto !important;
   touch-action: manipulation;
@@ -93,6 +94,8 @@
 
 .textEditorContainer {
   background-color: #eef7ee;
+  border: 1px solid #b1daae;
+  border-radius: 5px;
 }
 
 /* CONTROL PANEL */
@@ -158,6 +161,7 @@
 
   .submitButton {
     margin-left: auto;
+    margin-right: 1em;
   }
 
   .customButtons {
@@ -175,6 +179,7 @@
     margin: 1rem;
     height: 82vh;
     display: block;
+    word-wrap: break-word;
     background-color: white;
     overflow: auto;
     touch-action: manipulation;
@@ -205,7 +210,8 @@
   }
 
   .previewWindow {
-    display: flex !important;
+    overflow: hidden;
+    display: flex;
     width: 50%;
     height: 100%;
   }

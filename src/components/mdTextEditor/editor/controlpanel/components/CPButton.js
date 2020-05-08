@@ -51,6 +51,7 @@ class Buttons extends React.Component {
             this.props.icon ? (
               <Button
                 id="custom"
+                size="big"
                 className="CPButton"
                 onTouchStart={this.handleButtonPress}
                 onTouchEnd={this.handleClose}
@@ -69,6 +70,7 @@ class Buttons extends React.Component {
             ) : (
               <Button
                 id="custom"
+                size="big"
                 className="CPButton"
                 onTouchStart={this.handleButtonPress}
                 onTouchEnd={this.handleClose}
@@ -99,6 +101,7 @@ class Buttons extends React.Component {
             this.props.icon ? (
               <Button
                 id="custom"
+                size="big"
                 className="CPButton"
                 onTouchStart={this.handleButtonPress}
                 onTouchEnd={this.handleButtonRelease}
@@ -117,6 +120,7 @@ class Buttons extends React.Component {
             ) : (
               <Button
                 id="custom"
+                size="big"
                 className="CPButton"
                 onClick={() =>
                   this.props.onButtonClick(
