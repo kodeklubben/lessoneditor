@@ -31,6 +31,7 @@
   padding: 1rem;
   width: 93vw;
   height: 69vh;
+  word-wrap: break-word;
   background-color: white;
   overflow: auto !important;
   touch-action: manipulation;

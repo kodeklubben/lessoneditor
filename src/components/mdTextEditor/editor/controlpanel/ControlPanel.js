@@ -141,7 +141,7 @@ const ControlPanel = props => {
             />
           </div>
 
-          <div className="submitButton">
+          <div style={{ display: showTextArea }} className="submitButton">
             <button className="ui icon button" onClick={submitHandler}>
               <i className="arrow right icon" />
             </button>
@@ -189,6 +189,8 @@ const ControlPanel = props => {
               />
             ))}
           </div>
+
+          <div />
         </div>
 
         {/*large screen */}
