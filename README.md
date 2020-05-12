@@ -53,16 +53,16 @@ frontend/
 
 backend/
 ├───api
-|   ├───models
-|   |   └───lesson.js
-|   └───routes
-|       ├───images.js
-|       └───lessons.js
+│   ├───models
+│   │   └───lesson.js
+│   └───routes
+│       ├───images.js
+│       └───lessons.js
 ├───static
-|   └───images
+│   └───images
 ├───utils
-|   ├───handleGit.js
-|   └───wrriteToFile.js
+│   ├───handleGit.js
+│   └───wrriteToFile.js
 ├───app.js
 ├───README.md
 └───server.js
