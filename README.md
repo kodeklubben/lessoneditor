@@ -179,15 +179,9 @@ In the projects backend directory, you can run:
 #### `npm start`
 
 Runs the express application.
+Currently set up to run through `nodemon` for ease of development.
 Send HTTP request to [http://localhost:5000/$route](http://localhost:5000/lessons) to access the server.
 
-
-#### `npm dev` 
-
-Runs the express application in development mode through nodemon.
-Send HTTP request to [http://localhost:5000/$route](http://localhost:5000/lessons) to access the server.
-
-Useful during development as server restart is issued after save upon code changes.
 
 ## Learn More
 

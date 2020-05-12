@@ -53,7 +53,7 @@ Several quick start options are available:
 
 * Node.js
 * React.js
-* Redux.js
+    * Redux.js
 * highlight.js
 
 ## Learn More

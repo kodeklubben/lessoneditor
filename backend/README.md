@@ -59,12 +59,6 @@ There are several missing features in this application at the moment. In the fol
 * Express.js
     * body-parser
     * multer
-    * 
 * mongoose
 * simple-git
-
-# Running documentation locally
-
-1. Run `npm install` to install the Node.js dependencies
-2. Run `npm start`
-3. Open `http://localhost:5000/` in your browser
+* nodemon
