@@ -1,40 +1,31 @@
-import React, { Component } from "react";
-// import './ItemList.css'
+import React from 'react';
 
-class ItemList extends Component {
-    
-    state = {
-        listitems: ["Oppgave 1", "Oppgave 2", "Oppgave 3", "Oppgave 4", "Oppgave 5"]
-      };
+function ItemList({items}) {
+  const mystyle = {
+    padding: '10px',
+    fontFamily: 'Arial',
+    fontSize: '20px',
+  };
 
-    render() {
-      
-      const mystyle = {
-        
-        padding: "10px",
-        fontFamily: "Arial",
-        fontSize:"20px"
-        
-      };
-        return (
-            <React.Fragment>
-            <div className=".container my-container">
-            <div className="ui middle aligned divided list">
-              {this.state.listitems.map(listitem => (
-                <div className="item" >
+  return (
+      <>
+        <div className=".container my-container">
+          <div className="ui middle aligned divided list">
+            {items.map((listitem, index) => (
+                <div className="item" key={'listitem' + index}>
                   <div className="right floated content">
-                  <div className="ui button">Rediger</div>
+                    <div className="ui button">Rediger</div>
                   </div>
                   <div className="content" style={mystyle}>
-                {listitem}
+                    {listitem}
+                  </div>
                 </div>
-                </div>
-              ))}
-            </div>
-            </div>
-          </React.Fragment>
+            ))}
+          </div>
+        </div>
+      </>
         );
-    }
+
 }
 
 export default ItemList;
