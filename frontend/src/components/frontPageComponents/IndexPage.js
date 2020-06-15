@@ -2,12 +2,11 @@ import React from "react";
 import "./style.css";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import GoogleAuth from "../GoogleAuth";
 import ProfileMenu from "../ProfileMenu";
 
 const buttonText = ["Min side", "Rediger en oppgave", "Lag ny oppgave"];
 
-const IndexPage = props => {
+const IndexPage = (props) => {
   return (
     <div className="StartPageContainer">
       <div className="ui right aligned grid">
@@ -40,7 +39,7 @@ const IndexPage = props => {
   );
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return { isSignedIn: state.auth.isSignedIn, firstName: state.auth.firstName };
 };
 

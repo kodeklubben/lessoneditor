@@ -1,12 +1,11 @@
 import React from "react";
 
 import { YMLtagsGrade } from "./YMLtags";
-import { YML_TEXT } from "./settingsFiles/languages/formpage_NO";
+import { FORM_TEXT, YML_TEXT } from "./settingsFiles/languages/formpage_NO";
 
 import COURSESLIST from "./settingsFiles/COURSELIST";
-import { FORM_TEXT } from "./settingsFiles/languages/formpage_NO";
 
-const Page2 = props => {
+const Page2 = (props) => {
   return (
     <>
       <form className="ui form">
@@ -18,7 +17,7 @@ const Page2 = props => {
               name="course"
               onChange={props.changeHandler}
             >
-              {COURSESLIST.map(element => (
+              {COURSESLIST.map((element) => (
                 <option key={element.courseTitle} value={element.courseTitle}>
                   {element.courseTitle}
                 </option>
@@ -35,7 +34,7 @@ const Page2 = props => {
               name="level"
               onChange={props.changeHandler}
             >
-              {FORM_TEXT.LEVEL_VALUES.map(element => (
+              {FORM_TEXT.LEVEL_VALUES.map((element) => (
                 <option key={element.value} value={element.value}>
                   {element.name}
                 </option>

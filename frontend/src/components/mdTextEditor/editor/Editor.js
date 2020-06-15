@@ -1,8 +1,6 @@
 import "./editor.css";
 import React from "react";
 import { connect } from "react-redux";
-import { Redirect } from "react-router-dom";
-import { Button, Icon, Popup } from "semantic-ui-react";
 import { addText, parseMD } from "../../../actions";
 import MDTextArea from "./MDTextArea";
 import MDPreview from "../mdPreview/MDPreview";
@@ -10,24 +8,22 @@ import { mdParser } from "../../../utils/mdParser";
 import ControlPanel from "./controlpanel/ControlPanel";
 import ProfileMenu from "../../ProfileMenu";
 import ImagePopup from "../ImagePopup";
-import PageButtons from "../../PageButtons";
 import {
-  SAVING,
+  NAV_BUTTONS,
   SAVED,
+  SAVING,
   SECTION_TEXT,
-  PHOTO_TEXT,
-  NAV_BUTTONS
 } from "../settingsFiles/languages/editor_NO";
 import {
-  SHORTCUTKEY,
-  KEY_COMBINATIONS as KEY,
+  code,
   emphasis,
-  undoRedo,
-  saveLoadNew,
   image,
+  KEY_COMBINATIONS as KEY,
   lists,
+  saveLoadNew,
   sections,
-  code
+  SHORTCUTKEY,
+  undoRedo,
 } from "../settingsFiles/buttonConfig";
 
 // check if buttons is pressed
@@ -54,10 +50,8 @@ var isButtonOn = {
   sec_flag: true,
   sec_try: true,
   inline: true,
-  codeblock: true
+  codeblock: true,
 };
-
-var preview = false;
 
 // dynamic list with all the keyboard shortcut chars from ./settingFiles/buttonConfig.js
 var shortcutKeys = [];
@@ -102,7 +96,7 @@ class Editor extends React.Component {
       images: [],
       counter: 0,
       buttonValues: isButtonOn,
-      redirect: null
+      redirect: null,
     };
 
     // refs are used to find elements in the DOM (simular to document.getElementbyID)
@@ -134,7 +128,7 @@ class Editor extends React.Component {
 
   render() {
     // Submithandler
-    const submitHandler = event => {
+    const submitHandler = (event) => {
       console.log("text submitted");
 
       this.setState({ redirect: "/endpage" });
@@ -166,7 +160,7 @@ class Editor extends React.Component {
         sec_flag: true,
         sec_try: true,
         inline: true,
-        codeblock: true
+        codeblock: true,
       };
       this.setState({ buttonValues: isButtonOn });
     };
@@ -190,7 +184,7 @@ class Editor extends React.Component {
     };
 
     // all config for handling text on input
-    const handleChange = event => {
+    const handleChange = (event) => {
       cursorPositionStart = event.target.selectionStart;
       cursorPositionEnd = event.target.selectionEnd;
       inputText = event.target.value;
@@ -223,17 +217,17 @@ class Editor extends React.Component {
       this.setState({ counter: 0 });
     };
 
-    const onTextareaKeyUp = event => {
+    const onTextareaKeyUp = (event) => {
       cursorPositionStart = event.target.selectionStart;
       cursorPositionEnd = event.target.selectionEnd;
     };
 
-    const onTextareaSelect = e => {
+    const onTextareaSelect = (e) => {
       cursorPositionStart = e.target.selectionStart;
       cursorPositionEnd = e.target.selectionEnd;
     };
 
-    const onTextareaMouseDown = e => {
+    const onTextareaMouseDown = (e) => {
       cursorPositionStart = e.target.selectionStart;
       cursorPositionEnd = e.target.selectionEnd;
 
@@ -241,7 +235,7 @@ class Editor extends React.Component {
     };
 
     // KEYBOARD SHORTCUT SETTINGS
-    const onTextareaKeyDown = event => {
+    const onTextareaKeyDown = (event) => {
       cursorPositionStart = event.target.selectionStart;
       cursorPositionEnd = event.target.selectionEnd;
 
@@ -369,8 +363,8 @@ class Editor extends React.Component {
       }
     };
 
-    const storeImage = image => {
-      this.setState(prevState => ({ images: [...prevState.images, image] }));
+    const storeImage = (image) => {
+      this.setState((prevState) => ({ images: [...prevState.images, image] }));
     };
 
     // Show/hide image popup
@@ -531,7 +525,7 @@ class Editor extends React.Component {
           listButtonValues = {
             bTitle: bTitle,
             output: output,
-            cursorInt: cursorIntON
+            cursorInt: cursorIntON,
           };
         }
       }
@@ -746,7 +740,7 @@ class Editor extends React.Component {
       FLAG: KEY.flag.join(""),
       TRY: KEY.try.join(""),
       INLINE: KEY.inline.join(""),
-      CODEBLOCK: KEY.codeblock.join("")
+      CODEBLOCK: KEY.codeblock.join(""),
     };
 
     // keyboard shortcut actions.  Settings in ./settingsFiles/buttonConfig.js
@@ -952,10 +946,10 @@ class Editor extends React.Component {
           code[1].cursorIntON,
           code[1].cursorIntOFF,
           code[1].endOutput
-        )
+        ),
     };
 
-    const handlePreview = event => {
+    const handlePreview = (event) => {
       if (this.preview) {
         this.preview = false;
         return false;
@@ -1010,11 +1004,11 @@ class Editor extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     mdText: state.mdText,
     parseMD: state.parseMD,
-    isSignedIn: state.auth.isSignedIn
+    isSignedIn: state.auth.isSignedIn,
   };
 };
 

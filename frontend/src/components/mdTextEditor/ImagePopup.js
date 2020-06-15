@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 
-const ImagePopup = props => {
+const ImagePopup = (props) => {
   const imageSizeErrorMessage = "Bildet kan ikke være over 5mb";
 
-  const fileSelectedHandler = event => {
+  const fileSelectedHandler = (event) => {
     try {
       if (event.target.files && event.target.files[0].size > 5000000) {
         props.imagePopupSubmitHandler(imageSizeErrorMessage, "");
@@ -12,8 +12,6 @@ const ImagePopup = props => {
         let fileName = event.target.files[0].name;
         props.storeImage(event.target.files[0]);
         props.imagePopupSubmitHandler(imageUrl, "filnavn: " + fileName);
-        imageUrl = "";
-        fileName = "";
       }
     } catch (err) {
       console.log(err);

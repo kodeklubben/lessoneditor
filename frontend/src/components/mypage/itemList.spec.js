@@ -1,8 +1,8 @@
-import React from 'react';
-import ItemList from './ItemList';
-import {shallow} from 'enzyme';
+import React from "react";
+import ItemList from "./ItemList";
+import { shallow } from "enzyme";
 
-it('renders without crashing', () => {
+it("renders without crashing", () => {
   const oppgaveNavn = "Min nye oppgave til kidsa";
   const wrapper = shallow(<ItemList items={[oppgaveNavn]}></ItemList>);
   expect(wrapper.contains(oppgaveNavn)).toEqual(true);

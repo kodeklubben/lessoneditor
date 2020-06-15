@@ -1,28 +1,26 @@
 import React from "react";
 
 import { YMLtagsSubject, YMLtagsTopic } from "./YMLtags";
-import { YML_TEXT } from "./settingsFiles/languages/formpage_NO";
-
-import { FORM_TEXT } from "./settingsFiles/languages/formpage_NO";
+import {
+  FORM_TEXT,
+  SUBJECT as subjects,
+  TOPIC as topics,
+  YML_TEXT,
+} from "./settingsFiles/languages/formpage_NO";
 
 import { Dropdown } from "semantic-ui-react";
-
-import {
-  SUBJECT as subjects,
-  TOPIC as topics
-} from "./settingsFiles/languages/formpage_NO";
 
 const SUBJECT_SUBTAG = "subject";
 const TOPIC_SUBTAG = "topic";
 
 const SUBJECT = {
   name: Object.values(subjects),
-  value: Object.keys(subjects)
+  value: Object.keys(subjects),
 };
 
 const TOPIC = {
   name: Object.values(topics),
-  value: Object.keys(topics)
+  value: Object.keys(topics),
 };
 
 const subjectSettings = [];
@@ -32,7 +30,7 @@ for (let i = 0; i < subjectLen; i++) {
   subjectSettings.push({
     key: SUBJECT.value[i],
     text: SUBJECT.name[i],
-    value: SUBJECT.value[i]
+    value: SUBJECT.value[i],
   });
 }
 
@@ -43,11 +41,11 @@ for (let i = 0; i < topicLen; i++) {
   topicSettings.push({
     key: TOPIC.value[i],
     text: TOPIC.name[i],
-    value: TOPIC.value[i]
+    value: TOPIC.value[i],
   });
 }
 
-const Page3 = props => {
+const Page3 = (props) => {
   return (
     <>
       <div className="ui form">

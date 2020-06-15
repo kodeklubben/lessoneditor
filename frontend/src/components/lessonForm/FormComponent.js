@@ -1,7 +1,6 @@
 import "./formpage.css";
 import React from "react";
 import { connect } from "react-redux";
-import { Redirect } from "react-router-dom";
 import FormPage from "./FormPage";
 import COURSELIST from "./settingsFiles/COURSELIST";
 import { LANGUAGES } from "./settingsFiles/languages/formpage_NO";
@@ -23,7 +22,7 @@ class FormComponent extends React.Component {
       license: "CC BY-SA 4.0",
       tags: { topic: [], subject: [], grade: [] },
       redirect: null,
-      pageNumber: 1
+      pageNumber: 1,
     };
   }
 
@@ -58,7 +57,7 @@ class FormComponent extends React.Component {
     );
   };
 
-  submitHandler = event => {
+  submitHandler = (event) => {
     this.setState({ redirect: "/editor" });
 
     console.log("YAML header: \n" + this.YAMLstateToString(this.state));
@@ -66,7 +65,7 @@ class FormComponent extends React.Component {
     // TODO: Send state-data to database
   };
 
-  changeHandler = event => {
+  changeHandler = (event) => {
     let nam = event.target.name;
     let val = event.target.value;
     this.setState({ [nam]: val });
@@ -79,7 +78,7 @@ class FormComponent extends React.Component {
     this.setState({ [field]: "" });
   };
 
-  checkboxHandler = event => {
+  checkboxHandler = (event) => {
     let name = event.target.name;
     let value = event.target.value;
 
@@ -105,12 +104,12 @@ class FormComponent extends React.Component {
     }
   };
 
-  setPageNumber = input => {
+  setPageNumber = (input) => {
     this.setState({ pageNumber: input });
     this.setState({ err: "" });
   };
 
-  setErr = err => {
+  setErr = (err) => {
     this.setState({ err });
   };
 
@@ -130,9 +129,9 @@ class FormComponent extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
-    isSignedIn: state.auth.isSignedIn
+    isSignedIn: state.auth.isSignedIn,
   };
 };
 

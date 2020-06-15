@@ -37,7 +37,7 @@ class Buttons extends React.Component {
 
   responsiveCP = () => {
     return this.smallScreen ? (
-      <React.Fragment>
+      <>
         <Popup
           content={this.props.title}
           inverted
@@ -89,9 +89,9 @@ class Buttons extends React.Component {
             )
           }
         />
-      </React.Fragment>
+      </>
     ) : (
-      <React.Fragment>
+      <>
         <Popup
           content={this.props.title + " (" + this.props.shortcutKey + ")"}
           mouseEnterDelay={250}
@@ -137,7 +137,7 @@ class Buttons extends React.Component {
             )
           }
         />
-      </React.Fragment>
+      </>
     );
   };
 

@@ -1,5 +1,4 @@
 import React from "react";
-import logo from "./public/logo.jpg";
 import "./style.css";
 
 let navbarText = [
@@ -8,7 +7,7 @@ let navbarText = [
   "Finn kodeklubb",
   "Kodeklubben",
   "Skole",
-  "Kodetimen"
+  "Kodetimen",
 ];
 
 const NavBar = () => {
