@@ -1,154 +1,78 @@
 const express = require('express');
 const router = express.Router();
-const mongoose = require('mongoose');
 
-
-const Lesson = require('../models/lesson');
 
 // @route GET /
 // @desc Get all saved lessons in JSON format
 router.get('/', (req, res, next) => {
-  Lesson.find()
-      .select('level license tags title author translator language markdown')
-      .exec()
-      .then(lessons => {
-        res.status(200).json({
-          count: lessons.length,
-          lessons: lessons.map(lesson => {
-            return {
-              lesson: docFromDbToClient(lesson)
-            }
-          })
-        });
-      })
-      .catch(err => {
-        res.status(500).json({
-          error: err
-        })
-      });
+  // Todo: Code for fetching all saved lessons (For development)
+  res.status(200).json({
+    message: 'Handling GET Request to /'
+  });
 });
+
 
 // @route POST /submit
 // @desc Submit a lesson to Github
 router.post('/submit', (req, res, next) => {
+  // Todo: Code for Lesson submit
   res.status(200).json({
     message: 'Handling POST request to /lessons/submit'
   });
 });
 
+
 // @route POST /save
 // @desc Initial storage of a new lesson to DB
-router.post('/save', (req, res, next) => {
-  const lesson = new Lesson({
-    _id: mongoose.Types.ObjectId(),
-    level: req.body.yml.level,
-    license: req.body.yml.license,
-    tags: req.body.yml.tags,
-    title: req.body.yaml.title,
-    author: req.body.yaml.author,
-    translator: req.body.yaml.translator,
-    language: req.body.yaml.language,
-    markdown: req.body.markdown
-  });
-  lesson.save().then(result => {
-    res.status(201).json({
-      message: 'Saved lesson successfully',
-      savedLesson: docFromDbToClient(result)
-    })
-  }).catch(err => {
-    res.status(500).json({
-      error: err
+router.post('/save', (req, res, next) => { // Rename Path to something more appropriate
+    // Todo: Code for temporary storing lessons
+    res.status(200).json({
+      message: 'Handling Storage of lessons'
     });
-  })
 });
+
 
 // @route Patch /save/:lessonId
 // @desc Store changes to a lesson with _id=lessonId
 router.patch('/save/:lessonId', (req, res, next) => {
-  const id = req.params.lessonId;
-  const updateOps = docFromClientToDb(req.body);
-  Lesson.update( { _id: id }, { $set: updateOps})
-      .exec()
-      .then(result => {
-        res.status(200).json({
-          message: 'Lesson updated'
-        });
-      })
-      .catch( err => {
-        res.status(500).json({
-          error: err
-        })
-      });
+  // Todo: Code for updating a temporary stored lesson
+  res.status(200).json({
+    error: 'Handling Lesson storage update'
+  })
 });
+
 
 // @route GET /load/:lessonId
 // @desc Load a lesson with _id=lessonId from DB
 router.get('/load/:lessonId', (req, res, next) => {
-  Lesson.findById(req.params.lessonId)
-      .exec()
-      .then(lesson => {
-        if (!lesson) {
-          return res.status(404).json({
-            message: 'Lesson not found'
-          })
-        }
-        res.status(200).json({
-          lesson: lesson
-        });
-      })
-      .catch(err => {
-        res.status(500).json({
-          error: err
-        });
-      });
+  // Todo: Code for retrieving a specific lesson
+  res.status(200).json({
+    error: 'Handling fetch of specific lesson'
+  });
 });
+
 
 // @route DELETE /:lessonId
 // @desc Delete a lesson with _id=lessonId from the DB
 router.delete('/:lessonId', (req, res, next) => {
-  Lesson.remove({_id: req.params.lessonId})
-      .exec()
-      .then(result => {
-        res.status(200).json({
-          message: 'Lesson deleted'
-        });
-      })
-      .catch(err => {
-        res.status(500).json({
-          error: err
-        })
-      })
+  // Todo: code for deleting a specific lesson
+  res.status(200).json({
+    error: 'Handling deletion of specific lesson'
+  })
 });
 
+
+// Not sure if we still need this request??
 // @route GET /edit/lessonName
 // @desc Get a lesson from DB with title=lessonName and language=req.query.language
 router.get('/edit/:lessonName', (req, res, next) => {
-  Lesson.find( {title: req.params.lessonName, language: req.query.language})
-      .select('_id level license tags title author translator language markdown')
-      .exec()
-      .then(result => {
-        console.log(result);
-          if (result.length === 0) {
-            res.status(404).json({
-              message: 'Lesson Not Found'
-            })
-          } else if (result.length > 1) {
-            res.status(500).json({
-              message: 'Internal Server Error'
-            })
-          } else {
-              res.status(200).json({
-                lesson: docFromDbToClient(result[0])
-              })
-            }
-          })
-      .catch( err => {
-        res.status(500).json({
-          error: err
-        })
-      });
+  res.status(200).json({
+    message: 'Handling lesson fetch based on title and language'
+  })
 });
 
+
+// Might not be needed if frontend sends data in proper format!
 // @desc Translate doc from DB to JSON.
 const docFromDbToClient = (doc) => {
   return {
@@ -169,6 +93,8 @@ const docFromDbToClient = (doc) => {
   }
 };
 
+
+// Might not be needed if frontend sends data in proper format!
 // @desc Find fields that should be updated in DB
 // Todo: Find a better way to generate this.
 const docFromClientToDb = (doc) => {
