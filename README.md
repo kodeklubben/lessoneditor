@@ -53,15 +53,12 @@ frontend/
 
 backend/
 ├───api
-│   ├───models
-│   │   └───lesson.js
 │   └───routes
 │       ├───images.js
 │       └───lessons.js
 ├───static
 │   └───images
 ├───utils
-│   ├───handleGit.js
 │   └───wrriteToFile.js
 ├───app.js
 ├───README.md
