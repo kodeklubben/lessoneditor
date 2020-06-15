@@ -1,134 +1,130 @@
 import React from "react";
 
-class MultiInput extends React.Component {
-  constructor(props) {
-    super(props);
+const MultiInput = props => {
+    let inputOrder = 1;
+    let removeNameButtonOrder = 0;
+    let textInput = null;
 
-    this.inputOrder = 1;
-  }
+    const handleClick = event => {
+        if (props.inputValue && !props.inputArray.includes(props.inputValue)) {
+            let i = event.target.name + "List";
+            let temp = { [i]: [...props.inputArray, props.inputValue] };
+            props.multiInputHandler(temp, event.target.name);
+            inputOrder += 1;
+            removeNameButtonOrder += 1;
 
-  handleClick = event => {
-    if (
-      this.props.inputValue &&
-      !this.props.inputArray.includes(this.props.inputValue)
-    ) {
-      let i = event.target.name + "List";
-      let temp = { [i]: [...this.props.inputArray, this.props.inputValue] };
-      this.props.multiInputHandler(temp, event.target.name);
-      this.inputOrder += 1;
-      this.removeNameButtonOrder += 1;
+            textInput.focus();
+        }
+    };
 
-      this.textInput.focus();
-    }
-  };
+    const onBlur = e => {
+        handleClick(e);
+    };
 
-  onBlur = e => {
-    this.handleClick(e);
-  };
+    const inputClick = () => {
+        textInput.focus();
+    };
 
-  inputClick = () => {
-    this.textInput.focus();
-  };
+    const removeClickHandler = (name, value) => {
+        let i = name + "List";
+        let tempArray = props.inputArray;
+        let index = props.inputArray.indexOf(value);
+        tempArray.splice(index, 1);
+        let temp = { [i]: tempArray };
+        props.multiInputHandler(temp, name);
 
-  removeClickHandler = (name, value) => {
-    let i = name + "List";
-    let tempArray = this.props.inputArray;
-    let index = this.props.inputArray.indexOf(value);
-    tempArray.splice(index, 1);
-    let temp = { [i]: tempArray };
-    this.props.multiInputHandler(temp, name);
+        inputOrder -= 1;
+        removeNameButtonOrder -= 1;
+    };
 
-    this.inputOrder -= 1;
-    this.removeNameButtonOrder -= 1;
-  };
-
-  render() {
     return (
-      <React.Fragment>
         <div id="multiInputContainer" className="row">
-          <h3 className="formLabel">
-            {this.props.title}
-            <span className="requiredText"> {this.props.required}</span>
-          </h3>
-          <div className="inputField">
-            <div
-              style={{
-                order: this.inputOrder,
-                width: "100%"
-              }}
-            >
-              {this.props.autofocus ? (
-                <input
-                  autoFocus
-                  ref={element => (this.textInput = element)}
-                  id="formInput"
-                  autoComplete="off"
-                  type="text"
-                  name={this.props.name}
-                  placeholder={this.props.placeholder}
-                  value={this.props.inputValue}
-                  onClick={this.inputClick}
-                  onTouchStart={this.inputClick}
-                  onChange={this.props.changeHandler}
-                  onKeyUp={e => (e.key === "Enter" ? this.handleClick(e) : "")}
-                  onBlur={e => this.onBlur(e)}
-                />
-              ) : (
-                <input
-                  ref={element => (this.textInput = element)}
-                  id="formInput"
-                  autoComplete="off"
-                  type="text"
-                  name={this.props.name}
-                  placeholder={this.props.placeholder}
-                  value={this.props.inputValue}
-                  onClick={this.inputClick}
-                  onTouchStart={this.inputClick}
-                  onChange={this.props.changeHandler}
-                  onKeyUp={e => (e.key === "Enter" ? this.handleClick(e) : "")}
-                  onBlur={e => this.onBlur(e)}
-                />
-              )}
+            <h3 className="formLabel">
+                {props.title}
+                <span className="requiredText"> {props.required}</span>
+            </h3>
+            <div className="inputField">
+                <div
+                    style={{
+                        order: inputOrder,
+                        width: "100%"
+                    }}
+                >
+                    {props.autofocus ? (
+                        <input
+                            autoFocus
+                            ref={element => (textInput = element)}
+                            id="formInput"
+                            autoComplete="off"
+                            type="text"
+                            name={props.name}
+                            placeholder={props.placeholder}
+                            value={props.inputValue}
+                            onClick={inputClick}
+                            onTouchStart={inputClick}
+                            onChange={props.changeHandler}
+                            onKeyUp={e =>
+                                e.key === "Enter" ? handleClick(e) : ""
+                            }
+                            onBlur={e => onBlur(e)}
+                        />
+                    ) : (
+                        <input
+                            ref={element => (textInput = element)}
+                            id="formInput"
+                            autoComplete="off"
+                            type="text"
+                            name={props.name}
+                            placeholder={props.placeholder}
+                            value={props.inputValue}
+                            onClick={inputClick}
+                            onTouchStart={inputClick}
+                            onChange={props.changeHandler}
+                            onKeyUp={e =>
+                                e.key === "Enter" ? handleClick(e) : ""
+                            }
+                            onBlur={e => onBlur(e)}
+                        />
+                    )}
+                </div>
+
+                {props.inputArray.map(element => (
+                    <button
+                        className="ui right icon button"
+                        style={{ order: inputOrder - 1 }}
+                        id="removeNameButton"
+                        type="button"
+                        key={element}
+                        onClick={() => removeClickHandler(props.name, element)}
+                    >
+                        <span>
+                            {element} <i className="x icon"></i>
+                        </span>
+                    </button>
+                ))}
+
+                <button
+                    style={{
+                        order: inputOrder + 1,
+                        backgroundColor: "white"
+                    }}
+                    icon
+                    id="addNameButton"
+                    className="ui icon button"
+                    name={props.name}
+                    type="button"
+                    onClick={handleClick}
+                >
+                    <i id="addNameButtonChild" className="plus icon" />
+                </button>
             </div>
-
-            {this.props.inputArray.map(element => (
-              <button
-                className="ui right icon button"
-                style={{ order: this.inputOrder - 1 }}
-                id="removeNameButton"
-                type="button"
-                key={element}
-                onClick={() =>
-                  this.removeClickHandler(this.props.name, element)
-                }
-              >
-                <span>
-                  {element} <i className="x icon"></i>
-                </span>
-              </button>
-            ))}
-
-            <button
-              style={{ order: this.inputOrder + 1, backgroundColor: "white" }}
-              icon
-              id="addNameButton"
-              className="ui icon button"
-              name={this.props.name}
-              type="button"
-              onClick={this.handleClick}
-            >
-              <i id="addNameButtonChild" className="plus icon" />
-            </button>
-          </div>
-          {this.props.validateMessage ? (
-            <div className="validateError">{this.props.validateMessage}</div>
-          ) : (
-            ""
-          )}
+            {props.validateMessage ? (
+                <div className="validateError">{props.validateMessage}</div>
+            ) : (
+                ""
+            )}
         </div>
-      </React.Fragment>
     );
-  }
-}
+};
 
 export default MultiInput;
