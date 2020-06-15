@@ -93,8 +93,9 @@ const ControlPanel = props => {
             style={{ display: showTextArea }}
             className="ui icon buttons undoRedo"
           >
-            {undoRedo.map(element => (
+            {undoRedo.map((element, index) => (
               <CPButton
+                key={"element" + index}
                 bTitle={element.bTitle}
                 icon={element.icon}
                 output={element.output}
@@ -112,8 +113,9 @@ const ControlPanel = props => {
             style={{ display: showTextArea }}
             className="ui icon buttons image"
           >
-            {image.map(element => (
+            {image.map((element, index) => (
               <CPButton
+                key={"element" + index}
                 bTitle={element.bTitle}
                 icon={element.icon}
                 output={element.output}
@@ -159,8 +161,9 @@ const ControlPanel = props => {
 
         <div style={{ display: showTextArea }} className="bottomContainer">
           <div className="ui icon buttons emphasis">
-            {emphasis.map(element => (
+            {emphasis.map((element, index) => (
               <CPButton
+                key={"element" + index}
                 bTitle={element.bTitle}
                 icon={element.icon}
                 output={element.output}
@@ -175,8 +178,9 @@ const ControlPanel = props => {
           </div>
 
           <div className="ui icon buttons lists">
-            {lists.map(element => (
+            {lists.map((element, index) => (
               <CPButton
+                key={"element" + index}
                 bTitle={element.bTitle}
                 icon={element.icon}
                 output={element.output}
@@ -198,8 +202,9 @@ const ControlPanel = props => {
         <div className="upperContainerLarge">
           <div className="space" />
           <div className="ui icon buttons undoRedo">
-            {undoRedo.map(element => (
+            {undoRedo.map((element, index) => (
               <CPButton
+                key={"element" + index}
                 bTitle={element.bTitle}
                 icon={element.icon}
                 output={element.output}
@@ -215,8 +220,9 @@ const ControlPanel = props => {
 
           <div className="space" />
           <div className="ui icon buttons emphasis">
-            {emphasis.map(element => (
+            {emphasis.map((element, index) => (
               <CPButton
+                key={"element" + index}
                 bTitle={element.bTitle}
                 icon={element.icon}
                 output={element.output}
@@ -232,8 +238,9 @@ const ControlPanel = props => {
 
           <div className="space" />
           <div className="ui icon buttons lists">
-            {lists.map(element => (
+            {lists.map((element, index) => (
               <CPButton
+                key={"element" + index}
                 bTitle={element.bTitle}
                 icon={element.icon}
                 output={element.output}
@@ -249,8 +256,9 @@ const ControlPanel = props => {
 
           <div className="space" />
           <div className="ui icon buttons image">
-            {image.map(element => (
+            {image.map((element, index) => (
               <CPButton
+                key={"element" + index}
                 bTitle={element.bTitle}
                 icon={element.icon}
                 output={element.output}
@@ -287,8 +295,9 @@ const ControlPanel = props => {
         <div style={{ display: showCustom }} className="customButtons">
           <div className="space" />
           <div className="ui buttons sections">
-            {sections.map(element => (
+            {sections.map((element, index) => (
               <CPButton
+                key={"element" + index}
                 bTitle={element.bTitle}
                 icon={element.icon}
                 output={element.output}
@@ -303,8 +312,9 @@ const ControlPanel = props => {
           </div>
           <div className="space" />
           <div className="ui buttons code">
-            {code.map(element => (
+            {code.map((element, index) => (
               <CPButton
+                key={"element" + index}
                 bTitle={element.bTitle}
                 icon={element.icon}
                 output={element.output}

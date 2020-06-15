@@ -135,13 +135,9 @@ class Editor extends React.Component {
   render() {
     // Submithandler
     const submitHandler = event => {
-      // event.preventDefault();
-
       console.log("text submitted");
 
       this.setState({ redirect: "/endpage" });
-
-      console.log(this.state.redirect);
 
       // TODO: Send inputtext-data to database
     };
@@ -969,7 +965,7 @@ class Editor extends React.Component {
       }
     };
 
-    return this.props.isSignedIn ? (
+    return (
       <div className="editor">
         <ImagePopup
           uploadImageRef={this.uploadImageRef}
@@ -1010,8 +1006,6 @@ class Editor extends React.Component {
           ></ControlPanel>
         </div>
       </div>
-    ) : (
-      <Redirect to="/" />
     );
   }
 }

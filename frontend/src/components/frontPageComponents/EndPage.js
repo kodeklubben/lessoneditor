@@ -1,17 +1,20 @@
 import React from "react";
 import "./style.css";
 
-export default class EndPage extends React.Component {
-  render() {
-    return (
-      <div>
-        <div className="greeting">
-          <p>Takk for ditt bidrag til Lær Kidsa Koding!</p>
-          <p>Ditt bidrag er nå inne til vurdering. </p>
-        </div>
+let closeMessage = "Lukk vindu";
+let greeting =
+  "Takk for ditt bidrag til Lær Kidsa Koding! Ditt bidrag er nå inne til vurdering";
 
-        <button className="closeBtn"> Lukk vindu </button>
+const EndPage = () => {
+  return (
+    <div>
+      <div className="greeting">
+        <p>{greeting}</p>
       </div>
-    );
-  }
-}
+
+      <button className="closeBtn"> {closeMessage} </button>
+    </div>
+  );
+};
+
+export default EndPage;

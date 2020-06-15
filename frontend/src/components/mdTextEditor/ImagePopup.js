@@ -1,45 +1,35 @@
-import React from "react";
+import React, { useState } from "react";
 
-class ImagePopup extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      inputValue: "",
-      toBigMessage: ""
-    };
-  }
+const ImagePopup = props => {
+  const imageSizeErrorMessage = "Bildet kan ikke være over 5mb";
 
-  fileSelectedHandler = event => {
+  const fileSelectedHandler = event => {
     try {
-      if (event.target.files && event.target.files[0].size > 4000000) {
-        this.props.imagePopupSubmitHandler("Bildet kan ikke være over 5mb", "");
+      if (event.target.files && event.target.files[0].size > 5000000) {
+        props.imagePopupSubmitHandler(imageSizeErrorMessage, "");
       } else {
         let imageUrl = URL.createObjectURL(event.target.files[0]);
         let fileName = event.target.files[0].name;
-        this.props.storeImage(event.target.files[0]);
-        this.setState({ toBigMessage: "" });
-        this.props.imagePopupSubmitHandler(imageUrl, "filnavn: " + fileName);
+        props.storeImage(event.target.files[0]);
+        props.imagePopupSubmitHandler(imageUrl, "filnavn: " + fileName);
         imageUrl = "";
         fileName = "";
-        this.setState({ inputValue: "", toBigMessage: "" });
       }
     } catch (err) {
       console.log(err);
-      this.props.editorRef.current.focus();
+      props.editorRef.current.focus();
     }
   };
 
-  render() {
-    return (
-      <input
-        style={{ display: "none" }}
-        type="file"
-        accept=".jpg,.jpeg,.png,.gif"
-        ref={this.props.uploadImageRef}
-        onChange={this.fileSelectedHandler}
-      />
-    );
-  }
-}
+  return (
+    <input
+      style={{ display: "none" }}
+      type="file"
+      accept=".jpg,.jpeg,.png,.gif"
+      ref={props.uploadImageRef}
+      onChange={fileSelectedHandler}
+    />
+  );
+};
 
 export default ImagePopup;

@@ -115,7 +115,7 @@ class FormComponent extends React.Component {
   };
 
   render() {
-    return this.props.isSignedIn ? (
+    return (
       <FormPage
         submitHandler={this.submitHandler}
         changeHandler={this.changeHandler}
@@ -126,8 +126,6 @@ class FormComponent extends React.Component {
         setErr={this.setErr}
         state={this.state}
       />
-    ) : (
-      <Redirect to="/" />
     );
   }
 }

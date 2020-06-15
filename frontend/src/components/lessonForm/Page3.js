@@ -6,6 +6,7 @@ import { YML_TEXT } from "./settingsFiles/languages/formpage_NO";
 import { FORM_TEXT } from "./settingsFiles/languages/formpage_NO";
 
 import { Dropdown } from "semantic-ui-react";
+
 import {
   SUBJECT as subjects,
   TOPIC as topics
@@ -48,7 +49,7 @@ for (let i = 0; i < topicLen; i++) {
 
 const Page3 = props => {
   return (
-    <React.Fragment>
+    <>
       <div className="ui form">
         <div id="titleField" className="field">
           <label>
@@ -145,7 +146,7 @@ const Page3 = props => {
           </div>
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 
