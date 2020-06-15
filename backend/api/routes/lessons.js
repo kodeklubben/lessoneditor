@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const mongoose = require('mongoose');
-const write = require('../../utils/writeToFile');
-const gitPush = require('../../utils/handleGit');
 
 
 const Lesson = require('../models/lesson');
@@ -33,8 +31,6 @@ router.get('/', (req, res, next) => {
 // @route POST /submit
 // @desc Submit a lesson to Github
 router.post('/submit', (req, res, next) => {
-  write(req.body);
-  gitPush(req.body.yaml.title);
   res.status(200).json({
     message: 'Handling POST request to /lessons/submit'
   });

@@ -32,8 +32,7 @@ backend/
 ├───static
 │   └───images
 ├───utils
-│   ├───handleGit.js
-│   └───wrriteToFile.js
+│    └───writeToFile.js
 ├───app.js
 ├───README.md
 └───server.js
