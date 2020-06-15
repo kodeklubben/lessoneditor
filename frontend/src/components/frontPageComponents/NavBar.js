@@ -41,10 +41,7 @@ const NavBar = () => {
               <a href="https://www.kidsakoder.no/skole/"> {navbarText[4]} </a>
             </li>
             <li>
-              <a href="https://www.kidsakoder.no/kodetimen/">
-                {" "}
-                {navbarText[5]}{" "}
-              </a>
+              <a href="https://www.kidsakoder.no/kodetimen/">{navbarText[5]}</a>
             </li>
           </ul>
         </div>

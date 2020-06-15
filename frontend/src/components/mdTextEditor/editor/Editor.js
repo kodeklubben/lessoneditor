@@ -376,9 +376,6 @@ class Editor extends React.Component {
     // Show/hide image popup
     const imagePopupSubmitHandler = (imagePopupInputValue, filename) => {
       if (imagePopupInputValue) {
-        if (filename === "") {
-          alert("image is to big");
-        }
         setUndo();
         inputText =
           inputText.slice(0, cursorPositionStart) +
@@ -968,7 +965,7 @@ class Editor extends React.Component {
       }
     };
 
-    return this.props.isSignedIn ? (
+    return (
       <div className="editor">
         <ImagePopup
           uploadImageRef={this.uploadImageRef}
@@ -1009,8 +1006,6 @@ class Editor extends React.Component {
           ></ControlPanel>
         </div>
       </div>
-    ) : (
-      <Redirect to="/" />
     );
   }
 }
