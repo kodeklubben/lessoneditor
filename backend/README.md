@@ -24,16 +24,13 @@ Gets HTTP Requests from the Lesson Editor asking for or containing lesson data:
 ```bash
 backend/
 ├───api
-│   ├───models
-│   │   └───lesson.js
 │   └───routes
 │       ├───images.js
 │       └───lessons.js
 ├───static
 │   └───images
 ├───utils
-│   ├───handleGit.js
-│   └───wrriteToFile.js
+│    └───writeToFile.js
 ├───app.js
 ├───README.md
 └───server.js

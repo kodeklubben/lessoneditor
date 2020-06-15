@@ -28,29 +28,15 @@ const upload = multer({
   fileFilter: fileFilter
 });
 
-const Lesson = require('../models/lesson');
-
-
 router.get('/:lessonId', (req, res, next) => {
-
+  // Todo: Code for getting all lesson pictures
 });
 
 // @router PATCH /images/:lessonId
 // @desc Stores an image file in static/images
 //       Adds filename to for lessons lessonImages field.
 router.patch('/:lessonId', upload.single('file'), (req, res, next) => {
-  Lesson.update({ _id: req.params.lessonId }, {$push: {lessonImages: req.file.filename}})
-      .exec()
-      .then( result => {
-        res.status(200).json({
-          message: 'Image added to lesson'
-        })
-      })
-      .catch(err => {
-        res.status(500).json({
-          error: err
-        })
-      })
+  // Todo: Code for adding picture to storage
 });
 
 // @router DELETE /images/:lessonId
@@ -63,18 +49,7 @@ router.delete('/:lessonId', (req, res, next) => {
       console.log(`static/images/${filename} was deleted.`)
     })
   }
-  Lesson.update({ _id: req.params.lessonId }, {$pull: {lessonImages: filename}})
-      .exec()
-      .then(result => {
-        res.status(200).json({
-          message: `Deleted picture: ${filename}`
-        })
-      })
-      .catch(err => {
-        res.status(500).json({
-          error: err
-        })
-      });
+  // Todo: Code for deleting a picture
 });
 
 
