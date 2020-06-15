@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import GoogleAuth from "../GoogleAuth";
 import ProfileMenu from "../ProfileMenu";
 
+const buttonText = ["Min side", "Rediger en oppgave", "Lag ny oppgave"];
+
 const IndexPage = props => {
   const indPage = () => {
     if (props.isSignedIn) {
@@ -27,13 +29,13 @@ const IndexPage = props => {
 
           <div className="btnDiv">
             <Link to="/myPage" className="link">
-              <button className="btn">Min side</button>
+              <button className="btn">{buttonText[0]}</button>
             </Link>
             <Link to="" className="link">
-              <button className="btn">Rediger en oppgave</button>
+              <button className="btn">{buttonText[1]}</button>
             </Link>
             <Link to="/createNewLesson" className="link">
-              <button className="btn">Lag ny oppgave</button>
+              <button className="btn">{buttonText[2]}</button>
             </Link>
           </div>
         </div>

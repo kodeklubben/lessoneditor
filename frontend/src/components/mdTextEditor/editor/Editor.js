@@ -135,13 +135,9 @@ class Editor extends React.Component {
   render() {
     // Submithandler
     const submitHandler = event => {
-      // event.preventDefault();
-
       console.log("text submitted");
 
       this.setState({ redirect: "/endpage" });
-
-      console.log(this.state.redirect);
 
       // TODO: Send inputtext-data to database
     };
@@ -380,6 +376,9 @@ class Editor extends React.Component {
     // Show/hide image popup
     const imagePopupSubmitHandler = (imagePopupInputValue, filename) => {
       if (imagePopupInputValue) {
+        if (filename === "") {
+          alert("image is to big");
+        }
         setUndo();
         inputText =
           inputText.slice(0, cursorPositionStart) +

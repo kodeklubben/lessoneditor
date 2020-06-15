@@ -104,7 +104,6 @@ const MultiInput = props => {
             order: inputOrder + 1,
             backgroundColor: "white"
           }}
-          icon
           id="addNameButton"
           className="ui icon button"
           name={props.name}

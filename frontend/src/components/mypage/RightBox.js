@@ -1,15 +1,21 @@
 import React from "react";
 import "./RightBoxStyleBckup.css";
 
+let boxTextHeader = "Informasjon";
+
+let boxText = ["Ferdig behandlet", "Under behandling", "Jobbes med"];
+
 function RightBox() {
   return (
     <div className="RightBox">
       <div className="informationTable">
-        <p id="header">Informasjon</p>
+        <p id="header">{boxTextHeader}</p>
       </div>
-      <p id="text1">Ferdig behandlet</p>
-      <p id="text2">Under behandling</p>
-      <p id="text3">Jobbes med</p>
+      {boxText.map((element, index) => (
+        <div key={"element" + index}>
+          <p>{element}</p>
+        </div>
+      ))}
     </div>
   );
 }
