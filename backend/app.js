@@ -1,18 +1,11 @@
 const express = require('express');
 const app = express();
-const mongoose = require('mongoose');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 
 const lessonRoutes = require('./api/routes/lessons');
 const imageRoutes = require('./api/routes/images');
 
-const mongoDB = `mongodb+srv://admin:${process.env.MONGO_ATLAS_PW}@node-rest-shop-qt3hc.mongodb.net/test?retryWrites=true&w=majority`;
-mongoose.connect(mongoDB, { useNewUrlParser: true })
-    .then(() => console.log('MongoDB connected'))
-    .catch(err => console.log(err));
-
-mongoose.Promise = global.Promise;
 
 app.use(morgan('dev'));
 app.use('/static/images', express.static('static/images'));
@@ -21,6 +14,7 @@ app.use(bodyParser.json());
 
 // Allow headers
 app.use((req, res, next) => {
+  // Allowing all headers might not be best practice?
   res.header('Access-Control-Allow-Origin', '*');
   res.header(
       'Access-Control-Allow-Headers',
