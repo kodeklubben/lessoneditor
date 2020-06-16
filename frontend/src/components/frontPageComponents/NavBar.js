@@ -2,13 +2,16 @@ import React from "react";
 import logo from "./public/logo.jpg";
 import "./style.css";
 
-let navbarText = [
-  "Om LKK",
-  "Nyheter",
-  "Finn kodeklubb",
-  "Kodeklubben",
-  "Skole",
-  "Kodetimen"
+const navContent = [
+  { href: "https://www.kidsakoder.no/om-lkk/", text: "Om LKK" },
+  { href: "https://www.kidsakoder.no/nyheter/", text: "Nyheter" },
+  {
+    href: "https://www.kidsakoder.no/kodeklubben/kodeklubboversikt/",
+    text: "Finn kodeklubb"
+  },
+  { href: "https://www.kidsakoder.no/kodeklubben/", text: "Kodeklubben" },
+  { href: "https://www.kidsakoder.no/skole/", text: "Skole" },
+  { href: "https://www.kidsakoder.no/kodetimen/", text: "Kodetimen" }
 ];
 
 const NavBar = () => {
@@ -20,29 +23,11 @@ const NavBar = () => {
         </div>
         <div className="navbar">
           <ul>
-            <li>
-              <a href="https://www.kidsakoder.no/om-lkk/"> {navbarText[0]} </a>
-            </li>
-            <li>
-              <a href="https://www.kidsakoder.no/nyheter/"> {navbarText[1]} </a>
-            </li>
-            <li>
-              <a href="https://www.kidsakoder.no/kodeklubben/kodeklubboversikt/">
-                {navbarText[2]}
-              </a>
-            </li>
-
-            <li>
-              <a href="https://www.kidsakoder.no/kodeklubben/">
-                {navbarText[3]}
-              </a>
-            </li>
-            <li>
-              <a href="https://www.kidsakoder.no/skole/"> {navbarText[4]} </a>
-            </li>
-            <li>
-              <a href="https://www.kidsakoder.no/kodetimen/">{navbarText[5]}</a>
-            </li>
+            {navbarText.map((element, index) => (
+              <li key={"element" + index}>
+                <a href={element.href}> {element.text} </a>
+              </li>
+            ))}
           </ul>
         </div>
         <div className="Clear"></div>

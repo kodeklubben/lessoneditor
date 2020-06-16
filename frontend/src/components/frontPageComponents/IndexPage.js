@@ -5,7 +5,11 @@ import { Link } from "react-router-dom";
 import GoogleAuth from "../GoogleAuth";
 import ProfileMenu from "../ProfileMenu";
 
-const buttonText = ["Min side", "Rediger en oppgave", "Lag ny oppgave"];
+const buttonContent = [
+  { link: "/myPage", name: "Min side" },
+  { link: "", name: "Rediger en oppgave" },
+  { link: "/createNewLesson", name: "Lag ny oppgave" }
+];
 
 const IndexPage = props => {
   return (
@@ -26,15 +30,11 @@ const IndexPage = props => {
       <div />
 
       <div className="btnDiv">
-        <Link to="/myPage" className="link">
-          <button className="btn">{buttonText[0]}</button>
-        </Link>
-        <Link to="" className="link">
-          <button className="btn">{buttonText[1]}</button>
-        </Link>
-        <Link to="/createNewLesson" className="link">
-          <button className="btn">{buttonText[2]}</button>
-        </Link>
+        {buttonContent.map((element, index) => (
+          <Link key={"element" + index} to={element.link} className="link">
+            <button className="btn">{element.name}</button>
+          </Link>
+        ))}
       </div>
     </div>
   );
