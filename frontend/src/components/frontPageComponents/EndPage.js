@@ -1,8 +1,8 @@
 import React from "react";
 import "./style.css";
 
-let closeMessage = "Lukk vindu";
-let greeting =
+const closeMessage = "Lukk vindu";
+const greeting =
   "Takk for ditt bidrag til Lær Kidsa Koding! Ditt bidrag er nå inne til vurdering";
 
 const EndPage = () => {

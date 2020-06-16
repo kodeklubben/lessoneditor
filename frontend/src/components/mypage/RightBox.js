@@ -1,5 +1,5 @@
 import React from "react";
-import "./RightBoxStyleBckup.css";
+import "./RightBoxStyle.css";
 
 let boxTextHeader = "Informasjon";
 

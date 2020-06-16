@@ -1,8 +1,17 @@
 import React from "react";
-// import "./NavbarStyle.css";
 import Logo from "./logo.jpg";
 
 let navText = ["Finn kodeklubb", "Oppgaver", "Hjelp", "Min side"];
+
+const navContent = [
+  {
+    href: "https://www.kidsakoder.no/kodeklubben/kodeklubboversikt/",
+    text: "Finn kodeklubb"
+  },
+  { href: "https://oppgaver.kidsakoder.no/", text: "Oppgaver" },
+  { href: "https://www.kidsakoder.no/om-lkk/", text: "Om LKK" },
+  { href: "#minside", text: "Min side" }
+];
 
 function Navbar() {
   return (
@@ -12,21 +21,11 @@ function Navbar() {
           <img alt="" src={Logo} />
         </div>
         <div className="right menu">
-          <a
-            className="item"
-            href="https://www.kidsakoder.no/kodeklubben/kodeklubboversikt/"
-          >
-            {navText[0]}
-          </a>
-          <a className="item" href="https://oppgaver.kidsakoder.no/">
-            {navText[1]}
-          </a>
-          <a className="item" href="https://www.kidsakoder.no/om-lkk/">
-            {navText[2]}
-          </a>
-          <a className="item" href="#minside">
-            {navText[3]}
-          </a>
+          {navContent.map((element, index) => (
+            <a key={"element" + index} className="item" href={element.href}>
+              {element.text}
+            </a>
+          ))}
         </div>
       </div>
     </div>
