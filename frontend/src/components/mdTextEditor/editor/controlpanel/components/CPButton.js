@@ -1,121 +1,122 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Icon, Popup } from "semantic-ui-react";
 
-class Buttons extends React.Component {
-  state = { isOpen: false };
+const Buttons = props => {
+  const [isOpen, setIsOpen] = useState(false);
 
-  smallScreen = false;
+  let buttonPressTimer = "";
+  let buttonPressTimer2 = "";
+  let timeout = "";
 
-  componentDidUpdate() {
+  let smallScreen = false;
+
+  useEffect(() => {
     if (window.innerWidth < 768) {
-      this.smallScreen = true;
+      smallScreen = true;
     } else if (window.innerWidth > 768) {
-      this.smallScreen = false;
+      smallScreen = false;
     }
-  }
+  }, []);
 
-  handleButtonPress = () => {
-    this.buttonPressTimer = setTimeout(
-      () => this.setState({ isOpen: true }),
-      500
-    );
-    this.buttonPressTimer2 = setTimeout(() => {
-      this.handleOpen();
+  const handleButtonPress = () => {
+    buttonPressTimer = setTimeout(() => setIsOpen(true), 500);
+    buttonPressTimer2 = setTimeout(() => {
+      handleOpen();
     }, 500);
   };
 
-  handleOpen = () => {
-    this.timeout = setTimeout(() => {
-      this.setState({ isOpen: false });
+  const handleOpen = () => {
+    timeout = setTimeout(() => {
+      setIsOpen(false);
     }, 2000);
   };
 
-  handleClose = () => {
-    clearTimeout(this.buttonPressTimer);
-    clearTimeout(this.buttonPressTimer2);
+  const handleClose = () => {
+    clearTimeout(buttonPressTimer);
+    clearTimeout(buttonPressTimer2);
   };
 
-  responsiveCP = () => {
-    return this.smallScreen ? (
-      <React.Fragment>
+  const responsiveCP = () => {
+    return smallScreen ? (
+      <>
         <Popup
-          content={this.props.title}
+          content={props.title}
           inverted
           basic
           size="tiny"
           style={{}}
-          open={this.state.isOpen}
-          onOpen={this.handleOpen}
-          onClose={this.handleClose}
+          open={isOpen}
+          onOpen={handleOpen}
+          onClose={handleClose}
           trigger={
-            this.props.icon ? (
+            props.icon ? (
               <Button
                 id="custom"
                 size="big"
                 className="CPButton"
-                onTouchStart={this.handleButtonPress}
-                onTouchEnd={this.handleClose}
+                onTouchStart={handleButtonPress}
+                onTouchEnd={handleClose}
                 onClick={() =>
-                  this.props.onButtonClick(
-                    this.props.bTitle,
-                    this.props.output,
-                    this.props.cursorIntON,
-                    this.props.cursorIntOFF,
-                    this.props.endOutput
+                  props.onButtonClick(
+                    props.bTitle,
+                    props.output,
+                    props.cursorIntON,
+                    props.cursorIntOFF,
+                    props.endOutput
                   )
                 }
               >
-                <Icon name={this.props.icon} />
+                <Icon name={props.icon} />
               </Button>
             ) : (
               <Button
                 id="custom"
                 size="big"
                 className="CPButton"
-                onTouchStart={this.handleButtonPress}
-                onTouchEnd={this.handleClose}
+                onTouchStart={handleButtonPress}
+                onTouchEnd={handleClose}
                 onClick={() =>
-                  this.props.onButtonClick(
-                    this.props.bTitle,
-                    this.props.output,
-                    this.props.cursorIntON,
-                    this.props.cursorIntOFF,
-                    this.props.endOutput
+                  props.onButtonClick(
+                    props.bTitle,
+                    props.output,
+                    props.cursorIntON,
+                    props.cursorIntOFF,
+                    props.endOutput
                   )
                 }
               >
-                {this.props.title}
+                {props.title}
               </Button>
             )
           }
         />
-      </React.Fragment>
+      </>
     ) : (
-      <React.Fragment>
+      <>
         <Popup
-          content={this.props.title + " (" + this.props.shortcutKey + ")"}
+          content={props.title + " (" + props.shortcutKey + ")"}
           mouseEnterDelay={250}
           mouseLeaveDelay={250}
           inverted
           trigger={
-            this.props.icon ? (
+            props.icon ? (
               <Button
                 id="custom"
                 size="big"
                 className="CPButton"
-                onTouchStart={this.handleButtonPress}
-                onTouchEnd={this.handleButtonRelease}
+                onTouchStart={handleButtonPress}
+                // onTouchEnd={handleButtonRelease}
                 onClick={() =>
-                  this.props.onButtonClick(
-                    this.props.bTitle,
-                    this.props.output,
-                    this.props.cursorIntON,
-                    this.props.cursorIntOFF,
-                    this.props.endOutput
+                  props.onButtonClick(
+                    props.bTitle,
+                    props.output,
+                    props.cursorIntON,
+                    props.cursorIntOFF,
+                    props.endOutput
                   )
                 }
               >
-                <Icon name={this.props.icon} />
+                <Icon name={props.icon} />
               </Button>
             ) : (
               <Button
@@ -123,27 +124,25 @@ class Buttons extends React.Component {
                 size="big"
                 className="CPButton"
                 onClick={() =>
-                  this.props.onButtonClick(
-                    this.props.bTitle,
-                    this.props.output,
-                    this.props.cursorIntON,
-                    this.props.cursorIntOFF,
-                    this.props.endOutput
+                  props.onButtonClick(
+                    props.bTitle,
+                    props.output,
+                    props.cursorIntON,
+                    props.cursorIntOFF,
+                    props.endOutput
                   )
                 }
               >
-                {this.props.title}
+                {props.title}
               </Button>
             )
           }
         />
-      </React.Fragment>
+      </>
     );
   };
 
-  render() {
-    return this.responsiveCP();
-  }
-}
+  return responsiveCP();
+};
 
 export default Buttons;
