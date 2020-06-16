@@ -1,18 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./OverviewStyle.css";
+
 import Navbar from "./Navbar";
 import ItemList from "./ItemList";
 import LeftBox from "./LeftBox";
 import RightBox from "./RightBox";
+import axios from "axios";
 
 const Overview = () => {
-  const oppgaver = [
-    "Oppgave 1",
-    "Oppgave 2",
-    "Oppgave 3",
-    "Oppgave 4",
-    "Oppgave 5"
-  ];
+  const [oppgaver, setOppgaver] = useState([]);
+  useEffect(() => {
+    async function fetchData() {
+      const response = await axios.get("/api/oppgaver");
+      setOppgaver(response.data);
+    }
+    fetchData();
+  }, []);
   return (
     <div>
       <Navbar />
