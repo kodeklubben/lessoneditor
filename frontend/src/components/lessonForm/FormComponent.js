@@ -77,10 +77,13 @@ const FormComponent = props => {
   };
 
   const multiInputHandler = (object, field) => {
+    console.log(field);
     let key = Object.keys(object)[0];
     let value = Object.values(object)[0];
-    setState(prevState => ({ ...prevState, [key]: [...state[key], value] }));
+    setState(prevState => ({ ...prevState, [key]: value }));
     setState(prevState => ({ ...prevState, [field]: "" }));
+    console.log(state[field]);
+    console.log(state.authorList);
   };
 
   const checkboxHandler = (event) => {
