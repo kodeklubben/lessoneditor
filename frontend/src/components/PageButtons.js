@@ -3,7 +3,7 @@ import { Link, Redirect } from "react-router-dom";
 
 const VALIDATION_ERROR = "* må fylles ut";
 
-const PageButtons = props => {
+const PageButtons = (props) => {
   if (props.state.redirect) {
     return <Redirect to={props.state.redirect} />;
   }
@@ -27,7 +27,7 @@ const PageButtons = props => {
     return true;
   };
 
-  const onClickHandler = input => {
+  const onClickHandler = (input) => {
     if (input > 0) {
       var notErr = validate();
     }

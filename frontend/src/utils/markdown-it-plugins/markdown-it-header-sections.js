@@ -12,7 +12,7 @@ export function headerSections(md) {
       t.block = true;
       t.attrs =
         attrs &&
-        attrs.map(function(attr) {
+        attrs.map(function (attr) {
           return [attr[0], "section_" + attr[1]];
         });
       return t;
@@ -58,7 +58,7 @@ export function headerSections(md) {
       if (token.type === "heading_open") {
         let section = {
           header: headingLevel(token.tag),
-          nesting: nestedLevel
+          nesting: nestedLevel,
         };
         if (last(sections) && section.header <= last(sections).header) {
           closeSections(section);

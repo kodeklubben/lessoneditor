@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 
-const ImagePopup = props => {
+const ImagePopup = (props) => {
   const imageSizeErrorMessage = "Bildet kan ikke være over 5mb";
 
-  const fileSelectedHandler = event => {
+  const fileSelectedHandler = (event) => {
     try {
       if (event.target.files && event.target.files[0].size > 5000000) {
         props.imagePopupSubmitHandler(imageSizeErrorMessage, "");

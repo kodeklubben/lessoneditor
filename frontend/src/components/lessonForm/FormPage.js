@@ -7,7 +7,7 @@ import PageButtons from "../PageButtons";
 import ProfileMenu from "../ProfileMenu";
 import { NAV_BUTTONS } from "./settingsFiles/languages/formpage_NO";
 
-const FormPage = props => {
+const FormPage = (props) => {
   const renderFormPage = () => {
     if (props.state.pageNumber === 1) {
       return (
@@ -89,11 +89,11 @@ const FormPage = props => {
   );
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     firstName: state.auth.firstName,
     imageUrl: state.auth.imageUrl,
-    email: state.auth.email
+    email: state.auth.email,
   };
 };
 

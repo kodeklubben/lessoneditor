@@ -36,7 +36,7 @@ const chars = {
   w: "w",
   x: "x",
   y: "y",
-  z: "z"
+  z: "z",
 };
 
 // SHORTCUTKEYS config
@@ -64,7 +64,7 @@ const KEY_COMBINATIONS = {
   try: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.t],
   inline: [SHORTCUTKEY, plus, chars.e],
   codeblock: [SHORTCUTKEY, plus, chars.k],
-  preview: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.y]
+  preview: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.y],
 };
 
 const emphasis = [
@@ -76,7 +76,7 @@ const emphasis = [
     cursorIntON: 2,
     cursorIntOFF: 2,
     endOutput: "",
-    shortcut: KEY_COMBINATIONS.bold.join("")
+    shortcut: KEY_COMBINATIONS.bold.join(""),
   },
   {
     bTitle: "italic",
@@ -86,7 +86,7 @@ const emphasis = [
     cursorIntON: 1,
     cursorIntOFF: 1,
     endOutput: "",
-    shortcut: KEY_COMBINATIONS.italic.join("")
+    shortcut: KEY_COMBINATIONS.italic.join(""),
   },
   {
     bTitle: "heading",
@@ -96,7 +96,7 @@ const emphasis = [
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: KEY_COMBINATIONS.heading.join("")
+    shortcut: KEY_COMBINATIONS.heading.join(""),
   },
   {
     bTitle: "strikethrough",
@@ -106,8 +106,8 @@ const emphasis = [
     cursorIntON: 2,
     cursorIntOFF: 2,
     endOutput: "",
-    shortcut: KEY_COMBINATIONS.strikethrough.join("")
-  }
+    shortcut: KEY_COMBINATIONS.strikethrough.join(""),
+  },
 ];
 
 const undoRedo = [
@@ -119,7 +119,7 @@ const undoRedo = [
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: KEY_COMBINATIONS.undo.join("")
+    shortcut: KEY_COMBINATIONS.undo.join(""),
   },
   {
     bTitle: "redo",
@@ -129,8 +129,8 @@ const undoRedo = [
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: KEY_COMBINATIONS.redo.join("")
-  }
+    shortcut: KEY_COMBINATIONS.redo.join(""),
+  },
 ];
 
 const saveLoadNew = [
@@ -142,7 +142,7 @@ const saveLoadNew = [
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: KEY_COMBINATIONS.new.join("")
+    shortcut: KEY_COMBINATIONS.new.join(""),
   },
   {
     bTitle: "load",
@@ -152,7 +152,7 @@ const saveLoadNew = [
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: KEY_COMBINATIONS.load.join("")
+    shortcut: KEY_COMBINATIONS.load.join(""),
   },
   {
     bTitle: "save",
@@ -162,8 +162,8 @@ const saveLoadNew = [
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: KEY_COMBINATIONS.save.join("")
-  }
+    shortcut: KEY_COMBINATIONS.save.join(""),
+  },
 ];
 
 const image = [
@@ -175,8 +175,8 @@ const image = [
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: KEY_COMBINATIONS.image.join("")
-  }
+    shortcut: KEY_COMBINATIONS.image.join(""),
+  },
 ];
 
 const preview = [
@@ -188,8 +188,8 @@ const preview = [
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: KEY_COMBINATIONS.preview.join("")
-  }
+    shortcut: KEY_COMBINATIONS.preview.join(""),
+  },
 ];
 
 const lists = [
@@ -201,7 +201,7 @@ const lists = [
     cursorIntON: 2,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: KEY_COMBINATIONS.listul.join("")
+    shortcut: KEY_COMBINATIONS.listul.join(""),
   },
   {
     bTitle: "listOl",
@@ -211,7 +211,7 @@ const lists = [
     cursorIntON: 3,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: KEY_COMBINATIONS.listol.join("")
+    shortcut: KEY_COMBINATIONS.listol.join(""),
   },
   {
     bTitle: "listCheck",
@@ -221,8 +221,8 @@ const lists = [
     cursorIntON: 6,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: KEY_COMBINATIONS.listcheck.join("")
-  }
+    shortcut: KEY_COMBINATIONS.listcheck.join(""),
+  },
 ];
 
 // !! bTitle - first chars must be "sec_" when in sections,
@@ -237,7 +237,7 @@ const sections = [
     cursorIntON: 0,
     cursorIntOFF: 14,
     endOutput: "",
-    shortcut: KEY_COMBINATIONS.activity.join("")
+    shortcut: KEY_COMBINATIONS.activity.join(""),
   },
   {
     bTitle: "sec_intro",
@@ -247,7 +247,7 @@ const sections = [
     cursorIntON: 0,
     cursorIntOFF: 11,
     endOutput: "",
-    shortcut: KEY_COMBINATIONS.intro.join("")
+    shortcut: KEY_COMBINATIONS.intro.join(""),
   },
   {
     bTitle: "sec_check",
@@ -257,7 +257,7 @@ const sections = [
     cursorIntON: 0,
     cursorIntOFF: 11,
     endOutput: "",
-    shortcut: KEY_COMBINATIONS.check.join("")
+    shortcut: KEY_COMBINATIONS.check.join(""),
   },
   {
     bTitle: "sec_tip",
@@ -267,7 +267,7 @@ const sections = [
     cursorIntON: 0,
     cursorIntOFF: 10,
     endOutput: "\n#\n\n",
-    shortcut: KEY_COMBINATIONS.tip.join("")
+    shortcut: KEY_COMBINATIONS.tip.join(""),
   },
   {
     bTitle: "sec_protip",
@@ -277,7 +277,7 @@ const sections = [
     cursorIntON: 0,
     cursorIntOFF: 13,
     endOutput: "\n#\n\n",
-    shortcut: KEY_COMBINATIONS.protip.join("")
+    shortcut: KEY_COMBINATIONS.protip.join(""),
   },
   {
     bTitle: "sec_challenge",
@@ -287,7 +287,7 @@ const sections = [
     cursorIntON: 0,
     cursorIntOFF: 16,
     endOutput: "\n#\n\n",
-    shortcut: KEY_COMBINATIONS.challenge.join("")
+    shortcut: KEY_COMBINATIONS.challenge.join(""),
   },
   {
     bTitle: "sec_flag",
@@ -297,7 +297,7 @@ const sections = [
     cursorIntON: 0,
     cursorIntOFF: 10,
     endOutput: "",
-    shortcut: KEY_COMBINATIONS.flag.join("")
+    shortcut: KEY_COMBINATIONS.flag.join(""),
   },
   {
     bTitle: "sec_try",
@@ -307,8 +307,8 @@ const sections = [
     cursorIntON: 0,
     cursorIntOFF: 12,
     endOutput: "",
-    shortcut: KEY_COMBINATIONS.try.join("")
-  }
+    shortcut: KEY_COMBINATIONS.try.join(""),
+  },
 ];
 
 const code = [
@@ -320,7 +320,7 @@ const code = [
     cursorIntON: 1,
     cursorIntOFF: 1,
     endOutput: "",
-    shortcut: KEY_COMBINATIONS.inline.join("")
+    shortcut: KEY_COMBINATIONS.inline.join(""),
   },
   {
     bTitle: "codeblock",
@@ -330,8 +330,8 @@ const code = [
     cursorIntON: 4,
     cursorIntOFF: 5,
     endOutput: "\n",
-    shortcut: KEY_COMBINATIONS.codeblock.join("")
-  }
+    shortcut: KEY_COMBINATIONS.codeblock.join(""),
+  },
 ];
 
 export {
@@ -345,5 +345,5 @@ export {
   code,
   KEY_COMBINATIONS,
   SHORTCUTKEY,
-  SHORTCUTKEY2
+  SHORTCUTKEY2,
 };

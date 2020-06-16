@@ -3,7 +3,7 @@ import MultiInput from "./MultiInput";
 
 import { LANGUAGES, FORM_TEXT } from "./settingsFiles/languages/formpage_NO";
 
-const Page1 = props => {
+const Page1 = (props) => {
   return (
     <>
       <form className="ui form">
@@ -36,7 +36,7 @@ const Page1 = props => {
               onChange={props.changeHandler}
               className="ui dropdown"
             >
-              {LANGUAGES.map(element => (
+              {LANGUAGES.map((element) => (
                 <option key={Object.keys(element)} value={Object.keys(element)}>
                   {Object.values(element)}
                 </option>

@@ -1,11 +1,11 @@
 import React from "react";
 
-const MultiInput = props => {
+const MultiInput = (props) => {
   let inputOrder = 1;
   let removeNameButtonOrder = 0;
   let textInput = null;
 
-  const handleClick = event => {
+  const handleClick = (event) => {
     if (props.inputValue && !props.inputArray.includes(props.inputValue)) {
       let i = event.target.name + "List";
       let temp = { [i]: [...props.inputArray, props.inputValue] };
@@ -17,7 +17,7 @@ const MultiInput = props => {
     }
   };
 
-  const onBlur = e => {
+  const onBlur = (e) => {
     handleClick(e);
   };
 
@@ -47,13 +47,13 @@ const MultiInput = props => {
         <div
           style={{
             order: inputOrder,
-            width: "100%"
+            width: "100%",
           }}
         >
           {props.autofocus ? (
             <input
               autoFocus
-              ref={element => (textInput = element)}
+              ref={(element) => (textInput = element)}
               id="formInput"
               autoComplete="off"
               type="text"
@@ -63,12 +63,12 @@ const MultiInput = props => {
               onClick={inputClick}
               onTouchStart={inputClick}
               onChange={props.changeHandler}
-              onKeyUp={e => (e.key === "Enter" ? handleClick(e) : "")}
-              onBlur={e => onBlur(e)}
+              onKeyUp={(e) => (e.key === "Enter" ? handleClick(e) : "")}
+              onBlur={(e) => onBlur(e)}
             />
           ) : (
             <input
-              ref={element => (textInput = element)}
+              ref={(element) => (textInput = element)}
               id="formInput"
               autoComplete="off"
               type="text"
@@ -78,13 +78,13 @@ const MultiInput = props => {
               onClick={inputClick}
               onTouchStart={inputClick}
               onChange={props.changeHandler}
-              onKeyUp={e => (e.key === "Enter" ? handleClick(e) : "")}
-              onBlur={e => onBlur(e)}
+              onKeyUp={(e) => (e.key === "Enter" ? handleClick(e) : "")}
+              onBlur={(e) => onBlur(e)}
             />
           )}
         </div>
 
-        {props.inputArray.map(element => (
+        {props.inputArray.map((element) => (
           <button
             className="ui right icon button"
             style={{ order: inputOrder - 1 }}
@@ -102,7 +102,7 @@ const MultiInput = props => {
         <button
           style={{
             order: inputOrder + 1,
-            backgroundColor: "white"
+            backgroundColor: "white",
           }}
           id="addNameButton"
           className="ui icon button"

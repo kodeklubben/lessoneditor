@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button, Icon, Popup } from "semantic-ui-react";
 
-const Buttons = props => {
+const Buttons = (props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   let buttonPressTimer = "";
