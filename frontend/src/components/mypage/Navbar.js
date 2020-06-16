@@ -1,8 +1,6 @@
 import React from "react";
 import Logo from "./logo.jpg";
 
-let navText = ["Finn kodeklubb", "Oppgaver", "Hjelp", "Min side"];
-
 const navContent = [
   {
     href: "https://www.kidsakoder.no/kodeklubben/kodeklubboversikt/",
