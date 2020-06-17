@@ -4,11 +4,11 @@ import Logo from "./logo.jpg";
 const navContent = [
   {
     href: "https://www.kidsakoder.no/kodeklubben/kodeklubboversikt/",
-    text: "Finn kodeklubb"
+    text: "Finn kodeklubb",
   },
   { href: "https://oppgaver.kidsakoder.no/", text: "Oppgaver" },
   { href: "https://www.kidsakoder.no/om-lkk/", text: "Om LKK" },
-  { href: "#minside", text: "Min side" }
+  { href: "#minside", text: "Min side" },
 ];
 
 function Navbar() {

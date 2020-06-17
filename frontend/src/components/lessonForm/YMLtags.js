@@ -2,11 +2,11 @@ import React from "react";
 import {
   gradeSettings,
   subjectSettings,
-  topicSettings
+  topicSettings,
 } from "./settingsFiles/YMLTAGSSETTINGS";
 import Checkbox from "./Checkbox";
 
-const YMLtagsGrade = props => {
+const YMLtagsGrade = (props) => {
   return (
     <>
       {gradeSettings.map((element, index) => (
@@ -23,7 +23,7 @@ const YMLtagsGrade = props => {
   );
 };
 
-const YMLtagsSubject = props => {
+const YMLtagsSubject = (props) => {
   return (
     <>
       {subjectSettings.map((element, index) => (
@@ -40,7 +40,7 @@ const YMLtagsSubject = props => {
   );
 };
 
-const YMLtagsTopic = props => {
+const YMLtagsTopic = (props) => {
   return (
     <>
       {topicSettings.map((element, index) => (

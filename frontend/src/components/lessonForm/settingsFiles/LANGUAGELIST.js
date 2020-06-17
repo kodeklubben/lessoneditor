@@ -3,7 +3,7 @@ const LANGUAGELIST = [
   { language: ["nn", "Nynorsk"] },
   { language: ["en", "Engelsk"] },
   { language: ["is", "Islandsk"] },
-  { language: ["es", "Esperanto"] }
+  { language: ["es", "Esperanto"] },
 ];
 
 export default LANGUAGELIST;

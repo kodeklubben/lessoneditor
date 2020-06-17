@@ -6,5 +6,5 @@ import authReducer from "./authReducer";
 export default combineReducers({
   mdText: mdTextReducer,
   parseMD: parseMDReducer,
-  auth: authReducer
+  auth: authReducer,
 });

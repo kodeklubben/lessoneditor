@@ -9,11 +9,11 @@ import {
   preview,
   lists,
   sections,
-  code
+  code,
 } from "../../settingsFiles/buttonConfig";
 import { Redirect } from "react-router-dom";
 
-const ControlPanel = props => {
+const ControlPanel = (props) => {
   const submitHandler = () => {
     props.submitHandler();
 
@@ -59,7 +59,7 @@ const ControlPanel = props => {
   const [showCustom, setShowCustom] = React.useState("none");
   const [redirect, setRedirect] = React.useState("");
 
-  const previewOnOff = buttonPress => {
+  const previewOnOff = (buttonPress) => {
     if (buttonPress) {
       setShowTextArea("none");
       setShowPreviewArea("flex");
@@ -335,9 +335,9 @@ const ControlPanel = props => {
   );
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
-    imageUrl: state.auth.imageUrl
+    imageUrl: state.auth.imageUrl,
   };
 };
 

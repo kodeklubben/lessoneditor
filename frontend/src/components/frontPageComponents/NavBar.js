@@ -7,11 +7,11 @@ const navContent = [
   { href: "https://www.kidsakoder.no/nyheter/", text: "Nyheter" },
   {
     href: "https://www.kidsakoder.no/kodeklubben/kodeklubboversikt/",
-    text: "Finn kodeklubb"
+    text: "Finn kodeklubb",
   },
   { href: "https://www.kidsakoder.no/kodeklubben/", text: "Kodeklubben" },
   { href: "https://www.kidsakoder.no/skole/", text: "Skole" },
-  { href: "https://www.kidsakoder.no/kodetimen/", text: "Kodetimen" }
+  { href: "https://www.kidsakoder.no/kodetimen/", text: "Kodetimen" },
 ];
 
 const NavBar = () => {

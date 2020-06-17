@@ -12,7 +12,7 @@ const SECTION_TEXT = "Tekst her";
 const NAV_BUTTONS = {
   prev: "Tilbake",
   next: "Neste",
-  submit: "Sende inn"
+  submit: "Sende inn",
 };
 
 // Button Names
@@ -40,7 +40,7 @@ const BUTTON_TITLE = {
   flag: "{Flag}",
   try: "{Prøv Selv}",
   inline: "Inline Code",
-  codeblock: "Code Block"
+  codeblock: "Code Block",
 };
 
 export { SAVING, SAVED, PHOTO_TEXT, SECTION_TEXT, BUTTON_TITLE, NAV_BUTTONS };

@@ -8,10 +8,10 @@ import ProfileMenu from "../ProfileMenu";
 const buttonContent = [
   { link: "/myPage", name: "Min side" },
   { link: "", name: "Rediger en oppgave" },
-  { link: "/createNewLesson", name: "Lag ny oppgave" }
+  { link: "/createNewLesson", name: "Lag ny oppgave" },
 ];
 
-const IndexPage = props => {
+const IndexPage = (props) => {
   return (
     <div className="StartPageContainer">
       <div className="ui right aligned grid">
@@ -40,7 +40,7 @@ const IndexPage = props => {
   );
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return { isSignedIn: state.auth.isSignedIn, firstName: state.auth.firstName };
 };
 

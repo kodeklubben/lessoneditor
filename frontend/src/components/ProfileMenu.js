@@ -5,7 +5,7 @@ import { Popup } from "semantic-ui-react";
 import GoogleAuth from "./GoogleAuth";
 import { Link } from "react-router-dom";
 
-const ProfileMenu = props => {
+const ProfileMenu = (props) => {
   return (
     <React.Fragment>
       <Popup
@@ -34,7 +34,7 @@ const ProfileMenu = props => {
           <div
             style={{
               position: "left",
-              borderRadius: "5px"
+              borderRadius: "5px",
             }}
           >
             <div className="ui ">
@@ -69,12 +69,12 @@ const ProfileMenu = props => {
   );
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     imageUrl: state.auth.imageUrl,
     firstName: state.auth.firstName,
     lastName: state.auth.lastName,
-    email: state.auth.email
+    email: state.auth.email,
   };
 };
 export default connect(mapStateToProps)(ProfileMenu);

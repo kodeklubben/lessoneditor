@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 
-const MDPreview = props => {
+const MDPreview = (props) => {
   return (
     <div
       className="PreviewArea"
@@ -10,7 +10,7 @@ const MDPreview = props => {
   );
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return { parseMD: state.parseMD };
 };
 
