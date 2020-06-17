@@ -1,33 +1,30 @@
 import "./formpage.css";
-import React from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import FormPage from "./FormPage";
 import COURSELIST from "./settingsFiles/COURSELIST";
 import { LANGUAGES } from "./settingsFiles/languages/formpage_NO";
 
-class FormComponent extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      course: COURSELIST[0].courseTitle,
-      title: "",
-      err: "",
-      author: "",
-      authorList: [],
-      authorErr: "",
-      translator: "",
-      translatorList: [],
-      language: Object.keys(LANGUAGES[0]),
-      level: 1,
-      license: "CC BY-SA 4.0",
-      tags: { topic: [], subject: [], grade: [] },
-      redirect: null,
-      pageNumber: 1,
-    };
-  }
+const FormComponent = props => {
+  const [state, setState] = useState({
+    course: COURSELIST[0].courseTitle,
+    title: "",
+    err: "",
+    author: "",
+    authorList: [],
+    authorErr: "",
+    translator: "",
+    translatorList: [],
+    language: Object.keys(LANGUAGES[0]),
+    level: 1,
+    license: "CC BY-SA 4.0",
+    tags: { topic: [], subject: [], grade: [] },
+    redirect: null,
+    pageNumber: 1,
+  });
 
-  YMLstateToString = ({ level, license, tags }) => {
+  const YMLstateToString = ({ level, license, tags }) => {
     return (
       "level: " +
       level +
@@ -43,7 +40,12 @@ class FormComponent extends React.Component {
     );
   };
 
-  YAMLstateToString = ({ title, authorList, translatorList, language }) => {
+  const YAMLstateToString = ({
+    title,
+    authorList,
+    translatorList,
+    language
+  }) => {
     return (
       "---\ntitle: " +
       title +
@@ -58,77 +60,80 @@ class FormComponent extends React.Component {
     );
   };
 
-  submitHandler = (event) => {
-    this.setState({ redirect: "/editor" });
+  const submitHandler = (event) => {
+    setState(prevState => ({ ...prevState, redirect: "/editor" }));
 
-    console.log("YAML header: \n" + this.YAMLstateToString(this.state));
-    console.log("\nYML-file: \n" + this.YMLstateToString(this.state));
+    console.log("YAML header: \n" + YAMLstateToString(state));
+    console.log("\nYML-file: \n" + YMLstateToString(state));
     // TODO: Send state-data to database
   };
 
-  changeHandler = (event) => {
+  const changeHandler = (event) => {
     let nam = event.target.name;
     let val = event.target.value;
-    this.setState({ [nam]: val });
-    if (this.state.author) this.setState({ err: "" });
-    if (this.state.title) this.setState({ err: "" });
+    setState(prevState => ({ ...prevState, [nam]: val }));
+    if (state.author) setState(prevState => ({ ...prevState, err: "" }));
+    if (state.title) setState(prevState => ({ ...prevState, err: "" }));
   };
 
-  multiInputHandler = (object, field) => {
-    this.setState(object);
-    this.setState({ [field]: "" });
+  const multiInputHandler = (object, field) => {
+    console.log(field);
+    let key = Object.keys(object)[0];
+    let value = Object.values(object)[0];
+    setState(prevState => ({ ...prevState, [key]: value }));
+    setState(prevState => ({ ...prevState, [field]: "" }));
+    console.log(state[field]);
+    console.log(state.authorList);
   };
 
-  checkboxHandler = (event) => {
+  const checkboxHandler = (event) => {
     let name = event.target.name;
     let value = event.target.value;
 
-    let i = this.state.tags;
+    let i = state.tags;
     if (i[name].includes(value)) {
       i[name].splice(i[name].indexOf(value), 1);
     } else {
       i[name].push(value);
     }
-    this.setState({ tags: i });
+    setState(prevState => ({ ...prevState, tags: i }));
   };
 
-  selectDropdownHandler = (event, data) => {
+  const selectDropdownHandler = (event, data) => {
     if (data) {
       let name = data.subtag;
       let value = data.value;
 
-      let i = this.state.tags;
+      let i = state.tags;
 
       i[name] = value;
 
-      this.setState({ tags: i });
+      setState(prevState => ({ ...prevState, tags: i }));
     }
   };
 
-  setPageNumber = (input) => {
-    this.setState({ pageNumber: input });
-    this.setState({ err: "" });
+  const setPageNumber = (input) => {
+    setState(prevState => ({ ...prevState, pageNumber: input }));
+    setState(prevState => ({ ...prevState, err: "" }));
   };
 
-  setErr = (err) => {
-    this.setState({ err });
+  const setErr = (err) => {
+    setState(prevState => ({ ...prevState, err }));
   };
 
-  render() {
-    return (
-      <FormPage
-        submitHandler={this.submitHandler}
-        changeHandler={this.changeHandler}
-        checkboxHandler={this.checkboxHandler}
-        multiInputHandler={this.multiInputHandler}
-        selectDropdownHandler={this.selectDropdownHandler}
-        setPageNumber={this.setPageNumber}
-        setErr={this.setErr}
-        state={this.state}
-      />
-    );
-  }
-}
+  return (
+    <FormPage
+      submitHandler={submitHandler}
+      changeHandler={changeHandler}
+      checkboxHandler={checkboxHandler}
+      multiInputHandler={multiInputHandler}
+      selectDropdownHandler={selectDropdownHandler}
+      setPageNumber={setPageNumber}
+      setErr={setErr}
+      state={state}
+    />
+  );
+};
 
 const mapStateToProps = (state) => {
   return {

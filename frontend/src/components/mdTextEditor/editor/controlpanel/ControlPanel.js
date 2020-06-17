@@ -72,7 +72,7 @@ const ControlPanel = (props) => {
   return redirect ? (
     <Redirect to="/endpage" />
   ) : (
-    <React.Fragment>
+    <>
       {/*small screen */}
       <div className="flexContainer">
         <div className="upperContainer">
@@ -331,7 +331,7 @@ const ControlPanel = (props) => {
           <div className="space" />
         </div>
       </div>
-    </React.Fragment>
+    </>
   );
 };
 
