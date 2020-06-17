@@ -1,0 +1,58 @@
+name: Build, push, and deploy
+
+on:
+  push:
+    branches:
+      - "*"
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  test:
+    name: Run tests
+    timeout-minutes: 3
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Cache node modules
+        uses: actions/cache@v1
+        with:
+          path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - run: npm ci --ignore-scripts --no-optional --prefer-offline --no-audit --prefix frontend
+      - run: npm ci --ignore-scripts --no-optional --prefer-offline --no-audit --prefix backend
+      - run: npm test --prefix frontend
+      - run: npm test --prefix backend
+
+  deploy:
+    name: Deploy to Google App Engine
+    timeout-minutes: 3
+    needs: test
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+      - name: Cache node modules
+        uses: actions/cache@v1
+        with:
+          path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - run: npm ci --ignore-scripts --no-optional --prefer-offline --no-audit --prefix frontend
+      - run: npm build --prefix frontend
+      - run: cp ./backend/package.json .
+      - name: Deploy to Google App Engine
+        uses: atRobertoFlores/gae_deploy_action@master
+        with:
+          service_account: ${{ secrets.SERVICE_ACCOUNT }}
+          project_name: lessoneditor
