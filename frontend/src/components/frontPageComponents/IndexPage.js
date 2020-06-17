@@ -1,8 +1,6 @@
 import React from "react";
 import "./style.css";
-import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import GoogleAuth from "../GoogleAuth";
 import ProfileMenu from "../ProfileMenu";
 
 const buttonContent = [
@@ -11,7 +9,7 @@ const buttonContent = [
   { link: "/createNewLesson", name: "Lag ny oppgave" },
 ];
 
-const IndexPage = (props) => {
+const IndexPage = () => {
   return (
     <div className="StartPageContainer">
       <div className="ui right aligned grid">
@@ -40,8 +38,4 @@ const IndexPage = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return { isSignedIn: state.auth.isSignedIn, firstName: state.auth.firstName };
-};
-
-export default connect(mapStateToProps)(IndexPage);
+export default IndexPage;

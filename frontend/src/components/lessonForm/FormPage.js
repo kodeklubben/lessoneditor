@@ -1,5 +1,4 @@
 import React from "react";
-import { connect } from "react-redux";
 import Page1 from "./Page1";
 import Page2 from "./Page2";
 import Page3 from "./Page3";
@@ -89,12 +88,4 @@ const FormPage = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    firstName: state.auth.firstName,
-    imageUrl: state.auth.imageUrl,
-    email: state.auth.email,
-  };
-};
-
-export default connect(mapStateToProps)(FormPage);
+export default FormPage;

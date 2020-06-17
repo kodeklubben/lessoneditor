@@ -1,5 +1,4 @@
 import React from "react";
-import { connect } from "react-redux";
 import { GlobalHotKeys, configure } from "react-hotkeys";
 
 // konfigurerer HotKeys-React
@@ -27,8 +26,4 @@ const MDTextArea = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return { mdText: state.mdText };
-};
-
-export default connect(mapStateToProps)(MDTextArea);
+export default MDTextArea;

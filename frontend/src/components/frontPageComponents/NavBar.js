@@ -23,7 +23,7 @@ const NavBar = () => {
         </div>
         <div className="navbar">
           <ul>
-            {navbarText.map((element, index) => (
+            {navContent.map((element, index) => (
               <li key={"element" + index}>
                 <a href={element.href}> {element.text} </a>
               </li>

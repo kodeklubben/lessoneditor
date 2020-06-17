@@ -1,11 +1,9 @@
 import "./profileMenu.css";
 import React from "react";
-import { connect } from "react-redux";
 import { Popup } from "semantic-ui-react";
-import GoogleAuth from "./GoogleAuth";
 import { Link } from "react-router-dom";
 
-const ProfileMenu = (props) => {
+const ProfileMenu = () => {
   return (
     <React.Fragment>
       <Popup
@@ -15,15 +13,7 @@ const ProfileMenu = (props) => {
         size="tiny"
         trigger={
           <div>
-            {props.imageUrl ? (
-              <img
-                className="triggerImage"
-                src={props.imageUrl}
-                alt="useImage"
-              ></img>
-            ) : (
-              <i className="user icon"></i>
-            )}
+            <i className="user icon"></i>
           </div>
         }
         position="bottom center"
@@ -38,30 +28,19 @@ const ProfileMenu = (props) => {
             }}
           >
             <div className="ui ">
-              {props.imageUrl ? (
-                <div>
-                  <img
-                    className="ui circular centered image"
-                    src={props.imageUrl}
-                    alt="useImage"
-                  ></img>
-                </div>
-              ) : (
-                <div className="ui circular centered image">
-                  <i className="user icon"></i>
-                </div>
-              )}
+              <div className="ui circular centered image">
+                <i className="user icon"></i>
+              </div>
             </div>
             <div style={{ marginTop: "1rem" }} />
-            <h2>{props.firstName + " " + props.lastName}</h2>
-            <p style={{ marginTop: "-1rem" }}>{props.email}</p>
+            <h2>Firstname LastName</h2>
+            <p style={{ marginTop: "-1rem" }}>email@email.com</p>
             <Link to="/myPage">
               <h4 style={{ color: "black", textDecoration: "underline" }}>
                 Min side
               </h4>
             </Link>
             <div style={{ marginTop: "3rem" }} />
-            <GoogleAuth />
           </div>
         }
       />
@@ -69,12 +48,4 @@ const ProfileMenu = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    imageUrl: state.auth.imageUrl,
-    firstName: state.auth.firstName,
-    lastName: state.auth.lastName,
-    email: state.auth.email,
-  };
-};
-export default connect(mapStateToProps)(ProfileMenu);
+export default ProfileMenu;

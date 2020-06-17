@@ -1,12 +1,11 @@
 import "./formpage.css";
 import React, { useState } from "react";
-import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import FormPage from "./FormPage";
 import COURSELIST from "./settingsFiles/COURSELIST";
 import { LANGUAGES } from "./settingsFiles/languages/formpage_NO";
 
-const FormComponent = props => {
+const FormComponent = () => {
   const [state, setState] = useState({
     course: COURSELIST[0].courseTitle,
     title: "",
@@ -44,7 +43,7 @@ const FormComponent = props => {
     title,
     authorList,
     translatorList,
-    language
+    language,
   }) => {
     return (
       "---\ntitle: " +
@@ -61,7 +60,7 @@ const FormComponent = props => {
   };
 
   const submitHandler = (event) => {
-    setState(prevState => ({ ...prevState, redirect: "/editor" }));
+    setState((prevState) => ({ ...prevState, redirect: "/editor" }));
 
     console.log("YAML header: \n" + YAMLstateToString(state));
     console.log("\nYML-file: \n" + YMLstateToString(state));
@@ -71,17 +70,17 @@ const FormComponent = props => {
   const changeHandler = (event) => {
     let nam = event.target.name;
     let val = event.target.value;
-    setState(prevState => ({ ...prevState, [nam]: val }));
-    if (state.author) setState(prevState => ({ ...prevState, err: "" }));
-    if (state.title) setState(prevState => ({ ...prevState, err: "" }));
+    setState((prevState) => ({ ...prevState, [nam]: val }));
+    if (state.author) setState((prevState) => ({ ...prevState, err: "" }));
+    if (state.title) setState((prevState) => ({ ...prevState, err: "" }));
   };
 
   const multiInputHandler = (object, field) => {
     console.log(field);
     let key = Object.keys(object)[0];
     let value = Object.values(object)[0];
-    setState(prevState => ({ ...prevState, [key]: value }));
-    setState(prevState => ({ ...prevState, [field]: "" }));
+    setState((prevState) => ({ ...prevState, [key]: value }));
+    setState((prevState) => ({ ...prevState, [field]: "" }));
     console.log(state[field]);
     console.log(state.authorList);
   };
@@ -96,7 +95,7 @@ const FormComponent = props => {
     } else {
       i[name].push(value);
     }
-    setState(prevState => ({ ...prevState, tags: i }));
+    setState((prevState) => ({ ...prevState, tags: i }));
   };
 
   const selectDropdownHandler = (event, data) => {
@@ -108,17 +107,17 @@ const FormComponent = props => {
 
       i[name] = value;
 
-      setState(prevState => ({ ...prevState, tags: i }));
+      setState((prevState) => ({ ...prevState, tags: i }));
     }
   };
 
   const setPageNumber = (input) => {
-    setState(prevState => ({ ...prevState, pageNumber: input }));
-    setState(prevState => ({ ...prevState, err: "" }));
+    setState((prevState) => ({ ...prevState, pageNumber: input }));
+    setState((prevState) => ({ ...prevState, err: "" }));
   };
 
   const setErr = (err) => {
-    setState(prevState => ({ ...prevState, err }));
+    setState((prevState) => ({ ...prevState, err }));
   };
 
   return (
@@ -135,10 +134,4 @@ const FormComponent = props => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    isSignedIn: state.auth.isSignedIn,
-  };
-};
-
-export default connect(mapStateToProps)(FormComponent);
+export default FormComponent;
