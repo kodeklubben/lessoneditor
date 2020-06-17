@@ -4,8 +4,9 @@
   "description": "A RESTfil application handling data for lessoneditor by LKK.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
+    "test": "echo \"Error: no test specified\" && exit 0",
+    "dev": "nodemon server.js",
+    "start-backend": "node server.js"
   },
   "keywords": [
     "node",
