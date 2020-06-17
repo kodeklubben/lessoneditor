@@ -18,7 +18,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && mv build ../backend/frontend",
+    "build": "react-scripts build && mv build ../build",
     "test": "cross-env CI=true react-scripts test",
     "eject": "react-scripts eject",
     "lint": "prettier ./src/**/* --write"

@@ -1,8 +1,6 @@
 const express = require("express");
 const path = require("path");
 const app = express();
-const setupProxy = require("./setupProxy");
-
 // const morgan = require("morgan");
 // const bodyParser = require("body-parser");
 
@@ -31,7 +29,7 @@ const setupProxy = require("./setupProxy");
 
 //app.use("/lessons", lessonRoutes);
 //app.use("/images", imageRoutes);
-app.use(express.static(__dirname + "/frontend"));
+
 // app.use((req, res, next) => {
 //   const error = new Error("Not found");
 //   error.status = 404;
@@ -46,9 +44,12 @@ app.use(express.static(__dirname + "/frontend"));
 //     },
 //   });
 // });
+const buildFolder = path.resolve(__dirname, "..", "build");
+app.use(express.static(buildFolder));
+const setupProxy = require("./setupProxy");
 setupProxy(app);
 app.get("*", function (request, response) {
-  response.sendFile(path.resolve(__dirname, "frontend/index.html"));
+  response.sendFile(path.resolve(buildFolder, "index.html"));
 });
 
 module.exports = app;
