@@ -1,7 +1,6 @@
 function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
-
 module.exports = function (app) {
   app.get("/api/oppgaver", function (req, res) {
     const oppgaver = [];
