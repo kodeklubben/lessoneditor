@@ -1,19 +1,29 @@
-import React, { useState } from "react";
+import React from "react";
+import axios from "axios";
 
 const ImagePopup = (props) => {
   const imageSizeErrorMessage = "Bildet kan ikke være over 5mb";
 
-  const fileSelectedHandler = (event) => {
+  const fileSelectedHandler = async (event) => {
     try {
       if (event.target.files && event.target.files[0].size > 5000000) {
         props.imagePopupSubmitHandler(imageSizeErrorMessage, "");
       } else {
-        let imageUrl = URL.createObjectURL(event.target.files[0]);
-        let fileName = event.target.files[0].name;
+        const fileName = event.target.files[0].name;
         props.storeImage(event.target.files[0]);
-        props.imagePopupSubmitHandler(imageUrl, "filnavn: " + fileName);
-        imageUrl = "";
-        fileName = "";
+        const url = "/api/uploads/test";
+        const formData = new FormData();
+        formData.append("file", event.target.files[0]);
+        const config = {
+          headers: {
+            "content-type": "multipart/form-data",
+          },
+        };
+        const fileInfo = await axios.post(url, formData, config);
+        props.imagePopupSubmitHandler(
+          fileInfo.data.imageUrl,
+          "filnavn: " + fileName
+        );
       }
     } catch (err) {
       console.log(err);

@@ -6,8 +6,10 @@
 .eslintrc.js
 /.idea
 /backend/node_modules
-/frontend/build
+/build
 /frontend/node_modules
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+package.json
+
