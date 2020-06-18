@@ -1,5 +1,4 @@
 import React from "react";
-import { connect } from "react-redux";
 import CPButton from "./components/CPButton";
 import {
   emphasis,
@@ -335,10 +334,4 @@ const ControlPanel = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    imageUrl: state.auth.imageUrl,
-  };
-};
-
-export default connect(mapStateToProps)(ControlPanel);
+export default ControlPanel;

@@ -1,9 +1,7 @@
 import "./editor.css";
 import React, { useState, useEffect, useRef } from "react";
-import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import { Button, Icon, Popup } from "semantic-ui-react";
-import { addText, parseMD } from "../../../actions";
 import MDTextArea from "./MDTextArea";
 import MDPreview from "../mdPreview/MDPreview";
 import { mdParser } from "../../../utils/mdParser";
@@ -92,8 +90,10 @@ let autoSaveMessage = <br />;
 
 // ___________________
 
-const Editor = props => {
+const Editor = () => {
   let [state, setState] = useState({
+    parseMD: "",
+    mdText: "",
     isEditor: true,
     editorRedirect: "",
     images: [],
@@ -101,7 +101,6 @@ const Editor = props => {
     buttonValues: isButtonOn,
     redirect: null,
   });
-  let [count, setCount] = useState(0);
 
   // refs are used to find elements in the DOM (simular to document.getElementbyID)
   let editorRef = useRef();
@@ -129,12 +128,12 @@ const Editor = props => {
 
   // counts seconds.  Used with autosave. (simulate backend communication latency)
   useInterval(() => {
-    setState(prevState => ({ ...prevState, counter: state.counter + 1 }));
-    if (state.counter > 1 && props.mdText) {
+    setState((prevState) => ({ ...prevState, counter: state.counter + 1 }));
+    if (state.counter > 1 && state.mdText) {
       autoSaveMessage = SAVED;
-    } else if (state.counter === 0 && props.mdText) {
+    } else if (state.counter === 0 && state.mdText) {
       autoSaveMessage = SAVING;
-      storedTextValue = props.mdText;
+      storedTextValue = state.mdText;
     }
   }, 500);
 
@@ -142,7 +141,7 @@ const Editor = props => {
   const submitHandler = (event) => {
     console.log("text submitted");
 
-    setState(prevState => ({ ...prevState, redirect: "/endpage" }));
+    setState((prevState) => ({ ...prevState, redirect: "/endpage" }));
 
     // TODO: Send inputtext-data to database
   };
@@ -173,7 +172,7 @@ const Editor = props => {
       inline: true,
       codeblock: true,
     };
-    setState(prevState => ({ ...prevState, buttonValues: isButtonOn }));
+    setState((prevState) => ({ ...prevState, buttonValues: isButtonOn }));
   };
 
   const setUndo = () => {
@@ -222,10 +221,12 @@ const Editor = props => {
       setCursorPosition(cursorPositionStart + 1, cursorPositionEnd + 1);
       charCounter = 0;
     }
-
-    props.addText(inputText);
-    props.parseMD(mdParser(inputText));
-    setState(prevState => ({ ...prevState, counter: 0 }));
+    setState((prevState) => ({
+      ...prevState,
+      mdText: inputText,
+      parseMD: mdParser(inputText),
+      counter: 0,
+    }));
   };
 
   const onTextareaKeyUp = (event) => {
@@ -288,14 +289,17 @@ const Editor = props => {
             orderedListIndex - 1 + ". "
         ) {
           isButtonOn[listButtonValues["bTitle"]] = true;
-          setState(prevState => ({ ...prevState, buttonValues: isButtonOn }));
           inputText =
             inputText.slice(
               0,
               cursorPositionStart - listButtonValues["cursorInt"]
             ) + inputText.slice(cursorPositionStart);
-          props.addText(inputText);
-          props.parseMD(mdParser(inputText));
+          setState((prevState) => ({
+            ...prevState,
+            mdText: inputText,
+            parseMD: mdParser(inputText),
+            buttonValues: isButtonOn,
+          }));
           setCursorPosition(
             cursorPositionStart - listButtonValues["cursorInt"],
             cursorPositionStart - listButtonValues["cursorInt"]
@@ -309,8 +313,11 @@ const Editor = props => {
             "\n\n" +
             (orderedListIndex + ". ") +
             inputText.slice(cursorPositionStart);
-          props.addText(inputText);
-          props.parseMD(mdParser(inputText));
+          setState((prevState) => ({
+            ...prevState,
+            mdText: inputText,
+            parseMD: mdParser(inputText),
+          }));
           setCursorPosition(
             cursorPositionStart + listButtonValues["cursorInt"] + 2,
             cursorPositionStart + listButtonValues["cursorInt"] + 2
@@ -324,8 +331,11 @@ const Editor = props => {
           "\n\n" +
           listButtonValues["output"] +
           inputText.slice(cursorPositionStart);
-        props.addText(inputText);
-        props.parseMD(mdParser(inputText));
+        setState((prevState) => ({
+          ...prevState,
+          mdText: inputText,
+          parseMD: mdParser(inputText),
+        }));
         setCursorPosition(
           cursorPositionStart + listButtonValues["cursorInt"] + 2,
           cursorPositionStart + listButtonValues["cursorInt"] + 2
@@ -348,8 +358,11 @@ const Editor = props => {
           inputText.slice(0, cursorPositionStart) +
           "  " +
           inputText.slice(cursorPositionStart);
-        props.addText(inputText);
-        props.parseMD(mdParser(inputText));
+        setState((prevState) => ({
+          ...prevState,
+          mdText: inputText,
+          parseMD: mdParser(inputText),
+        }));
         cursorPositionStart += 2;
         setCursorPosition(cursorPositionStart, cursorPositionStart);
         return;
@@ -359,8 +372,11 @@ const Editor = props => {
         inputText.slice(0, cursorPositionStart) +
         "  " +
         inputText.slice(cursorPositionEnd);
-      props.addText(inputText);
-      props.parseMD(mdParser(inputText));
+      setState((prevState) => ({
+        ...prevState,
+        mdText: inputText,
+        parseMD: mdParser(inputText),
+      }));
     }
 
     // reset buttons if arrow keys are pressed
@@ -377,7 +393,7 @@ const Editor = props => {
   const storeImage = (image) => {
     setState((prevState) => ({
       ...prevState,
-      images: [...prevState.images, image]
+      images: [...prevState.images, image],
     }));
   };
 
@@ -393,8 +409,11 @@ const Editor = props => {
         imagePopupInputValue +
         ")" +
         inputText.slice(cursorPositionStart);
-      props.addText(inputText);
-      props.parseMD(mdParser(inputText));
+      setState((prevState) => ({
+        ...prevState,
+        mdText: inputText,
+        parseMD: mdParser(inputText),
+      }));
       editorRef.current.focus();
       cursorPositionStart += 2;
       cursorPositionEnd += filename.length + 2;
@@ -433,8 +452,11 @@ const Editor = props => {
       inputText = "";
       undo = [""];
       redo = [];
-      props.addText(inputText);
-      props.parseMD(mdParser(inputText));
+      setState((prevState) => ({
+        ...prevState,
+        mdText: inputText,
+        parseMD: mdParser(inputText),
+      }));
       cursorPositionStart = cursorPositionEnd = 0;
       return;
     }
@@ -444,8 +466,11 @@ const Editor = props => {
       inputText = storedTextValue;
       undo = [inputText];
       redo = [inputText];
-      props.addText(inputText);
-      props.parseMD(mdParser(inputText));
+      setState((prevState) => ({
+        ...prevState,
+        mdText: inputText,
+        parseMD: mdParser(inputText),
+      }));
       setCursorPosition(inputText.length, inputText.length);
       return;
     }
@@ -466,8 +491,11 @@ const Editor = props => {
       redoCursorPosition.push(cursorPositionStart);
 
       inputText = undo.pop();
-      props.addText(inputText);
-      props.parseMD(mdParser(inputText));
+      setState((prevState) => ({
+        ...prevState,
+        mdText: inputText,
+        parseMD: mdParser(inputText),
+      }));
       setCursorPosition(pos1, pos2);
       return;
     }
@@ -480,8 +508,11 @@ const Editor = props => {
       }
       setUndo();
       inputText = redo.pop();
-      props.addText(inputText);
-      props.parseMD(mdParser(inputText));
+      setState((prevState) => ({
+        ...prevState,
+        mdText: inputText,
+        parseMD: mdParser(inputText),
+      }));
       setCursorPosition(pos1, pos2);
       return;
     }
@@ -495,13 +526,16 @@ const Editor = props => {
       ) === output
     ) {
       isButtonOn[bTitle] = true;
-      setState(prevState => ({ ...prevState, buttonValues: isButtonOn }));
+      setState((prevState) => ({ ...prevState, buttonValues: isButtonOn }));
       setUndo();
       inputText =
         inputText.slice(0, cursorPositionStart - cursorIntON) +
         inputText.slice(cursorPositionStart - cursorIntON + output.length);
-      props.addText(inputText);
-      props.parseMD(mdParser(inputText));
+      setState((prevState) => ({
+        ...prevState,
+        mdText: inputText,
+        parseMD: mdParser(inputText),
+      }));
       cursorPositionEnd = cursorPositionStart -= cursorIntON;
       setCursorPosition(cursorPositionStart, cursorPositionStart);
       return;
@@ -519,8 +553,11 @@ const Editor = props => {
           inputText.slice(0, cursorPositionStart) +
           "\n\n" +
           inputText.slice(cursorPositionStart);
-        props.addText(inputText);
-        props.parseMD(mdParser(inputText));
+        setState((prevState) => ({
+          ...prevState,
+          mdText: inputText,
+          parseMD: mdParser(inputText),
+        }));
         cursorPositionStart += 2;
         cursorPositionEnd += 2;
         handleButtonClick(bTitle, output, cursorIntON, cursorIntOFF, endOutput);
@@ -552,14 +589,17 @@ const Editor = props => {
         isButtonOn[bTitle]
       ) {
         isButtonOn[bTitle] = false;
-        setState(prevState => ({ ...prevState, buttonValues: isButtonOn }));
+        setState((prevState) => ({ ...prevState, buttonValues: isButtonOn }));
         setUndo();
         inputText =
           inputText.slice(0, cursorPositionStart - 3) +
           "# " +
           inputText.slice(cursorPositionStart);
-        props.addText(inputText);
-        props.parseMD(mdParser(inputText));
+        setState((prevState) => ({
+          ...prevState,
+          mdText: inputText,
+          parseMD: mdParser(inputText),
+        }));
         cursorPositionStart -= 1;
         setCursorPosition(cursorPositionStart, cursorPositionStart);
         return;
@@ -570,8 +610,11 @@ const Editor = props => {
           output +
           inputText.slice(cursorPositionStart);
 
-        props.addText(inputText);
-        props.parseMD(mdParser(inputText));
+        setState((prevState) => ({
+          ...prevState,
+          mdText: inputText,
+          parseMD: mdParser(inputText),
+        }));
         cursorPositionStart += output.length;
         setCursorPosition(cursorPositionStart, cursorPositionStart);
         return;
@@ -583,16 +626,19 @@ const Editor = props => {
           inputText =
             inputText.slice(0, cursorPositionStart - 2) +
             inputText.slice(cursorPositionStart);
-          props.addText(inputText);
-          props.parseMD(mdParser(inputText));
+          setState((prevState) => ({
+            ...prevState,
+            mdText: inputText,
+            parseMD: mdParser(inputText),
+          }));
           cursorPositionStart -= 2;
           setCursorPosition(cursorPositionStart, cursorPositionStart);
           isButtonOn[bTitle] = true;
-          setState(prevState => ({ ...prevState, buttonValues: isButtonOn }));
+          setState((prevState) => ({ ...prevState, buttonValues: isButtonOn }));
           return;
         } else {
           isButtonOn[bTitle] = true;
-          setState(prevState => ({ ...prevState, buttonValues: isButtonOn }));
+          setState((prevState) => ({ ...prevState, buttonValues: isButtonOn }));
           return;
         }
       }
@@ -601,14 +647,17 @@ const Editor = props => {
     // insert section text
     if (bTitle.slice(0, 4) === "sec_" && isButtonOn[bTitle]) {
       isButtonOn[bTitle] = false;
-      setState(prevState => ({ ...prevState, buttonValues: isButtonOn }));
+      setState((prevState) => ({ ...prevState, buttonValues: isButtonOn }));
       setUndo();
       inputText =
         inputText.slice(0, cursorPositionStart) +
         output +
         inputText.slice(cursorPositionStart);
-      props.addText(inputText);
-      props.parseMD(mdParser(inputText));
+      setState((prevState) => ({
+        ...prevState,
+        mdText: inputText,
+        parseMD: mdParser(inputText),
+      }));
       if (output.slice(0, 2) === "##") {
         cursorPositionStart += 3;
         cursorPositionEnd += SECTION_TEXT.length + 3;
@@ -633,7 +682,7 @@ const Editor = props => {
     if (isButtonOn[bTitle]) {
       if (cursorPositionStart !== cursorPositionEnd) {
         isButtonOn[bTitle] = false;
-        setState(prevState => ({ ...prevState, buttonValues: isButtonOn }));
+        setState((prevState) => ({ ...prevState, buttonValues: isButtonOn }));
         let i = inputText.slice(cursorPositionStart, cursorPositionEnd);
 
         // if text is selected with " " it need to be removed before insert markdown syntax
@@ -661,8 +710,11 @@ const Editor = props => {
           i +
           output.slice(cursorIntON) +
           inputText.slice(cursorPositionEnd);
-        props.addText(inputText);
-        props.parseMD(mdParser(inputText));
+        setState((prevState) => ({
+          ...prevState,
+          mdText: inputText,
+          parseMD: mdParser(inputText),
+        }));
         setCursorPosition(
           cursorPositionStart + cursorIntON,
           cursorPositionEnd + cursorIntON
@@ -670,14 +722,17 @@ const Editor = props => {
         return;
       }
       isButtonOn[bTitle] = false;
-      setState(prevState => ({ ...prevState, buttonValues: isButtonOn }));
+      setState((prevState) => ({ ...prevState, buttonValues: isButtonOn }));
 
       inputText =
         inputText.slice(0, cursorPositionStart) +
         output +
         inputText.slice(cursorPositionStart);
-      props.addText(inputText);
-      props.parseMD(mdParser(inputText));
+      setState((prevState) => ({
+        ...prevState,
+        mdText: inputText,
+        parseMD: mdParser(inputText),
+      }));
       setUndo();
       setCursorPosition(
         cursorPositionStart + cursorIntON,
@@ -687,10 +742,13 @@ const Editor = props => {
     } else if (!isButtonOn[bTitle]) {
       if (cursorPositionStart !== cursorPositionEnd) {
         isButtonOn[bTitle] = true;
-        setState(prevState => ({ ...prevState, buttonValues: isButtonOn }));
+        setState((prevState) => ({ ...prevState, buttonValues: isButtonOn }));
         inputText = undo[undo.length - 1];
-        props.addText(inputText);
-        props.parseMD(mdParser(inputText));
+        setState((prevState) => ({
+          ...prevState,
+          mdText: inputText,
+          parseMD: mdParser(inputText),
+        }));
         setCursorPosition(
           cursorPositionStart - cursorIntON,
           cursorPositionEnd - cursorIntON
@@ -698,7 +756,7 @@ const Editor = props => {
         return;
       }
       isButtonOn[bTitle] = true;
-      setState(prevState => ({ ...prevState, buttonValues: isButtonOn }));
+      setState((prevState) => ({ ...prevState, buttonValues: isButtonOn }));
       setCursorPosition(
         cursorPositionStart + cursorIntOFF,
         cursorPositionEnd + cursorIntOFF
@@ -709,8 +767,11 @@ const Editor = props => {
           inputText.slice(0, cursorPositionStart + cursorIntOFF) +
           endOutput +
           inputText.slice(cursorPositionStart + cursorIntOFF);
-        props.addText(inputText);
-        props.parseMD(mdParser(inputText));
+        setState((prevState) => ({
+          ...prevState,
+          mdText: inputText,
+          parseMD: mdParser(inputText),
+        }));
         cursorPositionStart = cursorPositionEnd += cursorIntOFF;
         setCursorPosition(cursorPositionStart, cursorPositionEnd);
       }
@@ -992,6 +1053,7 @@ const Editor = props => {
           redirect={state.redirect}
           MDTextArea={
             <MDTextArea
+              mdText={state.mdText}
               editorRef={editorRef}
               onInputChange={handleChange}
               handleButtonClick={handleButtonClick}
@@ -1004,19 +1066,11 @@ const Editor = props => {
               keyMap={keyMap}
             />
           }
-          MDPreview={<MDPreview />}
+          MDPreview={<MDPreview parseMD={state.parseMD} />}
         ></ControlPanel>
       </div>
     </div>
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    mdText: state.mdText,
-    parseMD: state.parseMD,
-    isSignedIn: state.auth.isSignedIn,
-  };
-};
-
-export default connect(mapStateToProps, { addText, parseMD })(Editor);
+export default Editor;
