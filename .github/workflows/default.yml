@@ -42,7 +42,7 @@ jobs:
     name: Deploy to Google App Engine
     timeout-minutes: 3
     needs: test
-    if: github.ref == 'refs/heads/bygger-pa-alle-kjoringer'
+    if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
