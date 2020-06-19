@@ -46,8 +46,8 @@ const app = express();
 // });
 const buildFolder = path.resolve(__dirname, "..", "build");
 app.use(express.static(buildFolder));
-const setupProxy = require("./setupProxy");
-setupProxy(app);
+require("../backend/mocks/uploads")(app);
+require("../backend/mocks/oppgaver")(app);
 app.get("*", function (request, response) {
   response.sendFile(path.resolve(buildFolder, "index.html"));
 });
