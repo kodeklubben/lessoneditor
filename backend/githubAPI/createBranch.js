@@ -17,6 +17,5 @@ async function getRepoMasterSha(octokit, username, repo) {
     repo: repo,
     branch: "master",
   });
-  // Ikke sikker på om master alltid er elements 0.
   return response.data.commit.sha;
 }
