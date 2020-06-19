@@ -8,6 +8,9 @@ on:
     branches:
       - master
 
+env:
+  CI: false
+
 jobs:
   test:
     name: Run tests
@@ -29,27 +32,25 @@ jobs:
       - run: npm ci --ignore-scripts --no-optional --prefer-offline --no-audit --prefix backend
       - run: npm test --prefix frontend
       - run: npm test --prefix backend
-
+      - run: npm run build --prefix frontend
+      - name: Archive build artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: build
+          path: build
   deploy:
     name: Deploy to Google App Engine
     timeout-minutes: 3
     needs: test
-    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/bygger-pa-alle-kjoringer'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
-      - name: Cache node modules
-        uses: actions/cache@v1
+      - name: Download build artifacts
+        uses: actions/download-artifact@v1
         with:
-          path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
-      - run: npm ci --ignore-scripts --no-optional --prefer-offline --no-audit --prefix frontend
-      - run: npm run build --prefix frontend
+          name: build
       - run: cp ./backend/package.json .
       - name: Deploy to Google App Engine
         uses: atRobertoFlores/gae_deploy_action@master

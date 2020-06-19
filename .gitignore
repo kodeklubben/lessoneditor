@@ -7,9 +7,10 @@
 /.idea
 /backend/node_modules
 /build
+/frontend/build
 /frontend/node_modules
 npm-debug.log*
+package.json
 yarn-debug.log*
 yarn-error.log*
-package.json
 
