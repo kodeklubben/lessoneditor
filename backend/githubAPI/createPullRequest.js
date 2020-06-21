@@ -1,6 +1,6 @@
 const { Octokit } = require("@octokit/rest");
 
-module.exports = async (token, username, repo, title, branch, body) => {
+module.exports = async (token, username, title, branch, body) => {
   const octokit = new Octokit({ auth: token });
   return await octokit.pulls.create({
     owner: "kodeklubben",
