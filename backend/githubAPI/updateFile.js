@@ -10,7 +10,7 @@ module.exports = async (
   branch
 ) => {
   const octokit = new Octokit({ auth: token });
-  const sha = await getFileSha(octokit, username, repo, path);
+  const sha = await getFileSha(octokit, username, repo, path, branch);
   return await octokit.repos.createOrUpdateFileContents({
     owner: username,
     repo: repo,
@@ -22,11 +22,12 @@ module.exports = async (
   });
 };
 
-async function getFileSha(octokit, username, repo, path) {
+async function getFileSha(octokit, username, repo, path, branch) {
   const response = await octokit.repos.getContent({
     owner: username,
     repo: repo,
     path: path,
+    ref: branch,
   });
   return response.data.sha;
 }
