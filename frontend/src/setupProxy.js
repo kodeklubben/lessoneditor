@@ -1,7 +1,7 @@
-const oppgaver = require("../../backend/mocks/oppgaver");
-const uploads = require("../../backend/mocks/uploads");
+const oppgaverMock = require("../../backend/routes/oppgaver.mock");
+const uploadsMock = require("../../backend/routes/uploads.mock");
 
 module.exports = function (app) {
-  oppgaver(app);
-  uploads(app);
+  oppgaverMock(app);
+  uploadsMock(app);
 };
