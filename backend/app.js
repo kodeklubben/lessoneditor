@@ -45,11 +45,14 @@ const app = express();
 //   });
 // });
 const buildFolder = path.resolve(__dirname, "..", "build");
-app.use(express.static(buildFolder));
-require("../backend/mocks/uploads")(app);
-require("../backend/mocks/oppgaver")(app);
-app.get("*", function (request, response) {
-  response.sendFile(path.resolve(buildFolder, "index.html"));
-});
 
-module.exports = app;
+module.exports = async () => {
+  await require("./server/add-basic-auth")(app);
+  app.use(express.static(buildFolder));
+  require("./routes/uploads")(app);
+  require("./routes/oppgaver.mock")(app);
+  app.get("*", function (request, response) {
+    response.sendFile(path.resolve(buildFolder, "index.html"));
+  });
+  return app;
+};
