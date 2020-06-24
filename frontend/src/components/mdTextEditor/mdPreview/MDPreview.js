@@ -1,10 +1,10 @@
 import React from "react";
 
-const MDPreview = (props) => {
+const MDPreview = ({ parseMD }) => {
   return (
     <div
       className="PreviewArea"
-      dangerouslySetInnerHTML={{ __html: props.parseMD }}
+      dangerouslySetInnerHTML={{ __html: parseMD }}
     />
   );
 };
