@@ -1,6 +1,5 @@
 import "./formpage.css";
 import React, { useState } from "react";
-import { Redirect } from "react-router-dom";
 import FormPage from "./FormPage";
 import COURSELIST from "./settingsFiles/COURSELIST";
 import { LANGUAGES } from "./settingsFiles/languages/formpage_NO";

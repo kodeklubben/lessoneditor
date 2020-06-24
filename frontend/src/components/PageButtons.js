@@ -48,7 +48,7 @@ const PageButtons = (props) => {
   };
 
   return (
-    <React.Fragment>
+    <>
       {props.state.pageNumber === 1 || props.state.isEditor ? (
         <Link to="/">
           <button id="backButton" className="ui button" type="button">
@@ -75,7 +75,7 @@ const PageButtons = (props) => {
         <i aria-hidden="true" className="" />
         {props.nextTitle}
       </button>
-    </React.Fragment>
+    </>
   );
 };
 
