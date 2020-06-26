@@ -6,6 +6,7 @@
 .eslintrc.js
 /.idea
 /backend/node_modules
+/backend/.env
 /build
 /node_modules
 /frontend/build

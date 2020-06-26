@@ -26,6 +26,7 @@ module.exports = (app) => {
     });
     res.send(fileInfo);
   });
+
   app.delete("/api/uploads/:lessonId", (req, res, next) => {
     const filename = req.body.filename;
     if (fs.lstatSync(`static/images/${filename}`).isFile()) {
