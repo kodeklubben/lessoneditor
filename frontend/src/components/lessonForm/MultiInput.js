@@ -2,7 +2,7 @@ import React from "react";
 
 const MultiInput = (props) => {
   let inputOrder = 1;
-  let removeNameButtonOrder = 0;
+
   let textInput = null;
 
   const handleClick = (event) => {
@@ -11,7 +11,6 @@ const MultiInput = (props) => {
       let temp = { [i]: [...props.inputArray, props.inputValue] };
       props.multiInputHandler(temp, event.target.name);
       inputOrder += 1;
-      removeNameButtonOrder += 1;
 
       textInput.focus();
     }
@@ -34,7 +33,6 @@ const MultiInput = (props) => {
     props.multiInputHandler(temp, name);
 
     inputOrder -= 1;
-    removeNameButtonOrder -= 1;
   };
 
   return (

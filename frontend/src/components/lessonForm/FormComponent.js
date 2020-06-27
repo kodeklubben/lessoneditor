@@ -1,6 +1,5 @@
 import "./formpage.css";
 import React, { useState } from "react";
-import { Redirect } from "react-router-dom";
 import FormPage from "./FormPage";
 import COURSELIST from "./settingsFiles/COURSELIST";
 import { LANGUAGES } from "./settingsFiles/languages/formpage_NO";
@@ -76,13 +75,10 @@ const FormComponent = () => {
   };
 
   const multiInputHandler = (object, field) => {
-    console.log(field);
     let key = Object.keys(object)[0];
     let value = Object.values(object)[0];
     setState((prevState) => ({ ...prevState, [key]: value }));
     setState((prevState) => ({ ...prevState, [field]: "" }));
-    console.log(state[field]);
-    console.log(state.authorList);
   };
 
   const checkboxHandler = (event) => {

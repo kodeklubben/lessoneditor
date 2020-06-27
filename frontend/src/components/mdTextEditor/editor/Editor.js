@@ -1,19 +1,15 @@
 import "./editor.css";
 import React, { useState, useEffect, useRef } from "react";
-import { Redirect } from "react-router-dom";
-import { Button, Icon, Popup } from "semantic-ui-react";
 import MDTextArea from "./MDTextArea";
 import MDPreview from "../mdPreview/MDPreview";
 import { mdParser } from "../../../utils/mdParser";
 import ControlPanel from "./controlpanel/ControlPanel";
 import ProfileMenu from "../../ProfileMenu";
 import ImagePopup from "../ImagePopup";
-import PageButtons from "../../PageButtons";
 import {
   SAVING,
   SAVED,
   SECTION_TEXT,
-  PHOTO_TEXT,
   NAV_BUTTONS,
 } from "../settingsFiles/languages/editor_NO";
 import {

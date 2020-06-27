@@ -1,5 +1,5 @@
 import React from "react";
-import ItemList from "./ItemList";
+import ItemList from "../../components/mypage/ItemList";
 import { shallow } from "enzyme";
 
 it("renders without crashing", () => {

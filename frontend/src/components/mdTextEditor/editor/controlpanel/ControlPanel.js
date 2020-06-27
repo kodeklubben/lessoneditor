@@ -3,7 +3,6 @@ import CPButton from "./components/CPButton";
 import {
   emphasis,
   undoRedo,
-  saveLoadNew,
   image,
   preview,
   lists,
