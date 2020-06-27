@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Button, Icon, Popup } from "semantic-ui-react";
 
 const Buttons = (props) => {
@@ -8,13 +8,13 @@ const Buttons = (props) => {
   let buttonPressTimer2 = "";
   let timeout = "";
 
-  let smallScreen = false;
+  let smallScreen = useRef();
 
   useEffect(() => {
     if (window.innerWidth < 768) {
-      smallScreen = true;
+      smallScreen.current = true;
     } else if (window.innerWidth > 768) {
-      smallScreen = false;
+      smallScreen.current = false;
     }
   }, []);
 
@@ -34,6 +34,7 @@ const Buttons = (props) => {
   const handleClose = () => {
     clearTimeout(buttonPressTimer);
     clearTimeout(buttonPressTimer2);
+    clearTimeout(timeout);
   };
 
   const responsiveCP = () => {
@@ -105,7 +106,6 @@ const Buttons = (props) => {
                 size="big"
                 className="CPButton"
                 onTouchStart={handleButtonPress}
-                // onTouchEnd={handleButtonRelease}
                 onClick={() =>
                   props.onButtonClick(
                     props.bTitle,
