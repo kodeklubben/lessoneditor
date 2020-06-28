@@ -1,5 +1,5 @@
 import React from "react";
-import PageButtons from "../components/PageButtons";
+import PageButtons from "components/PageButtons";
 import { shallow } from "enzyme";
 
 it("should call setPageNumber", () => {
