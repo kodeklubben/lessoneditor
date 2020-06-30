@@ -13,9 +13,7 @@ it("should render buttons", () => {
 });
 
 it("should redirect to a given link", () => {
-  const initLinkAdress = wrapper.find("Link").at(0).prop("to");
+  const initLinkAdress = "/myPage";
 
-  wrapper.find("button").first().simulate("click");
-  wrapper.update();
   expect(wrapper.find("Link").at(0).prop("to")).toEqual(initLinkAdress);
 });
