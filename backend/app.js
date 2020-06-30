@@ -50,7 +50,7 @@ module.exports = async () => {
   await require("./server/add-basic-auth")(app);
   app.use(express.static(buildFolder));
   require("./routes/uploads")(app);
-  require("./routes/oppgaver.mock")(app);
+  require("./routes/oppgaver.local")(app);
   app.get("*", function (request, response) {
     response.sendFile(path.resolve(buildFolder, "index.html"));
   });
