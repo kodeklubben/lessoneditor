@@ -1052,7 +1052,6 @@ const Editor = () => {
               mdText={state.mdText}
               editorRef={editorRef}
               onInputChange={handleChange}
-              handleButtonClick={handleButtonClick}
               onTextareaKeyDown={onTextareaKeyDown}
               onTextareaKeyUp={onTextareaKeyUp}
               onTextareaMouseDown={onTextareaMouseDown}
