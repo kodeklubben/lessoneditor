@@ -1,0 +1,47 @@
+Tekstbehandler
+
+## Generelt: 
+
+- Automatisk linjeskift etter 80 tegn fungerer dårlig.  (update:  Er fjernet inntil videre)
+
+- TAB oppfører seg rart når vi redigerer tekst inne i en kodeblokk.  
+
+- Preview kan gjerne auto-scrolle mens vi redigerer. Håper det er lett å få til. 
+  Kanskje det går å la scrollern automatisk følge html-elementet som blir redigert vha en #id eller .klasse ?
+
+-  Må finne ut om "bold/italic" markdown skal bruke **tekst** eller __tekst__ - syntaks.
+
+- Når oppgaven i preview'ern får en viss lengde blir det lagt til linjer uten innhold under de to tekstvinduene. 
+  Skyldes dette CSS eller noe? TODO - Finne ut av dette.
+
+- Se på om tekst i lister (raw markdown) i tekstarea-feltet kan indenteres automatisk? 
+  Blir samme format som oppgavene som allerede er skrevet da. 
+
+
+
+
+
+## Micro:bit 
+
+- Kodelinje-syntaks rendrer feil.  `tekstfelt`.{.microbitbasic}   
+  I nettleser vises det med html-kode <Code class="Contet_microbitbasic_35Pls">tekstfelt</Code>
+
+  TODO: Må konfigurere markdownIT for  micro:bit
+  I dette tilfellet må knappen for kodeblokk legge til {.microbitbasic} etter ´´
+  Må lage et script som bruker info fra hvilke kurs oppgaven skrives for, og konfigurerer knappen deretter. 
+
+
+- Kodeblokk-syntaks rendrer feil. 
+
+  ```microbit
+  basic.forever(function () {
+    (eventuell flere funksjoner for å vise SVG her)
+  })
+  ```
+  Koden over skal rendre SVG-grafikk. 
+
+  TODO: Bruke navnet på kurs for å konfigurere knapp for kodeblokk.  
+  Konfigurere markdownIT til å rendre SVG i preview'ern. 
+
+
+-

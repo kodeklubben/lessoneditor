@@ -165,7 +165,7 @@
   }
 
   .customButtons {
-    display: none;
+    display: flex;
     flex-flow: row nowrap;
     justify-content: space-between;
   }
@@ -177,7 +177,7 @@
   .PreviewArea {
     padding: 1rem;
     margin: 1rem;
-    height: 82vh;
+    height: 77vh;
     display: block;
     word-wrap: break-word;
     background-color: white;
@@ -185,6 +185,7 @@
     touch-action: manipulation;
   }
   .TextArea {
+    height: 77vh;
     outline: none;
     padding: 1rem;
     margin: 1rem;
