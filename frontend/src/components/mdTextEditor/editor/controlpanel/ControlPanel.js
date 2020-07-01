@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
 import CPButton from "./components/CPButton";
 import {
   emphasis,
@@ -17,6 +17,16 @@ const ControlPanel = (props) => {
 
     setRedirect("/endpage");
   };
+
+  let smallScreen = useRef();
+
+  useEffect(() => {
+    if (window.innerWidth < 768) {
+      smallScreen.current = true;
+    } else if (window.innerWidth > 768) {
+      smallScreen.current = false;
+    }
+  }, []);
 
   const handleButtonClick = (
     bTitle,
@@ -41,7 +51,9 @@ const ControlPanel = (props) => {
         setShowCustom("none");
       }
     } else {
-      setShowCustom("none");
+      if (smallScreen.current) {
+        setShowCustom("none");
+      }
       props.handleButtonClick(
         bTitle,
         output,
@@ -52,10 +64,10 @@ const ControlPanel = (props) => {
     }
   };
 
-  const [showTextArea, setShowTextArea] = React.useState("");
-  const [showPreviewArea, setShowPreviewArea] = React.useState("");
-  const [showCustom, setShowCustom] = React.useState("none");
-  const [redirect, setRedirect] = React.useState("");
+  const [showTextArea, setShowTextArea] = useState("");
+  const [showPreviewArea, setShowPreviewArea] = useState("");
+  const [showCustom, setShowCustom] = useState("none");
+  const [redirect, setRedirect] = useState("");
 
   const previewOnOff = (buttonPress) => {
     if (buttonPress) {
@@ -270,7 +282,14 @@ const ControlPanel = (props) => {
             ))}
           </div>
           <div className="space" />
-          <div style={{ display: showTextArea }} className="showCustom">
+          <div
+            style={
+              smallScreen.current
+                ? { display: showTextArea }
+                : { display: "none" }
+            }
+            className="showCustom"
+          >
             <CPButton
               bTitle="showCustom"
               icon=""
@@ -290,7 +309,12 @@ const ControlPanel = (props) => {
           </div>
         </div>
 
-        <div style={{ display: showCustom }} className="customButtons">
+        <div
+          style={
+            smallScreen.current ? { display: showCustom } : { display: "flex" }
+          }
+          className="customButtons"
+        >
           <div className="space" />
           <div className="ui buttons sections">
             {sections.map((element, index) => (

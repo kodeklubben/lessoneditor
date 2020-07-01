@@ -6,7 +6,6 @@ let wrapped;
 
 beforeEach(() => {
   wrapped = mount(<Editor />);
-  wrapped.update();
 });
 
 afterEach(() => {
@@ -68,7 +67,7 @@ describe("preview-area", () => {
 // Denne feiler:
 
 // describe("editor buttons", () => {
-//   it("should output text to textarea after buttonclick", () => {
+//   it("should output markdown syntax for bold to textarea after buttonclick", () => {
 //     wrapped.find(".emphasis").find("button").at(0).simulate("click");
 //     wrapped.update();
 //     expect(wrapped.find("textarea").prop("value")).toEqual("****");

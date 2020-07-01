@@ -38,7 +38,7 @@ const Buttons = (props) => {
   };
 
   const responsiveCP = () => {
-    return smallScreen ? (
+    return smallScreen.current ? (
       <>
         <Popup
           content={props.title}

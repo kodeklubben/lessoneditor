@@ -1,6 +1,6 @@
 body {
   background-color: rgb(255, 255, 255);
-  max-width: 1200px;
+  max-width: 1600px;
   margin: auto;
 }
 
@@ -35,12 +35,21 @@ ol {
   background: #349946;
   padding: 10px;
   border-radius: 5px;
+  margin-top: 20px;
+}
+
+.section_tip {
+  border: 3px solid #ff7f00;
+  background: #fff99d;
+  border-radius: 12px;
+  padding: 0 20px 20px;
+  margin: 20px 0;
 }
 
 .section_flag {
   border-top: 3px dotted #e6862d;
   padding-bottom: 20px;
-  margin: 0 20px;
+  margin: 10px 0px;
 }
 
 .section_flag h2,
@@ -108,6 +117,14 @@ ol {
 }
 
 /* List styling */
+
+.checklist-item {
+  margin-bottom: 15px;
+}
+
+.contains-checklist {
+  margin-left: -20px;
+}
 
 .PreviewArea ul li::before {
   content: "";
