@@ -1,5 +1,5 @@
 import "./editor.css";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import MDTextArea from "./MDTextArea";
 import MDPreview from "../mdPreview/MDPreview";
 import { mdParser } from "../../../utils/mdParser";
@@ -16,6 +16,7 @@ import {
   SHORTCUTKEY,
   KEY_COMBINATIONS as KEY,
 } from "../settingsFiles/buttonConfig";
+import { UserContext } from "../../UserContext";
 
 // check if buttons is pressed
 let isButtonOn = {
@@ -781,7 +782,7 @@ const Editor = () => {
       return true;
     }
   };
-
+  const user = useContext(UserContext);
   return (
     <div className="editor">
       <ImagePopup
@@ -792,7 +793,7 @@ const Editor = () => {
       />
 
       <div className="profileMenu">
-        <ProfileMenu />
+        <ProfileMenu name={user.name} email={user.email} />
       </div>
 
       <div className="textEditorContainer">

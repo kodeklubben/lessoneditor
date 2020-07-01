@@ -1,11 +1,10 @@
-const express = require("express");
-const path = require("path");
-const app = express();
-const buildFolder = path.resolve(__dirname, "..", "build");
-
-app.use(express.static(buildFolder));
-require("./routes/uploads.local")(app);
+const app = require("express")();
+const port = process.env.PORT || 3232;
+require("./routes/current-user.local")(app);
 require("./routes/oppgaver.local")(app);
-//require("./routes/github-login")(app);
-const port = 3421;
-app.listen(3421, () => console.log(`Server listening on port ${port}`));
+require("./routes/serve-frontend")(app);
+require("./routes/uploads.local")(app);
+
+app.listen(3421, () =>
+  console.log(`Server(Local) is running on http://localhost:${port}`)
+);

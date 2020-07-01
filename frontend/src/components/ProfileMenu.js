@@ -3,9 +3,9 @@ import React from "react";
 import { Popup } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
-const ProfileMenu = () => {
+const ProfileMenu = ({ name, email }) => {
   return (
-    <React.Fragment>
+    <>
       <Popup
         className="transition hidden"
         basic
@@ -33,8 +33,8 @@ const ProfileMenu = () => {
               </div>
             </div>
             <div style={{ marginTop: "1rem" }} />
-            <h2>Firstname LastName</h2>
-            <p style={{ marginTop: "-1rem" }}>email@email.com</p>
+            <h2>{name}</h2>
+            <p style={{ marginTop: "-1rem" }}>{email}</p>
             <Link to="/myPage">
               <h4 style={{ color: "black", textDecoration: "underline" }}>
                 Min side
@@ -44,7 +44,7 @@ const ProfileMenu = () => {
           </div>
         }
       />
-    </React.Fragment>
+    </>
   );
 };
 
