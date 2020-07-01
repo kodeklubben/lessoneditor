@@ -1,0 +1,5 @@
+{
+  "CURRENT_USER": "/api/current-user",
+  "AUTH_CALLBACK": "/callback",
+  "AUTH_LOGIN_FAILED": "/login-failed"
+}
