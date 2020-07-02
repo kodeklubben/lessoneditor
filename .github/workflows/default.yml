@@ -8,9 +8,6 @@ on:
     branches:
       - master
 
-env:
-  CI: false
-
 jobs:
   test:
     name: Run tests
@@ -51,6 +48,7 @@ jobs:
         uses: actions/download-artifact@v1
         with:
           name: build
+      - run: echo "${{ secrets.DOTENV }}" > ./backend/.env
       - run: cp ./backend/package.json .
       - name: Deploy to Google App Engine
         uses: atRobertoFlores/gae_deploy_action@master
