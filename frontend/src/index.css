@@ -18,6 +18,10 @@ ol {
   font-size: 41px;
 }
 
+.PreviewArea .section_intro ul li::before {
+  content: none;
+}
+
 .PreviewArea > hr {
   display: none;
 }
