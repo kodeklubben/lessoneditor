@@ -1,9 +1,10 @@
 const paths = require("../../paths.json");
 const passport = require("passport");
 const session = require("express-session");
+
 const GitHubStrategy = require("passport-github2").Strategy;
 const ensureAuthenticated = require("../utils/ensure-authenticated");
-
+const sessionStore = require("../storage/session-storage");
 passport.serializeUser(function (user, done) {
   done(null, user);
 });
@@ -11,7 +12,8 @@ passport.serializeUser(function (user, done) {
 passport.deserializeUser(function (obj, done) {
   done(null, obj);
 });
-
+console.log("GITHUB_CLIENT_ID", process.env.GITHUB_CLIENT_ID);
+console.log("GITHUB_CALLBACK_URL", process.env.GITHUB_CALLBACK_URL);
 const strategy = new GitHubStrategy(
   {
     clientID: process.env.GITHUB_CLIENT_ID,
@@ -34,7 +36,8 @@ passport.use(strategy.name, strategy);
 module.exports = (app) => {
   app.use(
     session({
-      secret: "keyboard cat",
+      store: sessionStore(),
+      secret: process.env.GITHUB_CLIENT_SECRET,
       resave: false,
       saveUninitialized: false,
     })

@@ -1,2 +1,2 @@
 runtime: nodejs12
-entrypoint: ./start.sh
+entrypoint: node ./backend/server-gae.js
