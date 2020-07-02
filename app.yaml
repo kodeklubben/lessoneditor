@@ -1,2 +1,10 @@
 runtime: nodejs12
 entrypoint: node ./backend/server-gae.js
+handlers:
+  - url: /static
+    static_dir: build/static
+
+  - url: /.*
+    secure: always
+    redirect_http_response_code: 301
+    script: auto
