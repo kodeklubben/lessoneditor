@@ -262,10 +262,10 @@ const sections = [
   {
     bTitle: "sec_tip",
     icon: "",
-    output: "## " + SECTION_TEXT + " {.tip}\n",
+    output: "## {.tip}\n" + SECTION_TEXT,
     title: BUTTON_TITLE.tip,
-    cursorIntON: 0,
-    cursorIntOFF: 8,
+    cursorIntON: 10,
+    cursorIntOFF: 19,
     endOutput: "",
     shortcut: KEY_COMBINATIONS.tip.join(""),
   },

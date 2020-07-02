@@ -650,15 +650,20 @@ const Editor = () => {
         mdText: inputText,
         parseMD: mdParser(inputText),
       }));
-      if (output.slice(0, 2) === "##") {
+      if (output.slice(0, 2) === "##" && bTitle !== "sec_tip") {
         cursorPositionStart += 3;
         cursorPositionEnd += SECTION_TEXT.length + 3;
-      } else if (
-        bTitle === "sec_tip" ||
-        bTitle === "sec_protip" ||
-        bTitle === "sec_challenge"
-      ) {
-        cursorPositionStart += cursorIntOFF;
+      }
+      // else if (
+      //   bTitle === "sec_tip" ||
+      //   bTitle === "sec_protip" ||
+      //   bTitle === "sec_challenge"
+      // ) {
+      //   cursorPositionStart += cursorIntOFF;
+      //   cursorPositionEnd += cursorIntOFF;
+      // }
+      else if (bTitle === "sec_tip") {
+        cursorPositionStart += cursorIntON;
         cursorPositionEnd += cursorIntOFF;
       } else {
         cursorPositionStart += 2;
