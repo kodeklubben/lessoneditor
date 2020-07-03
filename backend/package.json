@@ -31,7 +31,8 @@
     "passport-github2": "^0.1.12"
   },
   "devDependencies": {
-    "nodemon": "^2.0.3",
-    "faker": "^4.1.0"
+    "faker": "^4.1.0",
+    "jest": "^26.1.0",
+    "nodemon": "^2.0.3"
   }
 }
