@@ -1,5 +1,7 @@
 import "./editor.css";
-import React, { useState, useEffect, useRef, useContext } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { useParams } from "react-router";
+import axios from "axios";
 import MDTextArea from "./MDTextArea";
 import MDPreview from "../mdPreview/MDPreview";
 import { mdParser } from "../../../utils/mdParser";
@@ -7,14 +9,14 @@ import ControlPanel from "./controlpanel/ControlPanel";
 import ProfileMenu from "../../ProfileMenu";
 import ImagePopup from "../ImagePopup";
 import {
-  SAVING,
-  SAVED,
-  SECTION_TEXT,
   NAV_BUTTONS,
+  SAVED,
+  SAVING,
+  SECTION_TEXT,
 } from "../settingsFiles/languages/editor_NO";
 import {
-  SHORTCUTKEY,
   KEY_COMBINATIONS as KEY,
+  SHORTCUTKEY,
 } from "../settingsFiles/buttonConfig";
 import { UserContext } from "../../UserContext";
 
@@ -91,7 +93,22 @@ const Editor = () => {
     buttonValues: isButtonOn,
     redirect: null,
   });
-
+  let { course, lesson, file } = useParams();
+  useEffect(() => {
+    if (course && lesson && file) {
+      async function fetchData() {
+        const result = await axios.get(
+          ["/api/lessons-proxy", course, lesson, file].join("/")
+        );
+        setState((prevState) => ({
+          ...prevState,
+          mdText: result.data,
+          parseMD: mdParser(result.data),
+        }));
+      }
+      fetchData();
+    }
+  }, [course, lesson, file]);
   // refs are used to find elements in the DOM (simular to document.getElementbyID)
   let editorRef = useRef();
   let uploadImageRef = useRef();
