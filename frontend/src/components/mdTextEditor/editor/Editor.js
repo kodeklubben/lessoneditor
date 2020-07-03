@@ -255,8 +255,6 @@ const Editor = () => {
 
   // KEYBOARD SHORTCUT SETTINGS
   const onTextareaKeyDown = (event) => {
-    console.log(event);
-    console.log(event.keyCode);
     cursorPositionStart = event.target.selectionStart;
     cursorPositionEnd = event.target.selectionEnd;
 
