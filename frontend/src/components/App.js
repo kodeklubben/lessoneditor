@@ -16,6 +16,7 @@ const App = () => {
           <Route exact path="/myPage" component={Overview} />
           <Route exact path="/createNewLesson" component={FormComponent} />
           <Route exact path="/editor" component={Editor} />
+          <Route path="/editor/:course/:lesson/:file" component={Editor} />
           <Route exact path="/endpage" component={EndPage} />
         </UserContextProvider>
       </BrowserRouter>

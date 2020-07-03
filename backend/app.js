@@ -42,6 +42,7 @@ module.exports = async () => {
   require("./routes/current-user")(app);
   require("./routes/oppgaver.local")(app);
   require("./routes/uploads")(app);
+  require("./routes/oppgave-proxy")(app);
   require("./routes/serve-frontend")(app);
   return app;
 };

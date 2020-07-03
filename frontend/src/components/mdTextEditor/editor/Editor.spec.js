@@ -1,12 +1,16 @@
 import React from "react";
 import { mount } from "enzyme";
-
+import { MemoryRouter } from "react-router-dom";
 import Editor from "components/mdTextEditor/editor/Editor";
 
 let wrapped;
 
 beforeEach(() => {
-  wrapped = mount(<Editor />);
+  wrapped = mount(
+    <MemoryRouter>
+      <Editor />
+    </MemoryRouter>
+  );
 });
 
 afterEach(() => {
