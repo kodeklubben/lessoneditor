@@ -359,31 +359,20 @@ const Editor = () => {
     if (event.key === "Tab") {
       event.preventDefault();
       // config for correct tab inside codeblock:
-      if (!isButtonOn["codeblock"]) {
-        setUndo();
-        inputText =
-          inputText.slice(0, cursorPositionStart) +
-          "  " +
-          inputText.slice(cursorPositionStart);
-        setState((prevState) => ({
-          ...prevState,
-          mdText: inputText,
-          parseMD: mdParser(inputText),
-        }));
-        cursorPositionStart += 2;
-        setCursorPosition(cursorPositionStart, cursorPositionStart);
-        return;
-      }
+
       setUndo();
       inputText =
         inputText.slice(0, cursorPositionStart) +
         "  " +
-        inputText.slice(cursorPositionEnd);
+        inputText.slice(cursorPositionStart);
       setState((prevState) => ({
         ...prevState,
         mdText: inputText,
         parseMD: mdParser(inputText),
       }));
+      cursorPositionStart += 2;
+      setCursorPosition(cursorPositionStart, cursorPositionStart);
+      return;
     }
 
     // reset buttons if arrow keys are pressed
