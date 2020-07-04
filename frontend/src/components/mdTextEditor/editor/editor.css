@@ -55,6 +55,8 @@
 
 .editor {
   padding: 1rem;
+  overflow: hidden;
+  position: relative;
 }
 
 .textWindows {

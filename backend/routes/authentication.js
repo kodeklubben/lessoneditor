@@ -11,12 +11,10 @@ module.exports = (app) => {
   app.use(passport.initialize({}));
   app.use(passport.session({}));
   app.use(require("../authentication/ensure-authenticated"));
-  app.get(paths.AUTH_LOGIN_FAILED, (req, res) => {
-    res.send("<code>Login failed, sorry.</code>");
-  });
-  app.get("/login-tests/display-user", (req, res) => {
-    res.send(req.user);
-  });
+  app.get(paths.AUTH_LOGIN_FAILED, (req, res) =>
+    res.send("<code>Login failed, sorry.</code>")
+  );
+  app.get("/login-tests/display-user", (req, res) => res.send(req.user));
   app.get(
     paths.AUTH_CALLBACK,
     passport.authenticate("github", {
