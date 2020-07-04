@@ -5,14 +5,13 @@ import axios from "axios";
 import MDTextArea from "./MDTextArea";
 import MDPreview from "../mdPreview/MDPreview";
 import { mdParser } from "../../../utils/mdParser";
-import { renderMicrobit } from "utils/renderMicrobit";
 import ControlPanel from "./controlpanel/ControlPanel";
 import ProfileMenu from "../../ProfileMenu";
 import ImagePopup from "../ImagePopup";
 import {
   NAV_BUTTONS,
-  SAVED,
-  SAVING,
+  // SAVED,
+  // SAVING,
   SECTION_TEXT,
 } from "../settingsFiles/languages/editor_NO";
 import {
