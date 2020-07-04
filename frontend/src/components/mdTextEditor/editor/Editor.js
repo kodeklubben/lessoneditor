@@ -10,8 +10,8 @@ import ProfileMenu from "../../ProfileMenu";
 import ImagePopup from "../ImagePopup";
 import {
   NAV_BUTTONS,
-  SAVED,
-  SAVING,
+  // SAVED,
+  // SAVING,
   SECTION_TEXT,
 } from "../settingsFiles/languages/editor_NO";
 import {
@@ -113,36 +113,36 @@ const Editor = () => {
   let editorRef = useRef();
   let uploadImageRef = useRef();
 
-  function useInterval(callback, delay) {
-    const savedCallback = useRef();
+  // function useInterval(callback, delay) {
+  //   const savedCallback = useRef();
 
-    // Remember the latest callback.
-    useEffect(() => {
-      savedCallback.current = callback;
-    }, [callback]);
+  //   // Remember the latest callback.
+  //   useEffect(() => {
+  //     savedCallback.current = callback;
+  //   }, [callback]);
 
-    // Set up the interval.
-    useEffect(() => {
-      function tick() {
-        savedCallback.current();
-      }
-      if (delay !== null) {
-        let id = setInterval(tick, delay);
-        return () => clearInterval(id);
-      }
-    }, [delay]);
-  }
+  //   // Set up the interval.
+  //   useEffect(() => {
+  //     function tick() {
+  //       savedCallback.current();
+  //     }
+  //     if (delay !== null) {
+  //       let id = setInterval(tick, delay);
+  //       return () => clearInterval(id);
+  //     }
+  //   }, [delay]);
+  // }
 
   // counts seconds.  Used with autosave. (simulate backend communication latency)
-  useInterval(() => {
-    setState((prevState) => ({ ...prevState, counter: state.counter + 1 }));
-    if (state.counter > 1 && state.mdText) {
-      autoSaveMessage = SAVED;
-    } else if (state.counter === 0 && state.mdText) {
-      autoSaveMessage = SAVING;
-      storedTextValue = state.mdText;
-    }
-  }, 500);
+  // useInterval(() => {
+  //   setState(prevState => ({ ...prevState, counter: state.counter + 1 }));
+  //   if (state.counter > 1 && state.mdText) {
+  //     autoSaveMessage = SAVED;
+  //   } else if (state.counter === 0 && state.mdText) {
+  //     autoSaveMessage = SAVING;
+  //     storedTextValue = state.mdText;
+  //   }
+  // }, 500);
 
   // Submithandler
   const submitHandler = (event) => {

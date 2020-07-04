@@ -244,3 +244,115 @@ ol {
   background-color: transparent;
   border-radius: 0;
 }
+
+/* MICRO:BIT inline style */
+code.blockmotion {
+  background-color: #4c97ff;
+}
+code.blocklooks {
+  background-color: #96f;
+}
+code.blocksound {
+  background-color: #cf63cf;
+}
+code.blockpen {
+  background-color: #0fbd8c;
+}
+code.blockdata {
+  background-color: #ff8c1a;
+}
+code.blockevents {
+  background-color: #ffbf00;
+}
+code.blockcontrol {
+  background-color: #ffab19;
+}
+code.blocksensing {
+  background-color: #5cb1d6;
+}
+code.blockoperators {
+  background-color: #59c059;
+}
+code.blockmoreblocks {
+  background-color: #ff6680;
+}
+code.microbitbasic {
+  background-color: #1e90ff;
+}
+code.microbitinput {
+  background-color: #d400d4;
+}
+code.microbitmusic {
+  background-color: #e63022;
+}
+code.microbitled {
+  background-color: #5c2d91;
+}
+code.microbitradio {
+  background-color: #e3008c;
+}
+code.microbitloops {
+  background-color: #0a0;
+}
+code.microbitlogic {
+  background-color: #00a4a6;
+}
+code.microbitvariables {
+  background-color: #dc143c;
+}
+code.microbitmath {
+  background-color: #9400d3;
+}
+code.microbitfunctions {
+  background-color: #3455db;
+}
+code.microbitarrays {
+  background-color: #e65722;
+}
+code.microbittext {
+  background-color: #b8860b;
+}
+code.microbitgame {
+  background-color: #007a4b;
+}
+code.microbitimages {
+  background-color: #7600a8;
+}
+code.microbitpins {
+  background-color: #b22222;
+}
+code.microbitserial {
+  background-color: #002050;
+}
+code.microbitcontrol {
+  background-color: #333;
+}
+code.blockmotion,
+code.blocklooks,
+code.blocksound,
+code.blockpen,
+code.blockdata,
+code.blockevents,
+code.blockcontrol,
+code.blocksensing,
+code.blockoperators,
+code.blockmoreblocks,
+code.microbitbasic,
+code.microbitinput,
+code.microbitmusic,
+code.microbitled,
+code.microbitradio,
+code.microbitloops,
+code.microbitlogic,
+code.microbitvariables,
+code.microbitmath,
+code.microbitfunctions,
+code.microbitarrays,
+code.microbittext,
+code.microbitgame,
+code.microbitimages,
+code.microbitpins,
+code.microbitserial,
+code.microbitcontrol {
+  color: #fff;
+}

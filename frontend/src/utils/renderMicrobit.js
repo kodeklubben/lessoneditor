@@ -6,10 +6,11 @@ const renderSpinner = () => {
   const pres = [...document.getElementsByTagName("pre")];
   for (let pre of pres) {
     if ([...pre.childNodes][0].className === "python") return;
-    pre.style.display = "none";
+    pre.style.backgroundColor = "white";
+    pre.style.borderStyle = "none";
     let img = document.createElement("img");
     img.id = "spinner";
-    img.src = require("../assets/graphics/spinner.gif");
+    img.src = require("assets/graphics/spinner.gif");
     img.alt = "Spinner";
     img.width = "50";
     img.height = "50";
@@ -44,7 +45,9 @@ const createIframe = (language) => {
     tr: "tr", // Turkish
   };
   const f = document.createElement("iframe");
-  //f.addEventListener('load', (e) => { console.log('microbit iframe loaded.'); });
+  f.addEventListener("load", (e) => {
+    // console.log("microbit iframe loaded.");
+  });
   f.id = microbitIframeId;
   f.style.position = "absolute";
   f.style.left = 0;
@@ -59,7 +62,7 @@ const createIframe = (language) => {
     f.src = "https://makecode.microbit.org/--docs?render=1&lang=en";
   }
   document.body.appendChild(f);
-  //console.log('iframe created and appended to body');
+  // console.log("iframe created and appended to body");
 
   window.addEventListener("message", processIframeMessage);
 };
@@ -67,7 +70,7 @@ const createIframe = (language) => {
 const removeIframe = () => {
   window.removeEventListener("message", processIframeMessage);
   document.getElementById(microbitIframeId).remove();
-  //console.log('Microbit iframe removed');
+  // console.log("Microbit iframe removed");
 };
 
 // Taken from https://makecode.microbit.org/blocks-embed
@@ -75,7 +78,10 @@ const renderSnippets = () => {
   getMicrobitSnippets().forEach((pre) => {
     const f = document.getElementById(microbitIframeId);
     f.dataset.rendering = +(f.dataset.rendering || 0) + 1; // unary "+" to force string to number
-    //console.log('renderSnippets(), snippets currently rendering:', f.dataset.rendering);
+    // console.log(
+    //   "renderSnippets(), snippets currently rendering:",
+    //   f.dataset.rendering
+    // );
     f.contentWindow.postMessage(
       {
         type: "renderblocks",
@@ -99,12 +105,14 @@ const createImage = (msg) => {
   img.style.display = "block";
   img.style.margin = "0 auto 15px";
   img.style.maxWidth = "100%";
-  let code = document.getElementsByTagName("pre")[0];
+  let code = document.getElementsByClassName("microbit")[0];
   let spinner = document.getElementById("spinner");
   if (document.body.contains(spinner)) {
     spinner.remove();
   }
-  if (typeof code === "undefined") return;
+  if (typeof code === "undefined") {
+    return;
+  }
   if (code.className === "microbit") {
     code.parentElement.insertBefore(img, code);
     code.parentElement.removeChild(code);
@@ -113,7 +121,10 @@ const createImage = (msg) => {
   // Check to see if this was the last image. If so, remove iframe.
   const f = document.getElementById(microbitIframeId);
   f.dataset.rendering = +f.dataset.rendering - 1; // unary "+" to force string to number
-  //console.log('createImage(), snippets currently rendering:', f.dataset.rendering);
+  // console.log(
+  //   "createImage(), snippets currently rendering:",
+  //   f.dataset.rendering
+  // );
   if (f.dataset.rendering <= 0) {
     removeIframe();
   }
@@ -122,7 +133,6 @@ const createImage = (msg) => {
 const processIframeMessage = (e) => {
   let msg = e.data;
   if (msg.source === "makecode") {
-    //console.log('processIframeMessage, e.data.type:', msg.type);
     if (msg.type === "renderready") {
       renderSnippets();
     } else if (msg.type === "renderblocks") {
