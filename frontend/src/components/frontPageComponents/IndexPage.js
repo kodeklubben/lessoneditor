@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import "./style.css";
 import { Link } from "react-router-dom";
 import ProfileMenu from "../ProfileMenu";
-import { UserContext } from "../UserContext";
+import { UserContext } from "../../contexts/UserContext";
 
 const buttonContent = [
   { link: "/myPage", name: "Min side" },
@@ -11,13 +11,16 @@ const buttonContent = [
 ];
 
 const IndexPage = () => {
-  const user = useContext(UserContext);
+  const context = useContext(UserContext);
 
   return (
     <div className="StartPageContainer">
       <div className="ui right aligned grid">
         <div className="right floated column">
-          <ProfileMenu name={user.name} email={user.email} />
+          <ProfileMenu
+            name={context.user ? context.user.name : ""}
+            email={context.user ? context.user.email : ""}
+          />
         </div>
       </div>
       <div style={{ margin: "1rem" }} />

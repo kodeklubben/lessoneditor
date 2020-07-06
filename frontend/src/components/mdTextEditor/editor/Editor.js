@@ -8,18 +8,18 @@ import { mdParser } from "../../../utils/mdParser";
 import ControlPanel from "./controlpanel/ControlPanel";
 import ProfileMenu from "../../ProfileMenu";
 import ImagePopup from "../ImagePopup";
+import resolveUrlTemplate from "../../../utils/resolve-url-template";
+import paths from "paths.json";
 import {
   NAV_BUTTONS,
-  // SAVED,
-  // SAVING,
   SECTION_TEXT,
 } from "../settingsFiles/languages/editor_NO";
 import {
   KEY_COMBINATIONS as KEY,
   SHORTCUTKEY,
 } from "../settingsFiles/buttonConfig";
-import { UserContext } from "../../UserContext";
-
+import { UserContext } from "../../../contexts/UserContext";
+// import { LessonContext } from "../../../contexts/LessonContext";
 // check if buttons is pressed
 let isButtonOn = {
   bold: true,
@@ -93,44 +93,84 @@ const Editor = () => {
     buttonValues: isButtonOn,
     redirect: null,
   });
+  const [savedText, setSavedText] = useState("");
+  // const lessonContext = useContext(LessonContext);
   const { course, lesson, file } = useParams();
   useEffect(() => {
     if (course && lesson && file) {
       async function fetchData() {
-        const proxyUrl = ["/api/lessons-proxy", course, lesson, file].join("/");
-        const result = await axios.get(proxyUrl);
+        let mdText = "";
+        try {
+          const tempFileUrl = resolveUrlTemplate(paths.DISPLAY_FILE, {
+            course,
+            lesson,
+            file,
+          });
+          const result = await axios.get(tempFileUrl + ".md");
+          mdText = result.data;
+        } catch (e) {
+          console.log("No tempFile Found");
+          try {
+            const proxyUrl = ["/api/lessons-proxy", course, lesson, file].join(
+              "/"
+            );
+            const result = await axios.get(proxyUrl);
+            mdText = result.data;
+          } catch (e) {
+            console.log("No proxy-text found.");
+          }
+        }
+        setSavedText(mdText);
         setState((prevState) => ({
           ...prevState,
-          mdText: result.data,
-          parseMD: mdParser(result.data),
+          mdText: mdText,
+          parseMD: mdParser(mdText),
         }));
       }
       fetchData();
     }
   }, [course, lesson, file]);
+
+  useInterval(async () => {
+    if (state.mdText !== savedText) {
+      const tempFileUrl = resolveUrlTemplate(paths.DISPLAY_FILE, {
+        course,
+        lesson,
+        file,
+      });
+
+      await axios.post(tempFileUrl + ".md", state.mdText, {
+        headers: {
+          "Content-Type": "text/plain",
+        },
+      });
+      setSavedText(state.mdText);
+    }
+  }, 5000);
+
   // refs are used to find elements in the DOM (simular to document.getElementbyID)
   let editorRef = useRef();
   let uploadImageRef = useRef();
 
-  // function useInterval(callback, delay) {
-  //   const savedCallback = useRef();
+  function useInterval(callback, delay) {
+    const savedCallback = useRef();
 
-  //   // Remember the latest callback.
-  //   useEffect(() => {
-  //     savedCallback.current = callback;
-  //   }, [callback]);
+    // Remember the latest callback.
+    useEffect(() => {
+      savedCallback.current = callback;
+    }, [callback]);
 
-  //   // Set up the interval.
-  //   useEffect(() => {
-  //     function tick() {
-  //       savedCallback.current();
-  //     }
-  //     if (delay !== null) {
-  //       let id = setInterval(tick, delay);
-  //       return () => clearInterval(id);
-  //     }
-  //   }, [delay]);
-  // }
+    // Set up the interval.
+    useEffect(() => {
+      function tick() {
+        savedCallback.current();
+      }
+      if (delay !== null) {
+        let id = setInterval(tick, delay);
+        return () => clearInterval(id);
+      }
+    }, [delay]);
+  }
 
   // counts seconds.  Used with autosave. (simulate backend communication latency)
   // useInterval(() => {
@@ -200,7 +240,7 @@ const Editor = () => {
   };
 
   // all config for handling text on input
-  const handleChange = (event) => {
+  const handleChange = async (event) => {
     cursorPositionStart = event.target.selectionStart;
     cursorPositionEnd = event.target.selectionEnd;
     inputText = event.target.value;
@@ -227,6 +267,7 @@ const Editor = () => {
     //   setCursorPosition(cursorPositionStart + 1, cursorPositionEnd + 1);
     //   charCounter = 0;
     // }
+
     setState((prevState) => ({
       ...prevState,
       mdText: inputText,
@@ -790,7 +831,7 @@ const Editor = () => {
       return true;
     }
   };
-  const user = useContext(UserContext);
+  const context = useContext(UserContext);
   return (
     <div className="editor">
       <ImagePopup
@@ -801,7 +842,10 @@ const Editor = () => {
       />
 
       <div className="profileMenu">
-        <ProfileMenu name={user.name} email={user.email} />
+        <ProfileMenu
+          name={context.user ? context.user.name : ""}
+          email={context.user ? context.user.email : ""}
+        />
       </div>
 
       <div className="textEditorContainer">

@@ -6,7 +6,8 @@ export const UserContext = React.createContext({});
 
 export const UserContextProvider = (props) => {
   const [user, setUser] = useState({
-    data: {},
+    name: "",
+    email: "",
     lessons: [],
   });
   useEffect(() => {
@@ -14,7 +15,7 @@ export const UserContextProvider = (props) => {
       const userRes = await axios.get(paths.USER);
       const userLessonsRes = await axios.get(paths.USER_LESSONS);
       setUser({
-        data: userRes.data,
+        ...userRes.data,
         lessons: userLessonsRes.data,
       });
     }

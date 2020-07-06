@@ -13,8 +13,7 @@ Du må være logget inn i gcloud cli og ha rettigheter til
 prosjektet for å kunne gjøre dette fra egen maskin.
 
 ```
-cp ./frontend/src/paths.json .
-cp ./backend/package.json .
+cp ./frontend/src/paths.json . && cp ./backend/package.json .
 npm ci --ignore-scripts --no-optional --prefer-offline --no-audit --prefix frontend
 npm run build --prefix frontend
 gcloud app deploy --quiet --project=lessoneditor
