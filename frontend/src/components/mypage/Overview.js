@@ -5,7 +5,7 @@ import Navbar from "./Navbar";
 import ItemList from "./ItemList";
 import LeftBox from "./LeftBox";
 import RightBox from "./RightBox";
-import { UserContext } from "../UserContext";
+import { UserContext } from "../../contexts/UserContext";
 
 const Overview = () => {
   const context = useContext(UserContext);

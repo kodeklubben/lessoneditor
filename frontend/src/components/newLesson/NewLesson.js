@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import slugify from "slugify";
 import COURSESLIST from "../lessonForm/settingsFiles/COURSELIST";
-import { UserContext } from "../UserContext";
+import { UserContext } from "../../contexts/UserContext";
 import { useHistory } from "react-router";
 
 const NewLesson = () => {

@@ -12,6 +12,12 @@ module.exports = (app) => {
     const { course, lesson, file } = req.params;
     return res.sendFile(getImgLoc(course, lesson, file));
   });
+  app.post(paths.DISPLAY_FILE, async (req, res) => {
+    const { course, lesson, file } = req.params;
+    const filename = getImgLoc(course, lesson, file);
+    await saveToDisk(filename, Buffer.from(req.body));
+    return res.send("ok");
+  });
   app.post(paths.LESSON_UPLOADS, multer.single("file"), async (req, res) => {
     if (!req.file) {
       res.status(400).send("No file uploaded.");
