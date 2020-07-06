@@ -93,13 +93,12 @@ const Editor = () => {
     buttonValues: isButtonOn,
     redirect: null,
   });
-  let { course, lesson, file } = useParams();
+  const { course, lesson, file } = useParams();
   useEffect(() => {
     if (course && lesson && file) {
       async function fetchData() {
-        const result = await axios.get(
-          ["/api/lessons-proxy", course, lesson, file].join("/")
-        );
+        const proxyUrl = ["/api/lessons-proxy", course, lesson, file].join("/");
+        const result = await axios.get(proxyUrl);
         setState((prevState) => ({
           ...prevState,
           mdText: result.data,

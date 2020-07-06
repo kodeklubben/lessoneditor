@@ -1,0 +1,10 @@
+{
+  "AUTH_CALLBACK": "/callback",
+  "AUTH_LOGIN_FAILED": "/login-failed",
+  "DISPLAY_FILE": "/api/display/:course/:lesson/:file",
+  "LESSON_DATA": "/api/lesson/:course/:lesson/data",
+  "LESSON_PROXY": "/api/lessons-proxy/*",
+  "LESSON_UPLOADS": "/api/lesson/:course/:lesson/upload",
+  "USER": "/api/user",
+  "USER_LESSONS": "/api/user/lessons"
+}

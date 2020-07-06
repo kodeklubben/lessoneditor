@@ -1,15 +1,15 @@
 const COURSESLIST = [
-  { courseTitle: "Micro:it" },
-  { courseTitle: "Scratch" },
-  { courseTitle: "Python" },
-  { courseTitle: "Lego Mindstorms" },
-  { courseTitle: "Web" },
-  { courseTitle: "Code Studio" },
-  { courseTitle: "Processing" },
-  { courseTitle: "Elm" },
-  { courseTitle: "Computer Craft" },
-  { courseTitle: "App Inventor" },
-  { courseTitle: "Arduino" },
+  { courseTitle: "App Inventor", slug: "appinventor" },
+  { courseTitle: "Arduino", slug: "arduino" },
+  { courseTitle: "Code Studio", slug: "codestudio" },
+  { courseTitle: "Computer Craft", slug: "computercraft" },
+  { courseTitle: "Elm", slug: "elm" },
+  { courseTitle: "Lego Mindstorms", slug: "legomindstorms" },
+  { courseTitle: "Micro:it", slug: "microbit" },
+  { courseTitle: "Processing", slug: "processing" },
+  { courseTitle: "Python", slug: "python" },
+  { courseTitle: "Scratch", slug: "scratch" },
+  { courseTitle: "Web", slug: "web" },
 ];
 
 export default COURSESLIST;

@@ -1,9 +1,9 @@
-const { format } = require("util");
+const gcsUrl = require("../utils/gcs-url");
 const { Storage } = require("@google-cloud/storage");
 const storage = new Storage();
-
+const constants = require("../constants.json");
 module.exports = async (filename, buffer, bucketName) => {
-  const bucketN = bucketName || process.env.GCLOUD_STORAGE_BUCKET;
+  const bucketN = bucketName || constants.BUCKET;
   const bucket = storage.bucket(bucketN);
   const blob = bucket.file(filename);
   const blobStream = blob.createWriteStream();
@@ -13,8 +13,7 @@ module.exports = async (filename, buffer, bucketName) => {
   let promise = new Promise((resolve) => {
     blobStream.on("finish", () => resolve());
   });
-
   blobStream.end(buffer);
   await promise;
-  return format(`https://storage.googleapis.com/${bucket.name}/${blob.name}`);
+  return gcsUrl(blob.name, bucketN);
 };

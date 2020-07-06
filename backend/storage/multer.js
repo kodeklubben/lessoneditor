@@ -4,12 +4,10 @@ const fileFilter = (req, file, cb) => {
     ? cb(null, true)
     : cb(null, false);
 };
-module.exports = (storage) => {
-  return multer({
-    storage: storage,
-    limits: {
-      fileSize: 1024 * 1024 * 5,
-    },
-    fileFilter: fileFilter,
-  });
-};
+module.exports = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 1024 * 1024 * 5,
+  },
+  fileFilter,
+});

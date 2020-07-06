@@ -13,7 +13,7 @@ module.exports = new GitHubStrategy(
       name: user.displayName,
       email: user.emails[0].value,
       photo: user.photos[0].value,
-      username: user.name,
+      username: user.username,
     });
   }
 );
