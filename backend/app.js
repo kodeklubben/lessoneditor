@@ -38,11 +38,12 @@ const app = require("express")();
 // });
 
 module.exports = async () => {
-  require("./routes/authentication")(app);
+  require("./routes/auth")(app);
+  require("./routes/configure")(app);
   require("./routes/current-user")(app);
-  require("./routes/oppgaver.local")(app);
-  require("./routes/uploads")(app);
-  require("./routes/oppgave-proxy")(app);
+  require("./routes/lesson-data")(app);
+  require("./routes/lesson-proxy")(app);
+  require("./routes/lesson-uploads")(app);
   require("./routes/serve-frontend")(app);
   return app;
 };

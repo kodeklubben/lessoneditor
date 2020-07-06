@@ -1,12 +1,11 @@
 const axios = require("axios");
-
+const paths = require("../paths");
+const constants = require("../constants.json");
 module.exports = (app) => {
-  app.get("/api/lessons-proxy/*", async (req, res) => {
-    const githubPrefix =
-      "https://raw.githubusercontent.com/kodeklubben/oppgaver/master/src";
-    const len = "/api/lessons-proxy/*".length;
+  app.get(paths.LESSON_PROXY, async (req, res) => {
+    const len = paths.LESSON_PROXY.length;
     const resource = req.path.substring(len - 2);
-    const url = githubPrefix + resource + ".md";
+    const url = constants.GITHUB_LESSON_PREFIX + resource + ".md";
     const remoteFolder = url.substr(0, url.lastIndexOf("/"));
     try {
       const content = await axios.get(url);

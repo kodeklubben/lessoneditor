@@ -1,16 +1,16 @@
-const paths = require("../../paths.json");
+const paths = require("../paths");
 const passport = require("passport");
 
 passport.serializeUser((user, done) => done(null, user));
 passport.deserializeUser((obj, done) => done(null, obj));
-passport.use("github", require("../authentication/strategy"));
+passport.use("github", require("../auth/strategy"));
 
 module.exports = (app) => {
   app.set("trust proxy", 1);
-  app.use(require("../authentication/session"));
+  app.use(require("../auth/session"));
   app.use(passport.initialize({}));
   app.use(passport.session({}));
-  app.use(require("../authentication/ensure-authenticated"));
+  app.use(require("../auth/ensure-authenticated"));
   app.get(paths.AUTH_LOGIN_FAILED, (req, res) =>
     res.send("<code>Login failed, sorry.</code>")
   );

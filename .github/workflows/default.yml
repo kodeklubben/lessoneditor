@@ -49,6 +49,7 @@ jobs:
         with:
           name: build
       - run: echo "${{ secrets.DOTENV }}" > ./backend/.env
+      - run: cp ./frontend/src/paths.json .
       - run: cp ./backend/package.json .
       - name: Deploy to Google App Engine
         uses: atRobertoFlores/gae_deploy_action@master

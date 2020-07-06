@@ -16,5 +16,6 @@
 npm-debug.log*
 package-lock.json
 package.json
+paths.json
 yarn-debug.log*
 yarn-error.log*

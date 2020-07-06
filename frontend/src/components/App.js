@@ -6,6 +6,7 @@ import IndexPage from "./frontPageComponents/IndexPage";
 import Overview from "./mypage/Overview";
 import { BrowserRouter, Route } from "react-router-dom";
 import { UserContextProvider } from "./UserContext";
+import NewLesson from "./newLesson/NewLesson";
 
 const App = () => {
   return (
@@ -16,6 +17,7 @@ const App = () => {
           <Route exact path="/myPage" component={Overview} />
           <Route exact path="/createNewLesson" component={FormComponent} />
           <Route exact path="/editor" component={Editor} />
+          <Route exact path="/new-lesson" component={NewLesson} />
           <Route path="/editor/:course/:lesson/:file" component={Editor} />
           <Route exact path="/endpage" component={EndPage} />
         </UserContextProvider>
