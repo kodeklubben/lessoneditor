@@ -60,6 +60,7 @@ let autoSaveMessage = <br />;
 // ___________________
 
 const Editor = () => {
+  const context = useContext(UserContext);
   let [state, setState] = useState({
     parseMD: "",
     mdText: "",
@@ -115,12 +116,14 @@ const Editor = () => {
         lesson,
         file,
       });
-
       await axios.post(tempFileUrl + ".md", state.mdText, {
         headers: {
           "Content-Type": "text/plain",
         },
       });
+      if (!context.getLesson(course, lesson)) {
+        await context.addLesson(course, lesson, lesson);
+      }
       setSavedText(state.mdText);
     }
   }, 5000);
@@ -784,7 +787,7 @@ const Editor = () => {
       return true;
     }
   };
-  const context = useContext(UserContext);
+
   return (
     <div className="editor">
       <ImagePopup
