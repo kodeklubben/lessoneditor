@@ -6,8 +6,13 @@ const getMicrobitSnippets = () =>
 
 const renderSpinner = () => {
   getMicrobitSnippets().forEach((codeBlock) => {
+    const pres = [...document.getElementsByTagName("pre")];
+    pres.forEach((pre) => {
+      pre.style.backgroundColor = "#fff";
+      pre.style.borderStyle = "none";
+    });
     codeBlock.style.borderStyle = "none";
-    codeBlock.style.color = "#f5f5f5";
+    codeBlock.style.color = "#999";
     const preSize = codeBlock.getBoundingClientRect();
     let img = document.createElement("img");
     img.className = "spinner";
