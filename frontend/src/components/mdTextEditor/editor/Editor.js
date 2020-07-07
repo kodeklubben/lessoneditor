@@ -8,6 +8,7 @@ import { mdParser } from "../../../utils/mdParser";
 import ControlPanel from "./controlpanel/ControlPanel";
 import ProfileMenu from "../../ProfileMenu";
 import ImagePopup from "../ImagePopup";
+import { editorButtonsValue } from "components/mdTextEditor/editor/utils/editorButtonsValue";
 import {
   NAV_BUTTONS,
   // SAVED,
@@ -21,31 +22,7 @@ import {
 import { UserContext } from "../../UserContext";
 
 // check if buttons is pressed
-let isButtonOn = {
-  bold: true,
-  italic: true,
-  heading: true,
-  strikethrough: true,
-  undo: true,
-  redo: true,
-  new: true,
-  load: true,
-  save: true,
-  image: true,
-  listUl: true,
-  listOl: true,
-  listCheck: true,
-  sec_activity: true,
-  sec_intro: true,
-  sec_check: true,
-  sec_tip: true,
-  sec_protip: true,
-  sec_challenge: true,
-  sec_flag: true,
-  sec_try: true,
-  inline: true,
-  codeblock: true,
-};
+let isButtonOn = editorButtonsValue;
 
 let preview = false;
 
@@ -153,31 +130,7 @@ const Editor = () => {
   };
 
   const resetButtons = () => {
-    isButtonOn = {
-      bold: true,
-      italic: true,
-      heading: true,
-      strikethrough: true,
-      undo: true,
-      redo: true,
-      new: true,
-      load: true,
-      save: true,
-      image: true,
-      listUl: true,
-      listOl: true,
-      listCheck: true,
-      sec_activity: true,
-      sec_intro: true,
-      sec_check: true,
-      sec_tip: true,
-      sec_protip: true,
-      sec_challenge: true,
-      sec_flag: true,
-      sec_try: true,
-      inline: true,
-      codeblock: true,
-    };
+    isButtonOn = editorButtonsValue;
     setState((prevState) => ({ ...prevState, buttonValues: isButtonOn }));
   };
 
