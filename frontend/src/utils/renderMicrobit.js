@@ -6,13 +6,8 @@ const getMicrobitSnippets = () =>
 
 const renderSpinner = () => {
   getMicrobitSnippets().forEach((codeBlock) => {
-    const pres = [...document.getElementsByTagName("pre")];
-    pres.forEach((pre) => {
-      pre.style.backgroundColor = "#fff";
-      pre.style.borderStyle = "none";
-    });
     codeBlock.style.borderStyle = "none";
-    codeBlock.style.color = "#999";
+    codeBlock.style.color = "#f5f5f5";
     const preSize = codeBlock.getBoundingClientRect();
     let img = document.createElement("img");
     img.className = "spinner";
@@ -93,8 +88,22 @@ const renderSnippets = () => {
       );
     }
   });
+  cleanUpCache();
 };
-
+const cleanUpCache = () => {
+  const activeImages = Array.from(document.getElementsByTagName("img")).map(
+    (tag) => {
+      return tag.src;
+    }
+  );
+  for (const msgId in msgCache) {
+    const msgSrc = msgCache[msgId].src;
+    if (!activeImages.includes(msgSrc)) {
+      delete msgCache[msgId];
+      URL.revokeObjectURL(msgSrc);
+    }
+  }
+};
 /**
  * Creates an image from the rendered microbit code
  * @param {object} msg
@@ -128,11 +137,15 @@ const processIframeMessage = (e) => {
     if (msg.type === "renderready") {
       renderSnippets();
     } else if (msg.type === "renderblocks") {
-      msg.src = URL.createObjectURL(
-        new Blob([msg.svg], { type: "image/svg+xml" })
-      );
-      createImage(msg);
-      msgCache[msg.id] = msg;
+      msgCache[msg.id] = {
+        id: msg.id,
+        width: msg.width,
+        height: msg.height,
+        src: URL.createObjectURL(
+          new Blob([msg.svg], { type: "image/svg+xml" })
+        ),
+      };
+      createImage(msgCache[msg.id]);
     }
   }
 };
