@@ -8,7 +8,7 @@ import { mdParser } from "../../../utils/mdParser";
 import ControlPanel from "./controlpanel/ControlPanel";
 import ProfileMenu from "../../ProfileMenu";
 import ImagePopup from "../ImagePopup";
-import { editorButtonsValue } from "components/mdTextEditor/editor/utils/editorButtonsValue";
+import editorButtonsValue from "./editorButtonsValue";
 import resolveUrlTemplate from "../../../utils/resolve-url-template";
 import paths from "paths.json";
 import {
