@@ -1,5 +1,6 @@
 const fs = require("fs");
 const saveToDisk = require("../utils/save-to-disk");
+const getTempDir = require("../utils/get-temp-dir");
 const paths = require("../paths");
 
 module.exports = (app) => {
@@ -13,7 +14,11 @@ module.exports = (app) => {
   app.get(paths.LESSON_DATA, async (req, res) => {
     const { course, lesson } = req.params;
     const filename = getTempDir([course, lesson, "data.json"]);
-    const content = fs.readFileSync(filename, "utf8");
-    res.send(JSON.parse(content));
+    if (fs.existsSync(filename)) {
+      const content = fs.readFileSync(filename, "utf8");
+      res.send(JSON.parse(content));
+    } else {
+      res.send({});
+    }
   });
 };

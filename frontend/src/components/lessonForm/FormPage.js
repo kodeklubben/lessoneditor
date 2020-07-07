@@ -5,7 +5,7 @@ import Page3 from "./Page3";
 import PageButtons from "../PageButtons";
 import ProfileMenu from "../ProfileMenu";
 import { NAV_BUTTONS } from "./settingsFiles/languages/formpage_NO";
-import { UserContext } from "../UserContext";
+import { UserContext } from "../../contexts/UserContext";
 
 const FormPage = (props) => {
   const renderFormPage = () => {
@@ -73,12 +73,12 @@ const FormPage = (props) => {
       );
     }
   };
-  const user = useContext(UserContext);
+  const context = useContext(UserContext);
   return (
     <div id="formPage" className="ui grid">
       <div className="right aligned row">
         <div id="profileMenu" className="right floated three wide column">
-          <ProfileMenu name={user.name} email={user.email} />
+          <ProfileMenu name={context.user.name} email={context.user.email} />
         </div>
         <div className="column" />
       </div>
