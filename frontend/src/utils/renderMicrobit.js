@@ -1,24 +1,28 @@
+import md5 from "crypto-js/md5";
+
 const microbitIframeId = "makecoderenderer";
 const getMicrobitSnippets = () =>
   Array.from(document.getElementsByClassName("microbit"));
 
 const renderSpinner = () => {
-  const pres = [...document.getElementsByTagName("pre")];
-  for (let pre of pres) {
-    if ([...pre.childNodes][0].className === "python") return;
-    pre.style.backgroundColor = "white";
-    pre.style.borderStyle = "none";
+  getMicrobitSnippets().forEach((codeBlock) => {
+    codeBlock.style.borderStyle = "none";
+    codeBlock.style.color = "#f5f5f5";
+    const preSize = codeBlock.getBoundingClientRect();
     let img = document.createElement("img");
-    img.id = "spinner";
+    img.className = "spinner";
     img.src = require("assets/graphics/spinner.gif");
     img.alt = "Spinner";
-    img.width = "50";
-    img.height = "50";
+    img.width = 50;
+    img.height = 50;
     img.style.maxWidth = "100%";
     img.style.display = "block";
     img.style.margin = "0 auto 15px";
-    pre.parentElement.insertBefore(img, pre);
-  }
+    img.style.position = "absolute";
+    img.style.top = preSize.height / 2 + "px";
+    img.style.left = preSize.width / 2 + "px";
+    codeBlock.parentElement.insertBefore(img, codeBlock);
+  });
 };
 
 /**
@@ -62,72 +66,69 @@ const createIframe = (language) => {
     f.src = "https://makecode.microbit.org/--docs?render=1&lang=en";
   }
   document.body.appendChild(f);
-  // console.log("iframe created and appended to body");
-
   window.addEventListener("message", processIframeMessage);
 };
 
-const removeIframe = () => {
-  window.removeEventListener("message", processIframeMessage);
-  document.getElementById(microbitIframeId).remove();
-  // console.log("Microbit iframe removed");
-};
-
+const msgCache = {};
 // Taken from https://makecode.microbit.org/blocks-embed
 const renderSnippets = () => {
-  getMicrobitSnippets().forEach((pre) => {
-    const f = document.getElementById(microbitIframeId);
-    f.dataset.rendering = +(f.dataset.rendering || 0) + 1; // unary "+" to force string to number
-    // console.log(
-    //   "renderSnippets(), snippets currently rendering:",
-    //   f.dataset.rendering
-    // );
-    f.contentWindow.postMessage(
-      {
-        type: "renderblocks",
-        id: pre.id,
-        code: pre.innerText,
-      },
-      "https://makecode.microbit.org/"
-    );
+  const f = document.getElementById(microbitIframeId);
+  getMicrobitSnippets().forEach((codeBlock) => {
+    const checksum = md5(codeBlock.innerText).toString();
+    if (msgCache[checksum]) {
+      createImage(msgCache[checksum]);
+    } else {
+      f.contentWindow.postMessage(
+        {
+          type: "renderblocks",
+          id: checksum,
+          code: codeBlock.innerText,
+        },
+        "https://makecode.microbit.org/"
+      );
+    }
   });
+  cleanUpCache();
 };
-
+const cleanUpCache = () => {
+  const activeImages = Array.from(document.getElementsByTagName("img")).map(
+    (tag) => {
+      return tag.src;
+    }
+  );
+  for (const msgId in msgCache) {
+    const msgSrc = msgCache[msgId].src;
+    if (!activeImages.includes(msgSrc)) {
+      delete msgCache[msgId];
+      URL.revokeObjectURL(msgSrc);
+    }
+  }
+};
 /**
  * Creates an image from the rendered microbit code
  * @param {object} msg
  */
 const createImage = (msg) => {
   let img = document.createElement("img");
-  img.src = msg.uri;
+  img.src = msg.src;
   img.width = msg.width;
   img.height = msg.height;
   img.style.display = "block";
   img.style.margin = "0 auto 15px";
   img.style.maxWidth = "100%";
-  let code = document.getElementsByClassName("microbit")[0];
-  let spinner = document.getElementById("spinner");
-  if (document.body.contains(spinner)) {
-    spinner.remove();
-  }
-  if (typeof code === "undefined") {
-    return;
-  }
-  if (code.className === "microbit") {
-    code.parentElement.insertBefore(img, code);
-    code.parentElement.removeChild(code);
-  }
-
-  // Check to see if this was the last image. If so, remove iframe.
-  const f = document.getElementById(microbitIframeId);
-  f.dataset.rendering = +f.dataset.rendering - 1; // unary "+" to force string to number
-  // console.log(
-  //   "createImage(), snippets currently rendering:",
-  //   f.dataset.rendering
-  // );
-  if (f.dataset.rendering <= 0) {
-    removeIframe();
-  }
+  getMicrobitSnippets().forEach((codeBlock) => {
+    if (md5(codeBlock.innerText).toString() === msg.id) {
+      if (codeBlock.className === "microbit") {
+        Array.from(
+          codeBlock.parentElement.getElementsByClassName("spinner")
+        ).forEach((element) => {
+          element.remove();
+        });
+        codeBlock.parentElement.insertBefore(img, codeBlock);
+        codeBlock.parentElement.removeChild(codeBlock);
+      }
+    }
+  });
 };
 
 const processIframeMessage = (e) => {
@@ -136,14 +137,25 @@ const processIframeMessage = (e) => {
     if (msg.type === "renderready") {
       renderSnippets();
     } else if (msg.type === "renderblocks") {
-      createImage(msg);
+      msgCache[msg.id] = {
+        id: msg.id,
+        width: msg.width,
+        height: msg.height,
+        src: URL.createObjectURL(
+          new Blob([msg.svg], { type: "image/svg+xml" })
+        ),
+      };
+      createImage(msgCache[msg.id]);
     }
   }
 };
 
 export const renderMicrobit = (language) => {
-  if (getMicrobitSnippets().length > 0) {
-    renderSpinner();
+  const existingFrame = document.getElementById(microbitIframeId);
+  renderSpinner();
+  if (getMicrobitSnippets().length > 0 && !existingFrame) {
     createIframe(language);
+  } else {
+    renderSnippets();
   }
 };

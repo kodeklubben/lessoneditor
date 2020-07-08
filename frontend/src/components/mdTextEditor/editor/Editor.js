@@ -8,6 +8,7 @@ import { mdParser } from "../../../utils/mdParser";
 import ControlPanel from "./controlpanel/ControlPanel";
 import ProfileMenu from "../../ProfileMenu";
 import ImagePopup from "../ImagePopup";
+import editorButtonsValue from "./editorButtonsValue";
 import resolveUrlTemplate from "../../../utils/resolve-url-template";
 import paths from "paths.json";
 import {
@@ -21,31 +22,7 @@ import {
 import { UserContext } from "../../../contexts/UserContext";
 // import { LessonContext } from "../../../contexts/LessonContext";
 // check if buttons is pressed
-let isButtonOn = {
-  bold: true,
-  italic: true,
-  heading: true,
-  strikethrough: true,
-  undo: true,
-  redo: true,
-  new: true,
-  load: true,
-  save: true,
-  image: true,
-  listUl: true,
-  listOl: true,
-  listCheck: true,
-  sec_activity: true,
-  sec_intro: true,
-  sec_check: true,
-  sec_tip: true,
-  sec_protip: true,
-  sec_challenge: true,
-  sec_flag: true,
-  sec_try: true,
-  inline: true,
-  codeblock: true,
-};
+let isButtonOn = editorButtonsValue;
 
 let preview = false;
 
@@ -83,6 +60,7 @@ let autoSaveMessage = <br />;
 // ___________________
 
 const Editor = () => {
+  const context = useContext(UserContext);
   let [state, setState] = useState({
     parseMD: "",
     mdText: "",
@@ -138,12 +116,14 @@ const Editor = () => {
         lesson,
         file,
       });
-
       await axios.post(tempFileUrl + ".md", state.mdText, {
         headers: {
           "Content-Type": "text/plain",
         },
       });
+      if (!context.getLesson(course, lesson)) {
+        await context.addLesson(course, lesson, lesson);
+      }
       setSavedText(state.mdText);
     }
   }, 5000);
@@ -193,31 +173,7 @@ const Editor = () => {
   };
 
   const resetButtons = () => {
-    isButtonOn = {
-      bold: true,
-      italic: true,
-      heading: true,
-      strikethrough: true,
-      undo: true,
-      redo: true,
-      new: true,
-      load: true,
-      save: true,
-      image: true,
-      listUl: true,
-      listOl: true,
-      listCheck: true,
-      sec_activity: true,
-      sec_intro: true,
-      sec_check: true,
-      sec_tip: true,
-      sec_protip: true,
-      sec_challenge: true,
-      sec_flag: true,
-      sec_try: true,
-      inline: true,
-      codeblock: true,
-    };
+    isButtonOn = editorButtonsValue;
     setState((prevState) => ({ ...prevState, buttonValues: isButtonOn }));
   };
 
@@ -831,7 +787,7 @@ const Editor = () => {
       return true;
     }
   };
-  const context = useContext(UserContext);
+
   return (
     <div className="editor">
       <ImagePopup

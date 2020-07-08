@@ -23,6 +23,11 @@ export const UserContextProvider = (props) => {
   }, []);
   const context = {
     user,
+    getLesson: (course, lesson) => {
+      return user.lessons.find(
+        (l) => l.course === course && l.lesson === lesson
+      );
+    },
     addLesson: async (course, lesson, title) => {
       const existing = user.lessons.find(
         (l) => l.course === course && l.lesson === lesson
