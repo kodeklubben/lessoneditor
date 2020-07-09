@@ -2,6 +2,7 @@ const path = require("path");
 const multer = require("../storage/multer");
 const getTempDir = require("../utils/get-temp-dir");
 const saveToDisk = require("../utils/save-to-disk");
+const fs = require("fs");
 const resolveUrlTemplate = require("../utils/resolve-url-template");
 const paths = require("../paths");
 const getImgLoc = (course, lesson, file) => {
@@ -10,7 +11,12 @@ const getImgLoc = (course, lesson, file) => {
 module.exports = (app) => {
   app.get(paths.DISPLAY_FILE, (req, res) => {
     const { course, lesson, file } = req.params;
-    return res.sendFile(getImgLoc(course, lesson, file));
+    const imgLoc = getImgLoc(course, lesson, file);
+    if (fs.existsSync(imgLoc)) {
+      return res.sendFile(imgLoc);
+    } else {
+      return res.status(404).send("");
+    }
   });
   app.post(paths.DISPLAY_FILE, async (req, res) => {
     const { course, lesson, file } = req.params;
