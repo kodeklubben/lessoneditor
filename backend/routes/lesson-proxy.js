@@ -1,4 +1,5 @@
 const axios = require("axios");
+const resolveMarkdown = require("../utils/resolve-markdown-urls");
 const paths = require("../paths");
 const constants = require("../constants.json");
 module.exports = (app) => {
@@ -10,17 +11,10 @@ module.exports = (app) => {
     try {
       const content = await axios.get(url);
       const markdownContent = content.data;
+      console.log(markdownContent);
+      const resolved = resolveMarkdown(markdownContent, remoteFolder);
       res.set("content-type", "text/plain");
-      const fixed = markdownContent.replace(/(!\[.*?\]\()(.+?)(\))/g, function (
-        whole,
-        a,
-        b,
-        c
-      ) {
-        const newUrl = remoteFolder + "/" + b;
-        return a + newUrl + c;
-      });
-      res.send(fixed);
+      res.send(resolved);
     } catch (e) {
       res.status(404).send(e.message);
     }
