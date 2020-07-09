@@ -1,9 +1,12 @@
 import "./profileMenu.css";
-import React from "react";
+import React, { useContext } from "react";
 import { Popup } from "semantic-ui-react";
 import { Link } from "react-router-dom";
 
+import { UserContext } from "contexts/UserContext";
+
 const ProfileMenu = ({ name, email }) => {
+  const context = useContext(UserContext);
   return (
     <>
       <Popup
@@ -12,8 +15,21 @@ const ProfileMenu = ({ name, email }) => {
         hover
         size="tiny"
         trigger={
-          <div>
-            <i className="user icon"></i>
+          <div
+            style={{
+              display: "flex",
+              margin: "10px",
+            }}
+          >
+            <span style={{ margin: "5px", float: "right" }}>{name}</span>
+            {context.user.photo ? (
+              <img src={context.user.photo} className="ui avatar image" />
+            ) : (
+              <i
+                style={{ margin: "0px", float: "right" }}
+                className="user icon"
+              ></i>
+            )}
           </div>
         }
         position="bottom center"
@@ -29,7 +45,11 @@ const ProfileMenu = ({ name, email }) => {
           >
             <div className="ui ">
               <div className="ui circular centered image">
-                <i className="user icon"></i>
+                {context.user.photo ? (
+                  <img src={context.user.photo} />
+                ) : (
+                  <i className="home icon"></i>
+                )}
               </div>
             </div>
             <div style={{ marginTop: "1rem" }} />

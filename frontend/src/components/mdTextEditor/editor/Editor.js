@@ -797,21 +797,13 @@ const Editor = () => {
         imagePopupSubmitHandler={imagePopupSubmitHandler}
       />
 
-      <div className="profileMenu">
-        <ProfileMenu
-          name={context.user ? context.user.name : ""}
-          email={context.user ? context.user.email : ""}
-        />
-      </div>
-
       <div className="textEditorContainer">
-        <p>{autoSaveMessage}</p>
         <ControlPanel
           editorRef={editorRef}
           handleButtonClick={handleButtonClick}
           nextTitle={NAV_BUTTONS.submit}
           prevValue="/createNewLesson"
-          nextValue="/endpage"
+          nextValue="/myPage"
           submitHandler={submitHandler}
           handlePreview={handlePreview}
           redirect={state.redirect}
@@ -824,7 +816,6 @@ const Editor = () => {
               onTextareaKeyUp={onTextareaKeyUp}
               onTextareaMouseDown={onTextareaMouseDown}
               onTextareaSelect={onTextareaSelect}
-              autoSaveMessage={autoSaveMessage}
               handleButtonClick={handleButtonClick}
               handlePreview={handlePreview}
             />
