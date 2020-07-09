@@ -23,7 +23,11 @@ const ProfileMenu = ({ name, email }) => {
           >
             <span style={{ margin: "5px", float: "right" }}>{name}</span>
             {context.user.photo ? (
-              <img src={context.user.photo} className="ui avatar image" />
+              <img
+                src={context.user.photo}
+                alt="user"
+                className="ui avatar image"
+              />
             ) : (
               <i
                 style={{ margin: "0px", float: "right" }}
@@ -46,7 +50,7 @@ const ProfileMenu = ({ name, email }) => {
             <div className="ui ">
               <div className="ui circular centered image">
                 {context.user.photo ? (
-                  <img src={context.user.photo} />
+                  <img src={context.user.photo} alt="user" />
                 ) : (
                   <i className="home icon"></i>
                 )}

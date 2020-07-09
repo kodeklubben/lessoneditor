@@ -6,7 +6,6 @@ import MDTextArea from "./MDTextArea";
 import MDPreview from "../mdPreview/MDPreview";
 import { mdParser } from "../../../utils/mdParser";
 import ControlPanel from "./controlpanel/ControlPanel";
-import ProfileMenu from "../../ProfileMenu";
 import ImagePopup from "../ImagePopup";
 import editorButtonsValue from "./editorButtonsValue";
 import resolveUrlTemplate from "../../../utils/resolve-url-template";
@@ -55,7 +54,7 @@ let cursorPositionStart = 0;
 let cursorPositionEnd = 0;
 
 // autosave message, gets updated by autosave
-let autoSaveMessage = <br />;
+// let autoSaveMessage = <br />;
 
 // ___________________
 
