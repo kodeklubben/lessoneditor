@@ -6,7 +6,6 @@ import { UserContext } from "../../contexts/UserContext";
 
 const buttonContent = [
   { link: "/myPage", name: "Min side" },
-  { link: "", name: "Rediger en oppgave" },
   { link: "/createNewLesson", name: "Lag ny oppgave" },
 ];
 
