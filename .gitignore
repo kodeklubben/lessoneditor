@@ -19,3 +19,4 @@ package.json
 paths.json
 yarn-debug.log*
 yarn-error.log*
+yarn.lock
