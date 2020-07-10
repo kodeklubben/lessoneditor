@@ -311,6 +311,7 @@ const ControlPanel = (props) => {
             <ProfileMenu
               name={context.user ? context.user.name : ""}
               email={context.user ? context.user.email : ""}
+              photo={context.user ? context.user.photo : ""}
             />
           </div>
         </div>

@@ -1,10 +1,7 @@
 import "./profileMenu.css";
-import React, { useContext } from "react";
+import React from "react";
 
-import { UserContext } from "contexts/UserContext";
-
-const ProfileMenu = ({ name, email }) => {
-  const context = useContext(UserContext);
+const ProfileMenu = ({ name, email, photo }) => {
   return (
     <div
       style={{
@@ -13,8 +10,8 @@ const ProfileMenu = ({ name, email }) => {
       }}
     >
       <span style={{ margin: "5px", float: "right" }}>{name}</span>
-      {context.user ? (
-        <img src={context.user.photo} alt="user" className="ui avatar image" />
+      {photo ? (
+        <img src={photo} alt="user" className="ui avatar image" />
       ) : (
         <i style={{ margin: "0px", float: "right" }} className="user icon"></i>
       )}

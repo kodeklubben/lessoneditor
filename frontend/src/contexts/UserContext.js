@@ -8,7 +8,7 @@ export const UserContextProvider = (props) => {
   const [user, setUser] = useState({
     name: "",
     email: "",
-    picture: "",
+    photo: "",
     lessons: [],
   });
   useEffect(() => {
