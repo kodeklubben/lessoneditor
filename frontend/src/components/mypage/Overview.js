@@ -3,8 +3,6 @@ import "./OverviewStyle.css";
 
 import Navbar from "./Navbar";
 import ItemList from "./ItemList";
-import LeftBox from "./LeftBox";
-import RightBox from "./RightBox";
 import { UserContext } from "../../contexts/UserContext";
 
 const Overview = () => {
@@ -17,14 +15,8 @@ const Overview = () => {
         <div className="OverviewBox">
           <div className="ui stackable four column grid">
             <div className="row">
-              <div className="left floated computer only three wide column">
-                <LeftBox />
-              </div>
-              <div className="eight wide column">
+              <div className="ten wide column">
                 <ItemList items={lessons} />
-              </div>
-              <div className="right floated computer only three wide column">
-                <RightBox />
               </div>
             </div>
           </div>

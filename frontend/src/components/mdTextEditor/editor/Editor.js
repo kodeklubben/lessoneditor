@@ -6,7 +6,6 @@ import MDTextArea from "./MDTextArea";
 import MDPreview from "../mdPreview/MDPreview";
 import { mdParser } from "../../../utils/mdParser";
 import ControlPanel from "./controlpanel/ControlPanel";
-import ProfileMenu from "../../ProfileMenu";
 import ImagePopup from "../ImagePopup";
 import editorButtonsValue from "./editorButtonsValue";
 import resolveUrlTemplate from "../../../utils/resolve-url-template";
@@ -55,7 +54,7 @@ let cursorPositionStart = 0;
 let cursorPositionEnd = 0;
 
 // autosave message, gets updated by autosave
-let autoSaveMessage = <br />;
+// let autoSaveMessage = <br />;
 
 // ___________________
 
@@ -797,21 +796,13 @@ const Editor = () => {
         imagePopupSubmitHandler={imagePopupSubmitHandler}
       />
 
-      <div className="profileMenu">
-        <ProfileMenu
-          name={context.user ? context.user.name : ""}
-          email={context.user ? context.user.email : ""}
-        />
-      </div>
-
       <div className="textEditorContainer">
-        <p>{autoSaveMessage}</p>
         <ControlPanel
           editorRef={editorRef}
           handleButtonClick={handleButtonClick}
           nextTitle={NAV_BUTTONS.submit}
           prevValue="/createNewLesson"
-          nextValue="/endpage"
+          nextValue="/myPage"
           submitHandler={submitHandler}
           handlePreview={handlePreview}
           redirect={state.redirect}
@@ -824,7 +815,6 @@ const Editor = () => {
               onTextareaKeyUp={onTextareaKeyUp}
               onTextareaMouseDown={onTextareaMouseDown}
               onTextareaSelect={onTextareaSelect}
-              autoSaveMessage={autoSaveMessage}
               handleButtonClick={handleButtonClick}
               handlePreview={handlePreview}
             />

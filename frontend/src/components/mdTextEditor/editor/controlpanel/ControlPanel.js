@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import CPButton from "./components/CPButton";
+import ProfileMenu from "components/ProfileMenu";
 import {
   emphasis,
   undoRedo,
@@ -9,13 +10,17 @@ import {
   sections,
   code,
 } from "../../settingsFiles/buttonConfig";
+
+import { UserContext } from "contexts/UserContext";
+
 import { Redirect } from "react-router-dom";
 
 const ControlPanel = (props) => {
+  const context = useContext(UserContext);
   const submitHandler = () => {
     props.submitHandler();
 
-    setRedirect("/endpage");
+    setRedirect("/myPage");
   };
 
   let smallScreen = useRef();
@@ -80,7 +85,7 @@ const ControlPanel = (props) => {
   };
 
   return redirect ? (
-    <Redirect to="/endpage" />
+    <Redirect to="/myPage" />
   ) : (
     <>
       {/*small screen */}
@@ -302,10 +307,12 @@ const ControlPanel = (props) => {
               shortcutKey=""
             />
           </div>
-          <div className="submitButton">
-            <button className="ui icon button submit" onClick={submitHandler}>
-              <i className="arrow right icon" />
-            </button>
+          <div style={{ display: "flex" }} className="submitButton">
+            <ProfileMenu
+              name={context.user ? context.user.name : ""}
+              email={context.user ? context.user.email : ""}
+              photo={context.user ? context.user.photo : ""}
+            />
           </div>
         </div>
 
@@ -349,6 +356,13 @@ const ControlPanel = (props) => {
               />
             ))}
           </div>
+          <button
+            style={{ marginLeft: "auto" }}
+            className="ui  icon button submit"
+            onClick={submitHandler}
+          >
+            <i className="home right icon" />
+          </button>
 
           <div className="space" />
         </div>
