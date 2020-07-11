@@ -1,8 +1,11 @@
 import "./formpage.css";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import FormPage from "./FormPage";
 import COURSELIST from "./settingsFiles/COURSELIST";
 import { LANGUAGES } from "./settingsFiles/languages/formpage_NO";
+import { UserContext } from "../../contexts/UserContext";
+import { useHistory } from "react-router";
+import slugify from "slugify";
 
 const FormComponent = () => {
   const [state, setState] = useState({
@@ -58,12 +61,26 @@ const FormComponent = () => {
     );
   };
 
-  const submitHandler = (event) => {
-    setState((prevState) => ({ ...prevState, redirect: "/editor" }));
+  const history = useHistory();
+  const user = useContext(UserContext);
+
+  const navigateToEditor = (course, lesson) => {
+    const target = ["/editor", course, lesson, lesson].join("/");
+    history.push(target);
+  };
+
+  const submitHandler = async (event) => {
+    setState((prevState) => ({ ...prevState }));
 
     console.log("YAML header: \n" + YAMLstateToString(state));
     console.log("\nYML-file: \n" + YMLstateToString(state));
     // TODO: Send state-data to database
+    const { course, title } = state;
+    if (course && title) {
+      const lesson = slugify(title);
+      await user.addLesson(course, lesson, title);
+      navigateToEditor(course, lesson);
+    }
   };
 
   const changeHandler = (event) => {
