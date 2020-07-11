@@ -5,6 +5,7 @@
   "LESSON_DATA": "/api/lesson/:course/:lesson/data",
   "LESSON_PROXY": "/api/lessons-proxy/*",
   "LESSON_UPLOADS": "/api/lesson/:course/:lesson/upload",
+  "LESSON_SUBMIT": "api/lesson/:course/:lesson/submit",
   "USER": "/api/user",
   "USER_LESSONS": "/api/user/lessons"
 }

@@ -7,7 +7,7 @@ module.exports = async (
   repo,
   path /*will be replaced by generatePath*/,
   commitMessage,
-  content,
+  buffer,
   branch
 ) => {
   const octokit = new Octokit({ auth: token });
@@ -16,7 +16,7 @@ module.exports = async (
     repo: repo,
     path: path,
     message: commitMessage,
-    content: Buffer.from(content).toString("base64"),
+    content: buffer.toString("base64"),
     branch: branch,
   });
 };
