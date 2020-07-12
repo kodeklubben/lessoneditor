@@ -12,6 +12,12 @@ function ItemList({ items }) {
     const target = ["/editor", course, lesson, lesson].join("/");
     history.push(target);
   };
+
+  const submitHandler = () => {
+    console.log("text submitted");
+    history.push("/endPage");
+  };
+
   return (
     <>
       <div className=".container my-container">
@@ -26,6 +32,9 @@ function ItemList({ items }) {
                   }
                 >
                   Rediger
+                </div>
+                <div className="ui button" onClick={submitHandler}>
+                  Send Inn
                 </div>
               </div>
               <div className="content" style={mystyle}>
