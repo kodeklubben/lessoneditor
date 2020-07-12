@@ -20,7 +20,7 @@ const ControlPanel = (props) => {
   const submitHandler = () => {
     props.submitHandler();
 
-    setRedirect("/myPage");
+    setRedirect("/");
   };
 
   let smallScreen = useRef();
@@ -85,7 +85,7 @@ const ControlPanel = (props) => {
   };
 
   return redirect ? (
-    <Redirect to="/myPage" />
+    <Redirect to="/" />
   ) : (
     <>
       {/*small screen */}

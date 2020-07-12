@@ -1,7 +1,7 @@
 import React from "react";
 import "./style.css";
 
-const closeMessage = "Lukk vindu";
+const closeMessage = "Tilbake til min side";
 const greeting =
   "Takk for ditt bidrag til Lær Kidsa Koding! Ditt bidrag er nå inne til vurdering";
 
@@ -12,7 +12,9 @@ const EndPage = () => {
         <p>{greeting}</p>
       </div>
 
-      <button className="closeBtn"> {closeMessage} </button>
+      <button className="closeBtn">
+        <a href={"/"}>{closeMessage}</a>{" "}
+      </button>
     </div>
   );
 };
