@@ -1,5 +1,5 @@
 const submit = require("../backend/githubAPI/submitLesson");
-const token = "86b1d5bd651fd6783caee77cb66850a3dfaf7fad";
+const token = "xxx";
 
 const lessonData = {
   course: "python",
