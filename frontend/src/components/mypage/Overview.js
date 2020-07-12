@@ -28,7 +28,7 @@ const Overview = () => {
         </div>
       </div>
 
-      <div style={{ marginTop: "50px" }} class="ui horizontal divider">
+      <div style={{ marginTop: "50px" }} className="ui horizontal divider">
         ...
       </div>
 

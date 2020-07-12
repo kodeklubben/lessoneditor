@@ -17,7 +17,7 @@ function ItemList({ items, lessonScreenshots }) {
 
   return (
     <>
-      <div class="ui link cards">
+      <div className="ui link cards">
         {items.map((listitem, index) => (
           <div className="card" key={"listitem" + index}>
             <div className="image">
