@@ -39,8 +39,8 @@ const Overview = () => {
             <div className="">
               <div className="">
                 <ItemList
-                  lessonScreenshots={lessonScreenshots}
                   items={lessons}
+                  lessonScreenshots={lessonScreenshots}
                 />
               </div>
             </div>
