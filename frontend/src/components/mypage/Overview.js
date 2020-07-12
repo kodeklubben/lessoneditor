@@ -3,6 +3,7 @@ import "./overview.css";
 
 import ItemList from "./ItemList";
 import { UserContext } from "../../contexts/UserContext";
+import Header from "../Header/Header";
 
 const lessonScreenshots = [
   "lessonsScreenshots/Screenshot 2020-07-12 at 09.42.03.png",
@@ -16,40 +17,44 @@ const Overview = () => {
   const context = useContext(UserContext);
   const { lessons } = context.user;
   return (
-    <div className="overViewContainer">
-      <h3>Lag ny oppgave</h3>
-      <div className="ui card">
-        <div className="content">
-          <a href={"/new-lesson"}>
-            <div style={{ height: "200px" }}>
-              <i className=" huge plus  icon"></i>
-            </div>{" "}
-          </a>
+    <div>
+      <Header />
+      <div className="overViewContainer">
+        <h3>Lag ny oppgave</h3>
+        <div className="ui card">
+          <div className="content">
+            <a href={"/new-lesson"}>
+              <div style={{ height: "200px" }}>
+                <i className=" huge plus  icon"></i>
+              </div>{" "}
+            </a>
+          </div>
         </div>
-      </div>
 
-      <div style={{ marginTop: "50px" }} className="ui horizontal divider">
-        ...
-      </div>
+        <div style={{ marginTop: "50px" }} className="ui horizontal divider">
+          ...
+        </div>
 
-      <h3>Mine oppgaver</h3>
-      {lessons ? (
-        <div className="">
+        <h3>Mine oppgaver</h3>
+        {lessons ? (
           <div className="">
             <div className="">
               <div className="">
-                <ItemList
-                  items={lessons}
-                  lessonScreenshots={lessonScreenshots}
-                />
+                <div className="">
+                  <ItemList
+                    items={lessons}
+                    lessonScreenshots={lessonScreenshots}
+                  />
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      ) : (
-        <b>Du har ingen kurs</b>
-      )}
-      <br />
+        ) : (
+          <b>Du har ingen kurs</b>
+        )}
+        <br />
+      </div>
+
     </div>
   );
 };
