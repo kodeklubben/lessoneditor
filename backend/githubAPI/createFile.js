@@ -20,9 +20,3 @@ module.exports = async (
     branch: branch,
   });
 };
-
-/*
-// Could be executed before this module elsewhere
-function generatePath(metaData) {
-  // Todo: Genereate file path from metadata (coruse, lessonName, fileName.*
-}*/

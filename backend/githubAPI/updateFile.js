@@ -31,8 +31,3 @@ async function getFileSha(octokit, username, repo, path, branch) {
   });
   return response.data.sha;
 }
-
-/*// Could be executed before this module elsewhere
-function generatePath(metaData) {
-  // Todo: Genereate file path from metadata (coruse, lessonName, fileName.*
-}*/
