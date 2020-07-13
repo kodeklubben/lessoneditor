@@ -5,7 +5,7 @@ module.exports = async (url) => {
     const response = await axios.get(url, {
       responseType: "arraybuffer",
     });
-    return response.data;
+    return Buffer.from(response.data, "binary");
   } catch (e) {
     return null;
   }

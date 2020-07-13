@@ -4,8 +4,8 @@ module.exports = async (token, username, title, branch, body) => {
   try {
     const octokit = new Octokit({ auth: token });
     return await octokit.pulls.create({
-      owner: "kodeklubben",
-      repo: "oppgaver",
+      owner: process.env.GITHUB_LESSON_REPO_OWNER,
+      repo: process.env.GITHUB_LESSON_REPO,
       title: title, // title of PR
       head: `${username}:${branch}`,
       base: "master",

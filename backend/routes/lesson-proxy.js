@@ -6,6 +6,7 @@ module.exports = (app) => {
   app.get(paths.LESSON_PROXY, async (req, res) => {
     const len = paths.LESSON_PROXY.length;
     const resource = req.path.substring(len - 2);
+    // Todo: fix env in constants.GITHUB_LESSON_PREFIX
     const url = constants.GITHUB_LESSON_PREFIX + resource + ".md";
     const remoteFolder = url.substr(0, url.lastIndexOf("/"));
     try {

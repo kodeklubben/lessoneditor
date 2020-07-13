@@ -1,14 +1,12 @@
 module.exports = (markdownContent) => {
-  let imgNames = [];
-  let imgUrls = [];
+  const images = [];
   const resolvedMarkdown = markdownContent.replace(
     /(!\[.*?\]\()(.+?)(\))/gs,
     function (whole, prefix, imagePathRaw, postfix) {
-      imgUrls.push(imagePathRaw);
       const imgPathSplit = imagePathRaw.split("/");
-      imgNames.push(imgPathSplit[imgPathSplit.length - 1]);
-      return prefix + imgNames[imgNames.length - 1] + postfix;
+      const imageName = imgPathSplit[imgPathSplit.length - 1];
+      images.push({ name: imageName, url: imagePathRaw });
     }
   );
-  return [resolvedMarkdown, imgNames, imgUrls];
+  return images;
 };
