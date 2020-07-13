@@ -116,8 +116,10 @@ ol {
 /* Image styling */
 
 .PreviewArea p img {
-  width: 40%;
-  margin-left: 30%;
+  display: block;
+  max-width: 100%;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* List styling */
@@ -181,12 +183,12 @@ ol {
 /* Checkbox styling */
 
 .contains-checklist .checklist-item::before {
-  opacity: 0;
+  visibility: hidden;
 }
 
 .contains-checklist input[type="checkbox"] {
   position: absolute;
-  opacity: 0;
+  visibility: hidden;
 }
 
 .contains-checklist input[type="checkbox"] + label {
@@ -225,7 +227,7 @@ ol {
 .PreviewArea pre {
   display: block;
   padding: 10.5px;
-  margin: 0 0 11px 45px;
+  margin: 0 0 11px 0px;
   font-size: 15px;
   line-height: 1.42857;
   color: #333;
