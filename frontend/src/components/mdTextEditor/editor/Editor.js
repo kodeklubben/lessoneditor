@@ -1,15 +1,13 @@
 import "./editor.css";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
-import axios from "axios";
 import MDTextArea from "./MDTextArea";
 import MDPreview from "../mdPreview/MDPreview";
-import { mdParser } from "../../../utils/mdParser";
 import ControlPanel from "./controlpanel/ControlPanel";
 import ImagePopup from "../ImagePopup";
 import editorButtonsValue from "./editorButtonsValue";
-import resolveUrlTemplate from "../../../utils/resolve-url-template";
-import paths from "paths.json";
+import fetchMdText from "../../../api/fetch-md-text";
+import saveMdText from "../../../api/save-md-text";
 import {
   NAV_BUTTONS,
   SECTION_TEXT,
@@ -61,48 +59,28 @@ let cursorPositionEnd = 0;
 const Editor = () => {
   const context = useContext(UserContext);
   let [state, setState] = useState({
-    parseMD: "",
     mdText: "",
     isEditor: true,
     editorRedirect: "",
     images: [],
-    counter: 0,
     buttonValues: isButtonOn,
     redirect: null,
   });
+  const setMdText = (mdText) => {
+    setState((prevState) => ({
+      ...prevState,
+      mdText,
+    }));
+  };
   const [savedText, setSavedText] = useState("");
   // const lessonContext = useContext(LessonContext);
   const { course, lesson, file } = useParams();
   useEffect(() => {
     if (course && lesson && file) {
       async function fetchData() {
-        let mdText = "";
-        try {
-          const tempFileUrl = resolveUrlTemplate(paths.DISPLAY_FILE, {
-            course,
-            lesson,
-            file,
-          });
-          const result = await axios.get(tempFileUrl + ".md");
-          mdText = result.data;
-        } catch (e) {
-          console.log("No tempFile Found");
-          try {
-            const proxyUrl = ["/api/lessons-proxy", course, lesson, file].join(
-              "/"
-            );
-            const result = await axios.get(proxyUrl);
-            mdText = result.data;
-          } catch (e) {
-            console.log("No proxy-text found.");
-          }
-        }
+        let mdText = await fetchMdText(course, lesson, file);
         setSavedText(mdText);
-        setState((prevState) => ({
-          ...prevState,
-          mdText: mdText,
-          parseMD: mdParser(mdText),
-        }));
+        setMdText(mdText);
       }
       fetchData();
     }
@@ -110,16 +88,7 @@ const Editor = () => {
 
   useInterval(async () => {
     if (state.mdText !== savedText) {
-      const tempFileUrl = resolveUrlTemplate(paths.DISPLAY_FILE, {
-        course,
-        lesson,
-        file,
-      });
-      await axios.post(tempFileUrl + ".md", state.mdText, {
-        headers: {
-          "Content-Type": "text/plain",
-        },
-      });
+      await saveMdText(course, lesson, file, state.mdText);
       if (!context.getLesson(course, lesson)) {
         await context.addLesson(course, lesson, lesson);
       }
@@ -223,12 +192,7 @@ const Editor = () => {
     //   charCounter = 0;
     // }
 
-    setState((prevState) => ({
-      ...prevState,
-      mdText: inputText,
-      parseMD: mdParser(inputText),
-      counter: 0,
-    }));
+    setMdText(inputText);
   };
 
   const onTextareaKeyUp = (event) => {
@@ -299,7 +263,6 @@ const Editor = () => {
           setState((prevState) => ({
             ...prevState,
             mdText: inputText,
-            parseMD: mdParser(inputText),
             buttonValues: isButtonOn,
           }));
           setCursorPosition(
@@ -315,11 +278,7 @@ const Editor = () => {
             "\n\n" +
             (orderedListIndex + ". ") +
             inputText.slice(cursorPositionStart);
-          setState((prevState) => ({
-            ...prevState,
-            mdText: inputText,
-            parseMD: mdParser(inputText),
-          }));
+          setMdText(inputText);
           setCursorPosition(
             cursorPositionStart + listButtonValues["cursorInt"] + 2,
             cursorPositionStart + listButtonValues["cursorInt"] + 2
@@ -333,11 +292,7 @@ const Editor = () => {
           "\n\n" +
           listButtonValues["output"] +
           inputText.slice(cursorPositionStart);
-        setState((prevState) => ({
-          ...prevState,
-          mdText: inputText,
-          parseMD: mdParser(inputText),
-        }));
+        setMdText(inputText);
         setCursorPosition(
           cursorPositionStart + listButtonValues["cursorInt"] + 2,
           cursorPositionStart + listButtonValues["cursorInt"] + 2
@@ -360,11 +315,7 @@ const Editor = () => {
         inputText.slice(0, cursorPositionStart) +
         "  " +
         inputText.slice(cursorPositionStart);
-      setState((prevState) => ({
-        ...prevState,
-        mdText: inputText,
-        parseMD: mdParser(inputText),
-      }));
+      setMdText(inputText);
       cursorPositionStart += 2;
       setCursorPosition(cursorPositionStart, cursorPositionStart);
       return;
@@ -400,11 +351,7 @@ const Editor = () => {
         imagePopupInputValue +
         ")" +
         inputText.slice(cursorPositionStart);
-      setState((prevState) => ({
-        ...prevState,
-        mdText: inputText,
-        parseMD: mdParser(inputText),
-      }));
+      setMdText(inputText);
       editorRef.current.focus();
       cursorPositionStart += 2;
       cursorPositionEnd += filename.length + 2;
@@ -443,11 +390,7 @@ const Editor = () => {
       inputText = "";
       undo = [""];
       redo = [];
-      setState((prevState) => ({
-        ...prevState,
-        mdText: inputText,
-        parseMD: mdParser(inputText),
-      }));
+      setMdText(inputText);
       cursorPositionStart = cursorPositionEnd = 0;
       return;
     }
@@ -457,11 +400,7 @@ const Editor = () => {
       inputText = storedTextValue;
       undo = [inputText];
       redo = [inputText];
-      setState((prevState) => ({
-        ...prevState,
-        mdText: inputText,
-        parseMD: mdParser(inputText),
-      }));
+      setMdText(inputText);
       setCursorPosition(inputText.length, inputText.length);
       return;
     }
@@ -482,11 +421,7 @@ const Editor = () => {
       redoCursorPosition.push(cursorPositionStart);
 
       inputText = undo.pop();
-      setState((prevState) => ({
-        ...prevState,
-        mdText: inputText,
-        parseMD: mdParser(inputText),
-      }));
+      setMdText(inputText);
       setCursorPosition(pos1, pos2);
       return;
     }
@@ -499,11 +434,7 @@ const Editor = () => {
       }
       setUndo();
       inputText = redo.pop();
-      setState((prevState) => ({
-        ...prevState,
-        mdText: inputText,
-        parseMD: mdParser(inputText),
-      }));
+      setMdText(inputText);
       setCursorPosition(pos1, pos2);
       return;
     }
@@ -522,11 +453,7 @@ const Editor = () => {
       inputText =
         inputText.slice(0, cursorPositionStart - cursorIntON) +
         inputText.slice(cursorPositionStart - cursorIntON + output.length);
-      setState((prevState) => ({
-        ...prevState,
-        mdText: inputText,
-        parseMD: mdParser(inputText),
-      }));
+      setMdText(inputText);
       cursorPositionEnd = cursorPositionStart -= cursorIntON;
       setCursorPosition(cursorPositionStart, cursorPositionStart);
       return;
@@ -544,11 +471,7 @@ const Editor = () => {
           inputText.slice(0, cursorPositionStart) +
           "\n\n" +
           inputText.slice(cursorPositionStart);
-        setState((prevState) => ({
-          ...prevState,
-          mdText: inputText,
-          parseMD: mdParser(inputText),
-        }));
+        setMdText(inputText);
         cursorPositionStart += 2;
         cursorPositionEnd += 2;
         handleButtonClick(bTitle, output, cursorIntON, cursorIntOFF, endOutput);
@@ -586,11 +509,7 @@ const Editor = () => {
           inputText.slice(0, cursorPositionStart - 3) +
           "# " +
           inputText.slice(cursorPositionStart);
-        setState((prevState) => ({
-          ...prevState,
-          mdText: inputText,
-          parseMD: mdParser(inputText),
-        }));
+        setMdText(inputText);
         cursorPositionStart -= 1;
         setCursorPosition(cursorPositionStart, cursorPositionStart);
         return;
@@ -601,11 +520,7 @@ const Editor = () => {
           output +
           inputText.slice(cursorPositionStart);
 
-        setState((prevState) => ({
-          ...prevState,
-          mdText: inputText,
-          parseMD: mdParser(inputText),
-        }));
+        setMdText(inputText);
         cursorPositionStart += output.length;
         setCursorPosition(cursorPositionStart, cursorPositionStart);
         return;
@@ -617,11 +532,7 @@ const Editor = () => {
           inputText =
             inputText.slice(0, cursorPositionStart - 2) +
             inputText.slice(cursorPositionStart);
-          setState((prevState) => ({
-            ...prevState,
-            mdText: inputText,
-            parseMD: mdParser(inputText),
-          }));
+          setMdText(inputText);
           cursorPositionStart -= 2;
           setCursorPosition(cursorPositionStart, cursorPositionStart);
           isButtonOn[bTitle] = true;
@@ -644,11 +555,7 @@ const Editor = () => {
         inputText.slice(0, cursorPositionStart) +
         output +
         inputText.slice(cursorPositionStart);
-      setState((prevState) => ({
-        ...prevState,
-        mdText: inputText,
-        parseMD: mdParser(inputText),
-      }));
+      setMdText(inputText);
       if (output.slice(0, 2) === "##" && bTitle !== "sec_tip") {
         cursorPositionStart += 3;
         cursorPositionEnd += SECTION_TEXT.length + 3;
@@ -706,11 +613,7 @@ const Editor = () => {
           i +
           output.slice(cursorIntON) +
           inputText.slice(cursorPositionEnd);
-        setState((prevState) => ({
-          ...prevState,
-          mdText: inputText,
-          parseMD: mdParser(inputText),
-        }));
+        setMdText(inputText);
         setCursorPosition(
           cursorPositionStart + cursorIntON,
           cursorPositionEnd + cursorIntON
@@ -724,11 +627,7 @@ const Editor = () => {
         inputText.slice(0, cursorPositionStart) +
         output +
         inputText.slice(cursorPositionStart);
-      setState((prevState) => ({
-        ...prevState,
-        mdText: inputText,
-        parseMD: mdParser(inputText),
-      }));
+      setMdText(inputText);
       setUndo();
       setCursorPosition(
         cursorPositionStart + cursorIntON,
@@ -740,11 +639,7 @@ const Editor = () => {
         isButtonOn[bTitle] = true;
         setState((prevState) => ({ ...prevState, buttonValues: isButtonOn }));
         inputText = undo[undo.length - 1];
-        setState((prevState) => ({
-          ...prevState,
-          mdText: inputText,
-          parseMD: mdParser(inputText),
-        }));
+        setMdText(inputText);
         setCursorPosition(
           cursorPositionStart - cursorIntON,
           cursorPositionEnd - cursorIntON
@@ -763,11 +658,7 @@ const Editor = () => {
           inputText.slice(0, cursorPositionStart + cursorIntOFF) +
           endOutput +
           inputText.slice(cursorPositionStart + cursorIntOFF);
-        setState((prevState) => ({
-          ...prevState,
-          mdText: inputText,
-          parseMD: mdParser(inputText),
-        }));
+        setMdText(inputText);
         cursorPositionStart = cursorPositionEnd += cursorIntOFF;
         setCursorPosition(cursorPositionStart, cursorPositionEnd);
       }
@@ -819,7 +710,7 @@ const Editor = () => {
               handlePreview={handlePreview}
             />
           }
-          MDPreview={<MDPreview parseMD={state.parseMD} />}
+          MDPreview={<MDPreview mdText={state.mdText} />}
         ></ControlPanel>
       </div>
     </div>

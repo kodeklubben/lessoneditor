@@ -12,7 +12,6 @@ module.exports = (app) => {
     try {
       const content = await axios.get(url);
       const markdownContent = content.data;
-      console.log(markdownContent);
       const resolved = resolveMarkdown(markdownContent, remoteFolder);
       res.set("content-type", "text/plain");
       res.send(resolved);
