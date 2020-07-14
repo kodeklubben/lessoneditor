@@ -18,10 +18,13 @@ module.exports = async (token, lessonData) => {
   const markdownContent = resolveMarkdownImageUrls(lessonData.markdown);
   const markdownImageUrls = getMarkdownUrls(lessonData.markdown);
   for (let i in markdownImageUrls) {
-    files.push({
-      path: `${lessonPath}/${markdownImageUrls[i].name}`,
-      buffer: await downloadImage(markdownImageUrls[i].url),
-    });
+    const buffer = await downloadImage(markdownImageUrls[i].url);
+    if (buffer !== null) {
+      files.push({
+        path: `${lessonPath}/${markdownImageUrls[i].name}`,
+        buffer: await downloadImage(markdownImageUrls[i].url),
+      });
+    }
   }
   files.push({
     path: `${lessonPath}/${lessonData.title}_${lessonData.language}.md`,
