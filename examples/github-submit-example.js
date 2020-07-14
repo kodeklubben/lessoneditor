@@ -32,4 +32,4 @@ This is some other shit.
 `,
 };
 
-submit(lessonData, token);
+submit(token, lessonData);

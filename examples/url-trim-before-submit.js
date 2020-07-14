@@ -1,4 +1,4 @@
-const resolve = require("../backend/utils/resolve-markdown-urls-submit");
+const resolve = require("../backend/utils/get-markdown-urls-submit");
 
 const markdown = `
 # Hello {.activity}

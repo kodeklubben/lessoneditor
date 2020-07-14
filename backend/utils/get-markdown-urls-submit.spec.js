@@ -1,4 +1,4 @@
-const resolveMdUrlsSub = require("./resolve-markdown-urls-submit");
+const resolveMdUrlsSub = require("./get-markdown-urls-submit");
 
 it("should generate list with object of image names and urls", () => {
   const markdownContent = `

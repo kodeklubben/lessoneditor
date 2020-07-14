@@ -1,7 +1,7 @@
 const createFork = require("./forkRepo");
 const upsertFile = require("./upsertFile");
 const createPullRequest = require("./createPullRequest");
-const resolveMarkdownUrls = require("../utils/resolve-markdown-urls-submit"); // endre navn
+const getMarkdownUrls = require("../utils/get-markdown-urls-submit");
 const resolveMarkdownImageUrls = require("../utils/resolve-markdown-image-urls");
 const downloadImage = require("../utils/download-image");
 const yaml = require("yaml");
@@ -15,8 +15,8 @@ module.exports = async (token, lessonData) => {
       buffer: Buffer.from(yaml.stringify(lessonData.yml)),
     },
   ];
-  const markdownContent = resolveMarkdownUrls(lessonData.markdown);
-  const markdownImageUrls = resolveMarkdownImageUrls(lessonData.markdown);
+  const markdownContent = resolveMarkdownImageUrls(lessonData.markdown);
+  const markdownImageUrls = getMarkdownUrls(lessonData.markdown);
   for (let i in markdownImageUrls) {
     files.push({
       path: `${lessonPath}/${markdownImageUrls[i].name}`,
