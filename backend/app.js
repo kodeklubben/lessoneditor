@@ -7,6 +7,7 @@ module.exports = async () => {
   require("./routes/current-user")(app);
   require("./routes/lesson-data")(app);
   require("./routes/lesson-proxy")(app);
+  require("./routes/lesson-submit")(app);
   if (isAppEngine()) {
     require("./routes/lesson-uploads")(app);
   } else {

@@ -3,7 +3,7 @@ const submit = require("../githubAPI/submitLesson");
 const loadFile = require("../utils/load-file");
 
 module.exports = (app) => {
-  app.post(paths.LESSON_SUBMIT, (req, res) => {
+  app.post(paths.LESSON_SUBMIT, async (req, res) => {
     try {
       const { username } = req.user;
       const { course, lesson } = req.params;
@@ -12,6 +12,7 @@ module.exports = (app) => {
       if (submitRes) {
         res.send("OK");
       }
+      res.send("Error", 500);
     } catch (e) {
       if (e === 404) {
         console.log("Could not submit new lesson");
