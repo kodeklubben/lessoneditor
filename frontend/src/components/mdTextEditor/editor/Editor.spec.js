@@ -1,7 +1,7 @@
 import React from "react";
 import { mount } from "enzyme";
 import { MemoryRouter } from "react-router-dom";
-import Editor from "components/mdTextEditor/editor/Editor";
+import Editor from "components/mdTextEditor/editor/tempEditor";
 
 let wrapped;
 

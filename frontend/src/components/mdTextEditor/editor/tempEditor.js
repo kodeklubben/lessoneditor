@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
 import MDTextArea from "./MDTextArea";
 import MDPreview from "../mdPreview/MDPreview";
-import ControlPanel from "./controlpanel/ControlPanel";
+import ControlPanel from "./controlpanel/tempControlPanel";
 import ImagePopup from "../ImagePopup";
 import editorButtonsValue from "./editorButtonsValue";
 import fetchMdText from "../../../api/fetch-md-text";
