@@ -7,6 +7,21 @@ export const emphasis = (
   cursorIntON,
   cursorIntOFF
 ) => {
+  // cancel button value if pressed second time without textinput
+  if (
+    isOn &&
+    inputText.slice(
+      cursorPositionStart - cursorIntON,
+      cursorPositionStart - cursorIntON + output.length
+    ) === output
+  ) {
+    inputText =
+      inputText.slice(0, cursorPositionStart - cursorIntON) +
+      inputText.slice(cursorPositionStart - cursorIntON + output.length);
+    cursorPositionEnd = cursorPositionStart -= cursorIntON;
+    return { inputText, cursorPositionStart, cursorPositionEnd };
+  }
+
   if (!isOn) {
     // if (cursorPositionStart !== cursorPositionEnd) {
     //   isButtonOn[bTitle] = false;

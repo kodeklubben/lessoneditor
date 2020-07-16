@@ -67,8 +67,8 @@ const KEY_COMBINATIONS = {
   preview: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.y],
 };
 
-const emphasis = {
-  bold: {
+const emphasis = [
+  {
     buttonTitle: "bold",
     icon: "bold",
     output: "****",
@@ -78,7 +78,7 @@ const emphasis = {
     endOutput: "",
     shortcut: KEY_COMBINATIONS.bold.join(""),
   },
-  italic: {
+  {
     buttonTitle: "italic",
     icon: "italic",
     output: "**",
@@ -88,7 +88,7 @@ const emphasis = {
     endOutput: "",
     shortcut: KEY_COMBINATIONS.italic.join(""),
   },
-  heading: {
+  {
     buttonTitle: "heading",
     icon: "heading",
     output: "## ",
@@ -98,7 +98,7 @@ const emphasis = {
     endOutput: "",
     shortcut: KEY_COMBINATIONS.heading.join(""),
   },
-  strikethrough: {
+  {
     buttonTitle: "strikethrough",
     icon: "strikethrough",
     output: "~~~~",
@@ -108,7 +108,7 @@ const emphasis = {
     endOutput: "",
     shortcut: KEY_COMBINATIONS.strikethrough.join(""),
   },
-};
+];
 
 const undoRedo = [
   {

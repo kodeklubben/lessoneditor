@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
 import MDTextArea from "./MDTextArea";
 import MDPreview from "../mdPreview/MDPreview";
-import Buttons from "./controlpanel/Buttons";
+import { Buttons } from "./controlpanel/Buttons";
 import ImagePopup from "../ImagePopup";
 import editorButtonsValue from "./editorButtonsValue";
 import fetchMdText from "../../../api/fetch-md-text";
@@ -142,11 +142,9 @@ const Editor = () => {
   };
 
   // sets cursor in textarea
-  const setCursorPosition = (positionStart, positionEnd) => {
-    setTimeout(() => {
-      editorRef.current.selectionStart = positionStart;
-      editorRef.current.selectionEnd = positionEnd;
-    }, 0);
+  const setCursorPosition = async (positionStart, positionEnd) => {
+    editorRef.current.selectionStart = await positionStart;
+    editorRef.current.selectionEnd = await positionEnd;
   };
 
   // all config for handling text on input
