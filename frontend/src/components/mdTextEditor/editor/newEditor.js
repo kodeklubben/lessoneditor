@@ -65,6 +65,10 @@ let listButtonValues = { bTitle: "", output: "", cursorInt: 0 };
 // temporary store inputtext before updating state
 let inputText = "";
 
+const setInputText = (text) => {
+  inputText = text;
+};
+
 // variables to help find cursor in textarea
 let cursorPositionStart = 0;
 let cursorPositionEnd = 0;
@@ -403,6 +407,7 @@ const Editor = () => {
           setMdText={setMdText}
           setCursorPosition={setCursorPosition}
           setCursor={setCursor}
+          setInputText={setInputText}
         ></Buttons>
         <MDTextArea
           mdText={state.mdText}
