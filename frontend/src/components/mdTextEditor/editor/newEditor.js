@@ -32,6 +32,29 @@ for (let i = 0; i < Object.values(KEY).length; i++) {
 // Count input char for automatic newline at 80 chars
 // let charCounter = 0;
 
+let undo = [""];
+let undoCursorPosition = [];
+let redo = [];
+let redoCursorPosition = [];
+
+const setUndo = (inputText, cursorPositionStart) => {
+  if (
+    undo[undo.length - 1] !== inputText &&
+    undoCursorPosition !== cursorPositionStart
+  ) {
+    undo.push(inputText);
+    undoCursorPosition.push(cursorPositionStart);
+  }
+};
+
+const ifNewLine = (inputText) => {
+  return (
+    inputText[cursorPositionStart - 1] === "\n" ||
+    inputText === "" ||
+    cursorPositionStart === 0
+  );
+};
+
 let orderedListIndex = 2;
 
 let storedTextValue = "";
@@ -45,6 +68,11 @@ let inputText = "";
 // variables to help find cursor in textarea
 let cursorPositionStart = 0;
 let cursorPositionEnd = 0;
+
+const setCursor = (pos1, pos2) => {
+  cursorPositionStart = pos1;
+  cursorPositionEnd = pos2;
+};
 
 // autosave message, gets updated by autosave
 // let autoSaveMessage = <br />;
@@ -374,6 +402,7 @@ const Editor = () => {
           cursorPositionEnd={cursorPositionEnd}
           setMdText={setMdText}
           setCursorPosition={setCursorPosition}
+          setCursor={setCursor}
         ></Buttons>
         <MDTextArea
           mdText={state.mdText}
