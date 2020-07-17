@@ -5,6 +5,12 @@ import editorButtonsValue from "../editorButtonsValue";
 
 import { emphasis } from "../../settingsFiles/buttonConfig";
 
+let cursorIntON;
+let cursorIntOFF;
+let output;
+let cancelResults;
+let results;
+
 const Buttons = ({
   editorRef,
   inputText,
@@ -25,58 +31,150 @@ const Buttons = ({
     setMdText(inputText);
   };
 
+  const cancelButton = (
+    isOn,
+    inputText,
+    cursorPositionStart,
+    cursorPositionEnd,
+    cursorIntON,
+    output
+  ) => {
+    if (
+      isOn &&
+      inputText.slice(
+        cursorPositionStart - cursorIntON,
+        cursorPositionStart - cursorIntON + output.length
+      ) === output
+    ) {
+      inputText =
+        inputText.slice(0, cursorPositionStart - cursorIntON) +
+        inputText.slice(cursorPositionStart - cursorIntON + output.length);
+      cursorPositionEnd = cursorPositionStart -= cursorIntON;
+      return {
+        cancel: true,
+        inputText,
+        cursorPositionStart,
+        cursorPositionEnd,
+      };
+    } else {
+      return {
+        cancel: false,
+        inputText,
+        cursorPositionStart,
+        cursorPositionEnd,
+      };
+    }
+  };
+
+  const bold = (
+    isOn,
+    inputText,
+    cursorPositionStart,
+    cursorPositionEnd,
+    cursorIntON,
+    cursorIntOFF,
+    output
+  ) => {
+    if (!isOn) {
+      inputText =
+        inputText.slice(0, cursorPositionStart) +
+        output +
+        inputText.slice(cursorPositionStart);
+
+      cursorPositionStart += cursorIntON;
+      cursorPositionEnd += cursorIntON;
+      return {
+        inputText,
+        cursorPositionStart,
+        cursorPositionEnd,
+      };
+    } else if (isOn) {
+      cursorPositionStart += cursorIntOFF;
+      cursorPositionEnd += cursorIntOFF;
+
+      return { inputText, cursorPositionStart, cursorPositionEnd };
+    }
+  };
+
   const newHandleButtonClick = (button) => {
     editorRef.current.focus();
     setButton((prevState) => ({ ...prevState, [button]: !isButtonOn[button] }));
     switch (button) {
       case "bold":
-        const cursorIntON = emphasis[0].cursorIntON;
-        const cursorIntOFF = emphasis[0].cursorIntOFF;
-        const output = emphasis[0].output;
+        cursorIntON = emphasis[0].cursorIntON;
+        cursorIntOFF = emphasis[0].cursorIntOFF;
+        output = emphasis[0].output;
 
-        // cancel button value if pressed second time without textinput
-        if (
-          isButtonOn[button] &&
-          inputText.slice(
-            cursorPositionStart - cursorIntON,
-            cursorPositionStart - cursorIntON + output.length
-          ) === output
-        ) {
-          setButton((prevState) => ({
-            ...prevState,
-            [button]: !isButtonOn[button],
-          }));
-          inputText =
-            inputText.slice(0, cursorPositionStart - cursorIntON) +
-            inputText.slice(cursorPositionStart - cursorIntON + output.length);
+        cancelResults = cancelButton(
+          isButtonOn[button],
+          inputText,
+          cursorPositionStart,
+          cursorPositionEnd,
+          cursorIntON,
+          output
+        );
+        if (cancelResults.cancel) {
           setChanges(
-            inputText,
-            cursorPositionStart - cursorIntON,
-            cursorPositionEnd - cursorIntON
+            cancelResults.inputText,
+            cancelResults.cursorPositionStart,
+            cancelResults.cursorPositionEnd
           );
-          setCursorPosition(cursorPositionStart, cursorPositionStart);
-          return;
-        }
-        if (!isButtonOn[button]) {
-          console.log("på");
-          console.log(inputText);
-          inputText =
-            inputText.slice(0, cursorPositionStart) +
-            "****" +
-            inputText.slice(cursorPositionStart);
-
-          setChanges(
-            inputText,
-            cursorPositionStart + 2,
-            cursorPositionStart + 2
-          );
-        } else if (isButtonOn[button]) {
-          console.log("av");
-          setChanges(inputText, cursorPositionStart + 2, cursorPositionEnd + 2);
           break;
         }
+
+        results = bold(
+          isButtonOn[button],
+          inputText,
+          cursorPositionStart,
+          cursorPositionEnd,
+          cursorIntON,
+          cursorIntOFF,
+          output
+        );
+
+        setChanges(
+          results.inputText,
+          results.cursorPositionStart,
+          results.cursorPositionEnd
+        );
         break;
       case "italic":
+        cursorIntON = emphasis[1].cursorIntON;
+        cursorIntOFF = emphasis[1].cursorIntOFF;
+        output = emphasis[1].output;
+
+        cancelResults = cancelButton(
+          isButtonOn[button],
+          inputText,
+          cursorPositionStart,
+          cursorPositionEnd,
+          cursorIntON,
+          output
+        );
+        if (cancelResults.cancel) {
+          setChanges(
+            cancelResults.inputText,
+            cancelResults.cursorPositionStart,
+            cancelResults.cursorPositionEnd
+          );
+          break;
+        }
+
+        results = bold(
+          isButtonOn[button],
+          inputText,
+          cursorPositionStart,
+          cursorPositionEnd,
+          cursorIntON,
+          cursorIntOFF,
+          output
+        );
+
+        setChanges(
+          results.inputText,
+          results.cursorPositionStart,
+          results.cursorPositionEnd
+        );
         break;
       default:
         alert("default");
