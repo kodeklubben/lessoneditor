@@ -47,14 +47,6 @@ const setUndo = (inputText, cursorPositionStart) => {
   }
 };
 
-const ifNewLine = (inputText) => {
-  return (
-    inputText[cursorPositionStart - 1] === "\n" ||
-    inputText === "" ||
-    cursorPositionStart === 0
-  );
-};
-
 let orderedListIndex = 2;
 
 let storedTextValue = "";
@@ -67,15 +59,6 @@ let inputText = "";
 
 const setInputText = (text) => {
   inputText = text;
-};
-
-// variables to help find cursor in textarea
-let cursorPositionStart = 0;
-let cursorPositionEnd = 0;
-
-const setCursor = (pos1, pos2) => {
-  cursorPositionStart = pos1;
-  cursorPositionEnd = pos2;
 };
 
 // autosave message, gets updated by autosave
@@ -101,8 +84,24 @@ const Editor = () => {
   };
   const [savedText, setSavedText] = useState("");
   // const lessonContext = useContext(LessonContext);
+  // variables to help find cursor in textarea
+  const [cursorPositionStart, setCursorPositionStart] = useState(0);
+  const [cursorPositionEnd, setCursorPositionEnd] = useState(0);
 
+  const setCursor = (pos1, pos2) => {
+    setCursorPositionStart(pos1);
+    setCursorPositionEnd(pos2);
+  };
   const { course, lesson, file } = useParams();
+
+  const ifNewLine = (inputText) => {
+    return (
+      inputText[cursorPositionStart - 1] === "\n" ||
+      inputText === "" ||
+      cursorPositionStart === 0
+    );
+  };
+
   useEffect(() => {
     if (course && lesson && file) {
       async function fetchData() {
@@ -181,8 +180,7 @@ const Editor = () => {
 
   // all config for handling text on input
   const handleChange = async (event) => {
-    cursorPositionStart = event.target.selectionStart;
-    cursorPositionEnd = event.target.selectionEnd;
+    setCursor(event.target.selectionStart, event.target.selectionEnd);
     inputText = event.target.value;
     // redo = [];
 
@@ -212,26 +210,22 @@ const Editor = () => {
   };
 
   const onTextareaKeyUp = (event) => {
-    cursorPositionStart = event.target.selectionStart;
-    cursorPositionEnd = event.target.selectionEnd;
+    setCursor(event.target.selectionStart, event.target.selectionEnd);
   };
 
-  const onTextareaSelect = (e) => {
-    cursorPositionStart = e.target.selectionStart;
-    cursorPositionEnd = e.target.selectionEnd;
+  const onTextareaSelect = (event) => {
+    setCursor(event.target.selectionStart, event.target.selectionEnd);
   };
 
-  const onTextareaMouseDown = (e) => {
-    cursorPositionStart = e.target.selectionStart;
-    cursorPositionEnd = e.target.selectionEnd;
+  const onTextareaMouseDown = (event) => {
+    setCursor(event.target.selectionStart, event.target.selectionEnd);
 
     resetButtons();
   };
 
   // KEYBOARD SHORTCUT SETTINGS
   const onTextareaKeyDown = (event) => {
-    cursorPositionStart = event.target.selectionStart;
-    cursorPositionEnd = event.target.selectionEnd;
+    setCursor(event.target.selectionStart, event.target.selectionEnd);
 
     // prevents default value on shortcut keys
     if (
@@ -332,7 +326,7 @@ const Editor = () => {
         "  " +
         inputText.slice(cursorPositionStart);
       setMdText(inputText);
-      cursorPositionStart += 2;
+      setCursorPositionStart(cursorPositionStart + 2);
       setCursorPosition(cursorPositionStart, cursorPositionStart);
       return;
     }
@@ -369,8 +363,8 @@ const Editor = () => {
         inputText.slice(cursorPositionStart);
       setMdText(inputText);
       editorRef.current.focus();
-      cursorPositionStart += 2;
-      cursorPositionEnd += filename.length + 2;
+      setCursorPositionStart(cursorPositionStart + 2);
+      setCursorPositionEnd(cursorPositionEnd + filename.length + 2);
       setCursorPosition(cursorPositionStart, cursorPositionEnd);
     } else {
       editorRef.current.focus();
