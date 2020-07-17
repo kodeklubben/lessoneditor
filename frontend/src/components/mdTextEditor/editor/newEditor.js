@@ -404,6 +404,7 @@ const Editor = () => {
           inputText={inputText}
           cursorPositionStart={cursorPositionStart}
           cursorPositionEnd={cursorPositionEnd}
+          mdText={state.mdText}
           setMdText={setMdText}
           setCursorPosition={setCursorPosition}
           setCursor={setCursor}

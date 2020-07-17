@@ -13,27 +13,24 @@ let results;
 
 const Buttons = ({
   editorRef,
-  inputText,
   cursorPositionStart,
   cursorPositionEnd,
+  mdText,
   setMdText,
   setCursorPosition,
   setCursor,
-  setInputText,
 }) => {
   let [isButtonOn, setButton] = useState(editorButtonsValue);
 
-  const setChanges = (inputText, cursorPositionStart, cursorPositionEnd) => {
-    // setUndo(results.inputText, results.cursorPositionStart);
-    setInputText(inputText);
+  const setChanges = (mdText, cursorPositionStart, cursorPositionEnd) => {
     setCursor(cursorPositionStart, cursorPositionEnd);
     setCursorPosition(cursorPositionStart, cursorPositionEnd);
-    setMdText(inputText);
+    setMdText(mdText);
   };
 
   const cancelButton = (
     isOn,
-    inputText,
+    mdText,
     cursorPositionStart,
     cursorPositionEnd,
     cursorIntON,
@@ -41,25 +38,25 @@ const Buttons = ({
   ) => {
     if (
       isOn &&
-      inputText.slice(
+      mdText.slice(
         cursorPositionStart - cursorIntON,
         cursorPositionStart - cursorIntON + output.length
       ) === output
     ) {
-      inputText =
-        inputText.slice(0, cursorPositionStart - cursorIntON) +
-        inputText.slice(cursorPositionStart - cursorIntON + output.length);
+      mdText =
+        mdText.slice(0, cursorPositionStart - cursorIntON) +
+        mdText.slice(cursorPositionStart - cursorIntON + output.length);
       cursorPositionEnd = cursorPositionStart -= cursorIntON;
       return {
         cancel: true,
-        inputText,
+        mdText,
         cursorPositionStart,
         cursorPositionEnd,
       };
     } else {
       return {
         cancel: false,
-        inputText,
+        mdText,
         cursorPositionStart,
         cursorPositionEnd,
       };
@@ -68,7 +65,7 @@ const Buttons = ({
 
   const bold = (
     isOn,
-    inputText,
+    mdText,
     cursorPositionStart,
     cursorPositionEnd,
     cursorIntON,
@@ -76,15 +73,15 @@ const Buttons = ({
     output
   ) => {
     if (!isOn) {
-      inputText =
-        inputText.slice(0, cursorPositionStart) +
+      mdText =
+        mdText.slice(0, cursorPositionStart) +
         output +
-        inputText.slice(cursorPositionStart);
+        mdText.slice(cursorPositionStart);
 
       cursorPositionStart += cursorIntON;
       cursorPositionEnd += cursorIntON;
       return {
-        inputText,
+        mdText,
         cursorPositionStart,
         cursorPositionEnd,
       };
@@ -92,7 +89,7 @@ const Buttons = ({
       cursorPositionStart += cursorIntOFF;
       cursorPositionEnd += cursorIntOFF;
 
-      return { inputText, cursorPositionStart, cursorPositionEnd };
+      return { mdText, cursorPositionStart, cursorPositionEnd };
     }
   };
 
@@ -107,7 +104,7 @@ const Buttons = ({
 
         cancelResults = cancelButton(
           isButtonOn[button],
-          inputText,
+          mdText,
           cursorPositionStart,
           cursorPositionEnd,
           cursorIntON,
@@ -115,7 +112,7 @@ const Buttons = ({
         );
         if (cancelResults.cancel) {
           setChanges(
-            cancelResults.inputText,
+            cancelResults.mdText,
             cancelResults.cursorPositionStart,
             cancelResults.cursorPositionEnd
           );
@@ -124,7 +121,7 @@ const Buttons = ({
 
         results = bold(
           isButtonOn[button],
-          inputText,
+          mdText,
           cursorPositionStart,
           cursorPositionEnd,
           cursorIntON,
@@ -133,7 +130,7 @@ const Buttons = ({
         );
 
         setChanges(
-          results.inputText,
+          results.mdText,
           results.cursorPositionStart,
           results.cursorPositionEnd
         );
@@ -145,7 +142,7 @@ const Buttons = ({
 
         cancelResults = cancelButton(
           isButtonOn[button],
-          inputText,
+          mdText,
           cursorPositionStart,
           cursorPositionEnd,
           cursorIntON,
@@ -153,7 +150,7 @@ const Buttons = ({
         );
         if (cancelResults.cancel) {
           setChanges(
-            cancelResults.inputText,
+            cancelResults.mdText,
             cancelResults.cursorPositionStart,
             cancelResults.cursorPositionEnd
           );
@@ -162,7 +159,7 @@ const Buttons = ({
 
         results = bold(
           isButtonOn[button],
-          inputText,
+          mdText,
           cursorPositionStart,
           cursorPositionEnd,
           cursorIntON,
@@ -171,7 +168,7 @@ const Buttons = ({
         );
 
         setChanges(
-          results.inputText,
+          results.mdText,
           results.cursorPositionStart,
           results.cursorPositionEnd
         );
