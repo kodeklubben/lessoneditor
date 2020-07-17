@@ -3,7 +3,7 @@ import CPButton from "./CPButton";
 
 import editorButtonsValue from "../editorButtonsValue";
 
-import { emphasis } from "../../settingsFiles/buttonConfig";
+import { emphasis as config } from "../../settingsFiles/buttonConfig";
 
 let cursorIntON;
 let cursorIntOFF;
@@ -136,90 +136,53 @@ const Buttons = ({
     }
   };
 
+  const emphasis = (button, cursorIntON, cursorIntOFF, output) => {
+    cancelResults = cancelButton(
+      isButtonOn[button],
+      mdText,
+      cursorPositionStart,
+      cursorPositionEnd,
+      cursorIntON,
+      output
+    );
+    if (cancelResults.cancel) {
+      setChanges(
+        cancelResults.mdText,
+        cancelResults.cursorPositionStart,
+        cancelResults.cursorPositionEnd
+      );
+      return;
+    }
+
+    results = emphasisButton(
+      isButtonOn[button],
+      mdText,
+      cursorPositionStart,
+      cursorPositionEnd,
+      cursorIntON,
+      cursorIntOFF,
+      output
+    );
+
+    setChanges(
+      results.mdText,
+      results.cursorPositionStart,
+      results.cursorPositionEnd
+    );
+  };
+
   const newHandleButtonClick = (button) => {
     editorRef.current.focus();
     setButton((prevState) => ({ ...prevState, [button]: !isButtonOn[button] }));
     switch (button) {
       case "bold":
-        cursorIntON = emphasis[0].cursorIntON;
-        cursorIntOFF = emphasis[0].cursorIntOFF;
-        output = emphasis[0].output;
-
-        cancelResults = cancelButton(
-          isButtonOn[button],
-          mdText,
-          cursorPositionStart,
-          cursorPositionEnd,
-          cursorIntON,
-          output
-        );
-        if (cancelResults.cancel) {
-          setChanges(
-            cancelResults.mdText,
-            cancelResults.cursorPositionStart,
-            cancelResults.cursorPositionEnd
-          );
-          break;
-        }
-
-        results = emphasisButton(
-          isButtonOn[button],
-          mdText,
-          cursorPositionStart,
-          cursorPositionEnd,
-          cursorIntON,
-          cursorIntOFF,
-          output
-        );
-
-        setChanges(
-          results.mdText,
-          results.cursorPositionStart,
-          results.cursorPositionEnd
-        );
+        emphasis(button, 2, 2, "****");
         break;
       case "italic":
-        cursorIntON = emphasis[1].cursorIntON;
-        cursorIntOFF = emphasis[1].cursorIntOFF;
-        output = emphasis[1].output;
-
-        cancelResults = cancelButton(
-          isButtonOn[button],
-          mdText,
-          cursorPositionStart,
-          cursorPositionEnd,
-          cursorIntON,
-          output
-        );
-        if (cancelResults.cancel) {
-          setChanges(
-            cancelResults.mdText,
-            cancelResults.cursorPositionStart,
-            cancelResults.cursorPositionEnd
-          );
-          break;
-        }
-
-        results = emphasisButton(
-          isButtonOn[button],
-          mdText,
-          cursorPositionStart,
-          cursorPositionEnd,
-          cursorIntON,
-          cursorIntOFF,
-          output
-        );
-
-        setChanges(
-          results.mdText,
-          results.cursorPositionStart,
-          results.cursorPositionEnd
-        );
+        emphasis(button, 1, 1, "**");
         break;
       case "heading":
-        cursorIntON = emphasis[2].cursorIntON;
-        cursorIntOFF = emphasis[2].cursorIntOFF;
-        output = emphasis[2].output;
+        output = "## ";
 
         results = heading(
           isButtonOn[button],
@@ -227,7 +190,6 @@ const Buttons = ({
           cursorPositionStart,
           output
         );
-        console.log(results);
         setButton((prevState) => ({ ...prevState, [button]: results.isOn }));
         setChanges(
           results.mdText,
@@ -238,42 +200,7 @@ const Buttons = ({
         break;
 
       case "strikethrough":
-        cursorIntON = emphasis[3].cursorIntON;
-        cursorIntOFF = emphasis[3].cursorIntOFF;
-        output = emphasis[3].output;
-
-        cancelResults = cancelButton(
-          isButtonOn[button],
-          mdText,
-          cursorPositionStart,
-          cursorPositionEnd,
-          cursorIntON,
-          output
-        );
-        if (cancelResults.cancel) {
-          setChanges(
-            cancelResults.mdText,
-            cancelResults.cursorPositionStart,
-            cancelResults.cursorPositionEnd
-          );
-          break;
-        }
-
-        results = emphasisButton(
-          isButtonOn[button],
-          mdText,
-          cursorPositionStart,
-          cursorPositionEnd,
-          cursorIntON,
-          cursorIntOFF,
-          output
-        );
-
-        setChanges(
-          results.mdText,
-          results.cursorPositionStart,
-          results.cursorPositionEnd
-        );
+        emphasis(button, 2, 2, "~~~~");
         break;
       default:
         alert("default");
@@ -282,7 +209,7 @@ const Buttons = ({
   return (
     <>
       <div className="ui icon buttons emphasis">
-        {emphasis.map((element, index) => (
+        {config.map((element, index) => (
           <CPButton
             key={"element" + index}
             buttonTitle={element.buttonTitle}
