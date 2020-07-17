@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
 import MDTextArea from "./MDTextArea";
 import MDPreview from "../mdPreview/MDPreview";
-import { Buttons } from "./controlpanel/Buttons";
+import Emphasis from "./controlpanel/Emphasis";
 import ImagePopup from "../ImagePopup";
 import editorButtonsValue from "./editorButtonsValue";
 import fetchMdText from "../../../api/fetch-md-text";
@@ -399,7 +399,7 @@ const Editor = () => {
       />
 
       <div className="textEditorContainer">
-        <Buttons
+        <Emphasis
           editorRef={editorRef}
           inputText={inputText}
           cursorPositionStart={cursorPositionStart}
@@ -409,7 +409,7 @@ const Editor = () => {
           setCursorPosition={setCursorPosition}
           setCursor={setCursor}
           setInputText={setInputText}
-        ></Buttons>
+        ></Emphasis>
         <MDTextArea
           mdText={state.mdText}
           editorRef={editorRef}

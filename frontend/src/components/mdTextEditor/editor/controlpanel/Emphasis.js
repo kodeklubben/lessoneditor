@@ -5,13 +5,11 @@ import editorButtonsValue from "../editorButtonsValue";
 
 import { emphasis as config } from "../../settingsFiles/buttonConfig";
 
-let cursorIntON;
-let cursorIntOFF;
 let output;
 let cancelResults;
 let results;
 
-const Buttons = ({
+const Emphasis = ({
   editorRef,
   cursorPositionStart,
   cursorPositionEnd,
@@ -136,7 +134,7 @@ const Buttons = ({
     }
   };
 
-  const emphasis = (button, cursorIntON, cursorIntOFF, output) => {
+  const setEmphasis = (button, cursorIntON, cursorIntOFF, output) => {
     cancelResults = cancelButton(
       isButtonOn[button],
       mdText,
@@ -176,10 +174,10 @@ const Buttons = ({
     setButton((prevState) => ({ ...prevState, [button]: !isButtonOn[button] }));
     switch (button) {
       case "bold":
-        emphasis(button, 2, 2, "****");
+        setEmphasis(button, 2, 2, "****");
         break;
       case "italic":
-        emphasis(button, 1, 1, "**");
+        setEmphasis(button, 1, 1, "**");
         break;
       case "heading":
         output = "## ";
@@ -200,7 +198,7 @@ const Buttons = ({
         break;
 
       case "strikethrough":
-        emphasis(button, 2, 2, "~~~~");
+        setEmphasis(button, 2, 2, "~~~~");
         break;
       default:
         alert("default");
@@ -224,4 +222,4 @@ const Buttons = ({
   );
 };
 
-export { Buttons };
+export default Emphasis;
