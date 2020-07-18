@@ -6,6 +6,7 @@ import MDPreview from "../mdPreview/MDPreview";
 import Emphasis from "./controlpanel/Emphasis";
 import UndoRedo from "./controlpanel/UndoRedo";
 import Image from "./controlpanel/Image";
+import Preview from "./controlpanel/Preview";
 import ImagePopup from "../ImagePopup";
 import editorButtonsValue from "./editorButtonsValue";
 import fetchMdText from "../../../api/fetch-md-text";
@@ -56,19 +57,14 @@ const setInputText = (text) => {
 const Editor = () => {
   const context = useContext(UserContext);
   let [state, setState] = useState({
-    mdText: "",
     isEditor: true,
     editorRedirect: "",
     images: [],
     buttonValues: isButtonOn,
     redirect: null,
   });
-  const setMdText = (mdText) => {
-    setState((prevState) => ({
-      ...prevState,
-      mdText,
-    }));
-  };
+
+  const [mdText, setMdText] = useState("");
   const [savedText, setSavedText] = useState("");
   // const lessonContext = useContext(LessonContext);
   const [cursorPositionStart, setCursorPositionStart] = useState(0);
@@ -135,12 +131,12 @@ const Editor = () => {
   }, [course, lesson, file]);
 
   useInterval(async () => {
-    if (state.mdText !== savedText) {
-      await saveMdText(course, lesson, file, state.mdText);
+    if (mdText !== savedText) {
+      await saveMdText(course, lesson, file, mdText);
       if (!context.getLesson(course, lesson)) {
         await context.addLesson(course, lesson, lesson);
       }
-      setSavedText(state.mdText);
+      setSavedText(mdText);
     }
   }, 5000);
 
@@ -394,6 +390,7 @@ const Editor = () => {
   };
 
   const handlePreview = (event) => {
+    alert("Preview");
     if (preview) {
       preview = false;
       return false;
@@ -419,7 +416,7 @@ const Editor = () => {
           inputText={inputText}
           cursorPositionStart={cursorPositionStart}
           cursorPositionEnd={cursorPositionEnd}
-          mdText={state.mdText}
+          mdText={mdText}
           setMdText={setMdText}
           setCursorPosition={setCursorPosition}
           setCursor={setCursor}
@@ -427,7 +424,7 @@ const Editor = () => {
         />
         <UndoRedo
           editorRef={editorRef}
-          mdText={state.mdText}
+          mdText={mdText}
           undo={undo}
           redo={redo}
           undoCursorPosition={undoCursorPosition}
@@ -441,8 +438,9 @@ const Editor = () => {
           cursorPositionEnd={cursorPositionEnd}
         />
         <Image editorRef={editorRef} uploadImageRef={uploadImageRef} />
+        <Preview handlePreview={handlePreview} />
         <MDTextArea
-          mdText={state.mdText}
+          mdText={mdText}
           editorRef={editorRef}
           onInputChange={handleChange}
           onTextareaKeyDown={onTextareaKeyDown}
@@ -451,7 +449,7 @@ const Editor = () => {
           onTextareaSelect={onTextareaSelect}
           handlePreview={handlePreview}
         />
-        <MDPreview mdText={state.mdText} />
+        <MDPreview mdText={mdText} />
       </div>
     </div>
   );
