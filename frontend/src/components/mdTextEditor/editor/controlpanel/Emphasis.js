@@ -26,13 +26,6 @@ const Emphasis = ({
     setMdText(mdText);
   };
 
-  console.log(
-    "cursorPositionStart :" +
-      cursorPositionStart +
-      "\ncursorPositionEnd : " +
-      cursorPositionEnd
-  );
-
   const cancelButton = (
     isOn,
     mdText,

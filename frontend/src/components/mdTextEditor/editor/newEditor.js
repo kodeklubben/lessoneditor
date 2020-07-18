@@ -4,6 +4,7 @@ import { useParams } from "react-router";
 import MDTextArea from "./MDTextArea";
 import MDPreview from "../mdPreview/MDPreview";
 import Emphasis from "./controlpanel/Emphasis";
+import UndoRedo from "./controlpanel/UndoRedo";
 import ImagePopup from "../ImagePopup";
 import editorButtonsValue from "./editorButtonsValue";
 import fetchMdText from "../../../api/fetch-md-text";
@@ -31,21 +32,6 @@ for (let i = 0; i < Object.values(KEY).length; i++) {
 
 // Count input char for automatic newline at 80 chars
 // let charCounter = 0;
-
-let undo = [""];
-let undoCursorPosition = [];
-let redo = [];
-let redoCursorPosition = [];
-
-const setUndo = (inputText, cursorPositionStart) => {
-  if (
-    undo[undo.length - 1] !== inputText &&
-    undoCursorPosition !== cursorPositionStart
-  ) {
-    undo.push(inputText);
-    undoCursorPosition.push(cursorPositionStart);
-  }
-};
 
 let orderedListIndex = 2;
 
@@ -84,9 +70,43 @@ const Editor = () => {
   };
   const [savedText, setSavedText] = useState("");
   // const lessonContext = useContext(LessonContext);
-  // variables to help find cursor in textarea
   const [cursorPositionStart, setCursorPositionStart] = useState(0);
   const [cursorPositionEnd, setCursorPositionEnd] = useState(0);
+
+  const [undo, setUndo] = useState([""]);
+  const [redo, setRedo] = useState([]);
+  const [undoCursorPosition, setUndoCursorPosition] = useState([]);
+  const [redoCursorPosition, setRedoCursorPosition] = useState([]);
+
+  const pushUndoValue = (inputText, cursorPositionStart) => {
+    if (
+      undo[undo.length - 1] !== inputText &&
+      undoCursorPosition !== cursorPositionStart
+    ) {
+      setUndo((undo) => [...undo, inputText]);
+      setUndoCursorPosition((undoCursorPosition) => [
+        ...undoCursorPosition,
+        cursorPositionStart,
+      ]);
+      setMdText(redo[redo.length - 1]);
+      setRedo(redo.slice(0, redo.length - 1));
+    }
+  };
+
+  const pushRedoValue = (inputText, cursorPositionStart) => {
+    if (
+      redo[redo.length] !== inputText &&
+      redoCursorPosition !== cursorPositionStart
+    ) {
+      setRedo((redo) => [...redo, inputText]);
+      setRedoCursorPosition((redoCursorPosition) => [
+        ...redoCursorPosition,
+        cursorPositionStart,
+      ]);
+      setUndo(undo.slice(0, undo.length - 1));
+      setMdText(undo[undo.length - 1]);
+    }
+  };
 
   const setCursor = (pos1, pos2) => {
     setCursorPositionStart(pos1);
@@ -188,10 +208,10 @@ const Editor = () => {
     // need to make event trigger for those cases here
     // if spacebar, update undo
     if (
-      inputText[cursorPositionStart - 1] === " " ||
-      inputText[cursorPositionStart - 1] === "\n"
+      inputText[cursorPositionStart] === " " ||
+      inputText[cursorPositionStart] === "\n"
     ) {
-      // setUndo(inputText, cursorPositionStart);
+      pushUndoValue(inputText, cursorPositionStart);
     }
 
     // Counts input char. New line if 80
@@ -241,13 +261,13 @@ const Editor = () => {
 
     // if spacebar, update undo
     if (event.key === " ") {
-      // setUndo(inputText, cursorPositionStart);
+      // pushUndoValue(inputText, cursorPositionStart);
     }
 
     // if input is enter, update undo and do list functions if list.
     if (event.key === "Enter") {
       // charCounter = 0;
-      // setUndo(inputText, cursorPositionStart);
+      // pushUndoValue(inputText, cursorPositionStart);
       if (
         !isButtonOn[listButtonValues["bTitle"]] &&
         listButtonValues["bTitle"]
@@ -320,7 +340,7 @@ const Editor = () => {
       event.preventDefault();
       // config for correct tab inside codeblock:
 
-      // setUndo(inputText, cursorPositionStart);
+      // pushUndoValue(inputText, cursorPositionStart);
       inputText =
         inputText.slice(0, cursorPositionStart) +
         "  " +
@@ -352,7 +372,7 @@ const Editor = () => {
   // Show/hide image popup
   const imagePopupSubmitHandler = (imagePopupInputValue, filename) => {
     if (imagePopupInputValue) {
-      // setUndo(inputText, cursorPositionStart);
+      // pushUndoValue(inputText, cursorPositionStart);
       inputText =
         inputText.slice(0, cursorPositionStart) +
         "![" +
@@ -403,7 +423,22 @@ const Editor = () => {
           setCursorPosition={setCursorPosition}
           setCursor={setCursor}
           setInputText={setInputText}
-        ></Emphasis>
+        />
+        <UndoRedo
+          editorRef={editorRef}
+          mdText={state.mdText}
+          undo={undo}
+          redo={redo}
+          undoCursorPosition={undoCursorPosition}
+          setUndoCursorPosition={setUndoCursorPosition}
+          redoCursorPosition={redoCursorPosition}
+          setRedoCursorPosition={setRedoCursorPosition}
+          pushUndoValue={pushUndoValue}
+          pushRedoValue={pushRedoValue}
+          setCursorPosition={setCursorPosition}
+          cursorPositionStart={cursorPositionStart}
+          cursorPositionEnd={cursorPositionEnd}
+        />
         <MDTextArea
           mdText={state.mdText}
           editorRef={editorRef}
