@@ -5,6 +5,7 @@ import MDTextArea from "./MDTextArea";
 import MDPreview from "../mdPreview/MDPreview";
 import Emphasis from "./controlpanel/Emphasis";
 import UndoRedo from "./controlpanel/UndoRedo";
+import Image from "./controlpanel/Image";
 import ImagePopup from "../ImagePopup";
 import editorButtonsValue from "./editorButtonsValue";
 import fetchMdText from "../../../api/fetch-md-text";
@@ -439,6 +440,7 @@ const Editor = () => {
           cursorPositionStart={cursorPositionStart}
           cursorPositionEnd={cursorPositionEnd}
         />
+        <Image editorRef={editorRef} uploadImageRef={uploadImageRef} />
         <MDTextArea
           mdText={state.mdText}
           editorRef={editorRef}
