@@ -7,6 +7,7 @@ import Emphasis from "./controlpanel/Emphasis";
 import UndoRedo from "./controlpanel/UndoRedo";
 import Image from "./controlpanel/Image";
 import Preview from "./controlpanel/Preview";
+import Lists from "./controlpanel/Lists";
 import ImagePopup from "../ImagePopup";
 import editorButtonsValue from "./editorButtonsValue";
 import fetchMdText from "../../../api/fetch-md-text";
@@ -438,6 +439,7 @@ const Editor = () => {
           cursorPositionEnd={cursorPositionEnd}
         />
         <Image editorRef={editorRef} uploadImageRef={uploadImageRef} />
+        <Lists editorRef={editorRef} />
         <Preview handlePreview={handlePreview} />
         <MDTextArea
           mdText={mdText}
