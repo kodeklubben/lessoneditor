@@ -6,14 +6,13 @@ const resolveMarkdownImageUrls = require("../utils/resolve-markdown-image-urls")
 const downloadImage = require("../utils/download-image");
 const yaml = require("yaml");
 
-module.exports = async (token, lessonData, path) => {
+module.exports = async (token, lessonData) => {
   if (lessonData === null) {
     console.log("No lesson data");
     return null;
   }
-  const lessonPath = `src/${path.course}/${path.lesson}`;
-  const branchName = `${path.course}/${path.lesson}`;
-  console.log(lessonPath, branchName);
+  const lessonPath = `src/${lessonData.course}/${lessonData.title}`;
+  const branchName = `${lessonData.course}/${lessonData.title}`;
   const files = [
     {
       path: `${lessonPath}/lesson.yml`,

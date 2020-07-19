@@ -22,7 +22,11 @@ module.exports = (app) => {
     const pathParts = [req.user.username, "user-lessons.json"];
     try {
       const result = await loadFile(pathParts);
-      res.send(result);
+      if (result) {
+        res.send(result);
+      } else {
+        res.send([]);
+      }
     } catch (e) {
       if (e.response.status === 404) {
         res.send([]);
