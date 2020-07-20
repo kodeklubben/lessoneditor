@@ -1,13 +1,23 @@
 const { Octokit } = require("@octokit/rest");
 
 module.exports = async (token, username, title, branch, body) => {
-  const octokit = new Octokit({ auth: token });
-  return await octokit.pulls.create({
-    owner: "kodeklubben",
-    repo: "oppgaver",
-    title: title, // title of PR
-    head: `${username}:${branch}`,
-    base: "master",
-    body: body, // PR message
-  });
+  try {
+    const octokit = new Octokit({ auth: token });
+    console.log("Creating pull request.");
+    return await octokit.pulls.create({
+      owner: process.env.GITHUB_LESSON_REPO_OWNER,
+      repo: process.env.GITHUB_LESSON_REPO,
+      title: title, // title of PR
+      head: `${username}:${branch}`,
+      base: "master",
+      body: body, // PR message
+    });
+  } catch (e) {
+    if (e.status === 422) {
+      console.log("Pull request already exists.");
+      return null;
+    } else {
+      throw e;
+    }
+  }
 };
