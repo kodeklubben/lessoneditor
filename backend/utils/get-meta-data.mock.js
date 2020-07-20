@@ -32,16 +32,16 @@ module.exports = (username, course, title) => {
   lessonData.course = course.toLowerCase();
   lessonData.title = title.toLowerCase();
   lessonData.language = language[Math.floor(Math.random() * language.length)];
-  let yml = {};
-  yml.grade = getRandomElements(
+  let yml = { tags: {} };
+  yml.tags.grade = getRandomElements(
     grade,
     Math.floor(Math.random() * grade.length)
   );
-  yml.subject = getRandomElements(
+  yml.tags.subject = getRandomElements(
     subject,
     Math.floor(Math.random() * subject.length)
   );
-  yml.topic = getRandomElements(
+  yml.tags.topic = getRandomElements(
     topic,
     Math.floor(Math.random() * topic.length)
   );

@@ -4,7 +4,7 @@ const createPullRequest = require("./createPullRequest");
 const getMarkdownUrls = require("../utils/get-markdown-urls-submit");
 const resolveMarkdownImageUrls = require("../utils/resolve-markdown-image-urls");
 const downloadImage = require("../utils/download-image");
-const yaml = require("yaml");
+const yaml = require("js-yaml");
 
 module.exports = async (token, lessonData) => {
   if (lessonData === null) {
@@ -16,7 +16,7 @@ module.exports = async (token, lessonData) => {
   const files = [
     {
       path: `${lessonPath}/lesson.yml`,
-      buffer: Buffer.from(yaml.stringify(lessonData.yml)),
+      buffer: Buffer.from(yaml.safeDump(lessonData.yml, { flowLevel: 2 })),
     },
   ];
   const markdownContent = resolveMarkdownImageUrls(lessonData.markdown);
