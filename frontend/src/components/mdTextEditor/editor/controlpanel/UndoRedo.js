@@ -30,7 +30,6 @@ const UndoRedo = ({
           );
         }
         if (undo.length <= 0) {
-          alert("empty");
           break;
         }
         pushRedoValue(mdText, cursorPositionStart);
@@ -45,7 +44,6 @@ const UndoRedo = ({
           );
         }
         if (redo.length <= 0) {
-          alert("empty REDO");
           break;
         }
         pushUndoValue(mdText, cursorPositionStart);
@@ -53,7 +51,7 @@ const UndoRedo = ({
 
         break;
       default:
-        alert("default");
+        break;
     }
   };
   return (
