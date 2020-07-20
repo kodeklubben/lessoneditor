@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 0",
-    "server-gae": "nodemon server-gae.js",
-    "server-local": "nodemon server-local.js"
+    "server-gae": "nodemon server-gae.js"
   },
   "keywords": [
     "node",
