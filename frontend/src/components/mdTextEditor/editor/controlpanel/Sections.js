@@ -23,6 +23,43 @@ const Sections = ({
   };
 
   let results;
+  let cancelResults;
+
+  const setSection = (button, cursorIntON, cursorIntOFF, output, cancelInt) => {
+    cancelResults = cancelButton(
+      buttonValues[button],
+      mdText,
+      cursorPositionStart,
+      cursorPositionEnd,
+      cancelInt,
+      output
+    );
+    if (cancelResults.cancel) {
+      setChanges(
+        cancelResults.mdText,
+        cancelResults.cursorPositionStart,
+        cancelResults.cursorPositionEnd
+      );
+      return;
+    }
+    results = insertSection(
+      buttonValues[button],
+      button,
+      mdText,
+      output,
+      cursorPositionStart,
+      cursorPositionEnd,
+      cursorIntON,
+      cursorIntOFF,
+      SECTION_TEXT
+    );
+
+    setChanges(
+      results.inputText,
+      results.cursorPositionStart,
+      results.cursorPositionEnd
+    );
+  };
 
   const newHandleButtonClick = (button) => {
     editorRef.current.focus();
@@ -32,148 +69,28 @@ const Sections = ({
     }));
     switch (button) {
       case "sec_activity":
-        results = insertSection(
-          buttonValues[button],
-          button,
-          mdText,
-          "# " + SECTION_TEXT + " {.activity}\n",
-          cursorPositionStart,
-          cursorPositionEnd,
-          0,
-          13,
-          SECTION_TEXT
-        );
-        setChanges(
-          results.inputText,
-          results.cursorPositionStart,
-          results.cursorPositionEnd
-        );
+        setSection(button, 0, 13, "# " + SECTION_TEXT + " {.activity}\n", 2);
         break;
       case "sec_intro":
-        results = insertSection(
-          buttonValues[button],
-          button,
-          mdText,
-          "# " + SECTION_TEXT + " {.intro}\n",
-          cursorPositionStart,
-          cursorPositionEnd,
-          0,
-          10,
-          SECTION_TEXT
-        );
-        setChanges(
-          results.inputText,
-          results.cursorPositionStart,
-          results.cursorPositionEnd
-        );
+        setSection(button, 0, 10, "# " + SECTION_TEXT + " {.intro}\n", 2);
         break;
       case "sec_check":
-        results = insertSection(
-          buttonValues[button],
-          button,
-          mdText,
-          "## " + SECTION_TEXT + " {.check}\n",
-          cursorPositionStart,
-          cursorPositionEnd,
-          0,
-          10,
-          SECTION_TEXT
-        );
-        setChanges(
-          results.inputText,
-          results.cursorPositionStart,
-          results.cursorPositionEnd
-        );
+        setSection(button, 0, 10, "## " + SECTION_TEXT + " {.check}\n", 3);
         break;
       case "sec_tip":
-        results = insertSection(
-          buttonValues[button],
-          button,
-          mdText,
-          "## {.tip}\n" + SECTION_TEXT,
-          cursorPositionStart,
-          cursorPositionEnd,
-          10,
-          10,
-          SECTION_TEXT
-        );
-        setChanges(
-          results.inputText,
-          results.cursorPositionStart,
-          results.cursorPositionEnd
-        );
+        setSection(button, 10, 10, "## {.tip}\n" + SECTION_TEXT, 10);
         break;
       case "sec_protip":
-        results = insertSection(
-          buttonValues[button],
-          button,
-          mdText,
-          "## " + SECTION_TEXT + " {.protip}\n",
-          cursorPositionStart,
-          cursorPositionEnd,
-          0,
-          11,
-          SECTION_TEXT
-        );
-        setChanges(
-          results.inputText,
-          results.cursorPositionStart,
-          results.cursorPositionEnd
-        );
+        setSection(button, 0, 11, "## " + SECTION_TEXT + " {.protip}\n", 3);
         break;
       case "sec_challenge":
-        results = insertSection(
-          buttonValues[button],
-          button,
-          mdText,
-          "## " + SECTION_TEXT + " {.challenge}\n",
-          cursorPositionStart,
-          cursorPositionEnd,
-          0,
-          14,
-          SECTION_TEXT
-        );
-        setChanges(
-          results.inputText,
-          results.cursorPositionStart,
-          results.cursorPositionEnd
-        );
+        setSection(button, 0, 14, "## " + SECTION_TEXT + " {.challenge}\n", 3);
         break;
       case "sec_flag":
-        results = insertSection(
-          buttonValues[button],
-          button,
-          mdText,
-          "## " + SECTION_TEXT + " {.flag}\n",
-          cursorPositionStart,
-          cursorPositionEnd,
-          0,
-          9,
-          SECTION_TEXT
-        );
-        setChanges(
-          results.inputText,
-          results.cursorPositionStart,
-          results.cursorPositionEnd
-        );
+        setSection(button, 0, 9, "## " + SECTION_TEXT + " {.flag}\n", 3);
         break;
       case "sec_try":
-        results = insertSection(
-          buttonValues[button],
-          button,
-          mdText,
-          "# " + SECTION_TEXT + " {.try}\n",
-          cursorPositionStart,
-          cursorPositionEnd,
-          0,
-          8,
-          SECTION_TEXT
-        );
-        setChanges(
-          results.inputText,
-          results.cursorPositionStart,
-          results.cursorPositionEnd
-        );
+        setSection(button, 0, 9, "# " + SECTION_TEXT + " {.try}\n", 2);
         break;
       default:
         break;
