@@ -9,6 +9,7 @@ import Image from "./controlpanel/Image";
 import Preview from "./controlpanel/Preview";
 import Lists from "./controlpanel/Lists";
 import Sections from "./controlpanel/Sections";
+import Code from "./controlpanel/Code";
 import ImageUpload from "../ImageUpload";
 import editorButtonsValue from "./editorButtonsValue";
 import fetchMdText from "../../../api/fetch-md-text";
@@ -354,6 +355,17 @@ const Editor = () => {
           setButtonValues={setButtonValues}
         />
         <Sections
+          editorRef={editorRef}
+          mdText={mdText}
+          buttonValues={buttonValues}
+          cursorPositionStart={cursorPositionStart}
+          cursorPositionEnd={cursorPositionEnd}
+          setMdText={setMdText}
+          setCursorPosition={setCursorPosition}
+          setCursor={setCursor}
+          setButtonValues={setButtonValues}
+        />
+        <Code
           editorRef={editorRef}
           mdText={mdText}
           buttonValues={buttonValues}

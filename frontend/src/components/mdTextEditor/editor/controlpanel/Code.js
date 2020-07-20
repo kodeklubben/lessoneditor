@@ -1,11 +1,12 @@
 import React from "react";
 import CPButton from "./CPButton";
 
-import { insertSection, cancelButton } from "./utils/buttonMethods";
-import { sections as config } from "../../settingsFiles/buttonConfig";
-import { SECTION_TEXT } from "components/mdTextEditor/settingsFiles/languages/editor_NO";
-
-const Sections = ({
+import {
+  buttonAction as codeAction,
+  cancelButton,
+} from "./utils/buttonMethods";
+import { code as config } from "../../settingsFiles/buttonConfig";
+const Code = ({
   editorRef,
   cursorPositionStart,
   cursorPositionEnd,
@@ -24,16 +25,15 @@ const Sections = ({
 
   let results;
   let cancelResults;
-  let h1 = "# ";
-  let h2 = "## ";
+  const temp = "```";
 
-  const setSection = (button, cursorIntON, cursorIntOFF, output, cancelInt) => {
+  const setCode = (button, cursorIntON, cursorIntOFF, output) => {
     cancelResults = cancelButton(
       buttonValues[button],
       mdText,
       cursorPositionStart,
       cursorPositionEnd,
-      cancelInt,
+      cursorIntON,
       output
     );
     if (cancelResults.cancel) {
@@ -44,20 +44,18 @@ const Sections = ({
       );
       return;
     }
-    results = insertSection(
+    results = codeAction(
       buttonValues[button],
-      button,
       mdText,
-      output,
       cursorPositionStart,
       cursorPositionEnd,
       cursorIntON,
       cursorIntOFF,
-      SECTION_TEXT
+      output
     );
 
     setChanges(
-      results.inputText,
+      results.mdText,
       results.cursorPositionStart,
       results.cursorPositionEnd
     );
@@ -70,47 +68,11 @@ const Sections = ({
       [button]: !buttonValues[button],
     }));
     switch (button) {
-      case "sec_activity":
-        setSection(
-          button,
-          0,
-          13,
-          h1 + SECTION_TEXT + " {.activity}\n",
-          h1.length
-        );
+      case "inline":
+        setCode(button, 1, 1, "``");
         break;
-      case "sec_intro":
-        setSection(button, 0, 10, h1 + SECTION_TEXT + " {.intro}\n", h1.length);
-        break;
-      case "sec_check":
-        setSection(button, 0, 10, h2 + SECTION_TEXT + " {.check}\n", h2.length);
-        break;
-      case "sec_tip":
-        setSection(button, 10, 10, "## {.tip}\n" + SECTION_TEXT, 10);
-        break;
-      case "sec_protip":
-        setSection(
-          button,
-          0,
-          11,
-          h2 + SECTION_TEXT + " {.protip}\n",
-          h2.length
-        );
-        break;
-      case "sec_challenge":
-        setSection(
-          button,
-          0,
-          14,
-          h2 + SECTION_TEXT + " {.challenge}\n",
-          h2.length
-        );
-        break;
-      case "sec_flag":
-        setSection(button, 0, 9, h2 + SECTION_TEXT + " {.flag}\n", h2.length);
-        break;
-      case "sec_try":
-        setSection(button, 0, 9, h1 + SECTION_TEXT + " {.try}\n", h1.length);
+      case "codeblock":
+        setCode(button, 4, 5, `${temp}\n\n${temp}`);
         break;
       default:
         break;
@@ -134,4 +96,4 @@ const Sections = ({
   );
 };
 
-export default Sections;
+export default Code;
