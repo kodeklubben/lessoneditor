@@ -5,22 +5,21 @@ const saveToDisk = require("../utils/save-to-disk");
 const fs = require("fs");
 const resolveUrlTemplate = require("../utils/resolve-url-template");
 const paths = require("../paths");
-const getImgLoc = (course, lesson, file) => {
-  return [getTempDir([course, lesson]), file].join(path.sep);
-};
 module.exports = (app) => {
   app.get(paths.DISPLAY_FILE, (req, res) => {
     const { course, lesson, file } = req.params;
-    const imgLoc = getImgLoc(course, lesson, file);
+    const imgLoc = getTempDir([course, lesson, file]);
     if (fs.existsSync(imgLoc)) {
-      return res.sendFile(imgLoc);
+      res.contentType(imgLoc);
+      res.sendFile(imgLoc);
     } else {
-      return res.status(404).send("");
+      res.status(404).send("");
     }
+    res.end();
   });
   app.post(paths.DISPLAY_FILE, async (req, res) => {
     const { course, lesson, file } = req.params;
-    const filename = getImgLoc(course, lesson, file);
+    const filename = getTempDir([course, lesson, file]);
     await saveToDisk(filename, Buffer.from(req.body));
     return res.send("ok");
   });
@@ -37,7 +36,7 @@ module.exports = (app) => {
       lesson,
       file,
     });
-    await saveToDisk(getImgLoc(course, lesson, file), req.file.buffer);
+    await saveToDisk(getTempDir([course, lesson, file]), req.file.buffer);
     res.send(fileInfo);
   });
 
