@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useContext } from "react";
-import CPButton from "./components/CPButton";
+import CPButton from "./CPButton";
 import ProfileMenu from "components/ProfileMenu";
 import {
   emphasis,

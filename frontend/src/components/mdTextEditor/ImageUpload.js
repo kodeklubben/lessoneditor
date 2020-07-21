@@ -4,16 +4,15 @@ import paths from "paths.json";
 import { useParams } from "react-router";
 import resolveUrlTemplate from "../../utils/resolve-url-template";
 
-const ImagePopup = (props) => {
+const ImageUpload = ({ imageSubmitHandler, editorRef, uploadImageRef }) => {
   const imageSizeErrorMessage = "Bildet kan ikke være over 5mb";
   const { course, lesson } = useParams();
   const fileSelectedHandler = async (event) => {
     try {
       if (event.target.files && event.target.files[0].size > 5000000) {
-        props.imagePopupSubmitHandler(imageSizeErrorMessage, "");
+        imageSubmitHandler(imageSizeErrorMessage, "");
       } else {
         const fileName = event.target.files[0].name;
-        props.storeImage(event.target.files[0]);
         const formData = new FormData();
         formData.append("file", event.target.files[0]);
         const config = {
@@ -27,14 +26,11 @@ const ImagePopup = (props) => {
           lesson,
         });
         const fileInfo = await axios.post(uploadUrl, formData, config);
-        props.imagePopupSubmitHandler(
-          fileInfo.data.imageUrl,
-          "filnavn: " + fileName
-        );
+        imageSubmitHandler(fileInfo.data.imageUrl, "filnavn: " + fileName);
       }
     } catch (err) {
       console.log(err);
-      props.editorRef.current.focus();
+      editorRef.current.focus();
     }
   };
 
@@ -43,10 +39,10 @@ const ImagePopup = (props) => {
       style={{ display: "none" }}
       type="file"
       accept=".jpg,.jpeg,.png,.gif"
-      ref={props.uploadImageRef}
+      ref={uploadImageRef}
       onChange={fileSelectedHandler}
     />
   );
 };
 
-export default ImagePopup;
+export default ImageUpload;

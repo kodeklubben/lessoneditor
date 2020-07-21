@@ -95,6 +95,7 @@
 }
 
 .textEditorContainer {
+  display: flex;
   background-color: #eef7ee;
   border: 1px solid #b1daae;
   border-radius: 5px;
