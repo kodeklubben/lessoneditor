@@ -20,26 +20,44 @@ export const UserContextProvider = (props) => {
         lessons: userLessonsRes.data,
       });
     }
+
     fetchData();
   }, []);
+  const getLesson = (course, lesson) => {
+    return user.lessons.find(
+      (item) => item.course === course && item.lesson === lesson
+    );
+  };
+  const saveLesson = async () => {
+    await axios.post(paths.USER_LESSONS, user.lessons);
+    setUser(user);
+  };
   const context = {
     user,
-    getLesson: (course, lesson) => {
-      return user.lessons.find(
-        (l) => l.course === course && l.lesson === lesson
-      );
-    },
+    getLesson,
     addLesson: async (course, lesson, title) => {
-      const existing = user.lessons.find(
-        (l) => l.course === course && l.lesson === lesson
-      );
+      const existing = getLesson(course, lesson);
       if (existing) {
         existing.title = title;
       } else {
         user.lessons.push({ course, lesson, title });
       }
-      await axios.post(paths.USER_LESSONS, user.lessons);
-      setUser(user);
+      await saveLesson();
+    },
+    removeLesson: async (course, lesson) => {
+      const existing = getLesson(course, lesson);
+      if (existing) {
+        user.lessons = user.lessons.filter(
+          (item) => item.course !== course && item.lesson !== lesson
+        );
+        saveLesson();
+      } else {
+        console.error(
+          "Trying to remove a lesson that doesn't exists",
+          course,
+          lesson
+        );
+      }
     },
   };
   return (

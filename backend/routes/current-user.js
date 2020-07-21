@@ -1,11 +1,7 @@
-const axios = require("axios");
 const paths = require("../paths");
-const gcsUrl = require("../utils/gcs-url");
-const saveToGcs = require("../utils/save-to-gcs");
-const constants = require("../constants.json");
-const getFilename = (username) => {
-  return [username, "user-lessons.json"].join("/");
-};
+const saveFile = require("../utils/save-file");
+const loadFile = require("../utils/load-file");
+
 module.exports = (app) => {
   app.get(paths.USER, async (req, res) => {
     res.send({
@@ -17,17 +13,20 @@ module.exports = (app) => {
     });
   });
   app.post(paths.USER_LESSONS, async (req, res) => {
-    const filename = getFilename(req.user.username);
     const buffer = Buffer.from(JSON.stringify(req.body));
-    await saveToGcs(filename, buffer, constants.BUCKET);
+    const pathParts = [req.user.username, "user-lessons.json"];
+    await saveFile(pathParts, buffer);
     res.send("ok");
   });
   app.get(paths.USER_LESSONS, async (req, res) => {
-    const filename = getFilename(req.user.username);
-    const url = gcsUrl(filename, constants.BUCKET);
+    const pathParts = [req.user.username, "user-lessons.json"];
     try {
-      const result = await axios.get(url);
-      res.send(result.data);
+      const result = await loadFile(pathParts);
+      if (result) {
+        res.send(result);
+      } else {
+        res.send([]);
+      }
     } catch (e) {
       if (e.response.status === 404) {
         res.send([]);
