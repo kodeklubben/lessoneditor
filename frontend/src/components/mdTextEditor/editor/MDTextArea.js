@@ -50,39 +50,49 @@ const keyMap = {
 // needs to be updated manually with same parameters as buttonConfig
 // SORRY FOR WET CODE AND MANUAL UPDATE. NEED HELP FIXING
 
-const MDTextArea = (props) => {
+const MDTextArea = ({
+  handlePreview,
+  newHandleButtonClick,
+  editorRef,
+  mdText,
+  onInputChange,
+  onTextareaKeyDown,
+  onTextareaKeyUp,
+  onTextareaMouseDown,
+  onTextareaSelect,
+}) => {
   const handlers = {
     // preview button
-    PREVIEW: () => props.handlePreview(true),
+    PREVIEW: () => handlePreview(true),
 
     // emphasis
     BOLD: () =>
-      props.handleButtonClick(
-        emphasis[0].bTitle,
+      newHandleButtonClick(
+        emphasis[0].buttonTitle,
         emphasis[0].output,
         emphasis[0].cursorIntON,
         emphasis[0].cursorIntOFF,
         emphasis[0].endOutput
       ),
     ITALIC: () =>
-      props.handleButtonClick(
-        emphasis[1].bTitle,
+      newHandleButtonClick(
+        emphasis[1].buttonTitle,
         emphasis[1].output,
         emphasis[1].cursorIntON,
         emphasis[1].cursorIntOFF,
         emphasis[1].endOutput
       ),
     HEADING: () =>
-      props.handleButtonClick(
-        emphasis[2].bTitle,
+      newHandleButtonClick(
+        emphasis[2].buttonTitle,
         emphasis[2].output,
         emphasis[2].cursorIntON,
         emphasis[2].cursorIntOFF,
         emphasis[2].endOutput
       ),
     STRIKETHROUGH: () =>
-      props.handleButtonClick(
-        emphasis[3].bTitle,
+      newHandleButtonClick(
+        emphasis[3].buttonTitle,
         emphasis[3].output,
         emphasis[3].cursorIntON,
         emphasis[3].cursorIntOFF,
@@ -91,16 +101,16 @@ const MDTextArea = (props) => {
 
     //undoRedo
     UNDO: () =>
-      props.handleButtonClick(
-        undoRedo[0].bTitle,
+      newHandleButtonClick(
+        undoRedo[0].buttonTitle,
         undoRedo[0].output,
         undoRedo[0].cursorIntON,
         undoRedo[0].cursorIntOFF,
         undoRedo[0].endOutput
       ),
     REDO: () =>
-      props.handleButtonClick(
-        undoRedo[1].bTitle,
+      newHandleButtonClick(
+        undoRedo[1].buttonTitle,
         undoRedo[1].output,
         undoRedo[1].cursorIntON,
         undoRedo[1].cursorIntOFF,
@@ -109,24 +119,24 @@ const MDTextArea = (props) => {
 
     //saveLoadNew
     NEW: () =>
-      props.handleButtonClick(
-        saveLoadNew[0].bTitle,
+      newHandleButtonClick(
+        saveLoadNew[0].buttonTitle,
         saveLoadNew[0].output,
         saveLoadNew[0].cursorIntON,
         saveLoadNew[0].cursorIntOFF,
         saveLoadNew[0].endOutput
       ),
     LOAD: () =>
-      props.handleButtonClick(
-        saveLoadNew[1].bTitle,
+      newHandleButtonClick(
+        saveLoadNew[1].buttonTitle,
         saveLoadNew[1].output,
         saveLoadNew[1].cursorIntON,
         saveLoadNew[1].cursorIntOFF,
         saveLoadNew[1].endOutput
       ),
     SAVE: () =>
-      props.handleButtonClick(
-        saveLoadNew[2].bTitle,
+      newHandleButtonClick(
+        saveLoadNew[2].buttonTitle,
         saveLoadNew[2].output,
         saveLoadNew[2].cursorIntON,
         saveLoadNew[2].cursorIntOFF,
@@ -135,8 +145,8 @@ const MDTextArea = (props) => {
 
     //image
     IMAGE: () =>
-      props.handleButtonClick(
-        image[0].bTitle,
+      newHandleButtonClick(
+        image[0].buttonTitle,
         image[0].output,
         image[0].cursorIntON,
         image[0].cursorIntOFF,
@@ -145,24 +155,24 @@ const MDTextArea = (props) => {
 
     //lists
     LISTUL: () =>
-      props.handleButtonClick(
-        lists[0].bTitle,
+      newHandleButtonClick(
+        lists[0].buttonTitle,
         lists[0].output,
         lists[0].cursorIntON,
         lists[0].cursorIntOFF,
         lists[0].endOutput
       ),
     LISTOL: () =>
-      props.handleButtonClick(
-        lists[1].bTitle,
+      newHandleButtonClick(
+        lists[1].buttonTitle,
         lists[1].output,
         lists[1].cursorIntON,
         lists[1].cursorIntOFF,
         lists[1].endOutput
       ),
     CHECKLIST: () =>
-      props.handleButtonClick(
-        lists[2].bTitle,
+      newHandleButtonClick(
+        lists[2].buttonTitle,
         lists[2].output,
         lists[2].cursorIntON,
         lists[2].cursorIntOFF,
@@ -171,64 +181,64 @@ const MDTextArea = (props) => {
 
     //sections
     ACTIVITY: () =>
-      props.handleButtonClick(
-        sections[0].bTitle,
+      newHandleButtonClick(
+        sections[0].buttonTitle,
         sections[0].output,
         sections[0].cursorIntON,
         sections[0].cursorIntOFF,
         sections[0].endOutput
       ),
     INTRO: () =>
-      props.handleButtonClick(
-        sections[1].bTitle,
+      newHandleButtonClick(
+        sections[1].buttonTitle,
         sections[1].output,
         sections[1].cursorIntON,
         sections[1].cursorIntOFF,
         sections[1].endOutput
       ),
     CHECK: () =>
-      props.handleButtonClick(
-        sections[2].bTitle,
+      newHandleButtonClick(
+        sections[2].buttonTitle,
         sections[2].output,
         sections[2].cursorIntON,
         sections[2].cursorIntOFF,
         sections[2].endOutput
       ),
     TIP: () =>
-      props.handleButtonClick(
-        sections[3].bTitle,
+      newHandleButtonClick(
+        sections[3].buttonTitle,
         sections[3].output,
         sections[3].cursorIntON,
         sections[3].cursorIntOFF,
         sections[3].endOutput
       ),
     PROTIP: () =>
-      props.handleButtonClick(
-        sections[4].bTitle,
+      newHandleButtonClick(
+        sections[4].buttonTitle,
         sections[4].output,
         sections[4].cursorIntON,
         sections[4].cursorIntOFF,
         sections[4].endOutput
       ),
     CHALLENGE: () =>
-      props.handleButtonClick(
-        sections[5].bTitle,
+      newHandleButtonClick(
+        sections[5].buttonTitle,
         sections[5].output,
         sections[5].cursorIntON,
         sections[5].cursorIntOFF,
         sections[5].endOutput
       ),
     FLAG: () =>
-      props.handleButtonClick(
-        sections[6].bTitle,
+      newHandleButtonClick(
+        sections[6].buttonTitle,
         sections[6].output,
         sections[6].cursorIntON,
         sections[6].cursorIntOFF,
         sections[6].endOutput
       ),
     TRY: () =>
-      props.handleButtonClick(
-        sections[7].bTitle,
+      newHandleButtonClick(
+        sections[7].buttonTitle,
         sections[7].output,
         sections[7].cursorIntON,
         sections[7].cursorIntOFF,
@@ -237,16 +247,16 @@ const MDTextArea = (props) => {
 
     //code
     INLINE: () =>
-      props.handleButtonClick(
-        code[0].bTitle,
+      newHandleButtonClick(
+        code[0].buttonTitle,
         code[0].output,
         code[0].cursorIntON,
         code[0].cursorIntOFF,
         code[0].endOutput
       ),
     CODEBLOCK: () =>
-      props.handleButtonClick(
-        code[1].bTitle,
+      newHandleButtonClick(
+        code[1].buttonTitle,
         code[1].output,
         code[1].cursorIntON,
         code[1].cursorIntOFF,
@@ -257,16 +267,16 @@ const MDTextArea = (props) => {
     <GlobalHotKeys id="hotkeysID" handlers={handlers} keyMap={keyMap}>
       <textarea
         autoFocus
-        ref={props.editorRef}
+        ref={editorRef}
         className="TextArea"
-        value={props.mdText}
-        onChange={(event) => props.onInputChange(event)}
-        onKeyDown={(event) => props.onTextareaKeyDown(event)}
-        onKeyUp={(event) => props.onTextareaKeyUp(event)}
-        onMouseDown={(event) => props.onTextareaMouseDown(event)}
-        onTouchEnd={(event) => props.onTextareaMouseDown(event)}
-        onSelect={(event) => props.onTextareaSelect(event)}
-        onWheel={(event) => props.onTextareaMouseDown(event)}
+        value={mdText}
+        onChange={(event) => onInputChange(event)}
+        onKeyDown={(event) => onTextareaKeyDown(event)}
+        onKeyUp={(event) => onTextareaKeyUp(event)}
+        onMouseDown={(event) => onTextareaMouseDown(event)}
+        onTouchEnd={(event) => onTextareaMouseDown(event)}
+        onSelect={(event) => onTextareaSelect(event)}
+        onWheel={(event) => onTextareaMouseDown(event)}
       />
     </GlobalHotKeys>
   );
