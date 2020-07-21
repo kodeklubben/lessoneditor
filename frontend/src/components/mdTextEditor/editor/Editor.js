@@ -3,13 +3,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
 import MDTextArea from "./MDTextArea";
 import MDPreview from "../mdPreview/MDPreview";
-import Emphasis from "./controlpanel/Emphasis";
-import UndoRedo from "./controlpanel/UndoRedo";
-import Image from "./controlpanel/Image";
-import Preview from "./controlpanel/Preview";
-import Lists from "./controlpanel/Lists";
-import Sections from "./controlpanel/Sections";
-import Code from "./controlpanel/Code";
+import ButtonPanel from "./controlpanel/ButtonPanel";
 import ImageUpload from "../ImageUpload";
 import editorButtonsValue from "./editorButtonsValue";
 import fetchMdText from "../../../api/fetch-md-text";
@@ -306,76 +300,36 @@ const Editor = () => {
 
   return (
     <div className="editor">
-      <p>New Editor</p>
       <p>{autoSaveMessage}</p>
       <ImageUpload
         uploadImageRef={uploadImageRef}
         editorRef={editorRef}
         imageSubmitHandler={imageSubmitHandler}
       />
+      <ButtonPanel
+        editorRef={editorRef}
+        uploadImageRef={uploadImageRef}
+        mdText={mdText}
+        buttonValues={buttonValues}
+        cursorPositionStart={cursorPositionStart}
+        cursorPositionEnd={cursorPositionEnd}
+        undo={undo}
+        redo={redo}
+        undoCursorPosition={undoCursorPosition}
+        redoCursorPosition={redoCursorPosition}
+        handlePreview={handlePreview}
+        pushUndoValue={pushUndoValue}
+        pushRedoValue={pushRedoValue}
+        setMdText={setMdText}
+        setCursorPosition={setCursorPosition}
+        setCursor={setCursor}
+        setButtonValues={setButtonValues}
+        setUndoCursorPosition={setUndoCursorPosition}
+        setRedoCursorPosition={setRedoCursorPosition}
+        setListButtonValues={setListButtonValues}
+      />
 
       <div className="textEditorContainer">
-        <Preview handlePreview={handlePreview} />
-        <Emphasis
-          editorRef={editorRef}
-          mdText={mdText}
-          buttonValues={buttonValues}
-          cursorPositionStart={cursorPositionStart}
-          cursorPositionEnd={cursorPositionEnd}
-          setMdText={setMdText}
-          setCursorPosition={setCursorPosition}
-          setCursor={setCursor}
-          setButtonValues={setButtonValues}
-        />
-        <UndoRedo
-          editorRef={editorRef}
-          mdText={mdText}
-          undo={undo}
-          redo={redo}
-          cursorPositionStart={cursorPositionStart}
-          undoCursorPosition={undoCursorPosition}
-          redoCursorPosition={redoCursorPosition}
-          pushUndoValue={pushUndoValue}
-          pushRedoValue={pushRedoValue}
-          setRedoCursorPosition={setRedoCursorPosition}
-          setCursorPosition={setCursorPosition}
-          setUndoCursorPosition={setUndoCursorPosition}
-        />
-        <Image editorRef={editorRef} uploadImageRef={uploadImageRef} />
-        <Lists
-          editorRef={editorRef}
-          mdText={mdText}
-          buttonValues={buttonValues}
-          cursorPositionStart={cursorPositionStart}
-          cursorPositionEnd={cursorPositionEnd}
-          setMdText={setMdText}
-          setCursorPosition={setCursorPosition}
-          setCursor={setCursor}
-          setListButtonValues={setListButtonValues}
-          setButtonValues={setButtonValues}
-        />
-        <Sections
-          editorRef={editorRef}
-          mdText={mdText}
-          buttonValues={buttonValues}
-          cursorPositionStart={cursorPositionStart}
-          cursorPositionEnd={cursorPositionEnd}
-          setMdText={setMdText}
-          setCursorPosition={setCursorPosition}
-          setCursor={setCursor}
-          setButtonValues={setButtonValues}
-        />
-        <Code
-          editorRef={editorRef}
-          mdText={mdText}
-          buttonValues={buttonValues}
-          cursorPositionStart={cursorPositionStart}
-          cursorPositionEnd={cursorPositionEnd}
-          setMdText={setMdText}
-          setCursorPosition={setCursorPosition}
-          setCursor={setCursor}
-          setButtonValues={setButtonValues}
-        />
         <MDTextArea
           mdText={mdText}
           editorRef={editorRef}

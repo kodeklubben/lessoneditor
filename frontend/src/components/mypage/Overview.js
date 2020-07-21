@@ -18,7 +18,7 @@ const Overview = () => {
   const { lessons } = context.user;
   return (
     <div>
-      {/* <Header /> */}
+      <Header />
       <div className="overViewContainer">
         <h3>Lag ny oppgave</h3>
         <div className="ui card">
