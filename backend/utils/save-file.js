@@ -1,6 +1,7 @@
+const getTempDir = require("./get-temp-dir");
 const isAppEngine = require("./isAppEngine");
 const saveToDisk = require("./save-to-disk");
-const getTempDir = require("./get-temp-dir");
+const saveToGcs = require("./save-to-gcs");
 
 module.exports = async (pathParts, buffer) => {
   if (isAppEngine()) {
