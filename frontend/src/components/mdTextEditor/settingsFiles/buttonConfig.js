@@ -69,7 +69,7 @@ const KEY_COMBINATIONS = {
 
 const emphasis = [
   {
-    bTitle: "bold",
+    buttonTitle: "bold",
     icon: "bold",
     output: "****",
     title: BUTTON_TITLE.bold,
@@ -79,7 +79,7 @@ const emphasis = [
     shortcut: KEY_COMBINATIONS.bold.join(""),
   },
   {
-    bTitle: "italic",
+    buttonTitle: "italic",
     icon: "italic",
     output: "**",
     title: BUTTON_TITLE.italic,
@@ -89,7 +89,7 @@ const emphasis = [
     shortcut: KEY_COMBINATIONS.italic.join(""),
   },
   {
-    bTitle: "heading",
+    buttonTitle: "heading",
     icon: "heading",
     output: "## ",
     title: BUTTON_TITLE.heading,
@@ -99,7 +99,7 @@ const emphasis = [
     shortcut: KEY_COMBINATIONS.heading.join(""),
   },
   {
-    bTitle: "strikethrough",
+    buttonTitle: "strikethrough",
     icon: "strikethrough",
     output: "~~~~",
     title: BUTTON_TITLE.strikethrough,
@@ -112,7 +112,7 @@ const emphasis = [
 
 const undoRedo = [
   {
-    bTitle: "undo",
+    buttonTitle: "undo",
     icon: "undo",
     output: "",
     title: BUTTON_TITLE.undo,
@@ -122,7 +122,7 @@ const undoRedo = [
     shortcut: KEY_COMBINATIONS.undo.join(""),
   },
   {
-    bTitle: "redo",
+    buttonTitle: "redo",
     icon: "redo",
     output: "",
     title: BUTTON_TITLE.redo,
@@ -135,7 +135,7 @@ const undoRedo = [
 
 const saveLoadNew = [
   {
-    bTitle: "new",
+    buttonTitle: "new",
     icon: "file",
     output: "",
     title: BUTTON_TITLE.new,
@@ -145,7 +145,7 @@ const saveLoadNew = [
     shortcut: KEY_COMBINATIONS.new.join(""),
   },
   {
-    bTitle: "load",
+    buttonTitle: "load",
     icon: "upload",
     output: "",
     title: BUTTON_TITLE.load,
@@ -155,7 +155,7 @@ const saveLoadNew = [
     shortcut: KEY_COMBINATIONS.load.join(""),
   },
   {
-    bTitle: "save",
+    buttonTitle: "save",
     icon: "save",
     output: "",
     title: BUTTON_TITLE.save,
@@ -168,7 +168,7 @@ const saveLoadNew = [
 
 const image = [
   {
-    bTitle: "image",
+    buttonTitle: "image",
     icon: "file image",
     output: "",
     title: BUTTON_TITLE.image,
@@ -181,7 +181,7 @@ const image = [
 
 const preview = [
   {
-    bTitle: "preview",
+    buttonTitle: "preview",
     icon: "eye",
     output: "",
     title: BUTTON_TITLE.preview,
@@ -194,7 +194,7 @@ const preview = [
 
 const lists = [
   {
-    bTitle: "listUl",
+    buttonTitle: "listUl",
     icon: "list ul",
     output: "- ",
     title: BUTTON_TITLE.listUl,
@@ -204,7 +204,7 @@ const lists = [
     shortcut: KEY_COMBINATIONS.listul.join(""),
   },
   {
-    bTitle: "listOl",
+    buttonTitle: "listOl",
     icon: "list ol",
     output: "1. ",
     title: BUTTON_TITLE.listOl,
@@ -214,7 +214,7 @@ const lists = [
     shortcut: KEY_COMBINATIONS.listol.join(""),
   },
   {
-    bTitle: "listCheck",
+    buttonTitle: "listCheck",
     icon: "tasks",
     output: "- [\u0020] ",
     title: BUTTON_TITLE.listCheck,
@@ -225,12 +225,12 @@ const lists = [
   },
 ];
 
-// !! bTitle - first chars must be "sec_" when in sections,
+// !! buttonTitle - first chars must be "sec_" when in sections,
 // if new buttons are added remember to update buttons-state in editor.js
 
 const sections = [
   {
-    bTitle: "sec_activity",
+    buttonTitle: "sec_activity",
     icon: "",
     output: "# " + SECTION_TEXT + " {.activity}\n",
     title: BUTTON_TITLE.activity,
@@ -240,7 +240,7 @@ const sections = [
     shortcut: KEY_COMBINATIONS.activity.join(""),
   },
   {
-    bTitle: "sec_intro",
+    buttonTitle: "sec_intro",
     icon: "",
     output: "# " + SECTION_TEXT + " {.intro}\n",
     title: BUTTON_TITLE.intro,
@@ -250,7 +250,7 @@ const sections = [
     shortcut: KEY_COMBINATIONS.intro.join(""),
   },
   {
-    bTitle: "sec_check",
+    buttonTitle: "sec_check",
     icon: "",
     output: "## " + SECTION_TEXT + " {.check}\n",
     title: BUTTON_TITLE.check,
@@ -260,7 +260,7 @@ const sections = [
     shortcut: KEY_COMBINATIONS.check.join(""),
   },
   {
-    bTitle: "sec_tip",
+    buttonTitle: "sec_tip",
     icon: "",
     output: "## {.tip}\n" + SECTION_TEXT,
     title: BUTTON_TITLE.tip,
@@ -270,7 +270,7 @@ const sections = [
     shortcut: KEY_COMBINATIONS.tip.join(""),
   },
   {
-    bTitle: "sec_protip",
+    buttonTitle: "sec_protip",
     icon: "",
     output: "## " + SECTION_TEXT + " {.protip}\n",
     title: BUTTON_TITLE.protip,
@@ -280,7 +280,7 @@ const sections = [
     shortcut: KEY_COMBINATIONS.protip.join(""),
   },
   {
-    bTitle: "sec_challenge",
+    buttonTitle: "sec_challenge",
     icon: "",
     output: "## " + SECTION_TEXT + " {.challenge}\n",
     title: BUTTON_TITLE.challenge,
@@ -290,7 +290,7 @@ const sections = [
     shortcut: KEY_COMBINATIONS.challenge.join(""),
   },
   {
-    bTitle: "sec_flag",
+    buttonTitle: "sec_flag",
     icon: "",
     output: "## " + SECTION_TEXT + " {.flag}\n",
     title: BUTTON_TITLE.flag,
@@ -300,7 +300,7 @@ const sections = [
     shortcut: KEY_COMBINATIONS.flag.join(""),
   },
   {
-    bTitle: "sec_try",
+    buttonTitle: "sec_try",
     icon: "",
     output: "# " + SECTION_TEXT + " {.try}\n",
     title: BUTTON_TITLE.try,
@@ -313,7 +313,7 @@ const sections = [
 
 const code = [
   {
-    bTitle: "inline",
+    buttonTitle: "inline",
     icon: "terminal",
     output: "``",
     title: BUTTON_TITLE.inline,
@@ -323,7 +323,7 @@ const code = [
     shortcut: KEY_COMBINATIONS.inline.join(""),
   },
   {
-    bTitle: "codeblock",
+    buttonTitle: "codeblock",
     icon: "code",
     output: `${temp}\n\n${temp}`,
     title: BUTTON_TITLE.codeblock,

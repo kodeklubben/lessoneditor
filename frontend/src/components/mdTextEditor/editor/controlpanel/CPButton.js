@@ -1,7 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Button, Icon, Popup } from "semantic-ui-react";
 
-const Buttons = (props) => {
+const Buttons = ({
+  icon,
+  title,
+  onButtonClick,
+  buttonTitle,
+  output,
+  cursorIntON,
+  cursorIntOFF,
+  endOutput,
+  shortcutKey,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
 
   let buttonPressTimer = "";
@@ -41,7 +51,7 @@ const Buttons = (props) => {
     return smallScreen.current ? (
       <>
         <Popup
-          content={props.title}
+          content={title}
           inverted
           basic
           size="tiny"
@@ -50,7 +60,7 @@ const Buttons = (props) => {
           onOpen={handleOpen}
           onClose={handleClose}
           trigger={
-            props.icon ? (
+            icon ? (
               <Button
                 id="custom"
                 size="big"
@@ -58,16 +68,16 @@ const Buttons = (props) => {
                 onTouchStart={handleButtonPress}
                 onTouchEnd={handleClose}
                 onClick={() =>
-                  props.onButtonClick(
-                    props.bTitle,
-                    props.output,
-                    props.cursorIntON,
-                    props.cursorIntOFF,
-                    props.endOutput
+                  onButtonClick(
+                    buttonTitle,
+                    output,
+                    cursorIntON,
+                    cursorIntOFF,
+                    endOutput
                   )
                 }
               >
-                <Icon name={props.icon} />
+                <Icon name={icon} />
               </Button>
             ) : (
               <Button
@@ -77,16 +87,16 @@ const Buttons = (props) => {
                 onTouchStart={handleButtonPress}
                 onTouchEnd={handleClose}
                 onClick={() =>
-                  props.onButtonClick(
-                    props.bTitle,
-                    props.output,
-                    props.cursorIntON,
-                    props.cursorIntOFF,
-                    props.endOutput
+                  onButtonClick(
+                    buttonTitle,
+                    output,
+                    cursorIntON,
+                    cursorIntOFF,
+                    endOutput
                   )
                 }
               >
-                {props.title}
+                {title}
               </Button>
             )
           }
@@ -95,28 +105,28 @@ const Buttons = (props) => {
     ) : (
       <>
         <Popup
-          content={props.title + " (" + props.shortcutKey + ")"}
+          content={title + " (" + shortcutKey + ")"}
           mouseEnterDelay={250}
           mouseLeaveDelay={250}
           inverted
           trigger={
-            props.icon ? (
+            icon ? (
               <Button
                 id="custom"
                 size="big"
                 className="CPButton"
                 onTouchStart={handleButtonPress}
                 onClick={() =>
-                  props.onButtonClick(
-                    props.bTitle,
-                    props.output,
-                    props.cursorIntON,
-                    props.cursorIntOFF,
-                    props.endOutput
+                  onButtonClick(
+                    buttonTitle,
+                    output,
+                    cursorIntON,
+                    cursorIntOFF,
+                    endOutput
                   )
                 }
               >
-                <Icon name={props.icon} />
+                <Icon name={icon} />
               </Button>
             ) : (
               <Button
@@ -124,16 +134,16 @@ const Buttons = (props) => {
                 size="big"
                 className="CPButton"
                 onClick={() =>
-                  props.onButtonClick(
-                    props.bTitle,
-                    props.output,
-                    props.cursorIntON,
-                    props.cursorIntOFF,
-                    props.endOutput
+                  onButtonClick(
+                    buttonTitle,
+                    output,
+                    cursorIntON,
+                    cursorIntOFF,
+                    endOutput
                   )
                 }
               >
-                {props.title}
+                {title}
               </Button>
             )
           }
