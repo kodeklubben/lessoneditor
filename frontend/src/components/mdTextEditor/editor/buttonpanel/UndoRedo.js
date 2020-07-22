@@ -19,7 +19,7 @@ const UndoRedo = ({
   cursorPositionStart,
   setCursorPosition,
 }) => {
-  const newHandleButtonClick = (button) => {
+  const handleButtonClick = (button) => {
     editorRef.current.focus();
     switch (button) {
       case "undo":
@@ -63,7 +63,7 @@ const UndoRedo = ({
             buttonTitle={element.buttonTitle}
             icon={element.icon}
             title={element.title}
-            onButtonClick={newHandleButtonClick}
+            onButtonClick={handleButtonClick}
             shortcutKey={element.shortcut}
           />
         ))}

@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
 import MDTextArea from "./MDTextArea";
 import MDPreview from "../mdPreview/MDPreview";
-import ButtonPanel from "./controlpanel/ButtonPanel";
+import ButtonPanel from "./buttonpanel/ButtonPanel";
 import ImageUpload from "../ImageUpload";
 import editorButtonsValue from "./editorButtonsValue";
 import fetchMdText from "../../../api/fetch-md-text";
@@ -27,8 +27,8 @@ for (let i = 0; i < Object.values(KEY).length; i++) {
 }
 
 const Editor = () => {
+  const [test, setTest] = useState(false);
   const context = useContext(UserContext);
-
   const [mdText, setMdText] = useState("");
   const [savedText, setSavedText] = useState("");
   // const lessonContext = useContext(LessonContext);
@@ -49,6 +49,11 @@ const Editor = () => {
 
   let editorRef = useRef();
   let uploadImageRef = useRef();
+
+  const testings = () => {
+    setTest(!test);
+    console.log("test : " + test);
+  };
 
   const pushUndoValue = (mdText, cursorPositionStart) => {
     resetButtons();
@@ -182,10 +187,7 @@ const Editor = () => {
     }
 
     if (event.key === "Enter") {
-      if (
-        buttonValues[listButtonValues["bTitle"]] &&
-        listButtonValues["bTitle"]
-      ) {
+      if (buttonValues[listButtonValues["bTitle"]]) {
         event.preventDefault();
 
         if (
@@ -270,7 +272,6 @@ const Editor = () => {
     }
   };
 
-  // Show/hide image popup
   const imageSubmitHandler = (imageInputValue, filename) => {
     if (imageInputValue) {
       pushUndoValue(mdText, cursorPositionStart);
@@ -295,7 +296,7 @@ const Editor = () => {
   };
 
   const handlePreview = (event) => {
-    alert("Preview");
+    console.log("Previewbutton pressed");
   };
 
   return (
@@ -307,6 +308,7 @@ const Editor = () => {
         imageSubmitHandler={imageSubmitHandler}
       />
       <ButtonPanel
+        testings={testings}
         editorRef={editorRef}
         uploadImageRef={uploadImageRef}
         mdText={mdText}
@@ -331,7 +333,9 @@ const Editor = () => {
 
       <div className="textEditorContainer">
         <MDTextArea
+          testings={testings}
           mdText={mdText}
+          buttonValues={buttonValues}
           editorRef={editorRef}
           onInputChange={handleChange}
           onTextareaKeyDown={onTextareaKeyDown}
@@ -339,6 +343,22 @@ const Editor = () => {
           onTextareaMouseDown={onTextareaMouseDown}
           onTextareaSelect={onTextareaSelect}
           handlePreview={handlePreview}
+          uploadImageRef={uploadImageRef}
+          cursorPositionStart={cursorPositionStart}
+          cursorPositionEnd={cursorPositionEnd}
+          undo={undo}
+          redo={redo}
+          undoCursorPosition={undoCursorPosition}
+          redoCursorPosition={redoCursorPosition}
+          pushUndoValue={pushUndoValue}
+          pushRedoValue={pushRedoValue}
+          setMdText={setMdText}
+          setCursorPosition={setCursorPosition}
+          setCursor={setCursor}
+          setButtonValues={setButtonValues}
+          setUndoCursorPosition={setUndoCursorPosition}
+          setRedoCursorPosition={setRedoCursorPosition}
+          setListButtonValues={setListButtonValues}
         />
         <MDPreview mdText={mdText} />
       </div>

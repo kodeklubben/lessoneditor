@@ -2,11 +2,18 @@ import React from "react";
 import CPButton from "./CPButton";
 
 import {
-  buttonAction as codeAction,
   cancelButton,
+  buttonAction as emphasisAction,
+  heading,
 } from "./utils/buttonMethods";
-import { code as config } from "../../settingsFiles/buttonConfig";
-const Code = ({
+
+import { emphasis as config } from "../../settingsFiles/buttonConfig";
+
+let output;
+let cancelResults;
+let results;
+
+const Emphasis = ({
   editorRef,
   cursorPositionStart,
   cursorPositionEnd,
@@ -23,11 +30,7 @@ const Code = ({
     setMdText(mdText);
   };
 
-  let results;
-  let cancelResults;
-  const temp = "```";
-
-  const setCode = (button, cursorIntON, cursorIntOFF, output) => {
+  const setEmphasis = (button, cursorIntON, cursorIntOFF, output) => {
     cancelResults = cancelButton(
       buttonValues[button],
       mdText,
@@ -44,7 +47,8 @@ const Code = ({
       );
       return;
     }
-    results = codeAction(
+
+    results = emphasisAction(
       buttonValues[button],
       mdText,
       cursorPositionStart,
@@ -61,18 +65,42 @@ const Code = ({
     );
   };
 
-  const newHandleButtonClick = (button) => {
+  const handleButtonClick = (button) => {
     editorRef.current.focus();
     setButtonValues((prevState) => ({
       ...prevState,
       [button]: !buttonValues[button],
     }));
     switch (button) {
-      case "inline":
-        setCode(button, 1, 1, "``");
+      case "bold":
+        setEmphasis(button, 2, 2, "****");
         break;
-      case "codeblock":
-        setCode(button, 4, 5, `${temp}\n\n${temp}`);
+      case "italic":
+        setEmphasis(button, 1, 1, "**");
+        break;
+      case "heading":
+        output = "## ";
+
+        results = heading(
+          buttonValues[button],
+          mdText,
+          cursorPositionStart,
+          output
+        );
+        setButtonValues((prevState) => ({
+          ...prevState,
+          [button]: results.isOn,
+        }));
+        setChanges(
+          results.mdText,
+          results.cursorPositionStart,
+          results.cursorPositionStart
+        );
+
+        break;
+
+      case "strikethrough":
+        setEmphasis(button, 2, 2, "~~~~");
         break;
       default:
         break;
@@ -87,7 +115,7 @@ const Code = ({
             buttonTitle={element.buttonTitle}
             icon={element.icon}
             title={element.title}
-            onButtonClick={newHandleButtonClick}
+            onButtonClick={handleButtonClick}
             shortcutKey={element.shortcut}
           />
         ))}
@@ -96,4 +124,4 @@ const Code = ({
   );
 };
 
-export default Code;
+export default Emphasis;
