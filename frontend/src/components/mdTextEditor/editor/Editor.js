@@ -1,4 +1,9 @@
 import "./editor.css";
+import {
+  cancelButton,
+  buttonAction,
+} from "../editor/buttonpanel/utils/buttonMethods";
+
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
 import MDTextArea from "./MDTextArea";
@@ -27,7 +32,7 @@ for (let i = 0; i < Object.values(KEY).length; i++) {
 }
 
 const Editor = () => {
-  const [test, setTest] = useState(true);
+  const [test, setTest] = useState(false);
   const context = useContext(UserContext);
   const [mdText, setMdText] = useState("");
   const [savedText, setSavedText] = useState("");
@@ -50,7 +55,7 @@ const Editor = () => {
   let editorRef = useRef();
   let uploadImageRef = useRef();
 
-  const testings = (text) => {
+  const testings = () => {
     console.log(test);
     setTest(!test);
     console.log("test : " + test, Math.random(1, 1000));
@@ -300,6 +305,12 @@ const Editor = () => {
     // console.log("Previewbutton pressed");
   };
 
+  const handlers = {
+    BOLD: () => {
+      testings();
+    },
+  };
+
   return (
     <div className="editor">
       <p>{autoSaveMessage}</p>
@@ -334,32 +345,14 @@ const Editor = () => {
 
       <div className="textEditorContainer">
         <MDTextArea
-          testings={testings}
+          handlers={handlers}
           mdText={mdText}
-          buttonValues={buttonValues}
           editorRef={editorRef}
           onInputChange={handleChange}
           onTextareaKeyDown={onTextareaKeyDown}
           onTextareaKeyUp={onTextareaKeyUp}
           onTextareaMouseDown={onTextareaMouseDown}
           onTextareaSelect={onTextareaSelect}
-          handlePreview={handlePreview}
-          uploadImageRef={uploadImageRef}
-          cursorPositionStart={cursorPositionStart}
-          cursorPositionEnd={cursorPositionEnd}
-          undo={undo}
-          redo={redo}
-          undoCursorPosition={undoCursorPosition}
-          redoCursorPosition={redoCursorPosition}
-          pushUndoValue={pushUndoValue}
-          pushRedoValue={pushRedoValue}
-          setMdText={setMdText}
-          setCursorPosition={setCursorPosition}
-          setCursor={setCursor}
-          setButtonValues={setButtonValues}
-          setUndoCursorPosition={setUndoCursorPosition}
-          setRedoCursorPosition={setRedoCursorPosition}
-          setListButtonValues={setListButtonValues}
         />
         <MDPreview mdText={mdText} />
       </div>
