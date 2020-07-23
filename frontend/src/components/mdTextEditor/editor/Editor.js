@@ -20,7 +20,11 @@ import {
 import { UserContext } from "../../../contexts/UserContext";
 // import { LessonContext } from "../../../contexts/LessonContext";
 
-let setButton = editorButtonsValue;
+let isKeyShortcutOn = editorButtonsValue;
+
+let setKeyShortcutOn = (button) => {
+  isKeyShortcutOn[button] = !isKeyShortcutOn[button];
+};
 
 let orderedListIndex = 2;
 
@@ -333,7 +337,8 @@ const Editor = () => {
 
       <div className="textEditorContainer">
         <MDTextArea
-          setButton={setButton}
+          isKeyShortcutOn={isKeyShortcutOn}
+          setKeyShortcutOn={setKeyShortcutOn}
           mdText={mdText}
           editorRef={editorRef}
           onInputChange={handleChange}
@@ -341,6 +346,22 @@ const Editor = () => {
           onTextareaKeyUp={onTextareaKeyUp}
           onTextareaMouseDown={onTextareaMouseDown}
           onTextareaSelect={onTextareaSelect}
+          uploadImageRef={uploadImageRef}
+          cursorPositionStart={cursorPositionStart}
+          cursorPositionEnd={cursorPositionEnd}
+          undo={undo}
+          redo={redo}
+          undoCursorPosition={undoCursorPosition}
+          redoCursorPosition={redoCursorPosition}
+          handlePreview={handlePreview}
+          pushUndoValue={pushUndoValue}
+          pushRedoValue={pushRedoValue}
+          setMdText={setMdText}
+          setCursorPosition={setCursorPosition}
+          setCursor={setCursor}
+          setUndoCursorPosition={setUndoCursorPosition}
+          setRedoCursorPosition={setRedoCursorPosition}
+          setListButtonValues={setListButtonValues}
         />
         <MDPreview mdText={mdText} />
       </div>
