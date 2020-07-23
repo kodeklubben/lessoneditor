@@ -8,12 +8,14 @@ import {
 } from "./utils/buttonMethods";
 
 import { emphasis as config } from "../../settingsFiles/buttonConfig";
+import { topicSettings } from "components/lessonForm/settingsFiles/YMLTAGSSETTINGS";
 
 let output;
 let cancelResults;
 let results;
 
 const Emphasis = ({
+  testings,
   editorRef,
   cursorPositionStart,
   cursorPositionEnd,
@@ -73,6 +75,7 @@ const Emphasis = ({
     }));
     switch (button) {
       case "bold":
+        testings();
         setEmphasis(button, 2, 2, "****");
         break;
       case "italic":

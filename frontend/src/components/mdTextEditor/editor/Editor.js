@@ -27,7 +27,7 @@ for (let i = 0; i < Object.values(KEY).length; i++) {
 }
 
 const Editor = () => {
-  const [test, setTest] = useState(false);
+  const [test, setTest] = useState(true);
   const context = useContext(UserContext);
   const [mdText, setMdText] = useState("");
   const [savedText, setSavedText] = useState("");
@@ -50,9 +50,10 @@ const Editor = () => {
   let editorRef = useRef();
   let uploadImageRef = useRef();
 
-  const testings = () => {
+  const testings = (text) => {
+    console.log(test);
     setTest(!test);
-    console.log("test : " + test);
+    console.log("test : " + test, Math.random(1, 1000));
   };
 
   const pushUndoValue = (mdText, cursorPositionStart) => {
@@ -296,7 +297,7 @@ const Editor = () => {
   };
 
   const handlePreview = (event) => {
-    console.log("Previewbutton pressed");
+    // console.log("Previewbutton pressed");
   };
 
   return (

@@ -44,6 +44,7 @@ const ButtonPanel = ({
     <>
       <Preview handlePreview={handlePreview} testings={testings} />
       <Emphasis
+        testings={testings}
         editorRef={editorRef}
         mdText={mdText}
         buttonValues={buttonValues}

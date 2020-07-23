@@ -37,10 +37,6 @@ const MDTextArea = ({
   };
 
   const setEmphasis = (button, cursorIntON, cursorIntOFF, output) => {
-    console.log(
-      "button : " + button + "\n buttonValues : " + buttonValues.bold
-    );
-
     cancelResults = cancelButton(
       buttonValues[button],
       mdText,
@@ -51,7 +47,7 @@ const MDTextArea = ({
     );
     if (cancelResults.cancel) {
       setChanges(
-        cancelResults.mdText,
+        cancelResults.inputText,
         cancelResults.cursorPositionStart,
         cancelResults.cursorPositionEnd
       );
@@ -76,40 +72,16 @@ const MDTextArea = ({
   };
 
   const handlers = {
-    // emphasis
-    BOLD: () => {
+    BOLD: (a) => {
+      console.log(a);
       editorRef.current.focus();
       setButtonValues((prevState) => ({
         ...prevState,
         bold: !buttonValues["bold"],
       }));
-      testings();
+
       setEmphasis("bold", 2, 2, "****");
     },
-    // ITALIC: () =>
-    //   newHandleButtonClick(
-    //     emphasis[1].buttonTitle,
-    //     emphasis[1].output,
-    //     emphasis[1].cursorIntON,
-    //     emphasis[1].cursorIntOFF,
-    //     emphasis[1].endOutput
-    //   ),
-    // HEADING: () =>
-    //   newHandleButtonClick(
-    //     emphasis[2].buttonTitle,
-    //     emphasis[2].output,
-    //     emphasis[2].cursorIntON,
-    //     emphasis[2].cursorIntOFF,
-    //     emphasis[2].endOutput
-    //   ),
-    // STRIKETHROUGH: () =>
-    //   newHandleButtonClick(
-    //     emphasis[3].buttonTitle,
-    //     emphasis[3].output,
-    //     emphasis[3].cursorIntON,
-    //     emphasis[3].cursorIntOFF,
-    //     emphasis[3].endOutput
-    //   )
   };
 
   return (
