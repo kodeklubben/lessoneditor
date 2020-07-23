@@ -8,7 +8,7 @@ module.exports = async (username, previewUrl, storagePath) => {
   const imageBuffer = downloadImage(url);
   await saveFile(storagePath, imageBuffer);
   if (isAppEngine()) {
-    return gcsUrl(fileName);
+    return gcsUrl(storagePath.join("/"));
   } else {
     storagePath.shift();
     return "/api/display/" + storagePath.join("/");

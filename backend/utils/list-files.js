@@ -1,6 +1,5 @@
 const isAppEngine = require("./isAppEngine");
 const { Storage } = require("@google-cloud/storage");
-const constants = require("../constants.json");
 const getTempDir = require("./get-temp-dir");
 const gcsUrl = require("./gcs-url");
 const path = require("path");
@@ -12,7 +11,7 @@ const resolveUrlTemplate = require("./resolve-url-template");
 module.exports = async (folders) => {
   const outFiles = [];
   if (isAppEngine()) {
-    const bucket = storage.bucket(constants.BUCKET);
+    const bucket = storage.bucket(process.env.BUCKET);
     const [files] = await bucket.getFiles({
       autoPaginate: false,
       prefix: folders.join("/"),
@@ -21,7 +20,7 @@ module.exports = async (folders) => {
       const { name, size, timeCreated, updated } = file.metadata;
       outFiles.push({
         filename: path.parse(name).base,
-        url: gcsUrl(name, constants.BUCKET),
+        url: gcsUrl(name),
         size,
         created: timeCreated,
         updated,

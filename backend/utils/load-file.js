@@ -1,17 +1,13 @@
 const axios = require("axios");
 const isAppEngine = require("./isAppEngine");
 const getTempDir = require("./get-temp-dir");
-const { format } = require("util");
-const constants = require("../constants.json");
+const gcsUrl = require("./gcs-url");
 const fs = require("fs");
 
 module.exports = async (pathParts) => {
   if (isAppEngine()) {
     const filename = pathParts.join("/");
-    const url = format(
-      `${constants.GOOGLE_STORAGE_PREFIX}/${constants.BUCKET}/${filename}`
-    );
-    const content = await axios.get(url);
+    const content = await axios.get(gcsUrl(filename));
     return content.data;
   } else {
     const filename = getTempDir(pathParts);
