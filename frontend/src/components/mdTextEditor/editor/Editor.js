@@ -20,6 +20,8 @@ import {
 import { UserContext } from "../../../contexts/UserContext";
 // import { LessonContext } from "../../../contexts/LessonContext";
 
+let setButton = editorButtonsValue;
+
 let orderedListIndex = 2;
 
 let tabSize = 2;
@@ -32,7 +34,6 @@ for (let i = 0; i < Object.values(KEY).length; i++) {
 }
 
 const Editor = () => {
-  const [test, setTest] = useState(false);
   const context = useContext(UserContext);
   const [mdText, setMdText] = useState("");
   const [savedText, setSavedText] = useState("");
@@ -54,12 +55,6 @@ const Editor = () => {
 
   let editorRef = useRef();
   let uploadImageRef = useRef();
-
-  const testings = () => {
-    console.log(test);
-    setTest(!test);
-    console.log("test : " + test, Math.random(1, 1000));
-  };
 
   const pushUndoValue = (mdText, cursorPositionStart) => {
     resetButtons();
@@ -305,12 +300,6 @@ const Editor = () => {
     // console.log("Previewbutton pressed");
   };
 
-  const handlers = {
-    BOLD: () => {
-      testings();
-    },
-  };
-
   return (
     <div className="editor">
       <p>{autoSaveMessage}</p>
@@ -320,7 +309,6 @@ const Editor = () => {
         imageSubmitHandler={imageSubmitHandler}
       />
       <ButtonPanel
-        testings={testings}
         editorRef={editorRef}
         uploadImageRef={uploadImageRef}
         mdText={mdText}
@@ -345,7 +333,7 @@ const Editor = () => {
 
       <div className="textEditorContainer">
         <MDTextArea
-          handlers={handlers}
+          setButton={setButton}
           mdText={mdText}
           editorRef={editorRef}
           onInputChange={handleChange}

@@ -7,7 +7,6 @@ configure({
 });
 
 const MDTextArea = ({
-  handlers,
   editorRef,
   mdText,
   onInputChange,
@@ -16,6 +15,12 @@ const MDTextArea = ({
   onTextareaMouseDown,
   onTextareaSelect,
 }) => {
+  const handlers = {
+    BOLD: () => {
+      alert("bold");
+    },
+  };
+
   return (
     <GlobalHotKeys id="hotkeysID" handlers={handlers} keyMap={keyMap}>
       <textarea
