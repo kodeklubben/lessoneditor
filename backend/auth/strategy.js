@@ -11,8 +11,8 @@ module.exports = new GitHubStrategy(
       id: user.id,
       token: accessToken,
       name: user.displayName,
-      email: user.emails[0].value,
-      photo: user.photos[0].value,
+      email: user.emails ? user.emails[0].value : "",
+      photo: user.photos ? user.photos[0].value : "",
       username: user.username,
     });
   }

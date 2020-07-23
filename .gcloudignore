@@ -9,7 +9,9 @@
 .gcloudignore
 .git
 .gitignore
+package-lock.json
 node_modules/
 frontend/
+thumbnail-service/
 .github/
 !build/

@@ -1,24 +1,19 @@
-const axios = require("axios");
-const constants = require("../constants.json");
 const paths = require("../paths");
-const { format } = require("util");
+const saveFile = require("../utils/save-file");
+const loadFile = require("../utils/load-file");
 
 module.exports = (app) => {
   app.post(paths.LESSON_DATA, async (req, res) => {
     const { username } = req.user;
     const { course, lesson } = req.params;
-    const filename = [username, course, lesson, "data.json"].join("/");
-    await saveToGcs(filename, JSON.stringify(req.body), constants.BUCKET);
+    const buffer = Buffer.from(JSON.stringify(req.body));
+    await saveFile([username, course, lesson, "data.json"], buffer);
     res.send("ok");
   });
   app.get(paths.LESSON_DATA, async (req, res) => {
     const { username } = req.user;
     const { course, lesson } = req.params;
-    const filename = [username, course, lesson, "data.json"].join("/");
-    const url = format(
-      `${constants.GOOGLE_STORAGE_PREFIX}/${constants.BUCKET}/${filename}`
-    );
-    const content = await axios.get(url);
-    res.send(content);
+    const content = await loadFile([username, course, lesson, "data.json"]);
+    res.send(JSON.parse(content));
   });
 };

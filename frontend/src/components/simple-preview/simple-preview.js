@@ -7,18 +7,23 @@ import MDPreview from "../mdTextEditor/mdPreview/MDPreview";
 const SimplePreview = () => {
   const { course, lesson, file } = useParams();
   const [mdText, setMdText] = useState("");
+  const [status, setStatus] = useState("Loading...");
   useEffect(() => {
     if (course && lesson && file) {
       async function fetchData() {
         let text = await fetchMdText(course, lesson, file);
+        if (mdText === "") {
+          setStatus("Not found...");
+        }
         setMdText(text);
       }
+
       fetchData();
     }
-  }, [course, lesson, file]);
+  }, [course, lesson, file, mdText]);
   return (
     <div className={"simple-preview"}>
-      <MDPreview mdText={mdText} />
+      {mdText !== "" ? <MDPreview mdText={mdText} /> : <div>{status}</div>}
     </div>
   );
 };
