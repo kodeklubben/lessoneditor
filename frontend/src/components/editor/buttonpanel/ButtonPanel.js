@@ -1,3 +1,4 @@
+import "./buttonpanel.css";
 import React, { useState } from "react";
 import Preview from "./Preview";
 import Emphasis from "./Emphasis";
@@ -103,8 +104,8 @@ const ButtonPanel = ({
         setButtonValues={setButtonValues}
       />
       <button
-        style={{ marginLeft: "auto" }}
-        className="ui  icon button submit"
+        className="ui right floated button"
+        id="buttonpanel"
         onClick={submitHandler}
       >
         <i className="home right icon" />

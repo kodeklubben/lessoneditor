@@ -1,11 +1,9 @@
-import React, { useContext } from "react";
+import React from "react";
 import Page1 from "./Page1";
 import Page2 from "./Page2";
 import Page3 from "./Page3";
 import PageButtons from "../PageButtons";
-import ProfileMenu from "../ProfileMenu";
 import { NAV_BUTTONS } from "./settingsFiles/languages/formpage_NO";
-import { UserContext } from "../../contexts/UserContext";
 
 const FormPage = (props) => {
   const renderFormPage = () => {
@@ -73,15 +71,8 @@ const FormPage = (props) => {
       );
     }
   };
-  const context = useContext(UserContext);
   return (
     <div id="formPage" className="ui grid">
-      <div className="right aligned row">
-        <div id="profileMenu" className="right floated three wide column">
-          <ProfileMenu name={context.user.name} email={context.user.email} />
-        </div>
-        <div className="column" />
-      </div>
       <div className="row">
         <div className="fourteen wide centered column">{renderFormPage()}</div>
       </div>

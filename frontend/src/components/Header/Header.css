@@ -1,8 +1,21 @@
-.mg {
-  margin-right: 300px;
-  margin-top: 40px;
+.header_container {
+  padding: 0px;
+  display: block;
+  background-color: white;
+  height: 3.5rem;
+  border-radius: 5px;
+  display: flex;
 }
 
-.mg span {
-  font-size: 30px;
+.header_logo {
+  background-color: rgb(117, 143, 105);
+  float: left;
+  margin: auto;
+  padding: 0px;
+  width: 10rem !important;
+}
+
+.header_profile {
+  margin-left: auto;
+  float: right;
 }

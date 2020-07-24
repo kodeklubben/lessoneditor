@@ -6,7 +6,7 @@ function ItemList({ items, lessonScreenshots }) {
   const history = useHistory();
 
   const navigateToEditor = (course, lesson) => {
-    const target = ["/mid-page", course, lesson, lesson].join("/");
+    const target = ["/editor", course, lesson, lesson].join("/");
     history.push(target);
   };
 
