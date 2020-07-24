@@ -61,7 +61,7 @@ const Code = ({
     );
   };
 
-  const newHandleButtonClick = (button) => {
+  const handleButtonClick = (button) => {
     editorRef.current.focus();
     setButtonValues((prevState) => ({
       ...prevState,
@@ -87,7 +87,7 @@ const Code = ({
             buttonTitle={element.buttonTitle}
             icon={element.icon}
             title={element.title}
-            onButtonClick={newHandleButtonClick}
+            onButtonClick={handleButtonClick}
             shortcutKey={element.shortcut}
           />
         ))}

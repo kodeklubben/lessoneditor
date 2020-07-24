@@ -3,35 +3,21 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
 import MDTextArea from "./MDTextArea";
 import MDPreview from "../mdPreview/MDPreview";
-import ButtonPanel from "./controlpanel/ButtonPanel";
+import ButtonPanel from "./buttonpanel/ButtonPanel";
 import ImageUpload from "../ImageUpload";
 import editorButtonsValue from "./editorButtonsValue";
 import fetchMdText from "../../../api/fetch-md-text";
 import saveMdText from "../../../api/save-md-text";
-import {
-  KEY_COMBINATIONS as KEY,
-  SHORTCUTKEY,
-} from "../settingsFiles/buttonConfig";
 import { UserContext } from "../../../contexts/UserContext";
-// import { LessonContext } from "../../../contexts/LessonContext";
 
 let orderedListIndex = 2;
 
 let tabSize = 2;
 
-let autoSaveMessage = "";
-
-let shortcutKeys = [];
-for (let i = 0; i < Object.values(KEY).length; i++) {
-  shortcutKeys.push(Object.values(KEY)[i][Object.values(KEY)[i].length - 1]);
-}
-
 const Editor = () => {
   const context = useContext(UserContext);
-
   const [mdText, setMdText] = useState("");
   const [savedText, setSavedText] = useState("");
-  // const lessonContext = useContext(LessonContext);
   const [buttonValues, setButtonValues] = useState(editorButtonsValue);
   const [cursorPositionStart, setCursorPositionStart] = useState(0);
   const [cursorPositionEnd, setCursorPositionEnd] = useState(0);
@@ -51,7 +37,6 @@ const Editor = () => {
   let uploadImageRef = useRef();
 
   const pushUndoValue = (mdText, cursorPositionStart) => {
-    resetButtons();
     if (
       undo[undo.length - 1] !== mdText &&
       undoCursorPosition !== cursorPositionStart
@@ -68,7 +53,6 @@ const Editor = () => {
   };
 
   const pushRedoValue = (mdText, cursorPositionStart) => {
-    resetButtons();
     if (
       redo[redo.length] !== mdText &&
       redoCursorPosition !== cursorPositionStart
@@ -170,22 +154,8 @@ const Editor = () => {
   const onTextareaKeyDown = (event) => {
     setCursor(event.target.selectionStart, event.target.selectionEnd);
 
-    if (
-      (event.ctrlKey && SHORTCUTKEY === "ctrl") ||
-      (event.altKey && SHORTCUTKEY === "alt") ||
-      (event.metaKey && SHORTCUTKEY === "command") ||
-      (event.shiftKey && SHORTCUTKEY === "shift")
-    ) {
-      if (shortcutKeys.includes(event.key)) {
-        event.preventDefault();
-      }
-    }
-
     if (event.key === "Enter") {
-      if (
-        buttonValues[listButtonValues["bTitle"]] &&
-        listButtonValues["bTitle"]
-      ) {
+      if (buttonValues[listButtonValues["bTitle"]]) {
         event.preventDefault();
 
         if (
@@ -270,7 +240,6 @@ const Editor = () => {
     }
   };
 
-  // Show/hide image popup
   const imageSubmitHandler = (imageInputValue, filename) => {
     if (imageInputValue) {
       pushUndoValue(mdText, cursorPositionStart);
@@ -295,12 +264,11 @@ const Editor = () => {
   };
 
   const handlePreview = (event) => {
-    alert("Preview");
+    console.log("Previewbutton pressed");
   };
 
   return (
     <div className="editor">
-      <p>{autoSaveMessage}</p>
       <ImageUpload
         uploadImageRef={uploadImageRef}
         editorRef={editorRef}
@@ -338,7 +306,6 @@ const Editor = () => {
           onTextareaKeyUp={onTextareaKeyUp}
           onTextareaMouseDown={onTextareaMouseDown}
           onTextareaSelect={onTextareaSelect}
-          handlePreview={handlePreview}
         />
         <MDPreview mdText={mdText} />
       </div>

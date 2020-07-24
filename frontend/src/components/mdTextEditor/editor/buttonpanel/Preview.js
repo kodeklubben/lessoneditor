@@ -1,12 +1,11 @@
 import React from "react";
 import CPButton from "./CPButton";
 
-import { image as config } from "../../settingsFiles/buttonConfig";
+import { preview as config } from "../../settingsFiles/buttonConfig";
 
-const Image = ({ editorRef, uploadImageRef }) => {
-  const newHandleButtonClick = (button) => {
-    uploadImageRef.current.click();
-    editorRef.current.focus();
+const Preview = ({ handlePreview }) => {
+  const handleButtonClick = (button) => {
+    handlePreview();
     return;
   };
   return (
@@ -18,7 +17,7 @@ const Image = ({ editorRef, uploadImageRef }) => {
             buttonTitle={element.buttonTitle}
             icon={element.icon}
             title={element.title}
-            onButtonClick={newHandleButtonClick}
+            onButtonClick={handleButtonClick}
             shortcutKey={element.shortcut}
           />
         ))}
@@ -27,4 +26,4 @@ const Image = ({ editorRef, uploadImageRef }) => {
   );
 };
 
-export default Image;
+export default Preview;
