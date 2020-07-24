@@ -11,6 +11,8 @@ import fetchMdText from "../../api/fetch-md-text";
 import saveMdText from "../../api/save-md-text";
 import { UserContext } from "../../contexts/UserContext";
 
+import { SAVING, SAVED } from "./settingsFiles/languages/editor_NO";
+
 let orderedListIndex = 2;
 
 let tabSize = 2;
@@ -19,6 +21,8 @@ const Editor = () => {
   const context = useContext(UserContext);
   const [mdText, setMdText] = useState("");
   const [savedText, setSavedText] = useState("");
+  const [autosaveMessage, setAutosaveMessage] = useState("");
+  const [count, setCount] = useState(0);
   const [buttonValues, setButtonValues] = useState(editorButtonsValue);
   const [cursorPositionStart, setCursorPositionStart] = useState(0);
   const [cursorPositionEnd, setCursorPositionEnd] = useState(0);
@@ -95,14 +99,32 @@ const Editor = () => {
   }, [course, lesson, file]);
 
   useInterval(async () => {
-    if (mdText !== savedText) {
-      await saveMdText(course, lesson, file, mdText);
-      if (!context.getLesson(course, lesson)) {
-        await context.addLesson(course, lesson, lesson);
+    setCount(count + 1);
+    console.log(count);
+    if (count > 1 && mdText) {
+      setAutosaveMessage(SAVED);
+    } else if (count === 0 && mdText) {
+      setAutosaveMessage(SAVING);
+      if (mdText !== savedText) {
+        await saveMdText(course, lesson, file, mdText);
+        if (!context.getLesson(course, lesson)) {
+          await context.addLesson(course, lesson, lesson);
+        }
+        setSavedText(mdText);
       }
-      setSavedText(mdText);
     }
-  }, 5000);
+  }, 808);
+
+  // counts seconds.  Used with autosave. (simulate backend communication latency)
+  // useInterval(() => {
+  //   setState(prevState => ({ ...prevState, counter: state.counter + 1 }));
+  //   if (state.counter > 1 && state.mdText) {
+  //     autoSaveMessage = SAVED;
+  //   } else if (state.counter === 0 && state.mdText) {
+  //     autoSaveMessage = SAVING;
+  //     storedTextValue = state.mdText;
+  //   }
+  // }, 500);
 
   function useInterval(callback, delay) {
     const savedCallback = useRef();
@@ -126,7 +148,7 @@ const Editor = () => {
 
   const handleChange = async (event) => {
     setCursor(event.target.selectionStart, event.target.selectionEnd);
-
+    setCount(0);
     let inputText = event.target.value;
 
     if (
@@ -311,6 +333,7 @@ const Editor = () => {
         />
         <MDPreview mdText={mdText} />
       </div>
+      {mdText ? <p>{autosaveMessage}</p> : ""}
     </div>
   );
 };
