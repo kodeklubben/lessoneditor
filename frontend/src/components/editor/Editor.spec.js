@@ -1,7 +1,9 @@
+import "../Header/header.css";
 import React from "react";
 import { mount } from "enzyme";
 import { MemoryRouter } from "react-router-dom";
 import Editor from "components/editor/Editor";
+import Header from "components/Header/Header";
 
 let wrapped;
 
