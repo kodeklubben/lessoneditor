@@ -17,11 +17,12 @@ let orderedListIndex = 2;
 
 let tabSize = 2;
 
+let autosaveMessage = "";
+
 const Editor = () => {
   const context = useContext(UserContext);
   const [mdText, setMdText] = useState("");
   const [savedText, setSavedText] = useState("");
-  const [autosaveMessage, setAutosaveMessage] = useState("");
   const [count, setCount] = useState(0);
   const [buttonValues, setButtonValues] = useState(editorButtonsValue);
   const [cursorPositionStart, setCursorPositionStart] = useState(0);
@@ -102,9 +103,9 @@ const Editor = () => {
     setCount(count + 1);
     console.log(count);
     if (count > 1 && mdText) {
-      setAutosaveMessage(SAVED);
+      autosaveMessage = SAVED;
     } else if (count === 0 && mdText) {
-      setAutosaveMessage(SAVING);
+      autosaveMessage = SAVING;
       if (mdText !== savedText) {
         await saveMdText(course, lesson, file, mdText);
         if (!context.getLesson(course, lesson)) {
@@ -114,17 +115,6 @@ const Editor = () => {
       }
     }
   }, 808);
-
-  // counts seconds.  Used with autosave. (simulate backend communication latency)
-  // useInterval(() => {
-  //   setState(prevState => ({ ...prevState, counter: state.counter + 1 }));
-  //   if (state.counter > 1 && state.mdText) {
-  //     autoSaveMessage = SAVED;
-  //   } else if (state.counter === 0 && state.mdText) {
-  //     autoSaveMessage = SAVING;
-  //     storedTextValue = state.mdText;
-  //   }
-  // }, 500);
 
   function useInterval(callback, delay) {
     const savedCallback = useRef();
