@@ -11,7 +11,7 @@ import {
 
 import {
   KEY_COMBINATIONS as KEY,
-  emphasis,
+  emphasis as config,
 } from "../../settingsFiles/buttonConfig";
 
 let output;
@@ -80,28 +80,28 @@ const Emphasis = ({
 
   const set = {
     bold: () => {
-      buttonTitle = emphasis.bold.buttonTitle;
+      buttonTitle = config.bold.buttonTitle;
       setButton(buttonTitle);
       setEmphasis(
         buttonValues[buttonTitle],
-        emphasis.bold.cursorIntON,
-        emphasis.bold.cursorIntOFF,
-        emphasis.bold.output
+        config.bold.cursorIntON,
+        config.bold.cursorIntOFF,
+        config.bold.output
       );
     },
     italic: () => {
-      buttonTitle = emphasis.italic.buttonTitle;
+      buttonTitle = config.italic.buttonTitle;
       setButton(buttonTitle);
       setEmphasis(
         buttonValues[buttonTitle],
-        emphasis.italic.cursorIntON,
-        emphasis.italic.cursorIntOFF,
-        emphasis.italic.output
+        config.italic.cursorIntON,
+        config.italic.cursorIntOFF,
+        config.italic.output
       );
     },
     heading: () => {
-      buttonTitle = emphasis.heading.buttonTitle;
-      output = emphasis.heading.output;
+      buttonTitle = config.heading.buttonTitle;
+      output = config.heading.output;
 
       results = heading(
         buttonValues[buttonTitle],
@@ -120,13 +120,13 @@ const Emphasis = ({
       );
     },
     strikethrough: () => {
-      buttonTitle = emphasis.strikethrough.buttonTitle;
+      buttonTitle = config.strikethrough.buttonTitle;
       setButton(buttonTitle);
       setEmphasis(
         buttonValues[buttonTitle],
-        emphasis.strikethrough.cursorIntON,
-        emphasis.strikethrough.cursorIntOFF,
-        emphasis.strikethrough.output
+        config.strikethrough.cursorIntON,
+        config.strikethrough.cursorIntOFF,
+        config.strikethrough.output
       );
     },
   };
@@ -134,21 +134,18 @@ const Emphasis = ({
   useHotkeys(
     `${KEY.bold}, ${KEY.italic}, ${KEY.heading}, ${KEY.strikethrough}`,
     (event, handler) => {
+      event.preventDefault();
       switch (handler.key) {
         case KEY.bold:
-          event.preventDefault();
           set.bold();
           break;
         case KEY.italic:
-          event.preventDefault();
           set.italic();
           break;
         case KEY.heading:
-          event.preventDefault();
           set.heading();
           break;
         case KEY.strikethrough:
-          event.preventDefault();
           set.strikethrough();
           break;
         default:
@@ -184,7 +181,7 @@ const Emphasis = ({
   return (
     <>
       <div className="ui icon buttons emphasis">
-        {Object.entries(emphasis).map((element, index) => (
+        {Object.entries(config).map((element, index) => (
           <CPButton
             key={"element" + index}
             buttonTitle={element[1].buttonTitle}

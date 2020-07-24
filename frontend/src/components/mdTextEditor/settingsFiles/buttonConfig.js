@@ -45,15 +45,15 @@ const KEY_COMBINATIONS = {
   italic: [SHORTCUTKEY, plus, chars.i].join(""),
   heading: [SHORTCUTKEY, plus, chars.h].join(""),
   strikethrough: [SHORTCUTKEY, plus, chars.s].join(""),
-  undo: [SHORTCUTKEY, plus, chars.z],
-  redo: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.z],
-  new: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.n],
-  load: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.l],
-  save: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.s],
-  image: [SHORTCUTKEY, plus, chars.p],
-  listul: [SHORTCUTKEY, plus, chars.u],
-  listol: [SHORTCUTKEY, plus, chars.o],
-  listcheck: [SHORTCUTKEY, plus, chars.c],
+  undo: [SHORTCUTKEY, plus, chars.z].join(""),
+  redo: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.z].join(""),
+  // new: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.n],
+  // load: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.l],
+  // save: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.s],
+  image: [SHORTCUTKEY, plus, chars.p].join(""),
+  listul: [SHORTCUTKEY, plus, chars.u].join(""),
+  listol: [SHORTCUTKEY, plus, chars.o].join(""),
+  listcheck: [SHORTCUTKEY, plus, chars.c].join(""),
   activity: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.a],
   intro: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.i],
   check: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.c],
@@ -64,7 +64,7 @@ const KEY_COMBINATIONS = {
   try: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.t],
   inline: [SHORTCUTKEY, plus, chars.e],
   codeblock: [SHORTCUTKEY, plus, chars.k],
-  preview: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.y],
+  preview: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.y].join(""),
 };
 
 const emphasis = {
@@ -110,8 +110,8 @@ const emphasis = {
   },
 };
 
-const undoRedo = [
-  {
+const undoRedo = {
+  undo: {
     buttonTitle: "undo",
     icon: "undo",
     output: "",
@@ -119,9 +119,9 @@ const undoRedo = [
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: KEY_COMBINATIONS.undo.join(""),
+    shortcut: KEY_COMBINATIONS.undo,
   },
-  {
+  redo: {
     buttonTitle: "redo",
     icon: "redo",
     output: "",
@@ -129,45 +129,45 @@ const undoRedo = [
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: KEY_COMBINATIONS.redo.join(""),
+    shortcut: KEY_COMBINATIONS.redo,
   },
-];
+};
 
-const saveLoadNew = [
-  {
-    buttonTitle: "new",
-    icon: "file",
-    output: "",
-    title: BUTTON_TITLE.new,
-    cursorIntON: 0,
-    cursorIntOFF: 0,
-    endOutput: "",
-    shortcut: KEY_COMBINATIONS.new.join(""),
-  },
-  {
-    buttonTitle: "load",
-    icon: "upload",
-    output: "",
-    title: BUTTON_TITLE.load,
-    cursorIntON: 0,
-    cursorIntOFF: 0,
-    endOutput: "",
-    shortcut: KEY_COMBINATIONS.load.join(""),
-  },
-  {
-    buttonTitle: "save",
-    icon: "save",
-    output: "",
-    title: BUTTON_TITLE.save,
-    cursorIntON: 0,
-    cursorIntOFF: 0,
-    endOutput: "",
-    shortcut: KEY_COMBINATIONS.save.join(""),
-  },
-];
+// const saveLoadNew = [
+//   {
+//     buttonTitle: "new",
+//     icon: "file",
+//     output: "",
+//     title: BUTTON_TITLE.new,
+//     cursorIntON: 0,
+//     cursorIntOFF: 0,
+//     endOutput: "",
+//     shortcut: KEY_COMBINATIONS.new.join("")
+//   },
+//   {
+//     buttonTitle: "load",
+//     icon: "upload",
+//     output: "",
+//     title: BUTTON_TITLE.load,
+//     cursorIntON: 0,
+//     cursorIntOFF: 0,
+//     endOutput: "",
+//     shortcut: KEY_COMBINATIONS.load.join("")
+//   },
+//   {
+//     buttonTitle: "save",
+//     icon: "save",
+//     output: "",
+//     title: BUTTON_TITLE.save,
+//     cursorIntON: 0,
+//     cursorIntOFF: 0,
+//     endOutput: "",
+//     shortcut: KEY_COMBINATIONS.save.join("")
+//   }
+// ];
 
-const image = [
-  {
+const image = {
+  image: {
     buttonTitle: "image",
     icon: "file image",
     output: "",
@@ -175,12 +175,12 @@ const image = [
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: KEY_COMBINATIONS.image.join(""),
+    shortcut: KEY_COMBINATIONS.image,
   },
-];
+};
 
-const preview = [
-  {
+const preview = {
+  preview: {
     buttonTitle: "preview",
     icon: "eye",
     output: "",
@@ -188,12 +188,12 @@ const preview = [
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: KEY_COMBINATIONS.preview.join(""),
+    shortcut: KEY_COMBINATIONS.preview,
   },
-];
+};
 
-const lists = [
-  {
+const lists = {
+  listUl: {
     buttonTitle: "listUl",
     icon: "list ul",
     output: "- ",
@@ -201,9 +201,9 @@ const lists = [
     cursorIntON: 2,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: KEY_COMBINATIONS.listul.join(""),
+    shortcut: KEY_COMBINATIONS.listul,
   },
-  {
+  listOl: {
     buttonTitle: "listOl",
     icon: "list ol",
     output: "1. ",
@@ -211,9 +211,9 @@ const lists = [
     cursorIntON: 3,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: KEY_COMBINATIONS.listol.join(""),
+    shortcut: KEY_COMBINATIONS.listol,
   },
-  {
+  listCheck: {
     buttonTitle: "listCheck",
     icon: "tasks",
     output: "- [\u0020] ",
@@ -221,9 +221,9 @@ const lists = [
     cursorIntON: 6,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: KEY_COMBINATIONS.listcheck.join(""),
+    shortcut: KEY_COMBINATIONS.listcheck,
   },
-];
+};
 
 // !! buttonTitle - first chars must be "sec_" when in sections,
 // if new buttons are added remember to update buttons-state in editor.js
@@ -337,7 +337,7 @@ const code = [
 export {
   emphasis,
   undoRedo,
-  saveLoadNew,
+  // saveLoadNew,
   image,
   lists,
   preview,

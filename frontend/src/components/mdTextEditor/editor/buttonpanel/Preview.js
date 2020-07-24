@@ -1,9 +1,31 @@
 import React from "react";
 import CPButton from "./CPButton";
 
-import { preview as config } from "../../settingsFiles/buttonConfig";
+import { useHotkeys } from "react-hotkeys-hook";
+
+import {
+  KEY_COMBINATIONS as KEY,
+  preview as config,
+} from "../../settingsFiles/buttonConfig";
 
 const Preview = ({ handlePreview }) => {
+  useHotkeys(
+    `${KEY.preview}`,
+    (event, handler) => {
+      switch (handler.key) {
+        case KEY.preview:
+          event.preventDefault();
+          handlePreview();
+          break;
+
+        default:
+          break;
+      }
+      return false;
+    },
+    { enableOnTags: "TEXTAREA", keydown: true }
+  );
+
   const handleButtonClick = (button) => {
     handlePreview();
     return;
@@ -11,14 +33,14 @@ const Preview = ({ handlePreview }) => {
   return (
     <>
       <div className="ui icon buttons emphasis">
-        {config.map((element, index) => (
+        {Object.entries(config).map((element, index) => (
           <CPButton
             key={"element" + index}
-            buttonTitle={element.buttonTitle}
-            icon={element.icon}
-            title={element.title}
+            buttonTitle={element[1].buttonTitle}
+            icon={element[1].icon}
+            title={element[1].title}
             onButtonClick={handleButtonClick}
-            shortcutKey={element.shortcut}
+            shortcutKey={element[1].shortcut}
           />
         ))}
       </div>
