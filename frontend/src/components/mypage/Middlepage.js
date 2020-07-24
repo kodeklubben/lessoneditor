@@ -1,16 +1,16 @@
 import React, { useContext } from "react";
 import "./overview.css";
 
-import ItemList from "./ItemList";
+import MidpageList from "./MidpageList";
 import { UserContext } from "../../contexts/UserContext";
 import Header from "../Header/Header";
 
 const lessonScreenshots = [
-  "lessonsScreenshots/Screenshot 2020-07-12 at 09.42.03.png",
-  "lessonsScreenshots/Screenshot 2020-07-12 at 09.42.22.png",
-  "lessonsScreenshots/Screenshot 2020-07-12 at 09.42.41.png",
-  "lessonsScreenshots/Screenshot 2020-07-12 at 09.42.58.png",
-  "lessonsScreenshots/Screenshot 2020-07-12 at 09.43.15.png",
+  "/lessonsScreenshots/Screenshot 2020-07-12 at 09.42.03.png",
+  "/lessonsScreenshots/Screenshot 2020-07-12 at 09.42.22.png",
+  "/lessonsScreenshots/Screenshot 2020-07-12 at 09.42.41.png",
+  "/lessonsScreenshots/Screenshot 2020-07-12 at 09.42.58.png",
+  "/lessonsScreenshots/Screenshot 2020-07-12 at 09.43.15.png",
 ];
 
 const Middlepage = () => {
@@ -28,7 +28,7 @@ const Middlepage = () => {
             <div className="">
               <div className="">
                 <div className="">
-                  <ItemList
+                  <MidpageList
                     items={lessons}
                     lessonScreenshots={lessonScreenshots}
                   />

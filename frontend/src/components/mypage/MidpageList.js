@@ -2,17 +2,18 @@ import "./itemlist.css";
 import React from "react";
 import { useHistory } from "react-router-dom";
 
-function ItemList({ items, lessonScreenshots }) {
+function MidpageList({ items, lessonScreenshots }) {
   const history = useHistory();
 
   const navigateToEditor = (course, lesson) => {
-    const target = ["/mid-page", course, lesson, lesson].join("/");
+    const target = ["/editor", course, lesson, lesson].join("/");
     history.push(target);
   };
 
   const submitHandler = () => {
     console.log("text submitted");
-    history.push("/endPage");
+    // history.push("/endPage");
+    console.log(lessonScreenshots);
   };
 
   return (
@@ -51,4 +52,4 @@ function ItemList({ items, lessonScreenshots }) {
     </>
   );
 }
-export default ItemList;
+export default MidpageList;

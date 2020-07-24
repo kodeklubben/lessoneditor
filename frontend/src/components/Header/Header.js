@@ -11,7 +11,7 @@ function Header() {
         </div>
         <div className="right menu ">
           <div className="mg">
-            <i class="big user circle icon "></i>
+            <i className="big user circle icon"></i>
             <span>User name</span>
           </div>
         </div>
