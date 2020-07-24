@@ -3,7 +3,7 @@ import "./overview.css";
 
 import ItemList from "./ItemList";
 import { UserContext } from "../../contexts/UserContext";
-import Header from "../header/Header";
+import Navbar from "../navbar/Navbar";
 
 const lessonScreenshots = [
   "lessonsScreenshots/Screenshot 2020-07-12 at 09.42.03.png",
@@ -18,7 +18,7 @@ const Overview = () => {
   const { lessons } = context.user;
   return (
     <div>
-      <Header />
+      <Navbar />
       <div className="overViewContainer">
         <h3>Lag ny oppgave</h3>
         <div className="ui card">

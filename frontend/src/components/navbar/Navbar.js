@@ -1,10 +1,10 @@
-import "./header.css";
+import "./navbar.css";
 import React, { useContext } from "react";
 import ProfileMenu from "components/ProfileMenu";
 
 import { UserContext } from "contexts/UserContext";
 
-function Header() {
+const Navbar = () => {
   const context = useContext(UserContext);
   return (
     <div>
@@ -24,5 +24,5 @@ function Header() {
       </header>
     </div>
   );
-}
-export default Header;
+};
+export default Navbar;
