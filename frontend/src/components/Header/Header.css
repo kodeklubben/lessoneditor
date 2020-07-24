@@ -1,7 +1,7 @@
 .header_container {
   padding: 0px;
   display: block;
-
+  margin-top: -10px;
   height: 6rem;
   border-radius: 5px;
   display: flex;
