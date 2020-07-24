@@ -9,7 +9,7 @@ const ProfileMenu = ({ name, email, photo }) => {
         margin: "10px",
       }}
     >
-      <span style={{ margin: "5px", float: "right" }}>{name}</span>
+      <span style={{ margin: "auto", float: "right" }}>{name}</span>
       {photo ? (
         <img src={photo} alt="user" className="ui avatar image" />
       ) : (
