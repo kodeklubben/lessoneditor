@@ -8,7 +8,7 @@ function Header() {
   const context = useContext(UserContext);
   return (
     <div>
-      <div className="header_container">
+      <header className="header_container">
         <div className="logo">
           <a href={"//kidsakoder.no"}>
             <img className="header_logo" alt="" src={"/lav_logo.jpg"} />
@@ -21,7 +21,7 @@ function Header() {
             photo={context.user ? context.user.photo : ""}
           />
         </div>
-      </div>
+      </header>
     </div>
   );
 }

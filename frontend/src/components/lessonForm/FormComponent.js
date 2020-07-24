@@ -1,7 +1,7 @@
 import "./formpage.css";
 import React, { useContext, useState } from "react";
 import FormPage from "./FormPage";
-import Header from "components/Header/Header";
+import Header from "components/header/Header";
 import COURSELIST from "./settingsFiles/COURSELIST";
 import { LANGUAGES } from "./settingsFiles/languages/formpage_NO";
 import { UserContext } from "../../contexts/UserContext";

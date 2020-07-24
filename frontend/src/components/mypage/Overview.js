@@ -3,7 +3,7 @@ import "./overview.css";
 
 import ItemList from "./ItemList";
 import { UserContext } from "../../contexts/UserContext";
-import Header from "../Header/Header";
+import Header from "../header/Header";
 
 const lessonScreenshots = [
   "lessonsScreenshots/Screenshot 2020-07-12 at 09.42.03.png",
