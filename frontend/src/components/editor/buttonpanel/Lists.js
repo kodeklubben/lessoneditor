@@ -4,19 +4,20 @@ import CPButton from "./CPButton";
 import { useHotkeys } from "react-hotkeys-hook";
 
 import {
-  buttonAction as codeAction,
   cancelButton,
+  buttonAction as listsAction,
 } from "./utils/buttonMethods";
+
 import {
   KEY_COMBINATIONS as KEY,
-  code as config,
-} from "../../settingsFiles/buttonConfig";
+  lists as config,
+} from "../settingsFiles/buttonConfig";
 
-let results;
 let cancelResults;
+let results;
 let buttonTitle;
 
-const Code = ({
+const Lists = ({
   editorRef,
   cursorPositionStart,
   cursorPositionEnd,
@@ -25,6 +26,7 @@ const Code = ({
   setMdText,
   setCursorPosition,
   setCursor,
+  setListButtonValues,
   setButtonValues,
 }) => {
   const setChanges = (mdText, cursorPositionStart, cursorPositionEnd) => {
@@ -40,7 +42,7 @@ const Code = ({
     }));
   };
 
-  const setCode = (button, cursorIntON, cursorIntOFF, output) => {
+  const setList = (button, cursorIntON, cursorIntOFF, output) => {
     cancelResults = cancelButton(
       buttonValues[button],
       mdText,
@@ -57,7 +59,8 @@ const Code = ({
       );
       return;
     }
-    results = codeAction(
+
+    results = listsAction(
       buttonValues[button],
       mdText,
       cursorPositionStart,
@@ -75,38 +78,66 @@ const Code = ({
   };
 
   const set = {
-    inline: () => {
-      buttonTitle = config.inline.buttonTitle;
+    listUl: () => {
+      buttonTitle = config.listUl.buttonTitle;
       setButton(buttonTitle);
-      setCode(
+      setListButtonValues({
+        bTitle: buttonTitle,
+        output: config.listUl.output,
+        cursorInt: config.listUl.cursorIntON,
+      });
+      setList(
         buttonTitle,
-        config.inline.cursorIntON,
-        config.inline.cursorIntOFF,
-        config.inline.output
+        config.listUl.cursorIntON,
+        config.listUl.cursorIntOFF,
+        config.listUl.output
       );
     },
-    codeblock: () => {
-      buttonTitle = config.codeblock.buttonTitle;
+    listOl: () => {
+      buttonTitle = config.listOl.buttonTitle;
       setButton(buttonTitle);
-      setCode(
+      setListButtonValues({
+        bTitle: buttonTitle,
+        output: config.listOl.output,
+        cursorInt: config.listOl.cursorIntON,
+      });
+      setList(
         buttonTitle,
-        config.codeblock.cursorIntON,
-        config.codeblock.cursorIntOFF,
-        config.codeblock.output
+        config.listOl.cursorIntON,
+        config.listOl.cursorIntOFF,
+        config.listOl.output
+      );
+    },
+    listCheck: () => {
+      buttonTitle = config.listCheck.buttonTitle;
+      setButton(buttonTitle);
+      setListButtonValues({
+        bTitle: buttonTitle,
+        output: config.listCheck.output,
+        cursorInt: config.listCheck.cursorIntON,
+      });
+      setList(
+        buttonTitle,
+        config.listCheck.cursorIntON,
+        config.listCheck.cursorIntOFF,
+        config.listCheck.output
       );
     },
   };
 
   useHotkeys(
-    `${KEY.inline}, ${KEY.codeblock}`,
+    `${KEY.listul}, ${KEY.listol}, ${KEY.listcheck}`,
     (event, handler) => {
       event.preventDefault();
       switch (handler.key) {
-        case KEY.inline:
-          set.inline();
+        case KEY.listul:
+          set.listUl();
           break;
-        case KEY.codeblock:
-          set.codeblock();
+        case KEY.listol:
+          set.listOl();
+          break;
+        case KEY.listcheck:
+          set.listCheck();
           break;
         default:
           break;
@@ -114,7 +145,7 @@ const Code = ({
       return false;
     },
     { enableOnTags: "TEXTAREA", keydown: true },
-    [setButton, setCode]
+    [setButton, setListButtonValues, setList]
   );
 
   const handleButtonClick = (button) => {
@@ -124,11 +155,14 @@ const Code = ({
       [button]: !buttonValues[button],
     }));
     switch (button) {
-      case config.inline.buttonTitle:
-        set.inline();
+      case config.listUl.buttonTitle:
+        set.listUl();
         break;
-      case config.codeblock.buttonTitle:
-        set.codeblock();
+      case config.listOl.buttonTitle:
+        set.listOl();
+        break;
+      case config.listCheck.buttonTitle:
+        set.listCheck();
         break;
       default:
         break;
@@ -152,4 +186,4 @@ const Code = ({
   );
 };
 
-export default Code;
+export default Lists;
