@@ -2,13 +2,13 @@ import "./editor.css";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
 import MDTextArea from "./MDTextArea";
-import MDPreview from "../mdPreview/MDPreview";
+import MDPreview from "./MDPreview";
 import ButtonPanel from "./buttonpanel/ButtonPanel";
-import ImageUpload from "../ImageUpload";
-import editorButtonsValue from "./editorButtonsValue";
-import fetchMdText from "../../../api/fetch-md-text";
-import saveMdText from "../../../api/save-md-text";
-import { UserContext } from "../../../contexts/UserContext";
+import ImageUpload from "./ImageUpload";
+import editorButtonsValue from "./buttonpanel/utils/editorButtonsValue";
+import fetchMdText from "../../api/fetch-md-text";
+import saveMdText from "../../api/save-md-text";
+import { UserContext } from "../../contexts/UserContext";
 
 let orderedListIndex = 2;
 

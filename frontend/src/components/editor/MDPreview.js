@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { renderMicrobit } from "utils/renderMicrobit";
-import { mdParser } from "../../../utils/mdParser";
+import { mdParser } from "../../utils/mdParser";
 
 const MDPreview = ({ mdText }) => {
   const parseMD = mdParser(mdText);

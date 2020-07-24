@@ -1,5 +1,5 @@
 import React from "react";
-import MDTextArea from "components/mdTextEditor/editor/MDTextArea";
+import MDTextArea from "components/editor/editor/MDTextArea";
 import { shallow } from "enzyme";
 
 it("should set text area change", () => {
