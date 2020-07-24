@@ -8,7 +8,6 @@ module.exports = async () => {
   require("./routes/lesson-data")(app);
   require("./routes/lesson-files")(app);
   require("./routes/lesson-proxy")(app);
-  require("./routes/lesson-uploads")(app);
   require("./routes/lesson-thumb")(app);
   require("./routes/lesson-submit")(app);
   if (isAppEngine()) {
