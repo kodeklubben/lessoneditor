@@ -10,7 +10,7 @@
     "markdown-it-attrs": "^3.0.3",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-hotkeys": "^2.0.0",
+    "react-hotkeys-hook": "^2.2.0",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "semantic-ui-css": "^2.4.1",
