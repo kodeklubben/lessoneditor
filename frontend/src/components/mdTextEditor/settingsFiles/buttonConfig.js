@@ -45,26 +45,23 @@ const KEY_COMBINATIONS = {
   italic: [SHORTCUTKEY, plus, chars.i].join(""),
   heading: [SHORTCUTKEY, plus, chars.h].join(""),
   strikethrough: [SHORTCUTKEY, plus, chars.s].join(""),
-  undo: [SHORTCUTKEY, plus, chars.z],
-  redo: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.z],
-  new: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.n],
-  load: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.l],
-  save: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.s],
-  image: [SHORTCUTKEY, plus, chars.p],
-  listul: [SHORTCUTKEY, plus, chars.u],
-  listol: [SHORTCUTKEY, plus, chars.o],
-  listcheck: [SHORTCUTKEY, plus, chars.c],
-  activity: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.a],
-  intro: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.i],
-  check: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.c],
-  tip: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.o],
-  protip: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.p],
-  challenge: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.g],
-  flag: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.f],
-  try: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.t],
-  inline: [SHORTCUTKEY, plus, chars.e],
-  codeblock: [SHORTCUTKEY, plus, chars.k],
-  preview: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.y],
+  undo: [SHORTCUTKEY, plus, chars.z].join(""),
+  redo: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.z].join(""),
+  image: [SHORTCUTKEY, plus, chars.p].join(""),
+  listul: [SHORTCUTKEY, plus, chars.u].join(""),
+  listol: [SHORTCUTKEY, plus, chars.o].join(""),
+  listcheck: [SHORTCUTKEY, plus, chars.c].join(""),
+  activity: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.a].join(""),
+  intro: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.i].join(""),
+  check: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.c].join(""),
+  tip: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.o].join(""),
+  protip: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.p].join(""),
+  challenge: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.g].join(""),
+  flag: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.f].join(""),
+  try: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.t].join(""),
+  inline: [SHORTCUTKEY, plus, chars.e].join(""),
+  codeblock: [SHORTCUTKEY, plus, chars.k].join(""),
+  preview: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.y].join(""),
 };
 
 const emphasis = {
@@ -75,7 +72,6 @@ const emphasis = {
     title: BUTTON_TITLE.bold,
     cursorIntON: 2,
     cursorIntOFF: 2,
-    endOutput: "",
     shortcut: KEY_COMBINATIONS.bold,
   },
   italic: {
@@ -85,7 +81,6 @@ const emphasis = {
     title: BUTTON_TITLE.italic,
     cursorIntON: 1,
     cursorIntOFF: 1,
-    endOutput: "",
     shortcut: KEY_COMBINATIONS.italic,
   },
   heading: {
@@ -95,7 +90,6 @@ const emphasis = {
     title: BUTTON_TITLE.heading,
     cursorIntON: 0,
     cursorIntOFF: 0,
-    endOutput: "",
     shortcut: KEY_COMBINATIONS.heading,
   },
   strikethrough: {
@@ -105,239 +99,195 @@ const emphasis = {
     title: BUTTON_TITLE.strikethrough,
     cursorIntON: 2,
     cursorIntOFF: 2,
-    endOutput: "",
     shortcut: KEY_COMBINATIONS.strikethrough,
   },
 };
 
-const undoRedo = [
-  {
+const undoRedo = {
+  undo: {
     buttonTitle: "undo",
     icon: "undo",
     output: "",
     title: BUTTON_TITLE.undo,
     cursorIntON: 0,
     cursorIntOFF: 0,
-    endOutput: "",
-    shortcut: KEY_COMBINATIONS.undo.join(""),
+    shortcut: KEY_COMBINATIONS.undo,
   },
-  {
+  redo: {
     buttonTitle: "redo",
     icon: "redo",
     output: "",
     title: BUTTON_TITLE.redo,
     cursorIntON: 0,
     cursorIntOFF: 0,
-    endOutput: "",
-    shortcut: KEY_COMBINATIONS.redo.join(""),
+    shortcut: KEY_COMBINATIONS.redo,
   },
-];
+};
 
-const saveLoadNew = [
-  {
-    buttonTitle: "new",
-    icon: "file",
-    output: "",
-    title: BUTTON_TITLE.new,
-    cursorIntON: 0,
-    cursorIntOFF: 0,
-    endOutput: "",
-    shortcut: KEY_COMBINATIONS.new.join(""),
-  },
-  {
-    buttonTitle: "load",
-    icon: "upload",
-    output: "",
-    title: BUTTON_TITLE.load,
-    cursorIntON: 0,
-    cursorIntOFF: 0,
-    endOutput: "",
-    shortcut: KEY_COMBINATIONS.load.join(""),
-  },
-  {
-    buttonTitle: "save",
-    icon: "save",
-    output: "",
-    title: BUTTON_TITLE.save,
-    cursorIntON: 0,
-    cursorIntOFF: 0,
-    endOutput: "",
-    shortcut: KEY_COMBINATIONS.save.join(""),
-  },
-];
-
-const image = [
-  {
+const image = {
+  image: {
     buttonTitle: "image",
     icon: "file image",
     output: "",
     title: BUTTON_TITLE.image,
     cursorIntON: 0,
     cursorIntOFF: 0,
-    endOutput: "",
-    shortcut: KEY_COMBINATIONS.image.join(""),
+    shortcut: KEY_COMBINATIONS.image,
   },
-];
+};
 
-const preview = [
-  {
+const preview = {
+  preview: {
     buttonTitle: "preview",
     icon: "eye",
     output: "",
     title: BUTTON_TITLE.preview,
     cursorIntON: 0,
     cursorIntOFF: 0,
-    endOutput: "",
-    shortcut: KEY_COMBINATIONS.preview.join(""),
+    shortcut: KEY_COMBINATIONS.preview,
   },
-];
+};
 
-const lists = [
-  {
+const lists = {
+  listUl: {
     buttonTitle: "listUl",
     icon: "list ul",
     output: "- ",
     title: BUTTON_TITLE.listUl,
     cursorIntON: 2,
     cursorIntOFF: 0,
-    endOutput: "",
-    shortcut: KEY_COMBINATIONS.listul.join(""),
+    shortcut: KEY_COMBINATIONS.listul,
   },
-  {
+  listOl: {
     buttonTitle: "listOl",
     icon: "list ol",
     output: "1. ",
     title: BUTTON_TITLE.listOl,
     cursorIntON: 3,
     cursorIntOFF: 0,
-    endOutput: "",
-    shortcut: KEY_COMBINATIONS.listol.join(""),
+    shortcut: KEY_COMBINATIONS.listol,
   },
-  {
+  listCheck: {
     buttonTitle: "listCheck",
     icon: "tasks",
     output: "- [\u0020] ",
     title: BUTTON_TITLE.listCheck,
     cursorIntON: 6,
     cursorIntOFF: 0,
-    endOutput: "",
-    shortcut: KEY_COMBINATIONS.listcheck.join(""),
+    shortcut: KEY_COMBINATIONS.listcheck,
   },
-];
+};
 
 // !! buttonTitle - first chars must be "sec_" when in sections,
 // if new buttons are added remember to update buttons-state in editor.js
 
-const sections = [
-  {
+const sections = {
+  activity: {
     buttonTitle: "sec_activity",
     icon: "",
     output: "# " + SECTION_TEXT + " {.activity}\n",
     title: BUTTON_TITLE.activity,
     cursorIntON: 0,
     cursorIntOFF: 13,
-    endOutput: "",
-    shortcut: KEY_COMBINATIONS.activity.join(""),
+    cancelInt: 2,
+    shortcut: KEY_COMBINATIONS.activity,
   },
-  {
+  intro: {
     buttonTitle: "sec_intro",
     icon: "",
     output: "# " + SECTION_TEXT + " {.intro}\n",
     title: BUTTON_TITLE.intro,
     cursorIntON: 0,
     cursorIntOFF: 10,
-    endOutput: "",
-    shortcut: KEY_COMBINATIONS.intro.join(""),
+    cancelInt: 2,
+    shortcut: KEY_COMBINATIONS.intro,
   },
-  {
+  check: {
     buttonTitle: "sec_check",
     icon: "",
     output: "## " + SECTION_TEXT + " {.check}\n",
     title: BUTTON_TITLE.check,
     cursorIntON: 0,
     cursorIntOFF: 10,
-    endOutput: "",
-    shortcut: KEY_COMBINATIONS.check.join(""),
+    cancelInt: 3,
+    shortcut: KEY_COMBINATIONS.check,
   },
-  {
+  tip: {
     buttonTitle: "sec_tip",
     icon: "",
     output: "## {.tip}\n" + SECTION_TEXT,
     title: BUTTON_TITLE.tip,
     cursorIntON: 10,
     cursorIntOFF: 19,
-    endOutput: "",
-    shortcut: KEY_COMBINATIONS.tip.join(""),
+    cancelInt: 10,
+    shortcut: KEY_COMBINATIONS.tip,
   },
-  {
+  protip: {
     buttonTitle: "sec_protip",
     icon: "",
     output: "## " + SECTION_TEXT + " {.protip}\n",
     title: BUTTON_TITLE.protip,
     cursorIntON: 0,
     cursorIntOFF: 11,
-    endOutput: "",
-    shortcut: KEY_COMBINATIONS.protip.join(""),
+    cancelInt: 3,
+    shortcut: KEY_COMBINATIONS.protip,
   },
-  {
+  challenge: {
     buttonTitle: "sec_challenge",
     icon: "",
     output: "## " + SECTION_TEXT + " {.challenge}\n",
     title: BUTTON_TITLE.challenge,
     cursorIntON: 0,
     cursorIntOFF: 14,
-    endOutput: "",
-    shortcut: KEY_COMBINATIONS.challenge.join(""),
+    cancelInt: 3,
+    shortcut: KEY_COMBINATIONS.challenge,
   },
-  {
+  flag: {
     buttonTitle: "sec_flag",
     icon: "",
     output: "## " + SECTION_TEXT + " {.flag}\n",
     title: BUTTON_TITLE.flag,
     cursorIntON: 0,
     cursorIntOFF: 9,
-    endOutput: "",
-    shortcut: KEY_COMBINATIONS.flag.join(""),
+    cancelInt: 3,
+    shortcut: KEY_COMBINATIONS.flag,
   },
-  {
+  try: {
     buttonTitle: "sec_try",
     icon: "",
     output: "# " + SECTION_TEXT + " {.try}\n",
     title: BUTTON_TITLE.try,
     cursorIntON: 0,
     cursorIntOFF: 8,
-    endOutput: "",
-    shortcut: KEY_COMBINATIONS.try.join(""),
+    cancelInt: 2,
+    shortcut: KEY_COMBINATIONS.try,
   },
-];
+};
 
-const code = [
-  {
+const code = {
+  inline: {
     buttonTitle: "inline",
     icon: "terminal",
     output: "``",
     title: BUTTON_TITLE.inline,
     cursorIntON: 1,
     cursorIntOFF: 1,
-    endOutput: "",
-    shortcut: KEY_COMBINATIONS.inline.join(""),
+    shortcut: KEY_COMBINATIONS.inline,
   },
-  {
+  codeblock: {
     buttonTitle: "codeblock",
     icon: "code",
     output: `${temp}\n\n${temp}`,
     title: BUTTON_TITLE.codeblock,
     cursorIntON: 4,
     cursorIntOFF: 5,
-    endOutput: "",
-    shortcut: KEY_COMBINATIONS.codeblock.join(""),
+    shortcut: KEY_COMBINATIONS.codeblock,
   },
-];
+};
 
 export {
   emphasis,
   undoRedo,
-  saveLoadNew,
   image,
   lists,
   preview,

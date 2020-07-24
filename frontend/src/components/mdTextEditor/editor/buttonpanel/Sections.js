@@ -1,9 +1,18 @@
 import React from "react";
 import CPButton from "./CPButton";
 
+import { useHotkeys } from "react-hotkeys-hook";
+
 import { insertSection, cancelButton } from "./utils/buttonMethods";
-import { sections as config } from "../../settingsFiles/buttonConfig";
+import {
+  KEY_COMBINATIONS as KEY,
+  sections as config,
+} from "../../settingsFiles/buttonConfig";
 import { SECTION_TEXT } from "components/mdTextEditor/settingsFiles/languages/editor_NO";
+
+let results;
+let cancelResults;
+let buttonTitle;
 
 const Sections = ({
   editorRef,
@@ -22,10 +31,12 @@ const Sections = ({
     setMdText(mdText);
   };
 
-  let results;
-  let cancelResults;
-  let h1 = "# ";
-  let h2 = "## ";
+  const setButton = (value) => {
+    setButtonValues((prevButtonValues) => ({
+      ...prevButtonValues,
+      [value]: !buttonValues[value],
+    }));
+  };
 
   const setSection = (button, cursorIntON, cursorIntOFF, output, cancelInt) => {
     cancelResults = cancelButton(
@@ -63,54 +74,162 @@ const Sections = ({
     );
   };
 
+  const set = {
+    activity: () => {
+      buttonTitle = config.activity.buttonTitle;
+      setButton(buttonTitle);
+      setSection(
+        buttonTitle,
+        config.activity.cursorIntON,
+        config.activity.cursorIntOFF,
+        config.activity.output,
+        config.activity.cancelInt
+      );
+    },
+    intro: () => {
+      buttonTitle = config.intro.buttonTitle;
+      setButton(buttonTitle);
+      setSection(
+        buttonTitle,
+        config.intro.cursorIntON,
+        config.intro.cursorIntOFF,
+        config.intro.output,
+        config.intro.cancelInt
+      );
+    },
+    check: () => {
+      buttonTitle = config.check.buttonTitle;
+      setButton(buttonTitle);
+      setSection(
+        buttonTitle,
+        config.check.cursorIntON,
+        config.check.cursorIntOFF,
+        config.check.output,
+        config.check.cancelInt
+      );
+    },
+    tip: () => {
+      buttonTitle = config.tip.buttonTitle;
+      setButton(buttonTitle);
+      setSection(
+        buttonTitle,
+        config.tip.cursorIntON,
+        config.tip.cursorIntOFF,
+        config.tip.output,
+        config.tip.cancelInt
+      );
+    },
+    protip: () => {
+      buttonTitle = config.protip.buttonTitle;
+      setButton(buttonTitle);
+      setSection(
+        buttonTitle,
+        config.protip.cursorIntON,
+        config.protip.cursorIntOFF,
+        config.protip.output,
+        config.protip.cancelInt
+      );
+    },
+    challenge: () => {
+      buttonTitle = config.challenge.buttonTitle;
+      setButton(buttonTitle);
+      setSection(
+        buttonTitle,
+        config.challenge.cursorIntON,
+        config.challenge.cursorIntOFF,
+        config.challenge.output,
+        config.challenge.cancelInt
+      );
+    },
+    flag: () => {
+      buttonTitle = config.flag.buttonTitle;
+      setButton(buttonTitle);
+      setSection(
+        buttonTitle,
+        config.flag.cursorIntON,
+        config.flag.cursorIntOFF,
+        config.flag.output,
+        config.flag.cancelInt
+      );
+    },
+    try: () => {
+      buttonTitle = config.try.buttonTitle;
+      setButton(buttonTitle);
+      setSection(
+        buttonTitle,
+        config.try.cursorIntON,
+        config.try.cursorIntOFF,
+        config.try.output,
+        config.try.cancelInt
+      );
+    },
+  };
+
+  useHotkeys(
+    `${KEY.activity}, ${KEY.intro}, ${KEY.check}, ${KEY.tip}, ` +
+      `${KEY.protip}, ${KEY.challenge}, ${KEY.flag}, ${KEY.try}`,
+    (event, handler) => {
+      event.preventDefault();
+      switch (handler.key) {
+        case KEY.activity:
+          set.activity();
+          break;
+        case KEY.intro:
+          set.intro();
+          break;
+        case KEY.check:
+          set.check();
+          break;
+        case KEY.tip:
+          set.tip();
+          break;
+        case KEY.protip:
+          set.protip();
+          break;
+        case KEY.challenge:
+          set.challenge();
+          break;
+        case KEY.flag:
+          set.flag();
+          break;
+        case KEY.try:
+          set.try();
+          break;
+        default:
+          break;
+      }
+      return false;
+    },
+    { enableOnTags: "TEXTAREA", keydown: true },
+    [setButton, setSection]
+  );
+
   const handleButtonClick = (button) => {
     editorRef.current.focus();
-    setButtonValues((prevState) => ({
-      ...prevState,
-      [button]: !buttonValues[button],
-    }));
     switch (button) {
-      case "sec_activity":
-        setSection(
-          button,
-          0,
-          13,
-          h1 + SECTION_TEXT + " {.activity}\n",
-          h1.length
-        );
+      case config.activity.buttonTitle:
+        set.activity();
         break;
-      case "sec_intro":
-        setSection(button, 0, 10, h1 + SECTION_TEXT + " {.intro}\n", h1.length);
+      case config.intro.buttonTitle:
+        set.intro();
         break;
-      case "sec_check":
-        setSection(button, 0, 10, h2 + SECTION_TEXT + " {.check}\n", h2.length);
+      case config.check.buttonTitle:
+        set.check();
         break;
-      case "sec_tip":
-        setSection(button, 10, 10, "## {.tip}\n" + SECTION_TEXT, 10);
+      case config.tip.buttonTitle:
+        set.tip();
         break;
-      case "sec_protip":
-        setSection(
-          button,
-          0,
-          11,
-          h2 + SECTION_TEXT + " {.protip}\n",
-          h2.length
-        );
+      case config.protip.buttonTitle:
+        set.protip();
         break;
-      case "sec_challenge":
-        setSection(
-          button,
-          0,
-          14,
-          h2 + SECTION_TEXT + " {.challenge}\n",
-          h2.length
-        );
+      case config.challenge.buttonTitle:
+        set.challenge();
         break;
-      case "sec_flag":
-        setSection(button, 0, 9, h2 + SECTION_TEXT + " {.flag}\n", h2.length);
+      case config.flag.buttonTitle:
+        set.flag();
         break;
-      case "sec_try":
-        setSection(button, 0, 9, h1 + SECTION_TEXT + " {.try}\n", h1.length);
+      case config.try.buttonTitle:
+        set.try();
         break;
       default:
         break;
@@ -119,14 +238,14 @@ const Sections = ({
   return (
     <>
       <div className="ui icon buttons emphasis">
-        {config.map((element, index) => (
+        {Object.entries(config).map((element, index) => (
           <CPButton
             key={"element" + index}
-            buttonTitle={element.buttonTitle}
-            icon={element.icon}
-            title={element.title}
+            buttonTitle={element[1].buttonTitle}
+            icon={element[1].icon}
+            title={element[1].title}
             onButtonClick={handleButtonClick}
-            shortcutKey={element.shortcut}
+            shortcutKey={element[1].shortcut}
           />
         ))}
       </div>

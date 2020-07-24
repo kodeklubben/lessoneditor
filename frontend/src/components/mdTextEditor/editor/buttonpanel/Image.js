@@ -1,10 +1,27 @@
 import React from "react";
 import CPButton from "./CPButton";
 
-import { image as config } from "../../settingsFiles/buttonConfig";
+import { useHotkeys } from "react-hotkeys-hook";
+
+import {
+  KEY_COMBINATIONS as KEY,
+  image as config,
+} from "../../settingsFiles/buttonConfig";
 
 const Image = ({ editorRef, uploadImageRef }) => {
-  const handleButtonClick = (button) => {
+  useHotkeys(
+    `${KEY.image}`,
+    (event) => {
+      event.preventDefault();
+
+      uploadImageRef.current.click();
+      editorRef.current.focus();
+
+      return false;
+    },
+    { enableOnTags: "TEXTAREA", keydown: true }
+  );
+  const handleButtonClick = () => {
     uploadImageRef.current.click();
     editorRef.current.focus();
     return;
@@ -12,14 +29,14 @@ const Image = ({ editorRef, uploadImageRef }) => {
   return (
     <>
       <div className="ui icon buttons emphasis">
-        {config.map((element, index) => (
+        {Object.entries(config).map((element, index) => (
           <CPButton
             key={"element" + index}
-            buttonTitle={element.buttonTitle}
-            icon={element.icon}
-            title={element.title}
+            buttonTitle={element[1].buttonTitle}
+            icon={element[1].icon}
+            title={element[1].title}
             onButtonClick={handleButtonClick}
-            shortcutKey={element.shortcut}
+            shortcutKey={element[1].shortcut}
           />
         ))}
       </div>

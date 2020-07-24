@@ -1,15 +1,21 @@
 import React from "react";
 import CPButton from "./CPButton";
 
+import { useHotkeys } from "react-hotkeys-hook";
+
 import {
   cancelButton,
   buttonAction as listsAction,
 } from "./utils/buttonMethods";
 
-import { lists as config } from "../../settingsFiles/buttonConfig";
+import {
+  KEY_COMBINATIONS as KEY,
+  lists as config,
+} from "../../settingsFiles/buttonConfig";
 
 let cancelResults;
 let results;
+let buttonTitle;
 
 const Lists = ({
   editorRef,
@@ -27,6 +33,13 @@ const Lists = ({
     setCursor(cursorPositionStart, cursorPositionEnd);
     setCursorPosition(cursorPositionStart, cursorPositionEnd);
     setMdText(mdText);
+  };
+
+  const setButton = (value) => {
+    setButtonValues((prevButtonValues) => ({
+      ...prevButtonValues,
+      [value]: !buttonValues[value],
+    }));
   };
 
   const setList = (button, cursorIntON, cursorIntOFF, output) => {
@@ -64,6 +77,77 @@ const Lists = ({
     );
   };
 
+  const set = {
+    listUl: () => {
+      buttonTitle = config.listUl.buttonTitle;
+      setButton(buttonTitle);
+      setListButtonValues({
+        bTitle: buttonTitle,
+        output: config.listUl.output,
+        cursorInt: config.listUl.cursorIntON,
+      });
+      setList(
+        buttonTitle,
+        config.listUl.cursorIntON,
+        config.listUl.cursorIntOFF,
+        config.listUl.output
+      );
+    },
+    listOl: () => {
+      buttonTitle = config.listOl.buttonTitle;
+      setButton(buttonTitle);
+      setListButtonValues({
+        bTitle: buttonTitle,
+        output: config.listOl.output,
+        cursorInt: config.listOl.cursorIntON,
+      });
+      setList(
+        buttonTitle,
+        config.listOl.cursorIntON,
+        config.listOl.cursorIntOFF,
+        config.listOl.output
+      );
+    },
+    listCheck: () => {
+      buttonTitle = config.listCheck.buttonTitle;
+      setButton(buttonTitle);
+      setListButtonValues({
+        bTitle: buttonTitle,
+        output: config.listCheck.output,
+        cursorInt: config.listCheck.cursorIntON,
+      });
+      setList(
+        buttonTitle,
+        config.listCheck.cursorIntON,
+        config.listCheck.cursorIntOFF,
+        config.listCheck.output
+      );
+    },
+  };
+
+  useHotkeys(
+    `${KEY.listul}, ${KEY.listol}, ${KEY.listcheck}`,
+    (event, handler) => {
+      event.preventDefault();
+      switch (handler.key) {
+        case KEY.listul:
+          set.listUl();
+          break;
+        case KEY.listol:
+          set.listOl();
+          break;
+        case KEY.listcheck:
+          set.listCheck();
+          break;
+        default:
+          break;
+      }
+      return false;
+    },
+    { enableOnTags: "TEXTAREA", keydown: true },
+    [setButton, setListButtonValues, setList]
+  );
+
   const handleButtonClick = (button) => {
     editorRef.current.focus();
     setButtonValues((prevState) => ({
@@ -71,22 +155,14 @@ const Lists = ({
       [button]: !buttonValues[button],
     }));
     switch (button) {
-      case "listUl":
-        setListButtonValues({ bTitle: button, output: "- ", cursorInt: 2 });
-        setList(button, 2, 0, "- ");
+      case config.listUl.buttonTitle:
+        set.listUl();
         break;
-      case "listOl":
-        setListButtonValues({ bTitle: button, output: "1. ", cursorInt: 3 });
-        setList(button, 3, 0, "1. ");
+      case config.listOl.buttonTitle:
+        set.listOl();
         break;
-
-      case "listCheck":
-        setListButtonValues({
-          bTitle: button,
-          output: "- [\u0020] ",
-          cursorInt: 6,
-        });
-        setList(button, 6, 0, "- [\u0020] ");
+      case config.listCheck.buttonTitle:
+        set.listCheck();
         break;
       default:
         break;
@@ -95,14 +171,14 @@ const Lists = ({
   return (
     <>
       <div className="ui icon buttons emphasis">
-        {config.map((element, index) => (
+        {Object.entries(config).map((element, index) => (
           <CPButton
             key={"element" + index}
-            buttonTitle={element.buttonTitle}
-            icon={element.icon}
-            title={element.title}
+            buttonTitle={element[1].buttonTitle}
+            icon={element[1].icon}
+            title={element[1].title}
             onButtonClick={handleButtonClick}
-            shortcutKey={element.shortcut}
+            shortcutKey={element[1].shortcut}
           />
         ))}
       </div>
