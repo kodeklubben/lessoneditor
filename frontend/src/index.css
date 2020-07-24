@@ -1,11 +1,6 @@
-* {
-  margin: 0px;
-  padding: 0px;
-}
-
 body {
   background-color: rgb(255, 255, 255);
-  width: 1600px;
+  max-width: 1600px;
   margin: auto;
 }
 
