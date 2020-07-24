@@ -41,10 +41,10 @@ const chars = {
 
 // SHORTCUTKEYS config
 const KEY_COMBINATIONS = {
-  bold: [SHORTCUTKEY, plus, chars.b],
-  italic: [SHORTCUTKEY, plus, chars.i],
-  heading: [SHORTCUTKEY, plus, chars.h],
-  strikethrough: [SHORTCUTKEY, plus, chars.s],
+  bold: [SHORTCUTKEY, plus, chars.b].join(""),
+  italic: [SHORTCUTKEY, plus, chars.i].join(""),
+  heading: [SHORTCUTKEY, plus, chars.h].join(""),
+  strikethrough: [SHORTCUTKEY, plus, chars.s].join(""),
   undo: [SHORTCUTKEY, plus, chars.z],
   redo: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.z],
   new: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.n],
@@ -67,8 +67,8 @@ const KEY_COMBINATIONS = {
   preview: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.y],
 };
 
-const emphasis = [
-  {
+const emphasis = {
+  bold: {
     buttonTitle: "bold",
     icon: "bold",
     output: "****",
@@ -76,9 +76,9 @@ const emphasis = [
     cursorIntON: 2,
     cursorIntOFF: 2,
     endOutput: "",
-    shortcut: KEY_COMBINATIONS.bold.join(""),
+    shortcut: KEY_COMBINATIONS.bold,
   },
-  {
+  italic: {
     buttonTitle: "italic",
     icon: "italic",
     output: "**",
@@ -86,9 +86,9 @@ const emphasis = [
     cursorIntON: 1,
     cursorIntOFF: 1,
     endOutput: "",
-    shortcut: KEY_COMBINATIONS.italic.join(""),
+    shortcut: KEY_COMBINATIONS.italic,
   },
-  {
+  heading: {
     buttonTitle: "heading",
     icon: "heading",
     output: "## ",
@@ -96,9 +96,9 @@ const emphasis = [
     cursorIntON: 0,
     cursorIntOFF: 0,
     endOutput: "",
-    shortcut: KEY_COMBINATIONS.heading.join(""),
+    shortcut: KEY_COMBINATIONS.heading,
   },
-  {
+  strikethrough: {
     buttonTitle: "strikethrough",
     icon: "strikethrough",
     output: "~~~~",
@@ -106,9 +106,9 @@ const emphasis = [
     cursorIntON: 2,
     cursorIntOFF: 2,
     endOutput: "",
-    shortcut: KEY_COMBINATIONS.strikethrough.join(""),
+    shortcut: KEY_COMBINATIONS.strikethrough,
   },
-];
+};
 
 const undoRedo = [
   {

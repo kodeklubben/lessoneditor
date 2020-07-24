@@ -9,19 +9,15 @@ import editorButtonsValue from "./editorButtonsValue";
 import fetchMdText from "../../../api/fetch-md-text";
 import saveMdText from "../../../api/save-md-text";
 import { UserContext } from "../../../contexts/UserContext";
-// import { LessonContext } from "../../../contexts/LessonContext";
 
 let orderedListIndex = 2;
 
 let tabSize = 2;
 
-let autoSaveMessage = "";
-
 const Editor = () => {
   const context = useContext(UserContext);
   const [mdText, setMdText] = useState("");
   const [savedText, setSavedText] = useState("");
-  // const lessonContext = useContext(LessonContext);
   const [buttonValues, setButtonValues] = useState(editorButtonsValue);
   const [cursorPositionStart, setCursorPositionStart] = useState(0);
   const [cursorPositionEnd, setCursorPositionEnd] = useState(0);
@@ -41,7 +37,6 @@ const Editor = () => {
   let uploadImageRef = useRef();
 
   const pushUndoValue = (mdText, cursorPositionStart) => {
-    resetButtons();
     if (
       undo[undo.length - 1] !== mdText &&
       undoCursorPosition !== cursorPositionStart
@@ -58,7 +53,6 @@ const Editor = () => {
   };
 
   const pushRedoValue = (mdText, cursorPositionStart) => {
-    resetButtons();
     if (
       redo[redo.length] !== mdText &&
       redoCursorPosition !== cursorPositionStart
@@ -275,7 +269,6 @@ const Editor = () => {
 
   return (
     <div className="editor">
-      <p>{autoSaveMessage}</p>
       <ImageUpload
         uploadImageRef={uploadImageRef}
         editorRef={editorRef}

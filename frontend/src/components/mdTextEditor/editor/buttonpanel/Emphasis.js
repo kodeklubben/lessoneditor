@@ -11,13 +11,13 @@ import {
 
 import {
   KEY_COMBINATIONS as KEY,
-  emphasis as config,
+  emphasis,
 } from "../../settingsFiles/buttonConfig";
 
 let output;
 let cancelResults;
 let results;
-let buttonValue;
+let buttonTitle;
 
 const Emphasis = ({
   editorRef,
@@ -36,7 +36,14 @@ const Emphasis = ({
     setMdText(mdText);
   };
 
-  const setEmphasis = (isON, button, cursorIntON, cursorIntOFF, output) => {
+  const setButton = (value) => {
+    setButtonValues((prevButtonValues) => ({
+      ...prevButtonValues,
+      [value]: !buttonValues[value],
+    }));
+  };
+
+  const setEmphasis = (isON, cursorIntON, cursorIntOFF, output) => {
     cancelResults = cancelButton(
       isON,
       mdText,
@@ -71,39 +78,78 @@ const Emphasis = ({
     );
   };
 
-  const setButton = (value) => {
-    setButtonValues((prevButtonValues) => ({
-      ...prevButtonValues,
-      [value]: !buttonValues[value],
-    }));
+  const set = {
+    bold: () => {
+      buttonTitle = emphasis.bold.buttonTitle;
+      setButton(buttonTitle);
+      setEmphasis(
+        buttonValues[buttonTitle],
+        emphasis.bold.cursorIntON,
+        emphasis.bold.cursorIntOFF,
+        emphasis.bold.output
+      );
+    },
+    italic: () => {
+      buttonTitle = emphasis.italic.buttonTitle;
+      setButton(buttonTitle);
+      setEmphasis(
+        buttonValues[buttonTitle],
+        emphasis.italic.cursorIntON,
+        emphasis.italic.cursorIntOFF,
+        emphasis.italic.output
+      );
+    },
+    heading: () => {
+      buttonTitle = emphasis.heading.buttonTitle;
+      output = emphasis.heading.output;
+
+      results = heading(
+        buttonValues[buttonTitle],
+        mdText,
+        cursorPositionStart,
+        output
+      );
+      setButtonValues((prevButtonValues) => ({
+        ...prevButtonValues,
+        [buttonTitle]: results.isOn,
+      }));
+      setChanges(
+        results.mdText,
+        results.cursorPositionStart,
+        results.cursorPositionStart
+      );
+    },
+    strikethrough: () => {
+      buttonTitle = emphasis.strikethrough.buttonTitle;
+      setButton(buttonTitle);
+      setEmphasis(
+        buttonValues[buttonTitle],
+        emphasis.strikethrough.cursorIntON,
+        emphasis.strikethrough.cursorIntOFF,
+        emphasis.strikethrough.output
+      );
+    },
   };
 
   useHotkeys(
     `${KEY.bold}, ${KEY.italic}, ${KEY.heading}, ${KEY.strikethrough}`,
     (event, handler) => {
-      console.log(handler);
       switch (handler.key) {
         case KEY.bold:
-          alert("");
           event.preventDefault();
-          buttonValue = KEY.bold;
-          setButton(buttonValue);
-          setEmphasis(buttonValues[buttonValue], buttonValue, 2, 2, "****");
+          set.bold();
           break;
         case KEY.italic:
           event.preventDefault();
-          buttonValue = KEY.italic;
-          setButton(buttonValue);
-          setEmphasis(buttonValues[buttonValue], buttonValue, 1, 1, "**");
+          set.italic();
           break;
         case KEY.heading:
-          alert("you pressed r!");
+          event.preventDefault();
+          set.heading();
           break;
         case KEY.strikethrough:
           event.preventDefault();
-          buttonValue = KEY.strikethrough;
-          setButton(buttonValue);
-          setEmphasis(buttonValues[buttonValue], buttonValue, 2, 2, "~~~~");
+          set.strikethrough();
           break;
         default:
           break;
@@ -111,46 +157,25 @@ const Emphasis = ({
       return false;
     },
     { enableOnTags: "TEXTAREA", keydown: true },
-    [setButton, setEmphasis]
+    [setButton, setEmphasis, heading]
   );
 
   const handleButtonClick = (button) => {
-    console.log(KEY);
     editorRef.current.focus();
-    setButtonValues((prevButtonValues) => ({
-      ...prevButtonValues,
-      [button]: !buttonValues[button],
-    }));
+
     switch (button) {
       case "bold":
-        setEmphasis(buttonValues[button], button, 2, 2, "****");
+        set.bold();
         break;
       case "italic":
-        setEmphasis(button, 1, 1, "**");
+        set.italic();
         break;
       case "heading":
-        output = "## ";
-
-        results = heading(
-          buttonValues[button],
-          mdText,
-          cursorPositionStart,
-          output
-        );
-        setButtonValues((prevButtonValues) => ({
-          ...prevButtonValues,
-          [button]: results.isOn,
-        }));
-        setChanges(
-          results.mdText,
-          results.cursorPositionStart,
-          results.cursorPositionStart
-        );
-
+        set.heading();
         break;
 
       case "strikethrough":
-        setEmphasis(button, 2, 2, "~~~~");
+        set.strikethrough();
         break;
       default:
         break;
@@ -159,14 +184,14 @@ const Emphasis = ({
   return (
     <>
       <div className="ui icon buttons emphasis">
-        {config.map((element, index) => (
+        {Object.entries(emphasis).map((element, index) => (
           <CPButton
             key={"element" + index}
-            buttonTitle={element.buttonTitle}
-            icon={element.icon}
-            title={element.title}
+            buttonTitle={element[1].buttonTitle}
+            icon={element[1].icon}
+            title={element[1].title}
             onButtonClick={handleButtonClick}
-            shortcutKey={element.shortcut}
+            shortcutKey={element[1].shortcut}
           />
         ))}
       </div>

@@ -2,12 +2,10 @@ import React from "react";
 import CPButton from "./CPButton";
 
 import { preview as config } from "../../settingsFiles/buttonConfig";
-// import { topicSettings } from "components/lessonForm/settingsFiles/YMLTAGSSETTINGS";
 
-const Preview = ({ handlePreview, testings }) => {
+const Preview = ({ handlePreview }) => {
   const handleButtonClick = (button) => {
     handlePreview();
-    testings();
     return;
   };
   return (
