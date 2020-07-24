@@ -4,22 +4,19 @@ import CPButton from "./CPButton";
 import { useHotkeys } from "react-hotkeys-hook";
 
 import {
+  buttonAction as codeAction,
   cancelButton,
-  buttonAction as emphasisAction,
-  heading,
 } from "./utils/buttonMethods";
-
 import {
   KEY_COMBINATIONS as KEY,
-  emphasis as config,
-} from "../../settingsFiles/buttonConfig";
+  code as config,
+} from "../settingsFiles/buttonConfig";
 
-let output;
-let cancelResults;
 let results;
+let cancelResults;
 let buttonTitle;
 
-const Emphasis = ({
+const Code = ({
   editorRef,
   cursorPositionStart,
   cursorPositionEnd,
@@ -43,9 +40,9 @@ const Emphasis = ({
     }));
   };
 
-  const setEmphasis = (isON, cursorIntON, cursorIntOFF, output) => {
+  const setCode = (button, cursorIntON, cursorIntOFF, output) => {
     cancelResults = cancelButton(
-      isON,
+      buttonValues[button],
       mdText,
       cursorPositionStart,
       cursorPositionEnd,
@@ -60,9 +57,8 @@ const Emphasis = ({
       );
       return;
     }
-
-    results = emphasisAction(
-      isON,
+    results = codeAction(
+      buttonValues[button],
       mdText,
       cursorPositionStart,
       cursorPositionEnd,
@@ -79,74 +75,38 @@ const Emphasis = ({
   };
 
   const set = {
-    bold: () => {
-      buttonTitle = config.bold.buttonTitle;
+    inline: () => {
+      buttonTitle = config.inline.buttonTitle;
       setButton(buttonTitle);
-      setEmphasis(
-        buttonValues[buttonTitle],
-        config.bold.cursorIntON,
-        config.bold.cursorIntOFF,
-        config.bold.output
+      setCode(
+        buttonTitle,
+        config.inline.cursorIntON,
+        config.inline.cursorIntOFF,
+        config.inline.output
       );
     },
-    italic: () => {
-      buttonTitle = config.italic.buttonTitle;
+    codeblock: () => {
+      buttonTitle = config.codeblock.buttonTitle;
       setButton(buttonTitle);
-      setEmphasis(
-        buttonValues[buttonTitle],
-        config.italic.cursorIntON,
-        config.italic.cursorIntOFF,
-        config.italic.output
-      );
-    },
-    heading: () => {
-      buttonTitle = config.heading.buttonTitle;
-      output = config.heading.output;
-
-      results = heading(
-        buttonValues[buttonTitle],
-        mdText,
-        cursorPositionStart,
-        output
-      );
-      setButtonValues((prevButtonValues) => ({
-        ...prevButtonValues,
-        [buttonTitle]: results.isOn,
-      }));
-      setChanges(
-        results.mdText,
-        results.cursorPositionStart,
-        results.cursorPositionStart
-      );
-    },
-    strikethrough: () => {
-      buttonTitle = config.strikethrough.buttonTitle;
-      setButton(buttonTitle);
-      setEmphasis(
-        buttonValues[buttonTitle],
-        config.strikethrough.cursorIntON,
-        config.strikethrough.cursorIntOFF,
-        config.strikethrough.output
+      setCode(
+        buttonTitle,
+        config.codeblock.cursorIntON,
+        config.codeblock.cursorIntOFF,
+        config.codeblock.output
       );
     },
   };
 
   useHotkeys(
-    `${KEY.bold}, ${KEY.italic}, ${KEY.heading}, ${KEY.strikethrough}`,
+    `${KEY.inline}, ${KEY.codeblock}`,
     (event, handler) => {
       event.preventDefault();
       switch (handler.key) {
-        case KEY.bold:
-          set.bold();
+        case KEY.inline:
+          set.inline();
           break;
-        case KEY.italic:
-          set.italic();
-          break;
-        case KEY.heading:
-          set.heading();
-          break;
-        case KEY.strikethrough:
-          set.strikethrough();
+        case KEY.codeblock:
+          set.codeblock();
           break;
         default:
           break;
@@ -154,23 +114,21 @@ const Emphasis = ({
       return false;
     },
     { enableOnTags: "TEXTAREA", keydown: true },
-    [setButton, setEmphasis, heading]
+    [setButton, setCode]
   );
 
   const handleButtonClick = (button) => {
     editorRef.current.focus();
+    setButtonValues((prevState) => ({
+      ...prevState,
+      [button]: !buttonValues[button],
+    }));
     switch (button) {
-      case config.bold.buttonTitle:
-        set.bold();
+      case config.inline.buttonTitle:
+        set.inline();
         break;
-      case config.italic.buttonTitle:
-        set.italic();
-        break;
-      case config.heading.buttonTitle:
-        set.heading();
-        break;
-      case config.strikethrough.buttonTitle:
-        set.strikethrough();
+      case config.codeblock.buttonTitle:
+        set.codeblock();
         break;
       default:
         break;
@@ -194,4 +152,4 @@ const Emphasis = ({
   );
 };
 
-export default Emphasis;
+export default Code;

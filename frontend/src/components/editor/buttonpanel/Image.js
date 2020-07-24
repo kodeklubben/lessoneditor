@@ -6,7 +6,7 @@ import { useHotkeys } from "react-hotkeys-hook";
 import {
   KEY_COMBINATIONS as KEY,
   image as config,
-} from "../../settingsFiles/buttonConfig";
+} from "../settingsFiles/buttonConfig";
 
 const Image = ({ editorRef, uploadImageRef }) => {
   useHotkeys(

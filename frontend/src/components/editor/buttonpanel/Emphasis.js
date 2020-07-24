@@ -5,19 +5,21 @@ import { useHotkeys } from "react-hotkeys-hook";
 
 import {
   cancelButton,
-  buttonAction as listsAction,
+  buttonAction as emphasisAction,
+  heading,
 } from "./utils/buttonMethods";
 
 import {
   KEY_COMBINATIONS as KEY,
-  lists as config,
-} from "../../settingsFiles/buttonConfig";
+  emphasis as config,
+} from "../settingsFiles/buttonConfig";
 
+let output;
 let cancelResults;
 let results;
 let buttonTitle;
 
-const Lists = ({
+const Emphasis = ({
   editorRef,
   cursorPositionStart,
   cursorPositionEnd,
@@ -26,7 +28,6 @@ const Lists = ({
   setMdText,
   setCursorPosition,
   setCursor,
-  setListButtonValues,
   setButtonValues,
 }) => {
   const setChanges = (mdText, cursorPositionStart, cursorPositionEnd) => {
@@ -42,9 +43,9 @@ const Lists = ({
     }));
   };
 
-  const setList = (button, cursorIntON, cursorIntOFF, output) => {
+  const setEmphasis = (isON, cursorIntON, cursorIntOFF, output) => {
     cancelResults = cancelButton(
-      buttonValues[button],
+      isON,
       mdText,
       cursorPositionStart,
       cursorPositionEnd,
@@ -60,8 +61,8 @@ const Lists = ({
       return;
     }
 
-    results = listsAction(
-      buttonValues[button],
+    results = emphasisAction(
+      isON,
       mdText,
       cursorPositionStart,
       cursorPositionEnd,
@@ -78,66 +79,74 @@ const Lists = ({
   };
 
   const set = {
-    listUl: () => {
-      buttonTitle = config.listUl.buttonTitle;
+    bold: () => {
+      buttonTitle = config.bold.buttonTitle;
       setButton(buttonTitle);
-      setListButtonValues({
-        bTitle: buttonTitle,
-        output: config.listUl.output,
-        cursorInt: config.listUl.cursorIntON,
-      });
-      setList(
-        buttonTitle,
-        config.listUl.cursorIntON,
-        config.listUl.cursorIntOFF,
-        config.listUl.output
+      setEmphasis(
+        buttonValues[buttonTitle],
+        config.bold.cursorIntON,
+        config.bold.cursorIntOFF,
+        config.bold.output
       );
     },
-    listOl: () => {
-      buttonTitle = config.listOl.buttonTitle;
+    italic: () => {
+      buttonTitle = config.italic.buttonTitle;
       setButton(buttonTitle);
-      setListButtonValues({
-        bTitle: buttonTitle,
-        output: config.listOl.output,
-        cursorInt: config.listOl.cursorIntON,
-      });
-      setList(
-        buttonTitle,
-        config.listOl.cursorIntON,
-        config.listOl.cursorIntOFF,
-        config.listOl.output
+      setEmphasis(
+        buttonValues[buttonTitle],
+        config.italic.cursorIntON,
+        config.italic.cursorIntOFF,
+        config.italic.output
       );
     },
-    listCheck: () => {
-      buttonTitle = config.listCheck.buttonTitle;
+    heading: () => {
+      buttonTitle = config.heading.buttonTitle;
+      output = config.heading.output;
+
+      results = heading(
+        buttonValues[buttonTitle],
+        mdText,
+        cursorPositionStart,
+        output
+      );
+      setButtonValues((prevButtonValues) => ({
+        ...prevButtonValues,
+        [buttonTitle]: results.isOn,
+      }));
+      setChanges(
+        results.mdText,
+        results.cursorPositionStart,
+        results.cursorPositionStart
+      );
+    },
+    strikethrough: () => {
+      buttonTitle = config.strikethrough.buttonTitle;
       setButton(buttonTitle);
-      setListButtonValues({
-        bTitle: buttonTitle,
-        output: config.listCheck.output,
-        cursorInt: config.listCheck.cursorIntON,
-      });
-      setList(
-        buttonTitle,
-        config.listCheck.cursorIntON,
-        config.listCheck.cursorIntOFF,
-        config.listCheck.output
+      setEmphasis(
+        buttonValues[buttonTitle],
+        config.strikethrough.cursorIntON,
+        config.strikethrough.cursorIntOFF,
+        config.strikethrough.output
       );
     },
   };
 
   useHotkeys(
-    `${KEY.listul}, ${KEY.listol}, ${KEY.listcheck}`,
+    `${KEY.bold}, ${KEY.italic}, ${KEY.heading}, ${KEY.strikethrough}`,
     (event, handler) => {
       event.preventDefault();
       switch (handler.key) {
-        case KEY.listul:
-          set.listUl();
+        case KEY.bold:
+          set.bold();
           break;
-        case KEY.listol:
-          set.listOl();
+        case KEY.italic:
+          set.italic();
           break;
-        case KEY.listcheck:
-          set.listCheck();
+        case KEY.heading:
+          set.heading();
+          break;
+        case KEY.strikethrough:
+          set.strikethrough();
           break;
         default:
           break;
@@ -145,24 +154,23 @@ const Lists = ({
       return false;
     },
     { enableOnTags: "TEXTAREA", keydown: true },
-    [setButton, setListButtonValues, setList]
+    [setButton, setEmphasis, heading]
   );
 
   const handleButtonClick = (button) => {
     editorRef.current.focus();
-    setButtonValues((prevState) => ({
-      ...prevState,
-      [button]: !buttonValues[button],
-    }));
     switch (button) {
-      case config.listUl.buttonTitle:
-        set.listUl();
+      case config.bold.buttonTitle:
+        set.bold();
         break;
-      case config.listOl.buttonTitle:
-        set.listOl();
+      case config.italic.buttonTitle:
+        set.italic();
         break;
-      case config.listCheck.buttonTitle:
-        set.listCheck();
+      case config.heading.buttonTitle:
+        set.heading();
+        break;
+      case config.strikethrough.buttonTitle:
+        set.strikethrough();
         break;
       default:
         break;
@@ -186,4 +194,4 @@ const Lists = ({
   );
 };
 
-export default Lists;
+export default Emphasis;

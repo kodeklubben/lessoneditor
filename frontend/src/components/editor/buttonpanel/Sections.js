@@ -7,8 +7,8 @@ import { insertSection, cancelButton } from "./utils/buttonMethods";
 import {
   KEY_COMBINATIONS as KEY,
   sections as config,
-} from "../../settingsFiles/buttonConfig";
-import { SECTION_TEXT } from "components/mdTextEditor/settingsFiles/languages/editor_NO";
+} from "../settingsFiles/buttonConfig";
+import { SECTION_TEXT } from "components/editor/settingsFiles/languages/editor_NO";
 
 let results;
 let cancelResults;
