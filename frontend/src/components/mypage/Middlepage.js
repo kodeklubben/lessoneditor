@@ -3,7 +3,7 @@ import "./overview.css";
 
 import MidpageList from "./MidpageList";
 import { UserContext } from "../../contexts/UserContext";
-import Header from "../Header/Header";
+import Navbar from "../navbar/Navbar";
 
 const lessonScreenshots = [
   "/lessonsScreenshots/Screenshot 2020-07-12 at 09.42.03.png",
@@ -18,7 +18,7 @@ const Middlepage = () => {
   const { lessons } = context.user;
   return (
     <div>
-      <Header />
+      <Navbar />
 
       <h1>Oppgave Tittel</h1>
       <div className="overViewContainer">

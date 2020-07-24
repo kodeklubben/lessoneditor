@@ -1,14 +1,14 @@
-import "./header.css";
+import "./navbar.css";
 import React, { useContext } from "react";
 import ProfileMenu from "components/ProfileMenu";
 
 import { UserContext } from "contexts/UserContext";
 
-function Header() {
+const Navbar = () => {
   const context = useContext(UserContext);
   return (
     <div>
-      <div className="header_container">
+      <header className="header_container">
         <div className="logo">
           <a href={"//kidsakoder.no"}>
             <img className="header_logo" alt="" src={"/lav_logo.jpg"} />
@@ -21,8 +21,8 @@ function Header() {
             photo={context.user ? context.user.photo : ""}
           />
         </div>
-      </div>
+      </header>
     </div>
   );
-}
-export default Header;
+};
+export default Navbar;
