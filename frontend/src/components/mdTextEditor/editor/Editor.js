@@ -1,9 +1,4 @@
 import "./editor.css";
-import {
-  cancelButton,
-  buttonAction,
-} from "../editor/buttonpanel/utils/buttonMethods";
-
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
 import MDTextArea from "./MDTextArea";
@@ -13,29 +8,14 @@ import ImageUpload from "../ImageUpload";
 import editorButtonsValue from "./editorButtonsValue";
 import fetchMdText from "../../../api/fetch-md-text";
 import saveMdText from "../../../api/save-md-text";
-import {
-  KEY_COMBINATIONS as KEY,
-  SHORTCUTKEY,
-} from "../settingsFiles/buttonConfig";
 import { UserContext } from "../../../contexts/UserContext";
 // import { LessonContext } from "../../../contexts/LessonContext";
-
-let isKeyShortcutOn = editorButtonsValue;
-
-let setKeyShortcutOn = (button) => {
-  isKeyShortcutOn[button] = !isKeyShortcutOn[button];
-};
 
 let orderedListIndex = 2;
 
 let tabSize = 2;
 
 let autoSaveMessage = "";
-
-let shortcutKeys = [];
-for (let i = 0; i < Object.values(KEY).length; i++) {
-  shortcutKeys.push(Object.values(KEY)[i][Object.values(KEY)[i].length - 1]);
-}
 
 const Editor = () => {
   const context = useContext(UserContext);
@@ -180,17 +160,6 @@ const Editor = () => {
   const onTextareaKeyDown = (event) => {
     setCursor(event.target.selectionStart, event.target.selectionEnd);
 
-    if (
-      (event.ctrlKey && SHORTCUTKEY === "ctrl") ||
-      (event.altKey && SHORTCUTKEY === "alt") ||
-      (event.metaKey && SHORTCUTKEY === "command") ||
-      (event.shiftKey && SHORTCUTKEY === "shift")
-    ) {
-      if (shortcutKeys.includes(event.key)) {
-        event.preventDefault();
-      }
-    }
-
     if (event.key === "Enter") {
       if (buttonValues[listButtonValues["bTitle"]]) {
         event.preventDefault();
@@ -301,7 +270,7 @@ const Editor = () => {
   };
 
   const handlePreview = (event) => {
-    // console.log("Previewbutton pressed");
+    console.log("Previewbutton pressed");
   };
 
   return (
@@ -337,8 +306,6 @@ const Editor = () => {
 
       <div className="textEditorContainer">
         <MDTextArea
-          isKeyShortcutOn={isKeyShortcutOn}
-          setKeyShortcutOn={setKeyShortcutOn}
           mdText={mdText}
           editorRef={editorRef}
           onInputChange={handleChange}
@@ -346,22 +313,6 @@ const Editor = () => {
           onTextareaKeyUp={onTextareaKeyUp}
           onTextareaMouseDown={onTextareaMouseDown}
           onTextareaSelect={onTextareaSelect}
-          uploadImageRef={uploadImageRef}
-          cursorPositionStart={cursorPositionStart}
-          cursorPositionEnd={cursorPositionEnd}
-          undo={undo}
-          redo={redo}
-          undoCursorPosition={undoCursorPosition}
-          redoCursorPosition={redoCursorPosition}
-          handlePreview={handlePreview}
-          pushUndoValue={pushUndoValue}
-          pushRedoValue={pushRedoValue}
-          setMdText={setMdText}
-          setCursorPosition={setCursorPosition}
-          setCursor={setCursor}
-          setUndoCursorPosition={setUndoCursorPosition}
-          setRedoCursorPosition={setRedoCursorPosition}
-          setListButtonValues={setListButtonValues}
         />
         <MDPreview mdText={mdText} />
       </div>

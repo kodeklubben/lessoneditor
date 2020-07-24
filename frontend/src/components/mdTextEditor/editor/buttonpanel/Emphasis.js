@@ -1,17 +1,23 @@
 import React from "react";
 import CPButton from "./CPButton";
 
+import { useHotkeys } from "react-hotkeys-hook";
+
 import {
   cancelButton,
   buttonAction as emphasisAction,
   heading,
 } from "./utils/buttonMethods";
 
-import { emphasis as config } from "../../settingsFiles/buttonConfig";
+import {
+  KEY_COMBINATIONS as KEY,
+  emphasis as config,
+} from "../../settingsFiles/buttonConfig";
 
 let output;
 let cancelResults;
 let results;
+let buttonValue;
 
 const Emphasis = ({
   editorRef,
@@ -30,9 +36,9 @@ const Emphasis = ({
     setMdText(mdText);
   };
 
-  const setEmphasis = (button, cursorIntON, cursorIntOFF, output) => {
+  const setEmphasis = (isON, button, cursorIntON, cursorIntOFF, output) => {
     cancelResults = cancelButton(
-      buttonValues[button],
+      isON,
       mdText,
       cursorPositionStart,
       cursorPositionEnd,
@@ -49,7 +55,7 @@ const Emphasis = ({
     }
 
     results = emphasisAction(
-      buttonValues[button],
+      isON,
       mdText,
       cursorPositionStart,
       cursorPositionEnd,
@@ -65,15 +71,59 @@ const Emphasis = ({
     );
   };
 
+  const setButton = (value) => {
+    setButtonValues((prevButtonValues) => ({
+      ...prevButtonValues,
+      [value]: !buttonValues[value],
+    }));
+  };
+
+  useHotkeys(
+    `${KEY.bold}, ${KEY.italic}, ${KEY.heading}, ${KEY.strikethrough}`,
+    (event, handler) => {
+      console.log(handler);
+      switch (handler.key) {
+        case KEY.bold:
+          alert("");
+          event.preventDefault();
+          buttonValue = KEY.bold;
+          setButton(buttonValue);
+          setEmphasis(buttonValues[buttonValue], buttonValue, 2, 2, "****");
+          break;
+        case KEY.italic:
+          event.preventDefault();
+          buttonValue = KEY.italic;
+          setButton(buttonValue);
+          setEmphasis(buttonValues[buttonValue], buttonValue, 1, 1, "**");
+          break;
+        case KEY.heading:
+          alert("you pressed r!");
+          break;
+        case KEY.strikethrough:
+          event.preventDefault();
+          buttonValue = KEY.strikethrough;
+          setButton(buttonValue);
+          setEmphasis(buttonValues[buttonValue], buttonValue, 2, 2, "~~~~");
+          break;
+        default:
+          break;
+      }
+      return false;
+    },
+    { enableOnTags: "TEXTAREA", keydown: true },
+    [setButton, setEmphasis]
+  );
+
   const handleButtonClick = (button) => {
+    console.log(KEY);
     editorRef.current.focus();
-    setButtonValues((prevState) => ({
-      ...prevState,
+    setButtonValues((prevButtonValues) => ({
+      ...prevButtonValues,
       [button]: !buttonValues[button],
     }));
     switch (button) {
       case "bold":
-        setEmphasis(button, 2, 2, "****");
+        setEmphasis(buttonValues[button], button, 2, 2, "****");
         break;
       case "italic":
         setEmphasis(button, 1, 1, "**");
@@ -87,8 +137,8 @@ const Emphasis = ({
           cursorPositionStart,
           output
         );
-        setButtonValues((prevState) => ({
-          ...prevState,
+        setButtonValues((prevButtonValues) => ({
+          ...prevButtonValues,
           [button]: results.isOn,
         }));
         setChanges(

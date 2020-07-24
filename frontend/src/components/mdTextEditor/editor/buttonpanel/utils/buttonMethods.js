@@ -94,7 +94,6 @@ const cancelButton = (
       cursorPositionEnd,
     };
   } else {
-    alert("off");
     return {
       cancel: false,
       mdText,
