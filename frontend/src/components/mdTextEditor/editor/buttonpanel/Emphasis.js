@@ -169,7 +169,6 @@ const Emphasis = ({
       case config.heading.buttonTitle:
         set.heading();
         break;
-
       case config.strikethrough.buttonTitle:
         set.strikethrough();
         break;
