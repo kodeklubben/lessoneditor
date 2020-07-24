@@ -41,7 +41,7 @@ const ButtonPanel = ({
     <Redirect to="/" />
   ) : (
     <>
-      <Preview handlePreview={handlePreview} testings={testings} />
+      <Preview handlePreview={handlePreview} />
       <Emphasis
         editorRef={editorRef}
         mdText={mdText}
