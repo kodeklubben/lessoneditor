@@ -1,6 +1,7 @@
 import "./formpage.css";
 import React, { useContext, useState } from "react";
 import FormPage from "./FormPage";
+import Navbar from "components/navbar/Navbar";
 import COURSELIST from "./settingsFiles/COURSELIST";
 import { LANGUAGES } from "./settingsFiles/languages/formpage_NO";
 import { UserContext } from "../../contexts/UserContext";
@@ -134,16 +135,19 @@ const FormComponent = () => {
   };
 
   return (
-    <FormPage
-      submitHandler={submitHandler}
-      changeHandler={changeHandler}
-      checkboxHandler={checkboxHandler}
-      multiInputHandler={multiInputHandler}
-      selectDropdownHandler={selectDropdownHandler}
-      setPageNumber={setPageNumber}
-      setErr={setErr}
-      state={state}
-    />
+    <>
+      <Navbar />
+      <FormPage
+        submitHandler={submitHandler}
+        changeHandler={changeHandler}
+        checkboxHandler={checkboxHandler}
+        multiInputHandler={multiInputHandler}
+        selectDropdownHandler={selectDropdownHandler}
+        setPageNumber={setPageNumber}
+        setErr={setErr}
+        state={state}
+      />
+    </>
   );
 };
 

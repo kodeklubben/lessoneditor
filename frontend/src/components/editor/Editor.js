@@ -1,6 +1,7 @@
 import "./editor.css";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
+import Navbar from "components/navbar/Navbar";
 import MDTextArea from "./MDTextArea";
 import MDPreview from "./MDPreview";
 import ButtonPanel from "./buttonpanel/ButtonPanel";
@@ -274,6 +275,7 @@ const Editor = () => {
         editorRef={editorRef}
         imageSubmitHandler={imageSubmitHandler}
       />
+      <Navbar />
       <ButtonPanel
         editorRef={editorRef}
         uploadImageRef={uploadImageRef}
