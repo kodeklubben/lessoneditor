@@ -1,11 +1,21 @@
 import React from "react";
 import CPButton from "./CPButton";
 
+import { useHotkeys } from "react-hotkeys-hook";
+
 import {
   buttonAction as codeAction,
   cancelButton,
 } from "./utils/buttonMethods";
-import { code as config } from "../../settingsFiles/buttonConfig";
+import {
+  KEY_COMBINATIONS as KEY,
+  code as config,
+} from "../../settingsFiles/buttonConfig";
+
+let results;
+let cancelResults;
+let buttonTitle;
+
 const Code = ({
   editorRef,
   cursorPositionStart,
@@ -23,9 +33,12 @@ const Code = ({
     setMdText(mdText);
   };
 
-  let results;
-  let cancelResults;
-  const temp = "```";
+  const setButton = (value) => {
+    setButtonValues((prevButtonValues) => ({
+      ...prevButtonValues,
+      [value]: !buttonValues[value],
+    }));
+  };
 
   const setCode = (button, cursorIntON, cursorIntOFF, output) => {
     cancelResults = cancelButton(
@@ -61,6 +74,49 @@ const Code = ({
     );
   };
 
+  const set = {
+    inline: () => {
+      buttonTitle = config.inline.buttonTitle;
+      setButton(buttonTitle);
+      setCode(
+        buttonTitle,
+        config.inline.cursorIntON,
+        config.inline.cursorIntOFF,
+        config.inline.output
+      );
+    },
+    codeblock: () => {
+      buttonTitle = config.codeblock.buttonTitle;
+      setButton(buttonTitle);
+      setCode(
+        buttonTitle,
+        config.codeblock.cursorIntON,
+        config.codeblock.cursorIntOFF,
+        config.codeblock.output
+      );
+    },
+  };
+
+  useHotkeys(
+    `${KEY.inline}, ${KEY.codeblock}`,
+    (event, handler) => {
+      event.preventDefault();
+      switch (handler.key) {
+        case KEY.inline:
+          set.inline();
+          break;
+        case KEY.codeblock:
+          set.codeblock();
+          break;
+        default:
+          break;
+      }
+      return false;
+    },
+    { enableOnTags: "TEXTAREA", keydown: true },
+    [setButton, setCode]
+  );
+
   const handleButtonClick = (button) => {
     editorRef.current.focus();
     setButtonValues((prevState) => ({
@@ -68,11 +124,11 @@ const Code = ({
       [button]: !buttonValues[button],
     }));
     switch (button) {
-      case "inline":
-        setCode(button, 1, 1, "``");
+      case config.inline.buttonTitle:
+        set.inline();
         break;
-      case "codeblock":
-        setCode(button, 4, 5, `${temp}\n\n${temp}`);
+      case config.codeblock.buttonTitle:
+        set.codeblock();
         break;
       default:
         break;
@@ -81,14 +137,14 @@ const Code = ({
   return (
     <>
       <div className="ui icon buttons emphasis">
-        {config.map((element, index) => (
+        {Object.entries(config).map((element, index) => (
           <CPButton
             key={"element" + index}
-            buttonTitle={element.buttonTitle}
-            icon={element.icon}
-            title={element.title}
+            buttonTitle={element[1].buttonTitle}
+            icon={element[1].icon}
+            title={element[1].title}
             onButtonClick={handleButtonClick}
-            shortcutKey={element.shortcut}
+            shortcutKey={element[1].shortcut}
           />
         ))}
       </div>

@@ -11,21 +11,17 @@ import {
 const Image = ({ editorRef, uploadImageRef }) => {
   useHotkeys(
     `${KEY.image}`,
-    (event, handler) => {
+    (event) => {
       event.preventDefault();
-      switch (handler.key) {
-        case KEY.image:
-          uploadImageRef.current.click();
-          editorRef.current.focus();
-          break;
-        default:
-          break;
-      }
+
+      uploadImageRef.current.click();
+      editorRef.current.focus();
+
       return false;
     },
     { enableOnTags: "TEXTAREA", keydown: true }
   );
-  const handleButtonClick = (button) => {
+  const handleButtonClick = () => {
     uploadImageRef.current.click();
     editorRef.current.focus();
     return;

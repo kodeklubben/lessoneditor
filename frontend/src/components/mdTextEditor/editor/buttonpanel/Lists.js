@@ -80,6 +80,7 @@ const Lists = ({
   const set = {
     listUl: () => {
       buttonTitle = config.listUl.buttonTitle;
+      setButton(buttonTitle);
       setListButtonValues({
         bTitle: buttonTitle,
         output: config.listUl.output,
@@ -94,6 +95,7 @@ const Lists = ({
     },
     listOl: () => {
       buttonTitle = config.listOl.buttonTitle;
+      setButton(buttonTitle);
       setListButtonValues({
         bTitle: buttonTitle,
         output: config.listOl.output,
@@ -108,6 +110,7 @@ const Lists = ({
     },
     listCheck: () => {
       buttonTitle = config.listCheck.buttonTitle;
+      setButton(buttonTitle);
       setListButtonValues({
         bTitle: buttonTitle,
         output: config.listCheck.output,
@@ -152,13 +155,13 @@ const Lists = ({
       [button]: !buttonValues[button],
     }));
     switch (button) {
-      case "listUl":
+      case config.listUl.buttonTitle:
         set.listUl();
         break;
-      case "listOl":
+      case config.listOl.buttonTitle:
         set.listOl();
         break;
-      case "listCheck":
+      case config.listCheck.buttonTitle:
         set.listCheck();
         break;
       default:

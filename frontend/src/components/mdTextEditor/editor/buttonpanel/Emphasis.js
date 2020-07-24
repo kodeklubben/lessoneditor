@@ -159,19 +159,18 @@ const Emphasis = ({
 
   const handleButtonClick = (button) => {
     editorRef.current.focus();
-
     switch (button) {
-      case "bold":
+      case config.bold.buttonTitle:
         set.bold();
         break;
-      case "italic":
+      case config.italic.buttonTitle:
         set.italic();
         break;
-      case "heading":
+      case config.heading.buttonTitle:
         set.heading();
         break;
 
-      case "strikethrough":
+      case config.strikethrough.buttonTitle:
         set.strikethrough();
         break;
       default:

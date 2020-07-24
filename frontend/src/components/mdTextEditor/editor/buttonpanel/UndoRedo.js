@@ -77,10 +77,10 @@ const UndoRedo = ({
   const handleButtonClick = (button) => {
     editorRef.current.focus();
     switch (button) {
-      case "undo":
+      case config.undo.buttonTitle:
         set.undo();
         break;
-      case "redo":
+      case config.redo.buttonTitle:
         set.redo();
         break;
       default:

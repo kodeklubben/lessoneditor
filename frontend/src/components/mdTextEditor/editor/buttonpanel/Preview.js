@@ -11,22 +11,17 @@ import {
 const Preview = ({ handlePreview }) => {
   useHotkeys(
     `${KEY.preview}`,
-    (event, handler) => {
-      switch (handler.key) {
-        case KEY.preview:
-          event.preventDefault();
-          handlePreview();
-          break;
+    (event) => {
+      event.preventDefault();
 
-        default:
-          break;
-      }
+      handlePreview();
+
       return false;
     },
     { enableOnTags: "TEXTAREA", keydown: true }
   );
 
-  const handleButtonClick = (button) => {
+  const handleButtonClick = () => {
     handlePreview();
     return;
   };
