@@ -2,10 +2,12 @@ import React from "react";
 import CPButton from "./CPButton";
 
 import { preview as config } from "../../settingsFiles/buttonConfig";
+// import { topicSettings } from "components/lessonForm/settingsFiles/YMLTAGSSETTINGS";
 
-const Preview = ({ handlePreview }) => {
-  const newHandleButtonClick = (button) => {
+const Preview = ({ handlePreview, testings }) => {
+  const handleButtonClick = (button) => {
     handlePreview();
+    testings();
     return;
   };
   return (
@@ -17,7 +19,7 @@ const Preview = ({ handlePreview }) => {
             buttonTitle={element.buttonTitle}
             icon={element.icon}
             title={element.title}
-            onButtonClick={newHandleButtonClick}
+            onButtonClick={handleButtonClick}
             shortcutKey={element.shortcut}
           />
         ))}

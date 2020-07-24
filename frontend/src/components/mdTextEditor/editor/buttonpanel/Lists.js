@@ -3,17 +3,15 @@ import CPButton from "./CPButton";
 
 import {
   cancelButton,
-  buttonAction as emphasisAction,
-  heading,
+  buttonAction as listsAction,
 } from "./utils/buttonMethods";
 
-import { emphasis as config } from "../../settingsFiles/buttonConfig";
+import { lists as config } from "../../settingsFiles/buttonConfig";
 
-let output;
 let cancelResults;
 let results;
 
-const Emphasis = ({
+const Lists = ({
   editorRef,
   cursorPositionStart,
   cursorPositionEnd,
@@ -22,6 +20,7 @@ const Emphasis = ({
   setMdText,
   setCursorPosition,
   setCursor,
+  setListButtonValues,
   setButtonValues,
 }) => {
   const setChanges = (mdText, cursorPositionStart, cursorPositionEnd) => {
@@ -30,7 +29,7 @@ const Emphasis = ({
     setMdText(mdText);
   };
 
-  const setEmphasis = (button, cursorIntON, cursorIntOFF, output) => {
+  const setList = (button, cursorIntON, cursorIntOFF, output) => {
     cancelResults = cancelButton(
       buttonValues[button],
       mdText,
@@ -48,7 +47,7 @@ const Emphasis = ({
       return;
     }
 
-    results = emphasisAction(
+    results = listsAction(
       buttonValues[button],
       mdText,
       cursorPositionStart,
@@ -65,42 +64,29 @@ const Emphasis = ({
     );
   };
 
-  const newHandleButtonClick = (button) => {
+  const handleButtonClick = (button) => {
     editorRef.current.focus();
     setButtonValues((prevState) => ({
       ...prevState,
       [button]: !buttonValues[button],
     }));
     switch (button) {
-      case "bold":
-        setEmphasis(button, 2, 2, "****");
+      case "listUl":
+        setListButtonValues({ bTitle: button, output: "- ", cursorInt: 2 });
+        setList(button, 2, 0, "- ");
         break;
-      case "italic":
-        setEmphasis(button, 1, 1, "**");
-        break;
-      case "heading":
-        output = "## ";
-
-        results = heading(
-          buttonValues[button],
-          mdText,
-          cursorPositionStart,
-          output
-        );
-        setButtonValues((prevState) => ({
-          ...prevState,
-          [button]: results.isOn,
-        }));
-        setChanges(
-          results.mdText,
-          results.cursorPositionStart,
-          results.cursorPositionStart
-        );
-
+      case "listOl":
+        setListButtonValues({ bTitle: button, output: "1. ", cursorInt: 3 });
+        setList(button, 3, 0, "1. ");
         break;
 
-      case "strikethrough":
-        setEmphasis(button, 2, 2, "~~~~");
+      case "listCheck":
+        setListButtonValues({
+          bTitle: button,
+          output: "- [\u0020] ",
+          cursorInt: 6,
+        });
+        setList(button, 6, 0, "- [\u0020] ");
         break;
       default:
         break;
@@ -115,7 +101,7 @@ const Emphasis = ({
             buttonTitle={element.buttonTitle}
             icon={element.icon}
             title={element.title}
-            onButtonClick={newHandleButtonClick}
+            onButtonClick={handleButtonClick}
             shortcutKey={element.shortcut}
           />
         ))}
@@ -124,4 +110,4 @@ const Emphasis = ({
   );
 };
 
-export default Emphasis;
+export default Lists;

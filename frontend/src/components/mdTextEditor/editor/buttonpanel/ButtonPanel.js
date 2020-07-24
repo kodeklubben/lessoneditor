@@ -10,6 +10,7 @@ import Code from "./Code";
 import { Redirect } from "react-router-dom";
 
 const ButtonPanel = ({
+  testings,
   editorRef,
   uploadImageRef,
   mdText,
@@ -41,8 +42,9 @@ const ButtonPanel = ({
     <Redirect to="/" />
   ) : (
     <>
-      <Preview handlePreview={handlePreview} />
+      <Preview handlePreview={handlePreview} testings={testings} />
       <Emphasis
+        testings={testings}
         editorRef={editorRef}
         mdText={mdText}
         buttonValues={buttonValues}

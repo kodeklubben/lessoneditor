@@ -4,7 +4,7 @@ import CPButton from "./CPButton";
 import { image as config } from "../../settingsFiles/buttonConfig";
 
 const Image = ({ editorRef, uploadImageRef }) => {
-  const newHandleButtonClick = (button) => {
+  const handleButtonClick = (button) => {
     uploadImageRef.current.click();
     editorRef.current.focus();
     return;
@@ -18,7 +18,7 @@ const Image = ({ editorRef, uploadImageRef }) => {
             buttonTitle={element.buttonTitle}
             icon={element.icon}
             title={element.title}
-            onButtonClick={newHandleButtonClick}
+            onButtonClick={handleButtonClick}
             shortcutKey={element.shortcut}
           />
         ))}
