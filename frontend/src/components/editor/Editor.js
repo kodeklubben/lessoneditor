@@ -11,14 +11,19 @@ import fetchMdText from "../../api/fetch-md-text";
 import saveMdText from "../../api/save-md-text";
 import { UserContext } from "../../contexts/UserContext";
 
+import { SAVING, SAVED } from "./settingsFiles/languages/editor_NO";
+
 let orderedListIndex = 2;
 
 let tabSize = 2;
+
+let autosaveMessage = "";
 
 const Editor = () => {
   const context = useContext(UserContext);
   const [mdText, setMdText] = useState("");
   const [savedText, setSavedText] = useState("");
+  const [count, setCount] = useState(0);
   const [buttonValues, setButtonValues] = useState(editorButtonsValue);
   const [cursorPositionStart, setCursorPositionStart] = useState(0);
   const [cursorPositionEnd, setCursorPositionEnd] = useState(0);
@@ -95,14 +100,21 @@ const Editor = () => {
   }, [course, lesson, file]);
 
   useInterval(async () => {
-    if (mdText !== savedText) {
-      await saveMdText(course, lesson, file, mdText);
-      if (!context.getLesson(course, lesson)) {
-        await context.addLesson(course, lesson, lesson);
+    setCount(count + 1);
+    console.log(count);
+    if (count > 1 && mdText) {
+      autosaveMessage = SAVED;
+    } else if (count === 0 && mdText) {
+      autosaveMessage = SAVING;
+      if (mdText !== savedText) {
+        await saveMdText(course, lesson, file, mdText);
+        if (!context.getLesson(course, lesson)) {
+          await context.addLesson(course, lesson, lesson);
+        }
+        setSavedText(mdText);
       }
-      setSavedText(mdText);
     }
-  }, 5000);
+  }, 808);
 
   function useInterval(callback, delay) {
     const savedCallback = useRef();
@@ -126,7 +138,7 @@ const Editor = () => {
 
   const handleChange = async (event) => {
     setCursor(event.target.selectionStart, event.target.selectionEnd);
-
+    setCount(0);
     let inputText = event.target.value;
 
     if (
@@ -311,6 +323,7 @@ const Editor = () => {
         />
         <MDPreview mdText={mdText} />
       </div>
+      {mdText ? <p>{autosaveMessage}</p> : ""}
     </div>
   );
 };

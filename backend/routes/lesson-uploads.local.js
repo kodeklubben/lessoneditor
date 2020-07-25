@@ -7,19 +7,22 @@ const resolveUrlTemplate = require("../utils/resolve-url-template");
 const paths = require("../paths");
 module.exports = (app) => {
   app.get(paths.DISPLAY_FILE, (req, res) => {
+    const { username } = req.user;
     const { course, lesson, file } = req.params;
-    const imgLoc = getTempDir([course, lesson, file]);
+    const imgLoc = getTempDir([username, course, lesson, file]);
+    console.log(imgLoc);
     if (fs.existsSync(imgLoc)) {
       res.contentType(imgLoc);
       res.sendFile(imgLoc);
     } else {
       res.status(404).send("");
     }
-    res.end();
+    //res.end();
   });
   app.post(paths.DISPLAY_FILE, async (req, res) => {
+    const { username } = req.user;
     const { course, lesson, file } = req.params;
-    const filename = getTempDir([course, lesson, file]);
+    const filename = getTempDir([username, course, lesson, file]);
     await saveToDisk(filename, Buffer.from(req.body));
     return res.send("ok");
   });
