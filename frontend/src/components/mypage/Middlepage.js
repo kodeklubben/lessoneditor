@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import "./overview.css";
-
+import { useHistory } from "react-router-dom";
 import MidpageList from "./MidpageList";
 import { UserContext } from "../../contexts/UserContext";
 import Navbar from "../navbar/Navbar";
@@ -16,43 +16,64 @@ const lessonScreenshots = [
 const Middlepage = () => {
   const context = useContext(UserContext);
   const { lessons } = context.user;
+  const history = useHistory();
+
+  let testlist = context.listLesson("python", "gjettelek");
+  console.log(testlist);
+
+  const submitHandler = () => {
+    console.log("text submitted");
+    history.push("/endPage");
+  };
+
   return (
     <div>
       <Navbar />
-
-      <h1>Oppgave Tittel</h1>
+      <h1>{"oppgave"}</h1>
       <div className="overViewContainer">
-        <h3>Markdown tekstfiler</h3>
-        {lessons ? (
-          <div className="">
-            <div className="">
-              <div className="">
-                <div className="">
-                  <MidpageList
-                    items={lessons}
-                    lessonScreenshots={lessonScreenshots}
-                  />
-                </div>
+        <div className="ui two column grid">
+          <div className="column">
+            <h3>Lag ny oppgavetekst</h3>
+            <div className="ui card">
+              <div className="content">
+                <a href={"/new-lesson"}>
+                  <div style={{ height: "200px" }}>
+                    <i className=" huge plus  icon"></i>
+                  </div>
+                </a>
               </div>
             </div>
           </div>
+          <div className="column">
+            <h3>Send inn oppgave</h3>
+            <div onClick={submitHandler} className="ui card">
+              <div className="content">
+                <a href={"/endPage"}>
+                  <div style={{ height: "200px" }}>
+                    <i className=" huge arrow right  icon"></i>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          style={{
+            backgroundColor: "grey",
+            width: "90%",
+            margin: "auto",
+            marginTop: "60px",
+            marginBottom: "50px",
+            height: "2px",
+          }}
+          className="ui horizontal divider"
+        />
+        <h3>Oppgave tekstfiler</h3>
+        {lessons ? (
+          <MidpageList items={lessons} lessonScreenshots={lessonScreenshots} />
         ) : (
           <b>Du har ingen kurs</b>
         )}
-        <br />
-        <div style={{ marginTop: "50px" }} className="ui horizontal divider">
-          ...
-        </div>
-        <h3>Lag ny oppgavetekst</h3>
-        <div className="ui card">
-          <div className="content">
-            <a href={"/new-lesson"}>
-              <div style={{ height: "200px" }}>
-                <i className=" huge plus  icon"></i>
-              </div>{" "}
-            </a>
-          </div>
-        </div>
       </div>
     </div>
   );

@@ -1,11 +1,9 @@
 import "./simple-preview.css";
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
 import fetchMdText from "../../api/fetch-md-text";
 import MDPreview from "../editor/MDPreview";
 
-const SimplePreview = () => {
-  const { course, lesson, file } = useParams();
+const SimplePreview = ({ lessonScreenshots, course, lesson, file }) => {
   const [mdText, setMdText] = useState("");
   const [status, setStatus] = useState("Loading...");
   useEffect(() => {

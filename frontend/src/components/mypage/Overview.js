@@ -16,6 +16,9 @@ const lessonScreenshots = [
 const Overview = () => {
   const context = useContext(UserContext);
   const { lessons } = context.user;
+
+  console.log(lessons);
+
   return (
     <div>
       <Navbar />
@@ -26,14 +29,22 @@ const Overview = () => {
             <a href={"/new-lesson"}>
               <div style={{ height: "200px" }}>
                 <i className=" huge plus  icon"></i>
-              </div>{" "}
+              </div>
             </a>
           </div>
         </div>
 
-        <div style={{ marginTop: "50px" }} className="ui horizontal divider">
-          ...
-        </div>
+        <div
+          style={{
+            backgroundColor: "grey",
+            width: "90%",
+            margin: "auto",
+            marginTop: "60px",
+            marginBottom: "50px",
+            height: "2px",
+          }}
+          className="ui horizontal divider"
+        />
 
         <h3>Mine oppgaver</h3>
         {lessons ? (

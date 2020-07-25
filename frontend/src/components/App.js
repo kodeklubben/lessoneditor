@@ -18,6 +18,9 @@ const App = () => {
           <Route exact path="/mid-page" component={Middlepage} />
           <Route exact path="/new-lesson" component={FormComponent} />
           <Route exact path="/editor" component={Editor} />
+          <Route path="/mid-page/:course/:lesson/">
+            <Middlepage />
+          </Route>
           <Route path="/editor/:course/:lesson/:file">
             <LessonContextProvider>
               <Editor />
