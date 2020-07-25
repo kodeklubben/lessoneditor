@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import fetchMdText from "../../api/fetch-md-text";
 import MDPreview from "../editor/MDPreview";
 
-const SimplePreview = ({ lessonScreenshots, course, lesson, file }) => {
+const SimplePreview = ({ course, lesson, file }) => {
   const [mdText, setMdText] = useState("");
   const [status, setStatus] = useState("Loading...");
   useEffect(() => {

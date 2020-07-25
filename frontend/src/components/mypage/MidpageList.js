@@ -1,12 +1,14 @@
 import "./itemlist.css";
-import React from "react";
+import React, { useContext } from "react";
 import { useHistory } from "react-router-dom";
 // import { useParams } from "react-router";
+import { UserContext } from "../../contexts/UserContext";
 
 import SimplePreview from "components/simple-preview/simple-preview";
 
 function MidpageList({ items, lessonScreenshots }) {
   const history = useHistory();
+  const context = useContext(UserContext);
   const navigateToEditor = (course, lesson) => {
     const target = ["/editor", course, lesson, lesson].join("/");
     history.push(target);
@@ -46,6 +48,14 @@ function MidpageList({ items, lessonScreenshots }) {
                     }
                   >
                     Åpne
+                  </button>
+                  <button
+                    className="ui button"
+                    onClick={() =>
+                      context.removeLesson(listitem.course, listitem.lesson)
+                    }
+                  >
+                    fjerne
                   </button>
                   <button
                     className="ui right labeled icon button"

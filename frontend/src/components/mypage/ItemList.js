@@ -12,7 +12,7 @@ function ItemList({ items, lessonScreenshots }) {
   const context = useContext(UserContext);
 
   const navigateToEditor = (course, lesson) => {
-    const target = ["/mid-page", course, lesson, lesson].join("/");
+    const target = ["/lesson", course, lesson].join("/");
     history.push(target);
   };
 

@@ -3,6 +3,7 @@ import "./overview.css";
 import { useHistory } from "react-router-dom";
 import MidpageList from "./MidpageList";
 import { UserContext } from "../../contexts/UserContext";
+import { LessonContext } from "../../contexts/LessonContext";
 import Navbar from "../navbar/Navbar";
 
 const lessonScreenshots = [
@@ -15,11 +16,11 @@ const lessonScreenshots = [
 
 const Middlepage = () => {
   const context = useContext(UserContext);
+  const lContext = useContext(LessonContext);
   const { lessons } = context.user;
+  const test = lContext.lessonFiles;
+  console.log(test);
   const history = useHistory();
-
-  let testlist = context.listLesson("python", "gjettelek");
-  console.log(testlist);
 
   const submitHandler = () => {
     console.log("text submitted");

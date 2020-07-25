@@ -17,8 +17,6 @@ const Overview = () => {
   const context = useContext(UserContext);
   const { lessons } = context.user;
 
-  console.log(lessons);
-
   return (
     <div>
       <Navbar />
