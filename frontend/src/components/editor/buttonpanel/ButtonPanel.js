@@ -1,5 +1,5 @@
 import "./buttonpanel.css";
-import React, { useState } from "react";
+import React from "react";
 import Preview from "./Preview";
 import Emphasis from "./Emphasis";
 import UndoRedo from "./UndoRedo";
@@ -8,7 +8,7 @@ import Lists from "./Lists";
 import Sections from "./Sections";
 import Code from "./Code";
 
-import { Redirect } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 const ButtonPanel = ({
   editorRef,
@@ -31,16 +31,17 @@ const ButtonPanel = ({
   setUndoCursorPosition,
   setRedoCursorPosition,
   setListButtonValues,
+  course,
+  lesson,
 }) => {
-  const [redirect, setRedirect] = useState("");
+  const history = useHistory();
 
-  const submitHandler = () => {
-    setRedirect("/");
+  const navigateToMidPage = (course, lesson) => {
+    const target = ["/lesson", course, lesson].join("/");
+    history.push(target);
   };
 
-  return redirect ? (
-    <Redirect to="/" />
-  ) : (
+  return (
     <>
       <Preview handlePreview={handlePreview} />
       <Emphasis
@@ -106,9 +107,9 @@ const ButtonPanel = ({
       <button
         className="ui right floated button"
         id="buttonpanel"
-        onClick={submitHandler}
+        onClick={() => navigateToMidPage(course, lesson)}
       >
-        <i className="home right icon" />
+        <i className="arrow right icon" />
       </button>
     </>
   );

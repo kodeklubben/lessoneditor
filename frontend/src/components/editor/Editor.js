@@ -101,7 +101,6 @@ const Editor = () => {
 
   useInterval(async () => {
     setCount(count + 1);
-    console.log(count);
     if (count > 1 && mdText) {
       autosaveMessage = SAVED;
     } else if (count === 0 && mdText) {
@@ -114,7 +113,7 @@ const Editor = () => {
         setSavedText(mdText);
       }
     }
-  }, 808);
+  }, 500);
 
   function useInterval(callback, delay) {
     const savedCallback = useRef();
@@ -309,6 +308,8 @@ const Editor = () => {
         setUndoCursorPosition={setUndoCursorPosition}
         setRedoCursorPosition={setRedoCursorPosition}
         setListButtonValues={setListButtonValues}
+        course={course}
+        lesson={lesson}
       />
 
       <div className="textEditorContainer">

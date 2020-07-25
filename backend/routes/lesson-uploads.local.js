@@ -10,7 +10,7 @@ module.exports = (app) => {
     const { username } = req.user;
     const { course, lesson, file } = req.params;
     const imgLoc = getTempDir([username, course, lesson, file]);
-    console.log(imgLoc);
+
     if (fs.existsSync(imgLoc)) {
       res.contentType(imgLoc);
       res.sendFile(imgLoc);

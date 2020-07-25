@@ -11,6 +11,7 @@ export const UserContextProvider = (props) => {
     photo: "",
     lessons: [],
   });
+
   useEffect(() => {
     async function fetchData() {
       const userRes = await axios.get(paths.USER);
@@ -28,6 +29,9 @@ export const UserContextProvider = (props) => {
       (item) => item.course === course && item.lesson === lesson
     );
   };
+  const listLesson = async (course, lesson) => {
+    return await axios.get(paths.LESSON_FILES);
+  };
   const saveLesson = async () => {
     await axios.post(paths.USER_LESSONS, user.lessons);
     setUser(user);
@@ -44,6 +48,7 @@ export const UserContextProvider = (props) => {
       }
       await saveLesson();
     },
+    listLesson,
     removeLesson: async (course, lesson) => {
       const existing = getLesson(course, lesson);
       if (existing) {

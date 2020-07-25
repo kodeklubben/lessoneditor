@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import "./overview.css";
-
 import MidpageList from "./MidpageList";
 import { UserContext } from "../../contexts/UserContext";
 import Navbar from "../navbar/Navbar";
@@ -19,40 +18,41 @@ const Middlepage = () => {
   return (
     <div>
       <Navbar />
-
-      <h1>Oppgave Tittel</h1>
+      <div style={{ margin: "auto" }}>
+        <h1>Oppgave Tittel</h1>
+      </div>
       <div className="overViewContainer">
-        <h3>Markdown tekstfiler</h3>
-        {lessons ? (
-          <div className="">
-            <div className="">
-              <div className="">
-                <div className="">
-                  <MidpageList
-                    items={lessons}
-                    lessonScreenshots={lessonScreenshots}
-                  />
-                </div>
+        <div className="ui two column grid">
+          <div className="column">
+            <h3>Lag ny oppgavetekst</h3>
+            <div className="ui card">
+              <div className="content">
+                <a href={"/new-lesson"}>
+                  <div style={{ height: "200px" }}>
+                    <i className=" huge plus  icon"></i>
+                  </div>
+                </a>
               </div>
             </div>
           </div>
+        </div>
+        <div
+          style={{
+            backgroundColor: "grey",
+            width: "90%",
+            margin: "auto",
+            marginTop: "60px",
+            marginBottom: "50px",
+            height: "2px",
+          }}
+          className="ui horizontal divider"
+        />
+        <h3>Oppgave tekstfiler</h3>
+        {lessons ? (
+          <MidpageList items={lessons} lessonScreenshots={lessonScreenshots} />
         ) : (
           <b>Du har ingen kurs</b>
         )}
-        <br />
-        <div style={{ marginTop: "50px" }} className="ui horizontal divider">
-          ...
-        </div>
-        <h3>Lag ny oppgavetekst</h3>
-        <div className="ui card">
-          <div className="content">
-            <a href={"/new-lesson"}>
-              <div style={{ height: "200px" }}>
-                <i className=" huge plus  icon"></i>
-              </div>{" "}
-            </a>
-          </div>
-        </div>
       </div>
     </div>
   );
