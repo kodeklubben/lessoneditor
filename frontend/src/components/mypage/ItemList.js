@@ -4,8 +4,6 @@ import { useHistory } from "react-router-dom";
 
 import { UserContext } from "../../contexts/UserContext";
 
-import SimplePreview from "components/simple-preview/simple-preview";
-
 function ItemList({ items, lessonScreenshots }) {
   const history = useHistory();
 

@@ -18,7 +18,9 @@ const Middlepage = () => {
   return (
     <div>
       <Navbar />
-      <h1>{"oppgave"}</h1>
+      <div style={{ margin: "auto" }}>
+        <h1>Oppgave Tittel</h1>
+      </div>
       <div className="overViewContainer">
         <div className="ui two column grid">
           <div className="column">
