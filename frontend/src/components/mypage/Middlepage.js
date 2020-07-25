@@ -1,9 +1,7 @@
 import React, { useContext } from "react";
 import "./overview.css";
-import { useHistory } from "react-router-dom";
 import MidpageList from "./MidpageList";
 import { UserContext } from "../../contexts/UserContext";
-import { LessonContext } from "../../contexts/LessonContext";
 import Navbar from "../navbar/Navbar";
 
 const lessonScreenshots = [
@@ -16,17 +14,7 @@ const lessonScreenshots = [
 
 const Middlepage = () => {
   const context = useContext(UserContext);
-  const lContext = useContext(LessonContext);
   const { lessons } = context.user;
-  const test = lContext.lessonFiles;
-  console.log(test);
-  const history = useHistory();
-
-  const submitHandler = () => {
-    console.log("text submitted");
-    history.push("/endPage");
-  };
-
   return (
     <div>
       <Navbar />
@@ -40,18 +28,6 @@ const Middlepage = () => {
                 <a href={"/new-lesson"}>
                   <div style={{ height: "200px" }}>
                     <i className=" huge plus  icon"></i>
-                  </div>
-                </a>
-              </div>
-            </div>
-          </div>
-          <div className="column">
-            <h3>Send inn oppgave</h3>
-            <div onClick={submitHandler} className="ui card">
-              <div className="content">
-                <a href={"/endPage"}>
-                  <div style={{ height: "200px" }}>
-                    <i className=" huge arrow right  icon"></i>
                   </div>
                 </a>
               </div>

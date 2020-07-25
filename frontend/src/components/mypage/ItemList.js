@@ -24,11 +24,9 @@ function ItemList({ items, lessonScreenshots }) {
             <div key={"listitem" + index} className="column">
               <div className="ui fluid card">
                 <div className="image">
-                  <SimplePreview
-                    lessonScreenshots={lessonScreenshots}
-                    course={listitem.course}
-                    lesson={listitem.lesson}
-                    file={listitem.title}
+                  <img
+                    src={lessonScreenshots[Math.floor(Math.random() * 5)]}
+                    alt={"oppgavebilde"}
                   />
                 </div>
                 <div className="content">
@@ -52,7 +50,7 @@ function ItemList({ items, lessonScreenshots }) {
                       context.removeLesson(listitem.course, listitem.lesson)
                     }
                   >
-                    fjerne
+                    Fjerne
                   </button>
                 </div>
               </div>

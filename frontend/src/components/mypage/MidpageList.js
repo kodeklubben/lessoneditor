@@ -27,11 +27,9 @@ function MidpageList({ items, lessonScreenshots }) {
             <div key={"listitem" + index} className="column">
               <div className="ui fluid card">
                 <div className="image">
-                  <SimplePreview
-                    lessonScreenshots={lessonScreenshots}
-                    course={listitem.course}
-                    lesson={listitem.lesson}
-                    file={listitem.title}
+                  <img
+                    src={lessonScreenshots[Math.floor(Math.random() * 5)]}
+                    alt={"oppgavebilde"}
                   />
                 </div>
                 <div className="content">
@@ -49,14 +47,7 @@ function MidpageList({ items, lessonScreenshots }) {
                   >
                     Åpne
                   </button>
-                  <button
-                    className="ui button"
-                    onClick={() =>
-                      context.removeLesson(listitem.course, listitem.lesson)
-                    }
-                  >
-                    fjerne
-                  </button>
+
                   <button
                     className="ui right labeled icon button"
                     onClick={submitHandler}
