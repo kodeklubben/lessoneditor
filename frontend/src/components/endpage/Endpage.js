@@ -1,5 +1,5 @@
 import React from "react";
-import "./style.css";
+import "./endpage.css";
 
 const closeMessage = "Tilbake til min side";
 const greeting =

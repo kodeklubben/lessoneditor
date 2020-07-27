@@ -10,7 +10,7 @@ import slugify from "slugify";
 
 const FormComponent = () => {
   const [state, setState] = useState({
-    course: COURSELIST[0].courseTitle,
+    course: COURSELIST[0].slug,
     title: "",
     err: "",
     author: "",

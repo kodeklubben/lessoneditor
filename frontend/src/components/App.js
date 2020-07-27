@@ -1,9 +1,8 @@
 import React from "react";
 import FormComponent from "./lessonForm/FormComponent";
-import EndPage from "./frontPageComponents/EndPage";
+import Endpage from "./endpage/Endpage";
 import Editor from "./editor/Editor";
-import Overview from "./mypage/Overview";
-import Middlepage from "./mypage/Middlepage";
+import Frontpage from "./frontpage/Frontpage";
 import { BrowserRouter, Route } from "react-router-dom";
 import { LessonContextProvider } from "../contexts/LessonContext";
 import { UserContextProvider } from "../contexts/UserContext";
@@ -14,13 +13,9 @@ const App = () => {
     <>
       <BrowserRouter>
         <UserContextProvider>
-          <Route exact path="/" component={Overview} />
-          <Route exact path="/lesson" component={Middlepage} />
+          <Route exact path="/" component={Frontpage} />
           <Route exact path="/new-lesson" component={FormComponent} />
           <Route exact path="/editor" component={Editor} />
-          <Route path="/lesson/:course/:lesson/">
-            <Middlepage />
-          </Route>
           <Route path="/editor/:course/:lesson/:file">
             <LessonContextProvider>
               <Editor />
@@ -30,7 +25,7 @@ const App = () => {
             path="/preview/:course/:lesson/:file"
             component={SimplePreview}
           />
-          <Route exact path="/endpage" component={EndPage} />
+          <Route exact path="/endpage" component={Endpage} />
         </UserContextProvider>
       </BrowserRouter>
     </>
