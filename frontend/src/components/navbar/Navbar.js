@@ -3,25 +3,20 @@ import React, { useContext } from "react";
 import ProfileMenu from "components/ProfileMenu";
 
 import { UserContext } from "contexts/UserContext";
-import { useHistory } from "react-router-dom";
 
-const Navbar = ({ course, lesson }) => {
+const Navbar = ({ title }) => {
   const context = useContext(UserContext);
-
-  const history = useHistory();
-
-  const navigateToHomePage = () => {
-    history.push("/");
-  };
 
   return (
     <div>
       <nav className="header_container">
-        <div className="logo">
+        <div className="header_logo">
           <a href={"//kidsakoder.no"}>
             <img className="header_logo" alt="" src={"/lav_logo.jpg"} />
           </a>
         </div>
+
+        <h1 className="header_title">{title}</h1>
 
         <div className="header_profile">
           <ProfileMenu
@@ -29,15 +24,6 @@ const Navbar = ({ course, lesson }) => {
             email={context.user ? context.user.email : ""}
             photo={context.user ? context.user.photo : ""}
           />
-        </div>
-        <div className="header_homebutton">
-          <button
-            className="ui right floated button"
-            id="buttonpanel"
-            onClick={navigateToHomePage}
-          >
-            <i className="home right icon" />
-          </button>
         </div>
       </nav>
     </div>

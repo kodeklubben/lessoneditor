@@ -1,6 +1,7 @@
 import "./editor.css";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
+import Autosave from "./Autosave";
 import Navbar from "components/navbar/Navbar";
 import MDTextArea from "./MDTextArea";
 import MDPreview from "./MDPreview";
@@ -8,22 +9,13 @@ import ButtonPanel from "./buttonpanel/ButtonPanel";
 import ImageUpload from "./ImageUpload";
 import editorButtonsValue from "./buttonpanel/utils/editorButtonsValue";
 import fetchMdText from "../../api/fetch-md-text";
-import saveMdText from "../../api/save-md-text";
-import { UserContext } from "../../contexts/UserContext";
-
-import { SAVING, SAVED } from "./settingsFiles/languages/editor_NO";
 
 let orderedListIndex = 2;
 
 let tabSize = 2;
 
-let autosaveMessage = "";
-
 const Editor = () => {
-  const context = useContext(UserContext);
   const [mdText, setMdText] = useState("");
-  const [savedText, setSavedText] = useState("");
-  const [count, setCount] = useState(0);
   const [buttonValues, setButtonValues] = useState(editorButtonsValue);
   const [cursorPositionStart, setCursorPositionStart] = useState(0);
   const [cursorPositionEnd, setCursorPositionEnd] = useState(0);
@@ -92,54 +84,16 @@ const Editor = () => {
     if (course && lesson && file) {
       async function fetchData() {
         let lessonText = await fetchMdText(course, lesson, file);
-        setSavedText(lessonText);
         setMdText(lessonText);
+        setUndo([lessonText]);
       }
       fetchData();
     }
   }, [course, lesson, file]);
 
-  useInterval(async () => {
-    setCount(count + 1);
-    if (count > 1 && mdText) {
-      autosaveMessage = SAVED;
-    } else if (count === 0 && mdText) {
-      autosaveMessage = SAVING;
-      if (mdText !== savedText) {
-        await saveMdText(course, lesson, file, mdText);
-        if (!context.getLesson(course, lesson)) {
-          await context.addLesson(course, lesson, lesson);
-        }
-        setSavedText(mdText);
-      }
-    }
-  }, 500);
-
-  function useInterval(callback, delay) {
-    const savedCallback = useRef();
-
-    // Remember the latest callback.
-    useEffect(() => {
-      savedCallback.current = callback;
-    }, [callback]);
-
-    // Set up the interval.
-    useEffect(() => {
-      function tick() {
-        savedCallback.current();
-      }
-      if (delay !== null) {
-        let id = setInterval(tick, delay);
-        return () => clearInterval(id);
-      }
-    }, [delay]);
-  }
-
-  const handleChange = async (event) => {
+  const handleChange = (event) => {
     setCursor(event.target.selectionStart, event.target.selectionEnd);
-    setCount(0);
     let inputText = event.target.value;
-
     if (
       inputText[cursorPositionStart] === " " ||
       inputText[cursorPositionStart] === "\n"
@@ -286,7 +240,7 @@ const Editor = () => {
         editorRef={editorRef}
         imageSubmitHandler={imageSubmitHandler}
       />
-      <Navbar />
+      <Navbar title={lesson} />
       <ButtonPanel
         editorRef={editorRef}
         uploadImageRef={uploadImageRef}
@@ -324,7 +278,7 @@ const Editor = () => {
         />
         <MDPreview mdText={mdText} />
       </div>
-      {mdText ? <p>{autosaveMessage}</p> : ""}
+      <Autosave mdText={mdText} />
     </div>
   );
 };
