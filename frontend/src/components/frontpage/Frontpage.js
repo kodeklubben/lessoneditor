@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import "./overview.css";
+import "./frontpage.css";
 
 import ItemList from "./ItemList";
 import { UserContext } from "../../contexts/UserContext";
@@ -46,18 +46,7 @@ const Overview = () => {
 
         <h3>Mine oppgaver</h3>
         {lessons ? (
-          <div className="">
-            <div className="">
-              <div className="">
-                <div className="">
-                  <ItemList
-                    items={lessons}
-                    lessonScreenshots={lessonScreenshots}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
+          <ItemList items={lessons} lessonScreenshots={lessonScreenshots} />
         ) : (
           <b>Du har ingen kurs</b>
         )}

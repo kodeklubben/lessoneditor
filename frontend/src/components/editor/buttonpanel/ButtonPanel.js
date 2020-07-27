@@ -36,9 +36,8 @@ const ButtonPanel = ({
 }) => {
   const history = useHistory();
 
-  const navigateToMidPage = (course, lesson) => {
-    const target = ["/lesson", course, lesson].join("/");
-    history.push(target);
+  const navigateToHome = (course, lesson) => {
+    history.push("/");
   };
 
   return (
@@ -107,7 +106,7 @@ const ButtonPanel = ({
       <button
         className="ui right floated button"
         id="buttonpanel"
-        onClick={() => navigateToMidPage(course, lesson)}
+        onClick={() => navigateToHome()}
       >
         <i className="arrow right icon" />
       </button>
