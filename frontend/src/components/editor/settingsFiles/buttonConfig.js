@@ -6,7 +6,7 @@ import { BUTTON_TITLE, SECTION_TEXT } from "./languages/editor_NO";
 const temp = "```";
 
 // SHORTCUTKEY options: "ctrl", "shift", "alt", "option", "command"
-const SHORTCUTKEY = "ctrl";
+const SHORTCUTKEY = "command";
 const SHORTCUTKEY2 = "shift";
 const plus = "+";
 

@@ -1,0 +1,75 @@
+.PreviewArea ul,
+ol {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  margin: 0 0 20px;
+}
+.PreviewArea ul.task-list li.task-list-item::before {
+  opacity: 0;
+}
+.PreviewArea ul li {
+  list-style: none;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-left: 25px;
+}
+.PreviewArea ul li::before {
+  content: " ";
+  border-radius: 20px;
+  border: 3px solid #abdbea;
+  padding: 8px;
+  float: left;
+  margin-left: -40px;
+  margin-top: 2px;
+}
+.PreviewArea label {
+  font-weight: normal;
+  margin-left: 6px;
+}
+
+.PreviewArea ol li {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  margin-left: 45px;
+}
+
+/* Checkbox styling */
+
+.contains-checklist .checklist-item::before {
+  visibility: hidden;
+}
+
+.contains-checklist input[type="checkbox"] {
+  position: absolute;
+  visibility: hidden;
+}
+
+.contains-checklist input[type="checkbox"] + label {
+  position: relative;
+  font-weight: normal;
+  margin-left: 0;
+}
+
+.contains-checklist input[type="checkbox"] + label::before {
+  content: "\a0";
+  display: inline-block;
+  visibility: visible;
+  width: 1.3em;
+  height: 1.3em;
+  margin: 0 0.6em 0 -2.2em;
+  line-height: 1.1em;
+  border: 3px solid #abdbea;
+  border-radius: 3px;
+}
+
+.contains-checklist input[type="checkbox"]:checked + label::before {
+  content: "\2714";
+  line-height: 1.1em;
+  padding-left: 0.1em;
+}
+
+.contains-checklist input[type="checkbox"]:active + label::before,
+input[type="checkbox"]:focus + label::before {
+  background: darken(#abdbea, 20%);
+}
