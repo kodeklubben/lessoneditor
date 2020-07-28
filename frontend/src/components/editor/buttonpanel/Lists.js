@@ -1,4 +1,3 @@
-// import "./lists.css";
 import React from "react";
 import CPButton from "./ButtonComponent";
 

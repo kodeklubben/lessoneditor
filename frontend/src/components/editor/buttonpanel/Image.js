@@ -1,4 +1,3 @@
-// import "./image.css";
 import React from "react";
 import CPButton from "./ButtonComponent";
 

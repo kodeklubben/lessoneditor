@@ -1,4 +1,3 @@
-// import "./sections.scss";
 import React from "react";
 import CPButton from "./ButtonComponent";
 
