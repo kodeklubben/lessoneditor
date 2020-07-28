@@ -6,7 +6,7 @@
     "axios": "^0.19.2",
     "crypto-js": "^4.0.0",
     "highlight.js": "^10.1.2",
-    "markdown-it": "^10.0.0",
+    "markdown-it": "^11.0.0",
     "markdown-it-attrs": "^3.0.3",
     "node-sass": "^4.14.1",
     "react": "^16.13.1",
@@ -15,7 +15,7 @@
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "semantic-ui-css": "^2.4.1",
-    "semantic-ui-react": "^0.88.2",
+    "semantic-ui-react": "^1.0.0",
     "slugify": "^1.4.4"
   },
   "scripts": {
