@@ -1,5 +1,5 @@
 import "./buttonpanel.css";
-import "./microbit.css";
+// import "./microbit.css";
 import React from "react";
 import Preview from "./Preview";
 import Emphasis from "./Emphasis";

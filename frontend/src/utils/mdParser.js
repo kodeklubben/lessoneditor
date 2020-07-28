@@ -12,6 +12,13 @@ const md = require("markdown-it")({
         return hljs.highlight(lang, str).value;
       } catch (__) {}
     }
+    if (!lang) {
+      console.log(`str : ${str}, lang : ${lang}`);
+      // autodetect language
+      try {
+        return hljs.highlightAuto(str).value;
+      } catch (e) {}
+    }
     return "";
   },
 })

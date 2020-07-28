@@ -5,9 +5,10 @@
   "dependencies": {
     "axios": "^0.19.2",
     "crypto-js": "^4.0.0",
-    "highlight.js": "^9.18.1",
+    "highlight.js": "^10.1.2",
     "markdown-it": "^10.0.0",
     "markdown-it-attrs": "^3.0.3",
+    "node-sass": "^4.14.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-hotkeys-hook": "^2.2.0",

@@ -1,3 +1,5 @@
+import "./mdpreview.scss";
+// import "../../../node_modules/highlight.js/scss/idea.scss";
 import React, { useEffect } from "react";
 import { renderMicrobit } from "utils/renderMicrobit";
 import { mdParser } from "../../utils/mdParser";
