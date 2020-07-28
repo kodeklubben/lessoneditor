@@ -46,7 +46,7 @@
     "enzyme-to-json": "^3.5.0",
     "husky": "^4.2.5",
     "moxios": "^0.4.0",
-    "node-sass": "^4.12.0",
+    "node-sass": "^4.9.0",
     "prettier": "^2.0.5",
     "pretty-quick": "^2.0.1",
     "react-scripts": "^3.4.1",
