@@ -5,10 +5,10 @@ Our minimal requirement is to have a basic functioning application where the tea
 # Quick start
 Several quick start options are available:
 
-* Download the latest version of Node package manager (npm). 
+* Download the latest version of Node package manager (npm).
 * Clone the repo: `git clone https://github.com/kodeklubben/lessoneditor.git`
 
-Frontend: 
+Frontend:
 * cd lessoneditor/frontend
 * Install all dependencies with [npm](https://www.npmjs.com/) `npm install`
 * Install all dependencies with [yarn](https://yarnpkg.com/) `yarn install`
@@ -119,7 +119,7 @@ The plugin is based on markdown-it-header-section by arve0: [https://github.com/
 
 * markdown-it-insert-img: A plugin for parsing markdown links to html `<img>`-elements displaying the image form a specific URL.
 
-## Prop types 
+## Prop types
 In addition we implemented the use of proptypes in our react component structures which is a form of validation that ensures
 the right type of props are always passed to a react component. It is not really a form of testing, but it helps maintain
 correctness in the app.
@@ -186,3 +186,4 @@ You can learn more in the [Create React App documentation](https://facebook.gith
 
 To learn React, check out the [React documentation](https://reactjs.org/).
 
+// Nå har jeg vært innom ;) 
