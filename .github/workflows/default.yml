@@ -31,7 +31,7 @@ jobs:
       - run: npm test --prefix backend
       - run: npm update
       - run: npm install node-sass
-      - run: nodejs node_modules/node-sass/scripts/install.js
+      - run: node frontend/node_modules/node-sass/scripts/install.js
       - run: npm rebuild node-sass
       - run: npm run build --prefix frontend
       - name: Archive build artifacts
