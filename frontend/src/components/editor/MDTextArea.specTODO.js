@@ -5,7 +5,7 @@ import { shallow } from "enzyme";
 it("should set text area change", () => {
   const onChangeSpy = jest.fn();
 
-  const wrapper = shallow(<MDTextArea onInputChange={onChangeSpy} />);
+  const wrapper = shallow(<MDTextArea />);
   wrapper.find("textarea").simulate("change");
 
   expect(onChangeSpy).toHaveBeenCalled();
