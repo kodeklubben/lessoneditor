@@ -31,8 +31,6 @@ const ButtonPanel = ({
   setUndoCursorPosition,
   setRedoCursorPosition,
   setListButtonValues,
-  course,
-  lesson,
 }) => {
   const history = useHistory();
 
@@ -104,7 +102,7 @@ const ButtonPanel = ({
         setButtonValues={setButtonValues}
       />
       <button
-        className="ui right floated button"
+        className="ui right floated tiny button"
         id="buttonpanel"
         onClick={() => navigateToHome()}
       >

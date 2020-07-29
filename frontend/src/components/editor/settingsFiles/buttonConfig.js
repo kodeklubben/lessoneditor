@@ -6,7 +6,7 @@ import { BUTTON_TITLE, SECTION_TEXT } from "./languages/editor_NO";
 const temp = "```";
 
 // SHORTCUTKEY options: "ctrl", "shift", "alt", "option", "command"
-const SHORTCUTKEY = "command";
+const SHORTCUTKEY = "ctrl";
 const SHORTCUTKEY2 = "shift";
 const plus = "+";
 
@@ -68,7 +68,7 @@ const emphasis = {
   bold: {
     buttonTitle: "bold",
     icon: "bold",
-    output: "****",
+    output: "____",
     title: BUTTON_TITLE.bold,
     cursorIntON: 2,
     cursorIntOFF: 2,
@@ -77,7 +77,7 @@ const emphasis = {
   italic: {
     buttonTitle: "italic",
     icon: "italic",
-    output: "**",
+    output: "__",
     title: BUTTON_TITLE.italic,
     cursorIntON: 1,
     cursorIntOFF: 1,
@@ -182,16 +182,6 @@ const lists = {
 // if new buttons are added remember to update buttons-state in editor.js
 
 const sections = {
-  activity: {
-    buttonTitle: "sec_activity",
-    icon: "",
-    output: "# " + SECTION_TEXT + " {.activity}\n",
-    title: BUTTON_TITLE.activity,
-    cursorIntON: 0,
-    cursorIntOFF: 13,
-    cancelInt: 2,
-    shortcut: KEY_COMBINATIONS.activity,
-  },
   intro: {
     buttonTitle: "sec_intro",
     icon: "",
@@ -201,6 +191,16 @@ const sections = {
     cursorIntOFF: 10,
     cancelInt: 2,
     shortcut: KEY_COMBINATIONS.intro,
+  },
+  activity: {
+    buttonTitle: "sec_activity",
+    icon: "",
+    output: "# " + SECTION_TEXT + " {.activity}\n",
+    title: BUTTON_TITLE.activity,
+    cursorIntON: 0,
+    cursorIntOFF: 13,
+    cancelInt: 2,
+    shortcut: KEY_COMBINATIONS.activity,
   },
   check: {
     buttonTitle: "sec_check",

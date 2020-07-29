@@ -31,6 +31,7 @@ const Image = ({ editorRef, uploadImageRef }) => {
       <div className="ui icon buttons emphasis">
         {Object.entries(config).map((element, index) => (
           <CPButton
+            buttonValues={""}
             key={"element" + index}
             buttonTitle={element[1].buttonTitle}
             icon={element[1].icon}
