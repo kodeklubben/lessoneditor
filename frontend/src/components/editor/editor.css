@@ -172,8 +172,9 @@
     flex-flow: row nowrap;
     justify-content: space-between;
   }
-  .CPButton {
-    background-color: #b1daae !important;
+
+  .CPButton:hover {
+    background-color: #a6c0a4 !important;
   }
 
   /* EDITOR */
@@ -221,9 +222,9 @@
   }
 }
 
-.CPButton {
+/* .CPButton {
   background-color: #b1daae !important;
-}
+} */
 
 .ui.buttons.sections #custom {
   background-color: #d8f0d6 !important;

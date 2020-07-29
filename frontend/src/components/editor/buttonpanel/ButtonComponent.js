@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Button, Icon, Popup } from "semantic-ui-react";
 
 const Buttons = ({
+  buttonValues,
   icon,
   title,
   onButtonClick,
@@ -62,6 +63,11 @@ const Buttons = ({
           trigger={
             icon ? (
               <Button
+                style={
+                  buttonValues[buttonTitle]
+                    ? { backgroundColor: "#a6c0a4", borderRadius: 5 }
+                    : { backgroundColor: "#b1daae", borderRadius: 5 }
+                }
                 id="custom"
                 size="big"
                 className="CPButton"
@@ -81,6 +87,7 @@ const Buttons = ({
               </Button>
             ) : (
               <Button
+                style={{ backgroundColor: "#b1daae", borderRadius: 5 }}
                 id="custom"
                 size="big"
                 className="CPButton"
@@ -112,6 +119,11 @@ const Buttons = ({
           trigger={
             icon ? (
               <Button
+                style={
+                  buttonValues[buttonTitle]
+                    ? { backgroundColor: "#a6c0a4", borderRadius: 5 }
+                    : { backgroundColor: "#b1daae", borderRadius: 5 }
+                }
                 id="custom"
                 size="big"
                 className="CPButton"
@@ -130,6 +142,7 @@ const Buttons = ({
               </Button>
             ) : (
               <Button
+                style={{ backgroundColor: "#b1daae", borderRadius: 5 }}
                 id="custom"
                 size="big"
                 className="CPButton"

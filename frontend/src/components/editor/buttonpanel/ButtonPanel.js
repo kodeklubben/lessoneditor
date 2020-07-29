@@ -31,8 +31,6 @@ const ButtonPanel = ({
   setUndoCursorPosition,
   setRedoCursorPosition,
   setListButtonValues,
-  course,
-  lesson,
 }) => {
   const history = useHistory();
 
