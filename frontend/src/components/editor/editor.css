@@ -181,7 +181,7 @@
   .PreviewArea {
     padding: 1rem;
     margin: 1rem;
-    height: 77vh;
+    height: 80vh;
     display: block;
     word-wrap: break-word;
     background-color: white;
@@ -189,7 +189,7 @@
     touch-action: manipulation;
   }
   .TextArea {
-    height: 77vh;
+    height: 80vh;
     outline: none;
     padding: 1rem;
     margin: 1rem;
@@ -221,10 +221,6 @@
     height: 100%;
   }
 }
-
-/* .CPButton {
-  background-color: #b1daae !important;
-} */
 
 .ui.buttons.sections #custom {
   background-color: #d8f0d6 !important;

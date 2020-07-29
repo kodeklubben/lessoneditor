@@ -125,7 +125,7 @@ const Buttons = ({
                     : { backgroundColor: "#b1daae", borderRadius: 5 }
                 }
                 id="custom"
-                size="big"
+                size="medium"
                 className="CPButton"
                 onTouchStart={handleButtonPress}
                 onClick={() =>
@@ -144,7 +144,7 @@ const Buttons = ({
               <Button
                 style={{ backgroundColor: "#b1daae", borderRadius: 5 }}
                 id="custom"
-                size="big"
+                size="medium"
                 className="CPButton"
                 onClick={() =>
                   onButtonClick(
