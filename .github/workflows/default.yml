@@ -29,6 +29,8 @@ jobs:
       - run: npm ci --ignore-scripts --no-optional --prefer-offline --no-audit --prefix backend
       - run: npm test --prefix frontend
       - run: npm test --prefix backend
+      - run: node frontend/node_modules/node-sass/scripts/install.js
+      - run: npm rebuild node-sass
       - run: npm run build --prefix frontend
       - name: Archive build artifacts
         uses: actions/upload-artifact@v1

@@ -12,21 +12,24 @@ const Autosave = ({ mdText }) => {
   const [autoSaveMessage, setAutoSaveMessage] = useState("");
 
   useInterval(async () => {
-    if (counter < 2) {
+    if (counter < 17) {
       setCounter(counter + 1);
     }
-    if (counter > 0 && mdText !== savedText) {
+    if (counter >= 0 && mdText !== savedText) {
+      setSavedText(mdText);
+      setCounter(0);
+      setAutoSaveMessage(SAVING);
+    } else if (counter === 5 && autoSaveMessage !== SAVED) {
       await saveMdText(course, lesson, file, mdText);
       if (!context.getLesson(course, lesson)) {
         await context.addLesson(course, lesson, lesson);
       }
-      setSavedText(mdText);
-      setCounter(0);
-      setAutoSaveMessage(SAVING);
-    } else if (counter === 1) {
       setAutoSaveMessage(SAVED);
     }
-  }, 500);
+    if (counter === 15) {
+      setAutoSaveMessage("");
+    }
+  }, 300);
 
   function useInterval(callback, delay) {
     const savedCallback = useRef();

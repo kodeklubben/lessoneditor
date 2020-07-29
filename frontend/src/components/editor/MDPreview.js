@@ -1,3 +1,4 @@
+import "./mdpreview.scss";
 import React, { useEffect } from "react";
 import { renderMicrobit } from "utils/renderMicrobit";
 import { mdParser } from "../../utils/mdParser";

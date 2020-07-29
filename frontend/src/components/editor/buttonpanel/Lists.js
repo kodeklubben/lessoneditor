@@ -1,5 +1,5 @@
 import React from "react";
-import CPButton from "./CPButton";
+import CPButton from "./ButtonComponent";
 
 import { useHotkeys } from "react-hotkeys-hook";
 

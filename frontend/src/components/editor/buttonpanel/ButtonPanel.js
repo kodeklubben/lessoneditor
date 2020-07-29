@@ -6,7 +6,7 @@ import UndoRedo from "./UndoRedo";
 import Image from "./Image";
 import Lists from "./Lists";
 import Sections from "./Sections";
-import Code from "./Code";
+import Code from "./CodeButton";
 
 import { useHistory } from "react-router-dom";
 
