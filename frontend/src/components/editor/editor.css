@@ -173,9 +173,9 @@
     justify-content: space-between;
   }
 
-  .CPButton:hover {
+  /* .CPButton:hover {
     background-color: #a6c0a4 !important;
-  }
+  } */
 
   /* EDITOR */
   .PreviewArea {

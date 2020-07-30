@@ -1,4 +1,4 @@
-import { getAvailableLanguages } from "./filterUtils";
+// import { getAvailableLanguages } from "./filterUtils";
 
 /**
  * Render scratchblocks
@@ -7,6 +7,7 @@ import { getAvailableLanguages } from "./filterUtils";
  * @returns {string} <pre class="blocks">...</pre> and <code class="b">...</code> replaced with SVG
  */
 export const renderScratchBlocks = (content, styles) => {
+  console.log("styles : " + JSON.stringify(styles));
   const scratchblocks = require("scratchblocks/browser.js");
 
   // NOTE: English (en) is included by default. All other languages
@@ -22,20 +23,13 @@ export const renderScratchBlocks = (content, styles) => {
   });
 
   let replace = [];
-  if ("blocks" in styles) {
-    replace.push({
-      start: '<pre class="' + styles.blocks + '">',
-      end: "</pre>",
-      options: { languages: getAvailableLanguages() },
-    });
-  }
-  if ("b" in styles) {
-    replace.push({
-      start: '<code class="' + styles.b + '">',
-      end: "</code>",
-      options: { inline: true, languages: getAvailableLanguages() },
-    });
-  }
+
+  replace.push({
+    start: '<pre><code class="blocks">',
+    end: "</code></pre>",
+    // options: { inline: true, languages: getAvailableLanguages() },
+  });
+
   let returnContent = content;
   replace.forEach((r) => {
     const re = new RegExp(r.start + "[\\s\\S]*?" + r.end, "g");
@@ -44,7 +38,7 @@ export const renderScratchBlocks = (content, styles) => {
     if (blocks) {
       blocks.forEach((block) => {
         let code = block.substring(r.start.length, block.length - r.end.length);
-        let doc = scratchblocks.parse(code, r.options);
+        let doc = scratchblocks.parse(code);
         let docView = scratchblocks.newView(doc, { style: "scratch3" });
         let svg = docView.render();
         svg.setAttribute(
@@ -52,13 +46,9 @@ export const renderScratchBlocks = (content, styles) => {
           `0 0 ${svg.getAttribute("width")} ${svg.getAttribute("height")}`
         );
         svg.style.maxWidth = "100%";
-        if (r.options.inline) {
-          svg.style.margin = "3px 0";
-          svg.style.verticalAlign = "middle";
-        } else {
-          svg.style.display = "block";
-          svg.style.margin = "0 auto 15px";
-        }
+
+        svg.style.display = "block";
+        svg.style.margin = "0 auto 15px";
         returnContent = returnContent.replace(block, svg.outerHTML);
       });
     }

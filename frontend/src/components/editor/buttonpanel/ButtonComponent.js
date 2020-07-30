@@ -65,8 +65,8 @@ const Buttons = ({
               <Button
                 style={
                   buttonValues[buttonTitle]
-                    ? { backgroundColor: "#a6c0a4", borderRadius: 5 }
-                    : { backgroundColor: "#b1daae", borderRadius: 5 }
+                    ? { backgroundColor: "#a6c0a4" }
+                    : { backgroundColor: "#b1daae" }
                 }
                 id="custom"
                 size="big"
@@ -87,7 +87,7 @@ const Buttons = ({
               </Button>
             ) : (
               <Button
-                style={{ backgroundColor: "#b1daae", borderRadius: 5 }}
+                style={{ backgroundColor: "#b1daae" }}
                 id="custom"
                 size="big"
                 className="CPButton"
@@ -121,8 +121,8 @@ const Buttons = ({
               <Button
                 style={
                   buttonValues[buttonTitle]
-                    ? { backgroundColor: "#a6c0a4", borderRadius: 5 }
-                    : { backgroundColor: "#b1daae", borderRadius: 5 }
+                    ? { backgroundColor: "#a6c0a4" }
+                    : { backgroundColor: "#b1daae" }
                 }
                 id="custom"
                 size="medium"
@@ -142,7 +142,7 @@ const Buttons = ({
               </Button>
             ) : (
               <Button
-                style={{ backgroundColor: "#b1daae", borderRadius: 5 }}
+                style={{ backgroundColor: "#b1daae" }}
                 id="custom"
                 size="medium"
                 className="CPButton"
