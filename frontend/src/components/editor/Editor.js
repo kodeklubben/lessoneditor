@@ -136,7 +136,7 @@ const Editor = () => {
           pushUndoValue={pushUndoValue}
           resetButtons={resetButtons}
         />
-        <MDPreview mdText={mdText} />
+        <MDPreview mdText={mdText} course={course} lesson={lesson} />
       </div>
       <Autosave mdText={mdText} />
     </div>
