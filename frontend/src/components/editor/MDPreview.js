@@ -8,12 +8,12 @@ import { renderScratchBlocks } from "../../utils/renderScratchblocks";
 const MDPreview = ({ mdText, course }) => {
   const parseMD = mdParser(mdText);
   useEffect(() => {
-    if (course === "Micro:bit") {
+    if (course === "Micro:bit" || course === "microbit") {
       renderMicrobit("nb");
     }
   }, [course, parseMD]);
 
-  if (course === "Scratch") {
+  if (course === "Scratch" || course === "scratch") {
     let lessonContent = renderScratchBlocks(parseMD);
     return (
       <div
