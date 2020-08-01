@@ -8,6 +8,13 @@
 
 $checkbox-blue: #abdbea;
 
+@mixin sectionImg {
+  img {
+    display: inline;
+    margin: auto;
+  }
+}
+
 @mixin styledList {
   ul,
   ol {
@@ -50,6 +57,7 @@ $checkbox-blue: #abdbea;
   .section_activity,
   .section_save {
     @include styledList;
+    @include sectionImg;
   }
 
   ul,
