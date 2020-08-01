@@ -6,8 +6,7 @@
  * @param {object} styles css-modules object
  * @returns {string} <pre class="blocks">...</pre> and <code class="b">...</code> replaced with SVG
  */
-export const renderScratchBlocks = (content, styles) => {
-  console.log("styles : " + JSON.stringify(styles));
+export const renderScratchBlocks = (content) => {
   const scratchblocks = require("scratchblocks/browser.js");
 
   // NOTE: English (en) is included by default. All other languages
@@ -27,7 +26,7 @@ export const renderScratchBlocks = (content, styles) => {
   replace.push({
     start: '<pre><code class="blocks">',
     end: "</code></pre>",
-    // options: { inline: true, languages: getAvailableLanguages() },
+    options: { inline: true, languages: ["nb, nn, en"] },
   });
 
   let returnContent = content;
@@ -38,7 +37,11 @@ export const renderScratchBlocks = (content, styles) => {
     if (blocks) {
       blocks.forEach((block) => {
         let code = block.substring(r.start.length, block.length - r.end.length);
-        let doc = scratchblocks.parse(code);
+        console.log("code : " + code);
+        let doc = scratchblocks.parse(code, {
+          inline: false,
+          languages: ["nb", "nn", "en", "is"],
+        });
         let docView = scratchblocks.newView(doc, { style: "scratch3" });
         let svg = docView.render();
         svg.setAttribute(
