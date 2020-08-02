@@ -173,6 +173,18 @@
     justify-content: space-between;
   }
 
+  .MBButton:hover {
+    background-color: #aaa !important;
+  }
+
+  .MBButton {
+    color: #fff !important;
+    height: 1em !important;
+    padding-bottom: 16px !important;
+    padding-top: 2px !important;
+    margin-top: 1px !important;
+  }
+
   /* .CPButton:hover {
     background-color: #a6c0a4 !important;
   } */

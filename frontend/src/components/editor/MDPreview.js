@@ -8,6 +8,7 @@ const MDPreview = ({ mdText, course }) => {
   const parseMD = mdParser(mdText);
   useEffect(() => {
     if (course === "Micro:bit" || course === "microbit") {
+      //TODO: Get lesson language
       renderMicrobit("nb");
     }
   }, [course, parseMD]);
