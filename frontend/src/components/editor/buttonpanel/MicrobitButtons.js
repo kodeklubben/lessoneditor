@@ -1,5 +1,5 @@
 import React from "react";
-import ButtonComponent2 from "./MicroScratchButtonComponent2";
+import ButtonComponent from "./MicroScratchButtonComponent";
 
 import { useHotkeys } from "react-hotkeys-hook";
 
@@ -382,7 +382,7 @@ const MicrobitButtons = ({
     <>
       <div className="ui icon buttons emphasis">
         {Object.entries(config).map((element, index) => (
-          <ButtonComponent2
+          <ButtonComponent
             buttonValues={buttonValues}
             key={"element" + index}
             buttonTitle={element[1].buttonTitle}

@@ -105,7 +105,7 @@ const ButtonPanel = ({
         setButtonValues={setButtonValues}
         course={course}
       />
-      {course === "Micro:bit" ? (
+      {course === "Micro:bit" || course === "microbit" ? (
         <MicrobitButtons
           editorRef={editorRef}
           mdText={mdText}
@@ -120,7 +120,7 @@ const ButtonPanel = ({
       ) : (
         ""
       )}
-      {course === "Scratch" ? (
+      {course === "Scratch" || course === "scratch" ? (
         <SratchButtons
           editorRef={editorRef}
           mdText={mdText}

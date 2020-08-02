@@ -264,7 +264,7 @@ const sections = {
   },
 };
 
-const code = {
+const codebutton = {
   inline: {
     buttonTitle: "inline",
     icon: "terminal",
@@ -292,7 +292,7 @@ export {
   lists,
   preview,
   sections,
-  code,
+  codebutton,
   KEY_COMBINATIONS,
   SHORTCUTKEY,
   SHORTCUTKEY2,

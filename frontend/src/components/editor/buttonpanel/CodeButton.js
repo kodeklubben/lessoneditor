@@ -9,7 +9,7 @@ import {
 } from "./utils/buttonMethods";
 import {
   KEY_COMBINATIONS as KEY,
-  code as config,
+  codebutton as config,
 } from "../settingsFiles/buttonConfig";
 
 let results;
@@ -29,9 +29,7 @@ const CodeButton = ({
   course,
 }) => {
   const temp = "```";
-  const outputTest = `${temp}${course}\n\n${temp}`;
-
-  let test = false;
+  const outputCodeBlock = `${temp}${course}\n\n${temp}`;
 
   const setChanges = (mdText, cursorPositionStart, cursorPositionEnd) => {
     setCursor(cursorPositionStart, cursorPositionEnd);
@@ -52,8 +50,8 @@ const CodeButton = ({
       mdText,
       cursorPositionStart,
       cursorPositionEnd,
-      cursorIntON + course.length,
-      outputTest
+      cursorIntON,
+      output
     );
     if (cancelResults.cancel) {
       setChanges(
@@ -63,29 +61,16 @@ const CodeButton = ({
       );
       return;
     }
-    if (!test) {
-      results = codeAction(
-        buttonValues[button],
-        mdText,
-        cursorPositionStart,
-        cursorPositionEnd,
-        cursorIntON + course.length,
-        cursorIntOFF,
-        outputTest
-      );
-      test = true;
-    } else {
-      results = codeAction(
-        buttonValues[button],
-        mdText,
-        cursorPositionStart,
-        cursorPositionEnd,
-        cursorIntON,
-        cursorIntOFF,
-        output
-      );
-      test = false;
-    }
+
+    results = codeAction(
+      buttonValues[button],
+      mdText,
+      cursorPositionStart,
+      cursorPositionEnd,
+      cursorIntON,
+      cursorIntOFF,
+      output
+    );
 
     setChanges(
       results.mdText,
@@ -110,9 +95,9 @@ const CodeButton = ({
       setButton(buttonTitle);
       setCode(
         buttonTitle,
-        config.codeblock.cursorIntON,
+        config.codeblock.cursorIntON + course.length,
         config.codeblock.cursorIntOFF,
-        config.codeblock.output
+        outputCodeBlock
       );
     },
   };
