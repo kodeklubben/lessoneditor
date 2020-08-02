@@ -7,12 +7,11 @@ import MDTextArea from "./MDTextArea";
 import MDPreview from "./MDPreview";
 import ButtonPanel from "./buttonpanel/ButtonPanel";
 import ImageUpload from "./ImageUpload";
-import buttonsValue from "./buttonpanel/utils/buttonsValue";
 import fetchMdText from "../../api/fetch-md-text";
 
 const Editor = () => {
   const [mdText, setMdText] = useState("");
-  const [buttonValues, setButtonValues] = useState(buttonsValue);
+  const [buttonValues, setButtonValues] = useState({});
   const [cursorPositionStart, setCursorPositionStart] = useState(0);
   const [cursorPositionEnd, setCursorPositionEnd] = useState(0);
   const [undo, setUndo] = useState([""]);
@@ -70,7 +69,7 @@ const Editor = () => {
   };
 
   const resetButtons = () => {
-    setButtonValues(buttonsValue);
+    setButtonValues({});
   };
 
   useEffect(() => {

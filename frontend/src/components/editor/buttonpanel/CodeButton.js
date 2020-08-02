@@ -1,5 +1,5 @@
 import React from "react";
-import CPButton from "./ButtonComponent";
+import ButtonComponent from "./ButtonComponent";
 
 import { useHotkeys } from "react-hotkeys-hook";
 
@@ -16,7 +16,7 @@ let results;
 let cancelResults;
 let buttonTitle;
 
-const Code = ({
+const CodeButton = ({
   editorRef,
   cursorPositionStart,
   cursorPositionEnd,
@@ -26,7 +26,13 @@ const Code = ({
   setCursorPosition,
   setCursor,
   setButtonValues,
+  course,
 }) => {
+  const temp = "```";
+  const outputTest = `${temp}${course}\n\n${temp}`;
+
+  let test = false;
+
   const setChanges = (mdText, cursorPositionStart, cursorPositionEnd) => {
     setCursor(cursorPositionStart, cursorPositionEnd);
     setCursorPosition(cursorPositionStart, cursorPositionEnd);
@@ -46,8 +52,8 @@ const Code = ({
       mdText,
       cursorPositionStart,
       cursorPositionEnd,
-      cursorIntON,
-      output
+      cursorIntON + course.length,
+      outputTest
     );
     if (cancelResults.cancel) {
       setChanges(
@@ -57,15 +63,29 @@ const Code = ({
       );
       return;
     }
-    results = codeAction(
-      buttonValues[button],
-      mdText,
-      cursorPositionStart,
-      cursorPositionEnd,
-      cursorIntON,
-      cursorIntOFF,
-      output
-    );
+    if (!test) {
+      results = codeAction(
+        buttonValues[button],
+        mdText,
+        cursorPositionStart,
+        cursorPositionEnd,
+        cursorIntON + course.length,
+        cursorIntOFF,
+        outputTest
+      );
+      test = true;
+    } else {
+      results = codeAction(
+        buttonValues[button],
+        mdText,
+        cursorPositionStart,
+        cursorPositionEnd,
+        cursorIntON,
+        cursorIntOFF,
+        output
+      );
+      test = false;
+    }
 
     setChanges(
       results.mdText,
@@ -138,7 +158,7 @@ const Code = ({
     <>
       <div className="ui icon buttons emphasis">
         {Object.entries(config).map((element, index) => (
-          <CPButton
+          <ButtonComponent
             buttonValues={buttonValues}
             key={"element" + index}
             buttonTitle={element[1].buttonTitle}
@@ -153,4 +173,4 @@ const Code = ({
   );
 };
 
-export default Code;
+export default CodeButton;

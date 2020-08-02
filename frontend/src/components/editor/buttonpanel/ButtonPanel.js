@@ -6,7 +6,9 @@ import UndoRedo from "./UndoRedo";
 import Image from "./Image";
 import Lists from "./Lists";
 import Sections from "./Sections";
-import Code from "./CodeButton";
+import CodeButton from "./CodeButton";
+import MicrobitButtons from "./MicrobitButtons";
+import SratchButtons from "./ScratchButtons";
 
 import { useHistory } from "react-router-dom";
 
@@ -31,6 +33,7 @@ const ButtonPanel = ({
   setUndoCursorPosition,
   setRedoCursorPosition,
   setListButtonValues,
+  course,
 }) => {
   const history = useHistory();
 
@@ -90,7 +93,7 @@ const ButtonPanel = ({
         setCursor={setCursor}
         setButtonValues={setButtonValues}
       />
-      <Code
+      <CodeButton
         editorRef={editorRef}
         mdText={mdText}
         buttonValues={buttonValues}
@@ -100,7 +103,39 @@ const ButtonPanel = ({
         setCursorPosition={setCursorPosition}
         setCursor={setCursor}
         setButtonValues={setButtonValues}
+        course={course}
       />
+      {course === "Micro:bit" ? (
+        <MicrobitButtons
+          editorRef={editorRef}
+          mdText={mdText}
+          buttonValues={buttonValues}
+          cursorPositionStart={cursorPositionStart}
+          cursorPositionEnd={cursorPositionEnd}
+          setMdText={setMdText}
+          setCursorPosition={setCursorPosition}
+          setCursor={setCursor}
+          setButtonValues={setButtonValues}
+        />
+      ) : (
+        ""
+      )}
+      {course === "Scratch" ? (
+        <SratchButtons
+          editorRef={editorRef}
+          mdText={mdText}
+          buttonValues={buttonValues}
+          cursorPositionStart={cursorPositionStart}
+          cursorPositionEnd={cursorPositionEnd}
+          setMdText={setMdText}
+          setCursorPosition={setCursorPosition}
+          setCursor={setCursor}
+          setButtonValues={setButtonValues}
+        />
+      ) : (
+        ""
+      )}
+
       <button
         className="ui right floated tiny button"
         id="buttonpanel"
