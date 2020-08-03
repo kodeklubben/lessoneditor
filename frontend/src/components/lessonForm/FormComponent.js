@@ -77,6 +77,7 @@ const FormComponent = () => {
     console.log("\nYML-file: \n" + YMLstateToString(state));
     // TODO: Send state-data to database
     const { course, title } = state;
+    console.log(course + " " + title);
     if (course && title) {
       const lesson = slugify(title);
       await user.addLesson(course, lesson, title);

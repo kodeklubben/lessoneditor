@@ -247,6 +247,8 @@ const Sections = ({
             title={element[1].title}
             onButtonClick={handleButtonClick}
             shortcutKey={element[1].shortcut}
+            style={element[1].style}
+            imageurl={element[1].imageurl ? element[1].imageurl : ""}
           />
         ))}
       </div>

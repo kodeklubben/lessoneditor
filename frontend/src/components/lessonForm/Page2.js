@@ -19,7 +19,7 @@ const Page2 = (props) => {
               onChange={props.changeHandler}
             >
               {COURSESLIST.map((element) => (
-                <option key={element.courseTitle} value={element.courseTitle}>
+                <option key={element.slug} value={element.slug}>
                   {element.courseTitle}
                 </option>
               ))}
