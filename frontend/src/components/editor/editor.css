@@ -177,6 +177,10 @@
     background-color: #aaa !important;
   }
 
+  #noIcon:hover {
+    background-color: #aaa !important;
+  }
+
   .MBButton {
     color: #fff !important;
     height: 1em !important;

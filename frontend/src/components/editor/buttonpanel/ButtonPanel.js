@@ -82,17 +82,6 @@ const ButtonPanel = ({
         setListButtonValues={setListButtonValues}
         setButtonValues={setButtonValues}
       />
-      <Sections
-        editorRef={editorRef}
-        mdText={mdText}
-        buttonValues={buttonValues}
-        cursorPositionStart={cursorPositionStart}
-        cursorPositionEnd={cursorPositionEnd}
-        setMdText={setMdText}
-        setCursorPosition={setCursorPosition}
-        setCursor={setCursor}
-        setButtonValues={setButtonValues}
-      />
       <CodeButton
         editorRef={editorRef}
         mdText={mdText}
@@ -105,6 +94,19 @@ const ButtonPanel = ({
         setButtonValues={setButtonValues}
         course={course}
       />
+
+      <Sections
+        editorRef={editorRef}
+        mdText={mdText}
+        buttonValues={buttonValues}
+        cursorPositionStart={cursorPositionStart}
+        cursorPositionEnd={cursorPositionEnd}
+        setMdText={setMdText}
+        setCursorPosition={setCursorPosition}
+        setCursor={setCursor}
+        setButtonValues={setButtonValues}
+      />
+
       {course === "Micro:bit" || course === "microbit" ? (
         <MicrobitButtons
           editorRef={editorRef}

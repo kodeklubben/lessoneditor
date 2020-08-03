@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Button, Icon, Popup } from "semantic-ui-react";
+import { image } from "../settingsFiles/buttonConfig";
 
 const Buttons = ({
   buttonValues,
@@ -12,6 +13,8 @@ const Buttons = ({
   cursorIntOFF,
   endOutput,
   shortcutKey,
+  style,
+  imageurl,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -121,11 +124,15 @@ const Buttons = ({
               <Button
                 style={
                   buttonValues[buttonTitle]
-                    ? { backgroundColor: "#a6c0a4" }
-                    : { backgroundColor: "#b1daae" }
+                    ? {
+                        backgroundColor: "#a6c0a4",
+                      }
+                    : {
+                        backgroundColor: "#fff",
+                      }
                 }
                 id="custom"
-                size="medium"
+                size="big"
                 className="CPButton"
                 onTouchStart={handleButtonPress}
                 onClick={() =>
@@ -142,9 +149,8 @@ const Buttons = ({
               </Button>
             ) : (
               <Button
-                style={{ backgroundColor: "#b1daae" }}
-                id="custom"
-                size="medium"
+                style={style}
+                id="noIcon"
                 className="CPButton"
                 onClick={() =>
                   onButtonClick(
@@ -156,7 +162,27 @@ const Buttons = ({
                   )
                 }
               >
-                {title}
+                {imageurl ? (
+                  <img
+                    style={{
+                      height: "20px",
+                      display: "inline",
+                      position: "relative",
+                      top: "-0.3vh",
+                    }}
+                    src={imageurl}
+                    alt="test"
+                  />
+                ) : (
+                  ""
+                )}
+                {imageurl ? (
+                  <span style={{ position: "relative", top: "-0.7vh" }}>
+                    {title}
+                  </span>
+                ) : (
+                  <span>{title}</span>
+                )}
               </Button>
             )
           }
