@@ -173,10 +173,6 @@
     justify-content: space-between;
   }
 
-  .MBButton:hover {
-    background-color: #aaa !important;
-  }
-
   .MBButton {
     color: #fff !important;
     height: 1em !important;
@@ -185,9 +181,10 @@
     margin-top: 1px !important;
   }
 
-  /* .CPButton:hover {
-    background-color: #a6c0a4 !important;
-  } */
+  .CPButton:active,
+  .MBButton:active {
+    background-color: #bbb !important;
+  }
 
   /* EDITOR */
   .PreviewArea {
