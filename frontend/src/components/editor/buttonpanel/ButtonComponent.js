@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Button, Icon, Popup } from "semantic-ui-react";
-import { image } from "../settingsFiles/buttonConfig";
 
 const Buttons = ({
   buttonValues,
@@ -125,9 +124,11 @@ const Buttons = ({
                 style={
                   buttonValues[buttonTitle]
                     ? {
+                        borderRadius: "10px",
                         backgroundColor: "#a6c0a4",
                       }
                     : {
+                        borderRadius: "10px",
                         backgroundColor: "#fff",
                       }
                 }
