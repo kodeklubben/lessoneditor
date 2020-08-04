@@ -89,12 +89,9 @@ const Buttons = ({
               </Button>
             ) : (
               <Button
-                style={{ backgroundColor: "#b1daae" }}
-                id="custom"
-                size="big"
+                style={style}
+                id="noIcon"
                 className="CPButton"
-                onTouchStart={handleButtonPress}
-                onTouchEnd={handleClose}
                 onClick={() =>
                   onButtonClick(
                     buttonTitle,
@@ -105,7 +102,27 @@ const Buttons = ({
                   )
                 }
               >
-                {title}
+                {imageurl ? (
+                  <img
+                    style={{
+                      height: "20px",
+                      display: "inline",
+                      position: "relative",
+                      top: "-0.3vh",
+                    }}
+                    src={imageurl}
+                    alt="test"
+                  />
+                ) : (
+                  ""
+                )}
+                {imageurl ? (
+                  <span style={{ position: "relative", top: "-0.7vh" }}>
+                    {title}
+                  </span>
+                ) : (
+                  <span>{title}</span>
+                )}
               </Button>
             )
           }
@@ -167,9 +184,8 @@ const Buttons = ({
                   <img
                     style={{
                       height: "20px",
-                      display: "inline",
-                      position: "relative",
-                      top: "-0.3vh",
+                      position: "static",
+                      top: "0em",
                     }}
                     src={imageurl}
                     alt="test"
@@ -178,11 +194,18 @@ const Buttons = ({
                   ""
                 )}
                 {imageurl ? (
-                  <span style={{ position: "relative", top: "-0.7vh" }}>
+                  <div
+                    style={{
+                      display: "inline",
+                      position: "relative",
+                      top: "-0.4em",
+                      left: "0.2em",
+                    }}
+                  >
                     {title}
-                  </span>
+                  </div>
                 ) : (
-                  <span>{title}</span>
+                  <div>{title}</div>
                 )}
               </Button>
             )
