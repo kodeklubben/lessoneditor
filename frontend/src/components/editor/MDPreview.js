@@ -41,23 +41,23 @@ const renderScratchBlocks = (content) => {
         const checksum = md5(code).toString();
         if (checksum in storeSVG) {
           returnContent = returnContent.replace(block, storeSVG[checksum]);
-          return returnContent;
+        } else {
+          let doc = scratchblocks.parse(code, {
+            inline: false,
+            languages: LANGUAGES,
+          });
+          let docView = scratchblocks.newView(doc, { style: "scratch3" });
+          let svg = docView.render();
+          svg.setAttribute(
+            "viewBox",
+            `0 0 ${svg.getAttribute("width")} ${svg.getAttribute("height")}`
+          );
+          svg.style.maxWidth = "100%";
+          svg.style.display = "block";
+          svg.style.margin = "0 auto 15px";
+          returnContent = returnContent.replace(block, svg.outerHTML);
+          storeSVG[checksum] = svg.outerHTML;
         }
-        let doc = scratchblocks.parse(code, {
-          inline: false,
-          languages: LANGUAGES,
-        });
-        let docView = scratchblocks.newView(doc, { style: "scratch3" });
-        let svg = docView.render();
-        svg.setAttribute(
-          "viewBox",
-          `0 0 ${svg.getAttribute("width")} ${svg.getAttribute("height")}`
-        );
-        svg.style.maxWidth = "100%";
-        svg.style.display = "block";
-        svg.style.margin = "0 auto 15px";
-        returnContent = returnContent.replace(block, svg.outerHTML);
-        storeSVG[checksum] = svg.outerHTML;
       });
     }
   });
