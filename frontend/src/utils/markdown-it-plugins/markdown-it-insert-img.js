@@ -22,24 +22,21 @@ export function insertImg(md) {
         token.attrs[0].includes("check")
       ) {
         tokens.push(token);
-        tokens.push(
-          openImg(
-            "https://oppgaver.kidsakoder.no/CCV-assets/check.15ac74.svg",
-            "check"
-          )
-        );
+        tokens.push(openImg("/sectionSVG/check.svg", "check"));
       } else if (
         token.tag !== "section" &&
         token.attrs !== null &&
         token.attrs[0].includes("flag")
       ) {
         tokens.push(token);
-        tokens.push(
-          openImg(
-            "https://oppgaver.kidsakoder.no/CCV-assets/flag.4a58cd.svg",
-            "flag"
-          )
-        );
+        tokens.push(openImg("/sectionSVG/flag.svg", "flag"));
+      } else if (
+        token.tag !== "section" &&
+        token.attrs !== null &&
+        token.attrs[0].includes("save")
+      ) {
+        tokens.push(token);
+        tokens.push(openImg("/sectionSVG/save.svg", "save"));
       } else {
         tokens.push(token);
       }

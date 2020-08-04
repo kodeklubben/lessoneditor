@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { renderMicrobit } from "utils/renderMicrobit";
 import { mdParser } from "../../utils/mdParser";
 import md5 from "crypto-js/md5";
+import { renderToggleButtons } from "utils/renderToggleButton";
 
 const LANGUAGES = ["nb", "nn", "en", "is"];
 
@@ -64,16 +65,17 @@ const renderScratchBlocks = (content) => {
   return returnContent;
 };
 
-const MDPreview = ({ mdText, course, counter }) => {
+const MDPreview = ({ mdText, course, renderContent }) => {
   const parseMD = mdParser(mdText);
+
   useEffect(() => {
-    if (course === "microbit" && counter > 1) {
+    renderToggleButtons();
+    if (course === "microbit" && renderContent) {
       //TODO: Get lesson language
       renderMicrobit("nb");
     }
-  }, [course, parseMD, counter]);
-
-  if (course === "scratch" && counter > 1) {
+  }, [course, parseMD, renderContent]);
+  if (course === "scratch" && renderContent) {
     let lessonContent = renderScratchBlocks(parseMD);
     return (
       <div
