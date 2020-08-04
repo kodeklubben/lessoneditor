@@ -93,6 +93,15 @@ $checkbox-blue: #abdbea;
     margin-right: auto;
   }
 
+  h2 > img {
+    position: relative;
+    top: 0.2em;
+  }
+
+  label > img {
+    vertical-align: middle;
+  }
+
   // scratch code blocks
   pre,
   code.blocks {

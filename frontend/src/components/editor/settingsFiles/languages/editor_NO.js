@@ -23,9 +23,6 @@ const BUTTON_TITLE = {
   strikethrough: "Gjennomstreking",
   undo: "Angre",
   redo: "Gjøre om",
-  new: "Ny",
-  load: "Laste inn",
-  save: "Lagre",
   image: "Bilde",
   preview: "Forhåndsvisning",
   listUl: "Uordnet liste",
@@ -41,6 +38,7 @@ const BUTTON_TITLE = {
   try: "Prøv Selv",
   inline: "Inline Code",
   codeblock: "Code Block",
+  save: "Lagre",
 };
 
 export { SAVING, SAVED, PHOTO_TEXT, SECTION_TEXT, BUTTON_TITLE, NAV_BUTTONS };

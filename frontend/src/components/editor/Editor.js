@@ -10,7 +10,7 @@ import ImageUpload from "./ImageUpload";
 import fetchMdText from "../../api/fetch-md-text";
 
 const Editor = () => {
-  const [counter, setCounter] = useState(0);
+  const [renderContent, setRenderContent] = useState(false);
   const [mdText, setMdText] = useState("");
   const [buttonValues, setButtonValues] = useState({});
   const [cursorPositionStart, setCursorPositionStart] = useState(0);
@@ -135,9 +135,13 @@ const Editor = () => {
           pushUndoValue={pushUndoValue}
           resetButtons={resetButtons}
         />
-        <MDPreview mdText={mdText} course={course} counter={counter} />
+        <MDPreview
+          mdText={mdText}
+          course={course}
+          renderContent={renderContent}
+        />
       </div>
-      <Autosave mdText={mdText} counter={counter} setCounter={setCounter} />
+      <Autosave mdText={mdText} setRenderContent={setRenderContent} />
     </div>
   );
 };
