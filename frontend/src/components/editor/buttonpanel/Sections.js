@@ -1,5 +1,5 @@
 import React from "react";
-import CPButton from "./ButtonComponent";
+import ButtonComponent from "./ButtonComponent";
 
 import { useHotkeys } from "react-hotkeys-hook";
 
@@ -237,21 +237,19 @@ const Sections = ({
   };
   return (
     <>
-      <div className="ui icon buttons emphasis">
-        {Object.entries(config).map((element, index) => (
-          <CPButton
-            buttonValues={buttonValues}
-            key={"element" + index}
-            buttonTitle={element[1].buttonTitle}
-            icon={element[1].icon}
-            title={element[1].title}
-            onButtonClick={handleButtonClick}
-            shortcutKey={element[1].shortcut}
-            style={element[1].style}
-            imageurl={element[1].imageurl ? element[1].imageurl : ""}
-          />
-        ))}
-      </div>
+      {Object.entries(config).map((element, index) => (
+        <ButtonComponent
+          buttonValues={buttonValues}
+          key={"element" + index}
+          buttonTitle={element[1].buttonTitle}
+          icon={element[1].icon}
+          title={element[1].title}
+          onButtonClick={handleButtonClick}
+          shortcutKey={element[1].shortcut}
+          style={element[1].style}
+          imageurl={element[1].imageurl ? element[1].imageurl : ""}
+        />
+      ))}
     </>
   );
 };

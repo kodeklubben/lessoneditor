@@ -4,10 +4,10 @@ import saveMdText from "../../api/save-md-text";
 import { UserContext } from "../../contexts/UserContext";
 import { SAVING, SAVED } from "./settingsFiles/languages/editor_NO";
 
-const Autosave = ({ mdText }) => {
+const Autosave = ({ mdText, counter, setCounter }) => {
   const context = useContext(UserContext);
   const [savedText, setSavedText] = useState("");
-  const [counter, setCounter] = useState(0);
+
   const { course, lesson, file } = useParams();
   const [autoSaveMessage, setAutoSaveMessage] = useState("");
 

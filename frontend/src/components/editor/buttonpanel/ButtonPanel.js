@@ -1,6 +1,5 @@
 import "./buttonpanel.css";
 import React from "react";
-import Preview from "./Preview";
 import Emphasis from "./Emphasis";
 import UndoRedo from "./UndoRedo";
 import Image from "./Image";
@@ -23,7 +22,6 @@ const ButtonPanel = ({
   redo,
   undoCursorPosition,
   redoCursorPosition,
-  handlePreview,
   pushUndoValue,
   pushRedoValue,
   setMdText,
@@ -42,8 +40,7 @@ const ButtonPanel = ({
   };
 
   return (
-    <>
-      <Preview handlePreview={handlePreview} />
+    <div className="buttonpanel">
       <Emphasis
         editorRef={editorRef}
         mdText={mdText}
@@ -94,58 +91,59 @@ const ButtonPanel = ({
         setButtonValues={setButtonValues}
         course={course}
       />
-
-      <Sections
-        editorRef={editorRef}
-        mdText={mdText}
-        buttonValues={buttonValues}
-        cursorPositionStart={cursorPositionStart}
-        cursorPositionEnd={cursorPositionEnd}
-        setMdText={setMdText}
-        setCursorPosition={setCursorPosition}
-        setCursor={setCursor}
-        setButtonValues={setButtonValues}
-      />
-
-      {course === "Micro:bit" || course === "microbit" ? (
-        <MicrobitButtons
-          editorRef={editorRef}
-          mdText={mdText}
-          buttonValues={buttonValues}
-          cursorPositionStart={cursorPositionStart}
-          cursorPositionEnd={cursorPositionEnd}
-          setMdText={setMdText}
-          setCursorPosition={setCursorPosition}
-          setCursor={setCursor}
-          setButtonValues={setButtonValues}
-        />
-      ) : (
-        ""
-      )}
-      {course === "Scratch" || course === "scratch" ? (
-        <SratchButtons
-          editorRef={editorRef}
-          mdText={mdText}
-          buttonValues={buttonValues}
-          cursorPositionStart={cursorPositionStart}
-          cursorPositionEnd={cursorPositionEnd}
-          setMdText={setMdText}
-          setCursorPosition={setCursorPosition}
-          setCursor={setCursor}
-          setButtonValues={setButtonValues}
-        />
-      ) : (
-        ""
-      )}
-
-      <button
-        className="ui right floated tiny button"
-        id="buttonpanel"
-        onClick={() => navigateToHome()}
-      >
+      <button className="ui button" id="next" onClick={() => navigateToHome()}>
         <i className="arrow right icon" />
       </button>
-    </>
+      <br />
+      <div>
+        <Sections
+          editorRef={editorRef}
+          mdText={mdText}
+          buttonValues={buttonValues}
+          cursorPositionStart={cursorPositionStart}
+          cursorPositionEnd={cursorPositionEnd}
+          setMdText={setMdText}
+          setCursorPosition={setCursorPosition}
+          setCursor={setCursor}
+          setButtonValues={setButtonValues}
+        />
+      </div>
+
+      {course === "microbit" ? (
+        <>
+          <MicrobitButtons
+            editorRef={editorRef}
+            mdText={mdText}
+            buttonValues={buttonValues}
+            cursorPositionStart={cursorPositionStart}
+            cursorPositionEnd={cursorPositionEnd}
+            setMdText={setMdText}
+            setCursorPosition={setCursorPosition}
+            setCursor={setCursor}
+            setButtonValues={setButtonValues}
+          />
+        </>
+      ) : (
+        ""
+      )}
+      {course === "scratch" ? (
+        <>
+          <SratchButtons
+            editorRef={editorRef}
+            mdText={mdText}
+            buttonValues={buttonValues}
+            cursorPositionStart={cursorPositionStart}
+            cursorPositionEnd={cursorPositionEnd}
+            setMdText={setMdText}
+            setCursorPosition={setCursorPosition}
+            setCursor={setCursor}
+            setButtonValues={setButtonValues}
+          />
+        </>
+      ) : (
+        ""
+      )}
+    </div>
   );
 };
 

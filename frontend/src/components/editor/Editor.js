@@ -10,6 +10,7 @@ import ImageUpload from "./ImageUpload";
 import fetchMdText from "../../api/fetch-md-text";
 
 const Editor = () => {
+  const [counter, setCounter] = useState(0);
   const [mdText, setMdText] = useState("");
   const [buttonValues, setButtonValues] = useState({});
   const [cursorPositionStart, setCursorPositionStart] = useState(0);
@@ -97,7 +98,7 @@ const Editor = () => {
         setCursorPositionEnd={setCursorPositionEnd}
         setCursorPosition={setCursorPosition}
       />
-      <Navbar title={lesson} />
+      <Navbar title={lesson} course={course} />
       <ButtonPanel
         editorRef={editorRef}
         uploadImageRef={uploadImageRef}
@@ -119,7 +120,6 @@ const Editor = () => {
         setRedoCursorPosition={setRedoCursorPosition}
         setListButtonValues={setListButtonValues}
         course={course}
-        lesson={lesson}
       />
       <div className="textEditorContainer">
         <MDTextArea
@@ -135,9 +135,9 @@ const Editor = () => {
           pushUndoValue={pushUndoValue}
           resetButtons={resetButtons}
         />
-        <MDPreview mdText={mdText} course={course} lesson={lesson} />
+        <MDPreview mdText={mdText} course={course} counter={counter} />
       </div>
-      <Autosave mdText={mdText} />
+      <Autosave mdText={mdText} counter={counter} setCounter={setCounter} />
     </div>
   );
 };
