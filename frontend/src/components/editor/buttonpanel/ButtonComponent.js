@@ -29,7 +29,7 @@ const Buttons = ({
                   buttonValues[buttonTitle]
                     ? {
                         borderRadius: "10px",
-                        backgroundColor: "#aaa",
+                        backgroundColor: "#bbb",
                       }
                     : {
                         borderRadius: "10px",
