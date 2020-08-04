@@ -80,7 +80,7 @@ const microbitbuttons = {
   basic: {
     buttonTitle: "basic",
     output: "``{.microbitbasic}",
-    title: "Basic",
+    title: "Basis",
     cursorIntON: 1,
     cursorIntOFF: 17,
     shortcut: KEY_COMBINATIONS_MICROBIT.basic,
@@ -89,7 +89,7 @@ const microbitbuttons = {
   input: {
     buttonTitle: "input",
     output: "``{.microbitinput}",
-    title: "Input",
+    title: "Inndata",
     cursorIntON: 1,
     cursorIntOFF: 17,
     shortcut: KEY_COMBINATIONS_MICROBIT.input,
@@ -98,7 +98,7 @@ const microbitbuttons = {
   music: {
     buttonTitle: "music",
     output: "``{.microbitmusic}",
-    title: "Music",
+    title: "Musikk",
     cursorIntON: 1,
     cursorIntOFF: 17,
     shortcut: KEY_COMBINATIONS_MICROBIT.music,
@@ -107,7 +107,7 @@ const microbitbuttons = {
   led: {
     buttonTitle: "led",
     output: "``{.microbitled}",
-    title: "Led",
+    title: "Skjerm",
     cursorIntON: 1,
     cursorIntOFF: 15,
     shortcut: KEY_COMBINATIONS_MICROBIT.led,
@@ -125,7 +125,7 @@ const microbitbuttons = {
   loops: {
     buttonTitle: "loops",
     output: "``{.microbitloops}",
-    title: "Loops",
+    title: "Løkker",
     cursorIntON: 1,
     cursorIntOFF: 17,
     shortcut: KEY_COMBINATIONS_MICROBIT.loops,
@@ -134,7 +134,7 @@ const microbitbuttons = {
   logic: {
     buttonTitle: "logic",
     output: "``{.microbitlogic}",
-    title: "Logic",
+    title: "Logikk",
     cursorIntON: 1,
     cursorIntOFF: 17,
     shortcut: KEY_COMBINATIONS_MICROBIT.logic,
@@ -143,7 +143,7 @@ const microbitbuttons = {
   variables: {
     buttonTitle: "variables",
     output: "``{.microbitvariables}",
-    title: "Variables",
+    title: "Variabler",
     cursorIntON: 1,
     cursorIntOFF: 21,
     shortcut: KEY_COMBINATIONS_MICROBIT.variables,
@@ -152,7 +152,7 @@ const microbitbuttons = {
   math: {
     buttonTitle: "math",
     output: "``{.microbitmath}",
-    title: "Math",
+    title: "Matematikk",
     cursorIntON: 1,
     cursorIntOFF: 16,
     shortcut: KEY_COMBINATIONS_MICROBIT.math,
@@ -161,7 +161,7 @@ const microbitbuttons = {
   functions: {
     buttonTitle: "functions",
     output: "``{.microbitfunctions}",
-    title: "Functions",
+    title: "Funksjoner",
     cursorIntON: 1,
     cursorIntOFF: 21,
     shortcut: KEY_COMBINATIONS_MICROBIT.functions,
@@ -170,7 +170,7 @@ const microbitbuttons = {
   arrays: {
     buttonTitle: "arrays",
     output: "``{.microbitarrays}",
-    title: "Arrays",
+    title: "Tabeller",
     cursorIntON: 1,
     cursorIntOFF: 18,
     shortcut: KEY_COMBINATIONS_MICROBIT.arrays,
@@ -179,7 +179,7 @@ const microbitbuttons = {
   text: {
     buttonTitle: "text",
     output: "``{.microbittext}",
-    title: "Text",
+    title: "Tekst",
     cursorIntON: 1,
     cursorIntOFF: 16,
     shortcut: KEY_COMBINATIONS_MICROBIT.text,
@@ -188,7 +188,7 @@ const microbitbuttons = {
   game: {
     buttonTitle: "game",
     output: "``{.microbitgame}",
-    title: "Game",
+    title: "Spill",
     cursorIntON: 1,
     cursorIntOFF: 16,
     shortcut: KEY_COMBINATIONS_MICROBIT.game,
@@ -197,7 +197,7 @@ const microbitbuttons = {
   images: {
     buttonTitle: "images",
     output: "``{.microbitimages}",
-    title: "Images",
+    title: "Bilder",
     cursorIntON: 1,
     cursorIntOFF: 18,
     shortcut: KEY_COMBINATIONS_MICROBIT.images,
@@ -206,7 +206,7 @@ const microbitbuttons = {
   pins: {
     buttonTitle: "pins",
     output: "``{.microbitpins}",
-    title: "Pins",
+    title: "Tilkobling",
     cursorIntON: 1,
     cursorIntOFF: 16,
     shortcut: KEY_COMBINATIONS_MICROBIT.pins,
@@ -215,7 +215,7 @@ const microbitbuttons = {
   serial: {
     buttonTitle: "seial",
     output: "``{.microbitserial}",
-    title: "Serial",
+    title: "Serieport",
     cursorIntON: 1,
     cursorIntOFF: 18,
     shortcut: KEY_COMBINATIONS_MICROBIT.serial,
@@ -224,7 +224,7 @@ const microbitbuttons = {
   control: {
     buttonTitle: "control",
     output: "``{.microbitcontrol}",
-    title: "Control",
+    title: "Styring",
     cursorIntON: 1,
     cursorIntOFF: 19,
     shortcut: KEY_COMBINATIONS_MICROBIT.control,
@@ -236,7 +236,7 @@ const scratchbuttons = {
   motion: {
     buttonTitle: "motion",
     output: "``{.blockmotion}",
-    title: "Motion",
+    title: "Bevegelse",
     cursorIntON: 1,
     cursorIntOFF: 15,
     shortcut: KEY_COMBINATIONS_SCRATCH.motion,
@@ -245,7 +245,7 @@ const scratchbuttons = {
   looks: {
     buttonTitle: "looks",
     output: "``{.blocklooks}",
-    title: "Looks",
+    title: "Utseende",
     cursorIntON: 1,
     cursorIntOFF: 14,
     shortcut: KEY_COMBINATIONS_SCRATCH.looks,
@@ -254,7 +254,7 @@ const scratchbuttons = {
   sound: {
     buttonTitle: "sound",
     output: "``{.blocksound}",
-    title: "Sound",
+    title: "Lyd",
     cursorIntON: 1,
     cursorIntOFF: 14,
     shortcut: KEY_COMBINATIONS_SCRATCH.sound,
@@ -263,7 +263,7 @@ const scratchbuttons = {
   pen: {
     buttonTitle: "pen",
     output: "``{.blockpen}",
-    title: "Pen",
+    title: "Penn",
     cursorIntON: 1,
     cursorIntOFF: 12,
     shortcut: KEY_COMBINATIONS_SCRATCH.pen,
@@ -272,7 +272,7 @@ const scratchbuttons = {
   data: {
     buttonTitle: "data",
     output: "``{.blockdata}",
-    title: "Data",
+    title: "Variabler",
     cursorIntON: 1,
     cursorIntOFF: 13,
     shortcut: KEY_COMBINATIONS_SCRATCH.data,
@@ -281,7 +281,7 @@ const scratchbuttons = {
   events: {
     buttonTitle: "events",
     output: "``{.blockevents}",
-    title: "Events",
+    title: "Hendelser",
     cursorIntON: 1,
     cursorIntOFF: 15,
     shortcut: KEY_COMBINATIONS_SCRATCH.events,
@@ -290,7 +290,7 @@ const scratchbuttons = {
   control: {
     buttonTitle: "control",
     output: "``{.blockcontrol}",
-    title: "Control",
+    title: "Styring",
     cursorIntON: 1,
     cursorIntOFF: 16,
     shortcut: KEY_COMBINATIONS_SCRATCH.control,
@@ -299,7 +299,7 @@ const scratchbuttons = {
   sensing: {
     buttonTitle: "sensing",
     output: "``{.blocksensing}",
-    title: "Sensing",
+    title: "Sansing",
     cursorIntON: 1,
     cursorIntOFF: 16,
     shortcut: KEY_COMBINATIONS_SCRATCH.sensing,
@@ -308,7 +308,7 @@ const scratchbuttons = {
   operators: {
     buttonTitle: "operators",
     output: "``{.blockoperators}",
-    title: "Operators",
+    title: "Operatorer",
     cursorIntON: 1,
     cursorIntOFF: 18,
     shortcut: KEY_COMBINATIONS_SCRATCH.operators,
@@ -317,7 +317,7 @@ const scratchbuttons = {
   moreblocks: {
     buttonTitle: "moreblocks",
     output: "``{.blockmoreblocks}",
-    title: "More Blocks",
+    title: "Mine klosser",
     cursorIntON: 1,
     cursorIntOFF: 19,
     shortcut: KEY_COMBINATIONS_SCRATCH.moreblocks,

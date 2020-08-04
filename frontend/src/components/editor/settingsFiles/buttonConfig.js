@@ -192,7 +192,7 @@ const sections = {
     cancelInt: 2,
     shortcut: KEY_COMBINATIONS.intro,
     style: {
-      height: "4vh",
+      height: "3em",
       border: " 2px solid black",
       borderRadius: "10px",
       background: "#fff",
@@ -209,7 +209,7 @@ const sections = {
     cancelInt: 2,
     shortcut: KEY_COMBINATIONS.activity,
     style: {
-      height: "4vh",
+      height: "3em",
       color: "#fff",
       background: "#349946",
       padding: "10px",
@@ -226,9 +226,9 @@ const sections = {
     cancelInt: 3,
     shortcut: KEY_COMBINATIONS.check,
     style: {
-      height: "4vh",
+      height: "3em",
       border: " 2px solid black",
-      borderRadius: "10px",
+      borderRadius: "8px",
       textAlign: "center",
     },
     imageurl: "https://oppgaver.kidsakoder.no/CCV-assets/check.15ac74.svg",
@@ -243,7 +243,7 @@ const sections = {
     cancelInt: 10,
     shortcut: KEY_COMBINATIONS.tip,
     style: {
-      height: "4vh",
+      height: "3em",
       border: "3px solid #ff7f00",
       background: "#fff99d",
       borderRadius: "10px",
@@ -261,7 +261,7 @@ const sections = {
     cancelInt: 3,
     shortcut: KEY_COMBINATIONS.protip,
     style: {
-      height: "4vh",
+      height: "3em",
       border: "3px solid #ff7f00",
       background: "#fff99d",
       borderRadius: "10px",
@@ -279,7 +279,7 @@ const sections = {
     cancelInt: 3,
     shortcut: KEY_COMBINATIONS.challenge,
     style: {
-      height: "4vh",
+      height: "3em",
       color: "#fff",
       background: "#00b1da",
       padding: "10px",
@@ -296,12 +296,12 @@ const sections = {
     cancelInt: 3,
     shortcut: KEY_COMBINATIONS.flag,
     style: {
-      height: "4vh",
+      height: "3em",
       border: "3px dotted rgb(230, 134, 45)",
       borderRadius: "10px",
       color: "rgb(54, 161, 55)",
       background: "#fff",
-      padding: "10px",
+      padding: "8px",
     },
     imageurl: "https://oppgaver.kidsakoder.no/CCV-assets/flag.4a58cd.svg",
   },
@@ -315,7 +315,7 @@ const sections = {
     cancelInt: 2,
     shortcut: KEY_COMBINATIONS.try,
     style: {
-      height: "4vh",
+      height: "3em",
       background: "#abdbea",
       borderRadius: "10px",
       padding: "10px",
