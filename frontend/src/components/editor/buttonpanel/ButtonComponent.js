@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React from "react";
 import { Button, Icon, Popup } from "semantic-ui-react";
 
 const Buttons = ({
@@ -15,126 +15,13 @@ const Buttons = ({
   style,
   imageurl,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  let buttonPressTimer = "";
-  let buttonPressTimer2 = "";
-  let timeout = "";
-
-  let smallScreen = useRef();
-
-  useEffect(() => {
-    if (window.innerWidth < 768) {
-      smallScreen.current = true;
-    } else if (window.innerWidth > 768) {
-      smallScreen.current = false;
-    }
-  }, []);
-
-  const handleButtonPress = () => {
-    buttonPressTimer = setTimeout(() => setIsOpen(true), 500);
-    buttonPressTimer2 = setTimeout(() => {
-      handleOpen();
-    }, 500);
-  };
-
-  const handleOpen = () => {
-    timeout = setTimeout(() => {
-      setIsOpen(false);
-    }, 2000);
-  };
-
-  const handleClose = () => {
-    clearTimeout(buttonPressTimer);
-    clearTimeout(buttonPressTimer2);
-    clearTimeout(timeout);
-  };
-
   const responsiveCP = () => {
-    return smallScreen.current ? (
-      <>
-        <Popup
-          content={title}
-          inverted
-          basic
-          size="tiny"
-          style={{}}
-          open={isOpen}
-          onOpen={handleOpen}
-          onClose={handleClose}
-          trigger={
-            icon ? (
-              <Button
-                style={
-                  buttonValues[buttonTitle]
-                    ? { backgroundColor: "#a6c0a4" }
-                    : { backgroundColor: "#b1daae" }
-                }
-                id="custom"
-                size="big"
-                className="CPButton"
-                onTouchStart={handleButtonPress}
-                onTouchEnd={handleClose}
-                onClick={() =>
-                  onButtonClick(
-                    buttonTitle,
-                    output,
-                    cursorIntON,
-                    cursorIntOFF,
-                    endOutput
-                  )
-                }
-              >
-                <Icon name={icon} />
-              </Button>
-            ) : (
-              <Button
-                style={style}
-                id="noIcon"
-                className="CPButton"
-                onClick={() =>
-                  onButtonClick(
-                    buttonTitle,
-                    output,
-                    cursorIntON,
-                    cursorIntOFF,
-                    endOutput
-                  )
-                }
-              >
-                {imageurl ? (
-                  <img
-                    style={{
-                      height: "20px",
-                      display: "inline",
-                      position: "relative",
-                      top: "-0.3vh",
-                    }}
-                    src={imageurl}
-                    alt="test"
-                  />
-                ) : (
-                  ""
-                )}
-                {imageurl ? (
-                  <span style={{ position: "relative", top: "-0.7vh" }}>
-                    {title}
-                  </span>
-                ) : (
-                  <span>{title}</span>
-                )}
-              </Button>
-            )
-          }
-        />
-      </>
-    ) : (
+    return (
       <>
         <Popup
           content={title + " (" + shortcutKey + ")"}
           mouseEnterDelay={250}
           mouseLeaveDelay={250}
-          inverted
           trigger={
             icon ? (
               <Button
@@ -142,17 +29,15 @@ const Buttons = ({
                   buttonValues[buttonTitle]
                     ? {
                         borderRadius: "10px",
-                        backgroundColor: "#a6c0a4",
+                        backgroundColor: "#aaa",
                       }
                     : {
                         borderRadius: "10px",
-                        backgroundColor: "#fff",
+                        backgroundColor: "rgba(0, 0, 0, 0)",
                       }
                 }
-                id="custom"
-                size="big"
                 className="CPButton"
-                onTouchStart={handleButtonPress}
+                size="big"
                 onClick={() =>
                   onButtonClick(
                     buttonTitle,
@@ -168,8 +53,8 @@ const Buttons = ({
             ) : (
               <Button
                 style={style}
-                id="noIcon"
                 className="CPButton"
+                size="tiny"
                 onClick={() =>
                   onButtonClick(
                     buttonTitle,
@@ -181,29 +66,24 @@ const Buttons = ({
                 }
               >
                 {imageurl ? (
-                  <img
-                    style={{
-                      height: "20px",
-                      position: "static",
-                      top: "0em",
-                    }}
-                    src={imageurl}
-                    alt="test"
-                  />
-                ) : (
-                  ""
-                )}
-                {imageurl ? (
-                  <div
-                    style={{
-                      display: "inline",
-                      position: "relative",
-                      top: "-0.4em",
-                      left: "0.2em",
-                    }}
-                  >
-                    {title}
-                  </div>
+                  <span>
+                    <img
+                      style={{
+                        height: "1.5em",
+                        margin: "-4px",
+                      }}
+                      src={imageurl}
+                      alt="test"
+                    />
+                    <div
+                      style={{
+                        margin: "0.5em",
+                        display: "inline",
+                      }}
+                    >
+                      {title}
+                    </div>
+                  </span>
                 ) : (
                   <div>{title}</div>
                 )}

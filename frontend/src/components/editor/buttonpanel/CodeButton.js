@@ -141,19 +141,17 @@ const CodeButton = ({
   };
   return (
     <>
-      <div className="ui icon buttons emphasis">
-        {Object.entries(config).map((element, index) => (
-          <ButtonComponent
-            buttonValues={buttonValues}
-            key={"element" + index}
-            buttonTitle={element[1].buttonTitle}
-            icon={element[1].icon}
-            title={element[1].title}
-            onButtonClick={handleButtonClick}
-            shortcutKey={element[1].shortcut}
-          />
-        ))}
-      </div>
+      {Object.entries(config).map((element, index) => (
+        <ButtonComponent
+          buttonValues={buttonValues}
+          key={"element" + index}
+          buttonTitle={element[1].buttonTitle}
+          icon={element[1].icon}
+          title={element[1].title}
+          onButtonClick={handleButtonClick}
+          shortcutKey={element[1].shortcut}
+        />
+      ))}
     </>
   );
 };

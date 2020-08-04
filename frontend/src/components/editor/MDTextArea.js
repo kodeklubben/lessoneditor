@@ -143,7 +143,7 @@ const MDTextArea = ({
       onMouseDown={(event) => onTextareaMouseDown(event)}
       onTouchEnd={(event) => onTextareaMouseDown(event)}
       onSelect={(event) => onTextareaSelect(event)}
-      onWheel={(event) => onTextareaMouseDown(event)}
+      // onWheel={event => onTextareaMouseDown(event)}
     />
   );
 };

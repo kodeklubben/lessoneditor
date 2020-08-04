@@ -64,16 +64,16 @@ const renderScratchBlocks = (content) => {
   return returnContent;
 };
 
-const MDPreview = ({ mdText, course }) => {
+const MDPreview = ({ mdText, course, counter }) => {
   const parseMD = mdParser(mdText);
   useEffect(() => {
-    if (course === "Micro:bit" || course === "microbit") {
+    if (course === "microbit" && counter > 1) {
       //TODO: Get lesson language
       renderMicrobit("nb");
     }
-  }, [course, parseMD]);
+  }, [course, parseMD, counter]);
 
-  if (course === "Scratch" || course === "scratch") {
+  if (course === "scratch" && counter > 1) {
     let lessonContent = renderScratchBlocks(parseMD);
     return (
       <div
