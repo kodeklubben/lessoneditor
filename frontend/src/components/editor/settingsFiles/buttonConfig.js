@@ -340,6 +340,7 @@ const sections = {
       padding: "10px",
       border: "3px solid rgb(36, 90, 154)",
     },
+    imageurl: "/sectionSVG/save.svg",
   },
 };
 

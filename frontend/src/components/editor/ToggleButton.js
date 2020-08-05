@@ -13,19 +13,21 @@ const ToggleButton = ({ buttonText, hiddenHTML }) => {
     borderRadius: "5px",
     backgroundColor: "#eee",
   };
-  // const contentStyle = {
-  //   paddingTop: "20px"
-  // };
+  const contentStyle = {
+    paddingTop: "20px",
+  };
   return (
     <div style={containerStyle}>
       <Button onClick={() => setOpen(!open)}>{buttonText}</Button>
-      {/* <Collapse in={open}>
+      {open ? (
         <div>
           <div style={contentStyle}>
             <div dangerouslySetInnerHTML={{ __html: hiddenHTML }} />
           </div>
         </div>
-      </Collapse> */}
+      ) : (
+        ""
+      )}
     </div>
   );
 };
