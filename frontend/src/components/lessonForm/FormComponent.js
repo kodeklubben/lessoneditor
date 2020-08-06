@@ -1,4 +1,4 @@
-import "./formpage.css";
+// import "./formpage.css";
 import React, { useContext, useState } from "react";
 import FormPage from "./FormPage";
 import Navbar from "components/navbar/Navbar";

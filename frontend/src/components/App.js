@@ -2,6 +2,7 @@ import React from "react";
 import FormComponent from "./lessonForm/FormComponent";
 import Endpage from "./endpage/Endpage";
 import Editor from "./editor/Editor";
+import Landingpage from "components/landingpage/Landingpage";
 import Frontpage from "./frontpage/Frontpage";
 import { BrowserRouter, Route } from "react-router-dom";
 import { LessonContextProvider } from "../contexts/LessonContext";
@@ -15,6 +16,12 @@ const App = () => {
         <UserContextProvider>
           <Route exact path="/" component={Frontpage} />
           <Route exact path="/new-lesson" component={FormComponent} />
+          <Route exact path="/landingpage" component={Landingpage} />
+          <Route path="/landingpage/:course">
+            <LessonContextProvider>
+              <Landingpage />
+            </LessonContextProvider>
+          </Route>
           <Route exact path="/editor" component={Editor} />
           <Route path="/editor/:course/:lesson/:file">
             <LessonContextProvider>

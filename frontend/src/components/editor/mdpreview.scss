@@ -60,6 +60,39 @@ $checkbox-blue: #abdbea;
     @include sectionImg;
   }
 
+  p > a:hover {
+    color: #225480;
+
+    font-size: initial;
+    text-decoration: underline;
+  }
+
+  label > a:hover {
+    color: #225480;
+
+    font-size: initial;
+    text-decoration: underline;
+  }
+
+  label > a {
+    font-size: initial;
+    display: inline;
+    margin-left: -1.5em;
+    margin-right: -1.5em;
+    color: #337ab7;
+    text-decoration: none;
+    background-color: transparent;
+  }
+
+  p > a {
+    font-size: initial;
+    display: inline;
+
+    color: #337ab7;
+    text-decoration: none;
+    background-color: transparent;
+  }
+
   ul,
   ol {
     padding: 0;
