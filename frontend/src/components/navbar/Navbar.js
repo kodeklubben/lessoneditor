@@ -28,7 +28,7 @@ const Navbar = ({ title, course }) => {
                 fontSize: "2.5em",
                 fontWeight: "bolder",
                 width:
-                  lessonTitle.length < 40
+                  lessonTitle && lessonTitle.length < 40
                     ? lessonTitle.length - 1 + "ch"
                     : 40 + "ch",
               }}
