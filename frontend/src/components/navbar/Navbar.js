@@ -1,11 +1,13 @@
 import "./navbar.css";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import ProfileMenu from "components/ProfileMenu";
+import { Input } from "semantic-ui-react";
 
 import { UserContext } from "contexts/UserContext";
 
 const Navbar = ({ title, course }) => {
   const context = useContext(UserContext);
+  const [lessonTitle, setLessonTitle] = useState(title);
   return (
     <div>
       <nav className="header_container">
@@ -19,8 +21,24 @@ const Navbar = ({ title, course }) => {
           <span style={{ color: "grey", marginTop: "1vh" }}>
             <h1>{course ? course + ":" : ""}</h1>
           </span>
-          <span style={{ marginTop: "1vh" }}>
-            <h1>{title}</h1>
+          <span>
+            <Input
+              style={{
+                marginTop: "0.1em",
+                fontSize: "2.5em",
+                fontWeight: "bolder",
+                width:
+                  lessonTitle && lessonTitle.length < 40
+                    ? lessonTitle.length - 1 + "ch"
+                    : 40 + "ch",
+              }}
+              id="titleInput"
+              size="massive"
+              transparent
+              onChange={(e) => setLessonTitle(e.target.value)}
+              value={lessonTitle}
+              placeholder="ingen tittel"
+            />
           </span>
         </div>
 

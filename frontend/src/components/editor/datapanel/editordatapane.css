@@ -1,0 +1,34 @@
+.big.x.icon:hover {
+  background-color: rgb(207, 207, 207);
+  border-radius: 20px;
+  color: grey;
+}
+
+.editorDatapanelBG {
+  z-index: 2;
+  position: absolute;
+  background-color: rgba(255, 255, 255, 0.74);
+  top: -8%;
+  left: -8%;
+  height: 110%;
+  width: 110%;
+}
+.editorDatapanel {
+  display: block;
+  z-index: 3;
+  left: 15%;
+  top: 16%;
+  position: absolute;
+  width: 75%;
+  height: 75%;
+  border: 1px solid #b1daae;
+  border-radius: 1em;
+  box-shadow: 0px 0px 10px #888888;
+  background-color: #eef7ee;
+}
+
+#test {
+  float: right;
+  margin-top: -2em;
+  margin-right: -2em;
+}
