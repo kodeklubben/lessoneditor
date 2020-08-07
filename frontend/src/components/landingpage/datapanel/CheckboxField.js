@@ -6,6 +6,9 @@ const CheckboxField = ({ test1, test2 }) => {
       <div className="ui form">
         <div className="two fields">
           <div className="field">
+            <label>
+              <h3 className="formLabel">{test1}</h3>
+            </label>
             <div
               id="subjectCheckbox"
               style={{ marginTop: "0px" }}

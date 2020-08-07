@@ -4,7 +4,7 @@ import { Dropdown } from "semantic-ui-react";
 import {
   levelOptions,
   FORM_TEXT,
-} from "./settingsFiles/languages/landingpage_NO";
+} from "../settingsFiles/languages/landingpage_NO";
 
 const Levels = (props) => {
   return (

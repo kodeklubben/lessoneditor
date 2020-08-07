@@ -10,9 +10,29 @@ $checkbox-blue: #abdbea;
 
 @mixin sectionImg {
   img {
-    display: inline;
-    margin: auto;
+    display: flex;
+    margin-left: auto;
   }
+  .checklist-item img,
+  .check img,
+  .save img {
+    display: inline;
+    margin-left: auto;
+  }
+}
+
+@mixin a_style {
+  font-size: initial;
+  display: inline;
+  color: #337ab7;
+  text-decoration: none;
+  background-color: transparent;
+}
+
+@mixin a_hover {
+  color: #225480;
+  font-size: initial;
+  text-decoration: underline;
 }
 
 @mixin styledList {
@@ -52,6 +72,14 @@ $checkbox-blue: #abdbea;
   border-radius: 5px;
 }
 
+a {
+  @include a_style;
+}
+
+a:hover {
+  @include a_hover;
+}
+
 .PreviewArea {
   .section_check,
   .section_activity,
@@ -60,37 +88,30 @@ $checkbox-blue: #abdbea;
     @include sectionImg;
   }
 
-  p > a:hover {
-    color: #225480;
+  // label > a:hover {
+  //   @include a_hover;
+  // }
 
-    font-size: initial;
-    text-decoration: underline;
-  }
-
-  label > a:hover {
-    color: #225480;
-
-    font-size: initial;
-    text-decoration: underline;
-  }
-
-  label > a {
-    font-size: initial;
-    display: inline;
+  .checklist-item a {
+    @include a_style;
     margin-left: -1.5em;
     margin-right: -1.5em;
-    color: #337ab7;
-    text-decoration: none;
-    background-color: transparent;
   }
 
-  p > a {
-    font-size: initial;
-    display: inline;
+  .checklist-item a {
+    @include a_hover;
+    margin-left: -1.5em;
+    margin-right: -1.5em;
+  }
 
-    color: #337ab7;
-    text-decoration: none;
-    background-color: transparent;
+  ul > li > p > a {
+    @include a_style();
+    margin-left: -1.5em;
+  }
+
+  ul > li > p > a:hover {
+    @include a_hover();
+    margin-left: -1.5em;
   }
 
   ul,
@@ -209,7 +230,8 @@ $checkbox-blue: #abdbea;
   section.section_try {
     background: #abdbea;
     border-radius: 10px;
-    padding: 1px 20px 10px;
+    padding: 10px 20px 10px;
+
     code {
       background-color: #fff;
       color: #007cc9;

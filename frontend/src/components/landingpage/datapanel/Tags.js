@@ -3,7 +3,7 @@ import {
   gradeSettings,
   subjectSettings,
   topicSettings,
-} from "./settingsFiles/LESSONTAGSSETTINGS";
+} from "../settingsFiles/LESSONTAGSSETTINGS";
 
 const Checkbox = ({ value, onCheck, subtag, name }) => {
   const onInputChange = (event) => {
@@ -11,7 +11,7 @@ const Checkbox = ({ value, onCheck, subtag, name }) => {
   };
 
   return (
-    <div className="ui checkbox">
+    <div style={{ display: "flex" }} className="ui checkbox">
       <input
         type="checkbox"
         name={subtag}
@@ -22,6 +22,12 @@ const Checkbox = ({ value, onCheck, subtag, name }) => {
       <label style={{ cursor: "pointer" }} htmlFor={value}>
         {name}
       </label>
+      <div style={{ float: "right" }}>
+        <i
+          style={{ justifyContent: "flex-end", float: "right" }}
+          className="info circle icon"
+        />
+      </div>
     </div>
   );
 };
