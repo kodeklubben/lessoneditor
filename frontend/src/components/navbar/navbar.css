@@ -16,6 +16,7 @@
 .header_title {
   display: flex;
   margin-left: auto;
+  align-items: center;
 }
 
 .header_profile {
@@ -24,4 +25,10 @@
   margin-left: auto;
   float: right;
   width: 11%;
+}
+
+#titleInput:hover {
+  background-color: aqua;
+  border: 1px solid rgba(77, 77, 151, 0.699) !important;
+  border-radius: 5px !important;
 }

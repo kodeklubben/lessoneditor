@@ -8,6 +8,7 @@ import Sections from "./Sections";
 import CodeButton from "./CodeButton";
 import MicrobitButtons from "./MicrobitButtons";
 import SratchButtons from "./ScratchButtons";
+import EditorDatapanel from "../datapanel/EditorDatapanel";
 
 import { useHistory } from "react-router-dom";
 
@@ -41,59 +42,69 @@ const ButtonPanel = ({
 
   return (
     <div className="buttonpanel">
-      <Emphasis
-        editorRef={editorRef}
-        mdText={mdText}
-        buttonValues={buttonValues}
-        cursorPositionStart={cursorPositionStart}
-        cursorPositionEnd={cursorPositionEnd}
-        setMdText={setMdText}
-        setCursorPosition={setCursorPosition}
-        setCursor={setCursor}
-        setButtonValues={setButtonValues}
-      />
-      <UndoRedo
-        editorRef={editorRef}
-        mdText={mdText}
-        undo={undo}
-        redo={redo}
-        cursorPositionStart={cursorPositionStart}
-        undoCursorPosition={undoCursorPosition}
-        redoCursorPosition={redoCursorPosition}
-        pushUndoValue={pushUndoValue}
-        pushRedoValue={pushRedoValue}
-        setRedoCursorPosition={setRedoCursorPosition}
-        setCursorPosition={setCursorPosition}
-        setUndoCursorPosition={setUndoCursorPosition}
-      />
-      <Image editorRef={editorRef} uploadImageRef={uploadImageRef} />
-      <Lists
-        editorRef={editorRef}
-        mdText={mdText}
-        buttonValues={buttonValues}
-        cursorPositionStart={cursorPositionStart}
-        cursorPositionEnd={cursorPositionEnd}
-        setMdText={setMdText}
-        setCursorPosition={setCursorPosition}
-        setCursor={setCursor}
-        setListButtonValues={setListButtonValues}
-        setButtonValues={setButtonValues}
-      />
-      <CodeButton
-        editorRef={editorRef}
-        mdText={mdText}
-        buttonValues={buttonValues}
-        cursorPositionStart={cursorPositionStart}
-        cursorPositionEnd={cursorPositionEnd}
-        setMdText={setMdText}
-        setCursorPosition={setCursorPosition}
-        setCursor={setCursor}
-        setButtonValues={setButtonValues}
-        course={course}
-      />
-      <button className="ui button" id="next" onClick={() => navigateToHome()}>
-        <i className="arrow right icon" />
-      </button>
+      <div style={{ display: "flex" }}>
+        <Emphasis
+          editorRef={editorRef}
+          mdText={mdText}
+          buttonValues={buttonValues}
+          cursorPositionStart={cursorPositionStart}
+          cursorPositionEnd={cursorPositionEnd}
+          setMdText={setMdText}
+          setCursorPosition={setCursorPosition}
+          setCursor={setCursor}
+          setButtonValues={setButtonValues}
+        />
+        <UndoRedo
+          editorRef={editorRef}
+          mdText={mdText}
+          undo={undo}
+          redo={redo}
+          cursorPositionStart={cursorPositionStart}
+          undoCursorPosition={undoCursorPosition}
+          redoCursorPosition={redoCursorPosition}
+          pushUndoValue={pushUndoValue}
+          pushRedoValue={pushRedoValue}
+          setRedoCursorPosition={setRedoCursorPosition}
+          setCursorPosition={setCursorPosition}
+          setUndoCursorPosition={setUndoCursorPosition}
+        />
+        <Image editorRef={editorRef} uploadImageRef={uploadImageRef} />
+        <Lists
+          editorRef={editorRef}
+          mdText={mdText}
+          buttonValues={buttonValues}
+          cursorPositionStart={cursorPositionStart}
+          cursorPositionEnd={cursorPositionEnd}
+          setMdText={setMdText}
+          setCursorPosition={setCursorPosition}
+          setCursor={setCursor}
+          setListButtonValues={setListButtonValues}
+          setButtonValues={setButtonValues}
+        />
+        <CodeButton
+          editorRef={editorRef}
+          mdText={mdText}
+          buttonValues={buttonValues}
+          cursorPositionStart={cursorPositionStart}
+          cursorPositionEnd={cursorPositionEnd}
+          setMdText={setMdText}
+          setCursorPosition={setCursorPosition}
+          setCursor={setCursor}
+          setButtonValues={setButtonValues}
+          course={course}
+        />
+        <div style={{ display: "flex", marginLeft: "auto" }}>
+          <EditorDatapanel />
+          <button
+            className="ui button"
+            id="next"
+            onClick={() => navigateToHome()}
+          >
+            <i className="arrow right icon" />
+          </button>
+        </div>
+      </div>
+
       <br />
       <div>
         <Sections
