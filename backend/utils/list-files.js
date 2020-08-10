@@ -27,7 +27,7 @@ module.exports = async (folders) => {
       });
     });
   } else {
-    const [username, course, lesson] = folders;
+    const [drafts, lessonId] = folders;
     const filesFolder = getTempDir(folders);
     if (fs.existsSync(filesFolder)) {
       fs.readdirSync(filesFolder).forEach((filename) => {
@@ -36,8 +36,7 @@ module.exports = async (folders) => {
         outFiles.push({
           filename,
           url: resolveUrlTemplate(paths.DISPLAY_FILE, {
-            course,
-            lesson,
+            lessonId,
             file: filename,
           }),
           size: stats.size,
