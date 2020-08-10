@@ -42,7 +42,7 @@ const ButtonPanel = ({
 
   return (
     <div className="buttonpanel">
-      <div style={{ display: "flex" }}>
+      <div style={{ display: "inline" }}>
         <Emphasis
           editorRef={editorRef}
           mdText={mdText}
@@ -93,8 +93,7 @@ const ButtonPanel = ({
           setButtonValues={setButtonValues}
           course={course}
         />
-        <div style={{ display: "flex", marginLeft: "auto" }}>
-          <EditorDatapanel />
+        <div style={{ display: "inline", marginLeft: "auto" }}>
           <button
             className="ui button"
             id="next"
@@ -102,6 +101,7 @@ const ButtonPanel = ({
           >
             <i className="arrow right icon" />
           </button>
+          <EditorDatapanel />
         </div>
       </div>
 

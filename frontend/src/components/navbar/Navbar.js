@@ -1,13 +1,25 @@
 import "./navbar.css";
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useRef } from "react";
 import ProfileMenu from "components/ProfileMenu";
-import { Input } from "semantic-ui-react";
 
 import { UserContext } from "contexts/UserContext";
 
 const Navbar = ({ title, course }) => {
   const context = useContext(UserContext);
   const [lessonTitle, setLessonTitle] = useState(title);
+
+  const test = useRef();
+
+  const lessonTitleHandler = (event) => {
+    setLessonTitle(event.target.value);
+  };
+
+  const onKeyUpHandler = (event) => {
+    if (event.key === "Enter") {
+      test.current.blur();
+    }
+  };
+
   return (
     <div>
       <nav className="header_container">
@@ -17,30 +29,37 @@ const Navbar = ({ title, course }) => {
           </a>
         </div>
 
-        <div className="header_title">
-          <span style={{ color: "grey", marginTop: "1vh" }}>
-            <h1>{course ? course + ":" : ""}</h1>
-          </span>
-          <span>
-            <Input
-              style={{
-                marginTop: "0.1em",
-                fontSize: "2.5em",
-                fontWeight: "bolder",
-                width:
-                  lessonTitle && lessonTitle.length < 40
-                    ? lessonTitle.length - 1 + "ch"
-                    : 40 + "ch",
-              }}
-              id="titleInput"
-              size="massive"
-              transparent
-              onChange={(e) => setLessonTitle(e.target.value)}
-              value={lessonTitle}
-              placeholder="ingen tittel"
-            />
-          </span>
-        </div>
+        {course ? (
+          <div className="header_title">
+            <span style={{ color: "grey", marginTop: "1vh" }}>
+              <h1>{course + ":"}</h1>
+            </span>
+            <span>
+              <input
+                ref={test}
+                autoComplete="off"
+                style={{
+                  marginTop: "0.2em",
+                  fontSize: "2.5em",
+                  fontWeight: "bolder",
+                  width:
+                    lessonTitle &&
+                    lessonTitle.length < 40 &&
+                    lessonTitle.length > 12
+                      ? lessonTitle.length + "ch"
+                      : 12 + "ch",
+                }}
+                id="titleInput"
+                onChange={lessonTitleHandler}
+                onKeyUp={onKeyUpHandler}
+                value={lessonTitle}
+                placeholder="ingen tittel"
+              />
+            </span>
+          </div>
+        ) : (
+          ""
+        )}
 
         <div className="header_profile">
           <ProfileMenu
