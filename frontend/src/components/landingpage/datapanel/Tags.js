@@ -22,12 +22,12 @@ const Checkbox = ({ value, onCheck, subtag, name }) => {
       <label style={{ cursor: "pointer" }} htmlFor={value}>
         {name}
       </label>
-      <div style={{ float: "right" }}>
+      {/* <div style={{ float: "right" }}>
         <i
           style={{ justifyContent: "flex-end", float: "right" }}
           className="info circle icon"
         />
-      </div>
+      </div> */}
     </div>
   );
 };

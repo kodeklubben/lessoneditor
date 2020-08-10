@@ -3,7 +3,7 @@ import { Input } from "semantic-ui-react";
 
 import { FORM_TEXT } from "../settingsFiles/languages/landingpage_NO";
 
-const Levels = ({ changeHandler }) => {
+const License = ({ changeHandler, license }) => {
   return (
     <div id="licenseField" className="field">
       <label>
@@ -14,10 +14,11 @@ const Levels = ({ changeHandler }) => {
           name="license"
           placeholder={FORM_TEXT.LICENSE.placeholder}
           onChange={changeHandler}
+          value={license}
         />
       </label>
     </div>
   );
 };
 
-export default Levels;
+export default License;

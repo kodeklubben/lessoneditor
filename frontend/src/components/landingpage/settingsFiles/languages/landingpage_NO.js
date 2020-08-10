@@ -53,25 +53,25 @@ const FORM_TEXT = {
 
 const levelOptions = [
   {
-    key: "Introduksjon",
+    key: 1,
     text: "Introduksjon",
     value: 1,
     image: { avatar: true, src: "/level1.png" },
   },
   {
-    key: "Nybegynner",
+    key: 2,
     text: "Nybegynner",
     value: 2,
     image: { avatar: true, src: "/level2.png" },
   },
   {
-    key: "Erfaren",
+    key: 3,
     text: "Erfaren",
     value: 3,
     image: { avatar: true, src: "/level3.png" },
   },
   {
-    key: "Ekspert",
+    key: 4,
     text: "Ekspert",
     value: 4,
     image: { avatar: true, src: "/level4.png" },

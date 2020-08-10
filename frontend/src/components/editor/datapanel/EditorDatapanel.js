@@ -1,8 +1,7 @@
 import "./editordatapane.css";
 import React, { useState } from "react";
 import MultiInput from "./MultiInput";
-
-import { LANGUAGES, FORM_TEXT } from "./settings/landingpage_NO.js";
+import { FORM_TEXT } from "./settings/landingpage_NO.js";
 
 const EditorDatapanel = () => {
   const [open, setOpen] = useState(false);
@@ -14,12 +13,6 @@ const EditorDatapanel = () => {
     authorErr: "",
     translator: "",
     translatorList: [],
-    language: Object.keys(LANGUAGES[0]),
-    level: 1,
-    license: "CC BY-SA 4.0",
-    tags: { topic: [], subject: [], grade: [] },
-    redirect: null,
-    pageNumber: 1,
   });
 
   const changeHandler = (event) => {
@@ -46,17 +39,36 @@ const EditorDatapanel = () => {
       >
         <i style={{ cursor: "pointer" }} className="grey cog icon"></i>
       </button>
+
       {open ? (
         <div
           style={open ? { display: "flex" } : { display: "none" }}
-          className="editorDatapanelBG"
+          className="editorDatapanel_BG"
         >
-          <div style={{ padding: "5em" }} className="editorDatapanel">
+          <div style={{ padding: "5em" }} className="editorDatapanel_container">
             <i
               onClick={() => setOpen(!open)}
-              id="test"
-              className="big grey x icon"
+              className="big grey x icon editor"
             />
+            <div id="titleField" className="field">
+              <label>
+                <h3 className="formLabel">
+                  {FORM_TEXT.TITLE.heading}
+                  <span className="requiredText"> (obligatorisk)</span>
+                </h3>
+              </label>
+              <input
+                autoFocus
+                autoComplete="off"
+                type="text"
+                name="title"
+                placeholder={FORM_TEXT.TITLE.placeholder}
+                value={state.title}
+                onChange={changeHandler}
+              />
+
+              <div className="validateError">{state.err}</div>
+            </div>
             <MultiInput
               changeHandler={changeHandler}
               multiInputHandler={multiInputHandler}
@@ -78,44 +90,6 @@ const EditorDatapanel = () => {
               inputValue={state.translator}
               placeholder={FORM_TEXT.TRANSLATOR.placeholder}
             />
-            <div className="field">
-              <label>
-                <h3 className="formLabel">{FORM_TEXT.LANGUAGE.heading}</h3>
-                <select
-                  name="language"
-                  onChange={changeHandler}
-                  className="ui dropdown"
-                >
-                  {LANGUAGES.map((element) => (
-                    <option
-                      key={Object.keys(element)}
-                      value={Object.keys(element)}
-                    >
-                      {Object.values(element)}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            </div>
-            <div id="titleField" className="field">
-              <label>
-                <h3 className="formLabel">
-                  {FORM_TEXT.TITLE.heading}
-                  <span className="requiredText"> (obligatorisk)</span>
-                </h3>
-              </label>
-              <input
-                autoFocus
-                autoComplete="off"
-                type="text"
-                name="title"
-                placeholder={FORM_TEXT.TITLE.placeholder}
-                value={state.title}
-                onChange={changeHandler}
-              />
-
-              <div className="validateError">{state.err}</div>
-            </div>
           </div>
         </div>
       ) : (
