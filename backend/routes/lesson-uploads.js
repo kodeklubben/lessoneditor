@@ -1,24 +1,21 @@
 const multer = require("../storage/multer");
-const saveToGcs = require("../utils/save-to-gcs");
+const saveFile = require("../utils/save-file");
 const paths = require("../paths");
 const fs = require("fs");
-const gcsUrl = require("../utils/gcs-url");
 const getTempDir = require("../utils/get-temp-dir");
 const isAppEngine = require("../utils/isAppEngine");
-
+const loadFromGcs = require("../utils/load-from-gcs");
 module.exports = (app) => {
   app.get(paths.DISPLAY_FILE, async (req, res) => {
-    const { username } = req.user;
-    const { course, lesson, file } = req.params;
-    const storageParts = [username, course, lesson, file];
+    const { lessonId, file } = req.params;
+    const storageParts = ["drafts", lessonId, file];
     try {
       if (isAppEngine()) {
-        const url = gcsUrl(storageParts.join("/"));
-        res.redirect(301, url);
+        loadFromGcs(storageParts.join("/")).pipe(res);
       } else {
-        const imgFilePath = getTempDir(storageParts);
-        if (fs.existsSync(imgFilePath)) {
-          res.sendFile(imgFilePath);
+        const localFilePath = getTempDir(storageParts);
+        if (fs.existsSync(localFilePath)) {
+          fs.createReadStream(localFilePath).pipe(res);
         } else {
           res.status(404).send("ikke funnet");
         }
@@ -28,10 +25,8 @@ module.exports = (app) => {
     }
   });
   app.post(paths.DISPLAY_FILE, async (req, res) => {
-    const { username } = req.user;
-    const { course, lesson, file } = req.params;
-    const filename = [username, course, lesson, file].join("/");
-    await saveToGcs(filename, Buffer.from(req.body));
+    const { lessonId, file } = req.params;
+    await saveFile(["drafts", lessonId, file], Buffer.from(req.body));
     res.send("ok");
   });
   app.post(paths.LESSON_UPLOADS, multer.single("file"), async (req, res) => {
@@ -39,13 +34,13 @@ module.exports = (app) => {
       res.status(400).send("No file uploaded.");
       return;
     }
-    const { username } = req.user;
-    const { course, lesson } = req.params;
+    const { lessonId } = req.params;
     const fileInfo = req.file;
-    fileInfo.imageUrl = await saveToGcs(
-      [username, course, lesson, req.file.originalname].join("/"),
+    fileInfo.imageUrl = await saveFile(
+      ["drafts", lessonId, req.file.originalname],
       req.file.buffer
     );
+    delete fileInfo.buffer;
     res.send(fileInfo);
   });
   app.delete(paths.LESSON_UPLOADS, (req, res, next) => {});

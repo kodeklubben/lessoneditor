@@ -19,8 +19,8 @@ const NewLesson = () => {
       setError("kurs og tittel må være satt");
     }
   };
-  const navigateToEditor = (course, lesson) => {
-    const target = ["/editor", course, lesson, lesson].join("/");
+  const navigateToEditor = (lessonId, lesson) => {
+    const target = ["/editor", lessonId, lesson].join("/");
     history.push(target);
   };
   const onSubmit = async (e) => {

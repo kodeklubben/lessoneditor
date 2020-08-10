@@ -4,15 +4,12 @@ const thumbFetch = require("../utils/thumb-fetch");
 const isAppEngine = require("../utils/isAppEngine");
 module.exports = (app) => {
   app.get(paths.LESSON_THUMB, async (req, res) => {
-    const { username } = req.user;
-    const { course, lesson, file } = req.params;
+    const { lessonId, file } = req.params;
     try {
       const serverBaseUrl = baseUrl(req);
-      const previewurl = [serverBaseUrl, "preview", course, lesson, file].join(
-        "/"
-      );
-      const storagePath = [username, course, lesson, "preview.png"];
-      let thumbUrl = await thumbFetch(username, previewurl, storagePath);
+      const previewurl = [serverBaseUrl, "preview", lessonId, file].join("/");
+      const storagePath = ["drafts", lessonId, "preview.png"];
+      let thumbUrl = await thumbFetch(previewurl, storagePath);
       if (!isAppEngine()) {
         thumbUrl = serverBaseUrl + thumbUrl;
       }

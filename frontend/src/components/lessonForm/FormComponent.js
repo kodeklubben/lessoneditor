@@ -65,8 +65,8 @@ const FormComponent = () => {
   const history = useHistory();
   const user = useContext(UserContext);
 
-  const navigateToEditor = (course, lesson) => {
-    const target = ["/editor", course, lesson, lesson].join("/");
+  const navigateToEditor = (lessonId, file) => {
+    const target = ["/editor", lessonId, file].join("/");
     history.push(target);
   };
 
@@ -80,8 +80,8 @@ const FormComponent = () => {
     console.log(course + " " + title);
     if (course && title) {
       const lesson = slugify(title);
-      await user.addLesson(course, lesson, title);
-      navigateToEditor(course, lesson);
+      const lessonId = await user.addLesson(course, lesson, title);
+      navigateToEditor(lessonId, lesson);
     }
   };
 

@@ -1,5 +1,5 @@
 import "./editor.css";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
 import Autosave from "./Autosave";
 import Navbar from "components/navbar/Navbar";
@@ -8,6 +8,7 @@ import MDPreview from "./MDPreview";
 import ButtonPanel from "./buttonpanel/ButtonPanel";
 import ImageUpload from "./ImageUpload";
 import fetchMdText from "../../api/fetch-md-text";
+import { LessonContext } from "../../contexts/LessonContext";
 
 const Editor = () => {
   const [renderContent, setRenderContent] = useState(false);
@@ -25,7 +26,6 @@ const Editor = () => {
     cursorInt: 0,
   });
 
-  const { course, lesson, file } = useParams();
   let editorRef = useRef();
   let uploadImageRef = useRef();
 
@@ -72,18 +72,18 @@ const Editor = () => {
   const resetButtons = () => {
     setButtonValues({});
   };
-
+  const { lessonId, file } = useParams();
   useEffect(() => {
-    if (course && lesson && file) {
+    if (lessonId && file) {
       async function fetchData() {
-        let lessonText = await fetchMdText(course, lesson, file);
+        let lessonText = await fetchMdText(lessonId, file);
         setMdText(lessonText);
         setUndo([lessonText]);
       }
       fetchData();
     }
-  }, [course, lesson, file]);
-
+  }, [lessonId, file]);
+  const { lesson, course } = useContext(LessonContext);
   return (
     <div className="editor">
       <ImageUpload

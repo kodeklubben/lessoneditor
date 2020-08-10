@@ -7,29 +7,22 @@ import paths from "../paths.json";
 export const LessonContext = React.createContext({});
 
 export const LessonContextProvider = (props) => {
-  const { course, lesson } = useParams();
+  const { lessonId } = useParams();
   const [data, setData] = useState({});
+  const lessonDataUrl = resolveUrlTemplate(paths.LESSON_DATA, { lessonId });
   useEffect(() => {
     async function fetchData() {
-      const url = resolveUrlTemplate(paths.LESSON_DATA, {
-        course,
-        lesson,
-      });
-      const res = await axios.get(url);
+      const res = await axios.get(lessonDataUrl);
       setData(res.data);
     }
 
-    if (course && lesson) fetchData();
-  }, [course, lesson]);
+    if (lessonId) fetchData();
+  }, [lessonId, lessonDataUrl]);
   const context = {
     data,
     saveLesson: async (data) => {
-      if (course && lesson) {
-        const url = resolveUrlTemplate(paths.LESSON_DATA, {
-          course,
-          lesson,
-        });
-        await axios.post(url, data);
+      if (lessonId) {
+        await axios.post(lessonDataUrl, data);
         setData(data);
       }
     },

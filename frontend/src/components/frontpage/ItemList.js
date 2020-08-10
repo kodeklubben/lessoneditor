@@ -9,15 +9,14 @@ function ItemList({ items, lessonScreenshots }) {
 
   const context = useContext(UserContext);
 
-  const navigateToEditor = (course, lesson) => {
-    const target = ["/editor", course, lesson, lesson].join("/");
+  const navigateToEditor = (lessonId, file) => {
+    const target = ["/editor", lessonId, file].join("/");
     history.push(target);
   };
-
   return (
-    <>
-      <div className="ui five column grid">
-        {items.map((listitem, index) => {
+    <div className="ui five column grid">
+      {items.length > 0 &&
+        items.map((listitem, index) => {
           return (
             <div key={"listitem" + index} className="column">
               <div className="ui fluid card">
@@ -37,7 +36,7 @@ function ItemList({ items, lessonScreenshots }) {
                   <button
                     className="ui button"
                     onClick={() =>
-                      navigateToEditor(listitem.course, listitem.lesson)
+                      navigateToEditor(listitem.lessonId, listitem.lesson)
                     }
                   >
                     Åpne
@@ -45,7 +44,7 @@ function ItemList({ items, lessonScreenshots }) {
                   <button
                     className="ui button"
                     onClick={() => {
-                      context.removeLesson(listitem.course, listitem.lesson);
+                      context.removeLesson(listitem.lessonId);
                       window.location.reload();
                     }}
                   >
@@ -56,8 +55,7 @@ function ItemList({ items, lessonScreenshots }) {
             </div>
           );
         })}
-      </div>
-    </>
+    </div>
   );
 }
 export default ItemList;

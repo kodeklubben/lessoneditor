@@ -2,10 +2,9 @@ import paths from "../paths.json";
 import axios from "axios";
 import resolveUrlTemplate from "../utils/resolve-url-template";
 
-export default async (course, lesson, file, mdText) => {
+export default async (lessonId, file, mdText) => {
   const tempFileUrl = resolveUrlTemplate(paths.DISPLAY_FILE, {
-    course,
-    lesson,
+    lessonId,
     file,
   });
   await axios.post(tempFileUrl + ".md", mdText, {
