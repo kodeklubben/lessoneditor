@@ -23,15 +23,12 @@ const App = () => {
             </LessonContextProvider>
           </Route>
           <Route exact path="/editor" component={Editor} />
-          <Route path="/editor/:course/:lesson/:file">
+          <Route path="/editor/:lessonId/:file">
             <LessonContextProvider>
               <Editor />
             </LessonContextProvider>
           </Route>
-          <Route
-            path="/preview/:course/:lesson/:file"
-            component={SimplePreview}
-          />
+          <Route path="/preview/:lessonId/:file" component={SimplePreview} />
           <Route exact path="/endpage" component={Endpage} />
         </UserContextProvider>
       </BrowserRouter>

@@ -1,14 +1,12 @@
-import React, { useState, useEffect, useContext, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router";
 import saveMdText from "../../api/save-md-text";
-import { UserContext } from "../../contexts/UserContext";
 import { SAVING, SAVED } from "./settingsFiles/languages/editor_NO";
 
 const Autosave = ({ mdText, setRenderContent }) => {
-  const context = useContext(UserContext);
   const [savedText, setSavedText] = useState("");
   const [counter, setCounter] = useState(0);
-  const { course, lesson, file } = useParams();
+  const { lessonId, file } = useParams();
   const [autoSaveMessage, setAutoSaveMessage] = useState("");
 
   useInterval(async () => {
@@ -23,10 +21,7 @@ const Autosave = ({ mdText, setRenderContent }) => {
       setAutoSaveMessage(SAVING);
     } else if (counter === 5 && autoSaveMessage !== SAVED) {
       setRenderContent(true);
-      await saveMdText(course, lesson, file, mdText);
-      if (!context.getLesson(course, lesson)) {
-        await context.addLesson(course, lesson, lesson);
-      }
+      await saveMdText(lessonId, file, mdText);
       setAutoSaveMessage(SAVED);
     }
     if (counter === 15) {

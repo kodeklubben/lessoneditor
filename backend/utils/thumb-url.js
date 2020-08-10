@@ -1,7 +1,7 @@
 const createJwtToken = require("../auth/create-jwt-token");
-module.exports = (username, secret, previewUrl) => {
+module.exports = (secret, previewUrl) => {
   const url = new URL(process.env.THUMB_SERVICE_URL);
-  const token = createJwtToken(username, secret);
+  const token = createJwtToken("na", secret);
   url.searchParams.append("url", previewUrl);
   url.searchParams.append("token", token);
   return url.toString();

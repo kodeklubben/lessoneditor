@@ -1,8 +1,6 @@
 import React from "react";
-import axios from "axios";
-import paths from "paths.json";
+import uploadImage from "../../api/upload-image";
 import { useParams } from "react-router";
-import resolveUrlTemplate from "../../utils/resolve-url-template";
 
 const imageSizeErrorMessage = "Bildet kan ikke være over 5mb";
 
@@ -18,8 +16,6 @@ const ImageUpload = ({
   setCursorPositionEnd,
   setCursorPosition,
 }) => {
-  const { course, lesson } = useParams();
-
   let start = cursorPositionStart + 2;
   let end = cursorPositionEnd + 18;
 
@@ -38,26 +34,16 @@ const ImageUpload = ({
     setCursorPositionEnd(end);
     setCursorPosition(start, end);
   };
-
+  const { lessonId } = useParams();
   const fileSelectedHandler = async (event) => {
     try {
       if (event.target.files && event.target.files[0].size > 5000000) {
         imageSubmitHandler(imageSizeErrorMessage, "");
       } else {
-        const formData = new FormData();
-        formData.append("file", await event.target.files[0]);
-        const config = {
-          headers: {
-            "content-type": "multipart/form-data",
-          },
-        };
+        const fileName = event.target.files[0].name;
 
-        const uploadUrl = resolveUrlTemplate(paths.LESSON_UPLOADS, {
-          course,
-          lesson,
-        });
-        const fileInfo = await axios.post(uploadUrl, formData, config);
-        imageSubmitHandler(fileInfo.data.imageUrl);
+        const fileInfo = await uploadImage(lessonId, event.target.files[0]);
+        imageSubmitHandler(fileInfo.imageUrl, "filnavn: " + fileName);
       }
     } catch (err) {
       console.log(err);

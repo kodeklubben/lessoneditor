@@ -3,7 +3,9 @@ import moxios from "moxios";
 import paths from "../paths.json";
 import { UserContext, UserContextProvider } from "./UserContext";
 import TestRenderer from "react-test-renderer";
-
+const nanoid = function () {
+  return Math.random().toString(36).substring(7);
+};
 describe("UserContext", function () {
   beforeEach(function () {
     // import and pass your custom axios instance to this method
@@ -16,7 +18,14 @@ describe("UserContext", function () {
       name: "TestName",
     },
   });
+  moxios.stubRequest(paths.LESSON, {
+    status: 200,
+    responseText: {
+      lessonId: nanoid(),
+    },
+  });
   const testLesson = {
+    lessonId: nanoid(),
     course: "microbit",
     lesson: "one-thing",
     title: "Hello One Thing",
@@ -27,6 +36,7 @@ describe("UserContext", function () {
     responseText: [
       testLesson,
       {
+        lessonId: nanoid(),
         course: "macrobit",
         lesson: "another-thing",
         title: "Hello Another Thing",
@@ -53,12 +63,14 @@ describe("UserContext", function () {
       );
     });
     expect(contextValue.user.name).toBe("TestName");
-    expect(contextValue.getLesson(testLesson.course, testLesson.lesson)).toBe(
-      testLesson
-    );
+    expect(contextValue.getLesson(testLesson.lessonId)).toBe(testLesson);
     expect(contextValue.user.lessons.length).toBe(2);
     await act(async () => {
-      contextValue.addLesson("nanobit", "third-thing", "Hello Third Thing");
+      await contextValue.addLesson(
+        "nanobit",
+        "third-thing",
+        "Hello Third Thing"
+      );
     });
     expect(contextValue.user.lessons.length).toBe(3);
     moxios.wait(function () {
@@ -68,11 +80,9 @@ describe("UserContext", function () {
         .then((d) => console.log([]));
     });
     await act(async () => {
-      contextValue.removeLesson(testLesson.course, testLesson.lesson);
+      await contextValue.removeLesson(testLesson.lessonId);
     });
     expect(contextValue.user.lessons.length).toBe(2);
-    expect(contextValue.getLesson(testLesson.course, testLesson.lesson)).toBe(
-      undefined
-    );
+    expect(contextValue.getLesson(testLesson.lessonId)).toBe(undefined);
   });
 });

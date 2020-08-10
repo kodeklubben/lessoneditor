@@ -14,14 +14,16 @@ module.exports = (app) => {
   });
   app.post(paths.USER_LESSONS, async (req, res) => {
     const buffer = Buffer.from(JSON.stringify(req.body));
-    const pathParts = [req.user.username, "user-lessons.json"];
-    await saveFile(pathParts, buffer);
+    await saveFile(["users", req.user.username, "lessons.json"], buffer);
     res.send("ok");
   });
   app.get(paths.USER_LESSONS, async (req, res) => {
-    const pathParts = [req.user.username, "user-lessons.json"];
     try {
-      const result = await loadFile(pathParts);
+      const result = await loadFile([
+        "users",
+        req.user.username,
+        "lessons.json",
+      ]);
       if (result) {
         res.send(result);
       } else {
