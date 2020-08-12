@@ -1,4 +1,4 @@
-import "./itemlist.css";
+import "./itemlist.scss";
 import React from "react";
 
 function ItemList({ items, removeLesson, navigateToEditor }) {
@@ -6,6 +6,7 @@ function ItemList({ items, removeLesson, navigateToEditor }) {
     <div className="ui five column grid">
       {items.length > 0 &&
         items.map((listitem, index) => {
+          console.log(listitem);
           return (
             <div key={"listitem" + index} className="column">
               <div className="ui fluid card">

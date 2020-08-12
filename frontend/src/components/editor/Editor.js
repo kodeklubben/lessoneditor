@@ -1,4 +1,4 @@
-import "./editor.css";
+import "./editor.scss";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
 import Autosave from "./Autosave";
@@ -83,7 +83,9 @@ const Editor = () => {
       fetchData();
     }
   }, [lessonId, file]);
+
   const { lesson, course } = useContext(LessonContext);
+  console.log(`lesson : ${lesson} and course : ${course}`);
   return (
     <div className="editor">
       <ImageUpload

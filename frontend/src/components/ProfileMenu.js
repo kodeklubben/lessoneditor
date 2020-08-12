@@ -1,4 +1,4 @@
-import "./profileMenu.css";
+import "./profileMenu.scss";
 import React from "react";
 
 const ProfileMenu = ({ name, email, photo }) => {

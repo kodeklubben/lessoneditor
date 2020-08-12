@@ -1,4 +1,4 @@
-import "./simple-preview.css";
+import "./simple-preview.scss";
 import React, { useEffect, useState } from "react";
 import fetchMdText from "../../api/fetch-md-text";
 import MDPreview from "../editor/MDPreview";

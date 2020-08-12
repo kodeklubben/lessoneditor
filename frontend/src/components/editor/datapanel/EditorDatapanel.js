@@ -1,4 +1,4 @@
-import "./editordatapane.css";
+import "./editordatapane.scss";
 import React, { useState } from "react";
 import MultiInput from "./MultiInput";
 import { FORM_TEXT } from "./settings/landingpage_NO.js";

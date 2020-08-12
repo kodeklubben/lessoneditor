@@ -1,4 +1,4 @@
-import "./navbar.css";
+import "./navbar.scss";
 import React, { useContext, useState, useRef } from "react";
 import ProfileMenu from "components/ProfileMenu";
 

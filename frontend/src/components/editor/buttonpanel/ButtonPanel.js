@@ -1,4 +1,4 @@
-import "./buttonpanel.css";
+import "./buttonpanel.scss";
 import React from "react";
 import Emphasis from "./Emphasis";
 import UndoRedo from "./UndoRedo";

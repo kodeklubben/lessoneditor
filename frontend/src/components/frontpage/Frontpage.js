@@ -1,5 +1,5 @@
+import "./frontpage.scss";
 import React, { useContext } from "react";
-import "./frontpage.css";
 
 import ItemList from "./ItemList";
 import { UserContext } from "../../contexts/UserContext";
