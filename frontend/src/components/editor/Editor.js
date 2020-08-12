@@ -1,30 +1,19 @@
 import "./editor.css";
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
+import Autosave from "./Autosave";
 import Navbar from "components/navbar/Navbar";
 import MDTextArea from "./MDTextArea";
 import MDPreview from "./MDPreview";
 import ButtonPanel from "./buttonpanel/ButtonPanel";
 import ImageUpload from "./ImageUpload";
-import editorButtonsValue from "./buttonpanel/utils/editorButtonsValue";
 import fetchMdText from "../../api/fetch-md-text";
-import saveMdText from "../../api/save-md-text";
-import { UserContext } from "../../contexts/UserContext";
-
-import { SAVING, SAVED } from "./settingsFiles/languages/editor_NO";
-
-let orderedListIndex = 2;
-
-let tabSize = 2;
-
-let autosaveMessage = "";
+import { LessonContext } from "../../contexts/LessonContext";
 
 const Editor = () => {
-  const context = useContext(UserContext);
+  const [renderContent, setRenderContent] = useState(false);
   const [mdText, setMdText] = useState("");
-  const [savedText, setSavedText] = useState("");
-  const [count, setCount] = useState(0);
-  const [buttonValues, setButtonValues] = useState(editorButtonsValue);
+  const [buttonValues, setButtonValues] = useState({});
   const [cursorPositionStart, setCursorPositionStart] = useState(0);
   const [cursorPositionEnd, setCursorPositionEnd] = useState(0);
   const [undo, setUndo] = useState([""]);
@@ -37,8 +26,6 @@ const Editor = () => {
     cursorInt: 0,
   });
 
-  const { course, lesson, file } = useParams();
-
   let editorRef = useRef();
   let uploadImageRef = useRef();
 
@@ -48,7 +35,6 @@ const Editor = () => {
       undoCursorPosition !== cursorPositionStart
     ) {
       setUndo((undo) => [...undo, mdText]);
-
       setUndoCursorPosition((undoCursorPosition) => [
         ...undoCursorPosition,
         cursorPositionStart,
@@ -68,7 +54,6 @@ const Editor = () => {
         ...redoCursorPosition,
         cursorPositionStart,
       ]);
-
       setUndo(undo.slice(0, undo.length - 1));
       setMdText(undo[undo.length - 1]);
     }
@@ -85,208 +70,35 @@ const Editor = () => {
   };
 
   const resetButtons = () => {
-    setButtonValues(editorButtonsValue);
+    setButtonValues({});
   };
-
+  const { lessonId, file } = useParams();
   useEffect(() => {
-    if (course && lesson && file) {
+    if (lessonId && file) {
       async function fetchData() {
-        let lessonText = await fetchMdText(course, lesson, file);
-        setSavedText(lessonText);
+        let lessonText = await fetchMdText(lessonId, file);
         setMdText(lessonText);
+        setUndo([lessonText]);
       }
       fetchData();
     }
-  }, [course, lesson, file]);
-
-  useInterval(async () => {
-    setCount(count + 1);
-    if (count > 1 && mdText) {
-      autosaveMessage = SAVED;
-    } else if (count === 0 && mdText) {
-      autosaveMessage = SAVING;
-      if (mdText !== savedText) {
-        await saveMdText(course, lesson, file, mdText);
-        if (!context.getLesson(course, lesson)) {
-          await context.addLesson(course, lesson, lesson);
-        }
-        setSavedText(mdText);
-      }
-    }
-  }, 500);
-
-  function useInterval(callback, delay) {
-    const savedCallback = useRef();
-
-    // Remember the latest callback.
-    useEffect(() => {
-      savedCallback.current = callback;
-    }, [callback]);
-
-    // Set up the interval.
-    useEffect(() => {
-      function tick() {
-        savedCallback.current();
-      }
-      if (delay !== null) {
-        let id = setInterval(tick, delay);
-        return () => clearInterval(id);
-      }
-    }, [delay]);
-  }
-
-  const handleChange = async (event) => {
-    setCursor(event.target.selectionStart, event.target.selectionEnd);
-    setCount(0);
-    let inputText = event.target.value;
-
-    if (
-      inputText[cursorPositionStart] === " " ||
-      inputText[cursorPositionStart] === "\n"
-    ) {
-      pushUndoValue(inputText, cursorPositionStart);
-    }
-    setMdText(inputText);
-  };
-
-  const onTextareaKeyUp = (event) => {
-    setCursor(event.target.selectionStart, event.target.selectionEnd);
-  };
-
-  const onTextareaSelect = (event) => {
-    setCursor(event.target.selectionStart, event.target.selectionEnd);
-  };
-
-  const onTextareaMouseDown = (event) => {
-    setCursor(event.target.selectionStart, event.target.selectionEnd);
-
-    resetButtons();
-  };
-
-  const onTextareaKeyDown = (event) => {
-    setCursor(event.target.selectionStart, event.target.selectionEnd);
-
-    if (event.key === "Enter") {
-      if (buttonValues[listButtonValues["bTitle"]]) {
-        event.preventDefault();
-
-        if (
-          mdText.slice(
-            cursorPositionStart - listButtonValues["cursorInt"],
-            cursorPositionStart
-          ) === listButtonValues["output"] ||
-          mdText.slice(
-            cursorPositionStart - listButtonValues["cursorInt"],
-            cursorPositionStart
-          ) ===
-            orderedListIndex - 1 + ". "
-        ) {
-          setButtonValues((prevState) => ({
-            ...prevState,
-            [listButtonValues["bTitle"]]: !buttonValues[
-              listButtonValues["bTitle"]
-            ],
-          }));
-          setMdText(
-            mdText.slice(
-              0,
-              cursorPositionStart - listButtonValues["cursorInt"]
-            ) + mdText.slice(cursorPositionStart)
-          );
-          setCursorPosition(
-            cursorPositionStart - listButtonValues["cursorInt"],
-            cursorPositionStart - listButtonValues["cursorInt"]
-          );
-          orderedListIndex = 2;
-          return;
-        }
-        if (listButtonValues["bTitle"] === "listOl") {
-          setMdText(
-            mdText.slice(0, cursorPositionStart) +
-              "\n\n" +
-              (orderedListIndex + ". ") +
-              mdText.slice(cursorPositionStart)
-          );
-          setCursorPosition(
-            cursorPositionStart + listButtonValues["cursorInt"] + 2,
-            cursorPositionStart + listButtonValues["cursorInt"] + 2
-          );
-          orderedListIndex++;
-          return;
-        }
-
-        setMdText(
-          mdText.slice(0, cursorPositionStart) +
-            "\n\n" +
-            listButtonValues["output"] +
-            mdText.slice(cursorPositionStart)
-        );
-        setCursorPosition(
-          cursorPositionStart + listButtonValues["cursorInt"] + 2,
-          cursorPositionStart + listButtonValues["cursorInt"] + 2
-        );
-        return;
-      }
-    }
-
-    if (event.key === "Tab") {
-      event.preventDefault();
-      pushUndoValue(mdText, cursorPositionStart);
-      let outputText =
-        mdText.slice(0, cursorPositionStart) +
-        " ".repeat(tabSize) +
-        mdText.slice(cursorPositionStart);
-      setMdText(outputText);
-      let position = cursorPositionStart + tabSize;
-      setCursorPosition(position, position);
-      return;
-    }
-
-    if (
-      event.key === "ArrowLeft" ||
-      event.key === "ArrowUp" ||
-      event.key === "ArrowRight" ||
-      event.key === "ArrowDown"
-    ) {
-      resetButtons();
-    }
-  };
-
-  const imageSubmitHandler = (imageInputValue, filename) => {
-    if (imageInputValue) {
-      pushUndoValue(mdText, cursorPositionStart);
-      setMdText(
-        mdText.slice(0, cursorPositionStart) +
-          "![" +
-          filename +
-          "](" +
-          imageInputValue +
-          ")" +
-          mdText.slice(cursorPositionStart)
-      );
-
-      editorRef.current.focus();
-      setCursorPositionStart(cursorPositionStart + 2);
-      setCursorPositionEnd(cursorPositionEnd + filename.length + 2);
-      setCursorPosition(cursorPositionStart, cursorPositionEnd);
-    } else {
-      editorRef.current.focus();
-      setCursorPosition(cursorPositionStart, cursorPositionEnd);
-    }
-  };
-
-  const handlePreview = (event) => {
-    console.log("Previewbutton pressed");
-  };
-
+  }, [lessonId, file]);
+  const { lesson, course } = useContext(LessonContext);
   return (
     <div className="editor">
       <ImageUpload
-        uploadImageRef={uploadImageRef}
         editorRef={editorRef}
-        imageSubmitHandler={imageSubmitHandler}
+        uploadImageRef={uploadImageRef}
+        mdText={mdText}
+        pushUndoValue={pushUndoValue}
+        cursorPositionStart={cursorPositionStart}
+        cursorPositionEnd={cursorPositionEnd}
+        setMdText={setMdText}
+        setCursorPositionStart={setCursorPositionStart}
+        setCursorPositionEnd={setCursorPositionEnd}
+        setCursorPosition={setCursorPosition}
       />
-      <Navbar />
+      <Navbar title={lesson} course={course} />
       <ButtonPanel
         editorRef={editorRef}
         uploadImageRef={uploadImageRef}
@@ -298,7 +110,6 @@ const Editor = () => {
         redo={redo}
         undoCursorPosition={undoCursorPosition}
         redoCursorPosition={redoCursorPosition}
-        handlePreview={handlePreview}
         pushUndoValue={pushUndoValue}
         pushRedoValue={pushRedoValue}
         setMdText={setMdText}
@@ -309,24 +120,29 @@ const Editor = () => {
         setRedoCursorPosition={setRedoCursorPosition}
         setListButtonValues={setListButtonValues}
         course={course}
-        lesson={lesson}
       />
-
       <div className="textEditorContainer">
         <MDTextArea
-          mdText={mdText}
           editorRef={editorRef}
-          onInputChange={handleChange}
-          onTextareaKeyDown={onTextareaKeyDown}
-          onTextareaKeyUp={onTextareaKeyUp}
-          onTextareaMouseDown={onTextareaMouseDown}
-          onTextareaSelect={onTextareaSelect}
+          mdText={mdText}
+          buttonValues={buttonValues}
+          listButtonValues={listButtonValues}
+          cursorPositionStart={cursorPositionStart}
+          setCursorPosition={setCursorPosition}
+          setMdText={setMdText}
+          setButtonValues={setButtonValues}
+          setCursor={setCursor}
+          pushUndoValue={pushUndoValue}
+          resetButtons={resetButtons}
         />
-        <MDPreview mdText={mdText} />
+        <MDPreview
+          mdText={mdText}
+          course={course}
+          renderContent={renderContent}
+        />
       </div>
-      {mdText ? <p>{autosaveMessage}</p> : ""}
+      <Autosave mdText={mdText} setRenderContent={setRenderContent} />
     </div>
   );
 };
-
 export default Editor;

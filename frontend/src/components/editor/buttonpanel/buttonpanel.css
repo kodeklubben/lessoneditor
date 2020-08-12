@@ -1,3 +1,25 @@
-#buttonpanel {
-  margin-top: 5px;
+.buttonpanel {
+  padding: 0 0.5em 0 0.5em;
+  border: 1px #b1daae;
+  border-style: solid solid hidden solid;
+  border-radius: 5px;
+  background-image: linear-gradient(white, #eef7ee);
+}
+
+.MBButton {
+  color: #fff !important;
+  height: 1em !important;
+  padding-bottom: 16px !important;
+  padding-top: 2px !important;
+  margin-top: 1px !important;
+}
+
+.CPButton:active,
+.MBButton:active {
+  background-color: #bbb !important;
+}
+
+#next {
+  float: right;
+  margin-right: -0.5em;
 }

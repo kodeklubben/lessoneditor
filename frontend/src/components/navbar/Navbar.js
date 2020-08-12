@@ -1,27 +1,65 @@
 import "./navbar.css";
-import React, { useContext } from "react";
+import React, { useContext, useState, useRef } from "react";
 import ProfileMenu from "components/ProfileMenu";
 
 import { UserContext } from "contexts/UserContext";
-import { useHistory } from "react-router-dom";
 
-const Navbar = ({ course, lesson }) => {
+const Navbar = ({ title, course }) => {
   const context = useContext(UserContext);
+  const [lessonTitle, setLessonTitle] = useState(title);
 
-  const history = useHistory();
+  const test = useRef();
 
-  const navigateToHomePage = () => {
-    history.push("/");
+  const lessonTitleHandler = (event) => {
+    setLessonTitle(event.target.value);
+  };
+
+  const onKeyUpHandler = (event) => {
+    if (event.key === "Enter") {
+      test.current.blur();
+    }
   };
 
   return (
     <div>
       <nav className="header_container">
-        <div className="logo">
+        <div className="header_logo">
           <a href={"//kidsakoder.no"}>
             <img className="header_logo" alt="" src={"/lav_logo.jpg"} />
           </a>
         </div>
+
+        {course ? (
+          <div className="header_title">
+            <span style={{ color: "grey", marginTop: "1vh" }}>
+              <h1>{course + ":"}</h1>
+            </span>
+            <span>
+              <input
+                ref={test}
+                autoComplete="off"
+                style={{
+                  marginTop: "0.2em",
+                  fontSize: "2.5em",
+                  fontWeight: "bolder",
+                  width:
+                    lessonTitle &&
+                    lessonTitle.length < 40 &&
+                    lessonTitle.length > 12
+                      ? lessonTitle.length + "ch"
+                      : 12 + "ch",
+                }}
+                id="titleInput"
+                onChange={lessonTitleHandler}
+                onKeyUp={onKeyUpHandler}
+                value={lessonTitle}
+                placeholder="ingen tittel"
+              />
+            </span>
+          </div>
+        ) : (
+          ""
+        )}
 
         <div className="header_profile">
           <ProfileMenu
@@ -29,15 +67,6 @@ const Navbar = ({ course, lesson }) => {
             email={context.user ? context.user.email : ""}
             photo={context.user ? context.user.photo : ""}
           />
-        </div>
-        <div className="header_homebutton">
-          <button
-            className="ui right floated button"
-            id="buttonpanel"
-            onClick={navigateToHomePage}
-          >
-            <i className="home right icon" />
-          </button>
         </div>
       </nav>
     </div>

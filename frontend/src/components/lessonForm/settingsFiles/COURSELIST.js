@@ -5,7 +5,7 @@ const COURSESLIST = [
   { courseTitle: "Computer Craft", slug: "computercraft" },
   { courseTitle: "Elm", slug: "elm" },
   { courseTitle: "Lego Mindstorms", slug: "legomindstorms" },
-  { courseTitle: "Micro:it", slug: "microbit" },
+  { courseTitle: "Micro:bit", slug: "microbit" },
   { courseTitle: "Processing", slug: "processing" },
   { courseTitle: "Python", slug: "python" },
   { courseTitle: "Scratch", slug: "scratch" },

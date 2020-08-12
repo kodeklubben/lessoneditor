@@ -1,24 +1,22 @@
 .header_container {
   padding: 0px;
   display: block;
-  margin-top: -10px;
-  height: 6rem;
+  margin-top: 10px;
+  height: 4rem;
   border-radius: 5px;
   display: flex;
   position: static;
 }
 
-.header_homebutton {
-  float: right;
-}
-
 .header_logo {
   float: left;
-  margin: auto;
-  margin-left: 10px;
-  padding: 10px;
+  height: 5vh;
+}
 
-  width: 80% !important;
+.header_title {
+  display: flex;
+  margin-left: auto;
+  align-items: center;
 }
 
 .header_profile {
@@ -27,4 +25,10 @@
   margin-left: auto;
   float: right;
   width: 11%;
+}
+
+#titleInput:hover {
+  background-color: aqua;
+  border: 1px solid rgba(77, 77, 151, 0.699) !important;
+  border-radius: 5px !important;
 }

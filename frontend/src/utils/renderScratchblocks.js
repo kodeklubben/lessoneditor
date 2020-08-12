@@ -1,4 +1,4 @@
-import { getAvailableLanguages } from "./filterUtils";
+import md5 from "crypto-js/md5";
 
 /**
  * Render scratchblocks
@@ -6,7 +6,12 @@ import { getAvailableLanguages } from "./filterUtils";
  * @param {object} styles css-modules object
  * @returns {string} <pre class="blocks">...</pre> and <code class="b">...</code> replaced with SVG
  */
-export const renderScratchBlocks = (content, styles) => {
+
+const LANGUAGES = ["nb", "nn", "en", "is"];
+
+let storeSVG = {};
+
+export const renderScratchBlocks = (content) => {
   const scratchblocks = require("scratchblocks/browser.js");
 
   // NOTE: English (en) is included by default. All other languages
@@ -22,20 +27,12 @@ export const renderScratchBlocks = (content, styles) => {
   });
 
   let replace = [];
-  if ("blocks" in styles) {
-    replace.push({
-      start: '<pre class="' + styles.blocks + '">',
-      end: "</pre>",
-      options: { languages: getAvailableLanguages() },
-    });
-  }
-  if ("b" in styles) {
-    replace.push({
-      start: '<code class="' + styles.b + '">',
-      end: "</code>",
-      options: { inline: true, languages: getAvailableLanguages() },
-    });
-  }
+
+  replace.push({
+    start: '<pre><code class="blocks">',
+    end: "</code></pre>",
+  });
+
   let returnContent = content;
   replace.forEach((r) => {
     const re = new RegExp(r.start + "[\\s\\S]*?" + r.end, "g");
@@ -44,22 +41,26 @@ export const renderScratchBlocks = (content, styles) => {
     if (blocks) {
       blocks.forEach((block) => {
         let code = block.substring(r.start.length, block.length - r.end.length);
-        let doc = scratchblocks.parse(code, r.options);
-        let docView = scratchblocks.newView(doc, { style: "scratch3" });
-        let svg = docView.render();
-        svg.setAttribute(
-          "viewBox",
-          `0 0 ${svg.getAttribute("width")} ${svg.getAttribute("height")}`
-        );
-        svg.style.maxWidth = "100%";
-        if (r.options.inline) {
-          svg.style.margin = "3px 0";
-          svg.style.verticalAlign = "middle";
+        const checksum = md5(code).toString();
+        if (checksum in storeSVG) {
+          returnContent = returnContent.replace(block, storeSVG[checksum]);
         } else {
+          let doc = scratchblocks.parse(code, {
+            inline: false,
+            languages: LANGUAGES,
+          });
+          let docView = scratchblocks.newView(doc, { style: "scratch3" });
+          let svg = docView.render();
+          svg.setAttribute(
+            "viewBox",
+            `0 0 ${svg.getAttribute("width")} ${svg.getAttribute("height")}`
+          );
+          svg.style.maxWidth = "100%";
           svg.style.display = "block";
           svg.style.margin = "0 auto 15px";
+          returnContent = returnContent.replace(block, svg.outerHTML);
+          storeSVG[checksum] = svg.outerHTML;
         }
-        returnContent = returnContent.replace(block, svg.outerHTML);
       });
     }
   });

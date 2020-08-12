@@ -1,5 +1,5 @@
 import React from "react";
-import CPButton from "./CPButton";
+import ButtonComponent from "./ButtonComponent";
 
 import { useHotkeys } from "react-hotkeys-hook";
 
@@ -163,11 +163,22 @@ const Sections = ({
         config.try.cancelInt
       );
     },
+    save: () => {
+      buttonTitle = config.save.buttonTitle;
+      setButton(buttonTitle);
+      setSection(
+        buttonTitle,
+        config.save.cursorIntON,
+        config.save.cursorIntOFF,
+        config.save.output,
+        config.save.cancelInt
+      );
+    },
   };
 
   useHotkeys(
     `${KEY.activity}, ${KEY.intro}, ${KEY.check}, ${KEY.tip}, ` +
-      `${KEY.protip}, ${KEY.challenge}, ${KEY.flag}, ${KEY.try}`,
+      `${KEY.protip}, ${KEY.challenge}, ${KEY.flag}, ${KEY.try}, ${KEY.save}`,
     (event, handler) => {
       event.preventDefault();
       switch (handler.key) {
@@ -194,6 +205,9 @@ const Sections = ({
           break;
         case KEY.try:
           set.try();
+          break;
+        case KEY.save:
+          set.save();
           break;
         default:
           break;
@@ -231,24 +245,28 @@ const Sections = ({
       case config.try.buttonTitle:
         set.try();
         break;
+      case config.save.buttonTitle:
+        set.save();
+        break;
       default:
         break;
     }
   };
   return (
     <>
-      <div className="ui icon buttons emphasis">
-        {Object.entries(config).map((element, index) => (
-          <CPButton
-            key={"element" + index}
-            buttonTitle={element[1].buttonTitle}
-            icon={element[1].icon}
-            title={element[1].title}
-            onButtonClick={handleButtonClick}
-            shortcutKey={element[1].shortcut}
-          />
-        ))}
-      </div>
+      {Object.entries(config).map((element, index) => (
+        <ButtonComponent
+          buttonValues={buttonValues}
+          key={"element" + index}
+          buttonTitle={element[1].buttonTitle}
+          icon={element[1].icon}
+          title={element[1].title}
+          onButtonClick={handleButtonClick}
+          shortcutKey={element[1].shortcut}
+          style={element[1].style}
+          imageurl={element[1].imageurl ? element[1].imageurl : ""}
+        />
+      ))}
     </>
   );
 };

@@ -107,9 +107,8 @@ const heading = (isOn, mdText, cursorPositionStart, output) => {
   if (
     output === "## " &&
     mdText.slice(cursorPositionStart - 3, cursorPositionStart) === output &&
-    !isOn
+    isOn
   ) {
-    isOn = !isOn;
     mdText =
       mdText.slice(0, cursorPositionStart - 3) +
       "# " +
@@ -117,6 +116,7 @@ const heading = (isOn, mdText, cursorPositionStart, output) => {
     cursorPositionStart -= 1;
     return { isOn, mdText, cursorPositionStart };
   } else if (output === "## " && !isOn) {
+    isOn = !isOn;
     mdText =
       mdText.slice(0, cursorPositionStart) +
       output +

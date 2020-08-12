@@ -59,6 +59,7 @@ const KEY_COMBINATIONS = {
   challenge: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.g].join(""),
   flag: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.f].join(""),
   try: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.t].join(""),
+  save: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.s].join(""),
   inline: [SHORTCUTKEY, plus, chars.e].join(""),
   codeblock: [SHORTCUTKEY, plus, chars.k].join(""),
   preview: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.y].join(""),
@@ -68,7 +69,7 @@ const emphasis = {
   bold: {
     buttonTitle: "bold",
     icon: "bold",
-    output: "****",
+    output: "____",
     title: BUTTON_TITLE.bold,
     cursorIntON: 2,
     cursorIntOFF: 2,
@@ -77,7 +78,7 @@ const emphasis = {
   italic: {
     buttonTitle: "italic",
     icon: "italic",
-    output: "**",
+    output: "__",
     title: BUTTON_TITLE.italic,
     cursorIntON: 1,
     cursorIntOFF: 1,
@@ -182,16 +183,6 @@ const lists = {
 // if new buttons are added remember to update buttons-state in editor.js
 
 const sections = {
-  activity: {
-    buttonTitle: "sec_activity",
-    icon: "",
-    output: "# " + SECTION_TEXT + " {.activity}\n",
-    title: BUTTON_TITLE.activity,
-    cursorIntON: 0,
-    cursorIntOFF: 13,
-    cancelInt: 2,
-    shortcut: KEY_COMBINATIONS.activity,
-  },
   intro: {
     buttonTitle: "sec_intro",
     icon: "",
@@ -201,6 +192,30 @@ const sections = {
     cursorIntOFF: 10,
     cancelInt: 2,
     shortcut: KEY_COMBINATIONS.intro,
+    style: {
+      height: "3em",
+      border: " 2px solid black",
+      borderRadius: "10px",
+      background: "#fff",
+      fontWeigth: "bold",
+    },
+  },
+  activity: {
+    buttonTitle: "sec_activity",
+    icon: "",
+    output: "# " + SECTION_TEXT + " {.activity}\n",
+    title: BUTTON_TITLE.activity,
+    cursorIntON: 0,
+    cursorIntOFF: 13,
+    cancelInt: 2,
+    shortcut: KEY_COMBINATIONS.activity,
+    style: {
+      height: "3em",
+      color: "#fff",
+      background: "#349946",
+      padding: "10px",
+      borderRadius: "10px",
+    },
   },
   check: {
     buttonTitle: "sec_check",
@@ -211,6 +226,14 @@ const sections = {
     cursorIntOFF: 10,
     cancelInt: 3,
     shortcut: KEY_COMBINATIONS.check,
+    style: {
+      background: "white",
+      height: "3em",
+      border: " 2px solid black",
+      borderRadius: "10px",
+      padding: "8px",
+    },
+    imageurl: "/sectionSVG/check.svg",
   },
   tip: {
     buttonTitle: "sec_tip",
@@ -221,6 +244,14 @@ const sections = {
     cursorIntOFF: 19,
     cancelInt: 10,
     shortcut: KEY_COMBINATIONS.tip,
+    style: {
+      height: "3em",
+      border: "3px solid #ff7f00",
+      background: "#fff99d",
+      borderRadius: "10px",
+      padding: "7px",
+      fontWeigth: "lighter",
+    },
   },
   protip: {
     buttonTitle: "sec_protip",
@@ -231,6 +262,14 @@ const sections = {
     cursorIntOFF: 11,
     cancelInt: 3,
     shortcut: KEY_COMBINATIONS.protip,
+    style: {
+      height: "3em",
+      border: "3px solid #ff7f00",
+      background: "#fff99d",
+      borderRadius: "10px",
+      padding: "7px",
+      fontWeigth: "bold",
+    },
   },
   challenge: {
     buttonTitle: "sec_challenge",
@@ -241,6 +280,13 @@ const sections = {
     cursorIntOFF: 14,
     cancelInt: 3,
     shortcut: KEY_COMBINATIONS.challenge,
+    style: {
+      height: "3em",
+      color: "#fff",
+      background: "#00b1da",
+      padding: "10px",
+      borderRadius: "10px",
+    },
   },
   flag: {
     buttonTitle: "sec_flag",
@@ -251,6 +297,15 @@ const sections = {
     cursorIntOFF: 9,
     cancelInt: 3,
     shortcut: KEY_COMBINATIONS.flag,
+    style: {
+      height: "3em",
+      border: "3px dotted rgb(230, 134, 45)",
+      borderRadius: "10px",
+      color: "rgb(54, 161, 55)",
+      background: "#fff",
+      padding: "7px",
+    },
+    imageurl: "/sectionSVG/flag.svg",
   },
   try: {
     buttonTitle: "sec_try",
@@ -261,10 +316,35 @@ const sections = {
     cursorIntOFF: 8,
     cancelInt: 2,
     shortcut: KEY_COMBINATIONS.try,
+    style: {
+      height: "3em",
+      background: "#abdbea",
+      borderRadius: "10px",
+      padding: "10px",
+    },
+  },
+  save: {
+    buttonTitle: "sec_save",
+    icon: "",
+    output: "## " + SECTION_TEXT + " {.save}\n",
+    title: BUTTON_TITLE.save,
+    cursorIntON: 0,
+    cursorIntOFF: 8,
+    cancelInt: 3,
+    shortcut: KEY_COMBINATIONS.save,
+    style: {
+      height: "3em",
+      color: "rgb(36, 90, 154)",
+      background: "white",
+      borderRadius: "10px",
+      padding: "10px",
+      border: "3px solid rgb(36, 90, 154)",
+    },
+    imageurl: "/sectionSVG/save.svg",
   },
 };
 
-const code = {
+const codebutton = {
   inline: {
     buttonTitle: "inline",
     icon: "terminal",
@@ -292,7 +372,7 @@ export {
   lists,
   preview,
   sections,
-  code,
+  codebutton,
   KEY_COMBINATIONS,
   SHORTCUTKEY,
   SHORTCUTKEY2,

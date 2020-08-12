@@ -1,4 +1,4 @@
-import "./formpage.css";
+// import "./formpage.css";
 import React, { useContext, useState } from "react";
 import FormPage from "./FormPage";
 import Navbar from "components/navbar/Navbar";
@@ -10,7 +10,7 @@ import slugify from "slugify";
 
 const FormComponent = () => {
   const [state, setState] = useState({
-    course: COURSELIST[0].courseTitle,
+    course: COURSELIST[0].slug,
     title: "",
     err: "",
     author: "",
@@ -65,8 +65,8 @@ const FormComponent = () => {
   const history = useHistory();
   const user = useContext(UserContext);
 
-  const navigateToEditor = (course, lesson) => {
-    const target = ["/editor", course, lesson, lesson].join("/");
+  const navigateToEditor = (lessonId, file) => {
+    const target = ["/editor", lessonId, file].join("/");
     history.push(target);
   };
 
@@ -77,10 +77,11 @@ const FormComponent = () => {
     console.log("\nYML-file: \n" + YMLstateToString(state));
     // TODO: Send state-data to database
     const { course, title } = state;
+    console.log(course + " " + title);
     if (course && title) {
       const lesson = slugify(title);
-      await user.addLesson(course, lesson, title);
-      navigateToEditor(course, lesson);
+      const lessonId = await user.addLesson(course, lesson, title);
+      navigateToEditor(lessonId, lesson);
     }
   };
 

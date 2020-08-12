@@ -1,12 +1,14 @@
 import "./buttonpanel.css";
 import React from "react";
-import Preview from "./Preview";
 import Emphasis from "./Emphasis";
 import UndoRedo from "./UndoRedo";
 import Image from "./Image";
 import Lists from "./Lists";
 import Sections from "./Sections";
-import Code from "./Code";
+import CodeButton from "./CodeButton";
+import MicrobitButtons from "./MicrobitButtons";
+import SratchButtons from "./ScratchButtons";
+import EditorDatapanel from "../datapanel/EditorDatapanel";
 
 import { useHistory } from "react-router-dom";
 
@@ -21,7 +23,6 @@ const ButtonPanel = ({
   redo,
   undoCursorPosition,
   redoCursorPosition,
-  handlePreview,
   pushUndoValue,
   pushRedoValue,
   setMdText,
@@ -32,86 +33,128 @@ const ButtonPanel = ({
   setRedoCursorPosition,
   setListButtonValues,
   course,
-  lesson,
 }) => {
   const history = useHistory();
 
-  const navigateToMidPage = (course, lesson) => {
-    const target = ["/lesson", course, lesson].join("/");
-    history.push(target);
+  const navigateToHome = (course, lesson) => {
+    history.push("/");
   };
 
   return (
-    <>
-      <Preview handlePreview={handlePreview} />
-      <Emphasis
-        editorRef={editorRef}
-        mdText={mdText}
-        buttonValues={buttonValues}
-        cursorPositionStart={cursorPositionStart}
-        cursorPositionEnd={cursorPositionEnd}
-        setMdText={setMdText}
-        setCursorPosition={setCursorPosition}
-        setCursor={setCursor}
-        setButtonValues={setButtonValues}
-      />
-      <UndoRedo
-        editorRef={editorRef}
-        mdText={mdText}
-        undo={undo}
-        redo={redo}
-        cursorPositionStart={cursorPositionStart}
-        undoCursorPosition={undoCursorPosition}
-        redoCursorPosition={redoCursorPosition}
-        pushUndoValue={pushUndoValue}
-        pushRedoValue={pushRedoValue}
-        setRedoCursorPosition={setRedoCursorPosition}
-        setCursorPosition={setCursorPosition}
-        setUndoCursorPosition={setUndoCursorPosition}
-      />
-      <Image editorRef={editorRef} uploadImageRef={uploadImageRef} />
-      <Lists
-        editorRef={editorRef}
-        mdText={mdText}
-        buttonValues={buttonValues}
-        cursorPositionStart={cursorPositionStart}
-        cursorPositionEnd={cursorPositionEnd}
-        setMdText={setMdText}
-        setCursorPosition={setCursorPosition}
-        setCursor={setCursor}
-        setListButtonValues={setListButtonValues}
-        setButtonValues={setButtonValues}
-      />
-      <Sections
-        editorRef={editorRef}
-        mdText={mdText}
-        buttonValues={buttonValues}
-        cursorPositionStart={cursorPositionStart}
-        cursorPositionEnd={cursorPositionEnd}
-        setMdText={setMdText}
-        setCursorPosition={setCursorPosition}
-        setCursor={setCursor}
-        setButtonValues={setButtonValues}
-      />
-      <Code
-        editorRef={editorRef}
-        mdText={mdText}
-        buttonValues={buttonValues}
-        cursorPositionStart={cursorPositionStart}
-        cursorPositionEnd={cursorPositionEnd}
-        setMdText={setMdText}
-        setCursorPosition={setCursorPosition}
-        setCursor={setCursor}
-        setButtonValues={setButtonValues}
-      />
-      <button
-        className="ui right floated button"
-        id="buttonpanel"
-        onClick={() => navigateToMidPage(course, lesson)}
-      >
-        <i className="arrow right icon" />
-      </button>
-    </>
+    <div className="buttonpanel">
+      <div style={{ display: "inline" }}>
+        <Emphasis
+          editorRef={editorRef}
+          mdText={mdText}
+          buttonValues={buttonValues}
+          cursorPositionStart={cursorPositionStart}
+          cursorPositionEnd={cursorPositionEnd}
+          setMdText={setMdText}
+          setCursorPosition={setCursorPosition}
+          setCursor={setCursor}
+          setButtonValues={setButtonValues}
+        />
+        <UndoRedo
+          editorRef={editorRef}
+          mdText={mdText}
+          undo={undo}
+          redo={redo}
+          cursorPositionStart={cursorPositionStart}
+          undoCursorPosition={undoCursorPosition}
+          redoCursorPosition={redoCursorPosition}
+          pushUndoValue={pushUndoValue}
+          pushRedoValue={pushRedoValue}
+          setRedoCursorPosition={setRedoCursorPosition}
+          setCursorPosition={setCursorPosition}
+          setUndoCursorPosition={setUndoCursorPosition}
+        />
+        <Image editorRef={editorRef} uploadImageRef={uploadImageRef} />
+        <Lists
+          editorRef={editorRef}
+          mdText={mdText}
+          buttonValues={buttonValues}
+          cursorPositionStart={cursorPositionStart}
+          cursorPositionEnd={cursorPositionEnd}
+          setMdText={setMdText}
+          setCursorPosition={setCursorPosition}
+          setCursor={setCursor}
+          setListButtonValues={setListButtonValues}
+          setButtonValues={setButtonValues}
+        />
+        <CodeButton
+          editorRef={editorRef}
+          mdText={mdText}
+          buttonValues={buttonValues}
+          cursorPositionStart={cursorPositionStart}
+          cursorPositionEnd={cursorPositionEnd}
+          setMdText={setMdText}
+          setCursorPosition={setCursorPosition}
+          setCursor={setCursor}
+          setButtonValues={setButtonValues}
+          course={course}
+        />
+        <div style={{ display: "inline", marginLeft: "auto" }}>
+          <button
+            className="ui button"
+            id="next"
+            onClick={() => navigateToHome()}
+          >
+            <i className="arrow right icon" />
+          </button>
+          <EditorDatapanel />
+        </div>
+      </div>
+
+      <br />
+      <div>
+        <Sections
+          editorRef={editorRef}
+          mdText={mdText}
+          buttonValues={buttonValues}
+          cursorPositionStart={cursorPositionStart}
+          cursorPositionEnd={cursorPositionEnd}
+          setMdText={setMdText}
+          setCursorPosition={setCursorPosition}
+          setCursor={setCursor}
+          setButtonValues={setButtonValues}
+        />
+      </div>
+
+      {course === "microbit" ? (
+        <>
+          <MicrobitButtons
+            editorRef={editorRef}
+            mdText={mdText}
+            buttonValues={buttonValues}
+            cursorPositionStart={cursorPositionStart}
+            cursorPositionEnd={cursorPositionEnd}
+            setMdText={setMdText}
+            setCursorPosition={setCursorPosition}
+            setCursor={setCursor}
+            setButtonValues={setButtonValues}
+          />
+        </>
+      ) : (
+        ""
+      )}
+      {course === "scratch" ? (
+        <>
+          <SratchButtons
+            editorRef={editorRef}
+            mdText={mdText}
+            buttonValues={buttonValues}
+            cursorPositionStart={cursorPositionStart}
+            cursorPositionEnd={cursorPositionEnd}
+            setMdText={setMdText}
+            setCursorPosition={setCursorPosition}
+            setCursor={setCursor}
+            setButtonValues={setButtonValues}
+          />
+        </>
+      ) : (
+        ""
+      )}
+    </div>
   );
 };
 

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import paths from "../paths.json";
+import resolveUrlTemplate from "../utils/resolve-url-template";
+import createLesson from "../api/create-lesson";
 
 export const UserContext = React.createContext({});
 
@@ -24,14 +26,22 @@ export const UserContextProvider = (props) => {
 
     fetchData();
   }, []);
-  const getLesson = (course, lesson) => {
+
+  const getLesson = (lessonId) => {
+    return user.lessons.find((item) => item.lessonId === lessonId);
+  };
+
+  const getLessonByCourseAndLesson = (course, lesson) => {
     return user.lessons.find(
       (item) => item.course === course && item.lesson === lesson
     );
   };
-  const listLesson = async (course, lesson) => {
-    return await axios.get(paths.LESSON_FILES);
+
+  const listLesson = async (lessonId) => {
+    const url = resolveUrlTemplate(paths.LESSON_FILES, { lessonId });
+    return await axios.get(url);
   };
+
   const saveLesson = async () => {
     await axios.post(paths.USER_LESSONS, user.lessons);
     setUser(user);
@@ -40,27 +50,30 @@ export const UserContextProvider = (props) => {
     user,
     getLesson,
     addLesson: async (course, lesson, title) => {
-      const existing = getLesson(course, lesson);
+      let lessonId;
+      const existing = getLessonByCourseAndLesson(course, lesson);
       if (existing) {
         existing.title = title;
+        lessonId = existing.lessonId;
       } else {
-        user.lessons.push({ course, lesson, title });
+        lessonId = await createLesson();
+        user.lessons.push({ lessonId, course, lesson, title });
       }
       await saveLesson();
+      return lessonId;
     },
     listLesson,
-    removeLesson: async (course, lesson) => {
-      const existing = getLesson(course, lesson);
+    removeLesson: async (lessonId) => {
+      const existing = getLesson(lessonId);
       if (existing) {
         user.lessons = user.lessons.filter(
-          (item) => item.course !== course && item.lesson !== lesson
+          (item) => item.lessonId !== lessonId
         );
-        saveLesson();
+        await saveLesson();
       } else {
         console.error(
           "Trying to remove a lesson that doesn't exists",
-          course,
-          lesson
+          lessonId
         );
       }
     },
