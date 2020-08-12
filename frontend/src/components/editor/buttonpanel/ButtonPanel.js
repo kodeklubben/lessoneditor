@@ -9,8 +9,9 @@ import CodeButton from "./CodeButton";
 import MicrobitButtons from "./MicrobitButtons";
 import SratchButtons from "./ScratchButtons";
 import EditorDatapanel from "../datapanel/EditorDatapanel";
-
+import saveMdText from "../../../api/save-md-text";
 import { useHistory } from "react-router-dom";
+import { useParams } from "react-router";
 
 const ButtonPanel = ({
   editorRef,
@@ -35,8 +36,9 @@ const ButtonPanel = ({
   course,
 }) => {
   const history = useHistory();
-
-  const navigateToHome = (course, lesson) => {
+  const { lessonId, file } = useParams();
+  const navigateToHome = async () => {
+    await saveMdText(lessonId, file, mdText, true);
     history.push("/");
   };
 

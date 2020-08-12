@@ -12,7 +12,7 @@ export default async (lessonId, file) => {
     const result = await axios.get(tempFileUrl + ".md");
     mdText = result.data;
   } catch (e) {
-    console.log("No tempFile Found");
+    console.error("No tempFile Found");
   }
   return mdText;
 };

@@ -1,18 +1,7 @@
 import "./itemlist.css";
-import React, { useContext } from "react";
-import { useHistory } from "react-router-dom";
+import React from "react";
 
-import { UserContext } from "../../contexts/UserContext";
-
-function ItemList({ items, lessonScreenshots }) {
-  const history = useHistory();
-
-  const context = useContext(UserContext);
-
-  const navigateToEditor = (lessonId, file) => {
-    const target = ["/editor", lessonId, file].join("/");
-    history.push(target);
-  };
+function ItemList({ items, removeLesson, navigateToEditor }) {
   return (
     <div className="ui five column grid">
       {items.length > 0 &&
@@ -20,11 +9,8 @@ function ItemList({ items, lessonScreenshots }) {
           return (
             <div key={"listitem" + index} className="column">
               <div className="ui fluid card">
-                <div className="image">
-                  <img
-                    src={lessonScreenshots[Math.floor(Math.random() * 5)]}
-                    alt={"oppgavebilde"}
-                  />
+                <div className="image itemListImage">
+                  <img src={listitem.thumb} alt={"oppgavebilde"} />
                 </div>
                 <div className="content">
                   <div className="header">{listitem.title}</div>
@@ -43,9 +29,8 @@ function ItemList({ items, lessonScreenshots }) {
                   </button>
                   <button
                     className="ui button"
-                    onClick={() => {
-                      context.removeLesson(listitem.lessonId);
-                      window.location.reload();
+                    onClick={async () => {
+                      await removeLesson(listitem.lessonId);
                     }}
                   >
                     Fjerne

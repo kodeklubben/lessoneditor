@@ -5,6 +5,9 @@ const fs = require("fs");
 const getTempDir = require("../utils/get-temp-dir");
 const isAppEngine = require("../utils/isAppEngine");
 const loadFromGcs = require("../utils/load-from-gcs");
+const thumbRefresh = require("../utils/thumb-refresh");
+const baseUrl = require("../utils/base-url");
+
 module.exports = (app) => {
   app.get(paths.DISPLAY_FILE, async (req, res) => {
     const { lessonId, file } = req.params;
@@ -24,9 +27,15 @@ module.exports = (app) => {
       res.status(404).send(e.message);
     }
   });
+  /**
+   * Her lagres markdown content blant annet.
+   */
   app.post(paths.DISPLAY_FILE, async (req, res) => {
     const { lessonId, file } = req.params;
     await saveFile(["drafts", lessonId, file], Buffer.from(req.body));
+    if (req.query.regenThumb) {
+      await thumbRefresh(baseUrl(req), lessonId, file);
+    }
     res.send("ok");
   });
   app.post(paths.LESSON_UPLOADS, multer.single("file"), async (req, res) => {

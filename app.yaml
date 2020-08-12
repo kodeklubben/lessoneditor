@@ -1,5 +1,5 @@
 runtime: nodejs12
-entrypoint: node ./backend/server-gae.js
+entrypoint: node ./backend/server.js
 handlers:
   - url: /static
     static_dir: build/static

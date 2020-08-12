@@ -1,14 +1,17 @@
-const axios = require("axios");
 const isAppEngine = require("./isAppEngine");
 const getTempDir = require("./get-temp-dir");
-const gcsUrl = require("./gcs-url");
+const loadFileFromGcs = require("./load-file-gcs-to-string");
 const fs = require("fs");
 
 module.exports = async (pathParts) => {
   if (isAppEngine()) {
-    const filename = pathParts.join("/");
-    const content = await axios.get(gcsUrl(filename));
-    return content.data;
+    try {
+      const filename = pathParts.join("/");
+      return await loadFileFromGcs(filename);
+    } catch (e) {
+      console.error(e.message);
+      return null;
+    }
   } else {
     const filename = getTempDir(pathParts);
     if (fs.existsSync(filename)) {
