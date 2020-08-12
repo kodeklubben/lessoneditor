@@ -64,7 +64,7 @@ describe("UserContext", function () {
     });
     expect(contextValue.user.name).toBe("TestName");
     expect(contextValue.getLesson(testLesson.lessonId)).toBe(testLesson);
-    expect(contextValue.user.lessons.length).toBe(2);
+    expect(contextValue.lessons.length).toBe(2);
     await act(async () => {
       await contextValue.addLesson(
         "nanobit",
@@ -72,7 +72,7 @@ describe("UserContext", function () {
         "Hello Third Thing"
       );
     });
-    expect(contextValue.user.lessons.length).toBe(3);
+    expect(contextValue.lessons.length).toBe(3);
     moxios.wait(function () {
       let request = moxios.requests.mostRecent();
       request
@@ -82,7 +82,7 @@ describe("UserContext", function () {
     await act(async () => {
       await contextValue.removeLesson(testLesson.lessonId);
     });
-    expect(contextValue.user.lessons.length).toBe(2);
+    expect(contextValue.lessons.length).toBe(2);
     expect(contextValue.getLesson(testLesson.lessonId)).toBe(undefined);
   });
 });

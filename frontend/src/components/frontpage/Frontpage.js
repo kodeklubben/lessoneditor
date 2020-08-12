@@ -4,19 +4,16 @@ import "./frontpage.css";
 import ItemList from "./ItemList";
 import { UserContext } from "../../contexts/UserContext";
 import Navbar from "../navbar/Navbar";
-
-const lessonScreenshots = [
-  "lessonsScreenshots/Screenshot 2020-07-12 at 09.42.03.png",
-  "lessonsScreenshots/Screenshot 2020-07-12 at 09.42.22.png",
-  "lessonsScreenshots/Screenshot 2020-07-12 at 09.42.41.png",
-  "lessonsScreenshots/Screenshot 2020-07-12 at 09.42.58.png",
-  "lessonsScreenshots/Screenshot 2020-07-12 at 09.43.15.png",
-];
+import { useHistory } from "react-router-dom";
 
 const Overview = () => {
+  const history = useHistory();
   const context = useContext(UserContext);
-  const { lessons } = context.user;
-
+  const { lessons } = context;
+  const navigateToEditor = (lessonId, file) => {
+    const target = ["/editor", lessonId, file].join("/");
+    history.push(target);
+  };
   return (
     <div>
       <Navbar />
@@ -46,7 +43,11 @@ const Overview = () => {
 
         <h3>Mine oppgaver</h3>
         {lessons ? (
-          <ItemList items={lessons} lessonScreenshots={lessonScreenshots} />
+          <ItemList
+            items={lessons}
+            removeLesson={context.removeLesson}
+            navigateToEditor={navigateToEditor}
+          />
         ) : (
           <b>Du har ingen kurs</b>
         )}

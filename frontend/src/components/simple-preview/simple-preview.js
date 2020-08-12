@@ -2,14 +2,16 @@ import "./simple-preview.css";
 import React, { useEffect, useState } from "react";
 import fetchMdText from "../../api/fetch-md-text";
 import MDPreview from "../editor/MDPreview";
+import { useParams } from "react-router";
 
-const SimplePreview = ({ course, lesson, file }) => {
+const SimplePreview = () => {
+  const { lessonId, file } = useParams();
   const [mdText, setMdText] = useState("");
   const [status, setStatus] = useState("Loading...");
   useEffect(() => {
-    if (course && lesson && file) {
+    if (lessonId && file) {
       async function fetchData() {
-        let text = await fetchMdText(course, lesson, file);
+        let text = await fetchMdText(lessonId, file);
         if (mdText === "") {
           setStatus("Not found...");
         }
@@ -18,7 +20,7 @@ const SimplePreview = ({ course, lesson, file }) => {
 
       fetchData();
     }
-  }, [course, lesson, file, mdText]);
+  }, [lessonId, file, mdText]);
   return (
     <div className={"simple-preview"}>
       {mdText !== "" ? <MDPreview mdText={mdText} /> : <div>{status}</div>}

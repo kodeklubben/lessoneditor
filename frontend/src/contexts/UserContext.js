@@ -11,43 +11,41 @@ export const UserContextProvider = (props) => {
     name: "",
     email: "",
     photo: "",
-    lessons: [],
   });
-
+  const [lessons, setLessons] = useState([]);
   useEffect(() => {
     async function fetchData() {
       const userRes = await axios.get(paths.USER);
       const userLessonsRes = await axios.get(paths.USER_LESSONS);
-      setUser({
-        ...userRes.data,
-        lessons: userLessonsRes.data,
-      });
+      setUser({ ...userRes.data });
+      setLessons(userLessonsRes.data);
     }
-
     fetchData();
   }, []);
 
   const getLesson = (lessonId) => {
-    return user.lessons.find((item) => item.lessonId === lessonId);
+    return lessons.find((item) => item.lessonId === lessonId);
   };
 
   const getLessonByCourseAndLesson = (course, lesson) => {
-    return user.lessons.find(
+    return lessons.find(
       (item) => item.course === course && item.lesson === lesson
     );
   };
 
+  // Feilplassert
   const listLesson = async (lessonId) => {
     const url = resolveUrlTemplate(paths.LESSON_FILES, { lessonId });
     return await axios.get(url);
   };
 
-  const saveLesson = async () => {
-    await axios.post(paths.USER_LESSONS, user.lessons);
-    setUser(user);
+  const saveLessons = async (updatedLessons) => {
+    await axios.post(paths.USER_LESSONS, updatedLessons);
+    setLessons(updatedLessons);
   };
   const context = {
     user,
+    lessons,
     getLesson,
     addLesson: async (course, lesson, title) => {
       let lessonId;
@@ -56,20 +54,17 @@ export const UserContextProvider = (props) => {
         existing.title = title;
         lessonId = existing.lessonId;
       } else {
-        lessonId = await createLesson();
-        user.lessons.push({ lessonId, course, lesson, title });
+        lessonId = await createLesson({ course, lesson, title });
+        lessons.push({ lessonId, course, lesson, title });
       }
-      await saveLesson();
+      await saveLessons(lessons);
       return lessonId;
     },
     listLesson,
     removeLesson: async (lessonId) => {
       const existing = getLesson(lessonId);
       if (existing) {
-        user.lessons = user.lessons.filter(
-          (item) => item.lessonId !== lessonId
-        );
-        await saveLesson();
+        await saveLessons(lessons.filter((l) => l.lessonId !== lessonId));
       } else {
         console.error(
           "Trying to remove a lesson that doesn't exists",
