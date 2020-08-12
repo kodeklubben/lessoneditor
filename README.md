@@ -1,6 +1,6 @@
 # Overview and description
 The aim of this project was to create web application possibility for a teacher to make   new  lessons  for  LKK’swebsite,kidsakoder.no, without difficulty.
-Our minimal requirement is to have a basic functioning application where the teacher don’t have to have any knowledge with Git when they want to edit or create anexercise for LKK’s website.
+Our minimal requirement is to have a basic functioning application where the teacher don’t need to have any knowledge with Git when they want to edit or create an exercise for Lær kidza koding website.
 
 # Quick start
 Several quick start options are available:
@@ -80,7 +80,7 @@ Backend:
 4. Open `http://localhost:5000` in your browser
 
 # Project structure
-Our project build is based on two parts, a client part and a server part. The server part contains all the necessary REST API implementations needed for handling data from the frontend and the client part contains the frontend "user-based" actions like creat new lesson, browse the user's created lesson and edit existing lesson.
+Our project structure is divided in two parts, a client part and a server part. The server part contains all the necessary REST API implementations needed for handling data from frontend. Client part contains frontend "user-based" actions like create a new lesson, browse the user's created lessons and edit existing lessons.
 
 ## Node js + express (backend)
 An Express application is most often used as backend application in a client-server architecture whereas the client could
@@ -88,19 +88,15 @@ be written in React.js, the server could be written in Express. We used express 
 Express ensured that all middleware can respond to HTTP requests and routing tables were setup to respond to different actions
 based on the HTTP method.
 
-We used mongodb as our db. Mongodb is a schemaless database that is easy to setup and use, and is famous for scaling really well,
-perfect for an app that should be able to handle large amounts of data. To interface with mongodb we chose
-to use mongoose, which provides a lot of nice functionality such as validation functions. With this setup, we define our database
-model in mongoose schemas, and then we can easily do CRUD operations with mongoose methods.
 
 ## Redux
 Redux is a Javascript Library for managing application state. Redux provides a real time current state of the lesson with all the
-state variables that the app has at a given time. This helps keep control of how the lesson state changes overtime and it is also very useful when debugging.
+state variables that the app has at a given time. This helps to keep control of how the lesson state changes overtime and it is also very useful for debugging.
 
 
 ## markdown-it
-markdown-it is a markdown parser package for node used for parsing markdown plaintext to html in the real-time previewer.
-The package is fast and easy to extend to suite specific needs through the plugin feature.
+Markdown-it is a markdown parser package for node used for parsing markdown plaintext to html in the real-time previewer.
+The package is fast and easy to extend and suites specific needs through the plugin feature.
 
 For more information on markdown-it see: [https://www.npmjs.com/package/markdown-it](https://www.npmjs.com/package/markdown-it).
 
@@ -120,8 +116,8 @@ The plugin is based on markdown-it-header-section by arve0: [https://github.com/
 * markdown-it-insert-img: A plugin for parsing markdown links to html `<img>`-elements displaying the image form a specific URL.
 
 ## Prop types
-In addition we implemented the use of proptypes in our react component structures which is a form of validation that ensures
-the right type of props are always passed to a react component. It is not really a form of testing, but it helps maintain
+We have also implemented proptypes in our react component structures which is a form of validation. It will help us to ensure
+the right type of props passed to our react components. It is not really a form of testing, but it helps maintain
 correctness in the app.
 
 
@@ -154,7 +150,7 @@ Builds the app for production to the `build` folder.<br />
 It correctly bundles React in production mode and optimizes the build for the best performance.
 
 The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
@@ -166,8 +162,7 @@ If you aren’t satisfied with the build tool and configuration choices, you can
 
 Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
+You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature.
 
 ### Backend
 
@@ -186,4 +181,3 @@ You can learn more in the [Create React App documentation](https://facebook.gith
 
 To learn React, check out the [React documentation](https://reactjs.org/).
 
-// Nå har jeg vært innom ;) 
