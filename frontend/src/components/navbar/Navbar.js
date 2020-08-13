@@ -43,8 +43,8 @@ const Navbar = ({ course, title, setTitle }) => {
                   fontWeight: "bolder",
                   width:
                     title && title.length < 40 && title.length > 12
-                      ? title.length + "ch"
-                      : 12 + "ch",
+                      ? title.length + 20 + "vh"
+                      : 60 + "vh",
                 }}
                 id="titleInput"
                 onChange={lessonTitleHandler}

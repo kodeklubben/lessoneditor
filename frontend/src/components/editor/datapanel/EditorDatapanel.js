@@ -93,6 +93,7 @@ const EditorDatapanel = ({ title, setTitle }) => {
               inputValue={state.translator}
               placeholder={FORM_TEXT.TRANSLATOR.placeholder}
             />
+            <button className="ui button">OK</button>
           </div>
         </div>
       ) : (

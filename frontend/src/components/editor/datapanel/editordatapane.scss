@@ -33,3 +33,11 @@
   margin-top: -2em;
   margin-right: -2em;
 }
+
+#titleField input,
+#multiInputContainer input {
+  border-radius: 5px;
+  height: 2.8rem;
+  padding-left: 1ch;
+  outline: none;
+}

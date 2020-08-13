@@ -28,8 +28,10 @@ const CodeButton = ({
   setButtonValues,
   course,
 }) => {
-  const temp = "```";
-  const outputCodeBlock = `${temp}${course}\n\n${temp}`;
+  const outputCodeBlock =
+    config.codeblock.output.slice(0, 3) +
+    course +
+    config.codeblock.output.slice(3);
 
   const setChanges = (mdText, cursorPositionStart, cursorPositionEnd) => {
     setCursor(cursorPositionStart, cursorPositionEnd);
@@ -123,6 +125,7 @@ const CodeButton = ({
   );
 
   const handleButtonClick = (button) => {
+    console.log(button);
     editorRef.current.focus();
     setButtonValues((prevState) => ({
       ...prevState,
@@ -151,6 +154,7 @@ const CodeButton = ({
           onButtonClick={handleButtonClick}
           shortcutKey={element[1].shortcut}
           course={course}
+          isOn={buttonValues.code}
         />
       ))}
     </>

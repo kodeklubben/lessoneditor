@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Icon, Popup } from "semantic-ui-react";
+import { Button, Popup } from "semantic-ui-react";
 import COURSELIST from "components/lessonForm/settingsFiles/COURSELIST";
 
 const CodeButtons = ({
@@ -58,7 +58,7 @@ const CodeButtons = ({
                     marginLeft: "-1em",
                   }}
                 >
-                  {"```" + courseNotSlug?.courseTitle}
+                  {"```Kodeblokk(" + courseNotSlug?.courseTitle + ")"}
                 </div>
               </Button>
             ) : (
@@ -86,7 +86,16 @@ const CodeButtons = ({
                   )
                 }
               >
-                <Icon name={icon} />
+                <div
+                  style={{
+                    fontSize: "x-large",
+                    position: "relative",
+                    top: "0.06em",
+                    marginLeft: "-1em",
+                  }}
+                >
+                  {"`Inline-kode"}
+                </div>
               </Button>
             )
           }

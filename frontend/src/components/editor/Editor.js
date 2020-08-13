@@ -8,9 +8,15 @@ import MDPreview from "./MDPreview";
 import ButtonPanel from "./buttonpanel/ButtonPanel";
 import ImageUpload from "./ImageUpload";
 import fetchMdText from "../../api/fetch-md-text";
-import { UserContext } from "contexts/UserContext";
+import { LessonContext } from "contexts/LessonContext";
 
 const Editor = () => {
+  const { lessonId, file } = useParams();
+
+  const context = useContext(LessonContext);
+  const { data } = context;
+  let course = data ? data.course : "";
+
   const [title, setTitle] = useState("");
   const [renderContent, setRenderContent] = useState(false);
   const [mdText, setMdText] = useState("");
@@ -27,12 +33,12 @@ const Editor = () => {
     cursorInt: 0,
   });
 
-  const { lessonId, file } = useParams();
-  const context = useContext(UserContext);
-  const { getLesson } = context;
-  // const thisLesson = getLesson(lessonId);
-  // const course = thisLesson?.course;
-  let course;
+  useEffect(() => {
+    if (data) {
+      setTitle(data.title);
+    }
+  }, [data]);
+
   const editorRef = useRef();
   const uploadImageRef = useRef();
 

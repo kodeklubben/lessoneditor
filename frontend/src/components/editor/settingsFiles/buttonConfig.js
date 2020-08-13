@@ -69,7 +69,7 @@ const emphasis = {
   bold: {
     buttonTitle: "bold",
     icon: "bold",
-    output: "____",
+    output: "__" + SECTION_TEXT + "__",
     title: BUTTON_TITLE.bold,
     cursorIntON: 2,
     cursorIntOFF: 2,
@@ -78,7 +78,7 @@ const emphasis = {
   italic: {
     buttonTitle: "italic",
     icon: "italic",
-    output: "__",
+    output: "_" + SECTION_TEXT + "_",
     title: BUTTON_TITLE.italic,
     cursorIntON: 1,
     cursorIntOFF: 1,
@@ -96,7 +96,7 @@ const emphasis = {
   strikethrough: {
     buttonTitle: "strikethrough",
     icon: "strikethrough",
-    output: "~~~~",
+    output: "~~" + SECTION_TEXT + "~~",
     title: BUTTON_TITLE.strikethrough,
     cursorIntON: 2,
     cursorIntOFF: 2,
@@ -178,9 +178,6 @@ const lists = {
     shortcut: KEY_COMBINATIONS.listcheck,
   },
 };
-
-// !! buttonTitle - first chars must be "sec_" when in sections,
-// if new buttons are added remember to update buttons-state in editor.js
 
 const sections = {
   intro: {
@@ -348,7 +345,7 @@ const codebutton = {
   inline: {
     buttonTitle: "inline",
     icon: "terminal",
-    output: "``",
+    output: "`" + SECTION_TEXT + "`",
     title: BUTTON_TITLE.inline,
     cursorIntON: 1,
     cursorIntOFF: 1,
@@ -357,7 +354,7 @@ const codebutton = {
   codeblock: {
     buttonTitle: "codeblock",
     icon: "code",
-    output: `${temp}\n\n${temp}`,
+    output: `${temp}\n${SECTION_TEXT}\n${temp}`,
     title: BUTTON_TITLE.codeblock,
     cursorIntON: 4,
     cursorIntOFF: 5,

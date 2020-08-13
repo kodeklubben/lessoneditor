@@ -27,8 +27,13 @@
   width: 11%;
 }
 
+#titleInput {
+  padding-left: 10px;
+  border-style: none;
+}
+
 #titleInput:hover {
-  background-color: aqua;
+  padding-left: 10px;
   border: 1px solid rgba(77, 77, 151, 0.699) !important;
   border-radius: 5px !important;
 }
