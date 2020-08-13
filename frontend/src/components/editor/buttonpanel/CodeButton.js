@@ -125,7 +125,6 @@ const CodeButton = ({
   );
 
   const handleButtonClick = (button) => {
-    console.log(button);
     editorRef.current.focus();
     setButtonValues((prevState) => ({
       ...prevState,

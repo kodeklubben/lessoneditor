@@ -49,7 +49,7 @@ const Navbar = ({ course, title, setTitle }) => {
                 id="titleInput"
                 onChange={lessonTitleHandler}
                 onKeyUp={onKeyUpHandler}
-                value={title}
+                value={title ? title : ""}
                 placeholder="ingen tittel"
               />
             </span>
