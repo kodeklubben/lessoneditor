@@ -1,4 +1,4 @@
-import "./buttonpanel.css";
+import "./buttonpanel.scss";
 import React from "react";
 import Emphasis from "./Emphasis";
 import UndoRedo from "./UndoRedo";
@@ -34,6 +34,8 @@ const ButtonPanel = ({
   setRedoCursorPosition,
   setListButtonValues,
   course,
+  title,
+  setTitle,
 }) => {
   const history = useHistory();
   const { lessonId, file } = useParams();
@@ -103,7 +105,7 @@ const ButtonPanel = ({
           >
             <i className="arrow right icon" />
           </button>
-          <EditorDatapanel />
+          <EditorDatapanel title={title} setTitle={setTitle} />
         </div>
       </div>
 
