@@ -1,5 +1,5 @@
 import React from "react";
-import ButtonComponent from "./ButtonComponent";
+import CodeButtonComponent from "./CodeButtonComponent";
 
 import { useHotkeys } from "react-hotkeys-hook";
 
@@ -142,7 +142,7 @@ const CodeButton = ({
   return (
     <>
       {Object.entries(config).map((element, index) => (
-        <ButtonComponent
+        <CodeButtonComponent
           buttonValues={buttonValues}
           key={"element" + index}
           buttonTitle={element[1].buttonTitle}
@@ -150,6 +150,7 @@ const CodeButton = ({
           title={element[1].title}
           onButtonClick={handleButtonClick}
           shortcutKey={element[1].shortcut}
+          course={course}
         />
       ))}
     </>

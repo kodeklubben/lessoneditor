@@ -8,9 +8,10 @@ import MDPreview from "./MDPreview";
 import ButtonPanel from "./buttonpanel/ButtonPanel";
 import ImageUpload from "./ImageUpload";
 import fetchMdText from "../../api/fetch-md-text";
-import { LessonContext } from "../../contexts/LessonContext";
+import { UserContext } from "contexts/UserContext";
 
 const Editor = () => {
+  const [title, setTitle] = useState("");
   const [renderContent, setRenderContent] = useState(false);
   const [mdText, setMdText] = useState("");
   const [buttonValues, setButtonValues] = useState({});
@@ -26,8 +27,16 @@ const Editor = () => {
     cursorInt: 0,
   });
 
-  let editorRef = useRef();
-  let uploadImageRef = useRef();
+  console.log(title);
+
+  const { lessonId, file } = useParams();
+  const context = useContext(UserContext);
+  const { getLesson } = context;
+  const thisLesson = getLesson(lessonId);
+  const course = thisLesson?.course;
+
+  const editorRef = useRef();
+  const uploadImageRef = useRef();
 
   const pushUndoValue = (mdText, cursorPositionStart) => {
     if (
@@ -72,7 +81,7 @@ const Editor = () => {
   const resetButtons = () => {
     setButtonValues({});
   };
-  const { lessonId, file } = useParams();
+
   useEffect(() => {
     if (lessonId && file) {
       async function fetchData() {
@@ -84,8 +93,6 @@ const Editor = () => {
     }
   }, [lessonId, file]);
 
-  const { lesson, course } = useContext(LessonContext);
-  console.log(`lesson : ${lesson} and course : ${course}`);
   return (
     <div className="editor">
       <ImageUpload
@@ -100,7 +107,7 @@ const Editor = () => {
         setCursorPositionEnd={setCursorPositionEnd}
         setCursorPosition={setCursorPosition}
       />
-      <Navbar title={lesson} course={course} />
+      <Navbar title={title} setTitle={setTitle} course={course} />
       <ButtonPanel
         editorRef={editorRef}
         uploadImageRef={uploadImageRef}
@@ -122,6 +129,8 @@ const Editor = () => {
         setRedoCursorPosition={setRedoCursorPosition}
         setListButtonValues={setListButtonValues}
         course={course}
+        title={title}
+        setTitle={setTitle}
       />
       <div className="textEditorContainer">
         <MDTextArea

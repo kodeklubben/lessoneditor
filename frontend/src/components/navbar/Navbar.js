@@ -1,17 +1,16 @@
 import "./navbar.scss";
-import React, { useContext, useState, useRef } from "react";
+import React, { useContext, useRef } from "react";
 import ProfileMenu from "components/ProfileMenu";
-
+import COURSELIST from "components/lessonForm/settingsFiles/COURSELIST";
 import { UserContext } from "contexts/UserContext";
 
-const Navbar = ({ title, course }) => {
+const Navbar = ({ course, title, setTitle }) => {
   const context = useContext(UserContext);
-  const [lessonTitle, setLessonTitle] = useState(title);
-
   const test = useRef();
 
+  const courseNotSlug = COURSELIST.find(({ slug }) => slug === course);
   const lessonTitleHandler = (event) => {
-    setLessonTitle(event.target.value);
+    setTitle(event.target.value);
   };
 
   const onKeyUpHandler = (event) => {
@@ -32,7 +31,7 @@ const Navbar = ({ title, course }) => {
         {course ? (
           <div className="header_title">
             <span style={{ color: "grey", marginTop: "1vh" }}>
-              <h1>{course + ":"}</h1>
+              <h1>{courseNotSlug?.courseTitle + ":"}</h1>
             </span>
             <span>
               <input
@@ -43,16 +42,14 @@ const Navbar = ({ title, course }) => {
                   fontSize: "2.5em",
                   fontWeight: "bolder",
                   width:
-                    lessonTitle &&
-                    lessonTitle.length < 40 &&
-                    lessonTitle.length > 12
-                      ? lessonTitle.length + "ch"
+                    title && title.length < 40 && title.length > 12
+                      ? title.length + "ch"
                       : 12 + "ch",
                 }}
                 id="titleInput"
                 onChange={lessonTitleHandler}
                 onKeyUp={onKeyUpHandler}
-                value={lessonTitle}
+                value={title}
                 placeholder="ingen tittel"
               />
             </span>

@@ -6,7 +6,6 @@ function ItemList({ items, removeLesson, navigateToEditor }) {
     <div className="ui five column grid">
       {items.length > 0 &&
         items.map((listitem, index) => {
-          console.log(listitem);
           return (
             <div key={"listitem" + index} className="column">
               <div className="ui fluid card">

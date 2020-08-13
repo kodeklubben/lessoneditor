@@ -14,6 +14,7 @@ const Overview = () => {
     const target = ["/editor", lessonId, file].join("/");
     history.push(target);
   };
+
   return (
     <div>
       <Navbar />
