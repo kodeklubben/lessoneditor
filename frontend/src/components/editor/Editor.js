@@ -27,14 +27,12 @@ const Editor = () => {
     cursorInt: 0,
   });
 
-  console.log(title);
-
   const { lessonId, file } = useParams();
   const context = useContext(UserContext);
   const { getLesson } = context;
-  const thisLesson = getLesson(lessonId);
-  const course = thisLesson?.course;
-
+  // const thisLesson = getLesson(lessonId);
+  // const course = thisLesson?.course;
+  let course;
   const editorRef = useRef();
   const uploadImageRef = useRef();
 
