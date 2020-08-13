@@ -3,10 +3,9 @@ import React, { useState } from "react";
 import MultiInput from "./MultiInput";
 import { FORM_TEXT } from "./settings/landingpage_NO.js";
 
-const EditorDatapanel = () => {
+const EditorDatapanel = ({ title, setTitle }) => {
   const [open, setOpen] = useState(false);
   const [state, setState] = useState({
-    title: "",
     err: "",
     author: "",
     authorList: [],
@@ -18,9 +17,13 @@ const EditorDatapanel = () => {
   const changeHandler = (event) => {
     let nam = event.target.name;
     let val = event.target.value;
-    setState((prevState) => ({ ...prevState, [nam]: val }));
-    if (state.author) setState((prevState) => ({ ...prevState, err: "" }));
-    if (state.title) setState((prevState) => ({ ...prevState, err: "" }));
+    if (nam === "title") {
+      setTitle(val);
+    } else {
+      setState((prevState) => ({ ...prevState, [nam]: val }));
+      if (state.author) setState((prevState) => ({ ...prevState, err: "" }));
+      if (title) setState((prevState) => ({ ...prevState, err: "" }));
+    }
   };
 
   const multiInputHandler = (object, field) => {
@@ -63,7 +66,7 @@ const EditorDatapanel = () => {
                 type="text"
                 name="title"
                 placeholder={FORM_TEXT.TITLE.placeholder}
-                value={state.title}
+                value={title}
                 onChange={changeHandler}
               />
 
@@ -90,6 +93,7 @@ const EditorDatapanel = () => {
               inputValue={state.translator}
               placeholder={FORM_TEXT.TRANSLATOR.placeholder}
             />
+            <button className="ui button">OK</button>
           </div>
         </div>
       ) : (

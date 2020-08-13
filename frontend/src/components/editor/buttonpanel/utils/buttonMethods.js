@@ -1,3 +1,5 @@
+import { SECTION_TEXT } from "components/editor/settingsFiles/languages/editor_NO";
+
 const buttonAction = (
   isOn,
   mdText,
@@ -29,7 +31,7 @@ const buttonAction = (
         mdText.slice(0, cursorPositionStart) +
         output.slice(0, cursorIntON) +
         i +
-        output.slice(cursorIntON) +
+        output.slice(0, cursorIntON) +
         mdText.slice(cursorPositionEnd);
 
       cursorPositionStart += cursorIntON;
@@ -43,7 +45,7 @@ const buttonAction = (
       mdText.slice(cursorPositionStart);
 
     cursorPositionStart += cursorIntON;
-    cursorPositionEnd += cursorIntON;
+    cursorPositionEnd += cursorIntON + SECTION_TEXT.length;
     return {
       mdText,
       cursorPositionStart,
