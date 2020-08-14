@@ -83,7 +83,7 @@ const Lists = ({
       setButton(buttonTitle);
       setListButtonValues({
         bTitle: buttonTitle,
-        output: config.listUl.output,
+        output: config.listUl.outputOnEnter,
         cursorInt: config.listUl.cursorIntON,
       });
       setList(
@@ -98,7 +98,7 @@ const Lists = ({
       setButton(buttonTitle);
       setListButtonValues({
         bTitle: buttonTitle,
-        output: config.listOl.output,
+        output: config.listOl.outputOnEnter,
         cursorInt: config.listOl.cursorIntON,
       });
       setList(
@@ -113,7 +113,7 @@ const Lists = ({
       setButton(buttonTitle);
       setListButtonValues({
         bTitle: buttonTitle,
-        output: config.listCheck.output,
+        output: config.listCheck.outputOnEnter,
         cursorInt: config.listCheck.cursorIntON,
       });
       setList(

@@ -30,7 +30,7 @@ const CodeButton = ({
 }) => {
   const outputCodeBlock =
     config.codeblock.output.slice(0, 3) +
-    course +
+    (course === "scratch" ? "blocks" : course) +
     config.codeblock.output.slice(3);
 
   const setChanges = (mdText, cursorPositionStart, cursorPositionEnd) => {
@@ -97,7 +97,8 @@ const CodeButton = ({
       setButton(buttonTitle);
       setCode(
         buttonTitle,
-        config.codeblock.cursorIntON + course.length,
+        config.codeblock.cursorIntON +
+          (course === "scratch" ? 6 : course.length),
         config.codeblock.cursorIntOFF,
         outputCodeBlock
       );
