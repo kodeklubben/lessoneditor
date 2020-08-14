@@ -32,8 +32,60 @@ const MDTextArea = ({
     setCursor(event.target.selectionStart, event.target.selectionEnd);
   };
 
-  const onTextareaSelect = (event) => {
-    setCursor(event.target.selectionStart, event.target.selectionEnd);
+  const onTextareaSelect = async (event) => {
+    let start = event.target.selectionStart;
+    let end = event.target.selectionEnd;
+    setCursor(start, end);
+    if (
+      mdText.slice(start - 1, start) === "_" &&
+      mdText.slice(end, end + 1) === "_" &&
+      mdText.slice(start - 2, start) !== "__" &&
+      !buttonValues.italic
+    ) {
+      setButtonValues((prevButtonValues) => ({
+        ...prevButtonValues,
+        italic: true,
+      }));
+    }
+    if (
+      mdText.slice(start - 2, start) === "__" &&
+      mdText.slice(end, end + 2) === "__" &&
+      !buttonValues.bold
+    ) {
+      setButtonValues((prevButtonValues) => ({
+        ...prevButtonValues,
+        bold: true,
+      }));
+    }
+    if (
+      mdText.slice(start, start + 1) === "_" &&
+      mdText.slice(end - 1, end) === "_" &&
+      mdText.slice(start, start + 2) !== "__"
+    ) {
+      setCursorPosition(start + 1, end - 1);
+    }
+    if (
+      mdText.slice(start, start + 2) === "__" &&
+      mdText.slice(end - 2, end) === "__"
+    ) {
+      setCursorPosition(start + 2, end - 2);
+    }
+    if (
+      mdText.slice(start - 2, start) === "~~" &&
+      mdText.slice(end, end + 2) === "~~" &&
+      !buttonValues.strikethrough
+    ) {
+      setButtonValues((prevButtonValues) => ({
+        ...prevButtonValues,
+        strikethrough: true,
+      }));
+    }
+    if (
+      mdText.slice(start, start + 2) === "~~" &&
+      mdText.slice(end - 2, end) === "~~"
+    ) {
+      setCursorPosition(start + 2, end - 2);
+    }
   };
 
   const onTextareaMouseDown = (event) => {
@@ -105,6 +157,24 @@ const MDTextArea = ({
           cursorPositionStart + listButtonValues["cursorInt"] + 2
         );
         return;
+      }
+
+      if (buttonValues["heading"]) {
+        setButtonValues((prevButtonValues) => ({
+          ...prevButtonValues,
+          heading: !buttonValues["heading"],
+        }));
+      }
+
+      if (
+        mdText.slice(cursorPositionStart, cursorPositionStart + 3) === " {."
+      ) {
+        let i = cursorPositionStart;
+        while (mdText[i] !== "\n") {
+          i++;
+        }
+        setCursorPosition(i, i);
+        setButtonValues({});
       }
     }
 
