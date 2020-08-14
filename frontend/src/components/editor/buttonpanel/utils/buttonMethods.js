@@ -178,6 +178,7 @@ const ifNewLine = (inputText, cursorPositionStart) => {
     inputText === "" ||
     cursorPositionStart === 0 ||
     inputText.slice(cursorPositionStart - 3, cursorPositionStart) === "## " ||
+    inputText.slice(cursorPositionStart - 2, cursorPositionStart) === "# " ||
     inputText.slice(cursorPositionStart - 2, cursorPositionStart) === "- " ||
     inputText.slice(cursorPositionStart - 3, cursorPositionStart) === "1. " ||
     inputText.slice(cursorPositionStart - 6, cursorPositionStart) ===
