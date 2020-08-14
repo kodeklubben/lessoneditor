@@ -30,10 +30,18 @@ const CodeButtons = ({
                 style={
                   buttonValues[buttonTitle]
                     ? {
+                        position: "relative",
+                        top: "0.1em",
+                        paddingTop: "0.25em",
+                        paddingBottom: "0.25em",
                         borderRadius: "10px",
                         backgroundColor: "#bbb",
                       }
                     : {
+                        position: "relative",
+                        top: "0.1em",
+                        paddingTop: "0.25em",
+                        paddingBottom: "0.25em",
                         borderRadius: "10px",
                         backgroundColor: "rgba(0, 0, 0, 0)",
                       }
@@ -66,10 +74,18 @@ const CodeButtons = ({
                 style={
                   buttonValues[buttonTitle]
                     ? {
+                        position: "relative",
+                        top: "0.1em",
+                        paddingTop: "0.25em",
+                        paddingBottom: "0.25em",
                         borderRadius: "10px",
                         backgroundColor: "#bbb",
                       }
                     : {
+                        position: "relative",
+                        top: "0.1em",
+                        paddingTop: "0.25em",
+                        paddingBottom: "0.25em",
                         borderRadius: "10px",
                         backgroundColor: "rgba(0, 0, 0, 0)",
                       }

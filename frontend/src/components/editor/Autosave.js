@@ -47,7 +47,9 @@ const Autosave = ({ mdText, setRenderContent }) => {
     }, [delay]);
   }
 
-  return <div>{savedText ? autoSaveMessage : ""}</div>;
+  return (
+    <div style={{ display: "block" }}>{savedText ? autoSaveMessage : ""}</div>
+  );
 };
 
 export default Autosave;
