@@ -16,6 +16,17 @@ const MDTextArea = ({
   pushUndoValue,
   resetButtons,
 }) => {
+  const getButtonName = (mdText, cursorPositionStart) => {
+    let output = "";
+    let i = cursorPositionStart;
+    while (mdText[i] !== "}") {
+      output += mdText[i];
+      i++;
+    }
+    console.log(output);
+    return output;
+  };
+
   const handleChange = (event) => {
     setCursor(event.target.selectionStart, event.target.selectionEnd);
     let inputText = event.target.value;
@@ -32,7 +43,7 @@ const MDTextArea = ({
     setCursor(event.target.selectionStart, event.target.selectionEnd);
   };
 
-  const onTextareaSelect = async (event) => {
+  const onTextareaSelect = (event) => {
     let start = event.target.selectionStart;
     let end = event.target.selectionEnd;
     setCursor(start, end);
@@ -48,22 +59,23 @@ const MDTextArea = ({
       }));
     }
     if (
-      mdText.slice(start - 2, start) === "__" &&
-      mdText.slice(end, end + 2) === "__" &&
+      mdText.slice(start, start + 1) === "_" &&
+      mdText.slice(end - 1, end) === "_" &&
+      mdText.slice(start, start + 2) !== "__" &&
       !buttonValues.bold
+    ) {
+      setCursorPosition(start + 1, end - 1);
+    }
+    if (
+      mdText.slice(start - 2, start) === "__" &&
+      mdText.slice(end, end + 2) === "__"
     ) {
       setButtonValues((prevButtonValues) => ({
         ...prevButtonValues,
         bold: true,
       }));
     }
-    if (
-      mdText.slice(start, start + 1) === "_" &&
-      mdText.slice(end - 1, end) === "_" &&
-      mdText.slice(start, start + 2) !== "__"
-    ) {
-      setCursorPosition(start + 1, end - 1);
-    }
+
     if (
       mdText.slice(start, start + 2) === "__" &&
       mdText.slice(end - 2, end) === "__"
@@ -85,6 +97,47 @@ const MDTextArea = ({
       mdText.slice(end - 2, end) === "~~"
     ) {
       setCursorPosition(start + 2, end - 2);
+    }
+    if (
+      mdText.slice(start - 1, start) === "`" &&
+      mdText.slice(end, end + 1) === "`" &&
+      mdText.slice(end, end + 2) !== "``"
+    ) {
+      if (mdText.slice(end, end + 11) === "`{.microbit") {
+        let buttonName = getButtonName(mdText, end + 11);
+        if (!buttonValues[buttonName]) {
+          setButtonValues((prevButtonValues) => ({
+            ...prevButtonValues,
+            [buttonName]: true,
+          }));
+          return;
+        }
+      } else if (mdText.slice(end, end + 7) === "`{.block") {
+        let buttonName = getButtonName(mdText, end + 7);
+        if (!buttonValues[buttonName]) {
+          setButtonValues((prevButtonValues) => ({
+            ...prevButtonValues,
+            [buttonName]: true,
+          }));
+          return;
+        }
+      } else if (!buttonValues.inline) {
+        setButtonValues((prevButtonValues) => ({
+          ...prevButtonValues,
+          inline: true,
+        }));
+      }
+    }
+    if (
+      mdText.slice(start, start + 1) === "`" &&
+      (mdText.slice(end - 1, end) === "}" || mdText.slice(end - 1, end) === "`")
+    ) {
+      let i = end;
+      while (mdText[i] !== "`") {
+        i--;
+      }
+
+      setCursorPosition(start + 1, i);
     }
   };
 

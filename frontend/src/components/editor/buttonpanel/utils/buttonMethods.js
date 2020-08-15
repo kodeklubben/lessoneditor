@@ -1,5 +1,6 @@
 import { SECTION_TEXT } from "components/editor/settingsFiles/languages/editor_NO";
 import { lists } from "components/editor/settingsFiles/buttonConfig";
+
 const buttonAction = (
   isOn,
   mdText,
@@ -32,6 +33,7 @@ const buttonAction = (
       output
     );
   }
+
   if (!isOn) {
     if (cursorPositionStart !== cursorPositionEnd) {
       let i = mdText.slice(cursorPositionStart, cursorPositionEnd);
@@ -54,11 +56,11 @@ const buttonAction = (
         mdText.slice(0, cursorPositionStart) +
         output.slice(0, cursorIntON) +
         i +
-        output.slice(0, cursorIntON) +
+        output.slice(cursorIntON + SECTION_TEXT.length) +
         mdText.slice(cursorPositionEnd);
 
       cursorPositionStart += cursorIntON;
-      cursorPositionEnd += cursorIntON;
+      cursorPositionEnd = cursorPositionStart + i.length;
 
       return { mdText, cursorPositionStart, cursorPositionEnd };
     }
@@ -79,7 +81,7 @@ const buttonAction = (
       mdText =
         mdText.slice(0, cursorPositionStart - cursorIntON) +
         mdText.slice(cursorPositionStart, cursorPositionEnd) +
-        mdText.slice(cursorPositionEnd + cursorIntON);
+        mdText.slice(cursorPositionEnd + cursorIntOFF);
 
       cursorPositionStart -= cursorIntON;
       cursorPositionEnd -= cursorIntON;
@@ -233,6 +235,7 @@ const insertSection = (
     }
     return { inputText, cursorPositionStart, cursorPositionEnd };
   } else {
+    cursorPositionEnd += sectionText.length;
     return { inputText, cursorPositionStart, cursorPositionEnd };
   }
 };
