@@ -382,6 +382,7 @@ const MicrobitButtons = ({
     <>
       {Object.entries(config).map((element, index) => (
         <ButtonComponent
+          id="test"
           buttonValues={buttonValues}
           key={"element" + index}
           buttonTitle={element[1].buttonTitle}

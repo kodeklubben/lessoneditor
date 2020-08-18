@@ -1,4 +1,4 @@
-import "./itemlist.css";
+import "./itemlist.scss";
 import React from "react";
 
 function ItemList({ items, removeLesson, navigateToEditor }) {

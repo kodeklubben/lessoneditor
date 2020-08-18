@@ -69,7 +69,7 @@ const emphasis = {
   bold: {
     buttonTitle: "bold",
     icon: "bold",
-    output: "____",
+    output: "__" + SECTION_TEXT + "__",
     title: BUTTON_TITLE.bold,
     cursorIntON: 2,
     cursorIntOFF: 2,
@@ -78,7 +78,7 @@ const emphasis = {
   italic: {
     buttonTitle: "italic",
     icon: "italic",
-    output: "__",
+    output: "_" + SECTION_TEXT + "_",
     title: BUTTON_TITLE.italic,
     cursorIntON: 1,
     cursorIntOFF: 1,
@@ -96,7 +96,7 @@ const emphasis = {
   strikethrough: {
     buttonTitle: "strikethrough",
     icon: "strikethrough",
-    output: "~~~~",
+    output: "~~" + SECTION_TEXT + "~~",
     title: BUTTON_TITLE.strikethrough,
     cursorIntON: 2,
     cursorIntOFF: 2,
@@ -153,7 +153,8 @@ const lists = {
   listUl: {
     buttonTitle: "listUl",
     icon: "list ul",
-    output: "- ",
+    output: "- " + SECTION_TEXT,
+    outputOnEnter: "- ",
     title: BUTTON_TITLE.listUl,
     cursorIntON: 2,
     cursorIntOFF: 0,
@@ -162,7 +163,8 @@ const lists = {
   listOl: {
     buttonTitle: "listOl",
     icon: "list ol",
-    output: "1. ",
+    output: "1. " + SECTION_TEXT,
+    outputOnEnter: "1. ",
     title: BUTTON_TITLE.listOl,
     cursorIntON: 3,
     cursorIntOFF: 0,
@@ -171,16 +173,14 @@ const lists = {
   listCheck: {
     buttonTitle: "listCheck",
     icon: "tasks",
-    output: "- [\u0020] ",
+    output: "- [\u0020] " + SECTION_TEXT,
+    outputOnEnter: "- [\u0020] ",
     title: BUTTON_TITLE.listCheck,
     cursorIntON: 6,
     cursorIntOFF: 0,
     shortcut: KEY_COMBINATIONS.listcheck,
   },
 };
-
-// !! buttonTitle - first chars must be "sec_" when in sections,
-// if new buttons are added remember to update buttons-state in editor.js
 
 const sections = {
   intro: {
@@ -193,8 +193,10 @@ const sections = {
     cancelInt: 2,
     shortcut: KEY_COMBINATIONS.intro,
     style: {
-      height: "3em",
+      boxSizing: "border-box",
+      height: "2em",
       border: " 2px solid black",
+      padding: "8px",
       borderRadius: "10px",
       background: "#fff",
       fontWeigth: "bold",
@@ -210,7 +212,8 @@ const sections = {
     cancelInt: 2,
     shortcut: KEY_COMBINATIONS.activity,
     style: {
-      height: "3em",
+      boxSizing: "border-box",
+      height: "2em",
       color: "#fff",
       background: "#349946",
       padding: "10px",
@@ -227,8 +230,9 @@ const sections = {
     cancelInt: 3,
     shortcut: KEY_COMBINATIONS.check,
     style: {
+      boxSizing: "border-box",
       background: "white",
-      height: "3em",
+      height: "2em",
       border: " 2px solid black",
       borderRadius: "10px",
       padding: "8px",
@@ -245,7 +249,8 @@ const sections = {
     cancelInt: 10,
     shortcut: KEY_COMBINATIONS.tip,
     style: {
-      height: "3em",
+      boxSizing: "border-box",
+      height: "2em",
       border: "3px solid #ff7f00",
       background: "#fff99d",
       borderRadius: "10px",
@@ -263,7 +268,8 @@ const sections = {
     cancelInt: 3,
     shortcut: KEY_COMBINATIONS.protip,
     style: {
-      height: "3em",
+      boxSizing: "border-box",
+      height: "2em",
       border: "3px solid #ff7f00",
       background: "#fff99d",
       borderRadius: "10px",
@@ -281,7 +287,8 @@ const sections = {
     cancelInt: 3,
     shortcut: KEY_COMBINATIONS.challenge,
     style: {
-      height: "3em",
+      boxSizing: "border-box",
+      height: "2em",
       color: "#fff",
       background: "#00b1da",
       padding: "10px",
@@ -298,7 +305,8 @@ const sections = {
     cancelInt: 3,
     shortcut: KEY_COMBINATIONS.flag,
     style: {
-      height: "3em",
+      boxSizing: "border-box",
+      height: "2em",
       border: "3px dotted rgb(230, 134, 45)",
       borderRadius: "10px",
       color: "rgb(54, 161, 55)",
@@ -317,7 +325,8 @@ const sections = {
     cancelInt: 2,
     shortcut: KEY_COMBINATIONS.try,
     style: {
-      height: "3em",
+      boxSizing: "border-box",
+      height: "2em",
       background: "#abdbea",
       borderRadius: "10px",
       padding: "10px",
@@ -333,11 +342,12 @@ const sections = {
     cancelInt: 3,
     shortcut: KEY_COMBINATIONS.save,
     style: {
-      height: "3em",
+      boxSizing: "border-box",
+      height: "2em",
       color: "rgb(36, 90, 154)",
       background: "white",
       borderRadius: "10px",
-      padding: "10px",
+      padding: "7px",
       border: "3px solid rgb(36, 90, 154)",
     },
     imageurl: "/sectionSVG/save.svg",
@@ -348,7 +358,7 @@ const codebutton = {
   inline: {
     buttonTitle: "inline",
     icon: "terminal",
-    output: "``",
+    output: "`" + SECTION_TEXT + "`",
     title: BUTTON_TITLE.inline,
     cursorIntON: 1,
     cursorIntOFF: 1,
@@ -357,7 +367,7 @@ const codebutton = {
   codeblock: {
     buttonTitle: "codeblock",
     icon: "code",
-    output: `${temp}\n\n${temp}`,
+    output: `${temp}\n${SECTION_TEXT}\n${temp}`,
     title: BUTTON_TITLE.codeblock,
     cursorIntON: 4,
     cursorIntOFF: 5,

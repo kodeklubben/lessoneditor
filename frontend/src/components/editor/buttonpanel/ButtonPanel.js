@@ -1,4 +1,4 @@
-import "./buttonpanel.css";
+import "./buttonpanel.scss";
 import React from "react";
 import Emphasis from "./Emphasis";
 import UndoRedo from "./UndoRedo";
@@ -34,6 +34,8 @@ const ButtonPanel = ({
   setRedoCursorPosition,
   setListButtonValues,
   course,
+  title,
+  setTitle,
 }) => {
   const history = useHistory();
   const { lessonId, file } = useParams();
@@ -83,18 +85,7 @@ const ButtonPanel = ({
           setListButtonValues={setListButtonValues}
           setButtonValues={setButtonValues}
         />
-        <CodeButton
-          editorRef={editorRef}
-          mdText={mdText}
-          buttonValues={buttonValues}
-          cursorPositionStart={cursorPositionStart}
-          cursorPositionEnd={cursorPositionEnd}
-          setMdText={setMdText}
-          setCursorPosition={setCursorPosition}
-          setCursor={setCursor}
-          setButtonValues={setButtonValues}
-          course={course}
-        />
+
         <div style={{ display: "inline", marginLeft: "auto" }}>
           <button
             className="ui button"
@@ -103,7 +94,7 @@ const ButtonPanel = ({
           >
             <i className="arrow right icon" />
           </button>
-          <EditorDatapanel />
+          <EditorDatapanel title={title} setTitle={setTitle} />
         </div>
       </div>
 
@@ -120,6 +111,20 @@ const ButtonPanel = ({
           setCursor={setCursor}
           setButtonValues={setButtonValues}
         />
+        <span style={{ marginLeft: "5em", position: "relative", top: "-4px" }}>
+          <CodeButton
+            editorRef={editorRef}
+            mdText={mdText}
+            buttonValues={buttonValues}
+            cursorPositionStart={cursorPositionStart}
+            cursorPositionEnd={cursorPositionEnd}
+            setMdText={setMdText}
+            setCursorPosition={setCursorPosition}
+            setCursor={setCursor}
+            setButtonValues={setButtonValues}
+            course={course}
+          />
+        </span>
       </div>
 
       {course === "microbit" ? (

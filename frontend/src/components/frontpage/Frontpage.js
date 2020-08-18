@@ -1,5 +1,5 @@
+import "./frontpage.scss";
 import React, { useContext } from "react";
-import "./frontpage.css";
 
 import ItemList from "./ItemList";
 import { UserContext } from "../../contexts/UserContext";
@@ -14,6 +14,7 @@ const Overview = () => {
     const target = ["/editor", lessonId, file].join("/");
     history.push(target);
   };
+
   return (
     <div>
       <Navbar />

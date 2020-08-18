@@ -1,3 +1,6 @@
+import { SECTION_TEXT } from "components/editor/settingsFiles/languages/editor_NO";
+import { lists } from "components/editor/settingsFiles/buttonConfig";
+
 const buttonAction = (
   isOn,
   mdText,
@@ -7,6 +10,30 @@ const buttonAction = (
   cursorIntOFF,
   output
 ) => {
+  if (
+    (output === lists.listUl.output ||
+      output === lists.listOl.output ||
+      output === lists.listCheck.output) &&
+    !ifNewLine(mdText, cursorPositionStart)
+  ) {
+    mdText =
+      mdText.slice(0, cursorPositionStart) +
+      "\n\n" +
+      mdText.slice(cursorPositionStart);
+    cursorPositionStart += 1;
+    cursorPositionEnd += 1;
+    console.log(mdText);
+    buttonAction(
+      isOn,
+      mdText,
+      cursorPositionStart,
+      cursorPositionEnd,
+      cursorIntON,
+      cursorIntOFF,
+      output
+    );
+  }
+
   if (!isOn) {
     if (cursorPositionStart !== cursorPositionEnd) {
       let i = mdText.slice(cursorPositionStart, cursorPositionEnd);
@@ -29,11 +56,11 @@ const buttonAction = (
         mdText.slice(0, cursorPositionStart) +
         output.slice(0, cursorIntON) +
         i +
-        output.slice(cursorIntON) +
+        output.slice(cursorIntON + SECTION_TEXT.length) +
         mdText.slice(cursorPositionEnd);
 
       cursorPositionStart += cursorIntON;
-      cursorPositionEnd += cursorIntON;
+      cursorPositionEnd = cursorPositionStart + i.length;
 
       return { mdText, cursorPositionStart, cursorPositionEnd };
     }
@@ -43,7 +70,7 @@ const buttonAction = (
       mdText.slice(cursorPositionStart);
 
     cursorPositionStart += cursorIntON;
-    cursorPositionEnd += cursorIntON;
+    cursorPositionEnd += cursorIntON + SECTION_TEXT.length;
     return {
       mdText,
       cursorPositionStart,
@@ -54,7 +81,7 @@ const buttonAction = (
       mdText =
         mdText.slice(0, cursorPositionStart - cursorIntON) +
         mdText.slice(cursorPositionStart, cursorPositionEnd) +
-        mdText.slice(cursorPositionEnd + cursorIntON);
+        mdText.slice(cursorPositionEnd + cursorIntOFF);
 
       cursorPositionStart -= cursorIntON;
       cursorPositionEnd -= cursorIntON;
@@ -104,6 +131,14 @@ const cancelButton = (
 };
 
 const heading = (isOn, mdText, cursorPositionStart, output) => {
+  if (!ifNewLine(mdText, cursorPositionStart)) {
+    mdText =
+      mdText.slice(0, cursorPositionStart) +
+      "\n\n" +
+      mdText.slice(cursorPositionStart);
+    cursorPositionStart += 1;
+    heading(isOn, mdText, cursorPositionStart, output);
+  }
   if (
     output === "## " &&
     mdText.slice(cursorPositionStart - 3, cursorPositionStart) === output &&
@@ -145,7 +180,11 @@ const ifNewLine = (inputText, cursorPositionStart) => {
     inputText === "" ||
     cursorPositionStart === 0 ||
     inputText.slice(cursorPositionStart - 3, cursorPositionStart) === "## " ||
-    inputText.slice(cursorPositionStart - 2, cursorPositionStart) === "# "
+    inputText.slice(cursorPositionStart - 2, cursorPositionStart) === "# " ||
+    inputText.slice(cursorPositionStart - 2, cursorPositionStart) === "- " ||
+    inputText.slice(cursorPositionStart - 3, cursorPositionStart) === "1. " ||
+    inputText.slice(cursorPositionStart - 6, cursorPositionStart) ===
+      "- [\u0020] "
     ? true
     : false;
 };
@@ -161,6 +200,24 @@ const insertSection = (
   cursorIntOFF,
   sectionText
 ) => {
+  if (!ifNewLine(inputText, cursorPositionStart)) {
+    inputText =
+      inputText.slice(0, cursorPositionStart) +
+      "\n\n" +
+      inputText.slice(cursorPositionStart);
+    cursorPositionStart += 1;
+    insertSection(
+      isOn,
+      button,
+      inputText,
+      output,
+      cursorPositionStart,
+      cursorPositionEnd,
+      cursorIntON,
+      cursorIntOFF,
+      sectionText
+    );
+  }
   if (!isOn) {
     inputText =
       inputText.slice(0, cursorPositionStart) +
@@ -178,6 +235,7 @@ const insertSection = (
     }
     return { inputText, cursorPositionStart, cursorPositionEnd };
   } else {
+    cursorPositionEnd += sectionText.length;
     return { inputText, cursorPositionStart, cursorPositionEnd };
   }
 };

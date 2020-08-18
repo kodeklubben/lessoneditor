@@ -1,3 +1,5 @@
+import { SECTION_TEXT } from "./languages/editor_NO";
+
 // SHORTCUTKEY options: "ctrl", "shift", "alt", "option", "command"
 const SHORTCUTKEY = "ctrl";
 const SHORTCUTKEY2 = "shift";
@@ -79,7 +81,7 @@ const KEY_COMBINATIONS_SCRATCH = {
 const microbitbuttons = {
   basic: {
     buttonTitle: "basic",
-    output: "``{.microbitbasic}",
+    output: "`" + SECTION_TEXT + "`{.microbitbasic}",
     title: "Basis",
     cursorIntON: 1,
     cursorIntOFF: 17,
@@ -88,7 +90,7 @@ const microbitbuttons = {
   },
   input: {
     buttonTitle: "input",
-    output: "``{.microbitinput}",
+    output: "`" + SECTION_TEXT + "`{.microbitinput}",
     title: "Inndata",
     cursorIntON: 1,
     cursorIntOFF: 17,
@@ -97,7 +99,7 @@ const microbitbuttons = {
   },
   music: {
     buttonTitle: "music",
-    output: "``{.microbitmusic}",
+    output: "`" + SECTION_TEXT + "`{.microbitmusic}",
     title: "Musikk",
     cursorIntON: 1,
     cursorIntOFF: 17,
@@ -106,7 +108,7 @@ const microbitbuttons = {
   },
   led: {
     buttonTitle: "led",
-    output: "``{.microbitled}",
+    output: "`" + SECTION_TEXT + "`{.microbitled}",
     title: "Skjerm",
     cursorIntON: 1,
     cursorIntOFF: 15,
@@ -115,7 +117,7 @@ const microbitbuttons = {
   },
   radio: {
     buttonTitle: "radio",
-    output: "``{.microbitradio}",
+    output: "`" + SECTION_TEXT + "`{.microbitradio}",
     title: "Radio",
     cursorIntON: 1,
     cursorIntOFF: 17,
@@ -124,7 +126,7 @@ const microbitbuttons = {
   },
   loops: {
     buttonTitle: "loops",
-    output: "``{.microbitloops}",
+    output: "`" + SECTION_TEXT + "`{.microbitloops}",
     title: "Løkker",
     cursorIntON: 1,
     cursorIntOFF: 17,
@@ -133,7 +135,7 @@ const microbitbuttons = {
   },
   logic: {
     buttonTitle: "logic",
-    output: "``{.microbitlogic}",
+    output: "`" + SECTION_TEXT + "`{.microbitlogic}",
     title: "Logikk",
     cursorIntON: 1,
     cursorIntOFF: 17,
@@ -142,7 +144,7 @@ const microbitbuttons = {
   },
   variables: {
     buttonTitle: "variables",
-    output: "``{.microbitvariables}",
+    output: "`" + SECTION_TEXT + "`{.microbitvariables}",
     title: "Variabler",
     cursorIntON: 1,
     cursorIntOFF: 21,
@@ -151,7 +153,7 @@ const microbitbuttons = {
   },
   math: {
     buttonTitle: "math",
-    output: "``{.microbitmath}",
+    output: "`" + SECTION_TEXT + "`{.microbitmath}",
     title: "Matematikk",
     cursorIntON: 1,
     cursorIntOFF: 16,
@@ -160,7 +162,7 @@ const microbitbuttons = {
   },
   functions: {
     buttonTitle: "functions",
-    output: "``{.microbitfunctions}",
+    output: "`" + SECTION_TEXT + "`{.microbitfunctions}",
     title: "Funksjoner",
     cursorIntON: 1,
     cursorIntOFF: 21,
@@ -169,7 +171,7 @@ const microbitbuttons = {
   },
   arrays: {
     buttonTitle: "arrays",
-    output: "``{.microbitarrays}",
+    output: "`" + SECTION_TEXT + "`{.microbitarrays}",
     title: "Tabeller",
     cursorIntON: 1,
     cursorIntOFF: 18,
@@ -178,7 +180,7 @@ const microbitbuttons = {
   },
   text: {
     buttonTitle: "text",
-    output: "``{.microbittext}",
+    output: "`" + SECTION_TEXT + "`{.microbittext}",
     title: "Tekst",
     cursorIntON: 1,
     cursorIntOFF: 16,
@@ -187,7 +189,7 @@ const microbitbuttons = {
   },
   game: {
     buttonTitle: "game",
-    output: "``{.microbitgame}",
+    output: "`" + SECTION_TEXT + "`{.microbitgame}",
     title: "Spill",
     cursorIntON: 1,
     cursorIntOFF: 16,
@@ -196,7 +198,7 @@ const microbitbuttons = {
   },
   images: {
     buttonTitle: "images",
-    output: "``{.microbitimages}",
+    output: "`" + SECTION_TEXT + "`{.microbitimages}",
     title: "Bilder",
     cursorIntON: 1,
     cursorIntOFF: 18,
@@ -205,7 +207,7 @@ const microbitbuttons = {
   },
   pins: {
     buttonTitle: "pins",
-    output: "``{.microbitpins}",
+    output: "`" + SECTION_TEXT + "`{.microbitpins}",
     title: "Tilkobling",
     cursorIntON: 1,
     cursorIntOFF: 16,
@@ -214,7 +216,7 @@ const microbitbuttons = {
   },
   serial: {
     buttonTitle: "seial",
-    output: "``{.microbitserial}",
+    output: "`" + SECTION_TEXT + "`{.microbitserial}",
     title: "Serieport",
     cursorIntON: 1,
     cursorIntOFF: 18,
@@ -223,7 +225,7 @@ const microbitbuttons = {
   },
   control: {
     buttonTitle: "control",
-    output: "``{.microbitcontrol}",
+    output: "`" + SECTION_TEXT + "`{.microbitcontrol}",
     title: "Styring",
     cursorIntON: 1,
     cursorIntOFF: 19,
@@ -235,7 +237,7 @@ const microbitbuttons = {
 const scratchbuttons = {
   motion: {
     buttonTitle: "motion",
-    output: "``{.blockmotion}",
+    output: "`" + SECTION_TEXT + "`{.blockmotion}",
     title: "Bevegelse",
     cursorIntON: 1,
     cursorIntOFF: 15,
@@ -244,7 +246,7 @@ const scratchbuttons = {
   },
   looks: {
     buttonTitle: "looks",
-    output: "``{.blocklooks}",
+    output: "`" + SECTION_TEXT + "`{.blocklooks}",
     title: "Utseende",
     cursorIntON: 1,
     cursorIntOFF: 14,
@@ -253,7 +255,7 @@ const scratchbuttons = {
   },
   sound: {
     buttonTitle: "sound",
-    output: "``{.blocksound}",
+    output: "`" + SECTION_TEXT + "`{.blocksound}",
     title: "Lyd",
     cursorIntON: 1,
     cursorIntOFF: 14,
@@ -262,7 +264,7 @@ const scratchbuttons = {
   },
   pen: {
     buttonTitle: "pen",
-    output: "``{.blockpen}",
+    output: "`" + SECTION_TEXT + "`{.blockpen}",
     title: "Penn",
     cursorIntON: 1,
     cursorIntOFF: 12,
@@ -271,7 +273,7 @@ const scratchbuttons = {
   },
   data: {
     buttonTitle: "data",
-    output: "``{.blockdata}",
+    output: "`" + SECTION_TEXT + "`{.blockdata}",
     title: "Variabler",
     cursorIntON: 1,
     cursorIntOFF: 13,
@@ -280,7 +282,7 @@ const scratchbuttons = {
   },
   events: {
     buttonTitle: "events",
-    output: "``{.blockevents}",
+    output: "`" + SECTION_TEXT + "`{.blockevents}",
     title: "Hendelser",
     cursorIntON: 1,
     cursorIntOFF: 15,
@@ -289,7 +291,7 @@ const scratchbuttons = {
   },
   control: {
     buttonTitle: "control",
-    output: "``{.blockcontrol}",
+    output: "`" + SECTION_TEXT + "`{.blockcontrol}",
     title: "Styring",
     cursorIntON: 1,
     cursorIntOFF: 16,
@@ -298,7 +300,7 @@ const scratchbuttons = {
   },
   sensing: {
     buttonTitle: "sensing",
-    output: "``{.blocksensing}",
+    output: "`" + SECTION_TEXT + "`{.blocksensing}",
     title: "Sansing",
     cursorIntON: 1,
     cursorIntOFF: 16,
@@ -307,7 +309,7 @@ const scratchbuttons = {
   },
   operators: {
     buttonTitle: "operators",
-    output: "``{.blockoperators}",
+    output: "`" + SECTION_TEXT + "`{.blockoperators}",
     title: "Operatorer",
     cursorIntON: 1,
     cursorIntOFF: 18,
@@ -316,7 +318,7 @@ const scratchbuttons = {
   },
   moreblocks: {
     buttonTitle: "moreblocks",
-    output: "``{.blockmoreblocks}",
+    output: "`" + SECTION_TEXT + "`{.blockmoreblocks}",
     title: "Mine klosser",
     cursorIntON: 1,
     cursorIntOFF: 19,

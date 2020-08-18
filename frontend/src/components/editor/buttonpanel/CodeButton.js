@@ -1,5 +1,5 @@
 import React from "react";
-import ButtonComponent from "./ButtonComponent";
+import CodeButtonComponent from "./CodeButtonComponent";
 
 import { useHotkeys } from "react-hotkeys-hook";
 
@@ -28,8 +28,10 @@ const CodeButton = ({
   setButtonValues,
   course,
 }) => {
-  const temp = "```";
-  const outputCodeBlock = `${temp}${course}\n\n${temp}`;
+  const outputCodeBlock =
+    config.codeblock.output.slice(0, 3) +
+    (course === "scratch" ? "blocks" : course) +
+    config.codeblock.output.slice(3);
 
   const setChanges = (mdText, cursorPositionStart, cursorPositionEnd) => {
     setCursor(cursorPositionStart, cursorPositionEnd);
@@ -95,7 +97,8 @@ const CodeButton = ({
       setButton(buttonTitle);
       setCode(
         buttonTitle,
-        config.codeblock.cursorIntON + course.length,
+        config.codeblock.cursorIntON +
+          (course === "scratch" ? 6 : course.length),
         config.codeblock.cursorIntOFF,
         outputCodeBlock
       );
@@ -142,7 +145,7 @@ const CodeButton = ({
   return (
     <>
       {Object.entries(config).map((element, index) => (
-        <ButtonComponent
+        <CodeButtonComponent
           buttonValues={buttonValues}
           key={"element" + index}
           buttonTitle={element[1].buttonTitle}
@@ -150,6 +153,8 @@ const CodeButton = ({
           title={element[1].title}
           onButtonClick={handleButtonClick}
           shortcutKey={element[1].shortcut}
+          course={course}
+          isOn={buttonValues.code}
         />
       ))}
     </>
