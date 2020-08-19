@@ -130,7 +130,9 @@ const MDTextArea = ({
     }
     if (
       mdText.slice(start, start + 1) === "`" &&
-      (mdText.slice(end - 1, end) === "}" || mdText.slice(end - 1, end) === "`")
+      (mdText.slice(end - 1, end) === "}" ||
+        mdText.slice(end - 1, end) === "`") &&
+      mdText.slice(end - 2, end) !== "``"
     ) {
       let i = end;
       while (mdText[i] !== "`") {

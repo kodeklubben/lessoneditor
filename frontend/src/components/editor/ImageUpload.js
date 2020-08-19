@@ -47,7 +47,7 @@ const ImageUpload = ({
       }
     } catch (err) {
       console.log(err);
-      editorRef.current.focus();
+      // editorRef.current.focus();
     }
   };
 

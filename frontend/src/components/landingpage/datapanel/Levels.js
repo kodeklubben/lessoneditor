@@ -14,6 +14,7 @@ const Levels = ({ changeHandler, level }) => {
         style={{ width: "13em" }}
         placeholder="Velg Nivå"
         name="level"
+        defaultValue={levelOptions[0].value}
         fluid
         selection
         onChange={changeHandler}

@@ -1,7 +1,7 @@
 import "./itemlist.scss";
 import React from "react";
 
-function ItemList({ items, removeLesson, navigateToEditor }) {
+function ItemList({ items, removeLesson, navigateToHome }) {
   return (
     <div className="ui five column grid">
       {items.length > 0 &&
@@ -21,9 +21,7 @@ function ItemList({ items, removeLesson, navigateToEditor }) {
                 <div className="extra content">
                   <button
                     className="ui button"
-                    onClick={() =>
-                      navigateToEditor(listitem.lessonId, listitem.lesson)
-                    }
+                    onClick={() => navigateToHome(listitem.lessonId)}
                   >
                     Åpne
                   </button>
