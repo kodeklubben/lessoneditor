@@ -1,17 +1,18 @@
 import "./frontpage.scss";
-import React, { useContext } from "react";
-
+import React, { useContext, useState } from "react";
+import NewLesson from "./NewLesson";
 import ItemList from "./ItemList";
 import { UserContext } from "../../contexts/UserContext";
 import Navbar from "../navbar/Navbar";
 import { useHistory } from "react-router-dom";
 
 const Overview = () => {
+  const [showPopup, setShowPopup] = useState(false);
   const history = useHistory();
   const context = useContext(UserContext);
   const { lessons } = context;
-  const navigateToEditor = (lessonId, file) => {
-    const target = ["/editor", lessonId, file].join("/");
+  const navigateToHome = (lessonId, file) => {
+    const target = ["/landingpage", lessonId].join("/");
     history.push(target);
   };
 
@@ -22,13 +23,13 @@ const Overview = () => {
         <h3>Lag ny oppgave</h3>
         <div className="ui card">
           <div className="content">
-            <a href={"/new-lesson"}>
-              <div style={{ height: "200px" }}>
-                <i className=" huge plus  icon"></i>
-              </div>
-            </a>
+            <div style={{ height: "200px" }} onClick={() => setShowPopup(true)}>
+              <i className=" huge plus  icon"></i>
+            </div>
           </div>
         </div>
+
+        {showPopup ? <NewLesson setShowPopup={setShowPopup} /> : ""}
 
         <div
           style={{
@@ -47,7 +48,7 @@ const Overview = () => {
           <ItemList
             items={lessons}
             removeLesson={context.removeLesson}
-            navigateToEditor={navigateToEditor}
+            navigateToHome={navigateToHome}
           />
         ) : (
           <b>Du har ingen kurs</b>

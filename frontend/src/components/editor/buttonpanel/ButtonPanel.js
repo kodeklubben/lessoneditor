@@ -41,7 +41,8 @@ const ButtonPanel = ({
   const { lessonId, file } = useParams();
   const navigateToHome = async () => {
     await saveMdText(lessonId, file, mdText, true);
-    history.push("/");
+    const target = ["/landingpage", lessonId].join("/");
+    history.push(target);
   };
 
   return (
@@ -85,7 +86,6 @@ const ButtonPanel = ({
           setListButtonValues={setListButtonValues}
           setButtonValues={setButtonValues}
         />
-
         <div style={{ display: "inline", marginLeft: "auto" }}>
           <button
             className="ui button"

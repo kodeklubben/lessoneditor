@@ -1,11 +1,8 @@
 .datapanel_container {
-  display: block;
-  z-index: 3;
-  left: 15%;
-  top: 16%;
-  position: absolute;
-  width: 75%;
-  height: 75%;
+  margin: auto;
+  display: flex;
+  max-height: 60%;
+  width: 90%;
   border: 1px solid #b1daae;
   border-radius: 10px;
   box-shadow: 0px 0px 10px #888888;
@@ -13,20 +10,13 @@
   padding: 7em;
 }
 
-.datapanel_BG {
-  z-index: 1;
-  position: absolute;
-  background-color: rgba(255, 255, 255, 0.74);
-  top: -8%;
-  left: -8%;
-  height: 110%;
-  width: 110%;
-}
-
 .big.grey.x.icon.landingpage {
-  position: relative;
-  left: 104%;
-  top: -4%;
+  float: right;
   margin-top: -2em;
   margin-right: -2em;
+}
+.big.x.icon:hover {
+  background-color: rgb(207, 207, 207);
+  border-radius: 20px;
+  color: grey;
 }

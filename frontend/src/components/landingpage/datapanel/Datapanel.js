@@ -25,8 +25,6 @@ const Datapanel = () => {
     setTags((prevState) => ({ ...prevState, i }));
   };
 
-  console.log(`level : ${level}, license : ${license}`);
-
   const changeHandler = (event, { value, name }) => {
     switch (name) {
       case "level":
@@ -42,36 +40,40 @@ const Datapanel = () => {
 
   return (
     <>
-      <div style={{ padding: "1em 0 0 1em", display: "flex" }}>
-        <div style={{ display: "flex" }} onClick={() => setOpen(!open)}>
+      <div>
+        <div onClick={() => setOpen(!open)}>
           <i style={{ cursor: "pointer" }} className="big grey cog icon"></i>
         </div>
         {open ? (
-          <div className="datapanel_BG">
-            <div style={{ display: "flex" }} className="datapanel_container">
-              <i
-                onClick={() => setOpen(!open)}
-                id="test"
-                className="big grey x icon landingpage"
+          <div className="datapanel_container">
+            <i
+              onClick={() => setOpen(!open)}
+              className="big grey x icon landingpage"
+            />
+            <div>
+              <CheckboxField
+                labelTitle={YML_TEXT.topic}
+                content={<TagsTopic checkboxHandler={checkboxHandler} />}
+              />
+              <CheckboxField
+                labelTitle={YML_TEXT.grade}
+                content={<TagsGrade checkboxHandler={checkboxHandler} />}
+              />
+            </div>
+            <div>
+              <CheckboxField
+                labelTitle={YML_TEXT.subject}
+                content={<TagsSubject checkboxHandler={checkboxHandler} />}
               />
               <div>
-                <CheckboxField
-                  test1={YML_TEXT.topic}
-                  test2={<TagsTopic checkboxHandler={checkboxHandler} />}
-                />
-                <CheckboxField
-                  test1={YML_TEXT.grade}
-                  test2={<TagsGrade checkboxHandler={checkboxHandler} />}
-                />
-              </div>
-              <div>
-                <CheckboxField
-                  test1={YML_TEXT.subject}
-                  test2={<TagsSubject checkboxHandler={checkboxHandler} />}
-                />
                 <Levels level={level} changeHandler={changeHandler} />
                 <License license={license} changeHandler={changeHandler} />
               </div>
+            </div>
+            <div>
+              <button className="ui button" onClick={() => setOpen(!open)}>
+                OK
+              </button>
             </div>
           </div>
         ) : (

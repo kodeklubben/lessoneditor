@@ -14,10 +14,14 @@ const App = () => {
     <>
       <BrowserRouter>
         <UserContextProvider>
-          <Route exact path="/" component={Frontpage} />
+          <Route exact path="/" component={Frontpage}>
+            <LessonContextProvider>
+              <Frontpage />
+            </LessonContextProvider>
+          </Route>
           <Route exact path="/new-lesson" component={FormComponent} />
           <Route exact path="/landingpage" component={Landingpage} />
-          <Route path="/landingpage/:course">
+          <Route path="/landingpage/:lessonId">
             <LessonContextProvider>
               <Landingpage />
             </LessonContextProvider>

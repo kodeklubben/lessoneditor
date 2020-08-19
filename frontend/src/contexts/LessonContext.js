@@ -9,7 +9,11 @@ export const LessonContext = React.createContext({});
 export const LessonContextProvider = (props) => {
   const { lessonId } = useParams();
   const [data, setData] = useState({});
+  const [lessonList, setLessonList] = useState({});
+  const [language, setLanguage] = useState("nb");
+  const lessonListUrl = resolveUrlTemplate(paths.LESSON_FILES, { lessonId });
   const lessonDataUrl = resolveUrlTemplate(paths.LESSON_DATA, { lessonId });
+
   useEffect(() => {
     async function fetchData() {
       const res = await axios.get(lessonDataUrl);
@@ -20,12 +24,20 @@ export const LessonContextProvider = (props) => {
   }, [lessonId, lessonDataUrl]);
   const context = {
     data,
+    fetchList: async (lessonId) => {
+      const res = await axios.get(lessonListUrl);
+      console.log("list here? : " + res);
+      setLessonList(res);
+    },
+    lessonList,
     saveLesson: async (data) => {
       if (lessonId) {
         await axios.post(lessonDataUrl, data);
         setData(data);
       }
     },
+    language,
+    setLanguage,
   };
   return (
     <>

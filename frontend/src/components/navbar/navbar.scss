@@ -1,4 +1,4 @@
-.header_container {
+.navbar_container {
   padding: 0px;
   display: block;
   margin-top: 10px;
@@ -8,34 +8,23 @@
   position: static;
 }
 
-.header_logo {
+.navbar_logo {
   float: left;
   height: 10vh;
 }
 
-.header_title {
-  color: red;
+.navbar_profile {
   display: flex;
-  margin-left: auto;
-  align-items: center;
-}
-
-.header_profile {
   border-radius: 5px;
   margin-top: auto;
   margin-left: auto;
-  margin-right: 10px;
+  margin-right: 1em;
   float: right;
-  width: 11%;
 }
 
-#titleInput {
-  padding-left: 10px;
-  border-style: none;
-}
-
-#titleInput:hover {
-  padding-left: 10px;
-  border: 1px solid rgba(77, 77, 151, 0.699) !important;
-  border-radius: 5px !important;
+.navbar_languages {
+  float: right;
+  margin-left: auto;
+  margin-right: -70em !important;
+  margin-top: 4em;
 }

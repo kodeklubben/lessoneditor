@@ -94,6 +94,9 @@ const EditorDatapanel = ({ title, setTitle }) => {
               placeholder={FORM_TEXT.TRANSLATOR.placeholder}
             />
             <button className="ui button">OK</button>
+            <button className="ui button" onClick={() => setOpen(!open)}>
+              Avbryt
+            </button>
           </div>
         </div>
       ) : (
