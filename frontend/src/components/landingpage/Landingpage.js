@@ -9,16 +9,13 @@ const Landingpage = () => {
   const history = useHistory();
   const { lessonId } = useParams();
   const lesson = useContext(LessonContext);
-  const { data, fetchList, lessonList, language } = lesson;
+  const { data, lessonList, language } = lesson;
 
   const navigateToEditor = (lessonId, file) => {
     const target = ["/editor", lessonId, file].join("/");
+
     history.push(target);
   };
-
-  fetchList(lessonId);
-
-  console.log(lessonList);
 
   return (
     <>
@@ -35,8 +32,13 @@ const Landingpage = () => {
         <div className="content">
           <div
             style={{ height: "200px" }}
-            onClick={() =>
-              navigateToEditor(lessonId, data.lesson + "_" + language)
+            onClick={async () =>
+              language !== "nb"
+                ? navigateToEditor(
+                    lessonId,
+                    (await data.lesson) + "_" + language
+                  )
+                : navigateToEditor(lessonId, await data.lesson)
             }
           >
             <i className=" huge plus  icon"></i>
@@ -44,11 +46,64 @@ const Landingpage = () => {
         </div>
       </div>
 
-      <p>__________________________</p>
+      <div
+        style={{
+          backgroundColor: "grey",
+          width: "90%",
+          margin: "auto",
+          marginTop: "60px",
+          marginBottom: "50px",
+          height: "2px",
+        }}
+        className="ui horizontal divider"
+      />
 
-      <a href="/">
-        <button className="ui button">Tilbake</button>
-      </a>
+      {Object.keys(lessonList).length !== 0 && lessonList.constructor !== Object
+        ? lessonList.map((listItem, index) => {
+            if (listItem.filename.slice(-3) === ".md") {
+              return (
+                <div key={listItem + index} className="column">
+                  <div className="ui fluid card">
+                    {/* <div className="image itemListImage">
+                    <img src={listitem.thumb} alt={"oppgavebilde"} />
+                  </div> */}
+                    <div className="content">
+                      <div className="header">
+                        {listItem.filename.slice(0, -3)}
+                      </div>
+                      {/* <div className="meta">
+                      <h4>{listitem.course}</h4>
+                    </div> */}
+                    </div>
+                    <div className="extra content">
+                      <button
+                        className="ui button"
+                        onClick={() =>
+                          navigateToEditor(
+                            lessonId,
+                            listItem.filename.slice(0, -3)
+                          )
+                        }
+                      >
+                        Åpne
+                      </button>
+                      {/* <button
+                      className="ui button"
+                      onClick={async () => {
+                        await removeLesson(listitem.lessonId);
+                      }}
+                    >
+                      Fjerne
+                    </button> */}
+                    </div>
+                  </div>
+                </div>
+              );
+            } else {
+              return "";
+            }
+          })
+        : ""}
     </>
   );
 };

@@ -82,7 +82,7 @@ const NewLesson = ({ setShowPopup }) => {
             type={"submit"}
             disabled={error.length > 0}
           >
-            Send inn
+            Neste
           </button>
           <button className="ui button" onClick={() => setShowPopup(false)}>
             Avbryt
