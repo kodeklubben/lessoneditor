@@ -1,0 +1,23 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  width: 140px;
+  height: 20px;
+  padding: 10px;
+  text-decoration: none;
+  margin-bottom: 40px;
+  border-radius: 40px;
+  border: 2px solid green;
+}
+#plusSign {
+  height: 10px;
+}
+.newLessonButton {
+  text-align: center;
+}
