@@ -34,13 +34,33 @@ const Languages = () => {
   const history = useHistory();
   const { lessonId, file } = useParams();
   const lessonContext = useContext(LessonContext);
-  const { data } = lessonContext;
-  const handleChange = (event, { name, value }) => {
-    lessonContext.setLanguage(value);
-    if (lessonId && file) {
-      const target = ["/editor", lessonId, data.lesson + "_" + value].join("/");
-      history.push(target);
+  const { data, setLanguage } = lessonContext;
+
+  const defaultValue = (file) => {
+    let returnvalue;
+    if (file.slice(-2) === "nn") {
+      returnvalue = "nn";
+    } else if (file.slice(-2) === "en") {
+      returnvalue = "en";
+    } else if (file.slice(-2) === "is") {
+      returnvalue = "is";
+    } else {
+      returnvalue = "nb";
     }
+    return returnvalue;
+  };
+
+  const handleChange = async (event, { value }) => {
+    setLanguage(value);
+    let target;
+    if (lessonId && file && value !== "nb") {
+      target = ["/editor", lessonId, (await data.lesson) + "_" + value].join(
+        "/"
+      );
+    } else if (lessonId && file) {
+      target = ["/editor", lessonId, await data.lesson].join("/");
+    }
+    history.push(target);
   };
   return (
     <div>
@@ -53,7 +73,7 @@ const Languages = () => {
         }}
         placeholder="Velg Språk"
         name="language"
-        defaultValue={languageOptions[0].value}
+        defaultValue={file ? defaultValue(file) : ""}
         fluid
         selection
         onChange={handleChange}

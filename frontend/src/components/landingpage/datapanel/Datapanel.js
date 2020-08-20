@@ -7,7 +7,7 @@ import Levels from "./Levels";
 import License from "./License";
 
 const Datapanel = () => {
-  const [open, setOpen] = useState(false);
+  // const [open, setOpen] = useState(false);
   const [level, setLevel] = useState(1);
   const [license, setLicense] = useState("CC BY-SA 4.0");
   const [tags, setTags] = useState({ topic: [], subject: [], grade: [] });
@@ -41,44 +41,44 @@ const Datapanel = () => {
   return (
     <>
       <div>
-        <div onClick={() => setOpen(!open)}>
+        {/* <div onClick={() => setOpen(!open)}>
           <i style={{ cursor: "pointer" }} className="big grey cog icon"></i>
         </div>
-        {open ? (
-          <div className="datapanel_container">
-            <i
-              onClick={() => setOpen(!open)}
-              className="big grey x icon landingpage"
+        {open ? ( */}
+        <div className="datapanel_container">
+          {/* <i
+            onClick={() => setOpen(!open)}
+            className="big grey x icon landingpage"
+          /> */}
+          <div>
+            <CheckboxField
+              labelTitle={YML_TEXT.topic}
+              content={<TagsTopic checkboxHandler={checkboxHandler} />}
+            />
+            <CheckboxField
+              labelTitle={YML_TEXT.grade}
+              content={<TagsGrade checkboxHandler={checkboxHandler} />}
+            />
+          </div>
+          <div>
+            <CheckboxField
+              labelTitle={YML_TEXT.subject}
+              content={<TagsSubject checkboxHandler={checkboxHandler} />}
             />
             <div>
-              <CheckboxField
-                labelTitle={YML_TEXT.topic}
-                content={<TagsTopic checkboxHandler={checkboxHandler} />}
-              />
-              <CheckboxField
-                labelTitle={YML_TEXT.grade}
-                content={<TagsGrade checkboxHandler={checkboxHandler} />}
-              />
-            </div>
-            <div>
-              <CheckboxField
-                labelTitle={YML_TEXT.subject}
-                content={<TagsSubject checkboxHandler={checkboxHandler} />}
-              />
-              <div>
-                <Levels level={level} changeHandler={changeHandler} />
-                <License license={license} changeHandler={changeHandler} />
-              </div>
-            </div>
-            <div>
-              <button className="ui button" onClick={() => setOpen(!open)}>
-                OK
-              </button>
+              <Levels level={level} changeHandler={changeHandler} />
+              <License license={license} changeHandler={changeHandler} />
             </div>
           </div>
-        ) : (
+          <div>
+            {/* <button className="ui button" onClick={() => setOpen(!open)}>
+              OK
+            </button> */}
+          </div>
+        </div>
+        {/* ) : (
           ""
-        )}
+        )} */}
       </div>
     </>
   );
