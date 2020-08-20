@@ -5,6 +5,7 @@ import ItemList from "./ItemList";
 import { UserContext } from "../../contexts/UserContext";
 import Navbar from "../navbar/Navbar";
 import { useHistory } from "react-router-dom";
+import NewLessonButton from "./newLessonButton";
 
 const Overview = () => {
   const [showPopup, setShowPopup] = useState(false);
@@ -20,14 +21,7 @@ const Overview = () => {
     <div>
       <Navbar />
       <div className="overViewContainer">
-        <h3>Lag ny oppgave</h3>
-        <div className="ui card">
-          <div className="content">
-            <div style={{ height: "200px" }} onClick={() => setShowPopup(true)}>
-              <i className=" huge plus  icon"></i>
-            </div>
-          </div>
-        </div>
+        <NewLessonButton setShowPopup={setShowPopup} />
 
         {showPopup ? <NewLesson setShowPopup={setShowPopup} /> : ""}
 

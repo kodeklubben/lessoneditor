@@ -8,6 +8,7 @@ import { BrowserRouter, Route } from "react-router-dom";
 import { LessonContextProvider } from "../contexts/LessonContext";
 import { UserContextProvider } from "../contexts/UserContext";
 import SimplePreview from "./simple-preview/simple-preview";
+import NewLessonButton from "./frontpage/newLessonButton";
 
 const App = () => {
   return (
