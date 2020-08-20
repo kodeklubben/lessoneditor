@@ -4,15 +4,19 @@ import ItemList from "./ItemList";
 import { UserContext } from "../../contexts/UserContext";
 import Navbar from "../navbar/Navbar";
 import { useHistory } from "react-router-dom";
+import "./newLessonButton.css";
+//<i className=" plus sign"></i>
 
+//<div style={{ height: "200px" }} onClick={() => setShowPopup(true)}>
+//            <i className=" huge plus  icon"></i>
 const NewLessonButton = ({ setShowPopup }) => {
   return (
     <div className="newLessonButton">
-      <h3>Lag ny oppgave</h3>
       <div className="content">
-        <div style={{ height: "200px" }} onClick={() => setShowPopup(true)}>
-          <i className=" huge plus  icon"></i>
-        </div>
+        <button className="huge plus icon" onClick={setShowPopup}>
+          {" "}
+          Lag ny oppgave
+        </button>
       </div>
     </div>
   );
