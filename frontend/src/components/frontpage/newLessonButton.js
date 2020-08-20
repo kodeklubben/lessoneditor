@@ -16,7 +16,7 @@ const NewLessonButton = ({ setShowPopup }) => {
         <button onClick={setShowPopup}>
           {" "}
           <img id="plusSign" src={"/plusSign.png"} />
-          Lag ny oppgave
+          Ny oppgave
         </button>
       </div>
     </div>

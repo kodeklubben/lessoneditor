@@ -1,23 +1,15 @@
-* {
-  margin: 0;
-  padding: 0;
-}
-.content {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+button {
   text-align: center;
-  width: 140px;
-  height: 20px;
-  padding: 10px;
-  text-decoration: none;
-  margin-bottom: 40px;
-  border-radius: 40px;
-  border: 2px solid green;
+  width: 130px;
+  height: 30px;
+  font-style: Arial, "Times New Roman", Times, serif;
+  font-size: 14px;
+  border-radius: 25px;
+  border-color: green;
+  background-color: white;
 }
+
 #plusSign {
-  height: 10px;
-}
-.newLessonButton {
-  text-align: center;
+  height: 15px;
+  padding: 1px 6px;
 }
