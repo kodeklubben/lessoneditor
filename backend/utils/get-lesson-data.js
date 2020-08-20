@@ -1,6 +1,5 @@
 const loadFile = require("../utils/load-file");
 const listFiles = require("../utils/list-files");
-const getMetaData = require("../utils/get-meta-data.mock");
 const yaml = require("js-yaml");
 
 // Todo: Check for empty fileList
@@ -20,7 +19,7 @@ module.exports = async (lessonId) => {
       lessonData.meta.title = metadata.lesson;
       const data = {};
       data.ext = "yml";
-      data.filename = "lesson";
+      data.filename = "lesson.yml";
       data.content = yaml.safeDump(metadata.yml, { flowLevel: 2 });
       lessonFiles.push(data);
       continue;
