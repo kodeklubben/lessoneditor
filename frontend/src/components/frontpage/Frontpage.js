@@ -8,7 +8,7 @@ import { useHistory } from "react-router-dom";
 import NewLessonButton from "./newLessonButton";
 
 const Overview = () => {
-  const [showPopup, setShowPopup] = useState(false);
+  const [showPopup, setShowPopup] = useState(false); // Les om useState i React
   const history = useHistory();
   const context = useContext(UserContext);
   const { lessons } = context;
@@ -31,7 +31,7 @@ const Overview = () => {
             width: "90%",
             margin: "auto",
             marginTop: "60px",
-            marginBottom: "50px",
+            marginBottom: "500px",
             height: "2px",
           }}
           className="ui horizontal divider"

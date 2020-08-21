@@ -1,11 +1,14 @@
 import "./navbar.scss";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import Languages from "./Languages";
 import ProfileMenu from "components/ProfileMenu";
 import { UserContext } from "contexts/UserContext";
+import NewLessonButton from "../frontpage/newLessonButton";
+import NewLesson from "../frontpage/NewLesson";
 
 const Navbar = ({ course }) => {
   const userContext = useContext(UserContext);
+  const [showPopup, setShowPopup] = useState(false);
 
   return (
     <div>
@@ -18,6 +21,8 @@ const Navbar = ({ course }) => {
 
         <div className="navbar_profile">
           <Languages />
+          <NewLessonButton setShowPopup={setShowPopup} />
+          {showPopup ? <NewLesson setShowPopup={setShowPopup} /> : ""}
           <ProfileMenu
             name={userContext.user ? userContext.user.name : ""}
             email={userContext.user ? userContext.user.email : ""}
@@ -28,4 +33,5 @@ const Navbar = ({ course }) => {
     </div>
   );
 };
+
 export default Navbar;
