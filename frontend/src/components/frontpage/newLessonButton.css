@@ -6,15 +6,16 @@
   height: 30px;
   font-style: Arial, "Times New Roman", Times, serif;
   font-size: 14px;
-  color: #aaff80;
+  color: #009145;
   border-radius: 25px;
   background-color: white;
   border: 2px solid green;
   margin-right: 10px;
+  margin-left: 10px;
 }
 .new-lesson-button:hover {
   cursor: pointer;
-  background-color: black;
+  background-color: #ccffcc;
 }
 
 .new-lesson-button:active {
@@ -22,6 +23,8 @@
 }
 
 #plusSign {
+  display: flex;
+  justify-content: center;
   height: 15px;
-  padding: 1px 6px;
+  margin: 4px 6px;
 }

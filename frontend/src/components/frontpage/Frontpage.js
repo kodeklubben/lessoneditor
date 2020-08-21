@@ -21,7 +21,8 @@ const Overview = () => {
     <div>
       <Navbar />
       <div className="overViewContainer">
-        <NewLessonButton setShowPopup={setShowPopup} />
+        <p id="welcome">Velkommen, </p>
+        <NewLessonButton setShowPopup={setShowPopup} id="newLessonButton" />
 
         {showPopup ? <NewLesson setShowPopup={setShowPopup} /> : ""}
 
