@@ -10,7 +10,6 @@ export const LessonContextProvider = (props) => {
   const { lessonId } = useParams();
   const [data, setData] = useState({});
   const [headerData, setHeaderData] = useState({});
-  const [ymlData, setYmlData] = useState({});
   const [lessonList, setLessonList] = useState({});
   const [language, setLanguage] = useState("nb");
 
@@ -40,8 +39,6 @@ export const LessonContextProvider = (props) => {
     setData,
     headerData,
     setHeaderData,
-    ymlData,
-    setYmlData,
     fetchList: async () => {
       const res = await axios.get(lessonListUrl);
       setLessonList(res.data);

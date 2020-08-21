@@ -36,6 +36,7 @@ const Datapanel = () => {
         grade: i.grade,
       },
     }));
+    console.log(data);
   };
 
   const changeHandler = (event, { value, name }) => {
