@@ -9,13 +9,20 @@ const Landingpage = () => {
   const history = useHistory();
   const { lessonId } = useParams();
   const lesson = useContext(LessonContext);
-  const { data, lessonList, language } = lesson;
+  const { data, lessonList } = lesson;
 
   const navigateToEditor = (lessonId, file) => {
     const target = ["/editor", lessonId, file].join("/");
 
     history.push(target);
   };
+
+  // const ymlTest = `level: 2
+  // license: "[Code Club World Limited Terms of Service](https://github.com/CodeClub/scratch-curriculum/blob/master/LICENSE.md)"
+  // tags:
+  //   topic: [text_based]
+  //   subject: [programming, arts_and_crafts]
+  //   grade: [junior]`;
 
   return (
     <>
@@ -24,25 +31,6 @@ const Landingpage = () => {
         <h2>{data.lesson}</h2>
         <div style={{ float: "right" }}>
           <Datapanel />
-        </div>
-      </div>
-
-      <h3>Lag ny tekstfil:</h3>
-      <div className="ui card">
-        <div className="content">
-          <div
-            style={{ height: "200px" }}
-            onClick={async () =>
-              language !== "nb"
-                ? navigateToEditor(
-                    lessonId,
-                    (await data.lesson) + "_" + language
-                  )
-                : navigateToEditor(lessonId, await data.lesson)
-            }
-          >
-            <i className=" huge plus  icon"></i>
-          </div>
         </div>
       </div>
 
