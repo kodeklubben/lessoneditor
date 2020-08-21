@@ -44,6 +44,7 @@ const Landingpage = () => {
             <i className=" huge plus  icon"></i>
           </div>
         </div>
+        <button className="ui button">submit</button>
       </div>
 
       <div

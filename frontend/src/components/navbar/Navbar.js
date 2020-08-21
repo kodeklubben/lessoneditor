@@ -4,7 +4,7 @@ import Languages from "./Languages";
 import ProfileMenu from "components/ProfileMenu";
 import { UserContext } from "contexts/UserContext";
 
-const Navbar = ({ course }) => {
+const Navbar = () => {
   const userContext = useContext(UserContext);
 
   return (
