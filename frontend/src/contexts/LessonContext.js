@@ -22,12 +22,21 @@ export const LessonContextProvider = (props) => {
 
     if (lessonId) fetchData();
   }, [lessonId, lessonDataUrl]);
+
+  useEffect(() => {
+    async function fetchList() {
+      const res = await axios.get(lessonListUrl);
+      setLessonList(res.data);
+    }
+
+    if (lessonId) fetchList();
+  }, [lessonId, lessonListUrl]);
+
   const context = {
     data,
     fetchList: async (lessonId) => {
       const res = await axios.get(lessonListUrl);
-      console.log("list here? : " + res);
-      setLessonList(res);
+      setLessonList(res.data);
     },
     lessonList,
     saveLesson: async (data) => {

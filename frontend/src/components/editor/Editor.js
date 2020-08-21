@@ -17,7 +17,6 @@ const Editor = () => {
   const { data } = context;
   let course = data ? data.course : "";
 
-  const [title, setTitle] = useState("");
   const [renderContent, setRenderContent] = useState(false);
   const [mdText, setMdText] = useState("");
   const [buttonValues, setButtonValues] = useState({});
@@ -32,12 +31,6 @@ const Editor = () => {
     output: "",
     cursorInt: 0,
   });
-
-  useEffect(() => {
-    if (data) {
-      setTitle(data.title);
-    }
-  }, [data]);
 
   const editorRef = useRef();
   const uploadImageRef = useRef();
@@ -111,7 +104,7 @@ const Editor = () => {
         setCursorPositionEnd={setCursorPositionEnd}
         setCursorPosition={setCursorPosition}
       />
-      <Navbar title={title} setTitle={setTitle} course={course} />
+      <Navbar course={course} />
       <ButtonPanel
         editorRef={editorRef}
         uploadImageRef={uploadImageRef}
@@ -133,8 +126,6 @@ const Editor = () => {
         setRedoCursorPosition={setRedoCursorPosition}
         setListButtonValues={setListButtonValues}
         course={course}
-        title={title}
-        setTitle={setTitle}
       />
       <div className="textEditorContainer">
         <MDTextArea
