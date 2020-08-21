@@ -1,4 +1,6 @@
-button {
+.new-lesson-button {
+  display: flex;
+  justify-content: center;
   text-align: center;
   width: 130px;
   height: 30px;
@@ -6,8 +8,17 @@ button {
   font-size: 14px;
   color: #aaff80;
   border-radius: 25px;
-  border-color: green;
   background-color: white;
+  border: 2px solid green;
+  margin-right: 10px;
+}
+.new-lesson-button:hover {
+  cursor: pointer;
+  background-color: black;
+}
+
+.new-lesson-button:active {
+  background-color: red;
 }
 
 #plusSign {

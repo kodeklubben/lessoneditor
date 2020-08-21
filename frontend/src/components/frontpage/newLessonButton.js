@@ -10,11 +10,11 @@ const NewLessonButton = ({ setShowPopup }) => {
   return (
     <div className="newLessonButton">
       <div className="content">
-        <button onClick={setShowPopup}>
+        <div className="new-lesson-button" onClick={setShowPopup}>
           {" "}
           <img id="plusSign" src={"/plusSign.png"} />
           Ny oppgave
-        </button>
+        </div>
       </div>
     </div>
   );
