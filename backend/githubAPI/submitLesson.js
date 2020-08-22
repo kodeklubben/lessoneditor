@@ -29,7 +29,7 @@ module.exports = async (token, lessonData) => {
         if (buffer !== null) {
           files.push({
             path: `${lessonPath}/${markdownImageUrls[i].name}`,
-            buffer,
+            buffer: buffer,
           });
         }
       }
@@ -39,27 +39,6 @@ module.exports = async (token, lessonData) => {
       });
     }
   }
-  /*const files = [
-    {
-      path: `${lessonPath}/lesson.yml`,
-      buffer: Buffer.from(yaml.safeDump(lessonData.yml, { flowLevel: 2 })),
-    },
-  ];*/
-  /*const markdownContent = resolveMarkdownImageUrls(lessonData.markdown);
-  const markdownImageUrls = getMarkdownUrls(lessonData.markdown);*/
-  /*for (let i in markdownImageUrls) {
-    const buffer = await downloadImage(markdownImageUrls[i].url);
-    if (buffer !== null) {
-      files.push({
-        path: `${lessonPath}/${markdownImageUrls[i].name}`,
-        buffer: await downloadImage(markdownImageUrls[i].url),
-      });
-    }
-  }*/
-  /*files.push({
-    path: `${lessonPath}/${lessonData.title}_${lessonData.language}.md`,
-    buffer: Buffer.from(markdownContent),
-  });*/
   const forkResponse = await createFork(token);
   const owner = forkResponse.data.owner.login;
   const repo = forkResponse.data.name;

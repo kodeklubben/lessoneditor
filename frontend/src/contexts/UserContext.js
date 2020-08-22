@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import paths from "../paths.json";
-import resolveUrlTemplate from "../utils/resolve-url-template";
 import createLesson from "../api/create-lesson";
 
 export const UserContext = React.createContext({});
@@ -33,12 +32,6 @@ export const UserContextProvider = (props) => {
     );
   };
 
-  // Feilplassert
-  const listLesson = async (lessonId) => {
-    const url = resolveUrlTemplate(paths.LESSON_FILES, { lessonId });
-    return await axios.get(url);
-  };
-
   const saveLessons = async (updatedLessons) => {
     await axios.post(paths.USER_LESSONS, updatedLessons);
     setLessons(updatedLessons);
@@ -60,7 +53,6 @@ export const UserContextProvider = (props) => {
       await saveLessons(lessons);
       return lessonId;
     },
-    listLesson,
     removeLesson: async (lessonId) => {
       const existing = getLesson(lessonId);
       if (existing) {

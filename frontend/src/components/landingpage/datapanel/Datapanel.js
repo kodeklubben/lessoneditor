@@ -1,16 +1,20 @@
 import "./datapanel.scss";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { YML_TEXT } from "../settingsFiles/languages/landingpage_NO";
 import { TagsGrade, TagsSubject, TagsTopic } from "./Tags";
 import CheckboxField from "./CheckboxField";
 import Levels from "./Levels";
 import License from "./License";
+import { LessonContext } from "contexts/LessonContext";
 
 const Datapanel = () => {
-  const [open, setOpen] = useState(false);
+  // const [open, setOpen] = useState(false);
   const [level, setLevel] = useState(1);
   const [license, setLicense] = useState("CC BY-SA 4.0");
   const [tags, setTags] = useState({ topic: [], subject: [], grade: [] });
+
+  const context = useContext(LessonContext);
+  const { data, setData } = context;
 
   const checkboxHandler = (event) => {
     let name = event.target.name;
@@ -23,9 +27,17 @@ const Datapanel = () => {
       i[name].push(value);
     }
     setTags((prevState) => ({ ...prevState, i }));
+    setData((prevState) => ({
+      ...prevState,
+      ymlData: {
+        ...prevState.ymlData,
+        topic: i.topic,
+        subject: i.subject,
+        grade: i.grade,
+      },
+    }));
+    console.log(data);
   };
-
-  console.log(`level : ${level}, license : ${license}`);
 
   const changeHandler = (event, { value, name }) => {
     switch (name) {
@@ -38,45 +50,50 @@ const Datapanel = () => {
       default:
         break;
     }
+    setData((prevState) => ({
+      ...prevState,
+      ymlData: { ...prevState.ymlData, [name]: value },
+    }));
+    console.log(data);
   };
 
   return (
     <>
-      <div style={{ padding: "1em 0 0 1em", display: "flex" }}>
-        <div style={{ display: "flex" }} onClick={() => setOpen(!open)}>
+      <div>
+        {/* <div onClick={() => setOpen(!open)}>
           <i style={{ cursor: "pointer" }} className="big grey cog icon"></i>
         </div>
-        {open ? (
-          <div className="datapanel_BG">
-            <div style={{ display: "flex" }} className="datapanel_container">
-              <i
-                onClick={() => setOpen(!open)}
-                id="test"
-                className="big grey x icon landingpage"
-              />
-              <div>
-                <CheckboxField
-                  test1={YML_TEXT.topic}
-                  test2={<TagsTopic checkboxHandler={checkboxHandler} />}
-                />
-                <CheckboxField
-                  test1={YML_TEXT.grade}
-                  test2={<TagsGrade checkboxHandler={checkboxHandler} />}
-                />
-              </div>
-              <div>
-                <CheckboxField
-                  test1={YML_TEXT.subject}
-                  test2={<TagsSubject checkboxHandler={checkboxHandler} />}
-                />
-                <Levels level={level} changeHandler={changeHandler} />
-                <License license={license} changeHandler={changeHandler} />
-              </div>
+        {open ? ( */}
+        <div className="datapanel_container">
+          {/* <i
+            onClick={() => setOpen(!open)}
+            className="big grey x icon landingpage"
+          /> */}
+          <div>
+            <CheckboxField
+              labelTitle={YML_TEXT.topic}
+              content={<TagsTopic checkboxHandler={checkboxHandler} />}
+            />
+            <CheckboxField
+              labelTitle={YML_TEXT.grade}
+              content={<TagsGrade checkboxHandler={checkboxHandler} />}
+            />
+          </div>
+          <div>
+            <CheckboxField
+              labelTitle={YML_TEXT.subject}
+              content={<TagsSubject checkboxHandler={checkboxHandler} />}
+            />
+            <div>
+              <Levels level={level} changeHandler={changeHandler} />
+              <License license={license} changeHandler={changeHandler} />
             </div>
           </div>
-        ) : (
+          <div></div>
+        </div>
+        {/* ) : (
           ""
-        )}
+        )} */}
       </div>
     </>
   );

@@ -1,5 +1,5 @@
 import "./buttonpanel.scss";
-import React from "react";
+import React, { useContext } from "react";
 import Emphasis from "./Emphasis";
 import UndoRedo from "./UndoRedo";
 import Image from "./Image";
@@ -12,6 +12,7 @@ import EditorDatapanel from "../datapanel/EditorDatapanel";
 import saveMdText from "../../../api/save-md-text";
 import { useHistory } from "react-router-dom";
 import { useParams } from "react-router";
+import { LessonContext } from "contexts/LessonContext";
 
 const ButtonPanel = ({
   editorRef,
@@ -33,15 +34,37 @@ const ButtonPanel = ({
   setUndoCursorPosition,
   setRedoCursorPosition,
   setListButtonValues,
-  course,
-  title,
-  setTitle,
 }) => {
   const history = useHistory();
   const { lessonId, file } = useParams();
+  const context = useContext(LessonContext);
+  const { data, language, headerData } = context;
+  const course = data.course;
+
+  let header;
+
+  if (headerData[language] && Object.keys(headerData[language]).length !== 0) {
+    header = `---
+title: ${headerData[language].title ? headerData[language].title : `test`}
+author: ${
+      headerData[language].authorList ? headerData[language].authorList : ""
+    }
+${
+  headerData[language].translatorList
+    ? `translator: ${headerData[language].translatorList}`
+    : ``
+}
+language: ${language ? language : ""}
+---
+`;
+  }
+
+  let newMdText = header !== undefined ? header + "\n\n\n" + mdText : mdText;
+
   const navigateToHome = async () => {
-    await saveMdText(lessonId, file, mdText, true);
-    history.push("/");
+    await saveMdText(lessonId, file, newMdText, true);
+    const target = ["/landingpage", lessonId].join("/");
+    history.push(target);
   };
 
   return (
@@ -85,7 +108,6 @@ const ButtonPanel = ({
           setListButtonValues={setListButtonValues}
           setButtonValues={setButtonValues}
         />
-
         <div style={{ display: "inline", marginLeft: "auto" }}>
           <button
             className="ui button"
@@ -94,7 +116,7 @@ const ButtonPanel = ({
           >
             <i className="arrow right icon" />
           </button>
-          <EditorDatapanel title={title} setTitle={setTitle} />
+          <EditorDatapanel headerData={headerData} />
         </div>
       </div>
 
@@ -122,7 +144,6 @@ const ButtonPanel = ({
             setCursorPosition={setCursorPosition}
             setCursor={setCursor}
             setButtonValues={setButtonValues}
-            course={course}
           />
         </span>
       </div>
