@@ -6,7 +6,11 @@ const CheckboxField = ({ labelTitle, content }) => {
       <label>
         <h3>{labelTitle}</h3>
       </label>
-      <div>{content}</div>
+      <div className="ui segment">
+        <div className="ui grid">
+          <div className="stackable two columnd row">{content}</div>
+        </div>
+      </div>
     </>
   );
 };

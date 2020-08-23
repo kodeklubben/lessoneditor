@@ -57,11 +57,7 @@ const EditorDatapanel = () => {
 
   return (
     <>
-      <button
-        style={{ marginLeft: "auto", float: "right" }}
-        className="ui button"
-        onClick={() => setOpen(!open)}
-      >
+      <button className="ui button" onClick={() => setOpen(!open)}>
         <i style={{ cursor: "pointer" }} className="grey cog icon"></i>
       </button>
 
@@ -70,7 +66,7 @@ const EditorDatapanel = () => {
           style={open ? { display: "flex" } : { display: "none" }}
           className="editorDatapanel_BG"
         >
-          <div style={{ padding: "5em" }} className="editorDatapanel_container">
+          <div className="editorDatapanel_container">
             <i
               onClick={() => setOpen(!open)}
               className="big grey x icon editor"

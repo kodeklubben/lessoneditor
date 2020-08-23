@@ -3,12 +3,13 @@ import React, { useContext } from "react";
 import Emphasis from "./Emphasis";
 import UndoRedo from "./UndoRedo";
 import Image from "./Image";
+import Languages from "./Languages";
 import Lists from "./Lists";
 import Sections from "./Sections";
 import CodeButton from "./CodeButton";
 import MicrobitButtons from "./MicrobitButtons";
 import SratchButtons from "./ScratchButtons";
-import EditorDatapanel from "../datapanel/EditorDatapanel";
+import EditorDatapanel from "./datapanel/EditorDatapanel";
 import saveMdText from "../../../api/save-md-text";
 import { useHistory } from "react-router-dom";
 import { useParams } from "react-router";
@@ -68,7 +69,7 @@ language: ${language ? language : ""}
   };
 
   return (
-    <div className="buttonpanel">
+    <div className="buttonpanel" style={{ paddingBottom: "0.25em" }}>
       <div style={{ display: "inline" }}>
         <Emphasis
           editorRef={editorRef}
@@ -108,15 +109,17 @@ language: ${language ? language : ""}
           setListButtonValues={setListButtonValues}
           setButtonValues={setButtonValues}
         />
-        <div style={{ display: "inline", marginLeft: "auto" }}>
+
+        <div style={{ display: "flex", float: "right" }}>
+          <Languages mdText={mdText} />
+          <EditorDatapanel headerData={headerData} />
           <button
-            className="ui button"
+            className={`ui ${mdText.length < 1 ? `disabled` : ``} button`}
             id="next"
             onClick={() => navigateToHome()}
           >
             <i className="arrow right icon" />
           </button>
-          <EditorDatapanel headerData={headerData} />
         </div>
       </div>
 
@@ -147,41 +150,42 @@ language: ${language ? language : ""}
           />
         </span>
       </div>
-
-      {course === "microbit" ? (
-        <>
-          <MicrobitButtons
-            editorRef={editorRef}
-            mdText={mdText}
-            buttonValues={buttonValues}
-            cursorPositionStart={cursorPositionStart}
-            cursorPositionEnd={cursorPositionEnd}
-            setMdText={setMdText}
-            setCursorPosition={setCursorPosition}
-            setCursor={setCursor}
-            setButtonValues={setButtonValues}
-          />
-        </>
-      ) : (
-        ""
-      )}
-      {course === "scratch" ? (
-        <>
-          <SratchButtons
-            editorRef={editorRef}
-            mdText={mdText}
-            buttonValues={buttonValues}
-            cursorPositionStart={cursorPositionStart}
-            cursorPositionEnd={cursorPositionEnd}
-            setMdText={setMdText}
-            setCursorPosition={setCursorPosition}
-            setCursor={setCursor}
-            setButtonValues={setButtonValues}
-          />
-        </>
-      ) : (
-        ""
-      )}
+      <div>
+        {course === "microbit" ? (
+          <>
+            <MicrobitButtons
+              editorRef={editorRef}
+              mdText={mdText}
+              buttonValues={buttonValues}
+              cursorPositionStart={cursorPositionStart}
+              cursorPositionEnd={cursorPositionEnd}
+              setMdText={setMdText}
+              setCursorPosition={setCursorPosition}
+              setCursor={setCursor}
+              setButtonValues={setButtonValues}
+            />
+          </>
+        ) : (
+          ""
+        )}
+        {course === "scratch" ? (
+          <>
+            <SratchButtons
+              editorRef={editorRef}
+              mdText={mdText}
+              buttonValues={buttonValues}
+              cursorPositionStart={cursorPositionStart}
+              cursorPositionEnd={cursorPositionEnd}
+              setMdText={setMdText}
+              setCursorPosition={setCursorPosition}
+              setCursor={setCursor}
+              setButtonValues={setButtonValues}
+            />
+          </>
+        ) : (
+          ""
+        )}
+      </div>
     </div>
   );
 };

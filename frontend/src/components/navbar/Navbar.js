@@ -1,7 +1,7 @@
 import "./navbar.scss";
 import React, { useContext } from "react";
-import Languages from "./Languages";
-import ProfileMenu from "components/ProfileMenu";
+
+import ProfileMenu from "components/navbar/ProfileMenu";
 import { UserContext } from "contexts/UserContext";
 
 const Navbar = () => {
@@ -17,7 +17,6 @@ const Navbar = () => {
         </div>
 
         <div className="navbar_profile">
-          <Languages />
           <ProfileMenu
             name={userContext.user ? userContext.user.name : ""}
             email={userContext.user ? userContext.user.email : ""}

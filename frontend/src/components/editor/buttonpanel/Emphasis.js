@@ -178,17 +178,20 @@ const Emphasis = ({
   };
   return (
     <>
-      {Object.entries(config).map((element, index) => (
-        <CPButton
-          buttonValues={buttonValues}
-          key={"element" + index}
-          buttonTitle={element[1].buttonTitle}
-          icon={element[1].icon}
-          title={element[1].title}
-          onButtonClick={handleButtonClick}
-          shortcutKey={element[1].shortcut}
-        />
-      ))}
+      {Object.entries(config).map((element, index) => {
+        // console.log(element);
+        return (
+          <CPButton
+            buttonValues={buttonValues}
+            key={"element" + index}
+            buttonTitle={element[1].buttonTitle}
+            icon={element[1].icon}
+            title={element[1].title}
+            onButtonClick={handleButtonClick}
+            shortcutKey={element[1].shortcut}
+          />
+        );
+      })}
     </>
   );
 };

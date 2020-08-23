@@ -1,5 +1,9 @@
 export const extractDataFromHeader = (tekst) => {
-  if (!tekst || tekst.slice(0, 3) !== "---") {
+  if (
+    !tekst ||
+    typeof tekst === "object" ||
+    (tekst.slice(0, 3) !== "---" && tekst.length > 3)
+  ) {
     return false;
   }
 
