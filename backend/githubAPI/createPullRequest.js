@@ -15,7 +15,7 @@ module.exports = async (token, username, title, branch, body) => {
   } catch (e) {
     if (e.status === 422) {
       console.log("Pull request already exists.");
-      return null;
+      return e;
     } else {
       throw e;
     }

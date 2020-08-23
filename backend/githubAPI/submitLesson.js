@@ -55,7 +55,7 @@ module.exports = async (token, lessonData) => {
       files[i].buffer
     );
   }
-  await createPullRequest(
+  return await createPullRequest(
     token,
     owner,
     lessonData.meta.title,
