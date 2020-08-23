@@ -17,6 +17,7 @@ module.exports = (app) => {
       ]);
       if (result) {
         const lessons = JSON.parse(result);
+        console.log(lessons);
         lessons.forEach(
           (lesson) =>
             (lesson.thumb = resolveUrlTemplate(paths.DISPLAY_FILE, {
