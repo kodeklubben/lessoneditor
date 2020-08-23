@@ -14,9 +14,10 @@ const Datapanel = () => {
   const [tags, setTags] = useState({ topic: [], subject: [], grade: [] });
 
   const context = useContext(LessonContext);
-  const { data, setData } = context;
+  const { data, setData, saveLesson } = context;
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
+    await saveLesson(data);
     setOpen(false);
   };
 

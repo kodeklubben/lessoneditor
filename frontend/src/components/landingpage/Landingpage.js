@@ -6,32 +6,34 @@ import Datapanel from "./datapanel/Datapanel";
 import { LessonContext } from "contexts/LessonContext";
 import submitLesson from "api/submit-lesson";
 
-// const languageOptions = [
-//   {
-//     key: 1,
-//     text: "Bokmål",
-//     value: "nb",
-//     image: { avatar: true, src: "/languagesFlag/flag_nb.svg" },
-//   },
-//   {
-//     key: 2,
-//     text: "Nynorsk",
-//     value: "nn",
-//     image: { avatar: true, src: "/languagesFlag/flag_nn.svg" },
-//   },
-//   {
-//     key: 3,
-//     text: "Engelsk",
-//     value: "en",
-//     image: { avatar: true, src: "/languagesFlag/flag_en.svg" },
-//   },
-//   {
-//     key: 4,
-//     text: "Islandsk",
-//     value: "is",
-//     image: { avatar: true, src: "/languagesFlag/flag_is.svg" },
-//   },
-// ];
+const languageOptions = [
+  {
+    key: 1,
+    text: "Bokmål",
+    value: "nb",
+    image: { avatar: true, src: "/languagesFlag/flag_nb.svg" },
+  },
+  {
+    key: 2,
+    text: "Nynorsk",
+    value: "nn",
+    image: { avatar: true, src: "/languagesFlag/flag_nn.svg" },
+  },
+  {
+    key: 3,
+    text: "Engelsk",
+    value: "en",
+    image: { avatar: true, src: "/languagesFlag/flag_en.svg" },
+  },
+  {
+    key: 4,
+    text: "Islandsk",
+    value: "is",
+    image: { avatar: true, src: "/languagesFlag/flag_is.svg" },
+  },
+];
+
+let languages = [];
 
 const Landingpage = () => {
   const history = useHistory();
@@ -63,6 +65,22 @@ const Landingpage = () => {
       {Object.keys(lessonList).length !== 0 && lessonList.constructor !== Object
         ? lessonList.map((listItem, index) => {
             if (listItem.filename.slice(-3) === ".md") {
+              switch (listItem.filename.slice(-5, -3)) {
+                case "en":
+                  languages.push("en");
+                  break;
+                case "nn":
+                  languages.push("nn");
+                  break;
+                case "is":
+                  languages.push("is");
+                  break;
+                default:
+                  languages.push("nb");
+                  break;
+              }
+              console.log(languages);
+
               return (
                 <div key={listItem + index} className="column">
                   <div className="ui fluid card">
