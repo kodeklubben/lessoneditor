@@ -86,8 +86,10 @@ const Editor = () => {
         data
           ? setHeaderData((prevData) => ({ ...prevData, [language]: data }))
           : console.log("no headerdata");
-        setMdText(lessonText.slice(data.indexLessonStart).trim());
-        setUndo([lessonText.slice(data.indexLessonStart).trim()]);
+        if (typeof lessonText !== "object" && lessonText.length > 3) {
+          setMdText(lessonText.slice(data.indexLessonStart).trim());
+          setUndo([lessonText.slice(data.indexLessonStart).trim()]);
+        }
       }
       fetchData();
     }

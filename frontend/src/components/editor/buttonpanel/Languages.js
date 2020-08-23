@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { useParams, useHistory } from "react-router";
 import { LessonContext } from "contexts/LessonContext";
 import { Dropdown } from "semantic-ui-react";
+import saveMdText from "../../../api/save-md-text";
 
 const languageOptions = [
   {
@@ -30,7 +31,7 @@ const languageOptions = [
   },
 ];
 
-const Languages = () => {
+const Languages = (mdText) => {
   const history = useHistory();
   const { lessonId, file } = useParams();
   const lessonContext = useContext(LessonContext);
@@ -38,11 +39,11 @@ const Languages = () => {
 
   const defaultValue = (file) => {
     let returnvalue;
-    if (file.slice(-2) === "nn") {
+    if (file.slice(-3) === "_nn") {
       returnvalue = "nn";
-    } else if (file.slice(-2) === "en") {
+    } else if (file.slice(-3) === "_en") {
       returnvalue = "en";
-    } else if (file.slice(-2) === "is") {
+    } else if (file.slice(-3) === "_is") {
       returnvalue = "is";
     } else {
       returnvalue = "nb";
@@ -60,16 +61,14 @@ const Languages = () => {
     } else if (lessonId && file) {
       target = ["/editor", lessonId, await data.lesson].join("/");
     }
+    await saveMdText(lessonId, file, mdText);
     history.push(target);
   };
   return (
-    <div>
+    <>
       <Dropdown
         style={{
           width: "13em",
-          position: "relative",
-          top: "-0.7em",
-          left: "-2em",
         }}
         placeholder="Velg Språk"
         name="language"
@@ -79,7 +78,7 @@ const Languages = () => {
         onChange={handleChange}
         options={languageOptions}
       />
-    </div>
+    </>
   );
 };
 

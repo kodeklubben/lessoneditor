@@ -5,7 +5,7 @@
 }
 
 .editorDatapanel_BG {
-  z-index: 2;
+  z-index: 1;
   position: absolute;
   background-color: rgba(255, 255, 255, 0.74);
   top: -8%;
@@ -15,7 +15,7 @@
 }
 .editorDatapanel_container {
   display: block;
-  z-index: 3;
+  z-index: 2;
   left: 15%;
   top: 16%;
   position: absolute;

@@ -8,13 +8,17 @@ import License from "./License";
 import { LessonContext } from "contexts/LessonContext";
 
 const Datapanel = () => {
-  // const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false);
   const [level, setLevel] = useState(1);
   const [license, setLicense] = useState("CC BY-SA 4.0");
   const [tags, setTags] = useState({ topic: [], subject: [], grade: [] });
 
   const context = useContext(LessonContext);
   const { data, setData } = context;
+
+  const onSubmit = () => {
+    setOpen(false);
+  };
 
   const checkboxHandler = (event) => {
     let name = event.target.name;
@@ -29,8 +33,8 @@ const Datapanel = () => {
     setTags((prevState) => ({ ...prevState, i }));
     setData((prevState) => ({
       ...prevState,
-      ymlData: {
-        ...prevState.ymlData,
+      yml: {
+        ...prevState.yml,
         topic: i.topic,
         subject: i.subject,
         grade: i.grade,
@@ -52,49 +56,68 @@ const Datapanel = () => {
     }
     setData((prevState) => ({
       ...prevState,
-      ymlData: { ...prevState.ymlData, [name]: value },
+      yml: { ...prevState.yml, [name]: value },
     }));
     console.log(data);
   };
 
   return (
     <>
-      <div>
-        {/* <div onClick={() => setOpen(!open)}>
-          <i style={{ cursor: "pointer" }} className="big grey cog icon"></i>
-        </div>
-        {open ? ( */}
-        <div className="datapanel_container">
-          {/* <i
-            onClick={() => setOpen(!open)}
-            className="big grey x icon landingpage"
-          /> */}
-          <div>
-            <CheckboxField
-              labelTitle={YML_TEXT.topic}
-              content={<TagsTopic checkboxHandler={checkboxHandler} />}
+      <button
+        style={{ backgroundColor: "rgb(0,0,0,0)" }}
+        className="ui button"
+        onClick={() => setOpen(!open)}
+      >
+        <i
+          style={{ cursor: "pointer" }}
+          className="big grey cog icon landingpage"
+        ></i>
+      </button>
+      {open ? (
+        <div
+          style={open ? { display: "flex" } : { display: "none" }}
+          className="datapanel_BG"
+        >
+          <div className="datapanel_container">
+            <i
+              onClick={() => setOpen(!open)}
+              className="big grey x icon landingpage"
             />
-            <CheckboxField
-              labelTitle={YML_TEXT.grade}
-              content={<TagsGrade checkboxHandler={checkboxHandler} />}
-            />
-          </div>
-          <div>
-            <CheckboxField
-              labelTitle={YML_TEXT.subject}
-              content={<TagsSubject checkboxHandler={checkboxHandler} />}
-            />
-            <div>
-              <Levels level={level} changeHandler={changeHandler} />
-              <License license={license} changeHandler={changeHandler} />
+            <div className="ui form datapanel">
+              <div id="bigScreen" className="two fields">
+                <div className="field">
+                  <CheckboxField
+                    labelTitle={YML_TEXT.topic}
+                    content={<TagsTopic checkboxHandler={checkboxHandler} />}
+                  />
+                  <CheckboxField
+                    labelTitle={YML_TEXT.grade}
+                    content={<TagsGrade checkboxHandler={checkboxHandler} />}
+                  />
+                </div>
+                <div className="field">
+                  <CheckboxField
+                    labelTitle={YML_TEXT.subject}
+                    content={<TagsSubject checkboxHandler={checkboxHandler} />}
+                  />
+                  <div>
+                    <Levels level={level} changeHandler={changeHandler} />
+                    <License license={license} changeHandler={changeHandler} />
+                  </div>
+                </div>
+              </div>
+              <button className="ui button" onClick={onSubmit}>
+                OK
+              </button>
+              <button className="ui button" onClick={() => setOpen(!open)}>
+                Avbryt
+              </button>
             </div>
           </div>
-          <div></div>
         </div>
-        {/* ) : (
-          ""
-        )} */}
-      </div>
+      ) : (
+        ""
+      )}
     </>
   );
 };
