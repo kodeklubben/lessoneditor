@@ -32,7 +32,7 @@ const Overview = () => {
             width: "90%",
             margin: "auto",
             marginTop: "60px",
-            marginBottom: "500px",
+            marginBottom: "50px",
             height: "2px",
           }}
           className="ui horizontal divider"
