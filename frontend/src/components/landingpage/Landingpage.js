@@ -62,32 +62,34 @@ const Landingpage = () => {
 
       {Object.keys(lessonList).length !== 0 && lessonList.constructor !== Object
         ? lessonList.map((listItem, index) => {
-            // if (listItem.filename.slice(-3) === ".md") {
-            return (
-              <div key={listItem + index} className="column">
-                <div className="ui fluid card">
-                  {/* <div className="image itemListImage">
+            if (listItem.filename.slice(-3) === ".md") {
+              return (
+                <div key={listItem + index} className="column">
+                  <div className="ui fluid card">
+                    {/* <div className="image itemListImage">
                     <img src={listitem.thumb} alt={"oppgavebilde"} />
                   </div> */}
-                  <div className="content">
-                    <div className="header">{listItem.filename}</div>
-                    {/* <div className="meta">
+                    <div className="content">
+                      <div className="header">
+                        {listItem.filename.slice(0, -3)}
+                      </div>
+                      {/* <div className="meta">
                       <h4>{listitem.course}</h4>
                     </div> */}
-                  </div>
-                  <div className="extra content">
-                    <button
-                      className="ui button"
-                      onClick={() =>
-                        navigateToEditor(
-                          lessonId,
-                          listItem.filename.slice(0, -3)
-                        )
-                      }
-                    >
-                      Åpne
-                    </button>
-                    {/* <button
+                    </div>
+                    <div className="extra content">
+                      <button
+                        className="ui button"
+                        onClick={() =>
+                          navigateToEditor(
+                            lessonId,
+                            listItem.filename.slice(0, -3)
+                          )
+                        }
+                      >
+                        Åpne
+                      </button>
+                      {/* <button
                       className="ui button"
                       onClick={async () => {
                         await removeLesson(listitem.lessonId);
@@ -95,16 +97,13 @@ const Landingpage = () => {
                     >
                       Fjerne
                     </button> */}
+                    </div>
                   </div>
                 </div>
-                <button className="ui button" onClick={onSubmit}>
-                  Submit
-                </button>
-              </div>
-            );
-            // } else {
-            //   return "";
-            // }
+              );
+            } else {
+              return "";
+            }
           })
         : ""}
       <button className="ui button" onClick={onSubmit}>
