@@ -7,7 +7,7 @@ const NewLessonButton = ({ setShowPopup }) => {
       <div className="content">
         <div className="new-lesson-button" onClick={setShowPopup}>
           {" "}
-          <img id="plusSign" src={"/plusSign.png"} />
+          <img id="plusSign" alt="plusSign" src={"/plusSign.png"} />
           Ny oppgave
         </div>
       </div>
