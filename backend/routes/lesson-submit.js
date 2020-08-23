@@ -8,9 +8,17 @@ module.exports = (app) => {
       const { lessonId } = req.params;
       const lessonData = await getLessonData(lessonId);
       if (lessonData) {
-        const submitRes = submit(req.user.token, lessonData);
-        if (submitRes) {
-          res.send("OK");
+        const submitRes = await submit(req.user.token, lessonData);
+        if (submitRes.status === 201) {
+          res.status(201).send({
+            message: "Pull Request Created",
+            pullRequestURL: submitRes.data.html_url,
+          });
+        } else if (submitRes.status === 422) {
+          res.status(200).send({
+            message: "Pull Request exists, updated files",
+            pullRequestUrl: `https://github.com/${process.env.GITHUB_LESSON_REPO_OWNER}/${process.env.GITHUB_LESSON_REPO}/pulls`,
+          });
         }
       }
       res.status(500).send("Error");
