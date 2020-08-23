@@ -5,7 +5,7 @@ const createNewLesson = require("../utils/create-lesson-data");
 
 module.exports = (app) => {
   app.post(paths.LESSON, async (req, res) => {
-    const data = await createNewLesson(req.body, req.user.username, false);
+    const data = await createNewLesson(req.body, req.user.username);
     await thumbRefresh(baseUrl(req), data.lessonId, data.lesson);
     res.send(data);
   });

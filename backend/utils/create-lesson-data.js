@@ -4,7 +4,7 @@ const nanoid = require("nanoid").customAlphabet(
   7
 );
 
-module.exports = async (lessonData, username, edit) => {
+module.exports = async (lessonData, username, edit = false) => {
   const data = Object.assign({}, lessonData);
   data.lessonId = nanoid();
   data.created = new Date().toISOString();

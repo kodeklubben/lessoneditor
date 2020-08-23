@@ -33,7 +33,8 @@ module.exports = (app) => {
             course: course,
             lesson: lesson,
           },
-          req.user.username
+          req.user.username,
+          true
         );
         for (const i in files.data) {
           if (files.data[i].name.match(imgRegex)) {

@@ -1,15 +1,20 @@
 const loadFile = require("./load-file");
 const saveFile = require("./save-file");
 
-module.exports = async (data, username) => {
-  const lessons = await loadFile(["users", username, "lessons.json"]);
-  if (lessons) {
-    let newLessons = JSON.parse(lessons);
-    newLessons.push(data);
-    const buffer = Buffer.from(JSON.stringify(newLessons));
-    await saveFile(["users", username, "lessons.json"], buffer);
+module.exports = async (data, username, edit = false) => {
+  let buffer;
+  if (edit) {
+    const lessons = await loadFile(["users", username, "lessons.json"]);
+    let newLessons = [];
+    if (lessons) {
+      newLessons = JSON.parse(lessons);
+      newLessons.push(data);
+    } else {
+      newLessons.push(data);
+    }
+    buffer = Buffer.from(JSON.stringify(newLessons));
   } else {
-    const buffer = Buffer.from(JSON.stringify(data));
-    await saveFile(["users", username, "lessons.json"], buffer);
+    buffer = Buffer.from(JSON.stringify(data));
   }
+  await saveFile(["users", username, "lessons.json"], buffer);
 };

@@ -1,5 +1,4 @@
 const paths = require("../paths");
-const saveFile = require("../utils/save-file");
 const loadFile = require("../utils/load-file");
 const upsertUserLessons = require("../utils/upsert-user-lessons");
 const resolveUrlTemplate = require("../utils/resolve-url-template");
