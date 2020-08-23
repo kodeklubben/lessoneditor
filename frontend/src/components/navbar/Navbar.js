@@ -6,7 +6,7 @@ import { UserContext } from "contexts/UserContext";
 import NewLessonButton from "../frontpage/newLessonButton";
 import NewLesson from "../frontpage/NewLesson";
 
-const Navbar = ({ course }) => {
+const Navbar = () => {
   const userContext = useContext(UserContext);
   const [showPopup, setShowPopup] = useState(false);
 

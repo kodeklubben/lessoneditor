@@ -1,12 +1,14 @@
 import "./editordatapane.scss";
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import MultiInput from "./MultiInput";
 import { FORM_TEXT } from "./settings/landingpage_NO.js";
+import { LessonContext } from "contexts/LessonContext";
 
-const EditorDatapanel = ({ title, setTitle }) => {
+const EditorDatapanel = () => {
   const [open, setOpen] = useState(false);
   const [state, setState] = useState({
-    err: "",
+    title: "",
+    titleErr: "",
     author: "",
     authorList: [],
     authorErr: "",
@@ -14,16 +16,31 @@ const EditorDatapanel = ({ title, setTitle }) => {
     translatorList: [],
   });
 
+  const context = useContext(LessonContext);
+  const { language, headerData, setHeaderData } = context;
+
+  useEffect(() => {
+    if (Object.keys(headerData).length !== 0) {
+      setState((prevState) => ({
+        ...prevState,
+        title: headerData[language].title,
+        authorList: headerData[language].authorList,
+      }));
+      if (headerData[language] && headerData[language].translatorList) {
+        setState((prevState) => ({
+          ...prevState,
+          translatorList: headerData[language].translatorList,
+        }));
+      }
+    }
+  }, [headerData, language]);
+
   const changeHandler = (event) => {
     let nam = event.target.name;
     let val = event.target.value;
-    if (nam === "title") {
-      setTitle(val);
-    } else {
-      setState((prevState) => ({ ...prevState, [nam]: val }));
-      if (state.author) setState((prevState) => ({ ...prevState, err: "" }));
-      if (title) setState((prevState) => ({ ...prevState, err: "" }));
-    }
+    setState((prevState) => ({ ...prevState, [nam]: val }));
+    if (state.author) setState((prevState) => ({ ...prevState, err: "" }));
+    if (state.title) setState((prevState) => ({ ...prevState, err: "" }));
   };
 
   const multiInputHandler = (object, field) => {
@@ -31,6 +48,11 @@ const EditorDatapanel = ({ title, setTitle }) => {
     let value = Object.values(object)[0];
     setState((prevState) => ({ ...prevState, [key]: value }));
     setState((prevState) => ({ ...prevState, [field]: "" }));
+  };
+
+  const onSubmit = () => {
+    setHeaderData((prevState) => ({ ...prevState, [language]: state }));
+    setOpen(false);
   };
 
   return (
@@ -66,7 +88,7 @@ const EditorDatapanel = ({ title, setTitle }) => {
                 type="text"
                 name="title"
                 placeholder={FORM_TEXT.TITLE.placeholder}
-                value={title}
+                value={state.title}
                 onChange={changeHandler}
               />
 
@@ -93,7 +115,9 @@ const EditorDatapanel = ({ title, setTitle }) => {
               inputValue={state.translator}
               placeholder={FORM_TEXT.TRANSLATOR.placeholder}
             />
-            <button className="ui button">OK</button>
+            <button className="ui button" onClick={onSubmit}>
+              OK
+            </button>
             <button className="ui button" onClick={() => setOpen(!open)}>
               Avbryt
             </button>

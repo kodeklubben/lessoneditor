@@ -9,15 +9,13 @@ import ButtonPanel from "./buttonpanel/ButtonPanel";
 import ImageUpload from "./ImageUpload";
 import fetchMdText from "../../api/fetch-md-text";
 import { LessonContext } from "contexts/LessonContext";
+import { extractDataFromHeader } from "./utils/extractDataFromHeader";
 
 const Editor = () => {
   const { lessonId, file } = useParams();
-
   const context = useContext(LessonContext);
-  const { data } = context;
-  let course = data ? data.course : "";
+  const { language, data, headerData, setHeaderData } = context;
 
-  const [renderContent, setRenderContent] = useState(false);
   const [mdText, setMdText] = useState("");
   const [buttonValues, setButtonValues] = useState({});
   const [cursorPositionStart, setCursorPositionStart] = useState(0);
@@ -26,6 +24,7 @@ const Editor = () => {
   const [redo, setRedo] = useState([]);
   const [undoCursorPosition, setUndoCursorPosition] = useState([]);
   const [redoCursorPosition, setRedoCursorPosition] = useState([]);
+  const [renderContent, setRenderContent] = useState(false);
   const [listButtonValues, setListButtonValues] = useState({
     bTitle: "",
     output: "",
@@ -83,12 +82,16 @@ const Editor = () => {
     if (lessonId && file) {
       async function fetchData() {
         let lessonText = await fetchMdText(lessonId, file);
-        setMdText(lessonText);
-        setUndo([lessonText]);
+        let data = extractDataFromHeader(lessonText);
+        data
+          ? setHeaderData((prevData) => ({ ...prevData, [language]: data }))
+          : console.log("no headerdata");
+        setMdText(lessonText.slice(data.indexLessonStart).trim());
+        setUndo([lessonText.slice(data.indexLessonStart).trim()]);
       }
       fetchData();
     }
-  }, [lessonId, file]);
+  }, [lessonId, file, headerData, setHeaderData, language]);
 
   return (
     <div className="editor">
@@ -104,7 +107,7 @@ const Editor = () => {
         setCursorPositionEnd={setCursorPositionEnd}
         setCursorPosition={setCursorPosition}
       />
-      <Navbar course={course} />
+      <Navbar />
       <ButtonPanel
         editorRef={editorRef}
         uploadImageRef={uploadImageRef}
@@ -125,7 +128,6 @@ const Editor = () => {
         setUndoCursorPosition={setUndoCursorPosition}
         setRedoCursorPosition={setRedoCursorPosition}
         setListButtonValues={setListButtonValues}
-        course={course}
       />
       <div className="textEditorContainer">
         <MDTextArea
@@ -143,8 +145,9 @@ const Editor = () => {
         />
         <MDPreview
           mdText={mdText}
-          course={course}
           renderContent={renderContent}
+          course={data.course ? data.course : ""}
+          language={language ? language : ""}
         />
       </div>
       <Autosave mdText={mdText} setRenderContent={setRenderContent} />

@@ -1,16 +1,20 @@
 import "./datapanel.scss";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { YML_TEXT } from "../settingsFiles/languages/landingpage_NO";
 import { TagsGrade, TagsSubject, TagsTopic } from "./Tags";
 import CheckboxField from "./CheckboxField";
 import Levels from "./Levels";
 import License from "./License";
+import { LessonContext } from "contexts/LessonContext";
 
 const Datapanel = () => {
   // const [open, setOpen] = useState(false);
   const [level, setLevel] = useState(1);
   const [license, setLicense] = useState("CC BY-SA 4.0");
   const [tags, setTags] = useState({ topic: [], subject: [], grade: [] });
+
+  const context = useContext(LessonContext);
+  const { data, setData } = context;
 
   const checkboxHandler = (event) => {
     let name = event.target.name;
@@ -23,6 +27,16 @@ const Datapanel = () => {
       i[name].push(value);
     }
     setTags((prevState) => ({ ...prevState, i }));
+    setData((prevState) => ({
+      ...prevState,
+      ymlData: {
+        ...prevState.ymlData,
+        topic: i.topic,
+        subject: i.subject,
+        grade: i.grade,
+      },
+    }));
+    console.log(data);
   };
 
   const changeHandler = (event, { value, name }) => {
@@ -36,6 +50,11 @@ const Datapanel = () => {
       default:
         break;
     }
+    setData((prevState) => ({
+      ...prevState,
+      ymlData: { ...prevState.ymlData, [name]: value },
+    }));
+    console.log(data);
   };
 
   return (
@@ -70,11 +89,7 @@ const Datapanel = () => {
               <License license={license} changeHandler={changeHandler} />
             </div>
           </div>
-          <div>
-            {/* <button className="ui button" onClick={() => setOpen(!open)}>
-              OK
-            </button> */}
-          </div>
+          <div></div>
         </div>
         {/* ) : (
           ""
