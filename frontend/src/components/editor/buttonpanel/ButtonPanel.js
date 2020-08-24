@@ -63,7 +63,9 @@ language: ${language ? language : ""}
   let newMdText = header !== undefined ? header + "\n\n\n" + mdText : mdText;
 
   const navigateToHome = async () => {
-    await saveMdText(lessonId, file, newMdText, true);
+    if (newMdText.length > 0 && language === "nb")
+      await saveMdText(lessonId, file, mdText, true);
+    if (newMdText.length > 0) await saveMdText(lessonId, file, newMdText);
     const target = ["/landingpage", lessonId].join("/");
     history.push(target);
   };

@@ -14,11 +14,6 @@ const Landingpage = () => {
   const lesson = useContext(LessonContext);
   const { data, lessonList, saveLesson } = lesson;
 
-  console.log(`
-  data : ${JSON.stringify(data)}, 
-  
-  lessonList : ${JSON.stringify(lessonList)}`);
-
   let languages = [];
   let allLanguages = ["nb", "nn", "en", "is"];
   let thumbUrl;
@@ -73,7 +68,6 @@ const Landingpage = () => {
       }
     });
   }
-  console.log(languages);
 
   return (
     <>
@@ -86,15 +80,17 @@ const Landingpage = () => {
       </div>
       <div style={{ marginBottom: "5em" }}>
         <div style={{ display: "flex" }}>
-          {allLanguages.map((element) => {
+          {allLanguages.map((element, index) => {
             return (
-              <LessonCard
-                language={element}
-                hasContent={languages.includes(element)}
-                thumbUrl={thumbUrl}
-                lessonId={lessonId}
-                lessonTitle={data.lesson}
-              />
+              <div key={element + index}>
+                <LessonCard
+                  language={element}
+                  hasContent={languages.includes(element)}
+                  thumbUrl={thumbUrl}
+                  lessonId={lessonId}
+                  lessonTitle={data.lesson}
+                />
+              </div>
             );
           })}
         </div>
