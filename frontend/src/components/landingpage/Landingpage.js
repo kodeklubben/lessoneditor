@@ -3,37 +3,10 @@ import React, { useContext } from "react";
 import { useParams, useHistory } from "react-router";
 import Navbar from "components/navbar/Navbar";
 import Datapanel from "./datapanel/Datapanel";
+import LessonCard from "./LessonCard";
 import { LessonContext } from "contexts/LessonContext";
+import { UserContext } from "../../contexts/UserContext";
 import submitLesson from "api/submit-lesson";
-
-const languageOptions = [
-  {
-    key: 1,
-    text: "Bokmål",
-    value: "nb",
-    image: { avatar: true, src: "/languagesFlag/flag_nb.svg" },
-  },
-  {
-    key: 2,
-    text: "Nynorsk",
-    value: "nn",
-    image: { avatar: true, src: "/languagesFlag/flag_nn.svg" },
-  },
-  {
-    key: 3,
-    text: "Engelsk",
-    value: "en",
-    image: { avatar: true, src: "/languagesFlag/flag_en.svg" },
-  },
-  {
-    key: 4,
-    text: "Islandsk",
-    value: "is",
-    image: { avatar: true, src: "/languagesFlag/flag_is.svg" },
-  },
-];
-
-let languages = [];
 
 const Landingpage = () => {
   const history = useHistory();
@@ -41,10 +14,25 @@ const Landingpage = () => {
   const lesson = useContext(LessonContext);
   const { data, lessonList, saveLesson } = lesson;
 
-  const navigateToEditor = (lessonId, file) => {
-    const target = ["/editor", lessonId, file].join("/");
-    history.push(target);
-  };
+  console.log(`
+  data : ${JSON.stringify(data)}, 
+  
+  lessonList : ${JSON.stringify(lessonList)}`);
+
+  let languages = [];
+  let allLanguages = ["nb", "nn", "en", "is"];
+  let thumbUrl;
+
+  if (
+    Object.keys(lessonList).length !== 0 &&
+    lessonList.constructor !== Object
+  ) {
+    lessonList.forEach((item) => {
+      if (item.filename === "preview.png") {
+        thumbUrl = item.url;
+      }
+    });
+  }
 
   const onSubmit = async () => {
     await saveLesson(data);
@@ -52,80 +40,73 @@ const Landingpage = () => {
     alert("submitted");
   };
 
+  if (
+    Object.keys(lessonList).length !== 0 &&
+    lessonList.constructor !== Object
+  ) {
+    lessonList.forEach((element) => {
+      switch (
+        element.filename.slice(-2) === "md" &&
+        element.filename.slice(5) !== "read" &&
+        element.filename.slice(-5, -3)
+      ) {
+        case "nn":
+          if (!languages.includes("nn")) {
+            languages.push("nn");
+          }
+          break;
+        case "en":
+          if (!languages.includes("en")) {
+            languages.push("en");
+          }
+          break;
+        case "is":
+          if (!languages.includes("is")) {
+            languages.push("is");
+          }
+          break;
+        default:
+          if (!languages.includes("nb")) {
+            languages.push("nb");
+          }
+          break;
+      }
+    });
+  }
+  console.log(languages);
+
   return (
     <>
       <Navbar />
-      <div className="landing_navbar">
+      <div style={{ marginBottom: "5em" }} className="landing_navbar">
         <h2>{data.lesson}</h2>
         <div style={{ display: "flex", float: "right" }}>
           <Datapanel />
         </div>
       </div>
+      <div style={{ marginBottom: "5em" }}>
+        <div style={{ display: "flex" }}>
+          {allLanguages.map((element) => {
+            return (
+              <LessonCard
+                language={element}
+                hasContent={languages.includes(element)}
+                thumbUrl={thumbUrl}
+                lessonId={lessonId}
+                lessonTitle={data.lesson}
+              />
+            );
+          })}
+        </div>
+      </div>
 
-      {Object.keys(lessonList).length !== 0 && lessonList.constructor !== Object
-        ? lessonList.map((listItem, index) => {
-            if (listItem.filename.slice(-3) === ".md") {
-              switch (listItem.filename.slice(-5, -3)) {
-                case "en":
-                  languages.push("en");
-                  break;
-                case "nn":
-                  languages.push("nn");
-                  break;
-                case "is":
-                  languages.push("is");
-                  break;
-                default:
-                  languages.push("nb");
-                  break;
-              }
-              console.log(languages);
-
-              return (
-                <div key={listItem + index} className="column">
-                  <div className="ui fluid card">
-                    {/* <div className="image itemListImage">
-                    <img src={listitem.thumb} alt={"oppgavebilde"} />
-                  </div> */}
-                    <div className="content">
-                      <div className="header">
-                        {listItem.filename.slice(0, -3)}
-                      </div>
-                      {/* <div className="meta">
-                      <h4>{listitem.course}</h4>
-                    </div> */}
-                    </div>
-                    <div className="extra content">
-                      <button
-                        className="ui button"
-                        onClick={() =>
-                          navigateToEditor(
-                            lessonId,
-                            listItem.filename.slice(0, -3)
-                          )
-                        }
-                      >
-                        Åpne
-                      </button>
-                      {/* <button
-                      className="ui button"
-                      onClick={async () => {
-                        await removeLesson(listitem.lessonId);
-                      }}
-                    >
-                      Fjerne
-                    </button> */}
-                    </div>
-                  </div>
-                </div>
-              );
-            } else {
-              return "";
-            }
-          })
-        : ""}
+      <a href={"/"}>
+        <button className="ui button" onClick={onSubmit}>
+          Tilbake
+        </button>
+      </a>
       <button className="ui button" onClick={onSubmit}>
-        Submit
+        Sende inn
       </button>
     </>
   );
