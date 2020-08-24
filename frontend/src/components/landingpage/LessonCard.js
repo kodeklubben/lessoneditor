@@ -42,7 +42,7 @@ const LessonCard = ({
   return (
     <div style={{ margin: "1em" }}>
       <div className="ui fluid card">
-        <div className="image itemListImage">
+        <div style={{ width: "360px" }} className="image itemListImage">
           {hasContent ? (
             hasContent ? (
               <img src={thumbUrl} alt={"oppgavebilde"} />

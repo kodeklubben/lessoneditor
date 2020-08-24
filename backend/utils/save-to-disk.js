@@ -5,7 +5,7 @@ module.exports = async (filename, buffer) => {
   return new Promise((resolve, reject) => {
     fs.open(filename, "w", (err, fd) => {
       if (err) reject(err);
-      fs.write(fd, buffer, 0, buffer.length, null, (err) => {
+      fs.write(fd, buffer, 0, buffer?.length, null, (err) => {
         if (err) reject(err);
         fs.close(fd, () => {
           resolve("file written");

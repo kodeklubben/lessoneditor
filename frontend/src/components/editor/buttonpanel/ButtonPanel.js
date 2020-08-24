@@ -35,9 +35,10 @@ const ButtonPanel = ({
   setUndoCursorPosition,
   setRedoCursorPosition,
   setListButtonValues,
+  file,
 }) => {
   const history = useHistory();
-  const { lessonId, file } = useParams();
+  const { lessonId } = useParams();
   const context = useContext(LessonContext);
   const { data, language, headerData } = context;
   const course = data.course;
@@ -113,7 +114,7 @@ language: ${language ? language : ""}
         />
 
         <div style={{ display: "flex", float: "right" }}>
-          <Languages mdText={mdText} />
+          <Languages mdText={mdText} file={file} />
           <EditorDatapanel headerData={headerData} />
           <button
             className={`ui ${mdText.length < 1 ? `disabled` : ``} button`}

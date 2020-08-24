@@ -31,9 +31,9 @@ const languageOptions = [
   },
 ];
 
-const Languages = (mdText) => {
+const Languages = ({ mdText, file }) => {
   const history = useHistory();
-  const { lessonId, file } = useParams();
+  const { lessonId } = useParams();
   const lessonContext = useContext(LessonContext);
   const { data, language, setLanguage, headerData } = lessonContext;
 
@@ -59,7 +59,7 @@ language: ${language ? language : ""}
 
   const defaultValue = (file) => {
     let returnvalue;
-    switch (file.slice(-3)) {
+    switch (file?.slice(-3)) {
       case "_nn":
         returnvalue = "nn";
         break;
@@ -90,7 +90,8 @@ language: ${language ? language : ""}
       target = ["/editor", lessonId, await data.lesson].join("/");
     }
     if (newMdText.length > 0) await saveMdText(lessonId, file, newMdText);
-    history.push(target);
+    history.push({ pathname: "/empty" });
+    history.replace({ pathname: target });
   };
   return (
     <>

@@ -26,7 +26,7 @@ const Checkbox = ({ value, onCheck, subtag, name }) => {
   );
 };
 
-const TagsGrade = (props) => {
+const TagsGrade = ({ checkboxHandler }) => {
   return (
     <>
       {gradeSettings.map((element, index) => (
@@ -35,7 +35,7 @@ const TagsGrade = (props) => {
             name={element.name}
             value={element.value}
             subtag={element.subtag}
-            onCheck={props.checkboxHandler}
+            onCheck={checkboxHandler}
           />
         </div>
       ))}
@@ -43,7 +43,7 @@ const TagsGrade = (props) => {
   );
 };
 
-const TagsSubject = (props) => {
+const TagsSubject = ({ checkboxHandler }) => {
   return (
     <>
       {subjectSettings.map((element, index) => (
@@ -52,7 +52,7 @@ const TagsSubject = (props) => {
             name={element.name}
             value={element.value}
             subtag={element.subtag}
-            onCheck={props.checkboxHandler}
+            onCheck={checkboxHandler}
           />
         </div>
       ))}
@@ -60,7 +60,8 @@ const TagsSubject = (props) => {
   );
 };
 
-const TagsTopic = (props) => {
+const TagsTopic = ({ checkboxHandler, data }) => {
+  console.log(data);
   return (
     <>
       {topicSettings.map((element, index) => (
@@ -69,7 +70,8 @@ const TagsTopic = (props) => {
             name={element.name}
             value={element.value}
             subtag={element.subtag}
-            onCheck={props.checkboxHandler}
+            checked={data}
+            onCheck={checkboxHandler}
           />
         </div>
       ))}

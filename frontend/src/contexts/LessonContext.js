@@ -20,7 +20,7 @@ export const LessonContextProvider = (props) => {
     async function fetchData() {
       const res = await axios.get(lessonDataUrl);
       setData(res.data);
-      setData((prevState) => ({ ...prevState, yml: {} }));
+      // setData((prevState) => ({ ...prevState, yml: {} }));
     }
 
     if (lessonId) fetchData();

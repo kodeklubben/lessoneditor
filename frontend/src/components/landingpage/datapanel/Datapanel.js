@@ -89,17 +89,32 @@ const Datapanel = () => {
                 <div className="field">
                   <CheckboxField
                     labelTitle={YML_TEXT.topic}
-                    content={<TagsTopic checkboxHandler={checkboxHandler} />}
+                    content={
+                      <TagsTopic
+                        data={data?.yml}
+                        checkboxHandler={checkboxHandler}
+                      />
+                    }
                   />
                   <CheckboxField
                     labelTitle={YML_TEXT.grade}
-                    content={<TagsGrade checkboxHandler={checkboxHandler} />}
+                    content={
+                      <TagsGrade
+                        data={data?.yml}
+                        checkboxHandler={checkboxHandler}
+                      />
+                    }
                   />
                 </div>
                 <div className="field">
                   <CheckboxField
                     labelTitle={YML_TEXT.subject}
-                    content={<TagsSubject checkboxHandler={checkboxHandler} />}
+                    content={
+                      <TagsSubject
+                        data={data?.yml}
+                        checkboxHandler={checkboxHandler}
+                      />
+                    }
                   />
                   <div>
                     <Levels level={level} changeHandler={changeHandler} />

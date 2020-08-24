@@ -7,7 +7,7 @@ it("renders without crashing", () => {
   const imageUrl = ["url1", "url2"];
   const wrapper = shallow(
     <ItemList
-      items={[{ title: oppgaveNavn }]}
+      items={[{ lesson: oppgaveNavn }]}
       lessonScreenshots={imageUrl}
     ></ItemList>
   );

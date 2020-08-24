@@ -130,6 +130,7 @@ const Editor = () => {
         setUndoCursorPosition={setUndoCursorPosition}
         setRedoCursorPosition={setRedoCursorPosition}
         setListButtonValues={setListButtonValues}
+        file={file}
       />
       <div className="textEditorContainer">
         <MDTextArea
