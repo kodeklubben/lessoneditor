@@ -5,7 +5,7 @@ import {
   topicSettings,
 } from "../settingsFiles/LESSONTAGSSETTINGS";
 
-const Checkbox = ({ value, onCheck, subtag, name }) => {
+const Checkbox = ({ value, onCheck, data, name }) => {
   const onInputChange = (event) => {
     onCheck(event);
   };
@@ -14,7 +14,8 @@ const Checkbox = ({ value, onCheck, subtag, name }) => {
     <div className="ui checkbox">
       <input
         type="checkbox"
-        name={subtag}
+        checked={data?.yml[value]}
+        name={name}
         id={value}
         value={value}
         onChange={onInputChange}
@@ -26,16 +27,16 @@ const Checkbox = ({ value, onCheck, subtag, name }) => {
   );
 };
 
-const TagsGrade = ({ checkboxHandler }) => {
+const TagsGrade = ({ changeHandler, data }) => {
   return (
     <>
       {gradeSettings.map((element, index) => (
         <div className="column" key={"element" + index}>
           <Checkbox
             name={element.name}
+            data={data}
             value={element.value}
-            subtag={element.subtag}
-            onCheck={checkboxHandler}
+            onCheck={changeHandler}
           />
         </div>
       ))}
@@ -43,16 +44,16 @@ const TagsGrade = ({ checkboxHandler }) => {
   );
 };
 
-const TagsSubject = ({ checkboxHandler }) => {
+const TagsSubject = ({ changeHandler, data }) => {
   return (
     <>
       {subjectSettings.map((element, index) => (
         <div className="column" key={"element" + index}>
           <Checkbox
             name={element.name}
+            data={data}
             value={element.value}
-            subtag={element.subtag}
-            onCheck={checkboxHandler}
+            onCheck={changeHandler}
           />
         </div>
       ))}
@@ -60,18 +61,16 @@ const TagsSubject = ({ checkboxHandler }) => {
   );
 };
 
-const TagsTopic = ({ checkboxHandler, data }) => {
-  console.log(data);
+const TagsTopic = ({ changeHandler, data }) => {
   return (
     <>
       {topicSettings.map((element, index) => (
         <div className="column" key={"element" + index}>
           <Checkbox
             name={element.name}
+            data={data}
             value={element.value}
-            subtag={element.subtag}
-            checked={data}
-            onCheck={checkboxHandler}
+            onCheck={changeHandler}
           />
         </div>
       ))}

@@ -1,5 +1,5 @@
 import "./datapanel.scss";
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { YML_TEXT } from "../settingsFiles/languages/landingpage_NO";
 import { TagsGrade, TagsSubject, TagsTopic } from "./Tags";
 import CheckboxField from "./CheckboxField";
@@ -9,57 +9,40 @@ import { LessonContext } from "contexts/LessonContext";
 
 const Datapanel = () => {
   const [open, setOpen] = useState(false);
-  const [level, setLevel] = useState(1);
-  const [license, setLicense] = useState("CC BY-SA 4.0");
-  const [tags, setTags] = useState({ topic: [], subject: [], grade: [] });
-
   const context = useContext(LessonContext);
-  const { data, setData, saveLesson } = context;
+  const { data, setData, getLessonData, saveLesson } = context;
 
   const onSubmit = async () => {
     await saveLesson(data);
     setOpen(false);
   };
 
-  const checkboxHandler = (event) => {
-    let name = event.target.name;
-    let value = event.target.value;
-
-    let i = tags;
-    if (i[name].includes(value)) {
-      i[name].splice(i[name].indexOf(value), 1);
-    } else {
-      i[name].push(value);
-    }
-    setTags((prevState) => ({ ...prevState, i }));
-    setData((prevState) => ({
-      ...prevState,
-      yml: {
-        ...prevState.yml,
-        topic: i.topic,
-        subject: i.subject,
-        grade: i.grade,
-      },
-    }));
-    console.log(data);
+  const onCancel = async () => {
+    await getLessonData();
+    setOpen(false);
   };
 
-  const changeHandler = (event, { value, name }) => {
-    switch (name) {
-      case "level":
-        setLevel(value);
-        break;
-      case "license":
-        setLicense(value);
-        break;
-      default:
-        break;
-    }
+  const dropdownHandler = (event, { name, value }) => {
     setData((prevState) => ({
       ...prevState,
       yml: { ...prevState.yml, [name]: value },
     }));
-    console.log(data);
+  };
+
+  console.log(JSON.stringify(data));
+
+  const changeHandler = (event) => {
+    let name =
+      event.target.type === "checkbox" ? event.target.value : event.target.name;
+    let value =
+      event.target.type === "checkbox"
+        ? event.target.checked
+        : event.target.value;
+
+    setData((prevState) => ({
+      ...prevState,
+      yml: { ...prevState.yml, [name]: value },
+    }));
   };
 
   return (
@@ -90,19 +73,13 @@ const Datapanel = () => {
                   <CheckboxField
                     labelTitle={YML_TEXT.topic}
                     content={
-                      <TagsTopic
-                        data={data?.yml}
-                        checkboxHandler={checkboxHandler}
-                      />
+                      <TagsTopic data={data} changeHandler={changeHandler} />
                     }
                   />
                   <CheckboxField
                     labelTitle={YML_TEXT.grade}
                     content={
-                      <TagsGrade
-                        data={data?.yml}
-                        checkboxHandler={checkboxHandler}
-                      />
+                      <TagsGrade data={data} changeHandler={changeHandler} />
                     }
                   />
                 </div>
@@ -110,22 +87,19 @@ const Datapanel = () => {
                   <CheckboxField
                     labelTitle={YML_TEXT.subject}
                     content={
-                      <TagsSubject
-                        data={data?.yml}
-                        checkboxHandler={checkboxHandler}
-                      />
+                      <TagsSubject data={data} changeHandler={changeHandler} />
                     }
                   />
                   <div>
-                    <Levels level={level} changeHandler={changeHandler} />
-                    <License license={license} changeHandler={changeHandler} />
+                    <Levels changeHandler={dropdownHandler} data={data} />
+                    <License changeHandler={changeHandler} data={data} />
                   </div>
                 </div>
               </div>
               <button className="ui button" onClick={onSubmit}>
                 OK
               </button>
-              <button className="ui button" onClick={() => setOpen(!open)}>
+              <button className="ui button" onClick={onCancel}>
                 Avbryt
               </button>
             </div>
