@@ -13,11 +13,8 @@ module.exports = (app) => {
     const { course, lesson, filename } = req.params;
     const savedLesson = await isLessonSaved(req.user.username, course, lesson);
     if (savedLesson) {
-      res.status(200).send({
-        redirect: paths.DISPLAY_FILE,
-        lessonId: savedLesson,
-        file: `${filename}.md`,
-      });
+      const redirectUrl = `/editor/${savedLesson}/${filename}`;
+      res.redirect(redirectUrl);
     } else {
       const path = `src/${course}/${lesson}`;
       const files = await getContent(path);
@@ -51,11 +48,8 @@ module.exports = (app) => {
             );
           }
         }
-        res.status(200).send({
-          redirect: paths.DISPLAY_FILE,
-          lessonId: lessonData.lessonId,
-          file: `${filename}.md`,
-        });
+        const redirectUrl = `/editor/${lessonData.lessonId}/${filename}`;
+        res.redirect(redirectUrl);
       } else {
         res.send("Error");
       }
