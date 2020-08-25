@@ -35,9 +35,10 @@ const ButtonPanel = ({
   setUndoCursorPosition,
   setRedoCursorPosition,
   setListButtonValues,
+  file,
 }) => {
   const history = useHistory();
-  const { lessonId, file } = useParams();
+  const { lessonId } = useParams();
   const context = useContext(LessonContext);
   const { data, language, headerData } = context;
   const course = data.course;
@@ -63,7 +64,9 @@ language: ${language ? language : ""}
   let newMdText = header !== undefined ? header + "\n\n\n" + mdText : mdText;
 
   const navigateToHome = async () => {
-    await saveMdText(lessonId, file, newMdText, true);
+    if (newMdText.length > 0 && language === "nb")
+      await saveMdText(lessonId, file, mdText, true);
+    if (newMdText.length > 0) await saveMdText(lessonId, file, newMdText);
     const target = ["/landingpage", lessonId].join("/");
     history.push(target);
   };
@@ -111,7 +114,7 @@ language: ${language ? language : ""}
         />
 
         <div style={{ display: "flex", float: "right" }}>
-          <Languages mdText={mdText} />
+          <Languages mdText={mdText} file={file} />
           <EditorDatapanel headerData={headerData} />
           <button
             className={`ui ${mdText.length < 1 ? `disabled` : ``} button`}

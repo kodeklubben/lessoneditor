@@ -5,7 +5,7 @@ import {
   FORM_TEXT,
 } from "../settingsFiles/languages/landingpage_NO";
 
-const Levels = ({ changeHandler, level }) => {
+const Levels = ({ changeHandler, data }) => {
   return (
     <div>
       <h3 className="formLabel">{FORM_TEXT.LEVEL.heading}</h3>
@@ -13,7 +13,8 @@ const Levels = ({ changeHandler, level }) => {
         style={{ width: "13em" }}
         placeholder="Velg Nivå"
         name="level"
-        // defaultValue={levelOptions[0].value}
+        defaultValue={levelOptions[0].value}
+        value={data?.yml["level"]}
         fluid
         selection
         onChange={changeHandler}

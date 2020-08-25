@@ -20,7 +20,14 @@ const EditorDatapanel = () => {
   const { language, headerData, setHeaderData } = context;
 
   useEffect(() => {
+    console.clear();
+    console.log("editorPanel : " + language);
+    console.log(headerData[language]);
+
     if (Object.keys(headerData).length !== 0) {
+      // if (headerData[language] === undefined) {
+      //   return;
+      // }
       setState((prevState) => ({
         ...prevState,
         title: headerData[language].title,
