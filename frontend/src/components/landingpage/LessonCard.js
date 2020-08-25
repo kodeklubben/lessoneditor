@@ -1,6 +1,5 @@
 import React from "react";
-import { useParams, useHistory } from "react-router";
-import Languages from "components/editor/buttonpanel/Languages";
+import { useHistory } from "react-router";
 
 const languageOptions = {
   nb: {

@@ -1,5 +1,5 @@
 import "./datapanel.scss";
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import { YML_TEXT } from "../settingsFiles/languages/landingpage_NO";
 import { TagsGrade, TagsSubject, TagsTopic } from "./Tags";
 import CheckboxField from "./CheckboxField";

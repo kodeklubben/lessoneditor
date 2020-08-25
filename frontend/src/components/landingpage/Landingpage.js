@@ -1,15 +1,13 @@
 import "./landingpage.scss";
 import React, { useContext } from "react";
-import { useParams, useHistory } from "react-router";
+import { useParams } from "react-router";
 import Navbar from "components/navbar/Navbar";
 import Datapanel from "./datapanel/Datapanel";
 import LessonCard from "./LessonCard";
 import { LessonContext } from "contexts/LessonContext";
-import { UserContext } from "../../contexts/UserContext";
 import submitLesson from "api/submit-lesson";
 
 const Landingpage = () => {
-  const history = useHistory();
   const { lessonId } = useParams();
   const lesson = useContext(LessonContext);
   const { data, lessonList, saveLesson } = lesson;
