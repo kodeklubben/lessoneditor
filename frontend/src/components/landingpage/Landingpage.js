@@ -1,6 +1,6 @@
 import "./landingpage.scss";
 import React, { useContext } from "react";
-import { useParams, useHistory } from "react-router";
+import { useParams } from "react-router";
 import Navbar from "components/navbar/Navbar";
 import Datapanel from "./datapanel/Datapanel";
 import LessonCard from "./LessonCard";
@@ -9,15 +9,9 @@ import { UserContext } from "../../contexts/UserContext";
 import submitLesson from "api/submit-lesson";
 
 const Landingpage = () => {
-  const history = useHistory();
   const { lessonId } = useParams();
   const lesson = useContext(LessonContext);
   const { data, lessonList, saveLesson } = lesson;
-
-  console.log(`
-  data : ${JSON.stringify(data)}, 
-  
-  lessonList : ${JSON.stringify(lessonList)}`);
 
   let languages = [];
   let allLanguages = ["nb", "nn", "en", "is"];
@@ -73,7 +67,6 @@ const Landingpage = () => {
       }
     });
   }
-  console.log(languages);
 
   return (
     <>
@@ -86,15 +79,17 @@ const Landingpage = () => {
       </div>
       <div style={{ marginBottom: "5em" }}>
         <div style={{ display: "flex" }}>
-          {allLanguages.map((element) => {
+          {allLanguages.map((element, index) => {
             return (
-              <LessonCard
-                language={element}
-                hasContent={languages.includes(element)}
-                thumbUrl={thumbUrl}
-                lessonId={lessonId}
-                lessonTitle={data.lesson}
-              />
+              <div key={element + index}>
+                <LessonCard
+                  language={element}
+                  hasContent={languages.includes(element)}
+                  thumbUrl={thumbUrl}
+                  lessonId={lessonId}
+                  lessonTitle={data.lesson}
+                />
+              </div>
             );
           })}
         </div>

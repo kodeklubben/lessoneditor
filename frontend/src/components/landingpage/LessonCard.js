@@ -1,6 +1,5 @@
 import React from "react";
-import { useParams, useHistory } from "react-router";
-import Languages from "components/editor/buttonpanel/Languages";
+import { useHistory } from "react-router";
 
 const languageOptions = {
   nb: {
@@ -42,7 +41,7 @@ const LessonCard = ({
   return (
     <div style={{ margin: "1em" }}>
       <div className="ui fluid card">
-        <div className="image itemListImage">
+        <div style={{ width: "360px" }} className="image itemListImage">
           {hasContent ? (
             hasContent ? (
               <img src={thumbUrl} alt={"oppgavebilde"} />

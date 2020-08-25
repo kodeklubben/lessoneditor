@@ -13,7 +13,7 @@ function ItemList({ items, removeLesson, navigateToHome }) {
                   <img src={listitem.thumb} alt={"oppgavebilde"} />
                 </div>
                 <div className="content">
-                  <div className="header">{listitem.title}</div>
+                  <div className="header">{listitem.lesson}</div>
                   <div className="meta">
                     <h4>{listitem.course}</h4>
                   </div>

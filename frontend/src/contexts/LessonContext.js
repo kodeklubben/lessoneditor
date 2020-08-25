@@ -20,7 +20,6 @@ export const LessonContextProvider = (props) => {
     async function fetchData() {
       const res = await axios.get(lessonDataUrl);
       setData(res.data);
-      setData((prevState) => ({ ...prevState, yml: {} }));
     }
 
     if (lessonId) fetchData();
@@ -49,6 +48,12 @@ export const LessonContextProvider = (props) => {
       if (lessonId) {
         await axios.post(lessonDataUrl, data);
         setData(data);
+      }
+    },
+    getLessonData: async (data) => {
+      if (lessonId) {
+        const res = await axios.get(lessonDataUrl);
+        setData(res.data);
       }
     },
     language,
