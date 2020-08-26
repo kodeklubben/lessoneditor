@@ -15,7 +15,6 @@ const Editor = () => {
   const { lessonId, file } = useParams();
   const context = useContext(LessonContext);
   const { language, data, setData } = context;
-
   const [mdText, setMdText] = useState("");
   const [buttonValues, setButtonValues] = useState({});
   const [cursorPositionStart, setCursorPositionStart] = useState(0);
@@ -30,6 +29,8 @@ const Editor = () => {
     output: "",
     cursorInt: 0,
   });
+
+  console.log("test");
 
   const editorRef = useRef();
   const uploadImageRef = useRef();
