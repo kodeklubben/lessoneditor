@@ -39,17 +39,29 @@ const NewLesson = ({ setShowPopup }) => {
     }
   };
   return (
-    <div>
+    <div
+      style={{
+        position: "absolute",
+        top: "0%",
+        left: "0%",
+        zIndex: "1",
+        width: "100%",
+        height: "100%",
+        backgroundColor: "rgb(256,256,256,0.7)",
+      }}
+    >
       <form
         style={{
-          position: "absolute",
+          zIndex: "2",
+          margin: "auto",
+          marginTop: "10%",
           backgroundColor: "white",
           border: "1px solid black",
           borderRadius: "10px",
-          padding: "5em",
-          left: "20%",
-          top: "20%",
-          zIndex: "1",
+          padding: "7% 10%",
+          width: "50%",
+          height: "50%",
+          boxShadow: "0px 0px 5px",
         }}
         className="ui form"
         method={"POST"}
@@ -57,8 +69,9 @@ const NewLesson = ({ setShowPopup }) => {
       >
         <i
           onClick={() => setShowPopup(false)}
-          className="big grey x icon editor"
+          className="big grey x icon frontpage"
         />
+        <br />
         <label>
           Tittel:
           <input
