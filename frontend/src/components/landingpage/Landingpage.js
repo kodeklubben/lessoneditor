@@ -101,9 +101,7 @@ const Landingpage = () => {
               width: "50%",
               height: "40%",
               backgroundColor: "white",
-              borderRadius: "20px",
               border: "5px solid red",
-              boxShadow: "0px 0px 20px",
             }}
           >
             <h1>Alert(!):Vil du __virkelig__ sende inn oppgaven...?</h1>
