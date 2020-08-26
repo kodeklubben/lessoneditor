@@ -92,10 +92,12 @@ const Landingpage = () => {
         >
           <div
             style={{
+              borderRadius: "20px",
+              boxShadow: "0px 0px  10px",
               zIndex: "2",
               margin: "auto",
               marginTop: "10%",
-              padding: "5% 10%",
+              padding: "5% 7% 0%",
               width: "50%",
               height: "40%",
               backgroundColor: "white",
