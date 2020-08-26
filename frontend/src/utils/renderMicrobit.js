@@ -11,7 +11,7 @@ const renderSpinner = () => {
     const preSize = codeBlock.getBoundingClientRect();
     let img = document.createElement("img");
     img.className = "spinner";
-    img.src = require("assets/graphics/spinner.gif");
+    img.src = "/spinner.gif";
     img.alt = "Spinner";
     img.width = 50;
     img.height = 50;

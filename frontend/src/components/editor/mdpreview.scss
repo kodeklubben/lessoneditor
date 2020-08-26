@@ -48,7 +48,7 @@ $checkbox-blue: #abdbea;
     list-style: none;
     padding-top: 10px;
     padding-bottom: 10px;
-    margin-left: 25px;
+    margin-left: 35px;
   }
   li::before {
     content: " ";
@@ -88,9 +88,9 @@ a:hover {
     @include sectionImg;
   }
 
-  // label > a:hover {
-  //   @include a_hover;
-  // }
+  label > a:hover {
+    @include a_hover;
+  }
 
   .checklist-item a {
     @include a_style;
@@ -107,11 +107,13 @@ a:hover {
   ul > li > p > a {
     @include a_style();
     margin-left: -1.5em;
+    padding: 26px;
   }
 
   ul > li > p > a:hover {
     @include a_hover();
     margin-left: -1.5em;
+    padding: 26px;
   }
 
   ul,
@@ -308,7 +310,7 @@ a:hover {
       }
     }
     > * {
-      padding: 0 20px;
+      padding: 0 15px;
     }
   }
 

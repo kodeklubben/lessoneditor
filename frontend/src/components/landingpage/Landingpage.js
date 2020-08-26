@@ -1,5 +1,5 @@
 import "./landingpage.scss";
-import React, { useContext } from "react";
+import React, { useState, useContext } from "react";
 import { useParams } from "react-router";
 import Navbar from "components/navbar/Navbar";
 import Datapanel from "./datapanel/Datapanel";
@@ -8,6 +8,7 @@ import { LessonContext } from "contexts/LessonContext";
 import submitLesson from "api/submit-lesson";
 
 const Landingpage = () => {
+  const [areYouSure, setAreYouSure] = useState(false);
   const { lessonId } = useParams();
   const lesson = useContext(LessonContext);
   const { data, lessonList, saveLesson } = lesson;
@@ -76,6 +77,57 @@ const Landingpage = () => {
           <Datapanel />
         </div>
       </div>
+
+      {areYouSure ? (
+        <div
+          style={{
+            position: "absolute",
+            top: "0%",
+            left: "0%",
+            zIndex: "1",
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgb(256,256,256,0.7)",
+          }}
+        >
+          <div
+            style={{
+              zIndex: "2",
+              margin: "auto",
+              marginTop: "10%",
+              padding: "10%",
+              width: "50%",
+              height: "50%",
+              backgroundColor: "white",
+              border: "5px solid red",
+            }}
+          >
+            <h1>Alert(!):Vil du __virkelig__ sende inn oppgaven...?</h1>
+            <i className="big bomb icon"></i>
+            <button
+              style={{ backgroundColor: "red" }}
+              className="ui button"
+              onClick={onSubmit}
+            >
+              Sende inn
+            </button>
+            <i className="big bomb icon"></i>
+            <br />
+            <i className="big red heart icon"></i>
+            <button
+              style={{ backgroundColor: "green" }}
+              className="ui button"
+              onClick={() => setAreYouSure(false)}
+            >
+              Få meg tilbake til trygg grunn...
+            </button>
+            <i className="big birthday cake icon"></i>
+          </div>
+        </div>
+      ) : (
+        ""
+      )}
+
       <div style={{ marginBottom: "5em" }}>
         <div style={{ display: "flex" }}>
           {allLanguages.map((element, index) => {
@@ -95,11 +147,14 @@ const Landingpage = () => {
       </div>
 
       <a href={"/"}>
-        <button className="ui button" onClick={onSubmit}>
-          Tilbake
-        </button>
+        <button className="ui button">Tilbake</button>
       </a>
-      <button className="ui button" onClick={onSubmit}>
+      <button
+        className="ui button"
+        onClick={() => {
+          setAreYouSure(true);
+        }}
+      >
         Sende inn
       </button>
     </>
