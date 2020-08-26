@@ -9,7 +9,6 @@ export const LessonContext = React.createContext({});
 export const LessonContextProvider = (props) => {
   const { lessonId } = useParams();
   const [data, setData] = useState({ header: {} });
-  const [headerData, setHeaderData] = useState({});
   const [lessonList, setLessonList] = useState({});
   const [language, setLanguage] = useState("nb");
 
@@ -37,8 +36,6 @@ export const LessonContextProvider = (props) => {
   const context = {
     data,
     setData,
-    headerData,
-    setHeaderData,
     fetchList: async () => {
       const res = await axios.get(lessonListUrl);
       setLessonList(res.data);
@@ -54,12 +51,6 @@ export const LessonContextProvider = (props) => {
         translator: "",
         translatorList: [],
       };
-      if (!headerData[language]) {
-        setHeaderData((prevState) => ({
-          ...prevState,
-          [language]: defaultState,
-        }));
-      }
       if (!data.header[language]) {
         setData((prevState) => ({
           ...prevState,

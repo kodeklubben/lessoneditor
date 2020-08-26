@@ -72,7 +72,7 @@ const Landingpage = () => {
     <>
       <Navbar />
       <div style={{ marginBottom: "5em" }} className="landing_navbar">
-        <h2>{data.lesson}</h2>
+        <h2>{`${data.lesson} (${data.course})`} </h2>
         <div style={{ display: "flex", float: "right" }}>
           <Datapanel />
         </div>
@@ -92,36 +92,43 @@ const Landingpage = () => {
         >
           <div
             style={{
+              borderRadius: "20px",
+              boxShadow: "0px 0px  10px",
               zIndex: "2",
               margin: "auto",
               marginTop: "10%",
-              padding: "10%",
+              padding: "5% 7% 0%",
               width: "50%",
-              height: "50%",
+              height: "40%",
               backgroundColor: "white",
               border: "5px solid red",
             }}
           >
             <h1>Alert(!):Vil du __virkelig__ sende inn oppgaven...?</h1>
-            <i className="big bomb icon"></i>
-            <button
-              style={{ backgroundColor: "red" }}
-              className="ui button"
-              onClick={onSubmit}
-            >
-              Sende inn
-            </button>
-            <i className="big bomb icon"></i>
-            <br />
-            <i className="big red heart icon"></i>
-            <button
-              style={{ backgroundColor: "green" }}
-              className="ui button"
-              onClick={() => setAreYouSure(false)}
-            >
-              Få meg tilbake til trygg grunn...
-            </button>
-            <i className="big birthday cake icon"></i>
+            <div style={{ marginTop: "5em" }}>
+              <div style={{ float: "left", marginRight: "auto" }}>
+                <i className="big bomb icon"></i>
+                <button
+                  style={{ backgroundColor: "red" }}
+                  className="ui button"
+                  onClick={onSubmit}
+                >
+                  Sende inn
+                </button>
+                <i className="big bomb icon"></i>
+              </div>
+              <div style={{ float: "right", marginLeft: "auto" }}>
+                <i className="big red heart icon"></i>
+                <button
+                  style={{ backgroundColor: "green" }}
+                  className="ui button"
+                  onClick={() => setAreYouSure(false)}
+                >
+                  Få meg tilbake til trygg grunn...
+                </button>
+                <i className="big birthday cake icon"></i>
+              </div>
+            </div>
           </div>
         </div>
       ) : (

@@ -5,9 +5,10 @@ import ItemList from "./ItemList";
 import { UserContext } from "../../contexts/UserContext";
 import Navbar from "../navbar/Navbar";
 import { useHistory } from "react-router-dom";
+import NewLessonButton from "./newLessonButton";
 
 const Overview = () => {
-  const [showPopup, setShowPopup] = useState(false);
+  const [showPopup, setShowPopup] = useState(false); // Les om useState i React
   const history = useHistory();
   const context = useContext(UserContext);
   const { lessons } = context;
@@ -20,14 +21,8 @@ const Overview = () => {
     <div>
       <Navbar />
       <div className="overViewContainer">
-        <h3>Lag ny oppgave</h3>
-        <div className="ui card">
-          <div className="content">
-            <div style={{ height: "200px" }} onClick={() => setShowPopup(true)}>
-              <i className=" huge plus  icon"></i>
-            </div>
-          </div>
-        </div>
+        <p id="welcome">Velkommen, </p>
+        <NewLessonButton setShowPopup={setShowPopup} id="newLessonButton" />
 
         {showPopup ? <NewLesson setShowPopup={setShowPopup} /> : ""}
 
@@ -43,15 +38,31 @@ const Overview = () => {
           className="ui horizontal divider"
         />
 
-        <h3>Mine oppgaver</h3>
-        {lessons ? (
-          <ItemList
-            items={lessons}
-            removeLesson={context.removeLesson}
-            navigateToHome={navigateToHome}
-          />
+        {lessons.length > 0 ? (
+          <>
+            <p
+              style={{
+                fontStyle: 'Arial, "Times New Roman", Times, serif',
+                fontSize: "23px",
+              }}
+            >
+              Mine oppgaver
+            </p>
+            <ItemList
+              items={lessons}
+              removeLesson={context.removeLesson}
+              navigateToHome={navigateToHome}
+            />
+          </>
         ) : (
-          <b>Du har ingen kurs</b>
+          <p
+            style={{
+              fontStyle: 'Arial, "Times New Roman", Times, serif',
+              fontSize: "23px",
+            }}
+          >
+            Du har ingen kurs
+          </p>
         )}
         <br />
       </div>

@@ -3,12 +3,12 @@ import React from "react";
 
 const ProfileMenu = ({ name, email, photo }) => {
   return (
-    <div style={{ marginBottom: "1em" }}>
+    <div style={{ marginBottom: "1em", marginLeft: "1em" }}>
       <span style={{ position: "relative", left: "-1em" }}>{name}</span>
       {photo ? (
-        <img src={photo} alt="user" className="ui avatar image" />
+        <img id="avatar" src={photo} alt="user" className="ui avatar image" />
       ) : (
-        <i className="user icon"></i>
+        <i id="user-icon" className="user icon"></i>
       )}
     </div>
   );
