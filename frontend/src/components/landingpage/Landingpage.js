@@ -5,7 +5,6 @@ import Navbar from "components/navbar/Navbar";
 import Datapanel from "./datapanel/Datapanel";
 import LessonCard from "./LessonCard";
 import { LessonContext } from "contexts/LessonContext";
-import { UserContext } from "../../contexts/UserContext";
 import submitLesson from "api/submit-lesson";
 
 const Landingpage = () => {
