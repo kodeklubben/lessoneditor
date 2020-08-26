@@ -58,26 +58,26 @@
   outline: none;
 }
 
-ul {
-  list-style-type: none;
-  overflow: hidden;
-  background-color: white;
-  width: 100%;
-}
+// ul {
+//   list-style-type: none;
+//   overflow: hidden;
+//   background-color: white;
+//   width: 100%;
+// }
 
-li {
-  float: left;
-  padding: 0 15px;
-}
+// li {
+//   float: left;
+//   padding: 0 15px;
+// }
 
-li a {
-  display: block;
-  color: white;
-  text-align: center;
-  padding: 26px;
-  text-decoration: none;
-  color: black;
-}
+// li a {
+//   display: block;
+//   color: white;
+//   text-align: center;
+//   padding: 26px;
+//   text-decoration: none;
+//   color: black;
+// }
 .navbar {
   float: right;
   height: 100%;
@@ -93,21 +93,21 @@ li a {
   /*border: 1px solid red;*/
   background-color: white;
 }
-li a:hover {
-  text-decoration: underline;
-  text-decoration-color: green;
-  font-size: 1.5em;
-}
+// li a:hover {
+//   text-decoration: underline;
+//   text-decoration-color: green;
+//   font-size: 1.5em;
+// }
 .logo {
   float: left;
   height: 100%;
   width: 20%;
 }
-.logo img {
-  /*border: 1px solid green;*/
-  height: 100%;
-  width: 100%;
-}
+// .logo img {
+//   /*border: 1px solid green;*/
+//   height: 100%;
+//   width: 100%;
+// }
 
 .Clear {
   float: both;
@@ -158,6 +158,6 @@ li a:hover {
   font-family: cursive;
 }
 
-a {
-  color: #265732;
-}
+// a {
+//   color: #265732;
+// }

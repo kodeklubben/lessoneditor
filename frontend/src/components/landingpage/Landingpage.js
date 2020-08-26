@@ -1,109 +1,163 @@
 import "./landingpage.scss";
-import React, { useContext } from "react";
-import { useParams, useHistory } from "react-router";
+import React, { useState, useContext } from "react";
+import { useParams } from "react-router";
 import Navbar from "components/navbar/Navbar";
 import Datapanel from "./datapanel/Datapanel";
+import LessonCard from "./LessonCard";
 import { LessonContext } from "contexts/LessonContext";
+import { UserContext } from "../../contexts/UserContext";
+import submitLesson from "api/submit-lesson";
 
 const Landingpage = () => {
-  const history = useHistory();
+  const [areYouSure, setAreYouSure] = useState(false);
   const { lessonId } = useParams();
   const lesson = useContext(LessonContext);
-  const { data, lessonList, language } = lesson;
+  const { data, lessonList, saveLesson } = lesson;
 
-  const navigateToEditor = (lessonId, file) => {
-    const target = ["/editor", lessonId, file].join("/");
+  let languages = [];
+  let allLanguages = ["nb", "nn", "en", "is"];
+  let thumbUrl;
 
-    history.push(target);
+  if (
+    Object.keys(lessonList).length !== 0 &&
+    lessonList.constructor !== Object
+  ) {
+    lessonList.forEach((item) => {
+      if (item.filename === "preview.png") {
+        thumbUrl = item.url;
+      }
+    });
+  }
+
+  const onSubmit = async () => {
+    await saveLesson(data);
+    await submitLesson(lessonId);
+    alert("submitted");
   };
+
+  if (
+    Object.keys(lessonList).length !== 0 &&
+    lessonList.constructor !== Object
+  ) {
+    lessonList.forEach((element) => {
+      switch (
+        element.filename.slice(-2) === "md" &&
+        element.filename.slice(5) !== "read" &&
+        element.filename.slice(-5, -3)
+      ) {
+        case "nn":
+          if (!languages.includes("nn")) {
+            languages.push("nn");
+          }
+          break;
+        case "en":
+          if (!languages.includes("en")) {
+            languages.push("en");
+          }
+          break;
+        case "is":
+          if (!languages.includes("is")) {
+            languages.push("is");
+          }
+          break;
+        default:
+          if (!languages.includes("nb")) {
+            languages.push("nb");
+          }
+          break;
+      }
+    });
+  }
 
   return (
     <>
       <Navbar />
-      <div className="landing_navbar">
+      <div style={{ marginBottom: "5em" }} className="landing_navbar">
         <h2>{data.lesson}</h2>
-        <div style={{ float: "right" }}>
+        <div style={{ display: "flex", float: "right" }}>
           <Datapanel />
         </div>
       </div>
 
-      <h3>Lag ny tekstfil:</h3>
-      <div className="ui card">
-        <div className="content">
+      {areYouSure ? (
+        <div
+          style={{
+            position: "absolute",
+            top: "0%",
+            left: "0%",
+            zIndex: "1",
+            width: "100%",
+            height: "100%",
+            backgroundColor: "rgb(256,256,256,0.7)",
+          }}
+        >
           <div
-            style={{ height: "200px" }}
-            onClick={async () =>
-              language !== "nb"
-                ? navigateToEditor(
-                    lessonId,
-                    (await data.lesson) + "_" + language
-                  )
-                : navigateToEditor(lessonId, await data.lesson)
-            }
+            style={{
+              zIndex: "2",
+              margin: "auto",
+              marginTop: "10%",
+              padding: "10%",
+              width: "50%",
+              height: "50%",
+              backgroundColor: "white",
+              border: "5px solid red",
+            }}
           >
-            <i className=" huge plus  icon"></i>
+            <h1>Alert(!):Vil du __virkelig__ sende inn oppgaven...?</h1>
+            <i className="big bomb icon"></i>
+            <button
+              style={{ backgroundColor: "red" }}
+              className="ui button"
+              onClick={onSubmit}
+            >
+              Sende inn
+            </button>
+            <i className="big bomb icon"></i>
+            <br />
+            <i className="big red heart icon"></i>
+            <button
+              style={{ backgroundColor: "green" }}
+              className="ui button"
+              onClick={() => setAreYouSure(false)}
+            >
+              Få meg tilbake til trygg grunn...
+            </button>
+            <i className="big birthday cake icon"></i>
           </div>
+        </div>
+      ) : (
+        ""
+      )}
+
+      <div style={{ marginBottom: "5em" }}>
+        <div style={{ display: "flex" }}>
+          {allLanguages.map((element, index) => {
+            return (
+              <div key={element + index}>
+                <LessonCard
+                  language={element}
+                  hasContent={languages.includes(element)}
+                  thumbUrl={thumbUrl}
+                  lessonId={lessonId}
+                  lessonTitle={data.lesson}
+                />
+              </div>
+            );
+          })}
         </div>
       </div>
 
-      <div
-        style={{
-          backgroundColor: "grey",
-          width: "90%",
-          margin: "auto",
-          marginTop: "60px",
-          marginBottom: "50px",
-          height: "2px",
+      <a href={"/"}>
+        <button className="ui button">Tilbake</button>
+      </a>
+      <button
+        className="ui button"
+        onClick={() => {
+          setAreYouSure(true);
         }}
-        className="ui horizontal divider"
-      />
-
-      {Object.keys(lessonList).length !== 0 && lessonList.constructor !== Object
-        ? lessonList.map((listItem, index) => {
-            if (listItem.filename.slice(-3) === ".md") {
-              return (
-                <div key={listItem + index} className="column">
-                  <div className="ui fluid card">
-                    {/* <div className="image itemListImage">
-                    <img src={listitem.thumb} alt={"oppgavebilde"} />
-                  </div> */}
-                    <div className="content">
-                      <div className="header">
-                        {listItem.filename.slice(0, -3)}
-                      </div>
-                      {/* <div className="meta">
-                      <h4>{listitem.course}</h4>
-                    </div> */}
-                    </div>
-                    <div className="extra content">
-                      <button
-                        className="ui button"
-                        onClick={() =>
-                          navigateToEditor(
-                            lessonId,
-                            listItem.filename.slice(0, -3)
-                          )
-                        }
-                      >
-                        Åpne
-                      </button>
-                      {/* <button
-                      className="ui button"
-                      onClick={async () => {
-                        await removeLesson(listitem.lessonId);
-                      }}
-                    >
-                      Fjerne
-                    </button> */}
-                    </div>
-                  </div>
-                </div>
-              );
-            } else {
-              return "";
-            }
-          })
-        : ""}
+      >
+        Sende inn
+      </button>
     </>
   );
 };

@@ -22,17 +22,18 @@ const NewLesson = ({ setShowPopup }) => {
       setError("kurs og tittel må være satt");
     }
   };
-  const navigateToEditor = (lessonId) => {
+  const navigateToLandingpage = (lessonId) => {
     const target = ["/landingpage", lessonId].join("/");
-    history.push(target);
+    history.push({ pathname: "/empty" });
+    history.replace({ pathname: target });
   };
   const onSubmit = async (e) => {
     e.preventDefault();
     const { course, title } = values;
     if (title) {
       const lesson = slugify(title);
-      const lessonId = await user.addLesson(course, title);
-      navigateToEditor(lessonId, lesson);
+      const lessonId = await user.addLesson(course, title, "no title");
+      navigateToLandingpage(lessonId, lesson);
     } else {
       setError("tittel er ikke satt");
     }

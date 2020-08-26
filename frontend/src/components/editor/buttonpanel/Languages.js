@@ -1,7 +1,8 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { useParams, useHistory } from "react-router";
 import { LessonContext } from "contexts/LessonContext";
 import { Dropdown } from "semantic-ui-react";
+import saveMdText from "../../../api/save-md-text";
 
 const languageOptions = [
   {
@@ -30,28 +31,60 @@ const languageOptions = [
   },
 ];
 
-const Languages = () => {
+const Languages = ({ mdText, file }) => {
   const history = useHistory();
-  const { lessonId, file } = useParams();
+  const { lessonId } = useParams();
   const lessonContext = useContext(LessonContext);
-  const { data, setLanguage } = lessonContext;
+  const { data, language, setLang } = lessonContext;
+
+  let header;
+
+  if (
+    data.header[language] &&
+    Object.keys(data.header[language]).length !== 0
+  ) {
+    header = `---
+title: ${data.header[language].title ? data.header[language].title : `test`}
+author: ${
+      data.header[language].authorList ? data.header[language].authorList : ""
+    }
+${
+  data.header[language].translatorList &&
+  data.header[language].translatorList.length > 0
+    ? `translator: ${data.header[language].translatorList}`
+    : ``
+}
+language: ${language ? language : ""}
+---
+`;
+  }
+
+  let newMdText = header !== undefined ? header + "\n\n\n" + mdText : mdText;
 
   const defaultValue = (file) => {
     let returnvalue;
-    if (file.slice(-2) === "nn") {
-      returnvalue = "nn";
-    } else if (file.slice(-2) === "en") {
-      returnvalue = "en";
-    } else if (file.slice(-2) === "is") {
-      returnvalue = "is";
-    } else {
-      returnvalue = "nb";
+    switch (file?.slice(-3)) {
+      case "_nn":
+        returnvalue = "nn";
+        break;
+      case "_en":
+        returnvalue = "en";
+        break;
+      case "_is":
+        returnvalue = "is";
+        break;
+      default:
+        returnvalue = "nb";
+        break;
     }
     return returnvalue;
   };
 
+  useEffect(() => {
+    setLang(defaultValue(file));
+  });
+
   const handleChange = async (event, { value }) => {
-    setLanguage(value);
     let target;
     if (lessonId && file && value !== "nb") {
       target = ["/editor", lessonId, (await data.lesson) + "_" + value].join(
@@ -60,16 +93,16 @@ const Languages = () => {
     } else if (lessonId && file) {
       target = ["/editor", lessonId, await data.lesson].join("/");
     }
-    history.push(target);
+    if (newMdText.length > 0) await saveMdText(lessonId, file, newMdText);
+    setLang(value);
+    history.push({ pathname: "/empty" });
+    history.replace({ pathname: target });
   };
   return (
-    <div>
+    <>
       <Dropdown
         style={{
           width: "13em",
-          position: "relative",
-          top: "-0.7em",
-          left: "-2em",
         }}
         placeholder="Velg Språk"
         name="language"
@@ -79,7 +112,7 @@ const Languages = () => {
         onChange={handleChange}
         options={languageOptions}
       />
-    </div>
+    </>
   );
 };
 

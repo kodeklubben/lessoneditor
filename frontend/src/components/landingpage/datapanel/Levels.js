@@ -1,12 +1,11 @@
 import React from "react";
 import { Dropdown } from "semantic-ui-react";
-
 import {
   levelOptions,
   FORM_TEXT,
 } from "../settingsFiles/languages/landingpage_NO";
 
-const Levels = ({ changeHandler, level }) => {
+const Levels = ({ changeHandler, data }) => {
   return (
     <div>
       <h3 className="formLabel">{FORM_TEXT.LEVEL.heading}</h3>
@@ -15,6 +14,7 @@ const Levels = ({ changeHandler, level }) => {
         placeholder="Velg Nivå"
         name="level"
         defaultValue={levelOptions[0].value}
+        value={data?.yml["level"]}
         fluid
         selection
         onChange={changeHandler}

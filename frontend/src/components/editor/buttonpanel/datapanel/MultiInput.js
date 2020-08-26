@@ -1,15 +1,26 @@
 import React from "react";
 
-const MultiInput = (props) => {
+const MultiInput = ({
+  changeHandler,
+  multiInputHandler,
+  name,
+  title,
+  inputArray = [],
+  inputValue,
+  placeholder,
+  required,
+  autofocus,
+  validateMessage,
+}) => {
   let inputOrder = 1;
 
   let textInput = null;
 
   const handleClick = (event) => {
-    if (props.inputValue && !props.inputArray.includes(props.inputValue)) {
+    if (inputValue && !inputArray.includes(inputValue)) {
       let i = event.target.name + "List";
-      let temp = { [i]: [...props.inputArray, props.inputValue] };
-      props.multiInputHandler(temp, event.target.name);
+      let temp = { [i]: [...inputArray, inputValue] };
+      multiInputHandler(temp, event.target.name);
       inputOrder += 1;
 
       textInput.focus();
@@ -26,11 +37,11 @@ const MultiInput = (props) => {
 
   const removeClickHandler = (name, value) => {
     let i = name + "List";
-    let tempArray = props.inputArray;
-    let index = props.inputArray.indexOf(value);
+    let tempArray = inputArray;
+    let index = inputArray.indexOf(value);
     tempArray.splice(index, 1);
     let temp = { [i]: tempArray };
-    props.multiInputHandler(temp, name);
+    multiInputHandler(temp, name);
 
     inputOrder -= 1;
   };
@@ -38,8 +49,8 @@ const MultiInput = (props) => {
   return (
     <div id="multiInputContainer" className="row">
       <h3 className="formLabel">
-        {props.title}
-        <span className="requiredText"> {props.required}</span>
+        {title}
+        <span className="requiredText"> {required}</span>
       </h3>
       <div className="inputField">
         <div
@@ -48,48 +59,46 @@ const MultiInput = (props) => {
             width: "100%",
           }}
         >
-          {props.autofocus ? (
+          {autofocus ? (
             <input
               autoFocus
               ref={(element) => (textInput = element)}
-              id="formInput"
               autoComplete="off"
               type="text"
-              name={props.name}
-              placeholder={props.placeholder}
-              value={props.inputValue}
+              name={name}
+              placeholder={placeholder}
+              value={inputValue}
               onClick={inputClick}
               onTouchStart={inputClick}
-              onChange={props.changeHandler}
+              onChange={changeHandler}
               onKeyUp={(e) => (e.key === "Enter" ? handleClick(e) : "")}
               onBlur={(e) => onBlur(e)}
             />
           ) : (
             <input
               ref={(element) => (textInput = element)}
-              id="formInput"
               autoComplete="off"
               type="text"
-              name={props.name}
-              placeholder={props.placeholder}
-              value={props.inputValue}
+              name={name}
+              placeholder={placeholder}
+              value={inputValue}
               onClick={inputClick}
               onTouchStart={inputClick}
-              onChange={props.changeHandler}
+              onChange={changeHandler}
               onKeyUp={(e) => (e.key === "Enter" ? handleClick(e) : "")}
               onBlur={(e) => onBlur(e)}
             />
           )}
         </div>
 
-        {props.inputArray.map((element) => (
+        {inputArray.map((element) => (
           <button
             className="ui right icon button"
             style={{ order: inputOrder - 1 }}
             id="removeNameButton"
             type="button"
             key={element}
-            onClick={() => removeClickHandler(props.name, element)}
+            onClick={() => removeClickHandler(name, element)}
           >
             <span>
               {element} <i className="x icon"></i>
@@ -104,15 +113,15 @@ const MultiInput = (props) => {
           }}
           id="addNameButton"
           className="ui icon button"
-          name={props.name}
+          name={name}
           type="button"
           onClick={handleClick}
         >
           <i id="addNameButtonChild" className="plus icon" />
         </button>
       </div>
-      {props.validateMessage ? (
-        <div className="validateError">{props.validateMessage}</div>
+      {validateMessage ? (
+        <div className="validateError">{validateMessage}</div>
       ) : (
         ""
       )}

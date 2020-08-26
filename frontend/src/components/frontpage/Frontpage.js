@@ -38,15 +38,31 @@ const Overview = () => {
           className="ui horizontal divider"
         />
 
-        <h3>Mine oppgaver</h3>
-        {lessons ? (
-          <ItemList
-            items={lessons}
-            removeLesson={context.removeLesson}
-            navigateToHome={navigateToHome}
-          />
+        {lessons.length > 0 ? (
+          <>
+            <p
+              style={{
+                fontStyle: 'Arial, "Times New Roman", Times, serif',
+                fontSize: "23px",
+              }}
+            >
+              Mine oppgaver
+            </p>
+            <ItemList
+              items={lessons}
+              removeLesson={context.removeLesson}
+              navigateToHome={navigateToHome}
+            />
+          </>
         ) : (
-          <b>Du har ingen kurs</b>
+          <p
+            style={{
+              fontStyle: 'Arial, "Times New Roman", Times, serif',
+              fontSize: "23px",
+            }}
+          >
+            Du har ingen kurs
+          </p>
         )}
         <br />
       </div>

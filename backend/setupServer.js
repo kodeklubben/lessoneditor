@@ -10,6 +10,7 @@ module.exports = function (app) {
   require("./routes/lesson-submit")(app);
   require("./routes/lesson-thumb")(app);
   require("./routes/lesson-uploads")(app);
+  require("./routes/lesson-edit")(app);
   require("./routes/serve-file")(app);
   require("./routes/serve-frontend")(app);
 };

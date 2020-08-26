@@ -5,16 +5,15 @@ import { renderScratchBlocks } from "utils/renderScratchblocks";
 import { mdParser } from "../../utils/mdParser";
 import { renderToggleButtons } from "utils/renderToggleButton";
 
-const MDPreview = ({ mdText, course, renderContent }) => {
+const MDPreview = ({ mdText, course, language, renderContent }) => {
   const parseMD = mdParser(mdText);
 
   useEffect(() => {
     renderToggleButtons();
     if (course === "microbit" && renderContent) {
-      //TODO: Get lesson language
-      renderMicrobit("nb");
+      renderMicrobit(JSON.stringify(language));
     }
-  }, [course, parseMD, renderContent]);
+  }, [course, parseMD, renderContent, language]);
 
   if (course === "scratch" && renderContent) {
     let lessonContent = renderScratchBlocks(parseMD);

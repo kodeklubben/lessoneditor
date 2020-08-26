@@ -1,12 +1,14 @@
 import "./editordatapane.scss";
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import MultiInput from "./MultiInput";
 import { FORM_TEXT } from "./settings/landingpage_NO.js";
+import { LessonContext } from "contexts/LessonContext";
 
-const EditorDatapanel = ({ title, setTitle }) => {
+const EditorDatapanel = () => {
   const [open, setOpen] = useState(false);
   const [state, setState] = useState({
-    err: "",
+    title: "",
+    titleErr: "",
     author: "",
     authorList: [],
     authorErr: "",
@@ -14,16 +16,34 @@ const EditorDatapanel = ({ title, setTitle }) => {
     translatorList: [],
   });
 
+  const context = useContext(LessonContext);
+  const { language, data, saveLesson, getLessonData } = context;
+
+  useEffect(() => {
+    const test = async () => {
+      if (data.header[language]) {
+        setState((prevState) => ({
+          ...prevState,
+          title: data.header[language].title,
+          authorList: data.header[language].authorList,
+        }));
+        if (data.header[language].translatorList) {
+          setState((prevState) => ({
+            ...prevState,
+            translatorList: data.header[language].translatorList,
+          }));
+        }
+      }
+    };
+    test();
+  }, [data, language]);
+
   const changeHandler = (event) => {
     let nam = event.target.name;
     let val = event.target.value;
-    if (nam === "title") {
-      setTitle(val);
-    } else {
-      setState((prevState) => ({ ...prevState, [nam]: val }));
-      if (state.author) setState((prevState) => ({ ...prevState, err: "" }));
-      if (title) setState((prevState) => ({ ...prevState, err: "" }));
-    }
+    setState((prevState) => ({ ...prevState, [nam]: val }));
+    if (state.author) setState((prevState) => ({ ...prevState, err: "" }));
+    if (state.title) setState((prevState) => ({ ...prevState, err: "" }));
   };
 
   const multiInputHandler = (object, field) => {
@@ -33,13 +53,21 @@ const EditorDatapanel = ({ title, setTitle }) => {
     setState((prevState) => ({ ...prevState, [field]: "" }));
   };
 
+  const onSubmit = () => {
+    let newData = { ...data, header: { [language]: state } };
+
+    saveLesson(newData);
+    setOpen(false);
+  };
+
+  const onCancel = async () => {
+    await getLessonData();
+    setOpen(false);
+  };
+
   return (
     <>
-      <button
-        style={{ marginLeft: "auto", float: "right" }}
-        className="ui button"
-        onClick={() => setOpen(!open)}
-      >
+      <button className="ui button" onClick={() => setOpen(!open)}>
         <i style={{ cursor: "pointer" }} className="grey cog icon"></i>
       </button>
 
@@ -48,7 +76,7 @@ const EditorDatapanel = ({ title, setTitle }) => {
           style={open ? { display: "flex" } : { display: "none" }}
           className="editorDatapanel_BG"
         >
-          <div style={{ padding: "5em" }} className="editorDatapanel_container">
+          <div className="editorDatapanel_container">
             <i
               onClick={() => setOpen(!open)}
               className="big grey x icon editor"
@@ -66,7 +94,7 @@ const EditorDatapanel = ({ title, setTitle }) => {
                 type="text"
                 name="title"
                 placeholder={FORM_TEXT.TITLE.placeholder}
-                value={title}
+                value={state.title}
                 onChange={changeHandler}
               />
 
@@ -93,8 +121,10 @@ const EditorDatapanel = ({ title, setTitle }) => {
               inputValue={state.translator}
               placeholder={FORM_TEXT.TRANSLATOR.placeholder}
             />
-            <button className="ui button">OK</button>
-            <button className="ui button" onClick={() => setOpen(!open)}>
+            <button className="ui button" onClick={onSubmit}>
+              OK
+            </button>
+            <button className="ui button" onClick={onCancel}>
               Avbryt
             </button>
           </div>
