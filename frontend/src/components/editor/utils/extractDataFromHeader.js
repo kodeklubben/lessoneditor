@@ -17,7 +17,9 @@ export const extractDataFromHeader = (tekst) => {
   let author = "";
   let translator = "";
 
-  indexHeaderEnding = tekst.slice(3).indexOf("---");
+  if (tekst.slice(3).indexOf("---") < 1000) {
+    indexHeaderEnding = tekst.slice(3).indexOf("---");
+  }
   parsedText = tekst.slice(3, indexHeaderEnding + 3);
 
   let indexLessonStart = indexHeaderEnding + 6;

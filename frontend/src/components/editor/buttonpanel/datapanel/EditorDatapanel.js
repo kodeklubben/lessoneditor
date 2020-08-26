@@ -17,47 +17,26 @@ const EditorDatapanel = () => {
   });
 
   const context = useContext(LessonContext);
-  const {
-    language,
-    setData,
-    data,
-    headerData,
-    setHeaderData,
-    saveLesson,
-  } = context;
+  const { language, data, saveLesson, getLessonData } = context;
 
   useEffect(() => {
     const test = async () => {
       if (data.header[language]) {
         setState((prevState) => ({
           ...prevState,
-          title: data?.header[language].title,
-          authorList: data?.header[language].authorList,
+          title: data.header[language].title,
+          authorList: data.header[language].authorList,
         }));
-        if (data?.header[language].translatorList) {
+        if (data.header[language].translatorList) {
           setState((prevState) => ({
             ...prevState,
-            translatorList: data?.header[language].translatorList,
+            translatorList: data.header[language].translatorList,
           }));
         }
-      } else if (headerData[language]) {
-        setState((prevState) => ({
-          ...prevState,
-          title: headerData[language].title,
-          authorList: headerData[language].authorList,
-        }));
-        if (headerData[language].translatorList) {
-          setState((prevState) => ({
-            ...prevState,
-            translatorList: headerData[language].translatorList,
-          }));
-        }
-      } else {
-        console.log("error");
       }
     };
     test();
-  }, [headerData, language]);
+  }, [data, language]);
 
   const changeHandler = (event) => {
     let nam = event.target.name;
@@ -75,14 +54,15 @@ const EditorDatapanel = () => {
   };
 
   const onSubmit = () => {
-    setHeaderData((prevState) => ({ ...prevState, [language]: state }));
-    setData((prevState) => ({
-      ...prevState,
-      header: { ...headerData },
-    }));
-    saveLesson(data);
+    let newData = { ...data, header: { [language]: state } };
+
+    saveLesson(newData);
     setOpen(false);
-    console.log("data : " + JSON.stringify(data));
+  };
+
+  const onCancel = async () => {
+    await getLessonData();
+    setOpen(false);
   };
 
   return (
@@ -144,7 +124,7 @@ const EditorDatapanel = () => {
             <button className="ui button" onClick={onSubmit}>
               OK
             </button>
-            <button className="ui button" onClick={() => setOpen(!open)}>
+            <button className="ui button" onClick={onCancel}>
               Avbryt
             </button>
           </div>

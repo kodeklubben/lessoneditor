@@ -35,19 +35,23 @@ const Languages = ({ mdText, file }) => {
   const history = useHistory();
   const { lessonId } = useParams();
   const lessonContext = useContext(LessonContext);
-  const { data, language, setLang, headerData } = lessonContext;
+  const { data, language, setLang } = lessonContext;
 
   let header;
 
-  if (headerData[language] && Object.keys(headerData[language]).length !== 0) {
+  if (
+    data.header[language] &&
+    Object.keys(data.header[language]).length !== 0
+  ) {
     header = `---
-title: ${headerData[language].title ? headerData[language].title : `test`}
+title: ${data.header[language].title ? data.header[language].title : `test`}
 author: ${
-      headerData[language].authorList ? headerData[language].authorList : ""
+      data.header[language].authorList ? data.header[language].authorList : ""
     }
 ${
-  headerData[language].translatorList
-    ? `translator: ${headerData[language].translatorList}`
+  data.header[language].translatorList &&
+  data.header[language].translatorList.length > 0
+    ? `translator: ${data.header[language].translatorList}`
     : ``
 }
 language: ${language ? language : ""}

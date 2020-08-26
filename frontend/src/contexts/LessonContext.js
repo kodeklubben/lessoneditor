@@ -60,10 +60,10 @@ export const LessonContextProvider = (props) => {
           [language]: defaultState,
         }));
       }
-      if (!data["header"][language]) {
+      if (!data.header[language]) {
         setData((prevState) => ({
           ...prevState,
-          ["header"]: { [language]: defaultState },
+          header: { [language]: defaultState },
         }));
       }
       setLanguage(language);
