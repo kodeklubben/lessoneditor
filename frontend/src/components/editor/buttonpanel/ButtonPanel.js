@@ -40,22 +40,26 @@ const ButtonPanel = ({
   const history = useHistory();
   const { lessonId } = useParams();
   const context = useContext(LessonContext);
-  const { data, language, headerData } = context;
+  const { data, language } = context;
   const course = data.course;
 
   let header;
 
-  if (headerData[language] && Object.keys(headerData[language]).length !== 0) {
+  if (
+    data.header[language] &&
+    Object.keys(data.header[language]).length !== 0
+  ) {
     header = `---
-title: ${headerData[language].title ? headerData[language].title : `test`}
+title: ${data.header[language].title ? data.header[language].title : `test`}
 author: ${
-      headerData[language].authorList ? headerData[language].authorList : ""
+      data.header[language].authorList ? data.header[language].authorList : ""
+    } ${
+      data.header[language].translatorList &&
+      data.header[language].translatorList.length > 0
+        ? `
+translator: ${data.header[language].translatorList}`
+        : ""
     }
-${
-  headerData[language].translatorList
-    ? `translator: ${headerData[language].translatorList}`
-    : ``
-}
 language: ${language ? language : ""}
 ---
 `;
@@ -115,7 +119,7 @@ language: ${language ? language : ""}
 
         <div style={{ display: "flex", float: "right" }}>
           <Languages mdText={mdText} file={file} />
-          <EditorDatapanel headerData={headerData} />
+          <EditorDatapanel headerData={data.header} />
           <button
             className={`ui ${mdText.length < 1 ? `disabled` : ``} button`}
             id="next"

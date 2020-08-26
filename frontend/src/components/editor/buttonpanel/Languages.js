@@ -35,19 +35,23 @@ const Languages = ({ mdText, file }) => {
   const history = useHistory();
   const { lessonId } = useParams();
   const lessonContext = useContext(LessonContext);
-  const { data, language, setLanguage, headerData } = lessonContext;
+  const { data, language, setLang } = lessonContext;
 
   let header;
 
-  if (headerData[language] && Object.keys(headerData[language]).length !== 0) {
+  if (
+    data.header[language] &&
+    Object.keys(data.header[language]).length !== 0
+  ) {
     header = `---
-title: ${headerData[language].title ? headerData[language].title : `test`}
+title: ${data.header[language].title ? data.header[language].title : `test`}
 author: ${
-      headerData[language].authorList ? headerData[language].authorList : ""
+      data.header[language].authorList ? data.header[language].authorList : ""
     }
 ${
-  headerData[language].translatorList
-    ? `translator: ${headerData[language].translatorList}`
+  data.header[language].translatorList &&
+  data.header[language].translatorList.length > 0
+    ? `translator: ${data.header[language].translatorList}`
     : ``
 }
 language: ${language ? language : ""}
@@ -77,7 +81,7 @@ language: ${language ? language : ""}
   };
 
   useEffect(() => {
-    setLanguage(defaultValue(file));
+    setLang(defaultValue(file));
   });
 
   const handleChange = async (event, { value }) => {
@@ -90,6 +94,7 @@ language: ${language ? language : ""}
       target = ["/editor", lessonId, await data.lesson].join("/");
     }
     if (newMdText.length > 0) await saveMdText(lessonId, file, newMdText);
+    setLang(value);
     history.push({ pathname: "/empty" });
     history.replace({ pathname: target });
   };

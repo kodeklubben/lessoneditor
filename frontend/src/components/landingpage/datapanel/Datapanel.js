@@ -29,8 +29,6 @@ const Datapanel = () => {
     }));
   };
 
-  console.log(JSON.stringify(data));
-
   const changeHandler = (event) => {
     let name =
       event.target.type === "checkbox" ? event.target.value : event.target.name;

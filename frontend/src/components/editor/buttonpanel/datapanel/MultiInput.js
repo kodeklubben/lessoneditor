@@ -5,7 +5,7 @@ const MultiInput = ({
   multiInputHandler,
   name,
   title,
-  inputArray,
+  inputArray = [],
   inputValue,
   placeholder,
   required,

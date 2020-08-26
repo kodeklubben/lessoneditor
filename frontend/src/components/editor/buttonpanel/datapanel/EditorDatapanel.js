@@ -17,30 +17,26 @@ const EditorDatapanel = () => {
   });
 
   const context = useContext(LessonContext);
-  const { language, headerData, setHeaderData } = context;
+  const { language, data, saveLesson, getLessonData } = context;
 
   useEffect(() => {
-    console.clear();
-    console.log("editorPanel : " + language);
-    console.log(headerData[language]);
-
-    if (Object.keys(headerData).length !== 0) {
-      // if (headerData[language] === undefined) {
-      //   return;
-      // }
-      setState((prevState) => ({
-        ...prevState,
-        title: headerData[language].title,
-        authorList: headerData[language].authorList,
-      }));
-      if (headerData[language] && headerData[language].translatorList) {
+    const test = async () => {
+      if (data.header[language]) {
         setState((prevState) => ({
           ...prevState,
-          translatorList: headerData[language].translatorList,
+          title: data.header[language].title,
+          authorList: data.header[language].authorList,
         }));
+        if (data.header[language].translatorList) {
+          setState((prevState) => ({
+            ...prevState,
+            translatorList: data.header[language].translatorList,
+          }));
+        }
       }
-    }
-  }, [headerData, language]);
+    };
+    test();
+  }, [data, language]);
 
   const changeHandler = (event) => {
     let nam = event.target.name;
@@ -58,7 +54,14 @@ const EditorDatapanel = () => {
   };
 
   const onSubmit = () => {
-    setHeaderData((prevState) => ({ ...prevState, [language]: state }));
+    let newData = { ...data, header: { [language]: state } };
+
+    saveLesson(newData);
+    setOpen(false);
+  };
+
+  const onCancel = async () => {
+    await getLessonData();
     setOpen(false);
   };
 
@@ -121,7 +124,7 @@ const EditorDatapanel = () => {
             <button className="ui button" onClick={onSubmit}>
               OK
             </button>
-            <button className="ui button" onClick={() => setOpen(!open)}>
+            <button className="ui button" onClick={onCancel}>
               Avbryt
             </button>
           </div>
