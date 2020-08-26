@@ -14,7 +14,8 @@ import { extractDataFromHeader } from "./utils/extractDataFromHeader";
 const Editor = () => {
   const { lessonId, file } = useParams();
   const context = useContext(LessonContext);
-  const { language, data, setData } = context;
+  const { language, data, setData, saveLesson } = context;
+  const { language, data, saveLesson } = context;
   const [mdText, setMdText] = useState("");
   const [buttonValues, setButtonValues] = useState({});
   const [cursorPositionStart, setCursorPositionStart] = useState(0);
@@ -82,22 +83,28 @@ const Editor = () => {
   useEffect(() => {
     if (lessonId && file) {
       async function fetchData() {
-        const lessonText = await fetchMdText(lessonId, file);
+        try {
+          const lessonText = await fetchMdText(lessonId, file);
+
+          return lessonText;
+        } catch (e) {
+          console.log(e);
+        }
+      }
+      fetchData().then((lessonText) => {
         const lessonData = extractDataFromHeader(lessonText);
         if (lessonData) {
-          setData((prevState) => ({
-            ...prevState,
-            header: { [language]: lessonData },
-          }));
+          const newData = { ...data, header: { [language]: lessonData } };
+          // console.log("newData : " + JSON.stringify(newData));
+          saveLesson(newData);
         }
         if (lessonData.indexLessonStart) {
           setMdText(lessonText.slice(lessonData.indexLessonStart).trim());
           setUndo([lessonText.slice(lessonData.indexLessonStart).trim()]);
         }
-      }
-      fetchData();
+      });
     }
-  }, [lessonId, data, file, setData, language]);
+  }, [data, file, language, lessonId, saveLesson]);
 
   return (
     <div className="editor">
