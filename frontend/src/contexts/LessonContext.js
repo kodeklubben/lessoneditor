@@ -8,7 +8,7 @@ export const LessonContext = React.createContext({});
 
 export const LessonContextProvider = (props) => {
   const { lessonId } = useParams();
-  const [data, setData] = useState({ header: {} });
+  const [data, setData] = useState({ header: { nb: {} } });
   const [lessonList, setLessonList] = useState({});
   const [language, setLanguage] = useState("nb");
 
@@ -65,7 +65,7 @@ export const LessonContextProvider = (props) => {
         setData(data);
       }
     },
-    getLessonData: async (data) => {
+    getLessonData: async () => {
       if (lessonId) {
         const res = await axios.get(lessonDataUrl);
         setData(res.data);

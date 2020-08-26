@@ -69,7 +69,7 @@ const emphasis = {
   bold: {
     buttonTitle: "bold",
     icon: "bold",
-    output: "__" + SECTION_TEXT + "__",
+    output: "**" + SECTION_TEXT + "**",
     title: BUTTON_TITLE.bold,
     cursorIntON: 2,
     cursorIntOFF: 2,
@@ -78,7 +78,7 @@ const emphasis = {
   italic: {
     buttonTitle: "italic",
     icon: "italic",
-    output: "_" + SECTION_TEXT + "_",
+    output: "*" + SECTION_TEXT + "*",
     title: BUTTON_TITLE.italic,
     cursorIntON: 1,
     cursorIntOFF: 1,
