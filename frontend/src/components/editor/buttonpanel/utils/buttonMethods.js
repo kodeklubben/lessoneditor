@@ -200,12 +200,13 @@ const insertSection = (
   cursorIntOFF,
   sectionText
 ) => {
-  if (!ifNewLine(inputText, cursorPositionStart)) {
+  if (!ifNewLine(inputText, cursorPositionStart) && !isOn) {
     inputText =
       inputText.slice(0, cursorPositionStart) +
-      "\n\n" +
+      "\n" +
       inputText.slice(cursorPositionStart);
     cursorPositionStart += 1;
+    cursorPositionEnd += 1;
     insertSection(
       isOn,
       button,
@@ -234,8 +235,9 @@ const insertSection = (
       cursorPositionEnd += sectionText.length + 2;
     }
     return { inputText, cursorPositionStart, cursorPositionEnd };
-  } else {
-    cursorPositionEnd += sectionText.length;
+  } else if (isOn) {
+    cursorPositionStart += cursorPositionEnd + sectionText.length;
+    cursorPositionEnd = cursorPositionStart;
     return { inputText, cursorPositionStart, cursorPositionEnd };
   }
 };

@@ -40,7 +40,7 @@ const ButtonPanel = ({
   const history = useHistory();
   const { lessonId } = useParams();
   const context = useContext(LessonContext);
-  const { data, language } = context;
+  const { data, language, saveLesson } = context;
   const course = data.course;
 
   let header;
@@ -70,7 +70,8 @@ language: ${language ? language : ""}
   const navigateToHome = async () => {
     if (newMdText.length > 0 && language === "nb")
       await saveMdText(lessonId, file, mdText, true);
-    if (newMdText.length > 0) await saveMdText(lessonId, file, newMdText);
+    if (newMdText.length > 0) await saveMdText(lessonId, file, newMdText, true); // TODO: Må lage screenshot av riktig tekstfil
+    saveLesson(data);
     const target = ["/landingpage", lessonId].join("/");
     history.push(target);
   };

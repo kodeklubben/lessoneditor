@@ -35,7 +35,7 @@ const Languages = ({ mdText, file }) => {
   const history = useHistory();
   const { lessonId } = useParams();
   const lessonContext = useContext(LessonContext);
-  const { data, language, setLang } = lessonContext;
+  const { data, language, setLang, saveLesson } = lessonContext;
 
   let header;
 
@@ -94,6 +94,7 @@ language: ${language ? language : ""}
       target = ["/editor", lessonId, await data.lesson].join("/");
     }
     if (newMdText.length > 0) await saveMdText(lessonId, file, newMdText);
+    saveLesson(data);
     setLang(value);
     history.push({ pathname: "/empty" });
     history.replace({ pathname: target });

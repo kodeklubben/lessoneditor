@@ -39,22 +39,22 @@ const EditorDatapanel = () => {
   }, [data, language]);
 
   const changeHandler = (event) => {
-    let nam = event.target.name;
-    let val = event.target.value;
+    const nam = event.target.name;
+    const val = event.target.value;
     setState((prevState) => ({ ...prevState, [nam]: val }));
     if (state.author) setState((prevState) => ({ ...prevState, err: "" }));
     if (state.title) setState((prevState) => ({ ...prevState, err: "" }));
   };
 
   const multiInputHandler = (object, field) => {
-    let key = Object.keys(object)[0];
-    let value = Object.values(object)[0];
+    const key = Object.keys(object)[0];
+    const value = Object.values(object)[0];
     setState((prevState) => ({ ...prevState, [key]: value }));
     setState((prevState) => ({ ...prevState, [field]: "" }));
   };
 
   const onSubmit = () => {
-    let newData = { ...data, header: { [language]: state } };
+    const newData = { ...data, header: { [language]: state } };
 
     saveLesson(newData);
     setOpen(false);

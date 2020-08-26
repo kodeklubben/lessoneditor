@@ -47,10 +47,26 @@ const MDTextArea = ({
     let start = event.target.selectionStart;
     let end = event.target.selectionEnd;
     setCursor(start, end);
+    let i = mdText.slice(start, end);
+    while (
+      i[0] === " " ||
+      i[i.length - 1] === " " ||
+      i[0] === "\n" ||
+      i[i.length - 1] === "\n"
+    ) {
+      if (i[0] === " " || i[0] === "\n") {
+        i = i.slice(1);
+        start += 1;
+      }
+      if (i[i.length - 1] === " " || i[i.length - 1] === "\n") {
+        i = i.slice(0, i.length - 1);
+        end -= 1;
+      }
+    }
     if (
-      mdText.slice(start - 1, start) === "_" &&
-      mdText.slice(end, end + 1) === "_" &&
-      mdText.slice(start - 2, start) !== "__" &&
+      mdText.slice(start - 1, start) === "*" &&
+      mdText.slice(end, end + 1) === "*" &&
+      mdText.slice(start - 2, start) !== "**" &&
       !buttonValues.italic
     ) {
       setButtonValues((prevButtonValues) => ({
@@ -59,16 +75,16 @@ const MDTextArea = ({
       }));
     }
     if (
-      mdText.slice(start, start + 1) === "_" &&
-      mdText.slice(end - 1, end) === "_" &&
-      mdText.slice(start, start + 2) !== "__" &&
+      mdText.slice(start, start + 1) === "*" &&
+      mdText.slice(end - 1, end) === "*" &&
+      mdText.slice(start, start + 2) !== "**" &&
       !buttonValues.bold
     ) {
       setCursorPosition(start + 1, end - 1);
     }
     if (
-      mdText.slice(start - 2, start) === "__" &&
-      mdText.slice(end, end + 2) === "__"
+      mdText.slice(start - 2, start) === "**" &&
+      mdText.slice(end, end + 2) === "**"
     ) {
       setButtonValues((prevButtonValues) => ({
         ...prevButtonValues,
@@ -77,8 +93,8 @@ const MDTextArea = ({
     }
 
     if (
-      mdText.slice(start, start + 2) === "__" &&
-      mdText.slice(end - 2, end) === "__"
+      mdText.slice(start, start + 2) === "**" &&
+      mdText.slice(end - 2, end) === "**"
     ) {
       setCursorPosition(start + 2, end - 2);
     }
