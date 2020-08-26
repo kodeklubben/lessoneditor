@@ -17,11 +17,13 @@ const Navbar = () => {
         </div>
 
         <div className="navbar_profile">
-          <ProfileMenu
-            name={userContext.user ? userContext.user.name : ""}
-            email={userContext.user ? userContext.user.email : ""}
-            photo={userContext.user ? userContext.user.photo : ""}
-          />
+          <a id="navbar_gohome" href={"/"}>
+            <ProfileMenu
+              name={userContext.user ? userContext.user.name : ""}
+              email={userContext.user ? userContext.user.email : ""}
+              photo={userContext.user ? userContext.user.photo : ""}
+            />
+          </a>
         </div>
       </nav>
     </div>

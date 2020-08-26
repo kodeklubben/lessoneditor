@@ -8,7 +8,7 @@ export const LessonContext = React.createContext({});
 
 export const LessonContextProvider = (props) => {
   const { lessonId } = useParams();
-  const [data, setData] = useState({});
+  const [data, setData] = useState({ header: {} });
   const [headerData, setHeaderData] = useState({});
   const [lessonList, setLessonList] = useState({});
   const [language, setLanguage] = useState("nb");
@@ -44,6 +44,30 @@ export const LessonContextProvider = (props) => {
       setLessonList(res.data);
     },
     lessonList,
+    setLang: async (language) => {
+      const defaultState = {
+        title: "",
+        titleErr: "",
+        author: "",
+        authorList: [],
+        authorErr: "",
+        translator: "",
+        translatorList: [],
+      };
+      if (!headerData[language]) {
+        setHeaderData((prevState) => ({
+          ...prevState,
+          [language]: defaultState,
+        }));
+      }
+      if (!data["header"][language]) {
+        setData((prevState) => ({
+          ...prevState,
+          ["header"]: { [language]: defaultState },
+        }));
+      }
+      setLanguage(language);
+    },
     saveLesson: async (data) => {
       if (lessonId) {
         await axios.post(lessonDataUrl, data);

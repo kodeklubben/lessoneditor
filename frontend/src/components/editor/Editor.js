@@ -14,7 +14,7 @@ import { extractDataFromHeader } from "./utils/extractDataFromHeader";
 const Editor = () => {
   const { lessonId, file } = useParams();
   const context = useContext(LessonContext);
-  const { language, data, headerData, setHeaderData } = context;
+  const { language, setLang, data, headerData, setHeaderData } = context;
 
   const [mdText, setMdText] = useState("");
   const [buttonValues, setButtonValues] = useState({});
@@ -77,6 +77,11 @@ const Editor = () => {
   const resetButtons = () => {
     setButtonValues({});
   };
+
+  useEffect(() => {
+    setLang(language);
+    console.log("data : " + JSON.stringify(data));
+  });
 
   useEffect(() => {
     if (lessonId && file) {

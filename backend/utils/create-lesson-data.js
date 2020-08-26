@@ -10,6 +10,7 @@ module.exports = async (lessonData, username, edit = false) => {
   data.created = new Date().toISOString();
   data.updated = new Date().toISOString();
   data.createdBy = username;
+  data.header = Object.assign({}, "");
   data.yml = Object.assign({}, "");
   const dataBuffer = Buffer.from(JSON.stringify(data));
   if (!edit) {
