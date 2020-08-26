@@ -7,7 +7,11 @@ const isLessonSaved = require("../utils/is-lesson-saved");
 const createNewLesson = require("../utils/create-lesson-data");
 const paths = require("../paths");
 const imgRegex = /([a-zA-Z0-9\s_\\.\-:])+(.png|.jpeg|.jpg)$/i;
+const mdRegex = /([a-zA-Z0-9\s_\\.\-:])+(.md)$/i;
+const isAppEngien = require("../utils/isAppEngine");
+const resolveMarkdownUrls = require("../utils/resolve-markdown-urls");
 
+// Todo: Refactor, finne bedre løsning på resolve markdown urls.
 module.exports = (app) => {
   app.get("/api/lesson/edit/:course/:lesson/:filename", async (req, res) => {
     const { course, lesson, filename } = req.params;
@@ -29,6 +33,7 @@ module.exports = (app) => {
             lessonId: lessonData.lessonId,
             course: course,
             lesson: lesson,
+            title: "",
           },
           req.user.username,
           true
@@ -40,11 +45,29 @@ module.exports = (app) => {
               ["drafts", lessonData.lessonId, files.data[i].name],
               imageBuffer
             );
-          } else {
-            const fileBuffer = await axios.get(files.data[i].download_url);
+          } else if (files.data[i].name.match(mdRegex)) {
+            const file = await axios.get(files.data[i].download_url);
+            let resolvedFile;
+            if (isAppEngien()) {
+              resolvedFile = resolveMarkdownUrls(
+                file.data,
+                `https://lessoneditor.ew.r.appspot.com/api/display/${lessonData.lessonId}/`
+              );
+            } else {
+              resolvedFile = resolveMarkdownUrls(
+                file.data,
+                `http://localhost:3232/api/display/${lessonData.lessonId}/`
+              );
+            }
             await saveFile(
               ["drafts", lessonData.lessonId, files.data[i].name],
-              Buffer.from(fileBuffer.data)
+              Buffer.from(resolvedFile)
+            );
+          } else {
+            const file = await axios.get(files.data[i].download_url);
+            await saveFile(
+              ["drafts", lessonData.lessonId, files.data[i].name],
+              Buffer.from(file.data)
             );
           }
         }
