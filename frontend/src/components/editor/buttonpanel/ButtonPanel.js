@@ -40,7 +40,7 @@ const ButtonPanel = ({
   const history = useHistory();
   const { lessonId } = useParams();
   const context = useContext(LessonContext);
-  const { data, language, saveLesson } = context;
+  const { data, language } = context;
   const course = data.course;
 
   let header;
@@ -50,9 +50,13 @@ const ButtonPanel = ({
     Object.keys(data.header[language]).length !== 0
   ) {
     header = `---
-title: ${data.header[language].title ? data.header[language].title : `test`}
+title: ${
+      data.header[language].title.length > 0 ? data.header[language].title : ""
+    }
 author: ${
-      data.header[language].authorList ? data.header[language].authorList : ""
+      data.header[language].authorList.length > 0
+        ? data.header[language].authorList
+        : ""
     } ${
       data.header[language].translatorList &&
       data.header[language].translatorList.length > 0
@@ -68,10 +72,8 @@ language: ${language ? language : ""}
   let newMdText = header !== undefined ? header + "\n\n\n" + mdText : mdText;
 
   const navigateToHome = async () => {
-    if (newMdText.length > 0 && language === "nb")
-      await saveMdText(lessonId, file, mdText, true);
-    if (newMdText.length > 0) await saveMdText(lessonId, file, newMdText, true); // TODO: Må lage screenshot av riktig tekstfil
-    saveLesson(data);
+    if (newMdText.length > 0) await saveMdText(lessonId, file, mdText, true); // litt dumt å kjøre denne to ganger pga screenshot
+    if (newMdText.length > 0) await saveMdText(lessonId, file, newMdText); // TODO: Må lage screenshot av riktig tekstfil
     const target = ["/landingpage", lessonId].join("/");
     history.push(target);
   };

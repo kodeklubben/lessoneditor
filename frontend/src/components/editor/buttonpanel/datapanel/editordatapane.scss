@@ -41,3 +41,52 @@
   padding-left: 1ch;
   outline: none;
 }
+
+/* MultiInput */
+
+#multiInputContainer {
+  margin-bottom: 1rem;
+}
+
+#addNameButtonChild {
+  pointer-events: none;
+}
+
+.inputField {
+  width: 100%;
+  max-width: 100% !important;
+  display: flex;
+  flex-direction: row;
+  height: 2.7rem;
+}
+
+.inputField input {
+  position: relative;
+  width: 100%;
+}
+
+.x.icon {
+  color: rgb(156, 156, 156);
+}
+
+#formInput {
+  position: static;
+}
+
+#removeNameButton {
+  border-style: none !important;
+  z-index: 1;
+  display: flex;
+  align-self: center;
+  align-items: center;
+  justify-content: center;
+  min-width: max-content;
+  border-style: solid;
+  border-color: rgb(160, 160, 160);
+  border-width: 1px;
+}
+
+#addNameButton {
+  z-index: 1;
+  position: static;
+}

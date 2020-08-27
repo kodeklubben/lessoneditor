@@ -8,13 +8,15 @@ import MDPreview from "./MDPreview";
 import ButtonPanel from "./buttonpanel/ButtonPanel";
 import ImageUpload from "./ImageUpload";
 import fetchMdText from "../../api/fetch-md-text";
+import saveMdText from "../../api/save-md-text";
 import { LessonContext } from "contexts/LessonContext";
 import { extractDataFromHeader } from "./utils/extractDataFromHeader";
 
 const Editor = () => {
   const { lessonId, file } = useParams();
   const context = useContext(LessonContext);
-  const { language, data, saveLesson } = context;
+  const { language, data, setData, saveLesson } = context;
+  const [saveLessonDelay, setSaveLessonDelay] = useState(0);
   const [mdText, setMdText] = useState("");
   const [buttonValues, setButtonValues] = useState({});
   const [cursorPositionStart, setCursorPositionStart] = useState(0);
@@ -91,17 +93,32 @@ const Editor = () => {
       fetchData().then((lessonText) => {
         const lessonData = extractDataFromHeader(lessonText);
         if (lessonData) {
-          const newData = { ...data, header: { [language]: lessonData } };
-          // console.log("newData : " + JSON.stringify(newData));
-          saveLesson(newData);
+          setData((prevState) => ({
+            ...prevState,
+            header: { [language]: lessonData },
+          }));
         }
-        if (lessonData.indexLessonStart) {
+        if (lessonText.length > 3) {
           setMdText(lessonText.slice(lessonData.indexLessonStart).trim());
           setUndo([lessonText.slice(lessonData.indexLessonStart).trim()]);
         }
       });
     }
-  }, [data, file, language, lessonId, saveLesson]);
+  }, [data.header]);
+
+  useEffect(() => {
+    const test = async () => {
+      if (mdText.length > 0) {
+        await saveMdText(lessonId, file, mdText);
+        setSaveLessonDelay((prevState) => prevState + 1);
+
+        if (saveLessonDelay > 3) {
+          saveLesson(data);
+        }
+      }
+    };
+    test();
+  }, [data.header]);
 
   return (
     <div className="editor">

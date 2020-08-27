@@ -20,7 +20,6 @@ export const LessonContextProvider = (props) => {
       const res = await axios.get(lessonDataUrl);
       setData(res.data);
     }
-
     if (lessonId) fetchData();
   }, [lessonId, lessonDataUrl]);
 
@@ -29,7 +28,6 @@ export const LessonContextProvider = (props) => {
       const res = await axios.get(lessonListUrl);
       setLessonList(res.data);
     }
-
     if (lessonId) fetchList();
   }, [lessonId, lessonListUrl]);
 
@@ -68,7 +66,9 @@ export const LessonContextProvider = (props) => {
     getLessonData: async () => {
       if (lessonId) {
         const res = await axios.get(lessonDataUrl);
-        setData(res.data);
+        if (Object.keys(res.data) > 0) {
+          setData(res.data);
+        }
       }
     },
     language,

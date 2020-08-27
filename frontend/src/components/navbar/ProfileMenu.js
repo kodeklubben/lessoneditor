@@ -6,9 +6,19 @@ const ProfileMenu = ({ name, email, photo }) => {
     <div style={{ marginBottom: "1em", marginLeft: "1em" }}>
       <span style={{ position: "relative", left: "-1em" }}>{name}</span>
       {photo ? (
-        <img id="avatar" src={photo} alt="user" className="ui avatar image" />
+        <img
+          style={{ marginLeft: "-0.7em", marginTop: "-1px" }}
+          id="avatar"
+          src={photo}
+          alt="user"
+          className="ui avatar image"
+        />
       ) : (
-        <i id="user-icon" className="user icon"></i>
+        <i
+          style={{ marginLeft: "-0.7em", marginTop: "0.4em" }}
+          id="user-icon"
+          className="user icon"
+        ></i>
       )}
     </div>
   );

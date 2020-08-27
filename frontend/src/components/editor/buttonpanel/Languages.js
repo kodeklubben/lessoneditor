@@ -44,9 +44,13 @@ const Languages = ({ mdText, file }) => {
     Object.keys(data.header[language]).length !== 0
   ) {
     header = `---
-title: ${data.header[language].title ? data.header[language].title : `test`}
+title: ${
+      data.header[language].title.length > 0 ? data.header[language].title : ""
+    }
 author: ${
-      data.header[language].authorList ? data.header[language].authorList : ""
+      data.header[language].authorList.length > 0
+        ? data.header[language].authorList
+        : ""
     }
 ${
   data.header[language].translatorList &&

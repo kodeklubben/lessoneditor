@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import slugify from "slugify";
-import COURSESLIST from "../lessonForm/settingsFiles/COURSELIST";
+import COURSESLIST from "../editor/settingsFiles/COURSELIST";
 import { UserContext } from "../../contexts/UserContext";
 import { useHistory } from "react-router";
 
