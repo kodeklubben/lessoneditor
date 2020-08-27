@@ -8,7 +8,6 @@ import ThankU from "./ThankU";
 import LessonCard from "./LessonCard";
 import { LessonContext } from "contexts/LessonContext";
 import submitLesson from "api/submit-lesson";
-import LandingpageTeacher from "./LandingpageTeacher";
 
 const Landingpage = () => {
   const [showSpinner, setShowSpinner] = useState(false);
@@ -76,7 +75,59 @@ const Landingpage = () => {
     });
   }
 
-  return <LandingpageTeacher />;
+  return (
+    <>
+      <Navbar />
+      <div style={{ marginBottom: "5em" }} className="landing_navbar">
+        <h2>{`${data.lesson} (${data.course})`} </h2>
+        <div style={{ display: "flex", float: "right" }}>
+          <Datapanel />
+        </div>
+      </div>
+
+      {areYouSure ? (
+        <Areyousure
+          onSubmit={onSubmit}
+          setAreYouSure={setAreYouSure}
+          showSpinner={showSpinner}
+        />
+      ) : (
+        ""
+      )}
+
+      {thankU ? <ThankU setThankU={setThankU} /> : ""}
+
+      <div style={{ marginBottom: "5em" }}>
+        <div style={{ display: "flex" }}>
+          {allLanguages.map((element, index) => {
+            return (
+              <div key={element + index}>
+                <LessonCard
+                  language={element}
+                  hasContent={languages.includes(element)}
+                  thumbUrl={thumbUrl}
+                  lessonId={lessonId}
+                  lessonTitle={data.lesson}
+                />
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <a href={"/"}>
+        <button className="ui button">Tilbake</button>
+      </a>
+      <button
+        className="ui button"
+        onClick={() => {
+          setAreYouSure(true);
+        }}
+      >
+        Sende inn
+      </button>
+    </>
+  );
 };
 
 export default Landingpage;
