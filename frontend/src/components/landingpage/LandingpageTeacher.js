@@ -8,9 +8,8 @@ import ThankU from "./ThankU";
 import LessonCard from "./LessonCard";
 import { LessonContext } from "contexts/LessonContext";
 import submitLesson from "api/submit-lesson";
-import LandingpageTeacher from "./LandingpageTeacher";
 
-const Landingpage = () => {
+const LandinpageTeacher = () => {
   const [showSpinner, setShowSpinner] = useState(false);
   const [areYouSure, setAreYouSure] = useState(false);
   const [thankU, setThankU] = useState(false);
@@ -49,7 +48,7 @@ const Landingpage = () => {
     lessonList.forEach((element) => {
       switch (
         element.filename.slice(-2) === "md" &&
-        element.filename.slice(5) !== "read" &&
+        element.filename.slice(6).toLowerCase() === "readme" &&
         element.filename.slice(-5, -3)
       ) {
         case "nn":
@@ -76,7 +75,58 @@ const Landingpage = () => {
     });
   }
 
-  return <LandingpageTeacher />;
+  return (
+    <>
+      <Navbar />
+      <div style={{ marginBottom: "5em" }} className="landing_navbar">
+        <h2>{`${data.lesson} (${data.course})`} </h2>
+        <div style={{ display: "flex", float: "right" }}>
+          <Datapanel />
+        </div>
+      </div>
+
+      {areYouSure ? (
+        <Areyousure
+          onSubmit={onSubmit}
+          setAreYouSure={setAreYouSure}
+          showSpinner={showSpinner}
+        />
+      ) : (
+        ""
+      )}
+
+      {thankU ? <ThankU setThankU={setThankU} /> : ""}
+
+      <div style={{ marginBottom: "5em" }}>
+        <div style={{ display: "flex" }}>
+          {allLanguages.map((element, index) => {
+            return (
+              <div key={element + index}>
+                <LessonCard
+                  language={element}
+                  hasContent={languages.includes(element)}
+                  lessonId={lessonId}
+                  lessonTitle={"lærerveiledning"}
+                />
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <a href={"/"}>
+        <button className="ui button">Tilbake</button>
+      </a>
+      <button
+        className="ui button"
+        onClick={() => {
+          setAreYouSure(true);
+        }}
+      >
+        Sende inn
+      </button>
+    </>
+  );
 };
 
-export default Landingpage;
+export default LandinpageTeacher;

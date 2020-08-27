@@ -1,13 +1,23 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { useParams } from "react-router";
+import { LessonContext } from "contexts/LessonContext";
 import saveMdText from "../../api/save-md-text";
 import { SAVING, SAVED } from "./settingsFiles/languages/editor_NO";
+import createNewHeader from ".//buttonpanel/utils/createNewHeader";
 
 const Autosave = ({ mdText, setRenderContent }) => {
   const [savedText, setSavedText] = useState("");
   const [counter, setCounter] = useState(0);
-  const { lessonId, file } = useParams();
   const [autoSaveMessage, setAutoSaveMessage] = useState("");
+  const { lessonId, file } = useParams();
+  const lessonContext = useContext(LessonContext);
+  const { headerData, language } = lessonContext;
+
+  const newHeader = async () => {
+    return createNewHeader(await headerData, await language);
+  };
+  let newMdText =
+    newHeader !== undefined ? newHeader + "\n\n\n" + mdText : mdText;
 
   useInterval(async () => {
     if (counter < 17) {
@@ -21,7 +31,7 @@ const Autosave = ({ mdText, setRenderContent }) => {
       setAutoSaveMessage(SAVING);
     } else if (counter === 5 && autoSaveMessage !== SAVED) {
       setRenderContent(true);
-      await saveMdText(lessonId, file, mdText);
+      await saveMdText(lessonId, file, newMdText);
       setAutoSaveMessage(SAVED);
     }
     if (counter === 15) {

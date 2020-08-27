@@ -8,9 +8,11 @@ export const LessonContext = React.createContext({});
 
 export const LessonContextProvider = (props) => {
   const { lessonId } = useParams();
-  const [data, setData] = useState({ header: { nb: {} } });
-  const [lessonList, setLessonList] = useState({});
+  const [data, setData] = useState({});
+  const [headerData, setHeaderData] = useState({});
   const [language, setLanguage] = useState("nb");
+  const [lessonList, setLessonList] = useState({});
+  const [state, setState] = useState({});
 
   const lessonListUrl = resolveUrlTemplate(paths.LESSON_FILES, { lessonId });
   const lessonDataUrl = resolveUrlTemplate(paths.LESSON_DATA, { lessonId });
@@ -33,30 +35,17 @@ export const LessonContextProvider = (props) => {
 
   const context = {
     data,
-    setData,
+    headerData,
+    setHeaderData,
+    language,
+    setLanguage,
+    state,
+    setState,
     fetchList: async () => {
       const res = await axios.get(lessonListUrl);
       setLessonList(res.data);
     },
     lessonList,
-    setLang: async (language) => {
-      const defaultState = {
-        title: "",
-        titleErr: "",
-        author: "",
-        authorList: [],
-        authorErr: "",
-        translator: "",
-        translatorList: [],
-      };
-      if (!data.header[language]) {
-        setData((prevState) => ({
-          ...prevState,
-          header: { [language]: defaultState },
-        }));
-      }
-      setLanguage(language);
-    },
     saveLesson: async (data) => {
       if (lessonId) {
         await axios.post(lessonDataUrl, data);
@@ -71,8 +60,6 @@ export const LessonContextProvider = (props) => {
         }
       }
     },
-    language,
-    setLanguage,
   };
   return (
     <>

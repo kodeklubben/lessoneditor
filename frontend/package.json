@@ -6,6 +6,7 @@
     "axios": "^0.19.2",
     "crypto-js": "^4.0.0",
     "highlight.js": "^10.1.2",
+    "js-yaml": "^3.14.0",
     "markdown-it": "^11.0.0",
     "markdown-it-attrs": "^3.0.3",
     "react": "^16.13.1",

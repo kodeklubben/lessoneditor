@@ -8,15 +8,14 @@ import MDPreview from "./MDPreview";
 import ButtonPanel from "./buttonpanel/ButtonPanel";
 import ImageUpload from "./ImageUpload";
 import fetchMdText from "../../api/fetch-md-text";
-import saveMdText from "../../api/save-md-text";
 import { LessonContext } from "contexts/LessonContext";
-import { extractDataFromHeader } from "./utils/extractDataFromHeader";
+
+import parseMdHeader from "./utils/parseMdHeader";
 
 const Editor = () => {
   const { lessonId, file } = useParams();
   const context = useContext(LessonContext);
-  const { language, data, setData, saveLesson } = context;
-  const [saveLessonDelay, setSaveLessonDelay] = useState(0);
+  const { language, data, setHeaderData } = context;
   const [mdText, setMdText] = useState("");
   const [buttonValues, setButtonValues] = useState({});
   const [cursorPositionStart, setCursorPositionStart] = useState(0);
@@ -90,35 +89,32 @@ const Editor = () => {
           console.log(e);
         }
       }
-      fetchData().then((lessonText) => {
-        const lessonData = extractDataFromHeader(lessonText);
-        if (lessonData) {
-          setData((prevState) => ({
-            ...prevState,
-            header: { [language]: lessonData },
-          }));
+      fetchData().then(async (lessonText) => {
+        const parsedHeader = parseMdHeader(lessonText);
+        if (parsedHeader?.body) {
+          setMdText(await parsedHeader.body);
+          setUndo([await parsedHeader.body]);
         }
-        if (lessonText.length > 3) {
-          setMdText(lessonText.slice(lessonData.indexLessonStart).trim());
-          setUndo([lessonText.slice(lessonData.indexLessonStart).trim()]);
+        if (parsedHeader?.header) {
+          const test = {
+            title: parsedHeader.header.title,
+            authorList: parsedHeader.header.author
+              ? parsedHeader.header.author.split(",").map((item) => {
+                  return item.trim();
+                })
+              : [],
+            translatorList: parsedHeader.header.translator
+              ? parsedHeader.header.translator.split(",").map((item) => {
+                  return item.trim();
+                })
+              : [],
+          };
+          console.log("test : " + JSON.stringify(test));
+          setHeaderData(test);
         }
       });
     }
-  }, [data.header]);
-
-  useEffect(() => {
-    const test = async () => {
-      if (mdText.length > 0) {
-        await saveMdText(lessonId, file, mdText);
-        setSaveLessonDelay((prevState) => prevState + 1);
-
-        if (saveLessonDelay > 3) {
-          saveLesson(data);
-        }
-      }
-    };
-    test();
-  }, [data.header]);
+  }, [file, lessonId, setHeaderData]);
 
   return (
     <div className="editor">
