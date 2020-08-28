@@ -57,7 +57,6 @@ const Languages = ({ mdText, file }) => {
     return returnvalue;
   };
   useEffect(() => {
-    console.log(defaultValue(file));
     setLanguage(defaultValue(file));
   }, [file, setLanguage]);
 

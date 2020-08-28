@@ -109,7 +109,6 @@ const Editor = () => {
                 })
               : [],
           };
-          console.log("test : " + JSON.stringify(test));
           setHeaderData(test);
         }
       });
