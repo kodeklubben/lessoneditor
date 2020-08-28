@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import fetchMdText from "../../api/fetch-md-text";
 import MDPreview from "../editor/MDPreview";
 import { useParams } from "react-router";
-import parseMdHeader from "../editor/utils/parseMdHeader";
 
 const SimplePreview = () => {
   const { lessonId, file } = useParams();
@@ -16,8 +15,7 @@ const SimplePreview = () => {
         if (mdText === "") {
           setStatus("Not found...");
         }
-        const parsedText = parseMdHeader(text);
-        setMdText(parsedText.body);
+        setMdText(text);
       }
 
       fetchData();

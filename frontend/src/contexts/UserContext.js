@@ -44,11 +44,9 @@ export const UserContextProvider = (props) => {
       let lessonId;
       const existing = getLessonByCourseAndLesson(course, lesson);
       if (existing) {
-        alert("1");
-        existing.title = lesson;
+        existing.title = title;
         lessonId = existing.lessonId;
       } else {
-        alert("2");
         lessonId = await createLesson({ course, lesson, title });
         lessons.push({ lessonId, course, lesson, title });
       }
