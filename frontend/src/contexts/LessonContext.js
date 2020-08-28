@@ -8,9 +8,11 @@ export const LessonContext = React.createContext({});
 
 export const LessonContextProvider = (props) => {
   const { lessonId } = useParams();
-  const [data, setData] = useState({ header: { nb: {} } });
-  const [lessonList, setLessonList] = useState({});
+  const [data, setData] = useState({});
+  const [headerData, setHeaderData] = useState({});
   const [language, setLanguage] = useState("nb");
+  const [lessonList, setLessonList] = useState({});
+  const [state, setState] = useState({});
 
   const lessonListUrl = resolveUrlTemplate(paths.LESSON_FILES, { lessonId });
   const lessonDataUrl = resolveUrlTemplate(paths.LESSON_DATA, { lessonId });
@@ -20,7 +22,6 @@ export const LessonContextProvider = (props) => {
       const res = await axios.get(lessonDataUrl);
       setData(res.data);
     }
-
     if (lessonId) fetchData();
   }, [lessonId, lessonDataUrl]);
 
@@ -29,36 +30,22 @@ export const LessonContextProvider = (props) => {
       const res = await axios.get(lessonListUrl);
       setLessonList(res.data);
     }
-
     if (lessonId) fetchList();
   }, [lessonId, lessonListUrl]);
 
   const context = {
     data,
-    setData,
+    headerData,
+    setHeaderData,
+    language,
+    setLanguage,
+    state,
+    setState,
     fetchList: async () => {
       const res = await axios.get(lessonListUrl);
       setLessonList(res.data);
     },
     lessonList,
-    setLang: async (language) => {
-      const defaultState = {
-        title: "",
-        titleErr: "",
-        author: "",
-        authorList: [],
-        authorErr: "",
-        translator: "",
-        translatorList: [],
-      };
-      if (!data.header[language]) {
-        setData((prevState) => ({
-          ...prevState,
-          header: { [language]: defaultState },
-        }));
-      }
-      setLanguage(language);
-    },
     saveLesson: async (data) => {
       if (lessonId) {
         await axios.post(lessonDataUrl, data);
@@ -68,11 +55,11 @@ export const LessonContextProvider = (props) => {
     getLessonData: async () => {
       if (lessonId) {
         const res = await axios.get(lessonDataUrl);
-        setData(res.data);
+        if (Object.keys(res.data) > 0) {
+          setData(res.data);
+        }
       }
     },
-    language,
-    setLanguage,
   };
   return (
     <>

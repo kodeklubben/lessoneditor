@@ -9,12 +9,13 @@ import ButtonPanel from "./buttonpanel/ButtonPanel";
 import ImageUpload from "./ImageUpload";
 import fetchMdText from "../../api/fetch-md-text";
 import { LessonContext } from "contexts/LessonContext";
-import { extractDataFromHeader } from "./utils/extractDataFromHeader";
+
+import parseMdHeader from "./utils/parseMdHeader";
 
 const Editor = () => {
   const { lessonId, file } = useParams();
   const context = useContext(LessonContext);
-  const { language, data, saveLesson } = context;
+  const { language, data, setHeaderData } = context;
   const [mdText, setMdText] = useState("");
   const [buttonValues, setButtonValues] = useState({});
   const [cursorPositionStart, setCursorPositionStart] = useState(0);
@@ -88,20 +89,31 @@ const Editor = () => {
           console.log(e);
         }
       }
-      fetchData().then((lessonText) => {
-        const lessonData = extractDataFromHeader(lessonText);
-        if (lessonData) {
-          const newData = { ...data, header: { [language]: lessonData } };
-          // console.log("newData : " + JSON.stringify(newData));
-          saveLesson(newData);
+      fetchData().then(async (lessonText) => {
+        const parsedHeader = parseMdHeader(lessonText);
+        if (parsedHeader?.body) {
+          setMdText(await parsedHeader.body);
+          setUndo([await parsedHeader.body]);
         }
-        if (lessonData.indexLessonStart) {
-          setMdText(lessonText.slice(lessonData.indexLessonStart).trim());
-          setUndo([lessonText.slice(lessonData.indexLessonStart).trim()]);
+        if (parsedHeader?.header) {
+          const test = {
+            title: parsedHeader.header.title,
+            authorList: parsedHeader.header.author
+              ? parsedHeader.header.author.split(",").map((item) => {
+                  return item.trim();
+                })
+              : [],
+            translatorList: parsedHeader.header.translator
+              ? parsedHeader.header.translator.split(",").map((item) => {
+                  return item.trim();
+                })
+              : [],
+          };
+          setHeaderData(test);
         }
       });
     }
-  }, [data, file, language, lessonId, saveLesson]);
+  }, [file, lessonId, setHeaderData]);
 
   return (
     <div className="editor">

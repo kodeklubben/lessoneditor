@@ -1,49 +1,38 @@
 import "./editordatapane.scss";
 import React, { useState, useEffect, useContext } from "react";
+import { useParams } from "react-router";
 import MultiInput from "./MultiInput";
 import { FORM_TEXT } from "./settings/landingpage_NO.js";
 import { LessonContext } from "contexts/LessonContext";
+import saveMdText from "../../../../api/save-md-text";
+import createNewHeader from "../utils/createNewHeader";
 
-const EditorDatapanel = () => {
-  const [open, setOpen] = useState(false);
-  const [state, setState] = useState({
-    title: "",
-    titleErr: "",
-    author: "",
-    authorList: [],
-    authorErr: "",
-    translator: "",
-    translatorList: [],
-  });
-
+const EditorDatapanel = ({ mdText, setMdText, file }) => {
+  const { lessonId } = useParams();
   const context = useContext(LessonContext);
-  const { language, data, saveLesson, getLessonData } = context;
+  const { headerData, setHeaderData } = context;
+  const [state, setState] = useState({});
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const test = async () => {
-      if (data.header[language]) {
-        setState((prevState) => ({
-          ...prevState,
-          title: data.header[language].title,
-          authorList: data.header[language].authorList,
-        }));
-        if (data.header[language].translatorList) {
-          setState((prevState) => ({
-            ...prevState,
-            translatorList: data.header[language].translatorList,
-          }));
-        }
+    const setDataFromHeaderData = async () => {
+      if (Object.keys(headerData).length > 0) {
+        setState(headerData);
       }
     };
-    test();
-  }, [data, language]);
+    setDataFromHeaderData();
+  }, [headerData, setState]);
 
   const changeHandler = (event) => {
     const nam = event.target.name;
     const val = event.target.value;
     setState((prevState) => ({ ...prevState, [nam]: val }));
-    if (state.author) setState((prevState) => ({ ...prevState, err: "" }));
-    if (state.title) setState((prevState) => ({ ...prevState, err: "" }));
+    if (state.author) {
+      setState((prevState) => ({ ...prevState, err: "" }));
+    }
+    if (state.title) {
+      setState((prevState) => ({ ...prevState, err: "" }));
+    }
   };
 
   const multiInputHandler = (object, field) => {
@@ -53,15 +42,21 @@ const EditorDatapanel = () => {
     setState((prevState) => ({ ...prevState, [field]: "" }));
   };
 
-  const onSubmit = () => {
-    const newData = { ...data, header: { [language]: state } };
-
-    saveLesson(newData);
+  const onSubmit = async () => {
+    setHeaderData(state);
+    const newHeader = createNewHeader(state);
+    let newMdText =
+      newHeader !== undefined ? newHeader + "\n\n\n" + mdText : mdText;
+    await saveMdText(lessonId, file, newMdText);
     setOpen(false);
   };
 
   const onCancel = async () => {
-    await getLessonData();
+    setState(headerData);
+    const newHeader = createNewHeader(headerData);
+    let newMdText =
+      newHeader !== undefined ? newHeader + "\n\n\n" + mdText : mdText;
+    await saveMdText(lessonId, file, newMdText);
     setOpen(false);
   };
 

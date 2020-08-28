@@ -1,5 +1,4 @@
 import React from "react";
-import FormComponent from "./lessonForm/FormComponent";
 import Endpage from "./endpage/Endpage";
 import Editor from "./editor/Editor";
 import Landingpage from "components/landingpage/Landingpage";
@@ -20,7 +19,6 @@ const App = () => {
               <Frontpage />
             </LessonContextProvider>
           </Route>
-          <Route exact path="/new-lesson" component={FormComponent} />
           <Route exact path="/landingpage" component={Landingpage} />
           <Route path="/landingpage/:lessonId">
             <LessonContextProvider>

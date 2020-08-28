@@ -3,6 +3,7 @@ import { useParams, useHistory } from "react-router";
 import { LessonContext } from "contexts/LessonContext";
 import { Dropdown } from "semantic-ui-react";
 import saveMdText from "../../../api/save-md-text";
+import createNewHeader from "./utils/createNewHeader";
 
 const languageOptions = [
   {
@@ -35,31 +36,7 @@ const Languages = ({ mdText, file }) => {
   const history = useHistory();
   const { lessonId } = useParams();
   const lessonContext = useContext(LessonContext);
-  const { data, language, setLang, saveLesson } = lessonContext;
-
-  let header;
-
-  if (
-    data.header[language] &&
-    Object.keys(data.header[language]).length !== 0
-  ) {
-    header = `---
-title: ${data.header[language].title ? data.header[language].title : `test`}
-author: ${
-      data.header[language].authorList ? data.header[language].authorList : ""
-    }
-${
-  data.header[language].translatorList &&
-  data.header[language].translatorList.length > 0
-    ? `translator: ${data.header[language].translatorList}`
-    : ``
-}
-language: ${language ? language : ""}
----
-`;
-  }
-
-  let newMdText = header !== undefined ? header + "\n\n\n" + mdText : mdText;
+  const { data, headerData, setLanguage } = lessonContext;
 
   const defaultValue = (file) => {
     let returnvalue;
@@ -79,23 +56,24 @@ language: ${language ? language : ""}
     }
     return returnvalue;
   };
-
   useEffect(() => {
-    setLang(defaultValue(file));
-  });
+    setLanguage(defaultValue(file));
+  }, [file, setLanguage]);
 
   const handleChange = async (event, { value }) => {
+    const newHeader = createNewHeader(await headerData, value);
+    const newMdText =
+      newHeader !== undefined ? newHeader + "\n\n\n" + mdText : mdText;
     let target;
     if (lessonId && file && value !== "nb") {
       target = ["/editor", lessonId, (await data.lesson) + "_" + value].join(
         "/"
       );
     } else if (lessonId && file) {
-      target = ["/editor", lessonId, await data.lesson].join("/");
+      target = ["/editor", lessonId, (await data.lesson) + ""].join("/");
     }
-    if (newMdText.length > 0) await saveMdText(lessonId, file, newMdText);
-    saveLesson(data);
-    setLang(value);
+    await saveMdText(lessonId, file, newMdText);
+
     history.push({ pathname: "/empty" });
     history.replace({ pathname: target });
   };

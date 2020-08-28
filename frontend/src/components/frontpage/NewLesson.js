@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import slugify from "slugify";
-import COURSESLIST from "../lessonForm/settingsFiles/COURSELIST";
+import COURSESLIST from "../editor/settingsFiles/COURSELIST";
 import { UserContext } from "../../contexts/UserContext";
 import { useHistory } from "react-router";
 
@@ -32,7 +32,7 @@ const NewLesson = ({ setShowPopup }) => {
     const { course, title } = values;
     if (title) {
       const lesson = slugify(title);
-      const lessonId = await user.addLesson(course, title, "no title");
+      const lessonId = await user.addLesson(course, title, "# Ny Oppgave");
       navigateToLandingpage(lessonId, lesson);
     } else {
       setError("tittel er ikke satt");

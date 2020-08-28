@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Popup } from "semantic-ui-react";
-import COURSELIST from "components/lessonForm/settingsFiles/COURSELIST";
+import COURSELIST from "components/editor/settingsFiles/COURSELIST";
 
 const CodeButtons = ({
   buttonValues,

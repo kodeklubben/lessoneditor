@@ -14,6 +14,7 @@ import saveMdText from "../../../api/save-md-text";
 import { useHistory } from "react-router-dom";
 import { useParams } from "react-router";
 import { LessonContext } from "contexts/LessonContext";
+import createNewHeader from "./utils/createNewHeader";
 
 const ButtonPanel = ({
   editorRef,
@@ -40,38 +41,14 @@ const ButtonPanel = ({
   const history = useHistory();
   const { lessonId } = useParams();
   const context = useContext(LessonContext);
-  const { data, language, saveLesson } = context;
+  const { data, headerData, language } = context;
   const course = data.course;
 
-  let header;
-
-  if (
-    data.header[language] &&
-    Object.keys(data.header[language]).length !== 0
-  ) {
-    header = `---
-title: ${data.header[language].title ? data.header[language].title : `test`}
-author: ${
-      data.header[language].authorList ? data.header[language].authorList : ""
-    } ${
-      data.header[language].translatorList &&
-      data.header[language].translatorList.length > 0
-        ? `
-translator: ${data.header[language].translatorList}`
-        : ""
-    }
-language: ${language ? language : ""}
----
-`;
-  }
-
-  let newMdText = header !== undefined ? header + "\n\n\n" + mdText : mdText;
-
   const navigateToHome = async () => {
-    if (newMdText.length > 0 && language === "nb")
-      await saveMdText(lessonId, file, mdText, true);
-    if (newMdText.length > 0) await saveMdText(lessonId, file, newMdText, true); // TODO: Må lage screenshot av riktig tekstfil
-    saveLesson(data);
+    const newHeader = createNewHeader(await headerData, await language);
+    let newMdText =
+      newHeader !== undefined ? newHeader + "\n\n\n" + mdText : mdText;
+    await saveMdText(lessonId, file, newMdText, true); //fjerne header i simple preview
     const target = ["/landingpage", lessonId].join("/");
     history.push(target);
   };
@@ -120,7 +97,7 @@ language: ${language ? language : ""}
 
         <div style={{ display: "flex", float: "right" }}>
           <Languages mdText={mdText} file={file} />
-          <EditorDatapanel headerData={data.header} />
+          <EditorDatapanel mdText={mdText} setMdText={setMdText} file={file} />
           <button
             className={`ui ${mdText.length < 1 ? `disabled` : ``} button`}
             id="next"
