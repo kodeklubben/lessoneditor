@@ -2,14 +2,19 @@ import "./landingpage.scss";
 import React, { useState, useContext } from "react";
 import { useParams } from "react-router";
 import Navbar from "components/navbar/Navbar";
+import TeacherGuides from "./TeacherGuides";
+import LessonTexts from "./LessonTexts";
+import AllFiles from "./AllFiles";
 import Datapanel from "./datapanel/Datapanel";
 import Areyousure from "./AreyousurePopup";
 import ThankU from "./ThankU";
-import LessonCard from "./LessonCard";
 import { LessonContext } from "contexts/LessonContext";
 import submitLesson from "api/submit-lesson";
 
+import { Dropdown } from "semantic-ui-react";
+
 const Landingpage = () => {
+  const [pageContet, setPageContent] = useState("lessontexts");
   const [showSpinner, setShowSpinner] = useState(false);
   const [areYouSure, setAreYouSure] = useState(false);
   const [thankU, setThankU] = useState(false);
@@ -17,9 +22,17 @@ const Landingpage = () => {
   const lesson = useContext(LessonContext);
   const { data, lessonList, saveLesson } = lesson;
 
-  let languages = [];
-  let allLanguages = ["nb", "nn", "en", "is"];
+  console.log(pageContet);
+
   let thumbUrl;
+
+  const options = [
+    { key: 1, text: "Vis Oppgavetekster", value: "lessontexts" },
+    { key: 2, text: "Vis Lærerveiledninger", value: "teacherguides" },
+    { key: 3, text: "Vis alle filer", value: "allfiles" },
+  ];
+
+  const handleChange = (e, { value }) => setPageContent(value);
 
   if (
     Object.keys(lessonList).length !== 0 &&
@@ -41,39 +54,41 @@ const Landingpage = () => {
     setThankU(true);
   };
 
-  if (
-    Object.keys(lessonList).length !== 0 &&
-    lessonList.constructor !== Object
-  ) {
-    lessonList.forEach((element) => {
-      switch (
-        element.filename.slice(-2) === "md" &&
-        element.filename.slice(5) !== "read" &&
-        element.filename.slice(-5, -3)
-      ) {
-        case "nn":
-          if (!languages.includes("nn")) {
-            languages.push("nn");
-          }
-          break;
-        case "en":
-          if (!languages.includes("en")) {
-            languages.push("en");
-          }
-          break;
-        case "is":
-          if (!languages.includes("is")) {
-            languages.push("is");
-          }
-          break;
-        default:
-          if (!languages.includes("nb")) {
-            languages.push("nb");
-          }
-          break;
-      }
-    });
-  }
+  const test = (input) => {
+    let returnValue;
+    switch (input) {
+      case "lessontexts":
+        returnValue = (
+          <LessonTexts
+            thumbUrl={thumbUrl}
+            lessonId={lessonId}
+            lessonList={lessonList}
+          />
+        );
+        break;
+      case "teacherguides":
+        returnValue = (
+          <TeacherGuides
+            thumbUrl={thumbUrl}
+            lessonId={lessonId}
+            lessonList={lessonList}
+          />
+        );
+        break;
+      case "allfiles":
+        returnValue = (
+          <AllFiles
+            thumbUrl={thumbUrl}
+            lessonId={lessonId}
+            lessonList={lessonList}
+          />
+        );
+        break;
+      default:
+        break;
+    }
+    return returnValue;
+  };
 
   return (
     <>
@@ -83,7 +98,16 @@ const Landingpage = () => {
         <div style={{ display: "flex", float: "right" }}>
           <Datapanel />
         </div>
+        <Dropdown
+          onChange={handleChange}
+          options={options}
+          placeholder="Choose an option"
+          selection
+          value={pageContet}
+        />
       </div>
+
+      {test(pageContet)}
 
       {areYouSure ? (
         <Areyousure
@@ -96,24 +120,6 @@ const Landingpage = () => {
       )}
 
       {thankU ? <ThankU setThankU={setThankU} /> : ""}
-
-      <div style={{ marginBottom: "5em" }}>
-        <div style={{ display: "flex" }}>
-          {allLanguages.map((element, index) => {
-            return (
-              <div key={element + index}>
-                <LessonCard
-                  language={element}
-                  hasContent={languages.includes(element)}
-                  thumbUrl={thumbUrl}
-                  lessonId={lessonId}
-                  lessonTitle={data.lesson}
-                />
-              </div>
-            );
-          })}
-        </div>
-      </div>
 
       <a href={"/"}>
         <button className="ui button">Tilbake</button>
