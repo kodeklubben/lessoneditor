@@ -48,7 +48,7 @@ const ButtonPanel = ({
     const newHeader = createNewHeader(await headerData, await language);
     let newMdText =
       newHeader !== undefined ? newHeader + "\n\n\n" + mdText : mdText;
-    await saveMdText(lessonId, file, newMdText, true); //fjerne header i simple preview
+    await saveMdText(lessonId, file, newMdText, true);
     const target = ["/landingpage", lessonId].join("/");
     history.push(target);
   };

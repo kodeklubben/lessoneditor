@@ -16,7 +16,7 @@ const Autosave = ({ mdText, setRenderContent }) => {
   const newHeader = async () => {
     return createNewHeader(await headerData, await language);
   };
-  let newMdText =
+  const newMdText =
     newHeader !== undefined ? newHeader + "\n\n\n" + mdText : mdText;
 
   useInterval(async () => {

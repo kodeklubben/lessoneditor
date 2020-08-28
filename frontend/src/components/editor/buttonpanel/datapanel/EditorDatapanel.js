@@ -45,7 +45,7 @@ const EditorDatapanel = ({ mdText, setMdText, file }) => {
   const onSubmit = async () => {
     setHeaderData(state);
     const newHeader = createNewHeader(state);
-    let newMdText =
+    const newMdText =
       newHeader !== undefined ? newHeader + "\n\n\n" + mdText : mdText;
     await saveMdText(lessonId, file, newMdText);
     setOpen(false);
@@ -53,7 +53,7 @@ const EditorDatapanel = ({ mdText, setMdText, file }) => {
 
   const onCancel = async () => {
     setState(headerData);
-    const newHeader = createNewHeader(headerData);
+    const newHeader = createNewHeader(state);
     let newMdText =
       newHeader !== undefined ? newHeader + "\n\n\n" + mdText : mdText;
     await saveMdText(lessonId, file, newMdText);
