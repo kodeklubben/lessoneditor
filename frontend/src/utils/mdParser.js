@@ -28,5 +28,9 @@ const md = require("markdown-it")({
   .use(generateChecklist);
 
 export const mdParser = (content) => {
-  return md.render(content);
+  if (typeof content !== "string") {
+    return " ";
+  } else {
+    return md.render(content);
+  }
 };

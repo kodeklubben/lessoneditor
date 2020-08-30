@@ -94,13 +94,13 @@ a:hover {
 
   .checklist-item a {
     @include a_style;
-    margin-left: -1.5em;
+    margin-left: 0px;
     margin-right: -1.5em;
   }
 
   .checklist-item a {
     @include a_hover;
-    margin-left: -1.5em;
+    margin-left: 0px;
     margin-right: -1.5em;
   }
 
