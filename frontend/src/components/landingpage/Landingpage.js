@@ -22,8 +22,6 @@ const Landingpage = () => {
   const lesson = useContext(LessonContext);
   const { data, lessonList, saveLesson } = lesson;
 
-  console.log(pageContet);
-
   let thumbUrl;
 
   const options = [

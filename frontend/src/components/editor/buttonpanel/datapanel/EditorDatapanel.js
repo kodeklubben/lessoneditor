@@ -6,13 +6,14 @@ import { FORM_TEXT } from "./settings/landingpage_NO.js";
 import { LessonContext } from "contexts/LessonContext";
 import saveMdText from "../../../../api/save-md-text";
 import createNewHeader from "../utils/createNewHeader";
-
-const EditorDatapanel = ({ mdText, setMdText, file }) => {
+import { useHistory } from "react-router-dom";
+const EditorDatapanel = ({ mdText, setMdText, file, open, setOpen }) => {
   const { lessonId } = useParams();
   const context = useContext(LessonContext);
   const { headerData, setHeaderData } = context;
   const [state, setState] = useState({});
-  const [open, setOpen] = useState(false);
+
+  const history = useHistory();
 
   useEffect(() => {
     const setDataFromHeaderData = async () => {
@@ -51,6 +52,10 @@ const EditorDatapanel = ({ mdText, setMdText, file }) => {
   };
 
   const onCancel = async () => {
+    if (mdText === "") {
+      const target = ["/landingpage", lessonId].join("/");
+      history.push(target);
+    }
     setState(headerData);
     const newHeader = createNewHeader(state);
     let newMdText =
@@ -70,10 +75,7 @@ const EditorDatapanel = ({ mdText, setMdText, file }) => {
           className="editorDatapanel_BG"
         >
           <div className="editorDatapanel_container">
-            <i
-              onClick={() => setOpen(!open)}
-              className="big grey x icon editor"
-            />
+            <i onClick={onCancel} className="big grey x icon editor" />
             <div id="titleField" className="field">
               <label>
                 <h3 className="formLabel">
