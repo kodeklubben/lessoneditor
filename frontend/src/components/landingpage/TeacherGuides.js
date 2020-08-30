@@ -14,10 +14,11 @@ const TeacherGuides = ({ thumbUrl, lessonId, lessonList }) => {
     lessonList.forEach((element) => {
       switch (
         element.filename.slice(-2) === "md" &&
-        element.filename.slice(6).toLowerCase() === "readme" &&
+        element.filename.slice(0, 6).toLowerCase() === "readme" &&
         element.filename.slice(-5, -3)
       ) {
         case "nn":
+          alert("");
           if (!languages.includes("nn")) {
             languages.push("nn");
           }
@@ -33,7 +34,7 @@ const TeacherGuides = ({ thumbUrl, lessonId, lessonList }) => {
           }
           break;
         default:
-          if (!languages.includes("nb")) {
+          if (!languages.includes("nb") && languages.length !== 0) {
             languages.push("nb");
           }
           break;

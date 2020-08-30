@@ -16,6 +16,7 @@ const Editor = () => {
   const { lessonId, file } = useParams();
   const context = useContext(LessonContext);
   const { language, data, setHeaderData } = context;
+
   const [mdText, setMdText] = useState("");
   const [buttonValues, setButtonValues] = useState({});
   const [cursorPositionStart, setCursorPositionStart] = useState(0);
@@ -30,6 +31,8 @@ const Editor = () => {
     output: "",
     cursorInt: 0,
   });
+
+  const [open, setOpen] = useState(false);
 
   const editorRef = useRef();
   const uploadImageRef = useRef();
@@ -82,35 +85,41 @@ const Editor = () => {
     if (lessonId && file) {
       async function fetchData() {
         const lessonText = await fetchMdText(lessonId, file);
+        console.log("lessontekst : " + lessonText);
         return lessonText;
       }
       async function parsedHeader(lessonText) {
         const parsedHeader = parseMdHeader(lessonText);
+
         return parsedHeader;
       }
 
       fetchData().then((lessonText) => {
-        parsedHeader(lessonText).then((parsedHeader) => {
-          if (typeof parsedHeader === "undefined") {
-            return;
-          }
-          setMdText(parsedHeader.body);
-          setUndo([parsedHeader.body]);
-          const newHeaderData = {
-            title: parsedHeader.header.title,
-            authorList: parsedHeader.header.author
-              ? parsedHeader.header.author.split(",").map((item) => {
-                  return item.trim();
-                })
-              : [],
-            translatorList: parsedHeader.header.translator
-              ? parsedHeader.header.translator.split(",").map((item) => {
-                  return item.trim();
-                })
-              : [],
-          };
-          setHeaderData(newHeaderData);
-        });
+        if (lessonText === "# " || lessonText === "") {
+          setOpen(true);
+          setMdText("");
+          setHeaderData({});
+          return;
+        } else {
+          parsedHeader(lessonText).then((header) => {
+            setMdText(header.body);
+            setUndo([header.body]);
+            const newHeaderData = {
+              title: header.header.title,
+              authorList: header.header.author
+                ? header.header.author.split(",").map((item) => {
+                    return item.trim();
+                  })
+                : [],
+              translatorList: header.header.translator
+                ? header.header.translator.split(",").map((item) => {
+                    return item.trim();
+                  })
+                : [],
+            };
+            setHeaderData(newHeaderData);
+          });
+        }
       });
     }
   }, [file, language, lessonId, setHeaderData]);
@@ -151,6 +160,8 @@ const Editor = () => {
         setRedoCursorPosition={setRedoCursorPosition}
         setListButtonValues={setListButtonValues}
         file={file}
+        open={open}
+        setOpen={setOpen}
       />
       <div className="textEditorContainer">
         <MDTextArea

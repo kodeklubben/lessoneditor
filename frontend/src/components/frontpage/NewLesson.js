@@ -32,7 +32,7 @@ const NewLesson = ({ setShowPopup }) => {
     const { course, title } = values;
     if (title) {
       const lesson = slugify(title);
-      const lessonId = await user.addLesson(course, title, "# Ny Oppgave");
+      const lessonId = await user.addLesson(course, title, "");
       navigateToLandingpage(lessonId, lesson);
     } else {
       setError("tittel er ikke satt");

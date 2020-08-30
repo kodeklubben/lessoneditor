@@ -37,6 +37,8 @@ const ButtonPanel = ({
   setRedoCursorPosition,
   setListButtonValues,
   file,
+  open,
+  setOpen,
 }) => {
   const history = useHistory();
   const { lessonId } = useParams();
@@ -107,7 +109,13 @@ const ButtonPanel = ({
 
         <div style={{ display: "flex", float: "right" }}>
           <Languages mdText={mdText} file={file} />
-          <EditorDatapanel mdText={mdText} setMdText={setMdText} file={file} />
+          <EditorDatapanel
+            mdText={mdText}
+            setMdText={setMdText}
+            file={file}
+            open={open}
+            setOpen={setOpen}
+          />
           <button
             className={`ui ${
               mdText && mdText.length < 1 ? `disabled` : ``
