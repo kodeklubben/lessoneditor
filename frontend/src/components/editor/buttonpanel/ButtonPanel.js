@@ -57,7 +57,9 @@ const ButtonPanel = ({
         typeof newHeader !== "undefined"
           ? newHeader + "\n\n\n" + mdText
           : mdText;
-      await saveMdText(lessonId, file, newMdText).then(history.push(target));
+      await saveMdText(lessonId, file, newMdText, true).then(
+        history.push(target)
+      );
     });
   };
 
