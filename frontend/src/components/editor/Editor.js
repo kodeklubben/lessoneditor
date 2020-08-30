@@ -80,18 +80,22 @@ const Editor = () => {
 
   useEffect(() => {
     if (lessonId && file) {
-      let test = language === "nb" ? file : file + "_" + language;
       async function fetchData() {
-        const lessonText = await fetchMdText(lessonId, test);
-
+        const lessonText = await fetchMdText(lessonId, file);
+        return lessonText;
+      }
+      async function parsedHeader(lessonText) {
         const parsedHeader = parseMdHeader(lessonText);
-        try {
-          setMdText(await parsedHeader.body);
-          setUndo([await parsedHeader.body]);
-        } catch (e) {
-          console.log(e);
-        }
-        try {
+        return parsedHeader;
+      }
+
+      fetchData().then((lessonText) => {
+        parsedHeader(lessonText).then((parsedHeader) => {
+          if (typeof parsedHeader === "undefined") {
+            return;
+          }
+          setMdText(parsedHeader.body);
+          setUndo([parsedHeader.body]);
           const newHeaderData = {
             title: parsedHeader.header.title,
             authorList: parsedHeader.header.author
@@ -106,11 +110,8 @@ const Editor = () => {
               : [],
           };
           setHeaderData(newHeaderData);
-        } catch (e) {
-          console.log(e);
-        }
-      }
-      fetchData();
+        });
+      });
     }
   }, [file, language, lessonId, setHeaderData]);
 

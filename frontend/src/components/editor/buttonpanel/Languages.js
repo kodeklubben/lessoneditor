@@ -38,6 +38,12 @@ const Languages = ({ mdText, file }) => {
   const lessonContext = useContext(LessonContext);
   const { headerData, setLanguage } = lessonContext;
 
+  const newHeader = async (language) => {
+    const header = createNewHeader(await headerData, language);
+
+    return header;
+  };
+
   const defaultValue = (file = "_nb") => {
     let returnvalue;
     switch (file.slice(-3)) {
@@ -62,9 +68,6 @@ const Languages = ({ mdText, file }) => {
 
   const handleChange = async (event, { value }) => {
     const tempTarget = ["/editor", lessonId].join("/");
-    const newHeader = createNewHeader(headerData, value);
-    const newMdText =
-      newHeader !== undefined ? newHeader + "\n\n\n" + mdText : mdText;
     let target;
     if (lessonId) {
       if (defaultValue(file) !== "nb" && value !== "nb") {
@@ -77,10 +80,14 @@ const Languages = ({ mdText, file }) => {
         console.log("change language dropdown error");
       }
     }
-
-    await saveMdText(lessonId, file, newMdText);
-
-    history.push({ pathname: tempTarget });
+    newHeader(value).then(async (newHeader) => {
+      const newMdText =
+        typeof newHeader !== "undefined"
+          ? newHeader + "\n\n\n" + mdText
+          : mdText;
+      await saveMdText(lessonId, file, newMdText).then(history.push(target));
+    });
+    history.push({ pathname: "/" });
     history.replace({ pathname: target });
   };
   return (

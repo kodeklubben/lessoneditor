@@ -44,13 +44,21 @@ const ButtonPanel = ({
   const { data, headerData, language } = context;
   const course = data.course;
 
+  const newHeader = async () => {
+    const header = createNewHeader(await headerData, await language);
+
+    return header;
+  };
+
   const navigateToHome = async () => {
-    const newHeader = createNewHeader(await headerData, await language);
-    let newMdText =
-      newHeader !== undefined ? newHeader + "\n\n\n" + mdText : mdText;
-    await saveMdText(lessonId, file, newMdText, true);
     const target = ["/landingpage", lessonId].join("/");
-    history.push(target);
+    newHeader().then(async (newHeader) => {
+      const newMdText =
+        typeof newHeader !== "undefined"
+          ? newHeader + "\n\n\n" + mdText
+          : mdText;
+      await saveMdText(lessonId, file, newMdText).then(history.push(target));
+    });
   };
 
   return (
@@ -99,7 +107,9 @@ const ButtonPanel = ({
           <Languages mdText={mdText} file={file} />
           <EditorDatapanel mdText={mdText} setMdText={setMdText} file={file} />
           <button
-            className={`ui ${mdText.length < 1 ? `disabled` : ``} button`}
+            className={`ui ${
+              mdText && mdText.length < 1 ? `disabled` : ``
+            } button`}
             id="next"
             onClick={() => navigateToHome()}
           >
