@@ -67,7 +67,7 @@ const Languages = ({ mdText, file }) => {
   }, [file, setLanguage]);
 
   const handleChange = async (event, { value }) => {
-    const tempTarget = ["/editor", lessonId].join("/");
+    // const tempTarget = ["/editor", lessonId].join("/");
     let target;
     if (lessonId) {
       if (defaultValue(file) !== "nb" && value !== "nb") {
