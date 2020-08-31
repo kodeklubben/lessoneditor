@@ -20,7 +20,7 @@ const Landingpage = () => {
   const [thankU, setThankU] = useState(false);
   const { lessonId } = useParams();
   const lesson = useContext(LessonContext);
-  const { data, lessonList, saveLesson } = lesson;
+  const { data, lessonList, saveLesson, saveYml } = lesson;
 
   let thumbUrl;
 

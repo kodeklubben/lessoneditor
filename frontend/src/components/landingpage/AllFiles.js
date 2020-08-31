@@ -12,7 +12,6 @@ const AllFiles = ({ lessonId, thumbUrl }) => {
       <div style={{ marginBottom: "5em" }}>
         <div style={{ marginLeft: "5em" }}>
           {lessonList.map((element, index) => {
-            console.log("element : " + JSON.stringify(element));
             return <h2>{element.filename}</h2>;
           })}
         </div>

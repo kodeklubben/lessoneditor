@@ -13,12 +13,16 @@ export const LessonContextProvider = (props) => {
   const [headerData, setHeaderData] = useState({});
   const [language, setLanguage] = useState("nb");
   const [lessonList, setLessonList] = useState({});
-  const [state, setState] = useState({});
 
   const lessonListUrl = resolveUrlTemplate(paths.LESSON_FILES, { lessonId });
-  const lessonDataUrl = resolveUrlTemplate(paths.LESSON_DATA, { lessonId });
-  const lessonYMLDataUrl = resolveUrlTemplate(paths.LESSON_YMLDATA, {
+  const lessonDataUrl = resolveUrlTemplate(paths.LESSON_DATA, {
     lessonId,
+    filename: "data.json",
+  });
+
+  const lessonYMLDataUrl = resolveUrlTemplate(paths.LESSON_DATA, {
+    lessonId,
+    filename: "lesson.yml",
   });
 
   useEffect(() => {
@@ -33,11 +37,11 @@ export const LessonContextProvider = (props) => {
 
   useEffect(() => {
     async function fetchData() {
-      const res = await axios.get(lessonYMLDataUrl);
-      return res;
+      const res2 = await axios.get(lessonYMLDataUrl);
+      return res2;
     }
     if (lessonId) {
-      fetchData().then((res) => console.log(res));
+      fetchData().then((res2) => console.log(res2));
     }
   }, [lessonId, lessonYMLDataUrl]);
 
@@ -51,12 +55,12 @@ export const LessonContextProvider = (props) => {
 
   const context = {
     data,
+    setData,
     headerData,
     setHeaderData,
     language,
     setLanguage,
-    state,
-    setState,
+
     fetchList: async () => {
       const res = await axios.get(lessonListUrl);
       setLessonList(res.data);
@@ -66,6 +70,13 @@ export const LessonContextProvider = (props) => {
       if (lessonId) {
         await axios.post(lessonDataUrl, data);
         setData(data);
+      }
+    },
+    saveYml: async (innhold) => {
+      if (lessonId) {
+        console.log("innhold : " + JSON.stringify(innhold));
+        await axios.post(lessonYMLDataUrl, innhold);
+        setYmlData(innhold);
       }
     },
     getLessonData: async () => {

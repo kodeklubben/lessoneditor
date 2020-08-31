@@ -12,7 +12,7 @@ module.exports = async (lessonData, username, edit = false) => {
   data.createdBy = username;
   data.yml = Object.assign({}, "");
   const dataBuffer = Buffer.from(JSON.stringify(data));
-  const ymlBuffer = Buffer.from("");
+  const ymlBuffer = Buffer.from(JSON.stringify({}));
   if (!edit) {
     await saveFile(
       ["drafts", data.lessonId, data.lesson + ".md"],
@@ -20,6 +20,6 @@ module.exports = async (lessonData, username, edit = false) => {
     );
   }
   await saveFile(["drafts", data.lessonId, "data.json"], dataBuffer);
-  await saveFile(["drafts", data.lessonId, "lesson.yml"], dataBuffer);
+  await saveFile(["drafts", data.lessonId, "lesson.yml"], ymlBuffer);
   return data;
 };
