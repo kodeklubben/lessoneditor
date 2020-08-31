@@ -1,5 +1,5 @@
 import "./datapanel.scss";
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { YML_TEXT } from "../settingsFiles/languages/landingpage_NO";
 import { TagsGrade, TagsSubject, TagsTopic } from "./Tags";
 import CheckboxField from "./CheckboxField";
@@ -9,8 +9,36 @@ import { LessonContext } from "contexts/LessonContext";
 
 const Datapanel = () => {
   const [open, setOpen] = useState(false);
+  const [checkBoxState, setCheckBoxState] = useState({});
   const context = useContext(LessonContext);
   const { ymlData, setYmlData, getLessonData, saveYml } = context;
+
+  useEffect(() => {
+    let obj;
+    obj = ymlData.tags.topic.reduce(
+      (accumulator, currentValue) => {
+        accumulator[currentValue] = true;
+        return accumulator;
+      },
+      { ...obj }
+    );
+    obj = ymlData.tags.subject.reduce(
+      (accumulator, currentValue) => {
+        accumulator[currentValue] = true;
+        return accumulator;
+      },
+      { ...obj }
+    );
+    obj = ymlData.tags.grade.reduce(
+      (accumulator, currentValue) => {
+        accumulator[currentValue] = true;
+        return accumulator;
+      },
+      { ...obj }
+    );
+    console.log("obj : " + JSON.stringify(obj));
+    setCheckBoxState((prevState) => ({ ...prevState, ...obj }));
+  }, [ymlData.tags]);
 
   const onSubmit = async () => {
     await saveYml(ymlData);
@@ -29,8 +57,42 @@ const Datapanel = () => {
     }));
   };
 
+  const checboxHandler = (event) => {
+    let subtag = event.target.getAttribute("subtag");
+    // console.log(subtag);
+    let name = event.target.value;
+    let value = event.target.checked;
+
+    setCheckBoxState((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+
+    // console.log("checboxState : " + JSON.stringify(checkBoxState));
+
+    if (!ymlData.tags[subtag].includes(name)) {
+      setYmlData((prevState) => ({
+        ...prevState,
+        tags: {
+          ...prevState?.tags,
+          [subtag]: [...prevState?.tags[subtag], name],
+        },
+      }));
+    } else {
+      setYmlData((prevState) => ({
+        ...prevState,
+        tags: {
+          ...prevState?.tags,
+          [subtag]: prevState?.tags[subtag].filter((e) => e !== name),
+        },
+      }));
+    }
+    console.log("ymlData : " + JSON.stringify(ymlData.tags));
+
+    // console.log("ymlData : " + JSON.stringify(ymlData));
+  };
+
   const changeHandler = (event) => {
-    console.log("ymlData : " + JSON.stringify(ymlData));
     let name =
       event.target.type === "checkbox" ? event.target.value : event.target.name;
     let value =
@@ -42,6 +104,7 @@ const Datapanel = () => {
       ...prevState,
       [name]: value,
     }));
+    // console.log("changeHandler : " + JSON.stringify(ymlData));
   };
 
   return (
@@ -72,13 +135,19 @@ const Datapanel = () => {
                   <CheckboxField
                     labelTitle={YML_TEXT.topic}
                     content={
-                      <TagsTopic data={ymlData} changeHandler={changeHandler} />
+                      <TagsTopic
+                        data={checkBoxState}
+                        changeHandler={checboxHandler}
+                      />
                     }
                   />
                   <CheckboxField
                     labelTitle={YML_TEXT.grade}
                     content={
-                      <TagsGrade data={ymlData} changeHandler={changeHandler} />
+                      <TagsGrade
+                        data={checkBoxState}
+                        changeHandler={checboxHandler}
+                      />
                     }
                   />
                 </div>
@@ -87,8 +156,8 @@ const Datapanel = () => {
                     labelTitle={YML_TEXT.subject}
                     content={
                       <TagsSubject
-                        data={ymlData}
-                        changeHandler={changeHandler}
+                        data={checkBoxState}
+                        changeHandler={checboxHandler}
                       />
                     }
                   />
