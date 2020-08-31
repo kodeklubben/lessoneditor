@@ -10,10 +10,10 @@ import { LessonContext } from "contexts/LessonContext";
 const Datapanel = () => {
   const [open, setOpen] = useState(false);
   const context = useContext(LessonContext);
-  const { data, setData, getLessonData, saveLesson } = context;
+  const { ymlData, setYmlData, getLessonData, saveYml } = context;
 
   const onSubmit = async () => {
-    await saveLesson(data);
+    await saveYml(ymlData);
     setOpen(false);
   };
 
@@ -23,13 +23,14 @@ const Datapanel = () => {
   };
 
   const dropdownHandler = (event, { name, value }) => {
-    setData((prevState) => ({
+    setYmlData((prevState) => ({
       ...prevState,
-      yml: { ...prevState.yml, [name]: value },
+      [name]: value,
     }));
   };
 
   const changeHandler = (event) => {
+    console.log("ymlData : " + JSON.stringify(ymlData));
     let name =
       event.target.type === "checkbox" ? event.target.value : event.target.name;
     let value =
@@ -37,9 +38,9 @@ const Datapanel = () => {
         ? event.target.checked
         : event.target.value;
 
-    setData((prevState) => ({
+    setYmlData((prevState) => ({
       ...prevState,
-      yml: { ...prevState.yml, [name]: value },
+      [name]: value,
     }));
   };
 
@@ -71,13 +72,13 @@ const Datapanel = () => {
                   <CheckboxField
                     labelTitle={YML_TEXT.topic}
                     content={
-                      <TagsTopic data={data} changeHandler={changeHandler} />
+                      <TagsTopic data={ymlData} changeHandler={changeHandler} />
                     }
                   />
                   <CheckboxField
                     labelTitle={YML_TEXT.grade}
                     content={
-                      <TagsGrade data={data} changeHandler={changeHandler} />
+                      <TagsGrade data={ymlData} changeHandler={changeHandler} />
                     }
                   />
                 </div>
@@ -85,12 +86,15 @@ const Datapanel = () => {
                   <CheckboxField
                     labelTitle={YML_TEXT.subject}
                     content={
-                      <TagsSubject data={data} changeHandler={changeHandler} />
+                      <TagsSubject
+                        data={ymlData}
+                        changeHandler={changeHandler}
+                      />
                     }
                   />
                   <div>
-                    <Levels changeHandler={dropdownHandler} data={data} />
-                    <License changeHandler={changeHandler} data={data} />
+                    <Levels changeHandler={dropdownHandler} data={ymlData} />
+                    <License changeHandler={changeHandler} data={ymlData} />
                   </div>
                 </div>
               </div>

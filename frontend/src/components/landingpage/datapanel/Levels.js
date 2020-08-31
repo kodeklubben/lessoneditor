@@ -14,7 +14,7 @@ const Levels = ({ changeHandler, data }) => {
         placeholder="Velg Nivå"
         name="level"
         defaultValue={levelOptions[0].value}
-        value={data?.yml["level"]}
+        value={data["level"]}
         fluid
         selection
         onChange={changeHandler}
