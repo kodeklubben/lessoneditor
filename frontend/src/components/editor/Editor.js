@@ -15,8 +15,7 @@ import parseMdHeader from "./utils/parseMdHeader";
 const Editor = () => {
   const { lessonId, file } = useParams();
   const context = useContext(LessonContext);
-  const { language, data, setHeaderData } = context;
-
+  const { language, data, setHeaderData, getLessonData } = context;
   const [mdText, setMdText] = useState("");
   const [buttonValues, setButtonValues] = useState({});
   const [cursorPositionStart, setCursorPositionStart] = useState(0);
@@ -82,46 +81,47 @@ const Editor = () => {
   };
 
   useEffect(() => {
-    if (lessonId && file) {
-      async function fetchData() {
-        const lessonText = await fetchMdText(lessonId, file);
-        console.log("lessontekst : " + lessonText);
-        return lessonText;
-      }
-      async function parsedHeader(lessonText) {
-        const parsedHeader = parseMdHeader(lessonText);
-
-        return parsedHeader;
-      }
-
-      fetchData().then((lessonText) => {
-        if (lessonText === "# " || lessonText === "") {
-          setOpen(true);
-          setMdText("");
-          setHeaderData({});
-          return;
-        } else {
-          parsedHeader(lessonText).then((header) => {
-            setMdText(header.body);
-            setUndo([header.body]);
-            const newHeaderData = {
-              title: header.header.title,
-              authorList: header.header.author
-                ? header.header.author.split(",").map((item) => {
-                    return item.trim();
-                  })
-                : [],
-              translatorList: header.header.translator
-                ? header.header.translator.split(",").map((item) => {
-                    return item.trim();
-                  })
-                : [],
-            };
-            setHeaderData(newHeaderData);
-          });
+    getLessonData().then((res) => {
+      if (lessonId && file) {
+        async function fetchData() {
+          const lessonText = await fetchMdText(lessonId, file);
+          return lessonText;
         }
-      });
-    }
+        async function parsedHeader(lessonText) {
+          const parsedHeader = parseMdHeader(lessonText);
+          return parsedHeader;
+        }
+
+        fetchData().then((lessonText) => {
+          parsedHeader(lessonText).then((header) => {
+            if (!header?.header?.title) {
+              setOpen(true);
+              setMdText("");
+              setHeaderData({});
+              return;
+            } else {
+              setMdText(header.body);
+              setUndo([header.body]);
+              const newHeaderData = {
+                title: header.header.title,
+                authorList: header.header.author
+                  ? header.header.author.split(",").map((item) => {
+                      return item.trim();
+                    })
+                  : [],
+                translatorList: header.header.translator
+                  ? header.header.translator.split(",").map((item) => {
+                      return item.trim();
+                    })
+                  : [],
+              };
+              setHeaderData(newHeaderData);
+            }
+          });
+        });
+      }
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [file, language, lessonId, setHeaderData]);
 
   return (

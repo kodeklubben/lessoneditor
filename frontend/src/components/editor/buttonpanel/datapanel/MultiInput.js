@@ -59,36 +59,19 @@ const MultiInput = ({
             width: "100%",
           }}
         >
-          {autofocus ? (
-            <input
-              autoFocus
-              ref={(element) => (textInput = element)}
-              autoComplete="off"
-              type="text"
-              name={name}
-              placeholder={placeholder}
-              value={inputValue}
-              onClick={inputClick}
-              onTouchStart={inputClick}
-              onChange={changeHandler}
-              onKeyUp={(e) => (e.key === "Enter" ? handleClick(e) : "")}
-              onBlur={(e) => onBlur(e)}
-            />
-          ) : (
-            <input
-              ref={(element) => (textInput = element)}
-              autoComplete="off"
-              type="text"
-              name={name}
-              placeholder={placeholder}
-              value={inputValue}
-              onClick={inputClick}
-              onTouchStart={inputClick}
-              onChange={changeHandler}
-              onKeyUp={(e) => (e.key === "Enter" ? handleClick(e) : "")}
-              onBlur={(e) => onBlur(e)}
-            />
-          )}
+          <input
+            ref={(element) => (textInput = element)}
+            autoComplete="off"
+            type="text"
+            name={name}
+            placeholder={placeholder}
+            value={inputValue}
+            onClick={inputClick}
+            onTouchStart={inputClick}
+            onChange={changeHandler}
+            onKeyUp={(e) => (e.key === "Enter" ? handleClick(e) : "")}
+            onBlur={(e) => onBlur(e)}
+          />
         </div>
 
         {inputArray.map((element) => (

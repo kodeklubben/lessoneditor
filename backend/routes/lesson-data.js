@@ -4,14 +4,14 @@ const loadFile = require("../utils/load-file");
 
 module.exports = (app) => {
   app.post(paths.LESSON_DATA, async (req, res) => {
-    const { lessonId } = req.params;
+    const { lessonId, filename } = req.params;
     const buffer = Buffer.from(JSON.stringify(req.body));
-    await saveFile(["drafts", lessonId, "data.json"], buffer);
+    await saveFile(["drafts", lessonId, filename], buffer);
     res.send("ok");
   });
   app.get(paths.LESSON_DATA, async (req, res) => {
-    const { lessonId } = req.params;
-    const content = await loadFile(["drafts", lessonId, "data.json"]);
+    const { lessonId, filename } = req.params;
+    const content = await loadFile(["drafts", lessonId, filename]);
     res.send(JSON.parse(content));
   });
 };
