@@ -5,6 +5,7 @@
   "FILE": "/file/*",
   "LESSON": "/api/lesson",
   "LESSON_DATA": "/api/lesson/:lessonId/data",
+  "LESSON_YMLDATA": "/api/lesson/:lessonId/ymldata",
   "LESSON_FILES": "/api/lesson/:lessonId/files",
   "LESSON_PROXY": "/api/lessons-proxy/*",
   "LESSON_SUBMIT": "/api/lesson/:lessonId/submit",
