@@ -9,7 +9,11 @@ export const LessonContext = React.createContext({});
 export const LessonContextProvider = (props) => {
   const { lessonId } = useParams();
   const [data, setData] = useState({});
-  const [ymlData, setYmlData] = useState({});
+  const [ymlData, setYmlData] = useState({
+    level: 1,
+    license: "CC BY-SA 4.0",
+    tags: { topic: [], subject: [], grade: [] },
+  });
   const [headerData, setHeaderData] = useState({});
   const [language, setLanguage] = useState("nb");
   const [lessonList, setLessonList] = useState({});
@@ -38,10 +42,16 @@ export const LessonContextProvider = (props) => {
   useEffect(() => {
     async function fetchData() {
       const res = await axios.get(lessonYMLDataUrl);
-      return res;
+      console.log("res.data : " + JSON.stringify(res.data));
+      return res.data;
     }
     if (lessonId) {
-      fetchData().then((res) => setYmlData(res.data));
+      fetchData().then((res) =>
+        setYmlData((prevState) => ({
+          ...prevState,
+          ...res,
+        }))
+      );
     }
   }, [lessonId, lessonYMLDataUrl]);
 
@@ -74,10 +84,9 @@ export const LessonContextProvider = (props) => {
         setData(data);
       }
     },
-    saveYml: async (innhold) => {
+    saveYml: async (ymlData) => {
       if (lessonId) {
-        await axios.post(lessonYMLDataUrl, innhold);
-        setYmlData(innhold);
+        await axios.post(lessonYMLDataUrl, ymlData);
       }
     },
     getLessonData: async () => {

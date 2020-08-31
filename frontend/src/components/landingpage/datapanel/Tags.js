@@ -5,10 +5,12 @@ import {
   topicSettings,
 } from "../settingsFiles/LESSONTAGSSETTINGS";
 
-const Checkbox = ({ value, onCheck, data, name }) => {
+const Checkbox = ({ value, onCheck, data, name, subtag }) => {
   const onInputChange = (event) => {
     onCheck(event);
   };
+
+  // console.log("name : " + value);
 
   return (
     <div className="ui checkbox">
@@ -16,6 +18,7 @@ const Checkbox = ({ value, onCheck, data, name }) => {
         type="checkbox"
         checked={data[value]}
         name={name}
+        subtag={subtag}
         id={value}
         value={value}
         onChange={onInputChange}
@@ -34,6 +37,7 @@ const TagsGrade = ({ changeHandler, data }) => {
         <div className="column" key={"element" + index}>
           <Checkbox
             name={element.name}
+            subtag={element.subtag}
             data={data}
             value={element.value}
             onCheck={changeHandler}
@@ -51,6 +55,7 @@ const TagsSubject = ({ changeHandler, data }) => {
         <div className="column" key={"element" + index}>
           <Checkbox
             name={element.name}
+            subtag={element.subtag}
             data={data}
             value={element.value}
             onCheck={changeHandler}
@@ -68,6 +73,7 @@ const TagsTopic = ({ changeHandler, data }) => {
         <div className="column" key={"element" + index}>
           <Checkbox
             name={element.name}
+            subtag={element.subtag}
             data={data}
             value={element.value}
             onCheck={changeHandler}
