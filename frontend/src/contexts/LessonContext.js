@@ -41,7 +41,7 @@ export const LessonContextProvider = (props) => {
       return res;
     }
     if (lessonId) {
-      fetchData().then((res) => console.log(res));
+      fetchData().then((res) => setYmlData(res.data));
     }
   }, [lessonId, lessonYMLDataUrl]);
 
@@ -55,8 +55,9 @@ export const LessonContextProvider = (props) => {
 
   const context = {
     data,
-    ymlData,
     setData,
+    ymlData,
+    setYmlData,
     headerData,
     setHeaderData,
     language,

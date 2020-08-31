@@ -14,7 +14,7 @@ const Checkbox = ({ value, onCheck, data, name }) => {
     <div className="ui checkbox">
       <input
         type="checkbox"
-        checked={data?.yml[value]}
+        checked={data[value]}
         name={name}
         id={value}
         value={value}

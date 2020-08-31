@@ -14,7 +14,7 @@ const License = ({ changeHandler, data }) => {
           name="license"
           placeholder={FORM_TEXT.LICENSE.placeholder}
           onChange={changeHandler}
-          value={data?.yml["license"]}
+          value={data["license"]}
         />
       </label>
     </div>
