@@ -18,7 +18,6 @@ const TeacherGuides = ({ thumbUrl, lessonId, lessonList }) => {
         element.filename.slice(-5, -3)
       ) {
         case "nn":
-          alert("");
           if (!languages.includes("nn")) {
             languages.push("nn");
           }

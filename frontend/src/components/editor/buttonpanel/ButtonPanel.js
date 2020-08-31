@@ -111,7 +111,6 @@ const ButtonPanel = ({
           <Languages mdText={mdText} file={file} />
           <EditorDatapanel
             mdText={mdText}
-            setMdText={setMdText}
             file={file}
             open={open}
             setOpen={setOpen}

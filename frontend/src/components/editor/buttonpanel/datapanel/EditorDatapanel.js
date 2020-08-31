@@ -7,7 +7,7 @@ import { LessonContext } from "contexts/LessonContext";
 import saveMdText from "../../../../api/save-md-text";
 import createNewHeader from "../utils/createNewHeader";
 import { useHistory } from "react-router-dom";
-const EditorDatapanel = ({ mdText, setMdText, file, open, setOpen }) => {
+const EditorDatapanel = ({ mdText, file, open, setOpen }) => {
   const { lessonId } = useParams();
   const context = useContext(LessonContext);
   const { headerData, setHeaderData } = context;
@@ -19,6 +19,8 @@ const EditorDatapanel = ({ mdText, setMdText, file, open, setOpen }) => {
     const setDataFromHeaderData = async () => {
       if (Object.keys(headerData).length > 0) {
         setState(headerData);
+      } else {
+        setState({ title: "", authorList: [] });
       }
     };
     setDataFromHeaderData();
@@ -52,7 +54,9 @@ const EditorDatapanel = ({ mdText, setMdText, file, open, setOpen }) => {
   };
 
   const onCancel = async () => {
-    if (mdText === "") {
+    console.log("state : " + JSON.stringify(state));
+    console.log("headerdata : " + JSON.stringify(headerData));
+    if (!state.title) {
       const target = ["/landingpage", lessonId].join("/");
       history.push(target);
     }
@@ -103,7 +107,6 @@ const EditorDatapanel = ({ mdText, setMdText, file, open, setOpen }) => {
               inputArray={state.authorList}
               inputValue={state.author}
               validateMessage={state.err}
-              autofocus="autofocus"
               required="(obligatorisk)"
               placeholder={FORM_TEXT.AUTHOR.placeholder}
             />

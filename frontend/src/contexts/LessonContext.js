@@ -7,29 +7,24 @@ import paths from "../paths.json";
 export const LessonContext = React.createContext({});
 
 export const LessonContextProvider = (props) => {
-  const ymlFile = "lesson.yml";
-
   const { lessonId } = useParams();
   const [data, setData] = useState({});
   const [headerData, setHeaderData] = useState({});
   const [language, setLanguage] = useState("nb");
   const [lessonList, setLessonList] = useState({});
-  const [ymlFiles, setYmlFiles] = useState({});
   const [state, setState] = useState({});
 
   const lessonListUrl = resolveUrlTemplate(paths.LESSON_FILES, { lessonId });
   const lessonDataUrl = resolveUrlTemplate(paths.LESSON_DATA, { lessonId });
-  const lessonYmlUrl = resolveUrlTemplate(paths.DISPLAY_FILE, {
-    lessonId,
-    ymlFile,
-  });
 
   useEffect(() => {
     async function fetchData() {
       const res = await axios.get(lessonDataUrl);
-      setData(res.data);
+      return res;
     }
-    if (lessonId) fetchData();
+    if (lessonId) {
+      fetchData().then((res) => setData(res.data));
+    }
   }, [lessonId, lessonDataUrl]);
 
   useEffect(() => {
@@ -48,14 +43,9 @@ export const LessonContextProvider = (props) => {
     setLanguage,
     state,
     setState,
-    ymlFiles,
     fetchList: async () => {
       const res = await axios.get(lessonListUrl);
       setLessonList(res.data);
-    },
-    test: async () => {
-      const res = await axios.get(lessonYmlUrl);
-      setYmlFiles(res);
     },
     lessonList,
     saveLesson: async (data) => {
@@ -65,12 +55,14 @@ export const LessonContextProvider = (props) => {
       }
     },
     getLessonData: async () => {
-      if (lessonId) {
+      async function fetchData() {
         const res = await axios.get(lessonDataUrl);
-        if (Object.keys(res.data) > 0) {
-          setData(res.data);
-        }
+        return res;
       }
+      if (lessonId) {
+        fetchData().then((res) => setData(res.data));
+      }
+      return "lesson data is loaded";
     },
   };
   return (
