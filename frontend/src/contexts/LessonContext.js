@@ -37,11 +37,11 @@ export const LessonContextProvider = (props) => {
 
   useEffect(() => {
     async function fetchData() {
-      const res2 = await axios.get(lessonYMLDataUrl);
-      return res2;
+      const res = await axios.get(lessonYMLDataUrl);
+      return res;
     }
     if (lessonId) {
-      fetchData().then((res2) => console.log(res2));
+      fetchData().then((res) => console.log(res));
     }
   }, [lessonId, lessonYMLDataUrl]);
 
@@ -55,6 +55,7 @@ export const LessonContextProvider = (props) => {
 
   const context = {
     data,
+    ymlData,
     setData,
     headerData,
     setHeaderData,
@@ -74,7 +75,6 @@ export const LessonContextProvider = (props) => {
     },
     saveYml: async (innhold) => {
       if (lessonId) {
-        console.log("innhold : " + JSON.stringify(innhold));
         await axios.post(lessonYMLDataUrl, innhold);
         setYmlData(innhold);
       }

@@ -1,7 +1,6 @@
 const paths = require("../paths");
 const saveFile = require("../utils/save-file");
 const loadFile = require("../utils/load-file");
-const yaml = require("js-yaml");
 
 module.exports = (app) => {
   app.post(paths.LESSON_DATA, async (req, res) => {
@@ -13,6 +12,6 @@ module.exports = (app) => {
   app.get(paths.LESSON_DATA, async (req, res) => {
     const { lessonId, filename } = req.params;
     const content = await loadFile(["drafts", lessonId, filename]);
-    res.send(JSON.parse(yaml.safeLoad(content)));
+    res.send(JSON.parse(content));
   });
 };
