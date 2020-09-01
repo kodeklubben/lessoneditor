@@ -1,4 +1,4 @@
-const loadFile = require("../utils/load-file");
+const loadFile = require("../storage/load-file");
 const listFiles = require("../utils/list-files");
 const yaml = require("js-yaml");
 

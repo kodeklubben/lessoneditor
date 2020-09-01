@@ -1,4 +1,4 @@
-const saveFile = require("./save-file");
+const saveFile = require("../storage/save-file");
 const nanoid = require("nanoid").customAlphabet(
   "01234567890abcdefghijklmnopqrstuvwxyz",
   7
