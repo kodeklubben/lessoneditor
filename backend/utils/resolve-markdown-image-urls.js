@@ -6,7 +6,6 @@ module.exports = (markdownContent) => {
     postfix
   ) {
     const imageName = imagePathRaw.split("/").pop().replace(/\s/g, "");
-    //const imageName = imgPathSplit[imgPathSplit.length - 1].replace(/\s/g, "");
     return prefix + imageName + postfix;
   });
 };
