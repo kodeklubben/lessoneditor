@@ -4,30 +4,24 @@ import fetchMdText from "../../api/fetch-md-text";
 import MDPreview from "../editor/MDPreview";
 import { useParams } from "react-router";
 
-import parseMdHeader from "../editor/utils/parseMdHeader";
-
 const SimplePreview = () => {
   const { lessonId, file } = useParams();
   const [mdText, setMdText] = useState("");
   const [status, setStatus] = useState("Loading...");
   useEffect(() => {
     if (lessonId && file) {
-      let test = "";
       async function fetchData() {
-        let text = await fetchMdText(lessonId, file);
+        const text = await fetchMdText(lessonId, file);
         if (mdText === "") {
           setStatus("Not found...");
         }
-        setMdText(text);
+        return text;
       }
 
-      fetchData();
-      try {
-        test = parseMdHeader(mdText).body;
-        setMdText(test);
-      } catch (e) {
-        console.log(e);
-      }
+      fetchData().then((mdText) => {
+        const body = mdText.split("---\n")[2].trim();
+        setMdText(body);
+      });
     }
   }, [lessonId, file, mdText]);
   return (
