@@ -49,6 +49,7 @@ const TeacherGuides = ({ thumbUrl, lessonId, lessonList }) => {
             return (
               <div key={element + index}>
                 <LessonCard
+                  title={"Lærerveiledning"}
                   language={element}
                   hasContent={languages.includes(element)}
                   thumbUrl={thumbUrl}

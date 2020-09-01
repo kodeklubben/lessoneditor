@@ -1,5 +1,6 @@
 import "./datapanel.scss";
 import React, { useState, useEffect, useContext } from "react";
+import { useHistory } from "react-router-dom";
 import { YML_TEXT } from "../settingsFiles/languages/landingpage_NO";
 import { TagsGrade, TagsSubject, TagsTopic } from "./Tags";
 import CheckboxField from "./CheckboxField";
@@ -7,13 +8,18 @@ import Levels from "./Levels";
 import License from "./License";
 import { LessonContext } from "contexts/LessonContext";
 
-const Datapanel = () => {
+const Datapanel = ({ lessonId }) => {
   const [open, setOpen] = useState(false);
   const [checkBoxState, setCheckBoxState] = useState({});
   const context = useContext(LessonContext);
-  const { ymlData, setYmlData, getLessonData, saveYml } = context;
+  const { ymlData, setYmlData, getYmlData, saveYml } = context;
+
+  const history = useHistory();
 
   useEffect(() => {
+    if (!ymlData.tags) {
+      return;
+    }
     let obj;
     obj = ymlData.tags.topic.reduce(
       (accumulator, currentValue) => {
@@ -40,13 +46,15 @@ const Datapanel = () => {
   }, [ymlData.tags]);
 
   const onSubmit = async () => {
-    await saveYml(ymlData);
-    setOpen(false);
+    await saveYml(ymlData).then(setOpen(false));
   };
 
   const onCancel = async () => {
-    await getLessonData();
-    setOpen(false);
+    getYmlData().then(() => {
+      const target = ["/landingpage", lessonId].join("/");
+      history.push("/");
+      history.replace(target);
+    });
   };
 
   const dropdownHandler = (event, { name, value }) => {

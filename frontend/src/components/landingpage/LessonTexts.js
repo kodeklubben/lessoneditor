@@ -53,6 +53,7 @@ const LessonTexts = ({ thumbUrl, lessonId }) => {
             return (
               <div key={element + index}>
                 <LessonCard
+                  title={"Oppgavetekst"}
                   language={element}
                   hasContent={languages.includes(element)}
                   thumbUrl={thumbUrl}

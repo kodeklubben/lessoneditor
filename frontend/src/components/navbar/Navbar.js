@@ -13,7 +13,7 @@ const Navbar = () => {
     <div>
       <nav className="navbar_container">
         <div className="navbar_logo">
-          <a href={"//kidsakoder.no"}>
+          <a href={"/"}>
             <img className="navbar_logo" alt="" src={"/lav_logo.jpg"} />
           </a>
         </div>
