@@ -47,6 +47,8 @@ const ButtonPanel = ({
   const { data, headerData, language } = context;
   const course = data.course;
 
+  const noThumbLang = ["_nn", "_en", "_is"];
+
   const newHeader = async () => {
     const header = createNewHeader(await headerData, await language);
 
@@ -65,10 +67,16 @@ const ButtonPanel = ({
         typeof newHeader !== "undefined"
           ? newHeader + "\n\n\n" + mdText
           : mdText;
-      if (!file.slice(0, 6).toLowerCase() === "readme") {
+
+      if (
+        file.slice(0, 6) !== "README" &&
+        !noThumbLang.includes(file.slice(-3))
+      ) {
         await saveMdText(lessonId, file, mdText, true);
+        await saveMdText(lessonId, file, newMdText);
+      } else {
+        await saveMdText(lessonId, file, newMdText);
       }
-      await saveMdText(lessonId, file, newMdText);
 
       history.push(target);
       history.replace(target);

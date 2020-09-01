@@ -50,8 +50,7 @@ const EditorDatapanel = ({ mdText, file, open, setOpen, editorRef }) => {
     const newHeader = createNewHeader(state);
     const newMdText =
       newHeader !== undefined ? newHeader + "\n\n\n" + mdText : mdText;
-    await saveMdText(lessonId, file, newMdText);
-    setOpen(false);
+    await saveMdText(lessonId, file, newMdText).then(setOpen(false));
     editorRef.current.focus();
   };
 
@@ -66,6 +65,9 @@ const EditorDatapanel = ({ mdText, file, open, setOpen, editorRef }) => {
       newHeader !== undefined ? newHeader + "\n\n\n" + mdText : mdText;
     await saveMdText(lessonId, file, newMdText);
     setOpen(false);
+    editorRef.current.focus() === null
+      ? editorRef.current.focus()
+      : console.log("editorRef error");
   };
 
   return (
