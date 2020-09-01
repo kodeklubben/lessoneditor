@@ -65,11 +65,11 @@ const ButtonPanel = ({
         typeof newHeader !== "undefined"
           ? newHeader + "\n\n\n" + mdText
           : mdText;
-      await saveMdText(lessonId, file, mdText, true);
-      await saveMdText(lessonId, file, newMdText).then(() => {
-        history.push(target);
-        history.replace(target);
-      });
+      await saveMdText(lessonId, file, mdText, true).then(
+        await saveMdText(lessonId, file, newMdText)
+      );
+      history.push(target);
+      history.replace(target);
     });
   };
 

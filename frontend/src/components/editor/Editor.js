@@ -17,7 +17,7 @@ const Editor = () => {
   const context = useContext(LessonContext);
   const { language, data, setData, setHeaderData, getLessonData } = context;
   const [mdText, setMdText] = useState("");
-  const [showSpinner, setSnowSpinner] = useState(false);
+  const [showSpinner, setShowSpinner] = useState(false);
   const [buttonValues, setButtonValues] = useState({});
   const [cursorPositionStart, setCursorPositionStart] = useState(0);
   const [cursorPositionEnd, setCursorPositionEnd] = useState(0);
@@ -83,7 +83,7 @@ const Editor = () => {
 
   useEffect(() => {
     getLessonData().then((res) => {
-      setSnowSpinner(true);
+      setShowSpinner(true);
       setData(res.data);
       if (lessonId && file) {
         async function fetchData() {
@@ -103,7 +103,7 @@ const Editor = () => {
             setOpen(true);
             setMdText("");
             setHeaderData({});
-            setSnowSpinner(false);
+            setShowSpinner(false);
             return;
           } else {
             setMdText(body);
@@ -122,7 +122,7 @@ const Editor = () => {
                 : [],
             };
             setHeaderData(newHeaderData);
-            setSnowSpinner(false);
+            setShowSpinner(false);
           }
         });
       }
@@ -144,6 +144,7 @@ const Editor = () => {
         setCursorPositionStart={setCursorPositionStart}
         setCursorPositionEnd={setCursorPositionEnd}
         setCursorPosition={setCursorPosition}
+        setShowSpinner={setShowSpinner}
       />
       <Navbar />
       <ButtonPanel
@@ -169,7 +170,7 @@ const Editor = () => {
         file={file}
         open={open}
         setOpen={setOpen}
-        setShowSpinner={setSnowSpinner}
+        setShowSpinner={setShowSpinner}
       />
       <div className="textEditorContainer">
         <MDTextArea
