@@ -53,8 +53,12 @@ const ButtonPanel = ({
     return header;
   };
 
-  const navigateToHome = async () => {
+  const onSubmit = () => {
     setShowSpinner(true);
+    navigateToHome();
+  };
+
+  const navigateToHome = async () => {
     const target = ["/landingpage", lessonId].join("/");
     newHeader().then(async (newHeader) => {
       const newMdText =
@@ -67,7 +71,6 @@ const ButtonPanel = ({
         history.replace(target);
       });
     });
-    setShowSpinner(false);
   };
 
   return (
@@ -131,7 +134,7 @@ const ButtonPanel = ({
             } button`}
             id="next"
             disabled={mdText.length === 0}
-            onClick={() => navigateToHome()}
+            onClick={onSubmit}
           >
             <i className="arrow right icon" />
           </button>

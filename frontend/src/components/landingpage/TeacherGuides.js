@@ -54,7 +54,7 @@ const TeacherGuides = ({ thumbUrl, lessonId, lessonList }) => {
                   hasContent={languages.includes(element)}
                   thumbUrl={thumbUrl}
                   lessonId={lessonId}
-                  lessonTitle={"readme"}
+                  lessonTitle={"README"}
                 />
               </div>
             );

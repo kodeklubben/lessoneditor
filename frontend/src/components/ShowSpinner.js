@@ -7,7 +7,7 @@ const ShowSpinner = () => {
         position: "absolute",
         top: "0%",
         left: "0%",
-        zIndex: "1",
+        zIndex: "5",
         width: "100%",
         height: "100%",
         backgroundColor: "rgb(256,256,256,0.7)",
@@ -18,6 +18,7 @@ const ShowSpinner = () => {
           display: "flex",
           justifyContent: "center",
           marginTop: "20%",
+          zIndex: "6",
         }}
       >
         <img style={{ width: "4em" }} src="/spinner.gif" alt="spinner" />
