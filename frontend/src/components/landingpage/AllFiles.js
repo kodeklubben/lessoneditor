@@ -3,7 +3,7 @@ import React, { useContext } from "react";
 
 import { LessonContext } from "contexts/LessonContext";
 
-const AllFiles = ({ lessonId, thumbUrl }) => {
+const AllFiles = () => {
   const lesson = useContext(LessonContext);
   const { lessonList } = lesson;
 

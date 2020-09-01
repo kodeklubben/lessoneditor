@@ -3,7 +3,7 @@ import React from "react";
 
 import LessonCard from "./LessonCard";
 
-const TeacherGuides = ({ thumbUrl, lessonId, lessonList }) => {
+const TeacherGuides = ({ lessonId, lessonList }) => {
   let languages = [];
   let allLanguages = ["nb", "nn", "en", "is"];
 
@@ -33,7 +33,7 @@ const TeacherGuides = ({ thumbUrl, lessonId, lessonList }) => {
           }
           break;
         default:
-          if (!languages.includes("nb") && languages.length !== 0) {
+          if (!languages.includes("nb")) {
             languages.push("nb");
           }
           break;
@@ -52,7 +52,6 @@ const TeacherGuides = ({ thumbUrl, lessonId, lessonList }) => {
                   title={"Lærerveiledning"}
                   language={element}
                   hasContent={languages.includes(element)}
-                  thumbUrl={thumbUrl}
                   lessonId={lessonId}
                   lessonTitle={"README"}
                 />

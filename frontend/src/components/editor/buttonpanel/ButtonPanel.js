@@ -65,9 +65,11 @@ const ButtonPanel = ({
         typeof newHeader !== "undefined"
           ? newHeader + "\n\n\n" + mdText
           : mdText;
-      await saveMdText(lessonId, file, mdText, true).then(
-        await saveMdText(lessonId, file, newMdText)
-      );
+      if (!file.slice(0, 6).toLowerCase() === "readme") {
+        await saveMdText(lessonId, file, mdText, true);
+      }
+      await saveMdText(lessonId, file, newMdText);
+
       history.push(target);
       history.replace(target);
     });

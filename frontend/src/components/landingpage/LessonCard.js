@@ -45,7 +45,21 @@ const LessonCard = ({
         <div style={{ width: "360px" }} className="image itemListImage">
           {hasContent ? (
             hasContent ? (
-              <img src={thumbUrl} alt={"oppgavebilde"} />
+              <div
+                style={{ width: "360px", padding: "10px" }}
+                className="ui placeholder"
+              >
+                <div className="line"> </div>
+                <div className="line"> </div>
+                <div className="line"> </div>
+                <div className="line"> </div>
+                <div className="image header">
+                  <div className="line"> </div>
+                  <div className="line"> </div>
+                  <div className="line"> </div>
+                  <div className="line"> </div>
+                </div>
+              </div>
             ) : (
               <div style={{ width: "360px" }}></div>
             )
