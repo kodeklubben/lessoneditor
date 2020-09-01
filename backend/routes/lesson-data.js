@@ -1,6 +1,6 @@
 const paths = require("../paths");
-const saveFile = require("../utils/save-file");
-const loadFile = require("../utils/load-file");
+const saveFile = require("../storage/save-file");
+const loadFile = require("../storage/load-file");
 
 module.exports = (app) => {
   app.post(paths.LESSON_DATA, async (req, res) => {

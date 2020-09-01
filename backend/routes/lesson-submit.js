@@ -1,6 +1,6 @@
 const paths = require("../paths");
 const submit = require("../githubAPI/submitLesson");
-const getLessonData = require("../utils/get-lesson-data");
+const getLessonData = require("../lesson/get-lesson-data");
 
 module.exports = (app) => {
   app.post(paths.LESSON_SUBMIT, async (req, res) => {

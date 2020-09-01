@@ -1,8 +1,8 @@
 const thumbUrl = require("./thumb-url");
-const saveFile = require("./save-file");
-const isAppEngine = require("./isAppEngine");
-const gcsUrl = require("./gcs-url");
-const downloadImage = require("./download-image");
+const saveFile = require("../storage/save-file");
+const isAppEngine = require("../utils/isAppEngine");
+const gcsUrl = require("../utils/gcs-url");
+const downloadImage = require("../storage/download-image");
 module.exports = async (previewUrl, storagePath) => {
   const url = thumbUrl(previewUrl);
   const imageBuffer = await downloadImage(url);

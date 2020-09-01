@@ -1,4 +1,4 @@
-const loadFile = require("./load-file");
+const loadFile = require("../storage/load-file");
 
 module.exports = async (username, course, title) => {
   const result = await loadFile(["users", username, "lessons.json"]);
