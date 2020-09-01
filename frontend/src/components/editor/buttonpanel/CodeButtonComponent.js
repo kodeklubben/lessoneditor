@@ -14,6 +14,7 @@ const CodeButtons = ({
   endOutput,
   shortcutKey,
   course,
+  style,
 }) => {
   const responsiveCP = () => {
     const courseNotSlug = COURSELIST.find(({ slug }) => slug === course);
@@ -27,27 +28,9 @@ const CodeButtons = ({
           trigger={
             icon === "code" ? (
               <Button
-                style={
-                  buttonValues[buttonTitle]
-                    ? {
-                        position: "relative",
-                        top: "0.1em",
-                        paddingTop: "0.25em",
-                        paddingBottom: "0.25em",
-                        borderRadius: "10px",
-                        backgroundColor: "#bbb",
-                      }
-                    : {
-                        position: "relative",
-                        top: "0.1em",
-                        paddingTop: "0.25em",
-                        paddingBottom: "0.25em",
-                        borderRadius: "10px",
-                        backgroundColor: "rgba(0, 0, 0, 0)",
-                      }
-                }
+                style={style}
                 className="CPButton"
-                size="big"
+                size="tiny"
                 onClick={() =>
                   onButtonClick(
                     buttonTitle,
@@ -58,40 +41,18 @@ const CodeButtons = ({
                   )
                 }
               >
-                <div
-                  style={{
-                    fontSize: "x-large",
-                    position: "relative",
-                    top: "0.06em",
-                    marginLeft: "-1em",
-                  }}
-                >
-                  {"```Kodeblokk(" + courseNotSlug?.courseTitle + ")"}
+                <div style={{ position: "relative", top: "-5px" }}>
+                  {"```Kodeblokk"}
+                  <span style={{ color: "#008000" }}>
+                    {'("' + courseNotSlug?.courseTitle + '")'}
+                  </span>
                 </div>
               </Button>
             ) : (
               <Button
-                style={
-                  buttonValues[buttonTitle]
-                    ? {
-                        position: "relative",
-                        top: "0.1em",
-                        paddingTop: "0.25em",
-                        paddingBottom: "0.25em",
-                        borderRadius: "10px",
-                        backgroundColor: "#bbb",
-                      }
-                    : {
-                        position: "relative",
-                        top: "0.1em",
-                        paddingTop: "0.25em",
-                        paddingBottom: "0.25em",
-                        borderRadius: "10px",
-                        backgroundColor: "rgba(0, 0, 0, 0)",
-                      }
-                }
+                style={style}
                 className="CPButton"
-                size="big"
+                size="tiny"
                 onClick={() =>
                   onButtonClick(
                     buttonTitle,
@@ -102,14 +63,7 @@ const CodeButtons = ({
                   )
                 }
               >
-                <div
-                  style={{
-                    fontSize: "x-large",
-                    position: "relative",
-                    top: "0.06em",
-                    marginLeft: "-1em",
-                  }}
-                >
+                <div style={{ position: "relative", top: "-5px" }}>
                   {"`Inline-kode"}
                 </div>
               </Button>

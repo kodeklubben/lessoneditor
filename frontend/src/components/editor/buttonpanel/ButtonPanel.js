@@ -143,7 +143,7 @@ const ButtonPanel = ({
           setCursor={setCursor}
           setButtonValues={setButtonValues}
         />
-        <span style={{ marginLeft: "5em", position: "relative", top: "-4px" }}>
+        <span style={{ marginLeft: "5em" }}>
           <CodeButton
             editorRef={editorRef}
             mdText={mdText}
