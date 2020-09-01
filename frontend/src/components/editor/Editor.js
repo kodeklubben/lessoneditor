@@ -9,7 +9,7 @@ import ButtonPanel from "./buttonpanel/ButtonPanel";
 import ImageUpload from "./ImageUpload";
 import fetchMdText from "../../api/fetch-md-text";
 import { LessonContext } from "contexts/LessonContext";
-
+import ShowSpinner from "../ShowSpinner";
 import parseMdHeader from "./utils/parseMdHeader";
 
 const Editor = () => {
@@ -17,6 +17,7 @@ const Editor = () => {
   const context = useContext(LessonContext);
   const { language, data, setData, setHeaderData, getLessonData } = context;
   const [mdText, setMdText] = useState("");
+  const [showSpinner, setSnowSpinner] = useState(false);
   const [buttonValues, setButtonValues] = useState({});
   const [cursorPositionStart, setCursorPositionStart] = useState(0);
   const [cursorPositionEnd, setCursorPositionEnd] = useState(0);
@@ -82,6 +83,7 @@ const Editor = () => {
 
   useEffect(() => {
     getLessonData().then((res) => {
+      setSnowSpinner(true);
       setData(res.data);
       if (lessonId && file) {
         async function fetchData() {
@@ -101,6 +103,7 @@ const Editor = () => {
             setOpen(true);
             setMdText("");
             setHeaderData({});
+            setSnowSpinner(false);
             return;
           } else {
             setMdText(body);
@@ -119,6 +122,7 @@ const Editor = () => {
                 : [],
             };
             setHeaderData(newHeaderData);
+            setSnowSpinner(false);
           }
         });
       }
@@ -128,6 +132,7 @@ const Editor = () => {
 
   return (
     <div className="editor">
+      {showSpinner ? <ShowSpinner /> : ""}
       <ImageUpload
         editorRef={editorRef}
         uploadImageRef={uploadImageRef}
@@ -164,6 +169,7 @@ const Editor = () => {
         file={file}
         open={open}
         setOpen={setOpen}
+        setShowSpinner={setSnowSpinner}
       />
       <div className="textEditorContainer">
         <MDTextArea

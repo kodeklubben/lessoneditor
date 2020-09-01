@@ -1,4 +1,5 @@
 import React from "react";
+import ShowSpinner from "../ShowSpinner";
 
 const AreyousurePopup = ({ onSubmit, setAreYouSure, showSpinner }) => {
   return (
@@ -14,15 +15,7 @@ const AreyousurePopup = ({ onSubmit, setAreYouSure, showSpinner }) => {
       }}
     >
       {showSpinner ? (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            marginTop: "20%",
-          }}
-        >
-          <img style={{ width: "4em" }} src="/spinner.gif" alt="spinner" />
-        </div>
+        <ShowSpinner />
       ) : (
         <div
           style={{

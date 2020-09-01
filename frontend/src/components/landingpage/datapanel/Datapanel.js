@@ -8,7 +8,7 @@ import Levels from "./Levels";
 import License from "./License";
 import { LessonContext } from "contexts/LessonContext";
 
-const Datapanel = ({ lessonId }) => {
+const Datapanel = ({ lessonId, setShowSpinner }) => {
   const [open, setOpen] = useState(false);
   const [checkBoxState, setCheckBoxState] = useState({});
   const context = useContext(LessonContext);
@@ -46,7 +46,11 @@ const Datapanel = ({ lessonId }) => {
   }, [ymlData.tags]);
 
   const onSubmit = async () => {
-    await saveYml(ymlData).then(setOpen(false));
+    setShowSpinner(true);
+    await saveYml(ymlData).then(() => {
+      setOpen(false);
+      setShowSpinner(false);
+    });
   };
 
   const onCancel = async () => {

@@ -10,7 +10,7 @@ import Areyousure from "./AreyousurePopup";
 import ThankU from "./ThankU";
 import { LessonContext } from "contexts/LessonContext";
 import submitLesson from "api/submit-lesson";
-
+import ShowSpinner from "../ShowSpinner";
 import { Dropdown } from "semantic-ui-react";
 
 const Landingpage = () => {
@@ -91,6 +91,7 @@ const Landingpage = () => {
 
   return (
     <>
+      {showSpinner ? <ShowSpinner /> : ""}
       <Navbar />
       <div
         style={
@@ -122,7 +123,7 @@ const Landingpage = () => {
               value={pageContet}
             />
           </div>
-          <Datapanel lessonId={lessonId} />
+          <Datapanel setShowSpinner={setShowSpinner} lessonId={lessonId} />
         </div>
       </div>
 

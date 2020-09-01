@@ -96,7 +96,7 @@ const EditorDatapanel = ({ mdText, file, open, setOpen, editorRef }) => {
                 onChange={changeHandler}
               />
               {!state.title ? (
-                <p style={{ color: "red" }}>må ha tittel</p>
+                <p style={{ color: "red" }}>Må ha tittel</p>
               ) : (
                 <p> </p>
               )}
@@ -114,8 +114,8 @@ const EditorDatapanel = ({ mdText, file, open, setOpen, editorRef }) => {
               required="(obligatorisk)"
               placeholder={FORM_TEXT.AUTHOR.placeholder}
             />
-            {state.authorList.length === 0 ? (
-              <p style={{ color: "red" }}>må ha forfatter</p>
+            {state.authorList.length === 0 && !state.author ? (
+              <p style={{ color: "red" }}>Må ha forfatter</p>
             ) : (
               <p></p>
             )}
@@ -130,7 +130,9 @@ const EditorDatapanel = ({ mdText, file, open, setOpen, editorRef }) => {
             />
             <button
               className="ui button"
-              disabled={!state.title || state.authorList.length === 0}
+              disabled={
+                !state.title || (!state.author && state.authorList.length === 0)
+              }
               onClick={onSubmit}
             >
               OK

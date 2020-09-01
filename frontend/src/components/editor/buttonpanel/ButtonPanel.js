@@ -39,6 +39,7 @@ const ButtonPanel = ({
   file,
   open,
   setOpen,
+  setShowSpinner,
 }) => {
   const history = useHistory();
   const { lessonId } = useParams();
@@ -53,6 +54,7 @@ const ButtonPanel = ({
   };
 
   const navigateToHome = async () => {
+    setShowSpinner(true);
     const target = ["/landingpage", lessonId].join("/");
     newHeader().then(async (newHeader) => {
       const newMdText =
@@ -65,6 +67,7 @@ const ButtonPanel = ({
         history.replace(target);
       });
     });
+    setShowSpinner(false);
   };
 
   return (
@@ -110,7 +113,11 @@ const ButtonPanel = ({
         />
 
         <div style={{ display: "flex", float: "right" }}>
-          <Languages mdText={mdText} file={file} />
+          <Languages
+            mdText={mdText}
+            file={file}
+            setShowSpinner={setShowSpinner}
+          />
           <EditorDatapanel
             mdText={mdText}
             file={file}
@@ -123,6 +130,7 @@ const ButtonPanel = ({
               mdText && mdText.length < 1 ? `disabled` : ``
             } button`}
             id="next"
+            disabled={mdText.length === 0}
             onClick={() => navigateToHome()}
           >
             <i className="arrow right icon" />
