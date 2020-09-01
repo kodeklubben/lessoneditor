@@ -3,7 +3,7 @@ const upsertFile = require("./upsertFile");
 const createPullRequest = require("./createPullRequest");
 const getMarkdownUrls = require("../utils/get-markdown-urls-submit");
 const resolveMarkdownImageUrls = require("../utils/resolve-markdown-image-urls");
-const downloadImage = require("../utils/download-image");
+const downloadImage = require("../storage/download-image");
 
 module.exports = async (token, lessonData) => {
   if (lessonData.files === null) {

@@ -1,16 +1,8 @@
 const saveFile = require("../storage/save-file");
-const nanoid = require("nanoid").customAlphabet(
-  "01234567890abcdefghijklmnopqrstuvwxyz",
-  7
-);
+const lessonInit = require("../utils/lesson-init");
 
 module.exports = async (lessonData, username, edit = false) => {
-  const data = Object.assign({}, lessonData);
-  data.lessonId = nanoid();
-  data.created = new Date().toISOString();
-  data.updated = new Date().toISOString();
-  data.createdBy = username;
-  data.yml = Object.assign({}, "");
+  const data = lessonInit(lessonData, username);
   const dataBuffer = Buffer.from(JSON.stringify(data));
   const ymlBuffer = Buffer.from(JSON.stringify({}));
   if (!edit) {

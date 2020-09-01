@@ -1,5 +1,5 @@
-const isAppEngine = require("./isAppEngine");
-const getTempDir = require("./get-temp-dir");
+const isAppEngine = require("../utils/isAppEngine");
+const getTempDir = require("../utils/get-temp-dir");
 const loadFileFromGcs = require("./load-file-gcs-to-string");
 const fs = require("fs");
 

@@ -1,5 +1,5 @@
 const loadFile = require("../storage/load-file");
-const listFiles = require("../utils/list-files");
+const listFiles = require("./list-files");
 const yaml = require("js-yaml");
 
 // Todo: Check for empty fileList

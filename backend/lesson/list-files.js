@@ -1,12 +1,12 @@
-const isAppEngine = require("./isAppEngine");
+const isAppEngine = require("../utils/isAppEngine");
 const { Storage } = require("@google-cloud/storage");
-const getTempDir = require("./get-temp-dir");
-const gcsUrl = require("./gcs-url");
+const getTempDir = require("../utils/get-temp-dir");
+const gcsUrl = require("../utils/gcs-url");
 const path = require("path");
 const storage = new Storage();
 const fs = require("fs");
 const paths = require("../paths");
-const resolveUrlTemplate = require("./resolve-url-template");
+const resolveUrlTemplate = require("../utils/resolve-url-template");
 
 module.exports = async (folders) => {
   const outFiles = [];

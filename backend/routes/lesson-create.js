@@ -1,7 +1,7 @@
 const paths = require("../paths");
-const thumbRefresh = require("../utils/thumb-refresh");
+const thumbRefresh = require("../thumb/thumb-refresh");
 const baseUrl = require("../utils/base-url");
-const createNewLesson = require("../utils/create-lesson-data");
+const createNewLesson = require("../lesson/create-lesson-data");
 
 module.exports = (app) => {
   app.post(paths.LESSON, async (req, res) => {
