@@ -33,7 +33,10 @@ const TeacherGuides = ({ lessonId, lessonList, thumbUrl }) => {
           }
           break;
         default:
-          if (!languages.includes("nb")) {
+          if (
+            !languages.includes("nb") &&
+            element.filename.slice(0, 6) === "README"
+          ) {
             languages.push("nb");
           }
           break;

@@ -1,5 +1,5 @@
 import "./landingpage.scss";
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useParams } from "react-router";
 import Navbar from "components/navbar/Navbar";
 import TeacherGuides from "./TeacherGuides";
@@ -14,10 +14,11 @@ import ShowSpinner from "../ShowSpinner";
 import { Dropdown } from "semantic-ui-react";
 
 const Landingpage = () => {
-  const [pageContet, setPageContent] = useState("lessontexts");
+  const [pageContent, setPageContent] = useState("lessontexts");
   const [showSpinner, setShowSpinner] = useState(false);
   const [areYouSure, setAreYouSure] = useState(false);
   const [thankU, setThankU] = useState(false);
+  const [thumbUrl, setThumbUrl] = useState("");
   const { lessonId } = useParams();
   const lesson = useContext(LessonContext);
   const { data, lessonList, saveLesson } = lesson;
@@ -27,6 +28,19 @@ const Landingpage = () => {
     { key: 2, text: "Modus: Lærer", value: "teacherguides" },
     { key: 3, text: "Vis alle filer", value: "allfiles" },
   ];
+
+  useEffect(() => {
+    if (
+      Object.keys(lessonList).length !== 0 &&
+      lessonList.constructor !== Object
+    ) {
+      lessonList.forEach((item) => {
+        if (item.filename === "preview.png") {
+          setThumbUrl(item.url);
+        }
+      });
+    }
+  });
 
   const handleChange = (e, { value }) => setPageContent(value);
 
@@ -44,12 +58,20 @@ const Landingpage = () => {
     switch (input) {
       case "lessontexts":
         returnValue = (
-          <LessonTexts lessonId={lessonId} lessonList={lessonList} />
+          <LessonTexts
+            thumbUrl={thumbUrl}
+            lessonId={lessonId}
+            lessonList={lessonList}
+          />
         );
         break;
       case "teacherguides":
         returnValue = (
-          <TeacherGuides lessonId={lessonId} lessonList={lessonList} />
+          <TeacherGuides
+            thumbUrl={thumbUrl}
+            lessonId={lessonId}
+            lessonList={lessonList}
+          />
         );
         break;
       case "allfiles":
@@ -67,16 +89,16 @@ const Landingpage = () => {
       <Navbar />
       <div
         style={
-          pageContet === "lessontexts"
+          pageContent === "lessontexts"
             ? { backgroundColor: "#b1daae" }
-            : pageContet === "teacherguides"
+            : pageContent === "teacherguides"
             ? { backgroundColor: "#a3cccb" }
             : { backgroundColor: "#cca3a3" }
         }
         className="landing_navbar"
       >
         <h2>
-          {pageContet === "teacherguides"
+          {pageContent === "teacherguides"
             ? `${data.lesson} (${data.course}) - Lærerveiledning`
             : `${data.lesson} (${data.course})`}{" "}
         </h2>
@@ -92,14 +114,14 @@ const Landingpage = () => {
               options={options}
               placeholder="Choose an option"
               selection
-              value={pageContet}
+              value={pageContent}
             />
           </div>
           <Datapanel setShowSpinner={setShowSpinner} lessonId={lessonId} />
         </div>
       </div>
 
-      {dropdownValue(pageContet)}
+      {dropdownValue(pageContent)}
 
       {areYouSure ? (
         <Areyousure

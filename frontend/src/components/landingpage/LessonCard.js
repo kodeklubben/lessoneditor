@@ -50,9 +50,9 @@ const LessonCard = ({
                 <div
                   style={{
                     position: "absolute",
-                    top: "3.9em",
+                    top: "3.4em",
                     left: "2.5em",
-                    backgroundColor: "white",
+                    backgroundColor: "rgba(256,256,256,0.75)",
                     padding: "0.7em",
                     borderRadius: "20px",
                   }}
