@@ -53,21 +53,24 @@ const ButtonPanel = ({
     return header;
   };
 
-  const navigateToHome = async () => {
+  const onSubmit = () => {
     setShowSpinner(true);
+    navigateToHome();
+  };
+
+  const navigateToHome = async () => {
     const target = ["/landingpage", lessonId].join("/");
     newHeader().then(async (newHeader) => {
       const newMdText =
         typeof newHeader !== "undefined"
           ? newHeader + "\n\n\n" + mdText
           : mdText;
-      await saveMdText(lessonId, file, mdText, true);
-      await saveMdText(lessonId, file, newMdText).then(() => {
-        history.push(target);
-        history.replace(target);
-      });
+      await saveMdText(lessonId, file, mdText, true).then(
+        await saveMdText(lessonId, file, newMdText)
+      );
+      history.push(target);
+      history.replace(target);
     });
-    setShowSpinner(false);
   };
 
   return (
@@ -131,7 +134,7 @@ const ButtonPanel = ({
             } button`}
             id="next"
             disabled={mdText.length === 0}
-            onClick={() => navigateToHome()}
+            onClick={onSubmit}
           >
             <i className="arrow right icon" />
           </button>

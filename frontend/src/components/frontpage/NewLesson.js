@@ -4,7 +4,7 @@ import COURSESLIST from "../editor/settingsFiles/COURSELIST";
 import { UserContext } from "../../contexts/UserContext";
 import { useHistory } from "react-router";
 
-const NewLesson = ({ setShowPopup }) => {
+const NewLesson = ({ setShowPopup, setShowSpinner }) => {
   const history = useHistory();
   const user = useContext(UserContext);
   const [values, setValues] = useState({
@@ -26,9 +26,11 @@ const NewLesson = ({ setShowPopup }) => {
     const target = ["/landingpage", lessonId].join("/");
     history.push({ pathname: "/empty" });
     history.replace({ pathname: target });
+    setShowSpinner(false);
   };
   const onSubmit = async (e) => {
     e.preventDefault();
+    setShowSpinner(true);
     const { course, title } = values;
     if (title) {
       const lesson = slugify(title);

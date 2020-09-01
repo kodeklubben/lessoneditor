@@ -15,6 +15,7 @@ const ImageUpload = ({
   setCursorPositionStart,
   setCursorPositionEnd,
   setCursorPosition,
+  setShowSpinner,
 }) => {
   let start = cursorPositionStart + 2;
   let end = cursorPositionEnd + 18;
@@ -37,12 +38,16 @@ const ImageUpload = ({
   const { lessonId } = useParams();
   const fileSelectedHandler = async (event) => {
     try {
+      setShowSpinner(true);
       if (event.target.files && event.target.files[0].size > 5000000) {
         imageSubmitHandler(imageSizeErrorMessage, "");
       } else {
         const fileName = event.target.files[0].name;
 
-        const fileInfo = await uploadImage(lessonId, event.target.files[0]);
+        const fileInfo = await uploadImage(
+          lessonId,
+          event.target.files[0]
+        ).then(setShowSpinner(false));
         imageSubmitHandler(fileInfo.imageUrl, "filnavn: " + fileName);
       }
     } catch (err) {

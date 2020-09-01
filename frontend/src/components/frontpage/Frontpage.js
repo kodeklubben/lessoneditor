@@ -6,9 +6,11 @@ import { UserContext } from "../../contexts/UserContext";
 import Navbar from "../navbar/Navbar";
 import { useHistory } from "react-router-dom";
 import NewLessonButton from "./newLessonButton";
+import ShowSpinner from "../ShowSpinner";
 
 const Overview = () => {
   const [showPopup, setShowPopup] = useState(false); // Les om useState i React
+  const [showSpinner, setShowSpinner] = useState(false);
   const history = useHistory();
   const context = useContext(UserContext);
   const { lessons } = context;
@@ -19,12 +21,20 @@ const Overview = () => {
 
   return (
     <div>
+      {showSpinner ? <ShowSpinner /> : ""}
       <Navbar />
       <div className="overViewContainer">
         <p id="welcome">Velkommen, </p>
         <NewLessonButton setShowPopup={setShowPopup} id="newLessonButton" />
 
-        {showPopup ? <NewLesson setShowPopup={setShowPopup} /> : ""}
+        {showPopup ? (
+          <NewLesson
+            setShowSpinner={setShowSpinner}
+            setShowPopup={setShowPopup}
+          />
+        ) : (
+          ""
+        )}
 
         <div
           style={{
