@@ -95,6 +95,11 @@ const EditorDatapanel = ({ mdText, file, open, setOpen, editorRef }) => {
                 value={state.title}
                 onChange={changeHandler}
               />
+              {!state.title ? (
+                <p style={{ color: "red" }}>Må ha tittel</p>
+              ) : (
+                <p> </p>
+              )}
 
               <div className="validateError">{state.err}</div>
             </div>
@@ -109,6 +114,11 @@ const EditorDatapanel = ({ mdText, file, open, setOpen, editorRef }) => {
               required="(obligatorisk)"
               placeholder={FORM_TEXT.AUTHOR.placeholder}
             />
+            {state.authorList.length === 0 && !state.author ? (
+              <p style={{ color: "red" }}>Må ha forfatter</p>
+            ) : (
+              <p></p>
+            )}
             <MultiInput
               changeHandler={changeHandler}
               multiInputHandler={multiInputHandler}
@@ -118,7 +128,13 @@ const EditorDatapanel = ({ mdText, file, open, setOpen, editorRef }) => {
               inputValue={state.translator}
               placeholder={FORM_TEXT.TRANSLATOR.placeholder}
             />
-            <button className="ui button" onClick={onSubmit}>
+            <button
+              className="ui button"
+              disabled={
+                !state.title || (!state.author && state.authorList.length === 0)
+              }
+              onClick={onSubmit}
+            >
               OK
             </button>
             <button className="ui button" onClick={onCancel}>

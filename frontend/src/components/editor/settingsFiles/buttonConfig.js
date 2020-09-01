@@ -363,6 +363,16 @@ const codebutton = {
     cursorIntON: 1,
     cursorIntOFF: 1,
     shortcut: KEY_COMBINATIONS.inline,
+    style: {
+      boxSizing: "border-box",
+      height: "2em",
+      padding: "7px",
+      color: "#c7254e",
+      backgroundColor: "#f9f2f4",
+      border: "3px solid #ccc",
+      borderRadius: "10px",
+      fontWeigth: "normal",
+    },
   },
   codeblock: {
     buttonTitle: "codeblock",
@@ -372,6 +382,16 @@ const codebutton = {
     cursorIntON: 4,
     cursorIntOFF: 5,
     shortcut: KEY_COMBINATIONS.codeblock,
+    style: {
+      boxSizing: "border-box",
+      height: "2em",
+      padding: "7px",
+      color: "inherit",
+      backgroundColor: "#f5f5f5",
+      border: "3px solid #ccc",
+      borderRadius: "10px",
+      fontWeigth: "normal",
+    },
   },
 };
 

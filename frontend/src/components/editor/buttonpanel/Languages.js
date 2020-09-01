@@ -32,7 +32,7 @@ const languageOptions = [
   },
 ];
 
-const Languages = ({ mdText, file }) => {
+const Languages = ({ mdText, file, setShowSpinner }) => {
   const history = useHistory();
   const { lessonId } = useParams();
   const lessonContext = useContext(LessonContext);
@@ -67,7 +67,7 @@ const Languages = ({ mdText, file }) => {
   }, [file, setLanguage]);
 
   const handleChange = async (event, { value }) => {
-    // const tempTarget = ["/editor", lessonId].join("/");
+    setShowSpinner(true);
     let target;
     if (lessonId) {
       if (defaultValue(file) !== "nb" && value !== "nb") {
@@ -85,10 +85,10 @@ const Languages = ({ mdText, file }) => {
         typeof newHeader !== "undefined"
           ? newHeader + "\n\n\n" + mdText
           : mdText;
-      await saveMdText(lessonId, file, mdText, true);
       await saveMdText(lessonId, file, newMdText).then(() => {
         history.push(target);
         history.replace(target);
+        setShowSpinner(false);
       });
     });
   };
