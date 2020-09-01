@@ -7,7 +7,7 @@ import { LessonContext } from "contexts/LessonContext";
 import saveMdText from "../../../../api/save-md-text";
 import createNewHeader from "../utils/createNewHeader";
 import { useHistory } from "react-router-dom";
-const EditorDatapanel = ({ mdText, file, open, setOpen }) => {
+const EditorDatapanel = ({ mdText, file, open, setOpen, editorRef }) => {
   const { lessonId } = useParams();
   const context = useContext(LessonContext);
   const { headerData, setHeaderData } = context;
@@ -51,6 +51,7 @@ const EditorDatapanel = ({ mdText, file, open, setOpen }) => {
     const newMdText =
       newHeader !== undefined ? newHeader + "\n\n\n" + mdText : mdText;
     await saveMdText(lessonId, file, newMdText).then(setOpen(false));
+    editorRef.current.focus();
   };
 
   const onCancel = async () => {
@@ -65,6 +66,7 @@ const EditorDatapanel = ({ mdText, file, open, setOpen }) => {
     let newMdText =
       newHeader !== undefined ? newHeader + "\n\n\n" + mdText : mdText;
     await saveMdText(lessonId, file, newMdText).then(setOpen(false));
+    editorRef.current.focus();
   };
 
   return (

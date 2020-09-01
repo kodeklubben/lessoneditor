@@ -15,7 +15,7 @@ import parseMdHeader from "./utils/parseMdHeader";
 const Editor = () => {
   const { lessonId, file } = useParams();
   const context = useContext(LessonContext);
-  const { language, data, setHeaderData, getLessonData } = context;
+  const { language, data, setData, setHeaderData, getLessonData } = context;
   const [mdText, setMdText] = useState("");
   const [buttonValues, setButtonValues] = useState({});
   const [cursorPositionStart, setCursorPositionStart] = useState(0);
@@ -82,7 +82,7 @@ const Editor = () => {
 
   useEffect(() => {
     getLessonData().then((res) => {
-      console.log("EditorFetchRes : " + res);
+      setData(res.data);
       if (lessonId && file) {
         async function fetchData() {
           const lessonText = await fetchMdText(lessonId, file);
@@ -90,27 +90,30 @@ const Editor = () => {
         }
 
         fetchData().then((lessonText) => {
-          const parsedHeader = parseMdHeader(lessonText);
-          if (
-            typeof parsedHeader === "undefined" ||
-            !parsedHeader.header.title
-          ) {
+          const parts = lessonText.split("---\n");
+          if (!parts) {
+            alert("error");
+            return;
+          }
+          const parsedHeader = parseMdHeader(parts[1]);
+          const body = parts[2] ? parts[2].trim() : "";
+          if (body.length < 1) {
             setOpen(true);
             setMdText("");
             setHeaderData({});
             return;
           } else {
-            setMdText(parsedHeader.body);
-            setUndo([parsedHeader.body]);
+            setMdText(body);
+            setUndo([body]);
             const newHeaderData = {
-              title: parsedHeader.header.title,
-              authorList: parsedHeader.header.author
-                ? parsedHeader.header.author.split(",").map((item) => {
+              title: parsedHeader.title,
+              authorList: parsedHeader.author
+                ? parsedHeader.author.split(",").map((item) => {
                     return item.trim();
                   })
                 : [],
-              translatorList: parsedHeader.header.translator
-                ? parsedHeader.header.translator.split(",").map((item) => {
+              translatorList: parsedHeader.translator
+                ? parsedHeader.translator.split(",").map((item) => {
                     return item.trim();
                   })
                 : [],

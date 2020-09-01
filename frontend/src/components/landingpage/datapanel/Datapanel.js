@@ -36,7 +36,6 @@ const Datapanel = () => {
       },
       { ...obj }
     );
-    console.log("obj : " + JSON.stringify(obj));
     setCheckBoxState((prevState) => ({ ...prevState, ...obj }));
   }, [ymlData.tags]);
 
@@ -59,7 +58,6 @@ const Datapanel = () => {
 
   const checboxHandler = (event) => {
     let subtag = event.target.getAttribute("subtag");
-    // console.log(subtag);
     let name = event.target.value;
     let value = event.target.checked;
 
@@ -67,8 +65,6 @@ const Datapanel = () => {
       ...prevState,
       [name]: value,
     }));
-
-    // console.log("checboxState : " + JSON.stringify(checkBoxState));
 
     if (!ymlData.tags[subtag].includes(name)) {
       setYmlData((prevState) => ({
@@ -87,9 +83,6 @@ const Datapanel = () => {
         },
       }));
     }
-    console.log("ymlData : " + JSON.stringify(ymlData.tags));
-
-    // console.log("ymlData : " + JSON.stringify(ymlData));
   };
 
   const changeHandler = (event) => {
@@ -104,7 +97,6 @@ const Datapanel = () => {
       ...prevState,
       [name]: value,
     }));
-    // console.log("changeHandler : " + JSON.stringify(ymlData));
   };
 
   return (

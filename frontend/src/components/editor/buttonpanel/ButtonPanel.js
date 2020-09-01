@@ -114,6 +114,7 @@ const ButtonPanel = ({
             file={file}
             open={open}
             setOpen={setOpen}
+            editorRef={editorRef}
           />
           <button
             className={`ui ${

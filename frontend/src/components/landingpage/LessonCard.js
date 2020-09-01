@@ -77,7 +77,9 @@ const LessonCard = ({
           )}
         </div>
         <div className="content">
-          <div className="header">{languageOptions[language].text}</div>
+          <div className="header">
+            {lessonTitle + " (" + languageOptions[language].text + ")"}
+          </div>
         </div>
         <div className="extra content">
           {hasContent ? (

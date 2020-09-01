@@ -42,7 +42,6 @@ export const LessonContextProvider = (props) => {
   useEffect(() => {
     async function fetchData() {
       const res = await axios.get(lessonYMLDataUrl);
-      console.log("res.data : " + JSON.stringify(res.data));
       return res.data;
     }
     if (lessonId) {
@@ -90,14 +89,8 @@ export const LessonContextProvider = (props) => {
       }
     },
     getLessonData: async () => {
-      async function fetchData() {
-        const res = await axios.get(lessonDataUrl);
-        return res;
-      }
-      if (lessonId) {
-        fetchData().then((res) => setData(res.data));
-      }
-      return "lesson data is loaded";
+      const res = await axios.get(lessonDataUrl);
+      return res;
     },
   };
   return (
