@@ -97,7 +97,7 @@ export const LessonContextProvider = (props) => {
       return res;
     },
     getHeaderData: async () => {
-      return await headerData;
+      return headerData;
     },
     setHData: async (data) => {
       setHeaderData(data);

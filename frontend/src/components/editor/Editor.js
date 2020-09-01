@@ -93,13 +93,9 @@ const Editor = () => {
 
         fetchData().then((lessonText) => {
           const parts = lessonText.split("---\n");
-          if (!parts) {
-            alert("error");
-            return;
-          }
           const parsedHeader = parseMdHeader(parts[1]);
           const body = parts[2] ? parts[2].trim() : "";
-          if (body.length < 1) {
+          if (body.length === 0) {
             setOpen(true);
             setMdText("");
             setHeaderData({});

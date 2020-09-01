@@ -73,13 +73,16 @@ const ButtonPanel = ({
         !noThumbLang.includes(file.slice(-3))
       ) {
         await saveMdText(lessonId, file, mdText, true);
-        await saveMdText(lessonId, file, newMdText);
+        await saveMdText(lessonId, file, newMdText).then(() => {
+          history.push(target);
+          history.replace(target);
+        });
       } else {
-        await saveMdText(lessonId, file, newMdText);
+        await saveMdText(lessonId, file, newMdText).then(() => {
+          history.push(target);
+          history.replace(target);
+        });
       }
-
-      history.push(target);
-      history.replace(target);
     });
   };
 

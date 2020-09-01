@@ -11,7 +11,7 @@ const EditorDatapanel = ({ mdText, file, open, setOpen, editorRef }) => {
   const { lessonId } = useParams();
   const context = useContext(LessonContext);
   const { headerData, setHeaderData } = context;
-  const [state, setState] = useState({});
+  const [state, setState] = useState({ title: "" });
 
   const history = useHistory();
 
@@ -65,9 +65,11 @@ const EditorDatapanel = ({ mdText, file, open, setOpen, editorRef }) => {
       newHeader !== undefined ? newHeader + "\n\n\n" + mdText : mdText;
     await saveMdText(lessonId, file, newMdText);
     setOpen(false);
-    editorRef.current.focus() === null
-      ? editorRef.current.focus()
-      : console.log("editorRef error");
+    try {
+      editorRef.current.focus();
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (
