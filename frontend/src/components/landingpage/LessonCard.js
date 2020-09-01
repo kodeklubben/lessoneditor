@@ -45,21 +45,21 @@ const LessonCard = ({
         <div style={{ width: "360px" }} className="image itemListImage">
           {hasContent ? (
             hasContent ? (
-              <div
-                style={{ width: "360px", padding: "10px" }}
-                className="ui placeholder"
-              >
-                <div className="line"> </div>
-                <div className="line"> </div>
-                <div className="line"> </div>
-                <div className="line"> </div>
-                <div className="image header">
-                  <div className="line"> </div>
-                  <div className="line"> </div>
-                  <div className="line"> </div>
-                  <div className="line"> </div>
+              <>
+                <img style={{ opacity: "0.3" }} src={thumbUrl} alt="thumbUrl" />
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "3.9em",
+                    left: "2.5em",
+                    backgroundColor: "white",
+                    padding: "0.7em",
+                    borderRadius: "20px",
+                  }}
+                >
+                  <h2>{title + " (" + languageOptions[language].text + ")"}</h2>
                 </div>
-              </div>
+              </>
             ) : (
               <div style={{ width: "360px" }}></div>
             )
@@ -91,11 +91,7 @@ const LessonCard = ({
             ""
           )}
         </div>
-        <div className="content">
-          <div className="header">
-            {title + " (" + languageOptions[language].text + ")"}
-          </div>
-        </div>
+
         <div className="extra content">
           {hasContent ? (
             <button

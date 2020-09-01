@@ -4,7 +4,7 @@ import React, { useContext } from "react";
 import LessonCard from "./LessonCard";
 import { LessonContext } from "contexts/LessonContext";
 
-const LessonTexts = ({ lessonId }) => {
+const LessonTexts = ({ lessonId, thumbUrl }) => {
   const lesson = useContext(LessonContext);
   const { data, lessonList } = lesson;
 
@@ -18,7 +18,7 @@ const LessonTexts = ({ lessonId }) => {
     lessonList.forEach((element) => {
       switch (
         element.filename.slice(-2) === "md" &&
-        element.filename.slice(0, 6).toLowerCase() !== "readme" &&
+        element.filename.slice(0, 6) !== "README" &&
         element.filename.slice(-5, -3)
       ) {
         case "nn":
@@ -58,6 +58,7 @@ const LessonTexts = ({ lessonId }) => {
                   hasContent={languages.includes(element)}
                   lessonId={lessonId}
                   lessonTitle={data.lesson}
+                  thumbUrl={thumbUrl}
                 />
               </div>
             );

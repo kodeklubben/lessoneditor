@@ -3,7 +3,7 @@ import React from "react";
 
 import LessonCard from "./LessonCard";
 
-const TeacherGuides = ({ lessonId, lessonList }) => {
+const TeacherGuides = ({ lessonId, lessonList, thumbUrl }) => {
   let languages = [];
   let allLanguages = ["nb", "nn", "en", "is"];
 
@@ -14,7 +14,7 @@ const TeacherGuides = ({ lessonId, lessonList }) => {
     lessonList.forEach((element) => {
       switch (
         element.filename.slice(-2) === "md" &&
-        element.filename.slice(0, 6).toLowerCase() === "readme" &&
+        element.filename.slice(0, 6) === "README" &&
         element.filename.slice(-5, -3)
       ) {
         case "nn":
@@ -54,6 +54,7 @@ const TeacherGuides = ({ lessonId, lessonList }) => {
                   hasContent={languages.includes(element)}
                   lessonId={lessonId}
                   lessonTitle={"README"}
+                  thumbUrl={thumbUrl}
                 />
               </div>
             );
