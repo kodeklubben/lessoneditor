@@ -15,13 +15,10 @@ const SimplePreview = () => {
         if (mdText === "") {
           setStatus("Not found...");
         }
-        return text;
+        setMdText(text);
       }
 
-      fetchData().then((mdText) => {
-        const body = mdText.split("---\n")[2].trim();
-        setMdText(body);
-      });
+      fetchData();
     }
   }, [lessonId, file, mdText]);
   return (

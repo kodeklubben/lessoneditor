@@ -25,6 +25,7 @@ const languageOptions = {
 };
 
 const LessonCard = ({
+  title,
   lessonId,
   language,
   hasContent,
@@ -78,7 +79,7 @@ const LessonCard = ({
         </div>
         <div className="content">
           <div className="header">
-            {lessonTitle + " (" + languageOptions[language].text + ")"}
+            {title + " (" + languageOptions[language].text + ")"}
           </div>
         </div>
         <div className="extra content">

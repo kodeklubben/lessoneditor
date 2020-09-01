@@ -18,7 +18,7 @@ const EditorDatapanel = ({ mdText, file, open, setOpen, editorRef }) => {
   useEffect(() => {
     const setDataFromHeaderData = async () => {
       if (Object.keys(headerData).length > 0) {
-        setState(headerData);
+        setState(await headerData);
       } else {
         setState({ title: "", authorList: [] });
       }
@@ -55,18 +55,15 @@ const EditorDatapanel = ({ mdText, file, open, setOpen, editorRef }) => {
   };
 
   const onCancel = async () => {
-    console.log("state : " + JSON.stringify(state));
-    console.log("headerdata : " + JSON.stringify(headerData));
     if (!state.title) {
       const target = ["/landingpage", lessonId].join("/");
       history.push(target);
     }
-    setState(headerData);
+    setState(await headerData);
     const newHeader = createNewHeader(state);
     let newMdText =
       newHeader !== undefined ? newHeader + "\n\n\n" + mdText : mdText;
     await saveMdText(lessonId, file, newMdText).then(setOpen(false));
-    editorRef.current.focus();
   };
 
   return (

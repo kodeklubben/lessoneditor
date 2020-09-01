@@ -1,5 +1,5 @@
 import "./landingpage.scss";
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useParams } from "react-router";
 import Navbar from "components/navbar/Navbar";
 import TeacherGuides from "./TeacherGuides";
@@ -18,11 +18,10 @@ const Landingpage = () => {
   const [showSpinner, setShowSpinner] = useState(false);
   const [areYouSure, setAreYouSure] = useState(false);
   const [thankU, setThankU] = useState(false);
+  const [thumbUrl, setThumbUrl] = useState("");
   const { lessonId } = useParams();
   const lesson = useContext(LessonContext);
   const { data, lessonList, saveLesson } = lesson;
-
-  let thumbUrl;
 
   const options = [
     { key: 1, text: "Modus: Elev", value: "lessontexts" },
@@ -32,16 +31,18 @@ const Landingpage = () => {
 
   const handleChange = (e, { value }) => setPageContent(value);
 
-  if (
-    Object.keys(lessonList).length !== 0 &&
-    lessonList.constructor !== Object
-  ) {
-    lessonList.forEach((item) => {
-      if (item.filename === "preview.png") {
-        thumbUrl = item.url;
-      }
-    });
-  }
+  useEffect(() => {
+    if (
+      Object.keys(lessonList).length !== 0 &&
+      lessonList.constructor !== Object
+    ) {
+      lessonList.forEach((item) => {
+        if (item.filename === "preview.png") {
+          setThumbUrl(item.url);
+        }
+      });
+    }
+  });
 
   const onSubmit = async () => {
     setShowSpinner(true);
@@ -121,7 +122,7 @@ const Landingpage = () => {
               value={pageContet}
             />
           </div>
-          <Datapanel />
+          <Datapanel lessonId={lessonId} />
         </div>
       </div>
 

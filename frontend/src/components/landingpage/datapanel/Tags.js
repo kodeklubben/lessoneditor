@@ -10,8 +10,6 @@ const Checkbox = ({ value, onCheck, data, name, subtag }) => {
     onCheck(event);
   };
 
-  // console.log("name : " + value);
-
   return (
     <div className="ui checkbox">
       <input

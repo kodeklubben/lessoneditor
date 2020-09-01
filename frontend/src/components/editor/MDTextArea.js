@@ -78,7 +78,8 @@ const MDTextArea = ({
       mdText.slice(start, start + 1) === "*" &&
       mdText.slice(end - 1, end) === "*" &&
       mdText.slice(start, start + 2) !== "**" &&
-      !buttonValues.bold
+      !buttonValues.bold &&
+      end - start > 1
     ) {
       setCursorPosition(start + 1, end - 1);
     }
@@ -94,7 +95,8 @@ const MDTextArea = ({
 
     if (
       mdText.slice(start, start + 2) === "**" &&
-      mdText.slice(end - 2, end) === "**"
+      mdText.slice(end - 2, end) === "**" &&
+      end - start > 1
     ) {
       setCursorPosition(start + 2, end - 2);
     }
@@ -110,7 +112,8 @@ const MDTextArea = ({
     }
     if (
       mdText.slice(start, start + 2) === "~~" &&
-      mdText.slice(end - 2, end) === "~~"
+      mdText.slice(end - 2, end) === "~~" &&
+      end - start > 1
     ) {
       setCursorPosition(start + 2, end - 2);
     }
@@ -154,8 +157,9 @@ const MDTextArea = ({
       while (mdText[i] !== "`") {
         i--;
       }
-
-      setCursorPosition(start + 1, i);
+      if (end - start > 1) {
+        setCursorPosition(start + 1, i);
+      }
     }
   };
 
