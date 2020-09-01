@@ -1,5 +1,5 @@
-const loadFile = require("./load-file");
-const saveFile = require("./save-file");
+const loadFile = require("../storage/load-file");
+const saveFile = require("../storage/save-file");
 
 module.exports = async (data, username, edit = false) => {
   let buffer;

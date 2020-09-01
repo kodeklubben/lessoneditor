@@ -1,6 +1,6 @@
 const paths = require("../paths");
 const baseUrl = require("../utils/base-url");
-const thumbRefresh = require("../utils/thumb-refresh");
+const thumbRefresh = require("../thumb/thumb-refresh");
 
 module.exports = (app) => {
   app.get(paths.LESSON_THUMB, async (req, res) => {

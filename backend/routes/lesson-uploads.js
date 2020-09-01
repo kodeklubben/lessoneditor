@@ -1,11 +1,11 @@
 const multer = require("../storage/multer");
-const saveFile = require("../utils/save-file");
+const saveFile = require("../storage/save-file");
 const paths = require("../paths");
 const fs = require("fs");
 const getTempDir = require("../utils/get-temp-dir");
 const isAppEngine = require("../utils/isAppEngine");
-const loadFromGcs = require("../utils/load-from-gcs");
-const thumbRefresh = require("../utils/thumb-refresh");
+const loadFromGcs = require("../storage/load-from-gcs");
+const thumbRefresh = require("../thumb/thumb-refresh");
 const baseUrl = require("../utils/base-url");
 
 module.exports = (app) => {

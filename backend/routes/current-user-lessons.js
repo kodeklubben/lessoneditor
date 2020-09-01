@@ -1,6 +1,6 @@
 const paths = require("../paths");
-const loadFile = require("../utils/load-file");
-const upsertUserLessons = require("../utils/upsert-user-lessons");
+const loadFile = require("../storage/load-file");
+const upsertUserLessons = require("../lesson/upsert-user-lessons");
 const resolveUrlTemplate = require("../utils/resolve-url-template");
 module.exports = (app) => {
   app.post(paths.USER_LESSONS, async (req, res) => {

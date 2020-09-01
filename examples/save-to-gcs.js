@@ -1,6 +1,6 @@
 const fs = require("fs");
 const path = require("path");
-const saveToGcs = require("../backend/utils/save-to-gcs");
+const saveToGcs = require("../backend/storage/save-to-gcs");
 const exampleBuffer = fs.readFileSync(
   path.resolve(__dirname, "..", "README.md")
 );
