@@ -72,16 +72,13 @@ const ButtonPanel = ({
         file.slice(0, 6) !== "README" &&
         !noThumbLang.includes(file.slice(-3))
       ) {
-        await saveMdText(lessonId, file, mdText, true);
-        await saveMdText(lessonId, file, newMdText).then(() => {
-          history.push(target);
-          history.replace(target);
-        });
+        await saveMdText(lessonId, file, newMdText, true);
+        history.push(target);
+        history.replace(target);
       } else {
-        await saveMdText(lessonId, file, newMdText).then(() => {
-          history.push(target);
-          history.replace(target);
-        });
+        await saveMdText(lessonId, file, newMdText);
+        history.push(target);
+        history.replace(target);
       }
     });
   };

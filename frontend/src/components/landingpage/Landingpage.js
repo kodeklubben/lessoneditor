@@ -21,7 +21,7 @@ const Landingpage = () => {
   const [thumbUrl, setThumbUrl] = useState("");
   const { lessonId } = useParams();
   const lesson = useContext(LessonContext);
-  const { data, lessonList, saveLesson } = lesson;
+  const { data, lessonList } = lesson;
 
   const options = [
     { key: 1, text: "Modus: Elev", value: "lessontexts" },
@@ -46,7 +46,6 @@ const Landingpage = () => {
 
   const onSubmit = async () => {
     setShowSpinner(true);
-    await saveLesson(data);
     await submitLesson(lessonId);
     setShowSpinner(false);
     setAreYouSure(false);

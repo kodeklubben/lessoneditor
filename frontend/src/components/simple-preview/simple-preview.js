@@ -15,7 +15,11 @@ const SimplePreview = () => {
         if (mdText === "") {
           setStatus("Not found...");
         }
-        setMdText(text);
+        const lessonText =
+          text && text.slice(0, 3) === "---"
+            ? text.split("---\n")[2].trim()
+            : text;
+        setMdText(lessonText);
       }
 
       fetchData();
@@ -23,11 +27,7 @@ const SimplePreview = () => {
   }, [lessonId, file, mdText]);
   return (
     <div className={"simple-preview"}>
-      {mdText !== "" ? (
-        <MDPreview mdText={mdText} renderContent={true} />
-      ) : (
-        <div>{status}</div>
-      )}
+      {mdText !== "" ? <MDPreview mdText={mdText} /> : <div>{status}</div>}
     </div>
   );
 };
