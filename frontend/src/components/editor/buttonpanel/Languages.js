@@ -92,8 +92,6 @@ const Languages = ({ mdText, file, setShowSpinner }) => {
         return;
       });
     });
-    setShowSpinner(false);
-    return;
   };
   return (
     <>
