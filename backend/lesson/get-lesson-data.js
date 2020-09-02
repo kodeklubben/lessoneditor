@@ -1,5 +1,6 @@
 const loadFile = require("../storage/load-file");
 const listFiles = require("./list-files");
+const yaml = require("js-yaml");
 
 // Todo: Check for empty fileList
 module.exports = async (lessonId) => {
@@ -22,6 +23,9 @@ module.exports = async (lessonId) => {
     data.ext = fileList[i].filename.split(".").pop();
     data.filename = fileList[i].filename;
     data.content = await loadFile(["drafts", lessonId, data.filename]);
+    if (data.filename === "lesson.yml") {
+      data.content = yaml.safeDump(JSON.parse(data.content), { flowLevel: 2 });
+    }
     lessonFiles.push(data);
   }
   lessonData.files = lessonFiles;
