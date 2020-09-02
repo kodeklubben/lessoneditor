@@ -126,7 +126,7 @@ const Editor = () => {
             if (newText.slice(0, 20) === emptyData) {
               newText = newText.split("---\n")[2].trim();
             }
-            console.log("lessonText : " + newText);
+            // console.log("lessonText : " + newText);
             setOpen(true);
             setMdText(newText);
             setHeaderData({});
