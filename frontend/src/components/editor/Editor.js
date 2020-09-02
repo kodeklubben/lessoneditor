@@ -114,17 +114,21 @@ const Editor = () => {
         }
 
         fetchData().then((lessonText) => {
-          const parts = lessonText.split("---\n");
+          let newText = lessonText;
+          const parts = newText.split("---\n");
           const parsedHeader = parseMdHeader(parts[1]);
           const body = parts[2] ? parts[2].trim() : "";
           if (
-            lessonText === welcomeText ||
-            lessonText === "" ||
-            lessonText.slice(0, 20) === emptyData
+            newText === welcomeText ||
+            newText === "" ||
+            newText.slice(0, 20) === emptyData
           ) {
-            console.log("lessonText : " + lessonText);
+            if (newText.slice(0, 20) === emptyData) {
+              newText = newText.split("---\n")[2].trim();
+            }
+            // console.log("lessonText : " + newText);
             setOpen(true);
-            setMdText(lessonText);
+            setMdText(newText);
             setHeaderData({});
             setShowSpinner(false);
             return;

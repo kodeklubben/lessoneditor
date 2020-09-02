@@ -56,7 +56,12 @@ const EditorDatapanel = ({ mdText, file, open, setOpen, editorRef }) => {
 
   const onCancel = async () => {
     if (!state.title) {
-      const target = ["/landingpage", lessonId].join("/");
+      let target = "";
+      if (file.slice(0, 6) === "README") {
+        target = ["/landingpage", lessonId, "teacherguides"].join("/");
+      } else {
+        target = ["/landingpage", lessonId, "lessontexts"].join("/");
+      }
       history.push(target);
     }
     setState(await headerData);
