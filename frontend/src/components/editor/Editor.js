@@ -95,7 +95,7 @@ const Editor = () => {
           const parts = lessonText.split("---\n");
           const parsedHeader = parseMdHeader(parts[1]);
           const body = parts[2] ? parts[2].trim() : "";
-          if ((body = "")) {
+          if (body === "") {
             setOpen(true);
             setMdText(body);
             setHeaderData({});
