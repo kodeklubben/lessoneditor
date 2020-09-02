@@ -20,7 +20,7 @@ const App = () => {
             </LessonContextProvider>
           </Route>
           <Route exact path="/landingpage" component={Landingpage} />
-          <Route path="/landingpage/:lessonId">
+          <Route path="/landingpage/:lessonId/:mode">
             <LessonContextProvider>
               <Landingpage />
             </LessonContextProvider>
