@@ -72,7 +72,7 @@ const ButtonPanel = ({
         file.slice(0, 6) !== "README" &&
         !noThumbLang.includes(file.slice(-3))
       ) {
-        await saveMdText(lessonId, file, newMdText);
+        await saveMdText(lessonId, file, newMdText, true);
         history.push(target);
         history.replace(target);
       } else {
