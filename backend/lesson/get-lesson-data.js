@@ -17,17 +17,15 @@ module.exports = async (lessonId) => {
       );
       lessonData.meta.course = metadata.course;
       lessonData.meta.title = metadata.lesson;
-      const data = {};
-      data.ext = "yml";
-      data.filename = "lesson.yml";
-      data.content = yaml.safeDump(metadata.yml, { flowLevel: 2 });
-      lessonFiles.push(data);
       continue;
     }
     const data = {};
     data.ext = fileList[i].filename.split(".").pop();
     data.filename = fileList[i].filename;
     data.content = await loadFile(["drafts", lessonId, data.filename]);
+    if (data.filename === "lesson.yml") {
+      data.content = yaml.safeDump(JSON.parse(data.content), { flowLevel: 2 });
+    }
     lessonFiles.push(data);
   }
   lessonData.files = lessonFiles;
