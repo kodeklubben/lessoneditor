@@ -95,9 +95,9 @@ const Editor = () => {
           const parts = lessonText.split("---\n");
           const parsedHeader = parseMdHeader(parts[1]);
           const body = parts[2] ? parts[2].trim() : "";
-          if (body.length === 0) {
+          if (body === "") {
             setOpen(true);
-            setMdText("");
+            setMdText(body);
             setHeaderData({});
             setShowSpinner(false);
             return;
@@ -121,8 +121,11 @@ const Editor = () => {
             setShowSpinner(false);
           }
         });
+      } else {
+        setShowSpinner(false);
       }
     });
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [file, language, lessonId, setHeaderData]);
 
