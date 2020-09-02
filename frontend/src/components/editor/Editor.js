@@ -12,6 +12,11 @@ import { LessonContext } from "contexts/LessonContext";
 import ShowSpinner from "../ShowSpinner";
 import parseMdHeader from "./utils/parseMdHeader";
 
+// temp helper to determine if lessonText is empty
+const emptyData = `---
+title: 
+author: `;
+
 const Editor = () => {
   const { lessonId, file } = useParams();
   const context = useContext(LessonContext);
@@ -95,7 +100,11 @@ const Editor = () => {
           const parts = lessonText.split("---\n");
           const parsedHeader = parseMdHeader(parts[1]);
           const body = parts[2] ? parts[2].trim() : "";
-          if (body === "") {
+          if (
+            lessonText === "# " ||
+            lessonText === "" ||
+            lessonText.slice(0, 20) === emptyData
+          ) {
             setOpen(true);
             setMdText(body);
             setHeaderData({});
