@@ -93,8 +93,6 @@ const ButtonPanel = ({
         });
       }
     });
-    setShowSpinner(false);
-    return;
   };
 
   return (

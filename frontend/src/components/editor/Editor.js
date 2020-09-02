@@ -17,6 +17,23 @@ const emptyData = `---
 title: 
 author: `;
 
+const welcomeText = `# Velkommen til kidsakoder sin tekstbehandler! {.intro}
+
+Dette er kidsakoder sin egen tekstbehandler for å lage, og redigere, sine oppgaver
+
+# Steg 1: Hva fungerer {.activity}
+
+
+
+## Du kan endre språk i panelet {.check}
+## Du kan også endre metadata i innstillinger {.protip}
+
+
+
+## Teksten lagres automatisk underveis{.save}
+
+## Enjoy!  {.flag}`;
+
 const Editor = () => {
   const { lessonId, file } = useParams();
   const context = useContext(LessonContext);
@@ -101,12 +118,13 @@ const Editor = () => {
           const parsedHeader = parseMdHeader(parts[1]);
           const body = parts[2] ? parts[2].trim() : "";
           if (
-            lessonText === "# " ||
+            lessonText === welcomeText ||
             lessonText === "" ||
             lessonText.slice(0, 20) === emptyData
           ) {
+            console.log("lessonText : " + lessonText);
             setOpen(true);
-            setMdText(body);
+            setMdText(lessonText);
             setHeaderData({});
             setShowSpinner(false);
             return;
@@ -132,11 +150,8 @@ const Editor = () => {
           }
         });
       }
-      setShowSpinner(false);
-      return;
     });
-    setShowSpinner(false);
-    return;
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [file, language, lessonId, setHeaderData]);
 
