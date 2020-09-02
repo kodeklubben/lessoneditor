@@ -27,7 +27,16 @@ const SimplePreview = () => {
   }, [lessonId, file, mdText]);
   return (
     <div className={"simple-preview"}>
-      {mdText !== "" ? <MDPreview mdText={mdText} /> : <div>{status}</div>}
+      {mdText !== "" ? (
+        <MDPreview
+          mdText={mdText}
+          course={"python"}
+          language={"nb"}
+          renderContent={true}
+        />
+      ) : (
+        <div>{status}</div>
+      )}
     </div>
   );
 };
