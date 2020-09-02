@@ -22,9 +22,9 @@ const NewLesson = ({ setShowPopup, setShowSpinner }) => {
       setError("kurs og tittel må være satt");
     }
   };
-  const navigateToLandingpage = (lessonId) => {
-    const target = ["/landingpage", lessonId].join("/");
-    history.push({ pathname: "/empty" });
+  const navigateToLandingpage = (lessonId, lesson) => {
+    const target = ["/editor", lessonId, lesson].join("/");
+    history.push({ pathname: "/" });
     history.replace({ pathname: target });
     setShowSpinner(false);
   };

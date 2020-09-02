@@ -128,13 +128,15 @@ const Editor = () => {
             };
             setHeaderData(newHeaderData);
             setShowSpinner(false);
+            return;
           }
         });
-      } else {
-        setShowSpinner(false);
       }
+      setShowSpinner(false);
+      return;
     });
-
+    setShowSpinner(false);
+    return;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [file, language, lessonId, setHeaderData]);
 

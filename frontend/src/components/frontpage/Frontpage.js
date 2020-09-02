@@ -15,7 +15,7 @@ const Overview = () => {
   const context = useContext(UserContext);
   const { lessons } = context;
   const navigateToHome = (lessonId, file) => {
-    const target = ["/landingpage", lessonId].join("/");
+    const target = ["/landingpage", lessonId, "lessontexts"].join("/");
     history.push(target);
   };
 

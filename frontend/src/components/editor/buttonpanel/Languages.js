@@ -85,11 +85,15 @@ const Languages = ({ mdText, file, setShowSpinner }) => {
         typeof newHeader !== "undefined"
           ? newHeader + "\n\n\n" + mdText
           : mdText;
-      await saveMdText(lessonId, file, newMdText);
-      history.push(target);
-      history.replace(target);
-      setShowSpinner(false);
+      await saveMdText(lessonId, file, newMdText).then(() => {
+        history.push(target);
+        history.replace(target);
+        setShowSpinner(false);
+        return;
+      });
     });
+    setShowSpinner(false);
+    return;
   };
   return (
     <>

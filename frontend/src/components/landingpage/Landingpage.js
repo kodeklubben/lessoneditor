@@ -19,7 +19,7 @@ const Landingpage = () => {
   const [areYouSure, setAreYouSure] = useState(false);
   const [thankU, setThankU] = useState(false);
   const [thumbUrl, setThumbUrl] = useState("");
-  const { lessonId } = useParams();
+  const { lessonId, mode } = useParams();
   const lesson = useContext(LessonContext);
   const { data, lessonList } = lesson;
 
@@ -28,6 +28,10 @@ const Landingpage = () => {
     { key: 2, text: "Modus: Lærer", value: "teacherguides" },
     { key: 3, text: "Vis alle filer", value: "allfiles" },
   ];
+
+  useEffect(() => {
+    mode ? setPageContent(mode) : console.log("error");
+  }, [mode]);
 
   useEffect(() => {
     if (

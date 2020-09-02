@@ -61,26 +61,40 @@ const ButtonPanel = ({
   };
 
   const navigateToHome = async () => {
-    const target = ["/landingpage", lessonId].join("/");
+    let target = "";
     newHeader().then(async (newHeader) => {
       const newMdText =
         typeof newHeader !== "undefined"
           ? newHeader + "\n\n\n" + mdText
           : mdText;
 
+      if (file.slice(0, 6) === "README") {
+        target = ["/landingpage", lessonId, "teacherguides"].join("/");
+      } else {
+        target = ["/landingpage", lessonId, "lessontexts"].join("/");
+      }
+
       if (
         file.slice(0, 6) !== "README" &&
         !noThumbLang.includes(file.slice(-3))
       ) {
-        await saveMdText(lessonId, file, newMdText, true);
-        history.push(target);
-        history.replace(target);
+        await saveMdText(lessonId, file, newMdText, true).then(() => {
+          history.push(target);
+          history.replace(target);
+          setShowSpinner(false);
+          return;
+        });
       } else {
-        await saveMdText(lessonId, file, newMdText);
-        history.push(target);
-        history.replace(target);
+        await saveMdText(lessonId, file, newMdText).then(() => {
+          history.push(target);
+          history.replace(target);
+          setShowSpinner(false);
+          return;
+        });
       }
     });
+    setShowSpinner(false);
+    return;
   };
 
   return (
