@@ -26,23 +26,23 @@ const EditorDatapanel = ({ mdText, file, open, setOpen, editorRef }) => {
     setDataFromHeaderData();
   }, [headerData, setState]);
 
-  const changeHandler = (event) => {
+  const changeHandler = event => {
     const nam = event.target.name;
     const val = event.target.value;
-    setState((prevState) => ({ ...prevState, [nam]: val }));
+    setState(prevState => ({ ...prevState, [nam]: val }));
     if (state.author) {
-      setState((prevState) => ({ ...prevState, err: "" }));
+      setState(prevState => ({ ...prevState, err: "" }));
     }
     if (state.title) {
-      setState((prevState) => ({ ...prevState, err: "" }));
+      setState(prevState => ({ ...prevState, err: "" }));
     }
   };
 
   const multiInputHandler = (object, field) => {
     const key = Object.keys(object)[0];
     const value = Object.values(object)[0];
-    setState((prevState) => ({ ...prevState, [key]: value }));
-    setState((prevState) => ({ ...prevState, [field]: "" }));
+    setState(prevState => ({ ...prevState, [key]: value }));
+    setState(prevState => ({ ...prevState, [field]: "" }));
   };
 
   const onSubmit = async () => {

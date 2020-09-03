@@ -26,19 +26,27 @@ const Landingpage = () => {
   const options = [
     { key: 1, text: "Modus: Elev", value: "lessontexts" },
     { key: 2, text: "Modus: Lærer", value: "teacherguides" },
-    { key: 3, text: "Vis alle filer", value: "allfiles" },
+    { key: 3, text: "Vis alle filer", value: "allfiles" }
   ];
 
   useEffect(() => {
     mode ? setPageContent(mode) : console.log("error");
-  }, [mode]);
+  }, [mode, data]);
+
+  useEffect(() => {
+    if (!data.course) {
+      setShowSpinner(true);
+    } else if (data.course) {
+      setShowSpinner(false);
+    }
+  }, [data.course]);
 
   useEffect(() => {
     if (
       Object.keys(lessonList).length !== 0 &&
       lessonList.constructor !== Object
     ) {
-      lessonList.forEach((item) => {
+      lessonList.forEach(item => {
         if (item.filename === "preview.png") {
           setThumbUrl(item.url);
         }
@@ -48,16 +56,18 @@ const Landingpage = () => {
 
   const handleChange = (e, { value }) => setPageContent(value);
 
-  const onSubmit = async () => {
+  const onSubmit = async lessonId => {
     setShowSpinner(true);
-    await saveLesson(data);
-    await submitLesson(lessonId);
-    setShowSpinner(false);
-    setAreYouSure(false);
-    setThankU(true);
+    await saveLesson(data)
+      .then(await submitLesson(lessonId))
+      .then(() => {
+        setShowSpinner(false);
+        setAreYouSure(false);
+        setThankU(true);
+      });
   };
 
-  const dropdownValue = (input) => {
+  const dropdownValue = input => {
     let returnValue;
     switch (input) {
       case "lessontexts":
@@ -112,7 +122,7 @@ const Landingpage = () => {
               style={{
                 maxWidth: "3em",
                 backgroundColor: "rgba(0,0,0,0)",
-                border: "1px solid grey",
+                border: "1px solid grey"
               }}
               onChange={handleChange}
               options={options}
@@ -132,6 +142,7 @@ const Landingpage = () => {
           onSubmit={onSubmit}
           setAreYouSure={setAreYouSure}
           showSpinner={showSpinner}
+          lessonId={lessonId}
         />
       ) : (
         ""
