@@ -1,7 +1,12 @@
 import React from "react";
 import ShowSpinner from "../ShowSpinner";
 
-const AreyousurePopup = ({ onSubmit, setAreYouSure, showSpinner }) => {
+const AreyousurePopup = ({
+  onSubmit,
+  setAreYouSure,
+  showSpinner,
+  lessonId
+}) => {
   return (
     <div
       style={{
@@ -11,7 +16,7 @@ const AreyousurePopup = ({ onSubmit, setAreYouSure, showSpinner }) => {
         zIndex: "1",
         width: "100%",
         height: "100%",
-        backgroundColor: "rgb(256,256,256,0.7)",
+        backgroundColor: "rgb(256,256,256,0.7)"
       }}
     >
       {showSpinner ? (
@@ -28,7 +33,7 @@ const AreyousurePopup = ({ onSubmit, setAreYouSure, showSpinner }) => {
             width: "50%",
             height: "40%",
             backgroundColor: "white",
-            border: "5px solid red",
+            border: "5px solid red"
           }}
         >
           <h1>Alert(!):Vil du __virkelig__ sende inn oppgaven...?</h1>
@@ -38,7 +43,7 @@ const AreyousurePopup = ({ onSubmit, setAreYouSure, showSpinner }) => {
               <button
                 style={{ backgroundColor: "red" }}
                 className="ui button"
-                onClick={onSubmit}
+                onClick={() => onSubmit(lessonId)}
               >
                 Sende inn
               </button>
