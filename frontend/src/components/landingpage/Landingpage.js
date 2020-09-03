@@ -39,7 +39,7 @@ const Landingpage = () => {
     } else if (data.course) {
       setShowSpinner(false);
     }
-  });
+  }, [data.course]);
 
   useEffect(() => {
     if (
