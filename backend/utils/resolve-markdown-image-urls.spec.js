@@ -27,7 +27,12 @@ it("Should remove markdown image urls and keep file name", () => {
   matches.forEach((match) => {
     res.push(match[2]);
   });
-  res.forEach((filename) => {
-    expect(filename).toBe("hent-fra-bibliotek.png");
-  });
+  expect(res[0]).toBe("../bilder/hent-fra-bibliotek.png");
+  expect(res[1]).toBe("hent-fra-bibliotek.png");
+  expect(res[2]).toBe("hent-fra-bibliotek.png");
+  expect(res[3]).toBe("hent-fra-bibliotek.png");
+  expect(res[4]).toBe("../bilder/hent-fra-bibliotek.png");
+  expect(res[5]).toBe("hent-fra-bibliotek.png");
+  expect(res[6]).toBe("hent-fra-bibliotek.png");
+  expect(res[7]).toBe("hent-fra-bibliotek.png");
 });

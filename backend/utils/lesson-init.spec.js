@@ -6,9 +6,11 @@ it("should return new lesson instance", () => {
   const username = "user";
   const lesson = lessonInit(lessonData, username);
 
+  expect(lessonData.test).toBe("test");
+  expect(lessonData.test2).toBe("test2");
   expect(typeof lesson.lessonId).toBe("string");
   expect(lesson.lessonId).toHaveLength(7);
   expect(lesson.created).toMatch(dateRegex);
   expect(lesson.updated).toMatch(dateRegex);
-  expect(lesson.createdBy).toBe(username);
+  expect(lesson.createdBy).toBe("user");
 });

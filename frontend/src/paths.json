@@ -2,6 +2,7 @@
   "AUTH_CALLBACK": "/callback",
   "AUTH_LOGIN_FAILED": "/login-failed",
   "DISPLAY_FILE": "/api/display/:lessonId/:file",
+  "DISPLAY_DEFAULT_FILE": "/api/display/bilder/:file",
   "FILE": "/file/*",
   "LESSON": "/api/lesson",
   "LESSON_DATA": "/api/lesson/:lessonId/data/:filename",
@@ -10,6 +11,7 @@
   "LESSON_SUBMIT": "/api/lesson/:lessonId/submit",
   "LESSON_THUMB": "/api/lesson-thumb/:lessonId/:file",
   "LESSON_UPLOADS": "/api/lesson/:lessonId/upload",
+  "DEFAULT_FILES": "/api/bilder/files",
   "USER": "/api/user",
   "USER_LESSONS": "/api/user/lessons"
 }

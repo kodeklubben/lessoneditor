@@ -23,7 +23,11 @@ module.exports = async (token, lessonData) => {
       const markdownContent = resolveMarkdownImageUrls(
         lessonData.files[i].content
       );
-      const markdownImageUrls = getMarkdownUrls(lessonData.files[i].content);
+      const markdownImageUrls = await getMarkdownUrls(
+        lessonData.files[i].content
+      );
+      console.log(lessonData.files[i].filename);
+      console.log(markdownImageUrls);
       for (let i in markdownImageUrls) {
         const buffer = await downloadImage(markdownImageUrls[i].url);
         if (buffer !== null) {
@@ -39,7 +43,7 @@ module.exports = async (token, lessonData) => {
       });
     }
   }
-  const forkResponse = await createFork(token);
+  /*const forkResponse = await createFork(token);
   const owner = forkResponse.data.owner.login;
   const repo = forkResponse.data.name;
   if (forkResponse.status !== 202) {
@@ -61,5 +65,5 @@ module.exports = async (token, lessonData) => {
     lessonData.meta.title,
     branchName,
     "Pull request from lesson editor"
-  );
+  );*/
 };

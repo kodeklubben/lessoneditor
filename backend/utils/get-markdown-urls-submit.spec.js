@@ -1,22 +1,22 @@
 const resolveMdUrlsSub = require("./get-markdown-urls-submit");
 
-it("should generate list with object of image names and urls", () => {
+it("should generate list with object of image names and urls", async () => {
   const markdownContent = `
   # some arbitrary markdown header
   
   ![Image with 
-  relative url](https://somedomain.com/bilder/hent-fra-bibliotek.png)
+  relative url](http://localhost:3232/api/display/bilder/hent-fra-bibliotek.png)
   
-  ![Image with slash](https://example.com/images/hent-fra-bibliotek.png)
+  ![Velg figur fra biblioteket]( http://localhost:3232/api/display/bilder/hent-fra-bibliotek.png )
+  
+  ![Velg figur fra biblioteket](http://localhost:3232/api/display/bilder/hent-fra-bibliotek.png)
+  
+  ![Bilde av et skummelt halloween ansikt]( http://localhost:3232/api/display/qk13wsf/halloweenimasjon.jpg )
   
   `;
-  const images = resolveMdUrlsSub(markdownContent);
-  expect(images[0].name).toBe("hent-fra-bibliotek.png");
+  const images = await resolveMdUrlsSub(markdownContent);
+  expect(images[0].name).toBe("halloweenimasjon.jpg");
   expect(images[0].url).toBe(
-    "https://somedomain.com/bilder/hent-fra-bibliotek.png"
-  );
-  expect(images[1].name).toBe("hent-fra-bibliotek.png");
-  expect(images[1].url).toBe(
-    "https://example.com/images/hent-fra-bibliotek.png"
+    "http://localhost:3232/api/display/qk13wsf/halloweenimasjon.jpg"
   );
 });

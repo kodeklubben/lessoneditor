@@ -1,6 +1,9 @@
 const { Octokit } = require("@octokit/rest");
 
-module.exports = async (path) => {
+module.exports = async (folders) => {
+  const pathParts = [...folders];
+  pathParts.unshift("src");
+  const path = pathParts.join("/");
   const octokit = new Octokit();
   try {
     return await octokit.repos.getContent({

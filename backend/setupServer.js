@@ -1,6 +1,7 @@
 module.exports = function (app) {
   require("./routes/auth")(app);
   require("./routes/configure")(app);
+  require("./routes/scratch")(app);
   require("./routes/current-user")(app);
   require("./routes/current-user-lessons")(app);
   require("./routes/lesson-create")(app);

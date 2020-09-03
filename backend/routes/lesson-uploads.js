@@ -1,31 +1,15 @@
 const multer = require("../storage/multer");
 const saveFile = require("../storage/save-file");
 const paths = require("../paths");
-const fs = require("fs");
-const getTempDir = require("../utils/get-temp-dir");
-const isAppEngine = require("../utils/isAppEngine");
-const loadFromGcs = require("../storage/load-from-gcs");
 const thumbRefresh = require("../thumb/thumb-refresh");
 const baseUrl = require("../utils/base-url");
+const loadDisplayFile = require("../storage/load-display-file");
 
 module.exports = (app) => {
   app.get(paths.DISPLAY_FILE, async (req, res) => {
     const { lessonId, file } = req.params;
     const storageParts = ["drafts", lessonId, file];
-    try {
-      if (isAppEngine()) {
-        loadFromGcs(storageParts.join("/")).pipe(res);
-      } else {
-        const localFilePath = getTempDir(storageParts);
-        if (fs.existsSync(localFilePath)) {
-          fs.createReadStream(localFilePath).pipe(res);
-        } else {
-          res.status(404).send("ikke funnet");
-        }
-      }
-    } catch (e) {
-      res.status(404).send(e.message);
-    }
+    loadDisplayFile(storageParts, res);
   });
   /**
    * Her lagres markdown content blant annet.
