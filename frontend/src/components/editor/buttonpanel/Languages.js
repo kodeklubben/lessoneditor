@@ -86,7 +86,7 @@ const Languages = ({ mdText, file, setShowSpinner }) => {
           ? newHeader + "\n\n\n" + mdText
           : mdText;
       await saveMdText(lessonId, file, newMdText).then(() => {
-        history.push(target);
+        history.push("/");
         history.replace(target);
         setShowSpinner(false);
         return;
