@@ -1,14 +1,16 @@
 const paths = require("../paths");
 const submit = require("../githubAPI/submitLesson");
 const getLessonData = require("../lesson/get-lesson-data");
+const baseUrl = require("../utils/base-url");
 
 module.exports = (app) => {
   app.post(paths.LESSON_SUBMIT, async (req, res) => {
     try {
       const { lessonId } = req.params;
+      const urlBase = baseUrl(req);
       const lessonData = await getLessonData(lessonId);
       if (lessonData) {
-        const submitRes = await submit(req.user.token, lessonData);
+        const submitRes = await submit(req.user.token, lessonData, urlBase);
         if (submitRes.status === 201) {
           res.status(201).send({
             message: "Pull Request Created",

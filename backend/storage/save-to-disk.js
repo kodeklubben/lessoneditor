@@ -1,6 +1,10 @@
 const fs = require("fs");
 const path = require("path");
 module.exports = async (filename, buffer) => {
+  // Todo: Throw error when buffer is null, requires frontend fix.
+  if (buffer === null) {
+    buffer = Buffer.from("# ");
+  }
   fs.mkdirSync(path.dirname(filename), { recursive: true });
   return new Promise((resolve, reject) => {
     fs.open(filename, "w", (err, fd) => {

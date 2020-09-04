@@ -5,7 +5,7 @@ it("Should remove markdown image urls and keep file name", () => {
   # some arbitrary markdown header
   
   ![Image with 
-  relative url](../bilder/hent-fra-bibliotek.png)
+  relative url](/filer/bilder/hent-fra-bibliotek.png)
   
   ![Image with slash](/hent-fra-bibliotek.png)
   
@@ -13,13 +13,15 @@ it("Should remove markdown image urls and keep file name", () => {
   
   ![Image with absoulte url](https://example.com/images/hent-fra-bibliotek.png)
   
-  ![Image with relative url and spaces]( ../bilder/hent-fra-bibliotek.png )
+  ![Image with relative url and spaces]( /filer/bilder/hent-fra-bibliotek.png )
   
   ![Image with slash and spaces]( /hent-fra-bibliotek.png )
   
   ![Image without slash and spaces]( hent-fra-bibliotek.png )
   
   ![Image with absoulte url and spaces]( https://example.com/images/hent-fra-bibliotek.png )
+  
+  ![Image with absoulte url and spaces]( /filer/drafts/asdfqwe/hent-fra-bibliotek.png )
   `;
   const resolvedMarkdown = resolveMarkdownImageUrls(markdownContent);
   const matches = [...resolvedMarkdown.matchAll(/(!\[.*?\]\()(.+?)(\))/gs)];
@@ -35,4 +37,5 @@ it("Should remove markdown image urls and keep file name", () => {
   expect(res[5]).toBe("hent-fra-bibliotek.png");
   expect(res[6]).toBe("hent-fra-bibliotek.png");
   expect(res[7]).toBe("hent-fra-bibliotek.png");
+  expect(res[8]).toBe("hent-fra-bibliotek.png");
 });

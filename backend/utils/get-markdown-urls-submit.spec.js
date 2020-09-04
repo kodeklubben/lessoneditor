@@ -5,18 +5,26 @@ it("should generate list with object of image names and urls", async () => {
   # some arbitrary markdown header
   
   ![Image with 
-  relative url](http://localhost:3232/api/display/bilder/hent-fra-bibliotek.png)
+  relative url](/file/bilder/hent-fra-bibliotek.png)
   
-  ![Velg figur fra biblioteket]( http://localhost:3232/api/display/bilder/hent-fra-bibliotek.png )
+  ![Velg figur fra biblioteket]( /file/bilder/hent-fra-bibliotek.png )
   
-  ![Velg figur fra biblioteket](http://localhost:3232/api/display/bilder/hent-fra-bibliotek.png)
+  ![Velg figur fra biblioteket](/file/bilder/hent-fra-bibliotek.png)
   
-  ![Bilde av et skummelt halloween ansikt]( http://localhost:3232/api/display/qk13wsf/halloweenimasjon.jpg )
+  ![Bilde av et skummelt halloween ansikt]( /file/drafts/asdfqwe/halloweenimasjon.jpg )
+  
+  ![Bilde av et skummelt halloween ansikt]( https://example.com/images/halloweenimasjon.jpg )
   
   `;
-  const images = await resolveMdUrlsSub(markdownContent);
+  const images = await resolveMdUrlsSub(
+    markdownContent,
+    "asdfqwe",
+    "http://lessoneditor.com"
+  );
   expect(images[0].name).toBe("halloweenimasjon.jpg");
   expect(images[0].url).toBe(
-    "http://localhost:3232/api/display/qk13wsf/halloweenimasjon.jpg"
+    "http://lessoneditor.com/api/display/asdfqwe/halloweenimasjon.jpg"
   );
+  expect(images[1].name).toBe("halloweenimasjon.jpg");
+  expect(images[1].url).toBe("https://example.com/images/halloweenimasjon.jpg");
 });
