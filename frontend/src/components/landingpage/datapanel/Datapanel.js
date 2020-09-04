@@ -8,7 +8,7 @@ import Levels from "./Levels";
 import License from "./License";
 import { LessonContext } from "contexts/LessonContext";
 
-const Datapanel = ({ lessonId, setShowSpinner }) => {
+const Datapanel = ({ lessonId, mode, setShowSpinner }) => {
   const [open, setOpen] = useState(false);
   const [checkBoxState, setCheckBoxState] = useState({});
   const context = useContext(LessonContext);
@@ -55,7 +55,7 @@ const Datapanel = ({ lessonId, setShowSpinner }) => {
 
   const onCancel = async () => {
     getYmlData().then(() => {
-      const target = ["/landingpage", lessonId].join("/");
+      const target = ["/landingpage", lessonId, mode].join("/");
       history.push("/");
       history.replace(target);
     });

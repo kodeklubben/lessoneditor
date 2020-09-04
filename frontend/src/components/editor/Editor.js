@@ -12,12 +12,13 @@ import { LessonContext } from "contexts/LessonContext";
 import ShowSpinner from "../ShowSpinner";
 import parseMdHeader from "./utils/parseMdHeader";
 
-// temp helper to determine if lessonText is empty
+//  to determine if lessonTextMetaData is empty
 const emptyData = `---
 title: 
 author: `;
 
-const welcomeText = `# Velkommen til kidsakoder sin tekstbehandler! {.intro}
+const welcomeText = {
+  nb: `# Velkommen til kidsakoder sin tekstbehandler! {.intro}
 
 Dette er kidsakoder sin egen tekstbehandler for å lage, og redigere, sine oppgaver
 
@@ -32,7 +33,11 @@ Dette er kidsakoder sin egen tekstbehandler for å lage, og redigere, sine oppga
 
 ## Teksten lagres automatisk underveis{.save}
 
-## Enjoy!  {.flag}`;
+## Enjoy!  {.flag}`,
+  nn: "# Nynorsk velkomst...",
+  en: "# English welcome",
+  is: `Verið velkomin til ritstjóra`,
+};
 
 const Editor = () => {
   const { lessonId, file } = useParams();
@@ -54,7 +59,7 @@ const Editor = () => {
     cursorInt: 0,
   });
 
-  const [open, setOpen] = useState(false);
+  const [openMetaData, setOpenMetaData] = useState(false);
 
   const editorRef = useRef();
   const uploadImageRef = useRef();
@@ -119,16 +124,15 @@ const Editor = () => {
           const parsedHeader = parseMdHeader(parts[1]);
           const body = parts[2] ? parts[2].trim() : "";
           if (
-            newText === welcomeText ||
+            newText === " " ||
             newText === "" ||
             newText.slice(0, 20) === emptyData
           ) {
             if (newText.slice(0, 20) === emptyData) {
               newText = newText.split("---\n")[2].trim();
             }
-            // console.log("lessonText : " + newText);
-            setOpen(true);
-            setMdText(newText);
+            setOpenMetaData(true);
+            setMdText(welcomeText[language]);
             setHeaderData({});
             setShowSpinner(false);
             return;
@@ -197,8 +201,8 @@ const Editor = () => {
         setRedoCursorPosition={setRedoCursorPosition}
         setListButtonValues={setListButtonValues}
         file={file}
-        open={open}
-        setOpen={setOpen}
+        openMetaData={openMetaData}
+        setOpenMetaData={setOpenMetaData}
         setShowSpinner={setShowSpinner}
       />
       <div className="textEditorContainer">

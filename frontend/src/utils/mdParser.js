@@ -3,7 +3,7 @@ import { insertImg } from "./markdown-it-plugins/markdown-it-insert-img";
 import { generateChecklist } from "./markdown-it-plugins/markdown-it-checklist";
 
 const hljs = require("highlight.js");
-
+var emoji = require("markdown-it-emoji");
 const md = require("markdown-it")({
   html: true,
   langPrefix: "",
@@ -25,7 +25,8 @@ const md = require("markdown-it")({
   .use(require("markdown-it-attrs"), { allowedAttributes: ["class"] })
   .use(headerSections)
   .use(insertImg)
-  .use(generateChecklist);
+  .use(generateChecklist)
+  .use(emoji);
 
 export const mdParser = (content) => {
   if (typeof content !== "string") {

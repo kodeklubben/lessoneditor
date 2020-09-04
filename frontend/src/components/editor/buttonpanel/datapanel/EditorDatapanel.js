@@ -7,7 +7,13 @@ import { LessonContext } from "contexts/LessonContext";
 import saveMdText from "../../../../api/save-md-text";
 import createNewHeader from "../utils/createNewHeader";
 import { useHistory } from "react-router-dom";
-const EditorDatapanel = ({ mdText, file, open, setOpen, editorRef }) => {
+const EditorDatapanel = ({
+  mdText,
+  file,
+  openMetaData,
+  setOpenMetaData,
+  editorRef,
+}) => {
   const { lessonId } = useParams();
   const context = useContext(LessonContext);
   const { headerData, setHeaderData } = context;
@@ -26,23 +32,23 @@ const EditorDatapanel = ({ mdText, file, open, setOpen, editorRef }) => {
     setDataFromHeaderData();
   }, [headerData, setState]);
 
-  const changeHandler = event => {
+  const changeHandler = (event) => {
     const nam = event.target.name;
     const val = event.target.value;
-    setState(prevState => ({ ...prevState, [nam]: val }));
+    setState((prevState) => ({ ...prevState, [nam]: val }));
     if (state.author) {
-      setState(prevState => ({ ...prevState, err: "" }));
+      setState((prevState) => ({ ...prevState, err: "" }));
     }
     if (state.title) {
-      setState(prevState => ({ ...prevState, err: "" }));
+      setState((prevState) => ({ ...prevState, err: "" }));
     }
   };
 
-  const multiInputHandler = (object, field) => {
+  const multiInputHandler = (object, name) => {
     const key = Object.keys(object)[0];
     const value = Object.values(object)[0];
-    setState(prevState => ({ ...prevState, [key]: value }));
-    setState(prevState => ({ ...prevState, [field]: "" }));
+    setState((prevState) => ({ ...prevState, [key]: value }));
+    setState((prevState) => ({ ...prevState, [name]: "" }));
   };
 
   const onSubmit = async () => {
@@ -50,7 +56,7 @@ const EditorDatapanel = ({ mdText, file, open, setOpen, editorRef }) => {
     const newHeader = createNewHeader(state);
     const newMdText =
       newHeader !== undefined ? newHeader + "\n\n\n" + mdText : mdText;
-    await saveMdText(lessonId, file, newMdText).then(setOpen(false));
+    await saveMdText(lessonId, file, newMdText).then(setOpenMetaData(false));
     editorRef.current.focus();
   };
 
@@ -64,12 +70,13 @@ const EditorDatapanel = ({ mdText, file, open, setOpen, editorRef }) => {
       }
       history.push(target);
     }
+
     setState(await headerData);
     const newHeader = createNewHeader(state);
     let newMdText =
       newHeader !== undefined ? newHeader + "\n\n\n" + mdText : mdText;
     await saveMdText(lessonId, file, newMdText);
-    setOpen(false);
+    setOpenMetaData(false);
     try {
       editorRef.current.focus();
     } catch (e) {
@@ -79,13 +86,16 @@ const EditorDatapanel = ({ mdText, file, open, setOpen, editorRef }) => {
 
   return (
     <>
-      <button className="ui button" onClick={() => setOpen(!open)}>
+      <button
+        className="ui button"
+        onClick={() => setOpenMetaData(!openMetaData)}
+      >
         <i style={{ cursor: "pointer" }} className="grey cog icon"></i>
       </button>
 
-      {open ? (
+      {openMetaData ? (
         <div
-          style={open ? { display: "flex" } : { display: "none" }}
+          style={openMetaData ? { display: "flex" } : { display: "none" }}
           className="editorDatapanel_BG"
         >
           <div className="editorDatapanel_container">

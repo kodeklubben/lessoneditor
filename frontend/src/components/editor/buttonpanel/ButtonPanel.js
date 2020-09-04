@@ -37,8 +37,8 @@ const ButtonPanel = ({
   setRedoCursorPosition,
   setListButtonValues,
   file,
-  open,
-  setOpen,
+  openMetaData,
+  setOpenMetaData,
   setShowSpinner,
 }) => {
   const history = useHistory();
@@ -146,8 +146,8 @@ const ButtonPanel = ({
           <EditorDatapanel
             mdText={mdText}
             file={file}
-            open={open}
-            setOpen={setOpen}
+            openMetaData={openMetaData}
+            setOpenMetaData={setOpenMetaData}
             editorRef={editorRef}
           />
           <button
@@ -180,9 +180,9 @@ const ButtonPanel = ({
           <CodeButton
             editorRef={editorRef}
             mdText={mdText}
-            buttonValues={buttonValues}
             cursorPositionStart={cursorPositionStart}
             cursorPositionEnd={cursorPositionEnd}
+            buttonValues={buttonValues}
             setMdText={setMdText}
             setCursorPosition={setCursorPosition}
             setCursor={setCursor}

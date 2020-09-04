@@ -9,6 +9,7 @@
     "js-yaml": "^3.14.0",
     "markdown-it": "^11.0.0",
     "markdown-it-attrs": "^3.0.3",
+    "markdown-it-emoji": "^1.4.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-hotkeys-hook": "^2.2.2",

@@ -5,11 +5,10 @@ const MultiInput = ({
   multiInputHandler,
   name,
   title,
-  inputArray = [],
+  inputArray,
   inputValue,
   placeholder,
   required,
-  autofocus,
   validateMessage,
 }) => {
   let inputOrder = 1;
@@ -27,8 +26,8 @@ const MultiInput = ({
     }
   };
 
-  const onBlur = (e) => {
-    handleClick(e);
+  const onBlur = (event) => {
+    handleClick(event);
   };
 
   const inputClick = () => {
