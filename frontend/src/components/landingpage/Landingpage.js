@@ -132,7 +132,9 @@ const Landingpage = () => {
           ) : (
             <>
               <span style={{ color: "grey" }}>{"Oppgavetittel: "}</span>
-              <span>{`${data.lesson}`}</span>
+              <span>{`${
+                data.lesson ? data.lesson.replace("_", " ") : ""
+              }`}</span>
               <span style={{ color: "grey", marginLeft: "1em" }}>
                 {" Kurs: "}
               </span>
