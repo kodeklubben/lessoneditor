@@ -1,6 +1,5 @@
 const saveFile = require("../storage/save-file");
 const lessonInit = require("../utils/lesson-init");
-const welcomeText = require("../utils/welcome-text");
 
 module.exports = async (lessonData, username, edit = false) => {
   const data = lessonInit(lessonData, username);
@@ -9,7 +8,7 @@ module.exports = async (lessonData, username, edit = false) => {
   if (!edit) {
     await saveFile(
       ["drafts", data.lessonId, data.lesson + ".md"],
-      Buffer.from(welcomeText + data.title)
+      Buffer.from(" ")
     );
   }
   await saveFile(["drafts", data.lessonId, "data.json"], dataBuffer);

@@ -17,9 +17,9 @@ let buttonTitle;
 
 const CodeButton = ({
   editorRef,
+  mdText,
   cursorPositionStart,
   cursorPositionEnd,
-  mdText,
   buttonValues,
   setMdText,
   setCursorPosition,

@@ -40,15 +40,17 @@ export const UserContextProvider = (props) => {
     user,
     lessons,
     getLesson,
-    addLesson: async (course, lesson, title) => {
+    addLesson: async (course, lesson) => {
       let lessonId;
       const existing = getLessonByCourseAndLesson(course, lesson);
       if (existing) {
-        existing.title = title;
+        // existing.title = title;
         lessonId = existing.lessonId;
       } else {
-        lessonId = await createLesson({ course, lesson, title });
-        lessons.push({ lessonId, course, lesson, title });
+        // lessonId = await createLesson({ course, lesson, title });
+        lessonId = await createLesson({ course, lesson });
+        // lessons.push({ lessonId, course, lesson, title });
+        lessons.push({ lessonId, course, lesson });
       }
       await saveLessons(lessons);
       return lessonId;
