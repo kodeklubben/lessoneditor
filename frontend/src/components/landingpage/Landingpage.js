@@ -1,6 +1,6 @@
 import "./landingpage.scss";
 import React, { useState, useContext, useEffect } from "react";
-import { useParams } from "react-router";
+import { useParams, useHistory } from "react-router";
 import Navbar from "components/navbar/Navbar";
 import TeacherGuides from "./TeacherGuides";
 import LessonTexts from "./LessonTexts";
@@ -12,6 +12,7 @@ import { LessonContext } from "contexts/LessonContext";
 import submitLesson from "api/submit-lesson";
 import ShowSpinner from "../ShowSpinner";
 import { Dropdown } from "semantic-ui-react";
+import COURSELIST from "components/editor/settingsFiles/COURSELIST";
 
 const Landingpage = () => {
   const [pageContent, setPageContent] = useState("lessontexts");
@@ -20,13 +21,16 @@ const Landingpage = () => {
   const [thankU, setThankU] = useState(false);
   const [thumbUrl, setThumbUrl] = useState("");
   const { lessonId, mode } = useParams();
+  const history = useHistory();
   const lesson = useContext(LessonContext);
   const { data, saveLesson, lessonList } = lesson;
+
+  const courseNotSlug = COURSELIST.find(({ slug }) => slug === data.course);
 
   const options = [
     { key: 1, text: "Modus: Elev", value: "lessontexts" },
     { key: 2, text: "Modus: Lærer", value: "teacherguides" },
-    { key: 3, text: "Vis alle filer", value: "allfiles" }
+    { key: 3, text: "Vis alle filer", value: "allfiles" },
   ];
 
   useEffect(() => {
@@ -46,17 +50,21 @@ const Landingpage = () => {
       Object.keys(lessonList).length !== 0 &&
       lessonList.constructor !== Object
     ) {
-      lessonList.forEach(item => {
+      lessonList.forEach((item) => {
         if (item.filename === "preview.png") {
           setThumbUrl(item.url);
         }
       });
     }
-  });
+  }, [lessonList]);
 
-  const handleChange = (e, { value }) => setPageContent(value);
+  const handleChange = (e, { value }) => {
+    setPageContent(value);
+    const target = ["/landingpage", lessonId, value].join("/");
+    history.push(target);
+  };
 
-  const onSubmit = async lessonId => {
+  const onSubmit = async (lessonId) => {
     setShowSpinner(true);
     await saveLesson(data)
       .then(await submitLesson(lessonId))
@@ -67,7 +75,7 @@ const Landingpage = () => {
       });
   };
 
-  const dropdownValue = input => {
+  const dropdownValue = (input) => {
     let returnValue;
     switch (input) {
       case "lessontexts":
@@ -112,17 +120,32 @@ const Landingpage = () => {
         className="landing_navbar"
       >
         <h2>
-          {pageContent === "teacherguides"
-            ? `${data.lesson} (${data.course}) - Lærerveiledning`
-            : `${data.lesson} (${data.course})`}{" "}
+          {pageContent === "teacherguides" ? (
+            <>
+              <span style={{ color: "grey" }}>{"Oppgavetittel: "}</span>
+              <span>{`${data.lesson}`}</span> <span>{`(Lærerveiledning)`}</span>
+              <span style={{ color: "grey", marginLeft: "1em" }}>
+                {" Kurs: "}
+              </span>
+              <span>{`${courseNotSlug?.courseTitle}`}</span>
+            </>
+          ) : (
+            <>
+              <span style={{ color: "grey" }}>{"Oppgavetittel: "}</span>
+              <span>{`${data.lesson}`}</span>
+              <span style={{ color: "grey", marginLeft: "1em" }}>
+                {" Kurs: "}
+              </span>
+              <span>{`${courseNotSlug?.courseTitle}`}</span>
+            </>
+          )}
         </h2>
         <div style={{ display: "flex", float: "right" }}>
           <div style={{ position: "relative", top: "-3.5em" }}>
             <Dropdown
               style={{
                 maxWidth: "3em",
-                backgroundColor: "rgba(0,0,0,0)",
-                border: "1px solid grey"
+                border: "1px solid grey",
               }}
               onChange={handleChange}
               options={options}
@@ -131,7 +154,11 @@ const Landingpage = () => {
               value={pageContent}
             />
           </div>
-          <Datapanel setShowSpinner={setShowSpinner} lessonId={lessonId} />
+          <Datapanel
+            setShowSpinner={setShowSpinner}
+            lessonId={lessonId}
+            mode={mode}
+          />
         </div>
       </div>
 

@@ -1,5 +1,4 @@
 import React from "react";
-import Endpage from "./endpage/Endpage";
 import Editor from "./editor/Editor";
 import Landingpage from "components/landingpage/Landingpage";
 import Frontpage from "./frontpage/Frontpage";
@@ -32,7 +31,6 @@ const App = () => {
             </LessonContextProvider>
           </Route>
           <Route path="/preview/:lessonId/:file" component={SimplePreview} />
-          <Route exact path="/endpage" component={Endpage} />
         </UserContextProvider>
       </BrowserRouter>
     </>

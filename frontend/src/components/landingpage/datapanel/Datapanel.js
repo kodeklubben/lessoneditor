@@ -8,7 +8,7 @@ import Levels from "./Levels";
 import License from "./License";
 import { LessonContext } from "contexts/LessonContext";
 
-const Datapanel = ({ lessonId, setShowSpinner }) => {
+const Datapanel = ({ lessonId, mode, setShowSpinner }) => {
   const [open, setOpen] = useState(false);
   const [checkBoxState, setCheckBoxState] = useState({});
   const context = useContext(LessonContext);
@@ -55,7 +55,7 @@ const Datapanel = ({ lessonId, setShowSpinner }) => {
 
   const onCancel = async () => {
     getYmlData().then(() => {
-      const target = ["/landingpage", lessonId].join("/");
+      const target = ["/landingpage", lessonId, mode].join("/");
       history.push("/");
       history.replace(target);
     });
@@ -114,14 +114,21 @@ const Datapanel = ({ lessonId, setShowSpinner }) => {
   return (
     <>
       <button
-        style={{ backgroundColor: "rgb(0,0,0,0)" }}
+        style={{
+          position: "relative",
+          top: "-3.5em",
+        }}
+        id="tagButton"
         className="ui button"
         onClick={() => setOpen(!open)}
       >
-        <i
-          style={{ cursor: "pointer" }}
-          className="big grey cog icon landingpage"
-        ></i>
+        <span>
+          <i
+            style={{ cursor: "pointer" }}
+            className="gray tags icon landingpage"
+          ></i>
+          {"Oppgavetags: "}
+        </span>
       </button>
       {open ? (
         <div

@@ -3,7 +3,6 @@ import { Button, Popup } from "semantic-ui-react";
 import COURSELIST from "components/editor/settingsFiles/COURSELIST";
 
 const CodeButtons = ({
-  buttonValues,
   icon,
   title,
   onButtonClick,

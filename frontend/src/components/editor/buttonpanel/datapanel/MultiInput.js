@@ -9,7 +9,6 @@ const MultiInput = ({
   inputValue,
   placeholder,
   required,
-  autofocus,
   validateMessage,
 }) => {
   let inputOrder = 1;
@@ -27,8 +26,8 @@ const MultiInput = ({
     }
   };
 
-  const onBlur = (e) => {
-    handleClick(e);
+  const onBlur = (event) => {
+    handleClick(event);
   };
 
   const inputClick = () => {
@@ -50,7 +49,9 @@ const MultiInput = ({
     <div id="multiInputContainer" className="row">
       <h3 className="formLabel">
         {title}
-        <span className="requiredText"> {required}</span>
+        <span style={{ color: "grey" }} className="requiredText">
+          {required}
+        </span>
       </h3>
       <div className="inputField">
         <div

@@ -8,22 +8,23 @@ const NewLesson = ({ setShowPopup, setShowSpinner }) => {
   const history = useHistory();
   const user = useContext(UserContext);
   const [values, setValues] = useState({
-    name: "",
+    lessonTitle: "",
     course: COURSESLIST[0].slug,
   });
-  const [error, setError] = useState("Kurs og tittel må være satt");
+  const [error, setError] = useState("Oppgavetittel må være satt");
+
   const onChange = (e) => {
     const { name, value } = e.target;
     setValues((prevValues) => ({ ...prevValues, [name]: value }));
-    const { title } = values;
-    if (title) {
+    const { lessonTitle } = values;
+    if (lessonTitle.length >= 0) {
       setError("");
-    } else {
-      setError("kurs og tittel må være satt");
+    } else if (!lessonTitle) {
+      setError("Oppgavetittel må være satt");
     }
   };
-  const navigateToLandingpage = (lessonId, lesson) => {
-    const target = ["/editor", lessonId, lesson].join("/");
+  const navigateToLandingpage = (lessonId) => {
+    const target = ["/landingpage", lessonId, "lessontexts"].join("/");
     history.push({ pathname: "/" });
     history.replace({ pathname: target });
     setShowSpinner(false);
@@ -31,13 +32,13 @@ const NewLesson = ({ setShowPopup, setShowSpinner }) => {
   const onSubmit = async (e) => {
     e.preventDefault();
     setShowSpinner(true);
-    const { course, title } = values;
-    if (title) {
-      const lesson = slugify(title);
-      const lessonId = await user.addLesson(course, title, "");
-      navigateToLandingpage(lessonId, lesson);
+    const { course, lessonTitle } = values;
+    if (lessonTitle) {
+      const lesson = slugify(lessonTitle, "_");
+      const lessonId = await user.addLesson(course, lesson);
+      navigateToLandingpage(lessonId);
     } else {
-      setError("tittel er ikke satt");
+      setError("Oppgavetittel er ikke satt");
     }
   };
   return (
@@ -77,9 +78,10 @@ const NewLesson = ({ setShowPopup, setShowSpinner }) => {
         <label>
           Tittel:
           <input
+            autoFocus
             onChange={onChange}
-            name={"title"}
-            defaultValue={values["title"]}
+            name={"lessonTitle"}
+            defaultValue={values["lessonTitle"]}
           />
         </label>
         <label>
@@ -96,7 +98,7 @@ const NewLesson = ({ setShowPopup, setShowSpinner }) => {
           <button
             className="ui button"
             type={"submit"}
-            disabled={error.length > 0}
+            disabled={values.lessonTitle.length === 0}
           >
             Neste
           </button>
