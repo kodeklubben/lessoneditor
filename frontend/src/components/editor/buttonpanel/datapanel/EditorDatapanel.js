@@ -38,7 +38,6 @@ const EditorDatapanel = ({
   const history = useHistory();
 
   useEffect(() => {
-    console.log(userContext.user);
     const setDataFromHeaderData = async () => {
       if (Object.keys(headerData).length > 0) {
         setState(await headerData);
@@ -49,8 +48,10 @@ const EditorDatapanel = ({
     setDataFromHeaderData();
     setState((prevState) => ({
       ...prevState,
-      authorList: [userContext.user.name],
-      title: context.data.lesson ? context.data.lesson.replace("_", " ") : "",
+      authorList: [userContext?.user?.name ? userContext?.user?.name : ""],
+      title: context?.data?.lesson
+        ? context?.data?.lesson.replace("_", " ")
+        : "",
     }));
   }, [headerData, context.data.lesson, userContext.user]);
 
