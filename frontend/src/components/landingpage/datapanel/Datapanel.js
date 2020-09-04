@@ -114,14 +114,21 @@ const Datapanel = ({ lessonId, mode, setShowSpinner }) => {
   return (
     <>
       <button
-        style={{ backgroundColor: "rgb(0,0,0,0)" }}
+        style={{
+          position: "relative",
+          top: "-3.5em",
+        }}
+        id="tagButton"
         className="ui button"
         onClick={() => setOpen(!open)}
       >
-        <i
-          style={{ cursor: "pointer" }}
-          className="big grey cog icon landingpage"
-        ></i>
+        <span>
+          <i
+            style={{ cursor: "pointer" }}
+            className="gray tags icon landingpage"
+          ></i>
+          {"Oppgavetags: "}
+        </span>
       </button>
       {open ? (
         <div

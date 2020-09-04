@@ -145,7 +145,6 @@ const Landingpage = () => {
             <Dropdown
               style={{
                 maxWidth: "3em",
-                backgroundColor: "rgba(0,0,0,0)",
                 border: "1px solid grey",
               }}
               onChange={handleChange}

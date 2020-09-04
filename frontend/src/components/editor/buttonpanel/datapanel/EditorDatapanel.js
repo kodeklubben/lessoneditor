@@ -3,12 +3,15 @@ import React, { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router";
 import MultiInput from "./MultiInput";
 import { FORM_TEXT } from "./settings/landingpage_NO.js";
+import COURSELIST from "components/editor/settingsFiles/COURSELIST";
 import { LessonContext } from "contexts/LessonContext";
+import { UserContext } from "contexts/UserContext";
 import saveMdText from "../../../../api/save-md-text";
 import createNewHeader from "../utils/createNewHeader";
 import { useHistory } from "react-router-dom";
 const EditorDatapanel = ({
   mdText,
+  initText,
   file,
   openMetaData,
   setOpenMetaData,
@@ -16,12 +19,26 @@ const EditorDatapanel = ({
 }) => {
   const { lessonId } = useParams();
   const context = useContext(LessonContext);
-  const { headerData, setHeaderData } = context;
-  const [state, setState] = useState({ title: "" });
+  const userContext = useContext(UserContext);
+  const { headerData, setHeaderData, language } = context;
+
+  const [state, setState] = useState({ title: "", authorList: [] });
+
+  const languageNotSlug = {
+    nb: "Bokmål",
+    nn: "Nynorsk",
+    en: "Engelsk",
+    is: "islandsk",
+  };
+
+  const courseNotSlug = COURSELIST.find(
+    ({ slug }) => slug === context.data.course
+  );
 
   const history = useHistory();
 
   useEffect(() => {
+    console.log(userContext.user);
     const setDataFromHeaderData = async () => {
       if (Object.keys(headerData).length > 0) {
         setState(await headerData);
@@ -30,7 +47,12 @@ const EditorDatapanel = ({
       }
     };
     setDataFromHeaderData();
-  }, [headerData, setState]);
+    setState((prevState) => ({
+      ...prevState,
+      authorList: [userContext.user.name],
+      title: context.data.lesson ? context.data.lesson.replace("_", " ") : "",
+    }));
+  }, [headerData, context.data.lesson, userContext.user]);
 
   const changeHandler = (event) => {
     const nam = event.target.name;
@@ -61,27 +83,23 @@ const EditorDatapanel = ({
   };
 
   const onCancel = async () => {
-    if (!state.title) {
-      let target = "";
-      if (file.slice(0, 6) === "README") {
-        target = ["/landingpage", lessonId, "teacherguides"].join("/");
-      } else {
-        target = ["/landingpage", lessonId, "lessontexts"].join("/");
-      }
-      history.push(target);
+    let target = "";
+    if (
+      state.title === context.data.lesson.replace("_", " ") &&
+      state.authorList[0] === userContext.user.name
+    ) {
+      setOpenMetaData(false);
+      return;
     }
-
-    setState(await headerData);
-    const newHeader = createNewHeader(state);
-    let newMdText =
-      newHeader !== undefined ? newHeader + "\n\n\n" + mdText : mdText;
-    await saveMdText(lessonId, file, newMdText);
+    if (state.title === "" && state.authorList.length === 0) {
+      setOpenMetaData(false);
+      return;
+    }
+    target = ["editor", lessonId, file].join("/");
+    await saveMdText(lessonId, file, initText);
+    history.push("/");
+    history.replace(target);
     setOpenMetaData(false);
-    try {
-      editorRef.current.focus();
-    } catch (e) {
-      console.log(e);
-    }
   };
 
   return (
@@ -90,7 +108,13 @@ const EditorDatapanel = ({
         className="ui button"
         onClick={() => setOpenMetaData(!openMetaData)}
       >
-        <i style={{ cursor: "pointer" }} className="grey cog icon"></i>
+        <span>
+          <i
+            style={{ cursor: "pointer" }}
+            className="grey  address card icon"
+          ></i>
+          {"Oppgavedata: "}
+        </span>
       </button>
 
       {openMetaData ? (
@@ -100,14 +124,39 @@ const EditorDatapanel = ({
         >
           <div className="editorDatapanel_container">
             <i onClick={onCancel} className="big grey x icon editor" />
+            <div style={{ marginBottom: "1em" }} className="field">
+              <h2
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  marginLeft: "auto",
+                }}
+              >
+                <span
+                  style={{ color: "grey", marginRight: "1ch" }}
+                >{`Prosjekttittel: `}</span>
+                {`${context.data.lesson.replace("_", " ")}`}
+              </h2>
+              <p
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  marginLeft: "auto",
+                }}
+              >{`Kurs: ${courseNotSlug?.courseTitle}`}</p>
+              <br />
+            </div>
             <div id="titleField" className="field">
               <label>
                 <h3 className="formLabel">
-                  {FORM_TEXT.TITLE.heading}
-                  <span className="requiredText"> (obligatorisk)</span>
+                  {`${FORM_TEXT.TITLE.heading} på ${languageNotSlug[language]}`}
+                  <span style={{ color: "grey" }} className="requiredText">
+                    (obligatorisk)
+                  </span>
                 </h3>
               </label>
               <input
+                style={{ width: "50%" }}
                 autoFocus
                 autoComplete="off"
                 type="text"
@@ -124,6 +173,7 @@ const EditorDatapanel = ({
 
               <div className="validateError">{state.err}</div>
             </div>
+            <br />
             <MultiInput
               changeHandler={changeHandler}
               multiInputHandler={multiInputHandler}
@@ -140,6 +190,7 @@ const EditorDatapanel = ({
             ) : (
               <p></p>
             )}
+            <br />
             <MultiInput
               changeHandler={changeHandler}
               multiInputHandler={multiInputHandler}

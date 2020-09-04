@@ -5,7 +5,7 @@ const MultiInput = ({
   multiInputHandler,
   name,
   title,
-  inputArray,
+  inputArray = [],
   inputValue,
   placeholder,
   required,
@@ -49,7 +49,9 @@ const MultiInput = ({
     <div id="multiInputContainer" className="row">
       <h3 className="formLabel">
         {title}
-        <span className="requiredText"> {required}</span>
+        <span style={{ color: "grey" }} className="requiredText">
+          {required}
+        </span>
       </h3>
       <div className="inputField">
         <div

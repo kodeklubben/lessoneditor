@@ -44,6 +44,7 @@ const Editor = () => {
   const context = useContext(LessonContext);
   const { language, data, setData, setHeaderData, getLessonData } = context;
   const [mdText, setMdText] = useState("");
+  const [initText, setInitText] = useState("");
   const [showSpinner, setShowSpinner] = useState(false);
   const [buttonValues, setButtonValues] = useState({});
   const [cursorPositionStart, setCursorPositionStart] = useState(0);
@@ -119,6 +120,7 @@ const Editor = () => {
         }
 
         fetchData().then((lessonText) => {
+          setInitText(lessonText);
           let newText = lessonText;
           const parts = newText.split("---\n");
           const parsedHeader = parseMdHeader(parts[1]);
@@ -126,6 +128,7 @@ const Editor = () => {
           if (
             newText === " " ||
             newText === "" ||
+            newText === welcomeText[language] ||
             newText.slice(0, 20) === emptyData
           ) {
             if (newText.slice(0, 20) === emptyData) {
@@ -184,6 +187,7 @@ const Editor = () => {
         editorRef={editorRef}
         uploadImageRef={uploadImageRef}
         mdText={mdText}
+        initText={initText}
         buttonValues={buttonValues}
         cursorPositionStart={cursorPositionStart}
         cursorPositionEnd={cursorPositionEnd}

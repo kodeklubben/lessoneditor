@@ -20,6 +20,7 @@ const ButtonPanel = ({
   editorRef,
   uploadImageRef,
   mdText,
+  initText,
   buttonValues,
   cursorPositionStart,
   cursorPositionEnd,
@@ -145,6 +146,7 @@ const ButtonPanel = ({
           />
           <EditorDatapanel
             mdText={mdText}
+            initText={initText}
             file={file}
             openMetaData={openMetaData}
             setOpenMetaData={setOpenMetaData}
