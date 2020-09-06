@@ -23,8 +23,8 @@ const NewLesson = ({ setShowPopup, setShowSpinner }) => {
       setError("Oppgavetittel må være satt");
     }
   };
-  const navigateToLandingpage = (lessonId) => {
-    const target = ["/landingpage", lessonId, "lessontexts"].join("/");
+  const navigateToLandingpage = (lessonId, lesson) => {
+    const target = ["/editor", lessonId, lesson, "nb"].join("/");
     history.push({ pathname: "/" });
     history.replace({ pathname: target });
     setShowSpinner(false);
@@ -34,9 +34,9 @@ const NewLesson = ({ setShowPopup, setShowSpinner }) => {
     setShowSpinner(true);
     const { course, lessonTitle } = values;
     if (lessonTitle) {
-      const lesson = slugify(lessonTitle, "_");
+      const lesson = slugify(lessonTitle);
       const lessonId = await user.addLesson(course, lesson);
-      navigateToLandingpage(lessonId);
+      navigateToLandingpage(lessonId, lesson);
     } else {
       setError("Oppgavetittel er ikke satt");
     }

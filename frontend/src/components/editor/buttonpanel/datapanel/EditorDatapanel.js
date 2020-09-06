@@ -50,7 +50,7 @@ const EditorDatapanel = ({
       ...prevState,
       authorList: [userContext?.user?.name ? userContext?.user?.name : ""],
       title: context?.data?.lesson
-        ? context?.data?.lesson.replace("_", " ")
+        ? context?.data?.lesson.replace(/-/g, " ")
         : "",
     }));
   }, [headerData, context.data.lesson, userContext.user]);
@@ -90,7 +90,7 @@ const EditorDatapanel = ({
   const onCancel = async () => {
     let target = "";
     if (
-      state.title === context.data.lesson.replace("_", " ") &&
+      state.title === context.data.lesson.replace(/-/g, " ") &&
       state.authorList[0] === userContext.user.name
     ) {
       setOpenMetaData(false);
@@ -100,7 +100,7 @@ const EditorDatapanel = ({
       setOpenMetaData(false);
       return;
     }
-    target = ["editor", lessonId, file].join("/");
+    target = ["editor", lessonId, file, language].join("/");
     await saveMdText(
       lessonId,
       language === "nb" ? file : `${file}_${language}`,
@@ -122,7 +122,7 @@ const EditorDatapanel = ({
             style={{ cursor: "pointer" }}
             className="grey  address card icon"
           ></i>
-          {"Oppgavedata: "}
+          {"Oppgavedata"}
         </span>
       </button>
 
@@ -144,7 +144,7 @@ const EditorDatapanel = ({
                 <span
                   style={{ color: "grey", marginRight: "1ch" }}
                 >{`Prosjekttittel: `}</span>
-                {`${context.data.lesson.replace("_", " ")}`}
+                {`${context.data.lesson.replace(/-/g, " ")}`}
               </h2>
               <p
                 style={{

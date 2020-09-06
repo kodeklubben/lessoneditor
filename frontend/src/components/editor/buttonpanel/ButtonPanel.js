@@ -74,7 +74,7 @@ const ButtonPanel = ({
         target = ["/landingpage", lessonId, "lessontexts"].join("/");
       }
 
-      if (file.slice(0, 6) === "README" && noThumbLang.includes(file)) {
+      if (file.slice(0, 6) === "README" || noThumbLang.includes(language)) {
         await saveMdText(lessonId, `${file}_${language}`, newMdText).then(
           () => {
             history.push(target);

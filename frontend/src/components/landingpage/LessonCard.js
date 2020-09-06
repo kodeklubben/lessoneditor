@@ -93,32 +93,14 @@ const LessonCard = ({ title, lessonId, language, hasContent, lessonTitle }) => {
           {hasContent ? (
             <button
               className="ui button"
-              onClick={() =>
-                navigateToEditor(
-                  lessonId,
-                  lessonTitle,
-                  // language !== "nb"
-                  //   ? lessonTitle + "_" + language
-                  //   : lessonTitle,
-                  language
-                )
-              }
+              onClick={() => navigateToEditor(lessonId, lessonTitle, language)}
             >
               Åpne
             </button>
           ) : (
             <button
               className="ui button"
-              onClick={() =>
-                navigateToEditor(
-                  lessonId,
-                  lessonTitle,
-                  // language !== "nb"
-                  //   ? lessonTitle + "_" + language
-                  //   : lessonTitle,
-                  language
-                )
-              }
+              onClick={() => navigateToEditor(lessonId, lessonTitle, language)}
             >
               Lag tekstfil
             </button>

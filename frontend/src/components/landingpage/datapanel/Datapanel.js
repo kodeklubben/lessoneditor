@@ -127,7 +127,7 @@ const Datapanel = ({ lessonId, mode, setShowSpinner }) => {
             style={{ cursor: "pointer" }}
             className="gray tags icon landingpage"
           ></i>
-          {"Oppgavetags: "}
+          {"Oppgavedata"}
         </span>
       </button>
       {open ? (
