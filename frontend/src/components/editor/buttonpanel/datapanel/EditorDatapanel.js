@@ -17,21 +17,21 @@ const EditorDatapanel = ({
   setOpenMetaData,
   editorRef,
 }) => {
-  const { lessonId } = useParams();
+  const { lessonId, language } = useParams();
   const context = useContext(LessonContext);
   const userContext = useContext(UserContext);
-  const { headerData, setHeaderData, language } = context;
+  const { headerData, setHeaderData } = context;
 
   const [state, setState] = useState({ title: "", authorList: [] });
 
-  const languageNotSlug = {
+  const getLanguageFromSlug = {
     nb: "Bokmål",
     nn: "Nynorsk",
     en: "Engelsk",
-    is: "islandsk",
+    is: "Islandsk",
   };
 
-  const courseNotSlug = COURSELIST.find(
+  const getCourseFromSlug = COURSELIST.find(
     ({ slug }) => slug === context.data.course
   );
 
@@ -79,7 +79,11 @@ const EditorDatapanel = ({
     const newHeader = createNewHeader(state);
     const newMdText =
       newHeader !== undefined ? newHeader + "\n\n\n" + mdText : mdText;
-    await saveMdText(lessonId, file, newMdText).then(setOpenMetaData(false));
+    await saveMdText(
+      lessonId,
+      language === "nb" ? file : `${file}_${language}`,
+      newMdText
+    ).then(setOpenMetaData(false));
     editorRef.current.focus();
   };
 
@@ -97,7 +101,11 @@ const EditorDatapanel = ({
       return;
     }
     target = ["editor", lessonId, file].join("/");
-    await saveMdText(lessonId, file, initText);
+    await saveMdText(
+      lessonId,
+      language === "nb" ? file : `${file}_${language}`,
+      initText
+    );
     history.push("/");
     history.replace(target);
     setOpenMetaData(false);
@@ -144,13 +152,13 @@ const EditorDatapanel = ({
                   justifyContent: "center",
                   marginLeft: "auto",
                 }}
-              >{`Kurs: ${courseNotSlug?.courseTitle}`}</p>
+              >{`Kurs: ${getCourseFromSlug?.courseTitle}`}</p>
               <br />
             </div>
             <div id="titleField" className="field">
               <label>
                 <h3 className="formLabel">
-                  {`${FORM_TEXT.TITLE.heading} på ${languageNotSlug[language]}`}
+                  {`${FORM_TEXT.TITLE.heading} på ${getLanguageFromSlug[language]}`}
                   <span style={{ color: "grey" }} className="requiredText">
                     (obligatorisk)
                   </span>

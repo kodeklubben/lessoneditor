@@ -9,9 +9,9 @@ const Autosave = ({ mdText, setRenderContent }) => {
   const [savedText, setSavedText] = useState("");
   const [counter, setCounter] = useState(0);
   const [autoSaveMessage, setAutoSaveMessage] = useState("");
-  const { lessonId, file } = useParams();
+  const { lessonId, file, language } = useParams();
   const lessonContext = useContext(LessonContext);
-  const { headerData, language } = lessonContext;
+  const { headerData } = lessonContext;
 
   const newHeader = async () => {
     const header = createNewHeader(await headerData, await language);
@@ -36,9 +36,11 @@ const Autosave = ({ mdText, setRenderContent }) => {
           typeof newHeader !== "undefined"
             ? newHeader + "\n\n\n" + mdText
             : mdText;
-        await saveMdText(lessonId, file, newMdText).then(
-          setAutoSaveMessage(SAVED)
-        );
+        await saveMdText(
+          lessonId,
+          language === "nb" ? file : `${file}_${language}`,
+          newMdText
+        ).then(setAutoSaveMessage(SAVED));
       });
     }
     if (counter === 15) {

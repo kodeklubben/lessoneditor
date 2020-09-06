@@ -10,7 +10,10 @@ function ItemList({ items, removeLesson, navigateToHome }) {
             <div key={"listitem" + index} className="column">
               <div className="ui fluid card">
                 <div className="image itemListImage">
-                  <img src={listitem.thumb} alt={"oppgavebilde"} />
+                  <img
+                    src={`${listitem.thumb}?${performance.now()}`}
+                    alt={"oppgavebilde"}
+                  />
                 </div>
                 <div className="content">
                   <div className="header">{listitem.lesson}</div>

@@ -24,18 +24,11 @@ const languageOptions = {
   },
 };
 
-const LessonCard = ({
-  title,
-  lessonId,
-  language,
-  hasContent,
-  thumbUrl,
-  lessonTitle,
-}) => {
+const LessonCard = ({ title, lessonId, language, hasContent, lessonTitle }) => {
   const history = useHistory();
 
-  const navigateToEditor = (lessonId, file) => {
-    const target = ["/editor", lessonId, file].join("/");
+  const navigateToEditor = (lessonId, file, language) => {
+    const target = ["/editor", lessonId, file, language].join("/");
     history.push(target);
   };
 
@@ -46,7 +39,11 @@ const LessonCard = ({
           {hasContent ? (
             hasContent ? (
               <>
-                <img style={{ opacity: "0.3" }} src={thumbUrl} alt="thumbUrl" />
+                <img
+                  style={{ opacity: "0.3" }}
+                  src={`/api/display/${lessonId}/preview.png?${performance.now()}`}
+                  alt="thumbUrl"
+                />
                 <div
                   style={{
                     position: "absolute",
@@ -99,7 +96,11 @@ const LessonCard = ({
               onClick={() =>
                 navigateToEditor(
                   lessonId,
-                  language !== "nb" ? lessonTitle + "_" + language : lessonTitle
+                  lessonTitle,
+                  // language !== "nb"
+                  //   ? lessonTitle + "_" + language
+                  //   : lessonTitle,
+                  language
                 )
               }
             >
@@ -111,7 +112,11 @@ const LessonCard = ({
               onClick={() =>
                 navigateToEditor(
                   lessonId,
-                  language !== "nb" ? lessonTitle + "_" + language : lessonTitle
+                  lessonTitle,
+                  // language !== "nb"
+                  //   ? lessonTitle + "_" + language
+                  //   : lessonTitle,
+                  language
                 )
               }
             >

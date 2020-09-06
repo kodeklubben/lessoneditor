@@ -25,7 +25,7 @@ const App = () => {
             </LessonContextProvider>
           </Route>
           <Route exact path="/editor" component={Editor} />
-          <Route path="/editor/:lessonId/:file">
+          <Route path="/editor/:lessonId/:file/:language">
             <LessonContextProvider>
               <Editor />
             </LessonContextProvider>

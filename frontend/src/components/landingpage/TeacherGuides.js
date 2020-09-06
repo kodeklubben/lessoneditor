@@ -3,7 +3,7 @@ import React from "react";
 
 import LessonCard from "./LessonCard";
 
-const TeacherGuides = ({ lessonId, lessonList, thumbUrl }) => {
+const TeacherGuides = ({ lessonId, lessonList }) => {
   let languages = [];
   let allLanguages = ["nb", "nn", "en", "is"];
 
@@ -57,7 +57,6 @@ const TeacherGuides = ({ lessonId, lessonList, thumbUrl }) => {
                   hasContent={languages.includes(element)}
                   lessonId={lessonId}
                   lessonTitle={"README"}
-                  thumbUrl={thumbUrl}
                 />
               </div>
             );
