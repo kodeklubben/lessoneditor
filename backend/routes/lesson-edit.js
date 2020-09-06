@@ -13,13 +13,19 @@ const isAppEngine = require("../utils/isAppEngine");
 const resolveMarkdownUrls = require("../utils/resolve-markdown-urls");
 const yaml = require("js-yaml");
 
+const languages = ["_nn", "_en", "_is"];
+
 // Todo: Refactor, finne bedre løsning på resolve markdown urls.
 module.exports = (app) => {
   app.get("/api/lesson/edit/:course/:lesson/:filename", async (req, res) => {
     const { course, lesson, filename } = req.params;
     const savedLesson = await isLessonSaved(req.user.username, course, lesson);
     if (savedLesson) {
-      const redirectUrl = `/editor/${savedLesson}/${filename}`;
+      const redirectUrl = `/editor/${savedLesson}/${
+        languages.includes(filename.slice(-3))
+          ? `${filename.slice(0, -3)}/${filename.slice(-2)}`
+          : `${filename}/nb`
+      }`;
       res.redirect(redirectUrl);
     } else {
       const path = `src/${course}/${lesson}`;
@@ -82,7 +88,11 @@ module.exports = (app) => {
             );
           }
         }
-        const redirectUrl = `/editor/${lessonData.lessonId}/${filename}`;
+        const redirectUrl = `/editor/${savedLesson}/${
+          languages.includes(filename.slice(-3))
+            ? `${filename.slice(0, -3)}/${filename.slice(-2)}`
+            : `${filename}/nb`
+        }`;
         res.redirect(redirectUrl);
       } else {
         res.send("Error");
