@@ -37,18 +37,17 @@ const ButtonPanel = ({
   setUndoCursorPosition,
   setRedoCursorPosition,
   setListButtonValues,
-  file,
   openMetaData,
   setOpenMetaData,
   setShowSpinner,
 }) => {
   const history = useHistory();
-  const { lessonId } = useParams();
+  const { lessonId, file, language } = useParams();
   const context = useContext(LessonContext);
-  const { data, headerData, language } = context;
+  const { data, headerData } = context;
   const course = data.course;
 
-  const noThumbLang = ["_nn", "_en", "_is"];
+  const noThumbLang = ["nn", "en", "is"];
 
   const newHeader = async () => {
     const header = createNewHeader(await headerData, await language);
@@ -75,18 +74,17 @@ const ButtonPanel = ({
         target = ["/landingpage", lessonId, "lessontexts"].join("/");
       }
 
-      if (
-        file.slice(0, 6) !== "README" &&
-        !noThumbLang.includes(file.slice(-3))
-      ) {
-        await saveMdText(lessonId, file, newMdText, true).then(() => {
-          history.push(target);
-          history.replace(target);
-          setShowSpinner(false);
-          return;
-        });
+      if (file.slice(0, 6) === "README" && noThumbLang.includes(file)) {
+        await saveMdText(lessonId, `${file}_${language}`, newMdText).then(
+          () => {
+            history.push(target);
+            history.replace(target);
+            setShowSpinner(false);
+            return;
+          }
+        );
       } else {
-        await saveMdText(lessonId, file, newMdText).then(() => {
+        await saveMdText(lessonId, file, newMdText, true).then(() => {
           history.push(target);
           history.replace(target);
           setShowSpinner(false);

@@ -19,7 +19,6 @@ const Landingpage = () => {
   const [showSpinner, setShowSpinner] = useState(false);
   const [areYouSure, setAreYouSure] = useState(false);
   const [thankU, setThankU] = useState(false);
-  const [thumbUrl, setThumbUrl] = useState("");
   const { lessonId, mode } = useParams();
   const history = useHistory();
   const lesson = useContext(LessonContext);
@@ -34,7 +33,7 @@ const Landingpage = () => {
   ];
 
   useEffect(() => {
-    mode ? setPageContent(mode) : console.log("error");
+    mode ? setPageContent(mode) : console.log("couldn't set site mode");
   }, [mode, data]);
 
   useEffect(() => {
@@ -44,19 +43,6 @@ const Landingpage = () => {
       setShowSpinner(false);
     }
   }, [data.course]);
-
-  useEffect(() => {
-    if (
-      Object.keys(lessonList).length !== 0 &&
-      lessonList.constructor !== Object
-    ) {
-      lessonList.forEach((item) => {
-        if (item.filename === "preview.png") {
-          setThumbUrl(item.url);
-        }
-      });
-    }
-  }, [lessonList]);
 
   const handleChange = (e, { value }) => {
     setPageContent(value);
@@ -80,20 +66,12 @@ const Landingpage = () => {
     switch (input) {
       case "lessontexts":
         returnValue = (
-          <LessonTexts
-            thumbUrl={thumbUrl}
-            lessonId={lessonId}
-            lessonList={lessonList}
-          />
+          <LessonTexts lessonId={lessonId} lessonList={lessonList} />
         );
         break;
       case "teacherguides":
         returnValue = (
-          <TeacherGuides
-            thumbUrl={thumbUrl}
-            lessonId={lessonId}
-            lessonList={lessonList}
-          />
+          <TeacherGuides lessonId={lessonId} lessonList={lessonList} />
         );
         break;
       case "allfiles":
@@ -123,7 +101,10 @@ const Landingpage = () => {
           {pageContent === "teacherguides" ? (
             <>
               <span style={{ color: "grey" }}>{"Oppgavetittel: "}</span>
-              <span>{`${data.lesson}`}</span> <span>{`(Lærerveiledning)`}</span>
+              <span>{`${
+                data.lesson ? data.lesson.replace("_", " ") : ""
+              }`}</span>{" "}
+              <span>{`(Lærerveiledning)`}</span>
               <span style={{ color: "grey", marginLeft: "1em" }}>
                 {" Kurs: "}
               </span>

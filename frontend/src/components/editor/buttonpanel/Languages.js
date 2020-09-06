@@ -32,9 +32,9 @@ const languageOptions = [
   },
 ];
 
-const Languages = ({ mdText, file, setShowSpinner }) => {
+const Languages = ({ mdText, setShowSpinner }) => {
   const history = useHistory();
-  const { lessonId } = useParams();
+  const { lessonId, file, language } = useParams();
   const lessonContext = useContext(LessonContext);
   const { headerData, setLanguage } = lessonContext;
 
@@ -44,48 +44,45 @@ const Languages = ({ mdText, file, setShowSpinner }) => {
     return header;
   };
 
-  const defaultValue = (file = "_nb") => {
-    let returnvalue;
-    switch (file.slice(-3)) {
-      case "_nn":
-        returnvalue = "nn";
-        break;
-      case "_en":
-        returnvalue = "en";
-        break;
-      case "_is":
-        returnvalue = "is";
-        break;
-      default:
-        returnvalue = "nb";
-        break;
-    }
-    return returnvalue;
-  };
+  // const defaultValue = (file = "_nb") => {
+  //   let returnvalue;
+  //   switch (file.slice(-3)) {
+  //     case "_nn":
+  //       returnvalue = "nn";
+  //       break;
+  //     case "_en":
+  //       returnvalue = "en";
+  //       break;
+  //     case "_is":
+  //       returnvalue = "is";
+  //       break;
+  //     default:
+  //       returnvalue = "nb";
+  //       break;
+  //   }
+  //   return returnvalue;
+  // };
+
   useEffect(() => {
-    setLanguage(defaultValue(file));
-  }, [file, setLanguage]);
+    setLanguage(language);
+  }, [language, setLanguage]);
 
   const handleChange = async (event, { value }) => {
     setShowSpinner(true);
     let target;
     if (lessonId) {
-      if (defaultValue(file) !== "nb" && value !== "nb") {
-        target = ["/editor", lessonId, file.slice(0, -2) + value].join("/");
-      } else if (defaultValue(file) === "nb" && value !== "nb") {
-        target = ["/editor", lessonId, file + "_" + value].join("/");
-      } else if (defaultValue(file) !== "nb" && value === "nb") {
-        target = ["/editor", lessonId, file.slice(0, -3)].join("/");
-      } else {
-        console.log("change language dropdown error");
-      }
+      target = ["/editor", lessonId, file, value].join("/");
     }
     newHeader(value).then(async (newHeader) => {
       const newMdText =
         typeof newHeader !== "undefined"
           ? newHeader + "\n\n\n" + mdText
           : mdText;
-      await saveMdText(lessonId, file, newMdText).then(() => {
+      await saveMdText(
+        lessonId,
+        language === "nb" ? file : `${file}_${language}`,
+        newMdText
+      ).then(() => {
         history.push("/");
         history.replace(target);
         setShowSpinner(false);
@@ -101,7 +98,7 @@ const Languages = ({ mdText, file, setShowSpinner }) => {
         }}
         placeholder="Velg Språk"
         name="language"
-        defaultValue={file ? defaultValue(file) : ""}
+        defaultValue={language}
         fluid
         selection
         onChange={handleChange}

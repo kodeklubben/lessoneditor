@@ -4,7 +4,7 @@ import React, { useContext } from "react";
 import LessonCard from "./LessonCard";
 import { LessonContext } from "contexts/LessonContext";
 
-const LessonTexts = ({ lessonId, thumbUrl }) => {
+const LessonTexts = ({ lessonId }) => {
   const lesson = useContext(LessonContext);
   const { data, lessonList } = lesson;
 
@@ -58,7 +58,6 @@ const LessonTexts = ({ lessonId, thumbUrl }) => {
                   hasContent={languages.includes(element)}
                   lessonId={lessonId}
                   lessonTitle={data.lesson}
-                  thumbUrl={thumbUrl}
                 />
               </div>
             );

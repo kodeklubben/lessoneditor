@@ -12,11 +12,6 @@ import { LessonContext } from "contexts/LessonContext";
 import ShowSpinner from "../ShowSpinner";
 import parseMdHeader from "./utils/parseMdHeader";
 
-//  to determine if lessonTextMetaData is empty
-const emptyData = `---
-title: 
-author: `;
-
 const welcomeText = {
   nb: `# Velkommen til kidsakoder sin tekstbehandler! {.intro}
 
@@ -40,9 +35,9 @@ Dette er kidsakoder sin egen tekstbehandler for å lage, og redigere, sine oppga
 };
 
 const Editor = () => {
-  const { lessonId, file } = useParams();
+  const { lessonId, file, language } = useParams();
   const context = useContext(LessonContext);
-  const { language, data, setData, setHeaderData, getLessonData } = context;
+  const { data, setData, setHeaderData, getLessonData } = context;
   const [mdText, setMdText] = useState("");
   const [initText, setInitText] = useState("");
   const [showSpinner, setShowSpinner] = useState(false);
@@ -113,9 +108,13 @@ const Editor = () => {
     getLessonData().then((res) => {
       setShowSpinner(true);
       setData(res.data);
+      console.log(language === "nb");
       if (lessonId && file) {
         async function fetchData() {
-          const lessonText = await fetchMdText(lessonId, file);
+          const lessonText = await fetchMdText(
+            lessonId,
+            language === "nb" ? file : `${file}_${language}`
+          );
           return lessonText;
         }
 
@@ -125,15 +124,7 @@ const Editor = () => {
           const parts = newText.split("---\n");
           const parsedHeader = parseMdHeader(parts[1]);
           const body = parts[2] ? parts[2].trim() : "";
-          if (
-            newText === " " ||
-            newText === "" ||
-            newText === welcomeText[language] ||
-            newText.slice(0, 20) === emptyData
-          ) {
-            if (newText.slice(0, 20) === emptyData) {
-              newText = newText.split("---\n")[2].trim();
-            }
+          if (body.length === 0) {
             setOpenMetaData(true);
             setMdText(welcomeText[language]);
             setHeaderData({});
