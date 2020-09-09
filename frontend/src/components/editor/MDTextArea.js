@@ -23,7 +23,6 @@ const MDTextArea = ({
       output += mdText[i];
       i++;
     }
-    console.log(output);
     return output;
   };
 
@@ -130,6 +129,7 @@ const MDTextArea = ({
             ...prevButtonValues,
             [buttonName]: true,
           }));
+
           return;
         }
       } else if (mdText.slice(end, end + 7) === "`{.block") {
@@ -139,9 +139,11 @@ const MDTextArea = ({
             ...prevButtonValues,
             [buttonName]: true,
           }));
+
           return;
         }
       } else if (!buttonValues.inline) {
+        alert("inline");
         setButtonValues((prevButtonValues) => ({
           ...prevButtonValues,
           inline: true,
@@ -161,6 +163,32 @@ const MDTextArea = ({
       }
       if (end - start > 1) {
         setCursorPosition(start + 1, i);
+      }
+      if (mdText.slice(i, i + 11) === "`{.microbit") {
+        let buttonName = getButtonName(mdText, i + 11);
+        if (!buttonValues[buttonName]) {
+          setButtonValues((prevButtonValues) => ({
+            ...prevButtonValues,
+            [buttonName]: true,
+          }));
+
+          return;
+        }
+      } else if (mdText.slice(i, i + 7) === "`{.block") {
+        let buttonName = getButtonName(mdText, i + 7);
+        if (!buttonValues[buttonName]) {
+          setButtonValues((prevButtonValues) => ({
+            ...prevButtonValues,
+            [buttonName]: true,
+          }));
+
+          return;
+        }
+      } else if (!buttonValues.inline) {
+        setButtonValues((prevButtonValues) => ({
+          ...prevButtonValues,
+          inline: true,
+        }));
       }
     }
   };

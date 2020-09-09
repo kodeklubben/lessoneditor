@@ -3,6 +3,7 @@ import { Button, Popup } from "semantic-ui-react";
 import COURSELIST from "components/editor/settingsFiles/COURSELIST";
 
 const CodeButtons = ({
+  buttonValues,
   icon,
   title,
   onButtonClick,
@@ -37,7 +38,11 @@ const CodeButtons = ({
               </Button>
             ) : (
               <Button
-                style={style}
+                style={
+                  buttonValues[buttonTitle]
+                    ? { ...style, backgroundColor: "#bbb" }
+                    : style
+                }
                 className="CPButton"
                 size="tiny"
                 onClick={() => onButtonClick(buttonTitle)}
