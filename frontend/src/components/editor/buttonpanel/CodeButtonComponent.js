@@ -7,10 +7,6 @@ const CodeButtons = ({
   title,
   onButtonClick,
   buttonTitle,
-  output,
-  cursorIntON,
-  cursorIntOFF,
-  endOutput,
   shortcutKey,
   course,
   style,
@@ -30,15 +26,7 @@ const CodeButtons = ({
                 style={style}
                 className="CPButton"
                 size="tiny"
-                onClick={() =>
-                  onButtonClick(
-                    buttonTitle,
-                    output,
-                    cursorIntON,
-                    cursorIntOFF,
-                    endOutput
-                  )
-                }
+                onClick={() => onButtonClick(buttonTitle)}
               >
                 <div style={{ position: "relative", top: "-5px" }}>
                   {"```Kodeblokk"}
@@ -52,15 +40,7 @@ const CodeButtons = ({
                 style={style}
                 className="CPButton"
                 size="tiny"
-                onClick={() =>
-                  onButtonClick(
-                    buttonTitle,
-                    output,
-                    cursorIntON,
-                    cursorIntOFF,
-                    endOutput
-                  )
-                }
+                onClick={() => onButtonClick(buttonTitle)}
               >
                 <div style={{ position: "relative", top: "-5px" }}>
                   {"`Inline-kode"}

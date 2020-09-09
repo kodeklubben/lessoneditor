@@ -108,7 +108,6 @@ const Editor = () => {
     getLessonData().then((res) => {
       setShowSpinner(true);
       setData(res.data);
-      console.log(language === "nb");
       if (lessonId && file) {
         async function fetchData() {
           const lessonText = await fetchMdText(
@@ -195,7 +194,6 @@ const Editor = () => {
         setUndoCursorPosition={setUndoCursorPosition}
         setRedoCursorPosition={setRedoCursorPosition}
         setListButtonValues={setListButtonValues}
-        file={file}
         openMetaData={openMetaData}
         setOpenMetaData={setOpenMetaData}
         setShowSpinner={setShowSpinner}

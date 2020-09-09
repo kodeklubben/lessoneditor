@@ -47,8 +47,6 @@ const ButtonPanel = ({
   const { data, headerData } = context;
   const course = data.course;
 
-  const noThumbLang = ["nn", "en", "is"];
-
   const newHeader = async () => {
     const header = createNewHeader(await headerData, await language);
 
@@ -74,17 +72,19 @@ const ButtonPanel = ({
         target = ["/landingpage", lessonId, "lessontexts"].join("/");
       }
 
-      if (file.slice(0, 6) === "README" || noThumbLang.includes(language)) {
-        await saveMdText(lessonId, `${file}_${language}`, newMdText).then(
-          () => {
-            history.push(target);
-            history.replace(target);
-            setShowSpinner(false);
-            return;
-          }
-        );
-      } else {
+      if (file.slice(0, 6) !== "README" && language === "nb") {
         await saveMdText(lessonId, file, newMdText, true).then(() => {
+          history.push(target);
+          history.replace(target);
+          setShowSpinner(false);
+          return;
+        });
+      } else {
+        await saveMdText(
+          lessonId,
+          language === "nb" ? file : `${file}_${language}`,
+          newMdText
+        ).then(() => {
           history.push(target);
           history.replace(target);
           setShowSpinner(false);

@@ -382,12 +382,11 @@ const MicrobitButtons = ({
     <>
       {Object.entries(config).map((element, index) => (
         <ButtonComponent
-          id="test"
-          buttonValues={buttonValues}
           key={"element" + index}
-          buttonTitle={element[1].buttonTitle}
+          buttonValues={buttonValues}
           title={element[1].title}
           onButtonClick={handleButtonClick}
+          buttonTitle={element[1].buttonTitle}
           shortcutKey={element[1].shortcut}
           color={element[1].color}
         />

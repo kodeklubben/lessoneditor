@@ -44,25 +44,6 @@ const Languages = ({ mdText, setShowSpinner }) => {
     return header;
   };
 
-  // const defaultValue = (file = "_nb") => {
-  //   let returnvalue;
-  //   switch (file.slice(-3)) {
-  //     case "_nn":
-  //       returnvalue = "nn";
-  //       break;
-  //     case "_en":
-  //       returnvalue = "en";
-  //       break;
-  //     case "_is":
-  //       returnvalue = "is";
-  //       break;
-  //     default:
-  //       returnvalue = "nb";
-  //       break;
-  //   }
-  //   return returnvalue;
-  // };
-
   useEffect(() => {
     setLanguage(language);
   }, [language, setLanguage]);

@@ -120,7 +120,8 @@ const MDTextArea = ({
     if (
       mdText.slice(start - 1, start) === "`" &&
       mdText.slice(end, end + 1) === "`" &&
-      mdText.slice(end, end + 2) !== "``"
+      mdText.slice(end, end + 2) !== "``" &&
+      end - start > 1
     ) {
       if (mdText.slice(end, end + 11) === "`{.microbit") {
         let buttonName = getButtonName(mdText, end + 11);
@@ -151,7 +152,8 @@ const MDTextArea = ({
       mdText.slice(start, start + 1) === "`" &&
       (mdText.slice(end - 1, end) === "}" ||
         mdText.slice(end - 1, end) === "`") &&
-      mdText.slice(end - 2, end) !== "``"
+      mdText.slice(end - 2, end) !== "``" &&
+      end - start > 1
     ) {
       let i = end;
       while (mdText[i] !== "`") {
