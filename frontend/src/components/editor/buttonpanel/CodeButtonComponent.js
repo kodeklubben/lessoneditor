@@ -4,7 +4,6 @@ import COURSELIST from "components/editor/settingsFiles/COURSELIST";
 
 const CodeButtons = ({
   buttonValues,
-  icon,
   title,
   onButtonClick,
   buttonTitle,
@@ -22,9 +21,13 @@ const CodeButtons = ({
           mouseEnterDelay={250}
           mouseLeaveDelay={250}
           trigger={
-            icon === "code" ? (
+            buttonTitle === "codeblock" ? (
               <Button
-                style={style}
+                style={
+                  buttonValues[buttonTitle]
+                    ? { ...style, backgroundColor: "#bbb" }
+                    : style
+                }
                 className="CPButton"
                 size="tiny"
                 onClick={() => onButtonClick(buttonTitle)}

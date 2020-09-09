@@ -211,6 +211,7 @@ const Editor = () => {
           setCursor={setCursor}
           pushUndoValue={pushUndoValue}
           resetButtons={resetButtons}
+          course={data.course ? data.course : ""}
         />
         <MDPreview
           mdText={mdText}

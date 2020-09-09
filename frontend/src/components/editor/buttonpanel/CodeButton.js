@@ -150,7 +150,6 @@ const CodeButton = ({
         <CodeButtonComponent
           key={"element" + index}
           buttonValues={buttonValues}
-          icon={element[1].icon}
           title={element[1].title}
           onButtonClick={handleButtonClick}
           buttonTitle={element[1].buttonTitle}

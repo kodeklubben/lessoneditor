@@ -15,6 +15,7 @@ const MDTextArea = ({
   setCursor,
   pushUndoValue,
   resetButtons,
+  course,
 }) => {
   const getButtonName = (mdText, cursorPositionStart) => {
     let output = "";
@@ -43,6 +44,9 @@ const MDTextArea = ({
   };
 
   const onTextareaSelect = (event) => {
+    if (course === "scratch") {
+      course = "blocks";
+    }
     let start = event.target.selectionStart;
     let end = event.target.selectionEnd;
     setCursor(start, end);
@@ -116,6 +120,29 @@ const MDTextArea = ({
     ) {
       setCursorPosition(start + 2, end - 2);
     }
+
+    //-------------
+    if (
+      mdText.slice(start - course.length - 4, start) ===
+        "```" + course + "\n" &&
+      mdText.slice(end, end + 4) === "\n```"
+    ) {
+      setButtonValues((prevButtonValues) => ({
+        ...prevButtonValues,
+        codeblock: true,
+      }));
+    }
+
+    if (
+      mdText.slice(start, start + 3) === "```" &&
+      mdText.slice(end - 3, end) === "```" &&
+      end - start > 1
+    ) {
+      setCursorPosition(start + 3 + course.length + 1, end - 3);
+    }
+
+    // ----------------
+
     if (
       mdText.slice(start - 1, start) === "`" &&
       mdText.slice(end, end + 1) === "`" &&
@@ -132,8 +159,8 @@ const MDTextArea = ({
 
           return;
         }
-      } else if (mdText.slice(end, end + 7) === "`{.block") {
-        let buttonName = getButtonName(mdText, end + 7);
+      } else if (mdText.slice(end, end + 8) === "`{.block") {
+        let buttonName = getButtonName(mdText, end + 8);
         if (!buttonValues[buttonName]) {
           setButtonValues((prevButtonValues) => ({
             ...prevButtonValues,
@@ -143,13 +170,15 @@ const MDTextArea = ({
           return;
         }
       } else if (!buttonValues.inline) {
-        alert("inline");
         setButtonValues((prevButtonValues) => ({
           ...prevButtonValues,
           inline: true,
         }));
       }
     }
+
+    //-------------------
+
     if (
       mdText.slice(start, start + 1) === "`" &&
       (mdText.slice(end - 1, end) === "}" ||
@@ -174,8 +203,8 @@ const MDTextArea = ({
 
           return;
         }
-      } else if (mdText.slice(i, i + 7) === "`{.block") {
-        let buttonName = getButtonName(mdText, i + 7);
+      } else if (mdText.slice(i, i + 8) === "`{.block") {
+        let buttonName = getButtonName(mdText, i + 8);
         if (!buttonValues[buttonName]) {
           setButtonValues((prevButtonValues) => ({
             ...prevButtonValues,

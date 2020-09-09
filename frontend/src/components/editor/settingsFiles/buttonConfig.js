@@ -185,7 +185,6 @@ const lists = {
 const sections = {
   intro: {
     buttonTitle: "sec_intro",
-    icon: "",
     output: "# " + SECTION_TEXT + " {.intro}\n",
     title: BUTTON_TITLE.intro,
     cursorIntON: 0,
@@ -204,7 +203,6 @@ const sections = {
   },
   activity: {
     buttonTitle: "sec_activity",
-    icon: "",
     output: "# " + SECTION_TEXT + " {.activity}\n",
     title: BUTTON_TITLE.activity,
     cursorIntON: 0,
@@ -222,7 +220,6 @@ const sections = {
   },
   check: {
     buttonTitle: "sec_check",
-    icon: "",
     output: "## " + SECTION_TEXT + " {.check}\n",
     title: BUTTON_TITLE.check,
     cursorIntON: 0,
@@ -241,7 +238,6 @@ const sections = {
   },
   tip: {
     buttonTitle: "sec_tip",
-    icon: "",
     output: "## {.tip}\n" + SECTION_TEXT,
     title: BUTTON_TITLE.tip,
     cursorIntON: 10,
@@ -260,7 +256,6 @@ const sections = {
   },
   protip: {
     buttonTitle: "sec_protip",
-    icon: "",
     output: "## " + SECTION_TEXT + " {.protip}\n",
     title: BUTTON_TITLE.protip,
     cursorIntON: 0,
@@ -279,7 +274,6 @@ const sections = {
   },
   challenge: {
     buttonTitle: "sec_challenge",
-    icon: "",
     output: "## " + SECTION_TEXT + " {.challenge}\n",
     title: BUTTON_TITLE.challenge,
     cursorIntON: 0,
@@ -297,7 +291,6 @@ const sections = {
   },
   flag: {
     buttonTitle: "sec_flag",
-    icon: "",
     output: "## " + SECTION_TEXT + " {.flag}\n",
     title: BUTTON_TITLE.flag,
     cursorIntON: 0,
@@ -317,7 +310,6 @@ const sections = {
   },
   try: {
     buttonTitle: "sec_try",
-    icon: "",
     output: "# " + SECTION_TEXT + " {.try}\n",
     title: BUTTON_TITLE.try,
     cursorIntON: 0,
@@ -334,7 +326,6 @@ const sections = {
   },
   save: {
     buttonTitle: "sec_save",
-    icon: "",
     output: "## " + SECTION_TEXT + " {.save}\n",
     title: BUTTON_TITLE.save,
     cursorIntON: 0,
@@ -357,7 +348,6 @@ const sections = {
 const codebutton = {
   inline: {
     buttonTitle: "inline",
-    icon: "terminal",
     output: "`" + SECTION_TEXT + "`",
     title: BUTTON_TITLE.inline,
     cursorIntON: 1,
@@ -376,7 +366,6 @@ const codebutton = {
   },
   codeblock: {
     buttonTitle: "codeblock",
-    icon: "code",
     output: `${temp}\n${SECTION_TEXT}\n${temp}`,
     title: BUTTON_TITLE.codeblock,
     cursorIntON: 4,
