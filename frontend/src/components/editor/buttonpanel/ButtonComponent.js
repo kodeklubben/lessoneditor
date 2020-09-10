@@ -7,10 +7,6 @@ const Buttons = ({
   title,
   onButtonClick,
   buttonTitle,
-  output,
-  cursorIntON,
-  cursorIntOFF,
-  endOutput,
   shortcutKey,
   style,
   imageurl,
@@ -44,32 +40,20 @@ const Buttons = ({
                 }
                 className="CPButton"
                 size="huge"
-                onClick={() =>
-                  onButtonClick(
-                    buttonTitle,
-                    output,
-                    cursorIntON,
-                    cursorIntOFF,
-                    endOutput
-                  )
-                }
+                onClick={() => onButtonClick(buttonTitle)}
               >
                 <Icon name={icon} />
               </Button>
             ) : (
               <Button
-                style={style}
+                style={
+                  buttonValues[buttonTitle]
+                    ? { ...style, background: "#bbb" }
+                    : style
+                }
                 className="CPButton"
                 size="tiny"
-                onClick={() =>
-                  onButtonClick(
-                    buttonTitle,
-                    output,
-                    cursorIntON,
-                    cursorIntOFF,
-                    endOutput
-                  )
-                }
+                onClick={() => onButtonClick(buttonTitle)}
               >
                 {imageurl ? (
                   <span>

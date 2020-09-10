@@ -21,10 +21,10 @@ let buttonTitle;
 
 const Emphasis = ({
   editorRef,
-  cursorPositionStart,
-  cursorPositionEnd,
   mdText,
   buttonValues,
+  cursorPositionStart,
+  cursorPositionEnd,
   setMdText,
   setCursorPosition,
   setCursor,
@@ -182,12 +182,12 @@ const Emphasis = ({
         // console.log(element);
         return (
           <CPButton
-            buttonValues={buttonValues}
             key={"element" + index}
-            buttonTitle={element[1].buttonTitle}
+            buttonValues={buttonValues}
             icon={element[1].icon}
             title={element[1].title}
             onButtonClick={handleButtonClick}
+            buttonTitle={element[1].buttonTitle}
             shortcutKey={element[1].shortcut}
           />
         );

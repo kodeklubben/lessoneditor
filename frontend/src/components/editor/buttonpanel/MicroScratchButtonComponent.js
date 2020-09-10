@@ -6,10 +6,6 @@ const Buttons = ({
   title,
   onButtonClick,
   buttonTitle,
-  output,
-  cursorIntON,
-  cursorIntOFF,
-  endOutput,
   shortcutKey,
   color,
 }) => {
@@ -29,15 +25,7 @@ const Buttons = ({
               }
               className="MBButton"
               size="tiny"
-              onClick={() =>
-                onButtonClick(
-                  buttonTitle,
-                  output,
-                  cursorIntON,
-                  cursorIntOFF,
-                  endOutput
-                )
-              }
+              onClick={() => onButtonClick(buttonTitle)}
             >
               {title}
             </Button>

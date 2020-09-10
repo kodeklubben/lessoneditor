@@ -3,14 +3,10 @@ import { Button, Popup } from "semantic-ui-react";
 import COURSELIST from "components/editor/settingsFiles/COURSELIST";
 
 const CodeButtons = ({
-  icon,
+  buttonValues,
   title,
   onButtonClick,
   buttonTitle,
-  output,
-  cursorIntON,
-  cursorIntOFF,
-  endOutput,
   shortcutKey,
   course,
   style,
@@ -25,20 +21,16 @@ const CodeButtons = ({
           mouseEnterDelay={250}
           mouseLeaveDelay={250}
           trigger={
-            icon === "code" ? (
+            buttonTitle === "codeblock" ? (
               <Button
-                style={style}
+                style={
+                  buttonValues[buttonTitle]
+                    ? { ...style, backgroundColor: "#bbb" }
+                    : style
+                }
                 className="CPButton"
                 size="tiny"
-                onClick={() =>
-                  onButtonClick(
-                    buttonTitle,
-                    output,
-                    cursorIntON,
-                    cursorIntOFF,
-                    endOutput
-                  )
-                }
+                onClick={() => onButtonClick(buttonTitle)}
               >
                 <div style={{ position: "relative", top: "-5px" }}>
                   {"```Kodeblokk"}
@@ -49,18 +41,14 @@ const CodeButtons = ({
               </Button>
             ) : (
               <Button
-                style={style}
+                style={
+                  buttonValues[buttonTitle]
+                    ? { ...style, backgroundColor: "#bbb" }
+                    : style
+                }
                 className="CPButton"
                 size="tiny"
-                onClick={() =>
-                  onButtonClick(
-                    buttonTitle,
-                    output,
-                    cursorIntON,
-                    cursorIntOFF,
-                    endOutput
-                  )
-                }
+                onClick={() => onButtonClick(buttonTitle)}
               >
                 <div style={{ position: "relative", top: "-5px" }}>
                   {"`Inline-kode"}

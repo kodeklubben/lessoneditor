@@ -172,12 +172,12 @@ const Lists = ({
     <>
       {Object.entries(config).map((element, index) => (
         <CPButton
-          buttonValues={buttonValues}
           key={"element" + index}
-          buttonTitle={element[1].buttonTitle}
+          buttonValues={buttonValues}
           icon={element[1].icon}
           title={element[1].title}
           onButtonClick={handleButtonClick}
+          buttonTitle={element[1].buttonTitle}
           shortcutKey={element[1].shortcut}
         />
       ))}

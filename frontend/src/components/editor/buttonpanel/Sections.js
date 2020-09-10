@@ -68,7 +68,7 @@ const Sections = ({
     );
 
     setChanges(
-      results.inputText,
+      results.mdText,
       results.cursorPositionStart,
       results.cursorPositionEnd
     );
@@ -256,12 +256,11 @@ const Sections = ({
     <>
       {Object.entries(config).map((element, index) => (
         <ButtonComponent
-          buttonValues={buttonValues}
           key={"element" + index}
-          buttonTitle={element[1].buttonTitle}
-          icon={element[1].icon}
+          buttonValues={buttonValues}
           title={element[1].title}
           onButtonClick={handleButtonClick}
+          buttonTitle={element[1].buttonTitle}
           shortcutKey={element[1].shortcut}
           style={element[1].style}
           imageurl={element[1].imageurl ? element[1].imageurl : ""}
