@@ -68,7 +68,7 @@ const Sections = ({
     );
 
     setChanges(
-      results.inputText,
+      results.mdText,
       results.cursorPositionStart,
       results.cursorPositionEnd
     );

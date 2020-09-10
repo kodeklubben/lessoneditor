@@ -22,7 +22,6 @@ const buttonAction = (
       mdText.slice(cursorPositionStart);
     cursorPositionStart += 1;
     cursorPositionEnd += 1;
-    console.log(mdText);
     buttonAction(
       isOn,
       mdText,
@@ -175,16 +174,15 @@ const heading = (isOn, mdText, cursorPositionStart, output) => {
   }
 };
 
-const ifNewLine = (inputText, cursorPositionStart) => {
-  return inputText[cursorPositionStart - 1] === "\n" ||
-    inputText === "" ||
+const ifNewLine = (mdText, cursorPositionStart) => {
+  return mdText[cursorPositionStart - 1] === "\n" ||
+    mdText === "" ||
     cursorPositionStart === 0 ||
-    inputText.slice(cursorPositionStart - 3, cursorPositionStart) === "## " ||
-    inputText.slice(cursorPositionStart - 2, cursorPositionStart) === "# " ||
-    inputText.slice(cursorPositionStart - 2, cursorPositionStart) === "- " ||
-    inputText.slice(cursorPositionStart - 3, cursorPositionStart) === "1. " ||
-    inputText.slice(cursorPositionStart - 6, cursorPositionStart) ===
-      "- [\u0020] "
+    mdText.slice(cursorPositionStart - 3, cursorPositionStart) === "## " ||
+    mdText.slice(cursorPositionStart - 2, cursorPositionStart) === "# " ||
+    mdText.slice(cursorPositionStart - 2, cursorPositionStart) === "- " ||
+    mdText.slice(cursorPositionStart - 3, cursorPositionStart) === "1. " ||
+    mdText.slice(cursorPositionStart - 6, cursorPositionStart) === "- [\u0020] "
     ? true
     : false;
 };
@@ -192,7 +190,7 @@ const ifNewLine = (inputText, cursorPositionStart) => {
 const insertSection = (
   isOn,
   button,
-  inputText,
+  mdText,
   output,
   cursorPositionStart,
   cursorPositionEnd,
@@ -200,17 +198,17 @@ const insertSection = (
   cursorIntOFF,
   sectionText
 ) => {
-  if (!ifNewLine(inputText, cursorPositionStart) && !isOn) {
-    inputText =
-      inputText.slice(0, cursorPositionStart) +
+  if (!ifNewLine(mdText, cursorPositionStart) && !isOn) {
+    mdText =
+      mdText.slice(0, cursorPositionStart) +
       "\n" +
-      inputText.slice(cursorPositionStart);
+      mdText.slice(cursorPositionStart);
     cursorPositionStart += 1;
     cursorPositionEnd += 1;
     insertSection(
       isOn,
       button,
-      inputText,
+      mdText,
       output,
       cursorPositionStart,
       cursorPositionEnd,
@@ -220,10 +218,39 @@ const insertSection = (
     );
   }
   if (!isOn) {
-    inputText =
-      inputText.slice(0, cursorPositionStart) +
+    if (cursorPositionStart !== cursorPositionEnd) {
+      let i = mdText.slice(cursorPositionStart, cursorPositionEnd);
+      while (
+        i[0] === " " ||
+        i[i.length - 1] === " " ||
+        i[0] === "\n" ||
+        i[i.length - 1] === "\n"
+      ) {
+        if (i[0] === " " || i[0] === "\n") {
+          i = i.slice(1);
+          cursorPositionStart += 1;
+        }
+        if (i[i.length - 1] === " " || i[i.length - 1] === "\n") {
+          i = i.slice(0, i.length - 1);
+          cursorPositionEnd -= 1;
+        }
+      }
+      mdText =
+        mdText.slice(0, cursorPositionStart) +
+        output.slice(0, cursorIntON) +
+        i +
+        output.slice(cursorIntON + SECTION_TEXT.length) +
+        mdText.slice(cursorPositionEnd);
+
+      cursorPositionStart += cursorIntON;
+      cursorPositionEnd = cursorPositionStart + i.length;
+
+      return { mdText, cursorPositionStart, cursorPositionEnd };
+    }
+    mdText =
+      mdText.slice(0, cursorPositionStart) +
       output +
-      inputText.slice(cursorPositionStart);
+      mdText.slice(cursorPositionStart);
     if (output.slice(0, 2) === "##" && button !== "sec_tip") {
       cursorPositionStart += 3;
       cursorPositionEnd += sectionText.length + 3;
@@ -234,11 +261,26 @@ const insertSection = (
       cursorPositionStart += 2;
       cursorPositionEnd += sectionText.length + 2;
     }
-    return { inputText, cursorPositionStart, cursorPositionEnd };
+    return { mdText, cursorPositionStart, cursorPositionEnd };
   } else if (isOn) {
-    cursorPositionStart += cursorPositionEnd + sectionText.length;
-    cursorPositionEnd = cursorPositionStart;
-    return { inputText, cursorPositionStart, cursorPositionEnd };
+    if (cursorPositionStart !== cursorPositionEnd) {
+      mdText =
+        mdText.slice(0, cursorPositionStart - cursorIntON) +
+        mdText.slice(cursorPositionStart, cursorPositionEnd) +
+        mdText.slice(cursorPositionEnd + cursorIntOFF);
+
+      cursorPositionStart -= cursorIntON;
+      cursorPositionEnd -= cursorIntON;
+
+      return { mdText, cursorPositionStart, cursorPositionEnd };
+    }
+    cursorPositionStart += cursorIntOFF;
+    cursorPositionEnd += cursorIntOFF;
+
+    return { mdText, cursorPositionStart, cursorPositionEnd };
+    // cursorPositionStart += cursorPositionEnd + sectionText.length;
+    // cursorPositionEnd = cursorPositionStart;
+    // return { mdText, cursorPositionStart, cursorPositionEnd };
   }
 };
 

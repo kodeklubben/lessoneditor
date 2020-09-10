@@ -3,6 +3,18 @@ import React from "react";
 let orderedListIndex = 2;
 let tabSize = 2;
 
+const segments = [
+  "intro",
+  "activity",
+  "check",
+  "tip",
+  "protip",
+  "challenge",
+  "flag",
+  "try",
+  "save",
+];
+
 const MDTextArea = ({
   editorRef,
   mdText,
@@ -17,7 +29,7 @@ const MDTextArea = ({
   resetButtons,
   course,
 }) => {
-  const getButtonName = (mdText, cursorPositionStart) => {
+  const getButtonName = (cursorPositionStart) => {
     let output = "";
     let i = cursorPositionStart;
     while (mdText[i] !== "}") {
@@ -44,11 +56,13 @@ const MDTextArea = ({
   };
 
   const onTextareaSelect = (event) => {
+    let start = event.target.selectionStart;
+    let end = event.target.selectionEnd;
+
     if (course === "scratch") {
       course = "blocks";
     }
-    let start = event.target.selectionStart;
-    let end = event.target.selectionEnd;
+
     setCursor(start, end);
     let i = mdText.slice(start, end);
     while (
@@ -66,6 +80,43 @@ const MDTextArea = ({
         end -= 1;
       }
     }
+
+    //______
+
+    if (
+      mdText.slice(start - 2, start) === "# " &&
+      mdText.slice(end, end + 2) === " {"
+    ) {
+      let buttonName = getButtonName(end + 3);
+      if (!segments.includes(buttonName)) return;
+      setButtonValues((prevButtonValues) => ({
+        ...prevButtonValues,
+        ["sec_" + buttonName]: true,
+      }));
+    }
+
+    if (
+      (mdText.slice(start, start + 2) === "##" ||
+        mdText.slice(start, start + 2) === "# ") &&
+      mdText.slice(end - 1, end) === "}" &&
+      end - start > 1
+    ) {
+      while (mdText[end] !== "{") {
+        end--;
+      }
+      mdText.slice(start, start + 2) === "##"
+        ? setCursorPosition(start + 3, end - 1)
+        : setCursorPosition(start + 2, end - 1);
+      let buttonName = getButtonName(end + 3);
+      if (!segments.includes(buttonName)) return;
+      setButtonValues((prevButtonValues) => ({
+        ...prevButtonValues,
+        ["sec_" + buttonName]: true,
+      }));
+    }
+
+    //______
+
     if (
       mdText.slice(start - 1, start) === "*" &&
       mdText.slice(end, end + 1) === "*" &&
@@ -150,7 +201,7 @@ const MDTextArea = ({
       end - start > 1
     ) {
       if (mdText.slice(end, end + 11) === "`{.microbit") {
-        let buttonName = getButtonName(mdText, end + 11);
+        let buttonName = getButtonName(end + 11);
         if (!buttonValues[buttonName]) {
           setButtonValues((prevButtonValues) => ({
             ...prevButtonValues,
@@ -160,7 +211,7 @@ const MDTextArea = ({
           return;
         }
       } else if (mdText.slice(end, end + 8) === "`{.block") {
-        let buttonName = getButtonName(mdText, end + 8);
+        let buttonName = getButtonName(end + 8);
         if (!buttonValues[buttonName]) {
           setButtonValues((prevButtonValues) => ({
             ...prevButtonValues,
@@ -194,7 +245,7 @@ const MDTextArea = ({
         setCursorPosition(start + 1, i);
       }
       if (mdText.slice(i, i + 11) === "`{.microbit") {
-        let buttonName = getButtonName(mdText, i + 11);
+        let buttonName = getButtonName(i + 11);
         if (!buttonValues[buttonName]) {
           setButtonValues((prevButtonValues) => ({
             ...prevButtonValues,
@@ -204,7 +255,7 @@ const MDTextArea = ({
           return;
         }
       } else if (mdText.slice(i, i + 8) === "`{.block") {
-        let buttonName = getButtonName(mdText, i + 8);
+        let buttonName = getButtonName(i + 8);
         if (!buttonValues[buttonName]) {
           setButtonValues((prevButtonValues) => ({
             ...prevButtonValues,

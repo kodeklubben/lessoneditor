@@ -46,7 +46,11 @@ const Buttons = ({
               </Button>
             ) : (
               <Button
-                style={style}
+                style={
+                  buttonValues[buttonTitle]
+                    ? { ...style, background: "#bbb" }
+                    : style
+                }
                 className="CPButton"
                 size="tiny"
                 onClick={() => onButtonClick(buttonTitle)}
