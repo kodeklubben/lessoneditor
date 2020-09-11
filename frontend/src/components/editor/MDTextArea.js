@@ -174,9 +174,8 @@ const MDTextArea = ({
 
     //-------------
     if (
-      mdText.slice(start - course.length - 4, start) ===
-        "```" + course + "\n" &&
-      mdText.slice(end, end + 4) === "\n```"
+      mdText.slice(start, start + 3) === "```" &&
+      mdText.slice(end - 3, end) === "```"
     ) {
       setButtonValues((prevButtonValues) => ({
         ...prevButtonValues,

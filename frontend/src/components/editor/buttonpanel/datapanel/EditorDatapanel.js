@@ -100,15 +100,21 @@ const EditorDatapanel = ({
       setOpenMetaData(false);
       return;
     }
-    target = ["editor", lessonId, file, language].join("/");
+    if (lessonId) {
+      target = ["editor", lessonId, file, language].join("/");
+    }
     await saveMdText(
       lessonId,
       language === "nb" ? file : `${file}_${language}`,
       initText
     );
-    history.push("/");
-    history.replace(target);
-    setOpenMetaData(false);
+    if (target !== "") {
+      history.push("/");
+      history.replace(target);
+      setOpenMetaData(false);
+    } else {
+      console.log("error");
+    }
   };
 
   return (

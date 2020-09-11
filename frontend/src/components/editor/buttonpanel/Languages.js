@@ -50,7 +50,7 @@ const Languages = ({ mdText, setShowSpinner }) => {
 
   const handleChange = async (event, { value }) => {
     setShowSpinner(true);
-    let target;
+    let target = "";
     if (lessonId) {
       target = ["/editor", lessonId, file, value].join("/");
     }
@@ -59,15 +59,20 @@ const Languages = ({ mdText, setShowSpinner }) => {
         typeof newHeader !== "undefined"
           ? newHeader + "\n\n\n" + mdText
           : mdText;
+
       await saveMdText(
         lessonId,
         language === "nb" ? file : `${file}_${language}`,
         newMdText
       ).then(() => {
-        history.push("/");
-        history.replace(target);
-        setShowSpinner(false);
-        return;
+        if (target !== "") {
+          history.push("/");
+          history.replace(target);
+          setShowSpinner(false);
+          return;
+        } else {
+          console.log("error");
+        }
       });
     });
   };
