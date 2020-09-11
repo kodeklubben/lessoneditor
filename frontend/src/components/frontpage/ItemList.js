@@ -17,7 +17,7 @@ function ItemList({ items, removeLesson, navigateToHome }) {
                 </div>
                 <div className="content">
                   <div className="header">
-                    {listitem.lesson.replace(/-/, " ")}
+                    {listitem.lesson.replace(/-/g, " ")}
                   </div>
                   <div className="meta">
                     <h4>{listitem.course}</h4>
