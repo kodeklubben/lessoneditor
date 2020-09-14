@@ -91,10 +91,10 @@ const Editor = () => {
 
   useEffect(() => {
     getLessonData().then((res) => {
+      setData(res.data);
       setShowSpinner(true);
       if (lessonId && file) {
-        async function fetchData(res) {
-          setData(res.data);
+        async function fetchData() {
           const lessonText = await fetchMdText(
             lessonId,
             language === "nb" ? file : `${file}_${language}`
@@ -102,11 +102,10 @@ const Editor = () => {
           return lessonText;
         }
 
-        fetchData(res).then((lessonText) => {
+        fetchData().then((lessonText) => {
           setInitText(lessonText);
-          let newText = lessonText;
-          const parts = newText.split("---\n");
-          const parsedHeader = parseMdHeader(parts[1]);
+          const parts = lessonText.split("---\n");
+          const parsedHeader = parts[1] ? parseMdHeader(parts[1]) : {};
           const body = parts[2] ? parts[2].trim() : "";
           if (body.length === 0) {
             setOpenMetaData(true);
@@ -114,26 +113,24 @@ const Editor = () => {
             setHeaderData({});
             setShowSpinner(false);
             return;
-          } else {
-            setMdText(body);
-            setUndo([body]);
-            const newHeaderData = {
-              title: parsedHeader.title,
-              authorList: parsedHeader.author
-                ? parsedHeader.author.split(",").map((item) => {
-                    return item.trim();
-                  })
-                : [],
-              translatorList: parsedHeader.translator
-                ? parsedHeader.translator.split(",").map((item) => {
-                    return item.trim();
-                  })
-                : [],
-            };
-            setHeaderData(newHeaderData);
-            setShowSpinner(false);
-            return;
-          }
+          } else setMdText(body);
+          setUndo([body]);
+          const newHeaderData = {
+            title: parsedHeader.title,
+            authorList: parsedHeader.author
+              ? parsedHeader.author.split(",").map((item) => {
+                  return item.trim();
+                })
+              : [],
+            translatorList: parsedHeader.translator
+              ? parsedHeader.translator.split(",").map((item) => {
+                  return item.trim();
+                })
+              : [],
+          };
+          setHeaderData(newHeaderData);
+          setShowSpinner(false);
+          return;
         });
       }
     });
