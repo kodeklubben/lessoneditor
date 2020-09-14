@@ -89,17 +89,6 @@ const EditorDatapanel = ({
 
   const onCancel = async () => {
     let target = "";
-    if (
-      state.title === context.data.lesson.replace(/-/g, " ") &&
-      state.authorList[0] === userContext.user.name
-    ) {
-      setOpenMetaData(false);
-      return;
-    }
-    if (state.title === "" && state.authorList.length === 0) {
-      setOpenMetaData(false);
-      return;
-    }
     if (lessonId) {
       target = ["editor", lessonId, file, language].join("/");
     }
@@ -107,14 +96,13 @@ const EditorDatapanel = ({
       lessonId,
       language === "nb" ? file : `${file}_${language}`,
       initText
-    );
-    if (target !== "") {
-      history.push("/");
-      history.replace(target);
-      setOpenMetaData(false);
-    } else {
-      console.log("error");
-    }
+    ).then(() => {
+      if (target !== "") {
+        window.location.reload();
+      } else {
+        console.log("error");
+      }
+    });
   };
 
   return (

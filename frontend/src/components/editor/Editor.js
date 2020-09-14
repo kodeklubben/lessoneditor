@@ -92,9 +92,9 @@ const Editor = () => {
   useEffect(() => {
     getLessonData().then((res) => {
       setShowSpinner(true);
-      setData(res.data);
       if (lessonId && file) {
-        async function fetchData() {
+        async function fetchData(res) {
+          setData(res.data);
           const lessonText = await fetchMdText(
             lessonId,
             language === "nb" ? file : `${file}_${language}`
@@ -102,7 +102,7 @@ const Editor = () => {
           return lessonText;
         }
 
-        fetchData().then((lessonText) => {
+        fetchData(res).then((lessonText) => {
           setInitText(lessonText);
           let newText = lessonText;
           const parts = newText.split("---\n");
