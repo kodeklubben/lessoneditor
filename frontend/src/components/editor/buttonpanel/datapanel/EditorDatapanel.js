@@ -8,7 +8,6 @@ import { LessonContext } from "contexts/LessonContext";
 import { UserContext } from "contexts/UserContext";
 import saveMdText from "../../../../api/save-md-text";
 import createNewHeader from "../utils/createNewHeader";
-import { useHistory } from "react-router-dom";
 const EditorDatapanel = ({
   mdText,
   initText,
@@ -34,8 +33,6 @@ const EditorDatapanel = ({
   const getCourseFromSlug = COURSELIST.find(
     ({ slug }) => slug === context.data.course
   );
-
-  const history = useHistory();
 
   useEffect(() => {
     const setDataFromHeaderData = async () => {
