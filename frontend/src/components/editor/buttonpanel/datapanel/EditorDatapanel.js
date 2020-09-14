@@ -8,7 +8,6 @@ import { LessonContext } from "contexts/LessonContext";
 import { UserContext } from "contexts/UserContext";
 import saveMdText from "../../../../api/save-md-text";
 import createNewHeader from "../utils/createNewHeader";
-import { useHistory } from "react-router-dom";
 const EditorDatapanel = ({
   mdText,
   initText,
@@ -34,8 +33,6 @@ const EditorDatapanel = ({
   const getCourseFromSlug = COURSELIST.find(
     ({ slug }) => slug === context.data.course
   );
-
-  const history = useHistory();
 
   useEffect(() => {
     const setDataFromHeaderData = async () => {
@@ -89,17 +86,6 @@ const EditorDatapanel = ({
 
   const onCancel = async () => {
     let target = "";
-    if (
-      state.title === context.data.lesson.replace(/-/g, " ") &&
-      state.authorList[0] === userContext.user.name
-    ) {
-      setOpenMetaData(false);
-      return;
-    }
-    if (state.title === "" && state.authorList.length === 0) {
-      setOpenMetaData(false);
-      return;
-    }
     if (lessonId) {
       target = ["editor", lessonId, file, language].join("/");
     }
@@ -107,14 +93,13 @@ const EditorDatapanel = ({
       lessonId,
       language === "nb" ? file : `${file}_${language}`,
       initText
-    );
-    if (target !== "") {
-      history.push("/");
-      history.replace(target);
-      setOpenMetaData(false);
-    } else {
-      console.log("error");
-    }
+    ).then(() => {
+      if (target !== "") {
+        window.location.reload();
+      } else {
+        console.log("error");
+      }
+    });
   };
 
   return (

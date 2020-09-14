@@ -6,18 +6,21 @@ import { LessonContext } from "contexts/LessonContext";
 
 const LessonTexts = ({ lessonId }) => {
   const lesson = useContext(LessonContext);
-  const { data, lessonList } = lesson;
+  const { lessonList } = lesson;
 
   let languages = [];
   let allLanguages = ["nb", "nn", "en", "is"];
+  let lessonTitle = "";
 
   if (
     Object.keys(lessonList).length !== 0 &&
     lessonList.constructor !== Object
   ) {
     lessonList.forEach((element) => {
+      if (element.filename.slice(-2) !== "md") {
+        return;
+      }
       switch (
-        element.filename.slice(-2) === "md" &&
         element.filename.slice(0, 6) !== "README" &&
         element.filename.slice(-6, -3)
       ) {
@@ -37,6 +40,7 @@ const LessonTexts = ({ lessonId }) => {
           }
           break;
         default:
+          lessonTitle = element.filename.slice(0, -3);
           if (!languages.includes("nb")) {
             languages.push("nb");
           }
@@ -57,7 +61,7 @@ const LessonTexts = ({ lessonId }) => {
                   language={element}
                   hasContent={languages.includes(element)}
                   lessonId={lessonId}
-                  lessonTitle={data.lesson}
+                  lessonTitle={lessonTitle}
                 />
               </div>
             );

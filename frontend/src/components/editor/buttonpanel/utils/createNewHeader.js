@@ -3,14 +3,14 @@ const createNewHeader = (state, language) => {
     return;
   }
   const newHeader = `---
-title: ${state.title ? state.title : ""}
-author: ${state.authorList.length > 0 ? state.authorList : ""} ${
+title: ${state.title ? `"${state.title}"` : ""}
+author: ${state.authorList.length > 0 ? `"${state.authorList}"` : ""} ${
     state.translatorList && state.translatorList.length > 0
       ? `
-translator: ${state.translatorList}`
+translator: "${state.translatorList}"`
       : ""
   }
-language: ${language ? language : ""}
+language: ${language ? `"${language}"` : ""}
 ---`;
   return newHeader;
 };
