@@ -8,14 +8,7 @@ import { LessonContext } from "contexts/LessonContext";
 import { UserContext } from "contexts/UserContext";
 import saveMdText from "../../../../api/save-md-text";
 import createNewHeader from "../utils/createNewHeader";
-const EditorDatapanel = ({
-  mdText,
-  initText,
-  file,
-  openMetaData,
-  setOpenMetaData,
-  editorRef,
-}) => {
+const EditorDatapanel = ({ mdText, file, openMetaData, setOpenMetaData }) => {
   const { lessonId, language } = useParams();
   const context = useContext(LessonContext);
   const userContext = useContext(UserContext);
@@ -80,26 +73,14 @@ const EditorDatapanel = ({
       lessonId,
       language === "nb" ? file : `${file}_${language}`,
       newMdText
-    ).then(setOpenMetaData(false));
-    editorRef.current.focus();
+    ).then(
+      // setOpenMetaData(false)
+      window.location.reload()
+    );
   };
 
-  const onCancel = async () => {
-    let target = "";
-    if (lessonId) {
-      target = ["editor", lessonId, file, language].join("/");
-    }
-    await saveMdText(
-      lessonId,
-      language === "nb" ? file : `${file}_${language}`,
-      initText
-    ).then(() => {
-      if (target !== "") {
-        window.location.reload();
-      } else {
-        console.log("error");
-      }
-    });
+  const onCancel = () => {
+    window.location.reload();
   };
 
   return (

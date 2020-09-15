@@ -137,11 +137,7 @@ const Landingpage = () => {
               value={pageContent}
             />
           </div>
-          <Datapanel
-            setShowSpinner={setShowSpinner}
-            lessonId={lessonId}
-            mode={mode}
-          />
+          <Datapanel />
         </div>
       </div>
 
