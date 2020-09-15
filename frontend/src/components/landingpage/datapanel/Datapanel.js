@@ -56,8 +56,8 @@ const Datapanel = ({ lessonId, mode, setShowSpinner }) => {
   const onCancel = async () => {
     getYmlData().then(() => {
       const target = ["/landingpage", lessonId, mode].join("/");
-      history.push("/");
-      history.replace(target);
+      history.push(target);
+      window.location.reload();
     });
   };
 
