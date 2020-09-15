@@ -74,8 +74,6 @@ const ButtonPanel = ({
       if (file.slice(0, 6) !== "README" && language === "nb") {
         await saveMdText(lessonId, file, newMdText, true).then(() => {
           history.push(target);
-          // window.location.reload();
-          // setShowSpinner(false);
           return;
         });
       } else {
@@ -85,8 +83,6 @@ const ButtonPanel = ({
           newMdText
         ).then(() => {
           history.push(target);
-          // window.location.reload();
-          // setShowSpinner(false);
           return;
         });
       }

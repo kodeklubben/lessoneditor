@@ -73,10 +73,7 @@ const EditorDatapanel = ({ mdText, file, openMetaData, setOpenMetaData }) => {
       lessonId,
       language === "nb" ? file : `${file}_${language}`,
       newMdText
-    ).then(
-      // setOpenMetaData(false)
-      window.location.reload()
-    );
+    ).then(window.location.reload());
   };
 
   const onCancel = () => {
