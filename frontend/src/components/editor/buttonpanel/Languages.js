@@ -66,9 +66,9 @@ const Languages = ({ mdText, setShowSpinner }) => {
         newMdText
       ).then(() => {
         if (target !== "") {
-          history.push("/");
-          history.replace(target);
-          setShowSpinner(false);
+          history.push(target);
+          window.location.reload();
+          // setShowSpinner(false);
           return;
         } else {
           console.log("error");
