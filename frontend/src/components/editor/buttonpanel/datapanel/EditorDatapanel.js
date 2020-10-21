@@ -1,4 +1,4 @@
-import "./editordatapane.scss";
+import "./editordatapanel.scss";
 import React, { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router";
 import MultiInput from "./MultiInput";

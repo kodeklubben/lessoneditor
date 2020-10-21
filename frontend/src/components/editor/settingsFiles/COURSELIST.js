@@ -10,6 +10,7 @@ const COURSESLIST = [
   { courseTitle: "Python", slug: "python" },
   { courseTitle: "Scratch", slug: "scratch" },
   { courseTitle: "Web", slug: "web" },
+  { courseTitle: "Uten Datamaskin", slug: "uten_datamaskin" },
 ];
 
 export default COURSESLIST;

@@ -11,6 +11,7 @@ import fetchMdText from "../../api/fetch-md-text";
 import { LessonContext } from "contexts/LessonContext";
 import ShowSpinner from "../ShowSpinner";
 import parseMdHeader from "./utils/parseMdHeader";
+import laererveiledningMal from "../editor/settingsFiles/laererveiledningMal";
 
 const welcomeText = {
   nb: `# Velkommen til kidsakoder sin tekstbehandler! {.intro}`,
@@ -107,7 +108,9 @@ const Editor = () => {
           const body = parts[2] ? parts[2].trim() : "";
           if (body.length === 0) {
             setOpenMetaData(true);
-            setMdText(welcomeText[language]);
+            file === "README"
+              ? setMdText(laererveiledningMal)
+              : setMdText(welcomeText[language]);
             setHeaderData({});
             setShowSpinner(false);
             return;
