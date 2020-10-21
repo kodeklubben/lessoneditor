@@ -1,4 +1,4 @@
-const larerveiledningMal = `(TEKSTMAL FOR LÆRERVEILEDNING)
+const larerveiledningMal = `(TEKSTMAL FOR LÆRERVEILEDNING: )
 
 # Om oppgaven {.activity}
 
