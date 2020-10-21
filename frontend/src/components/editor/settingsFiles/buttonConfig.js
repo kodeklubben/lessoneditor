@@ -50,7 +50,7 @@ const KEY_COMBINATIONS = {
   image: [SHORTCUTKEY, plus, chars.p].join(""),
   listul: [SHORTCUTKEY, plus, chars.u].join(""),
   listol: [SHORTCUTKEY, plus, chars.o].join(""),
-  listcheck: [SHORTCUTKEY, plus, chars.c].join(""),
+  listcheck: [SHORTCUTKEY, plus, chars.r].join(""),
   activity: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.a].join(""),
   intro: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.i].join(""),
   check: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.c].join(""),
@@ -185,7 +185,7 @@ const lists = {
 const sections = {
   intro: {
     buttonTitle: "sec_intro",
-    output: "# " + SECTION_TEXT + " {.intro}\n",
+    output: "# " + SECTION_TEXT + " {.intro}\n#",
     title: BUTTON_TITLE.intro,
     cursorIntON: 2,
     cursorIntOFF: 10,
@@ -203,7 +203,7 @@ const sections = {
   },
   activity: {
     buttonTitle: "sec_activity",
-    output: "# " + SECTION_TEXT + " {.activity}\n",
+    output: "# " + SECTION_TEXT + " {.activity}\n#",
     title: BUTTON_TITLE.activity,
     cursorIntON: 2,
     cursorIntOFF: 13,
@@ -220,7 +220,7 @@ const sections = {
   },
   check: {
     buttonTitle: "sec_check",
-    output: "## " + SECTION_TEXT + " {.check}\n",
+    output: "## " + SECTION_TEXT + " {.check}\n#",
     title: BUTTON_TITLE.check,
     cursorIntON: 3,
     cursorIntOFF: 10,
@@ -238,10 +238,10 @@ const sections = {
   },
   tip: {
     buttonTitle: "sec_tip",
-    output: "## {.tip}\n" + SECTION_TEXT,
+    output: "## {.tip}\n" + SECTION_TEXT + "\n#",
     title: BUTTON_TITLE.tip,
     cursorIntON: 10,
-    cursorIntOFF: 19,
+    cursorIntOFF: 10,
     cancelInt: 10,
     shortcut: KEY_COMBINATIONS.tip,
     style: {
@@ -256,7 +256,7 @@ const sections = {
   },
   protip: {
     buttonTitle: "sec_protip",
-    output: "## " + SECTION_TEXT + " {.protip}\n",
+    output: "## " + SECTION_TEXT + " {.protip}\n#",
     title: BUTTON_TITLE.protip,
     cursorIntON: 3,
     cursorIntOFF: 11,
@@ -274,7 +274,7 @@ const sections = {
   },
   challenge: {
     buttonTitle: "sec_challenge",
-    output: "## " + SECTION_TEXT + " {.challenge}\n",
+    output: "## " + SECTION_TEXT + " {.challenge}\n#",
     title: BUTTON_TITLE.challenge,
     cursorIntON: 3,
     cursorIntOFF: 14,
@@ -291,7 +291,7 @@ const sections = {
   },
   flag: {
     buttonTitle: "sec_flag",
-    output: "## " + SECTION_TEXT + " {.flag}\n",
+    output: "## " + SECTION_TEXT + " {.flag}\n#",
     title: BUTTON_TITLE.flag,
     cursorIntON: 3,
     cursorIntOFF: 9,
@@ -310,7 +310,7 @@ const sections = {
   },
   try: {
     buttonTitle: "sec_try",
-    output: "# " + SECTION_TEXT + " {.try}\n",
+    output: "# " + SECTION_TEXT + " {.try}\n#",
     title: BUTTON_TITLE.try,
     cursorIntON: 2,
     cursorIntOFF: 8,
@@ -326,7 +326,7 @@ const sections = {
   },
   save: {
     buttonTitle: "sec_save",
-    output: "## " + SECTION_TEXT + " {.save}\n",
+    output: "## " + SECTION_TEXT + " {.save}\n#",
     title: BUTTON_TITLE.save,
     cursorIntON: 3,
     cursorIntOFF: 8,
