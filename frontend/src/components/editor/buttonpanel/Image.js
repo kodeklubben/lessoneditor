@@ -14,8 +14,7 @@ const Image = ({ editorRef, uploadImageRef }) => {
     (event) => {
       event.preventDefault();
 
-      uploadImageRef.current.click();
-      editorRef.current.focus();
+      handleButtonClick();
 
       return false;
     },

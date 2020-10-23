@@ -2,6 +2,7 @@ import "./buttonpanel.scss";
 import React, { useContext } from "react";
 import Emphasis from "./Emphasis";
 import UndoRedo from "./UndoRedo";
+import Hyperlink from "./Hyperlink";
 import Image from "./Image";
 import Languages from "./Languages";
 import Lists from "./Lists";
@@ -116,6 +117,17 @@ const ButtonPanel = ({
           setRedoCursorPosition={setRedoCursorPosition}
           setCursorPosition={setCursorPosition}
           setUndoCursorPosition={setUndoCursorPosition}
+        />
+        <Hyperlink
+          editorRef={editorRef}
+          mdText={mdText}
+          buttonValues={buttonValues}
+          cursorPositionStart={cursorPositionStart}
+          cursorPositionEnd={cursorPositionEnd}
+          setMdText={setMdText}
+          setCursorPosition={setCursorPosition}
+          setCursor={setCursor}
+          setButtonValues={setButtonValues}
         />
         <Image editorRef={editorRef} uploadImageRef={uploadImageRef} />
         <Lists

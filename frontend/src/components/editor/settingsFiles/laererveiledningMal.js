@@ -1,4 +1,4 @@
-const larerveiledningMal = `(TEKSTMAL FOR LÆRERVEILEDNING: )
+const larerveiledningMal = `(TEKSTMAL FOR LÆRERVEILEDNING)
 
 # Om oppgaven {.activity}
 
@@ -6,17 +6,17 @@ I denne oppgaven...
 
 ## Oppgaven passer til: {.check}
 
- __Fag__:
+ **Fag**:
 
-__Anbefalte trinn__:
+**Anbefalte trinn**:
 
-__Tema__:
+**Tema**:
 
-__Tidsbruk__:
+**Tidsbruk**:
 
 ## Kompetansemål {.challenge}
 
-- [ ] __Fag, årstrinn__:
+- [ ] **Fag, årstrinn**:
 
 ## Forslag til læringsmål {.challenge}
 
@@ -34,9 +34,9 @@ nyttige tips til hvordan man underviser i programmering.
 
 ## Forutsetninger og utstyr {.challenge}
 
-- [ ] __Forutsetninger__:
+- [ ] **Forutsetninger**:
 
-- [ ] __Utstyr__:
+- [ ] **Utstyr**:
 
 ## Fremgangsmåte
 
@@ -52,24 +52,24 @@ oppgaveteksten.](../OPPGAVENAVN/OPPGAVENAVN.html){target=_blank}
 
 - [ ] Elevene må ...
 
-__ELLER__
+**ELLER**
 
-_Vi har dessverre ikke noen tips, erfaringer eller utfordringer tilknyttet denne
-oppgaven enda._
+*Vi har dessverre ikke noen tips, erfaringer eller utfordringer tilknyttet denne
+oppgaven enda.*
 
 ## Variasjoner {.challenge}
 
 - [ ]  Elevene kan lage ...
 
-__ELLER__
+**ELLER**
 
-- [ ]  _Vi har dessverre ikke noen variasjoner tilknyttet denne oppgaven enda._
+- [ ]  *Vi har dessverre ikke noen variasjoner tilknyttet denne oppgaven enda.*
 
 ## Eksterne ressurser {.challenge}
 
 - [ ] Introduksjonsvideo om …
 
-__ELLER__
+**ELLER**
 
 - [ ] Foreløpig ingen eksterne ressurser ...`;
 
