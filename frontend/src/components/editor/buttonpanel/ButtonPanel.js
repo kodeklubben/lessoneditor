@@ -121,13 +121,11 @@ const ButtonPanel = ({
         <Hyperlink
           editorRef={editorRef}
           mdText={mdText}
-          buttonValues={buttonValues}
           cursorPositionStart={cursorPositionStart}
           cursorPositionEnd={cursorPositionEnd}
           setMdText={setMdText}
           setCursorPosition={setCursorPosition}
           setCursor={setCursor}
-          setButtonValues={setButtonValues}
         />
         <Image editorRef={editorRef} uploadImageRef={uploadImageRef} />
         <Lists

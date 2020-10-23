@@ -26,7 +26,7 @@ const Popup = ({
   editorRef,
 }) => {
   const [openNewWindow, setOpenNewWindow] = useState(false);
-  const [url, setUrl] = useState("");
+  const [url, setUrl] = useState("https://");
 
   let start = cursorPositionStart + 1;
   let end = cursorPositionEnd + languageNO.linkText.length + 1;
@@ -40,7 +40,7 @@ const Popup = ({
       );
       setIsOpen(false);
       setOpenNewWindow(false);
-      setUrl("");
+      setUrl("https://");
       editorRef.current.focus();
       setCursor(start, end);
       setCursorPosition(start, end);
@@ -52,7 +52,7 @@ const Popup = ({
       );
       setIsOpen(false);
       setOpenNewWindow(false);
-      setUrl("");
+      setUrl("https://");
       editorRef.current.focus();
       setCursor(start, end);
       setCursorPosition(start, end);
@@ -62,7 +62,7 @@ const Popup = ({
   const clickCancelHandler = () => {
     setIsOpen(false);
     setOpenNewWindow(false);
-    setUrl("");
+    setUrl("https://");
     editorRef.current.focus();
   };
 
@@ -129,13 +129,11 @@ const Popup = ({
 const Hyperlink = ({
   editorRef,
   mdText,
-  buttonValues,
   cursorPositionStart,
   cursorPositionEnd,
   setMdText,
   setCursorPosition,
   setCursor,
-  setButtonValues,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
