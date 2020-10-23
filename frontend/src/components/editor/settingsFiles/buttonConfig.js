@@ -47,6 +47,7 @@ const KEY_COMBINATIONS = {
   strikethrough: [SHORTCUTKEY, plus, chars.s].join(""),
   undo: [SHORTCUTKEY, plus, chars.z].join(""),
   redo: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.z].join(""),
+  hyperlink: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.h].join(""),
   image: [SHORTCUTKEY, plus, chars.p].join(""),
   listul: [SHORTCUTKEY, plus, chars.u].join(""),
   listol: [SHORTCUTKEY, plus, chars.o].join(""),
@@ -122,6 +123,18 @@ const undoRedo = {
     cursorIntON: 0,
     cursorIntOFF: 0,
     shortcut: KEY_COMBINATIONS.redo,
+  },
+};
+
+const hyperlink = {
+  hyperlink: {
+    buttonTitle: "hyperlink",
+    icon: "linkify",
+    output: "",
+    title: BUTTON_TITLE.hyperlink,
+    cursorIntON: 0,
+    cursorIntOFF: 0,
+    shortcut: KEY_COMBINATIONS.hyperlink,
   },
 };
 
@@ -387,6 +400,7 @@ const codebutton = {
 export {
   emphasis,
   undoRedo,
+  hyperlink,
   image,
   lists,
   preview,
