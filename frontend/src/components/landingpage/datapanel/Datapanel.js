@@ -121,7 +121,7 @@ const Datapanel = () => {
             onClick={() => setOpen(!open)}
           >
             <span>
-              <Icon color={"gray"} name={"tags"} /> Oppgavedata
+              <Icon color={"grey"} name={"tags"} /> Oppgavedata
             </span>
           </Button>
         }

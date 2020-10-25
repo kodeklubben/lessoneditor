@@ -184,7 +184,7 @@ const ButtonPanel = ({
                 size="big"
                 onClick={onSubmit}
               >
-                <Icon name={"arrow right"} />
+                <Icon color={"grey"} name={"arrow right"} />
               </Button>
             }
           />

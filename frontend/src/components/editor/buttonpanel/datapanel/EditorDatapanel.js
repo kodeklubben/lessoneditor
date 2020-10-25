@@ -96,7 +96,7 @@ const EditorDatapanel = ({ mdText, file, openMetaData, setOpenMetaData }) => {
             onClick={() => setOpenMetaData(!openMetaData)}
           >
             <span>
-              <Icon color={"gray"} name={"address card"} /> Oppgavedata
+              <Icon color={"grey"} name={"address card"} /> Oppgavedata
             </span>
           </Button>
         }

@@ -12,8 +12,6 @@ const Navbar = () => {
 
   const { file } = useParams();
 
-  console.log(file);
-
   return (
     <div>
       <nav className="navbar_container">
