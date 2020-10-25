@@ -1,5 +1,6 @@
 import "./datapanel.scss";
 import React, { useState, useEffect, useContext } from "react";
+import { Button, Icon, Popup } from "semantic-ui-react";
 import { YML_TEXT } from "../settingsFiles/languages/landingpage_NO";
 import { TagsGrade, TagsSubject, TagsTopic } from "./Tags";
 import CheckboxField from "./CheckboxField";
@@ -104,23 +105,28 @@ const Datapanel = () => {
 
   return (
     <>
-      <button
-        style={{
-          position: "relative",
-          top: "-3.5em",
-        }}
-        id="tagButton"
-        className="ui button"
-        onClick={() => setOpen(!open)}
-      >
-        <span>
-          <i
-            style={{ cursor: "pointer" }}
-            className="gray tags icon landingpage"
-          ></i>
-          {"Oppgavedata"}
-        </span>
-      </button>
+      <Popup
+        content={"Endre prosjektdata"}
+        mouseEnterDelay={250}
+        mouseLeaveDelay={250}
+        trigger={
+          <Button
+            style={{
+              position: "relative",
+              top: "-3.5em",
+            }}
+            className={`ui button`}
+            id="tagButton"
+            size="medium"
+            onClick={() => setOpen(!open)}
+          >
+            <span>
+              <Icon color={"gray"} name={"tags"} /> Oppgavedata
+            </span>
+          </Button>
+        }
+      />
+
       {open ? (
         <div
           style={open ? { display: "flex" } : { display: "none" }}

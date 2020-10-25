@@ -79,13 +79,13 @@ const Languages = ({ mdText, setShowSpinner }) => {
   return (
     <>
       <Popup
-        content={"Endre språk på oppgavetekst"}
+        content={"Endre språk for oppgavetekst"}
         mouseEnterDelay={250}
         mouseLeaveDelay={250}
         trigger={
           <Dropdown
             style={{
-              width: "13em",
+              width: "12em",
             }}
             placeholder="Velg Språk"
             name="language"

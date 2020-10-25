@@ -181,7 +181,7 @@ const ButtonPanel = ({
                 id="next"
                 disabled={mdText.length === 0}
                 // className="CPButton"
-                size="huge"
+                size="big"
                 onClick={onSubmit}
               >
                 <Icon name={"arrow right"} />

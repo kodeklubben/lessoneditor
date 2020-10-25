@@ -11,7 +11,7 @@ import ThankU from "./ThankU";
 import { LessonContext } from "contexts/LessonContext";
 import submitLesson from "api/submit-lesson";
 import ShowSpinner from "../ShowSpinner";
-import { Dropdown } from "semantic-ui-react";
+import { Dropdown, Popup } from "semantic-ui-react";
 import COURSELIST from "components/editor/settingsFiles/COURSELIST";
 
 const Landingpage = () => {
@@ -27,9 +27,9 @@ const Landingpage = () => {
   const courseNotSlug = COURSELIST.find(({ slug }) => slug === data.course);
 
   const options = [
-    { key: 1, text: "Modus: Elev", value: "lessontexts" },
-    { key: 2, text: "Modus: Lærer", value: "teacherguides" },
-    { key: 3, text: "Vis alle filer", value: "allfiles" },
+    { key: 1, text: "Oppgaver", value: "lessontexts" },
+    { key: 2, text: "Lærerveiledning", value: "teacherguides" },
+    { key: 3, text: "Alle filer", value: "allfiles" },
   ];
 
   useEffect(() => {
@@ -125,16 +125,23 @@ const Landingpage = () => {
         </h2>
         <div style={{ display: "flex", float: "right" }}>
           <div style={{ position: "relative", top: "-3.5em" }}>
-            <Dropdown
-              style={{
-                maxWidth: "3em",
-                border: "1px solid grey",
-              }}
-              onChange={handleChange}
-              options={options}
-              placeholder="Choose an option"
-              selection
-              value={pageContent}
+            <Popup
+              content={"Oversikt prosjektfiler"}
+              mouseEnterDelay={250}
+              mouseLeaveDelay={250}
+              trigger={
+                <Dropdown
+                  style={{
+                    maxWidth: "3em",
+                    border: "1px solid grey",
+                  }}
+                  onChange={handleChange}
+                  options={options}
+                  placeholder="Choose an option"
+                  selection
+                  value={pageContent}
+                />
+              }
             />
           </div>
           <Datapanel />

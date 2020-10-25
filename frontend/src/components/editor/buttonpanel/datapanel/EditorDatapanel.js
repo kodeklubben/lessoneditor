@@ -92,13 +92,11 @@ const EditorDatapanel = ({ mdText, file, openMetaData, setOpenMetaData }) => {
             style={{ height: "2em", padding: "0 1em 0 1em", margin: "0" }}
             className={`ui button`}
             id="next"
-            disabled={mdText.length === 0}
-            // className="CPButton"
-            size="huge"
+            size="big"
             onClick={() => setOpenMetaData(!openMetaData)}
           >
             <span>
-              <Icon name={"grey address card"} /> Oppgavedata
+              <Icon color={"gray"} name={"address card"} /> Oppgavedata
             </span>
           </Button>
         }
