@@ -12,13 +12,7 @@ import { LessonContext } from "contexts/LessonContext";
 import ShowSpinner from "../ShowSpinner";
 import parseMdHeader from "./utils/parseMdHeader";
 import laererveiledningMal from "../editor/settingsFiles/laererveiledningMal";
-
-const welcomeText = {
-  nb: `# Velkommen til kidsakoder sin tekstbehandler! {.intro}`,
-  nn: "# Nynorsk velkomst...",
-  en: "# English welcome",
-  is: `Verið velkomin til ritstjóra`,
-};
+import oppgaveMal from "../editor/settingsFiles/oppgaveMal";
 
 const Editor = () => {
   const { lessonId, file, language } = useParams();
@@ -110,7 +104,7 @@ const Editor = () => {
             setOpenMetaData(true);
             file === "README"
               ? setMdText(laererveiledningMal)
-              : setMdText(welcomeText[language]);
+              : setMdText(oppgaveMal);
             setHeaderData({});
             setShowSpinner(false);
             return;

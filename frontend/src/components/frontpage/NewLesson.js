@@ -4,7 +4,12 @@ import COURSESLIST from "../editor/settingsFiles/COURSELIST";
 import { UserContext } from "../../contexts/UserContext";
 import { useHistory } from "react-router";
 
+const githubUrl =
+  "https://github.com/kodeklubben/oppgaver/blob/master/filtertags/keys.yml";
+
 const NewLesson = ({ setShowPopup, setShowSpinner }) => {
+  console.log(fetch(githubUrl));
+
   const history = useHistory();
   const user = useContext(UserContext);
   const [values, setValues] = useState({

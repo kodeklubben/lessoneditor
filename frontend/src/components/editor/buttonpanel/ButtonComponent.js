@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Icon, Popup } from "semantic-ui-react";
 
-const Buttons = ({
+const ButtonComponent = ({
   buttonValues,
   icon,
   title,
@@ -94,4 +94,4 @@ const Buttons = ({
   return responsiveCP();
 };
 
-export default Buttons;
+export default ButtonComponent;

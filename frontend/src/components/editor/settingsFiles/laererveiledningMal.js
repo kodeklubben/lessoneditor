@@ -28,7 +28,7 @@ Det er mange ulike måter man kan vurdere et programmeringsprosjekt, og her må 
 selv vurdere hva som er den beste måten ut ifra hvilket fag man jobber i,
 hvilken aldergruppe og hviklet nivå elevene er på, hva man ønsker å teste og
 hvor mye tid man har til rådighet til å jobbe med prosjektet. I vårt
-[lærerdokument](pages/guide_bruk_lærerveiledning.md){target=_blank} har vi blant
+[lærerdokument](https://github.com/kodeklubben/oppgaver/wiki/Hvordan-undervise-i-og-vurdere-programmering){target=_blank} har vi blant
 annet beskrevet ulike måter dette kan gjøres på, tillegg til en del andre
 nyttige tips til hvordan man underviser i programmering.
 
@@ -41,8 +41,7 @@ nyttige tips til hvordan man underviser i programmering.
 ## Fremgangsmåte
 
 Her kommer tips, erfaring og utfordringer til de ulike stegene i den faktiske
-oppgaven. [Klikk her for å se
-oppgaveteksten.](../OPPGAVENAVN/OPPGAVENAVN.html){target=_blank}
+oppgaven. 
 
 # Steg 1:... {.activity}
 
