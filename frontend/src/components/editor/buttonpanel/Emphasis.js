@@ -1,5 +1,5 @@
 import React from "react";
-import CPButton from "./ButtonComponent";
+import ButtonComponent from "./ButtonComponent";
 
 import { useHotkeys } from "react-hotkeys-hook";
 
@@ -181,7 +181,7 @@ const Emphasis = ({
       {Object.entries(config).map((element, index) => {
         // console.log(element);
         return (
-          <CPButton
+          <ButtonComponent
             key={"element" + index}
             buttonValues={buttonValues}
             icon={element[1].icon}

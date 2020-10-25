@@ -32,31 +32,23 @@ const Popup = ({
   let end = cursorPositionEnd + languageNO.linkText.length + 1;
 
   const clickOKHandler = () => {
-    if (openNewWindow) {
-      setMdText(
-        mdText.slice(0, cursorPositionStart) +
-          `[${languageNO.linkText}](${url}){target=_blank}` +
-          mdText.slice(cursorPositionStart)
-      );
-      setIsOpen(false);
-      setOpenNewWindow(false);
-      setUrl("https://");
-      editorRef.current.focus();
-      setCursor(start, end);
-      setCursorPosition(start, end);
-    } else {
-      setMdText(
-        mdText.slice(0, cursorPositionStart) +
-          `[${languageNO.linkText}](${url})` +
-          mdText.slice(cursorPositionStart)
-      );
-      setIsOpen(false);
-      setOpenNewWindow(false);
-      setUrl("https://");
-      editorRef.current.focus();
-      setCursor(start, end);
-      setCursorPosition(start, end);
-    }
+    openNewWindow
+      ? setMdText(
+          mdText.slice(0, cursorPositionStart) +
+            `[${languageNO.linkText}](${url}){target=_blank}` +
+            mdText.slice(cursorPositionStart)
+        )
+      : setMdText(
+          mdText.slice(0, cursorPositionStart) +
+            `[${languageNO.linkText}](${url})` +
+            mdText.slice(cursorPositionStart)
+        );
+    setIsOpen(false);
+    setOpenNewWindow(false);
+    setUrl("https://");
+    editorRef.current.focus();
+    setCursor(start, end);
+    setCursorPosition(start, end);
   };
 
   const clickCancelHandler = () => {
@@ -115,7 +107,11 @@ const Popup = ({
             <label>{languageNO.openNewWindow}</label>
           </div>
         </div>
-        <button disabled={!url} className="ui button" onClick={clickOKHandler}>
+        <button
+          disabled={url === "https://"}
+          className="ui button"
+          onClick={clickOKHandler}
+        >
           {languageNO.ok}
         </button>
         <button className="ui button" onClick={clickCancelHandler}>

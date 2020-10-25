@@ -1,7 +1,7 @@
 import React, { useContext, useEffect } from "react";
 import { useParams, useHistory } from "react-router";
 import { LessonContext } from "contexts/LessonContext";
-import { Dropdown } from "semantic-ui-react";
+import { Popup, Dropdown } from "semantic-ui-react";
 import saveMdText from "../../../api/save-md-text";
 import createNewHeader from "./utils/createNewHeader";
 
@@ -78,17 +78,24 @@ const Languages = ({ mdText, setShowSpinner }) => {
   };
   return (
     <>
-      <Dropdown
-        style={{
-          width: "13em",
-        }}
-        placeholder="Velg Språk"
-        name="language"
-        defaultValue={language}
-        fluid
-        selection
-        onChange={handleChange}
-        options={languageOptions}
+      <Popup
+        content={"Endre språk på oppgavetekst"}
+        mouseEnterDelay={250}
+        mouseLeaveDelay={250}
+        trigger={
+          <Dropdown
+            style={{
+              width: "13em",
+            }}
+            placeholder="Velg Språk"
+            name="language"
+            defaultValue={language}
+            fluid
+            selection
+            onChange={handleChange}
+            options={languageOptions}
+          />
+        }
       />
     </>
   );

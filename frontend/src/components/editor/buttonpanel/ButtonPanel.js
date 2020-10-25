@@ -1,5 +1,6 @@
 import "./buttonpanel.scss";
 import React, { useContext } from "react";
+import { Button, Icon, Popup } from "semantic-ui-react";
 import Emphasis from "./Emphasis";
 import UndoRedo from "./UndoRedo";
 import Hyperlink from "./Hyperlink";
@@ -93,55 +94,65 @@ const ButtonPanel = ({
   return (
     <div className="buttonpanel" style={{ paddingBottom: "0.25em" }}>
       <div style={{ display: "inline" }}>
-        <Emphasis
-          editorRef={editorRef}
-          mdText={mdText}
-          buttonValues={buttonValues}
-          cursorPositionStart={cursorPositionStart}
-          cursorPositionEnd={cursorPositionEnd}
-          setMdText={setMdText}
-          setCursorPosition={setCursorPosition}
-          setCursor={setCursor}
-          setButtonValues={setButtonValues}
-        />
-        <UndoRedo
-          editorRef={editorRef}
-          mdText={mdText}
-          undo={undo}
-          redo={redo}
-          cursorPositionStart={cursorPositionStart}
-          undoCursorPosition={undoCursorPosition}
-          redoCursorPosition={redoCursorPosition}
-          pushUndoValue={pushUndoValue}
-          pushRedoValue={pushRedoValue}
-          setRedoCursorPosition={setRedoCursorPosition}
-          setCursorPosition={setCursorPosition}
-          setUndoCursorPosition={setUndoCursorPosition}
-        />
-        <Hyperlink
-          editorRef={editorRef}
-          mdText={mdText}
-          cursorPositionStart={cursorPositionStart}
-          cursorPositionEnd={cursorPositionEnd}
-          setMdText={setMdText}
-          setCursorPosition={setCursorPosition}
-          setCursor={setCursor}
-        />
-        <Image editorRef={editorRef} uploadImageRef={uploadImageRef} />
-        <Lists
-          editorRef={editorRef}
-          mdText={mdText}
-          buttonValues={buttonValues}
-          cursorPositionStart={cursorPositionStart}
-          cursorPositionEnd={cursorPositionEnd}
-          setMdText={setMdText}
-          setCursorPosition={setCursorPosition}
-          setCursor={setCursor}
-          setListButtonValues={setListButtonValues}
-          setButtonValues={setButtonValues}
-        />
-
-        <div style={{ display: "flex", float: "right" }}>
+        <div className="ui icon buttons">
+          <Emphasis
+            editorRef={editorRef}
+            mdText={mdText}
+            buttonValues={buttonValues}
+            cursorPositionStart={cursorPositionStart}
+            cursorPositionEnd={cursorPositionEnd}
+            setMdText={setMdText}
+            setCursorPosition={setCursorPosition}
+            setCursor={setCursor}
+            setButtonValues={setButtonValues}
+          />
+        </div>
+        <span style={{ margin: "1.5em" }} />
+        <div className="ui icon buttons">
+          <UndoRedo
+            editorRef={editorRef}
+            mdText={mdText}
+            undo={undo}
+            redo={redo}
+            cursorPositionStart={cursorPositionStart}
+            undoCursorPosition={undoCursorPosition}
+            redoCursorPosition={redoCursorPosition}
+            pushUndoValue={pushUndoValue}
+            pushRedoValue={pushRedoValue}
+            setRedoCursorPosition={setRedoCursorPosition}
+            setCursorPosition={setCursorPosition}
+            setUndoCursorPosition={setUndoCursorPosition}
+          />
+        </div>
+        <span style={{ margin: "1.5em" }} />
+        <div className="ui icon buttons">
+          <Hyperlink
+            editorRef={editorRef}
+            mdText={mdText}
+            cursorPositionStart={cursorPositionStart}
+            cursorPositionEnd={cursorPositionEnd}
+            setMdText={setMdText}
+            setCursorPosition={setCursorPosition}
+            setCursor={setCursor}
+          />
+          <Image editorRef={editorRef} uploadImageRef={uploadImageRef} />
+        </div>
+        <span style={{ margin: "1.5em" }} />
+        <div className="ui icon buttons">
+          <Lists
+            editorRef={editorRef}
+            mdText={mdText}
+            buttonValues={buttonValues}
+            cursorPositionStart={cursorPositionStart}
+            cursorPositionEnd={cursorPositionEnd}
+            setMdText={setMdText}
+            setCursorPosition={setCursorPosition}
+            setCursor={setCursor}
+            setListButtonValues={setListButtonValues}
+            setButtonValues={setButtonValues}
+          />
+        </div>
+        <div style={{ display: "flex", float: "right", height: "1em" }}>
           <Languages
             mdText={mdText}
             file={file}
@@ -153,16 +164,30 @@ const ButtonPanel = ({
             openMetaData={openMetaData}
             setOpenMetaData={setOpenMetaData}
           />
-          <button
-            className={`ui ${
-              mdText && mdText.length < 1 ? `disabled` : ``
-            } button`}
-            id="next"
-            disabled={mdText.length === 0}
-            onClick={onSubmit}
-          >
-            <i className="arrow right icon" />
-          </button>
+          <Popup
+            content={"Til prosjektoversikt"}
+            mouseEnterDelay={250}
+            mouseLeaveDelay={250}
+            trigger={
+              <Button
+                style={{
+                  height: "2em",
+                  marginRight: "-0.5em",
+                  padding: "0 1em 0 1em",
+                }}
+                className={`ui ${
+                  mdText && mdText.length < 1 ? `disabled` : ``
+                } button`}
+                id="next"
+                disabled={mdText.length === 0}
+                // className="CPButton"
+                size="huge"
+                onClick={onSubmit}
+              >
+                <Icon name={"arrow right"} />
+              </Button>
+            }
+          />
         </div>
       </div>
 

@@ -1,6 +1,7 @@
 import "./editordatapanel.scss";
 import React, { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router";
+import { Button, Icon, Popup } from "semantic-ui-react";
 import MultiInput from "./MultiInput";
 import { FORM_TEXT } from "./settings/landingpage_NO.js";
 import COURSELIST from "components/editor/settingsFiles/COURSELIST";
@@ -82,18 +83,26 @@ const EditorDatapanel = ({ mdText, file, openMetaData, setOpenMetaData }) => {
 
   return (
     <>
-      <button
-        className="ui button"
-        onClick={() => setOpenMetaData(!openMetaData)}
-      >
-        <span>
-          <i
-            style={{ cursor: "pointer" }}
-            className="grey  address card icon"
-          ></i>
-          {"Oppgavedata"}
-        </span>
-      </button>
+      <Popup
+        content={"Endre data for oppgavetekst"}
+        mouseEnterDelay={250}
+        mouseLeaveDelay={250}
+        trigger={
+          <Button
+            style={{ height: "2em", padding: "0 1em 0 1em", margin: "0" }}
+            className={`ui button`}
+            id="next"
+            disabled={mdText.length === 0}
+            // className="CPButton"
+            size="huge"
+            onClick={() => setOpenMetaData(!openMetaData)}
+          >
+            <span>
+              <Icon name={"grey address card"} /> Oppgavedata
+            </span>
+          </Button>
+        }
+      />
 
       {openMetaData ? (
         <div
