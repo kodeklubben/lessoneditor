@@ -1,3 +1,47 @@
+import Axios from "axios";
+const githubUrlKeys =
+  "https://raw.githubusercontent.com/kodeklubben/oppgaver/master/filtertags/keys.yml";
+
+const githubUrlTranslationNB =
+  "https://api.github.com/repos/kodeklubben/oppgaver/contents/filtertags/translation_nb.yml";
+
+const testGit =
+  "https://api.github.com/repos/kodeklubben/oppgaver/contents/src/";
+
+let courseList = [];
+
+const yaml = require("js-yaml");
+
+const test = Axios.get(githubUrlKeys).then((response) => {
+  return yaml.safeLoad(response.data);
+});
+
+const test2 = Axios.get(githubUrlTranslationNB).then((response) => {
+  console.log(yaml.safeLoad(atob(response.data.content)));
+  return yaml.safeLoad(response.data);
+});
+
+const test3 = Axios.get(testGit).then((response) => {
+  for (let i = 0; i < response.data.length; i++) {
+    console.log(response.data[i].type === "dir" ? response.data[i].name : "");
+    if (response.data[i].type === "dir")
+      courseList = [...courseList, response.data[i].name];
+  }
+  return response.data;
+});
+
+console.log(test);
+
+console.log(test2);
+
+console.log(test3);
+
+console.log(courseList);
+
+for (let a in courseList) {
+  console.log(a);
+}
+
 // Languages title
 const LANGUAGES = [
   {
