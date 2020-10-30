@@ -1,4 +1,4 @@
-const COURSESLIST = [
+const COURSESLISTold = [
   { courseTitle: "App Inventor", slug: "appinventor" },
   { courseTitle: "Arduino", slug: "arduino" },
   { courseTitle: "Code Studio", slug: "codestudio" },
@@ -13,4 +13,4 @@ const COURSESLIST = [
   { courseTitle: "Uten Datamaskin", slug: "uten_datamaskin" },
 ];
 
-export default COURSESLIST;
+export default COURSESLISTold;

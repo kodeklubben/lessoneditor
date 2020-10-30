@@ -1,3 +1,63 @@
+// import Axios from "axios";
+
+// const githubUrlKeys =
+//   "https://raw.githubusercontent.com/kodeklubben/oppgaver/master/filtertags/keys.yml";
+
+// const githubUrlTranslationNB =
+//   "https://api.github.com/repos/kodeklubben/oppgaver/contents/filtertags/translation_nb.yml";
+
+// const testGit =
+//   "https://api.github.com/repos/kodeklubben/oppgaver/contents/src/";
+
+// let courseList = {};
+
+// const yaml = require("js-yaml");
+
+// const test = Axios.get(githubUrlKeys).then(response => {
+//   return yaml.safeLoad(response.data);
+// });
+
+// const test2 = Axios.get(githubUrlTranslationNB).then(response => {
+//   let buff = new Buffer.from(response.data.content, "base64");
+//   let text = buff.toString("utf8");
+//   // console.log(text);
+//   console.log(yaml.safeLoad(text));
+//   return yaml.safeLoad(response.data);
+// });
+
+// const test3 = Axios.get(testGit).then(response => {
+//   for (let i of response.data) {
+//     // console.log(response.data[i].type === "dir" ? response.data[i].name : "");
+//     if (i.type === "dir") {
+//       console.log(i.name);
+
+//       const title = Axios.get(testGit + i.name + "/index.md")
+//         .then(response => {
+//           let buff = new Buffer.from(response.data.content, "base64");
+//           let text = yaml.safeLoad(buff.toString("utf8").split("---")[1]);
+//           return text.title;
+//         })
+//         .then(response => {
+//           courseList = { ...courseList, [i.name]: response };
+//         });
+//     }
+//   }
+// });
+
+// console.log(test);
+
+// console.log(test2);
+
+// console.log(test3);
+
+// console.log(courseList);
+
+// console.log(courseList);
+
+// setTimeout(() => {
+//   console.log(courseList);
+// }, 8000);
+
 // Languages title
 const LANGUAGES = [
   {
