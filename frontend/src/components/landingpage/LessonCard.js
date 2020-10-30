@@ -27,8 +27,8 @@ const languageOptions = {
 const LessonCard = ({ title, lessonId, language, hasContent, lessonTitle }) => {
   const history = useHistory();
 
-  const navigateToEditor = (lessonId, file, language) => {
-    const target = ["/editor", lessonId, file, language].join("/");
+  const navigateToEditor = (lessonId, lessonTitle, language) => {
+    const target = ["/editor", lessonId, lessonTitle, language].join("/");
     history.push(target);
   };
 

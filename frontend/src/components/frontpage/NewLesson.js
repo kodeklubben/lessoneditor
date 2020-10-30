@@ -69,7 +69,8 @@ const NewLesson = ({ showSpinner, setShowPopup, setShowSpinner }) => {
       }
     }
     fecthData().then(setShowSpinner(false));
-  });
+    // eslint-disable-next-line
+  }, []);
 
   const onChange = (e) => {
     const { name, value } = e.target;
