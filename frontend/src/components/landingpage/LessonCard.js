@@ -90,21 +90,12 @@ const LessonCard = ({ title, lessonId, language, hasContent, lessonTitle }) => {
         </div>
 
         <div className="extra content">
-          {hasContent ? (
-            <button
-              className="ui button"
-              onClick={() => navigateToEditor(lessonId, lessonTitle, language)}
-            >
-              Åpne
-            </button>
-          ) : (
-            <button
-              className="ui button"
-              onClick={() => navigateToEditor(lessonId, lessonTitle, language)}
-            >
-              Lag tekstfil
-            </button>
-          )}
+          <button
+            className="ui button"
+            onClick={() => navigateToEditor(lessonId, lessonTitle, language)}
+          >
+            {hasContent ? "Åpne" : "Lag tekstfil"}
+          </button>
         </div>
       </div>
     </div>
