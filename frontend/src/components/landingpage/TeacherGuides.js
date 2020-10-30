@@ -16,34 +16,32 @@ const TeacherGuides = ({ lessonId, lessonList }) => {
       if (element.filename.slice(-2) !== "md") {
         return;
       }
-      switch (
-        element.filename.slice(0, 6) === "README"
-          ? element.filename.slice(-6, -3)
-          : ""
-      ) {
-        case "_nn":
-          if (!languages.includes("nn")) {
-            languages.push("nn");
-          }
-          break;
-        case "_en":
-          if (!languages.includes("en")) {
-            languages.push("en");
-          }
-          break;
-        case "_is":
-          if (!languages.includes("is")) {
-            languages.push("is");
-          }
-          break;
-        default:
-          if (
-            !languages.includes("nb") &&
-            element.filename.slice(0, 6) === "README"
-          ) {
-            languages.push("nb");
-          }
-          break;
+      if (element.filename.slice(0, 6) === "README") {
+        switch (element.filename.slice(-6, -3)) {
+          case "_nn":
+            if (!languages.includes("nn")) {
+              languages.push("nn");
+            }
+            break;
+          case "_en":
+            if (!languages.includes("en")) {
+              languages.push("en");
+            }
+            break;
+          case "_is":
+            if (!languages.includes("is")) {
+              languages.push("is");
+            }
+            break;
+          default:
+            if (
+              !languages.includes("nb") &&
+              element.filename.slice(0, 6) === "README"
+            ) {
+              languages.push("nb");
+            }
+            break;
+        }
       }
     });
   }

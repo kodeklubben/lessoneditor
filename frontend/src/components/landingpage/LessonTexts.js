@@ -16,36 +16,38 @@ const LessonTexts = ({ lessonId, lessonList }) => {
     Object.keys(lessonList).length !== 0 &&
     lessonList.constructor !== Object
   ) {
+    console.log(lessonTitle);
     lessonList.forEach((element) => {
       if (element.filename.slice(-2) !== "md") {
         return;
       }
-      switch (
-        element.filename.slice(0, 6) !== "README"
-          ? element.filename.slice(-6, -3)
-          : ""
-      ) {
-        case "_nn":
-          if (!languages.includes("nn")) {
-            languages.push("nn");
-          }
-          break;
-        case "_en":
-          if (!languages.includes("en")) {
-            languages.push("en");
-          }
-          break;
-        case "_is":
-          if (!languages.includes("is")) {
-            languages.push("is");
-          }
-          break;
-        default:
-          lessonTitle = element.filename.slice(0, -3);
-          if (!languages.includes("nb")) {
-            languages.push("nb");
-          }
-          break;
+      if (element.filename.slice(0, 6) !== "README") {
+        switch (element.filename.slice(-6, -3)) {
+          case "_nn":
+            lessonTitle = element.filename.slice(0, -6);
+            if (!languages.includes("nn")) {
+              languages.push("nn");
+            }
+            break;
+          case "_en":
+            lessonTitle = element.filename.slice(0, -6);
+            if (!languages.includes("en")) {
+              languages.push("en");
+            }
+            break;
+          case "_is":
+            lessonTitle = element.filename.slice(0, -6);
+            if (!languages.includes("is")) {
+              languages.push("is");
+            }
+            break;
+          default:
+            lessonTitle = element.filename.slice(0, -6);
+            if (!languages.includes("nb")) {
+              languages.push("nb");
+            }
+            break;
+        }
       }
     });
   }

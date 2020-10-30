@@ -30,20 +30,21 @@ const EditorDatapanel = ({ mdText, file, openMetaData, setOpenMetaData }) => {
 
   useEffect(() => {
     const setDataFromHeaderData = async () => {
-      if (Object.keys(headerData).length > 0) {
+      if (Object.keys(await headerData).length > 0) {
         setState(await headerData);
+      } else if (await userContext.user.name) {
+        setState((prevState) => ({
+          ...prevState,
+          authorList: [userContext.user.name],
+          title: context.data.lesson
+            ? context.data.lesson.replace(/-/g, " ")
+            : "",
+        }));
       } else {
         setState({ title: "", authorList: [] });
       }
     };
     setDataFromHeaderData();
-    setState((prevState) => ({
-      ...prevState,
-      authorList: [userContext?.user?.name ? userContext?.user?.name : ""],
-      title: context?.data?.lesson
-        ? context?.data?.lesson.replace(/-/g, " ")
-        : "",
-    }));
   }, [headerData, context.data.lesson, userContext.user]);
 
   const changeHandler = (event) => {
