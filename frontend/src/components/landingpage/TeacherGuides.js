@@ -12,6 +12,7 @@ const TeacherGuides = ({ lessonId, lessonList }) => {
     lessonList.constructor !== Object
   ) {
     lessonList.forEach((element) => {
+      console.log(element.filename.slice(-6, -3));
       if (element.filename.slice(-2) !== "md") {
         return;
       }
@@ -20,18 +21,18 @@ const TeacherGuides = ({ lessonId, lessonList }) => {
           ? element.filename.slice(-6, -3)
           : ""
       ) {
-        case "nn":
-          if (!languages.includes("_nn")) {
+        case "_nn":
+          if (!languages.includes("nn")) {
             languages.push("nn");
           }
           break;
-        case "en":
-          if (!languages.includes("_en")) {
+        case "_en":
+          if (!languages.includes("en")) {
             languages.push("en");
           }
           break;
-        case "is":
-          if (!languages.includes("_is")) {
+        case "_is":
+          if (!languages.includes("is")) {
             languages.push("is");
           }
           break;
