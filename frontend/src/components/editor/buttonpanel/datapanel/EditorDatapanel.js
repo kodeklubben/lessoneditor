@@ -4,7 +4,7 @@ import { useParams } from "react-router";
 import { Button, Icon, Popup } from "semantic-ui-react";
 import MultiInput from "./MultiInput";
 import { FORM_TEXT } from "./settings/landingpage_NO.js";
-import COURSELIST from "components/editor/settingsFiles/COURSELIST";
+import { COURSESLIST } from "components/editor/settingsFiles/COURSELIST";
 import { LessonContext } from "contexts/LessonContext";
 import { UserContext } from "contexts/UserContext";
 import saveMdText from "../../../../api/save-md-text";
@@ -24,7 +24,7 @@ const EditorDatapanel = ({ mdText, file, openMetaData, setOpenMetaData }) => {
     is: "Islandsk",
   };
 
-  const getCourseFromSlug = COURSELIST.find(
+  const getCourseFromSlug = COURSESLIST.find(
     ({ slug }) => slug === context.data.course
   );
 

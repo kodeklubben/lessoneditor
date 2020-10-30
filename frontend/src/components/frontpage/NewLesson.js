@@ -1,77 +1,18 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import slugify from "slugify";
-import COURSESLISTold from "components/editor/settingsFiles/COURSELIST";
+import { COURSESLIST } from "components/editor/settingsFiles/COURSELIST";
 import { UserContext } from "../../contexts/UserContext";
 import { useHistory } from "react-router";
-import Axios from "axios";
-import yaml from "js-yaml";
 import ShowSpinner from "../ShowSpinner";
-
-const GITHUB_URL =
-  "https://api.github.com/repos/kodeklubben/oppgaver/contents/src/";
 
 const NewLesson = ({ showSpinner, setShowPopup, setShowSpinner }) => {
   const history = useHistory();
   const user = useContext(UserContext);
-  const [COURSESLIST, setCOURSESLIST] = useState([]);
   const [values, setValues] = useState({
     lessonTitle: "",
-    course:
-      COURSESLIST.length !== 0 ? COURSESLIST[0].slug : COURSESLISTold[0].slug,
+    course: "COURSESLIST[0].slug",
   });
   const [error, setError] = useState("Oppgavetittel må være satt");
-
-  useEffect(() => {
-    async function fecthData() {
-      setShowSpinner(true);
-      const getCourseList = () =>
-        Axios.get(GITHUB_URL)
-          .then((response) => response.data)
-          .catch((error) => {
-            console.log(error);
-            setCOURSESLIST(COURSESLISTold);
-            setShowSpinner(false);
-          });
-
-      const test1 = await getCourseList();
-
-      const getCourseTitle = (i) =>
-        Axios.get(GITHUB_URL + i.name + "/index.md")
-          .then((response) => {
-            let buff = new Buffer.from(response.data.content, "base64");
-            let text = yaml.safeLoad(buff.toString("utf8").split("---")[1]);
-            return text.title;
-          })
-          .catch((error) => {
-            console.log(error);
-            setShowSpinner(false);
-          });
-
-      if (typeof test1 !== "undefined") {
-        for (let i of test1) {
-          if (i.type === "dir") {
-            if (i.name === "sponsorer") continue;
-            console.log(i.name);
-            const title = await getCourseTitle(i);
-            console.log("title : " + title);
-            setCOURSESLIST((prevState) => [
-              ...prevState,
-              {
-                courseTitle: title,
-                slug: i.name,
-              },
-            ]);
-          }
-        }
-      } else {
-        setCOURSESLIST(COURSESLISTold);
-        setShowSpinner(false);
-      }
-    }
-    fecthData().then(setShowSpinner(false));
-    // eslint-disable-next-line
-  }, []);
-
 
   const onChange = (e) => {
     const { name, value } = e.target;
