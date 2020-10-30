@@ -1,6 +1,6 @@
 import React from "react";
 import { Button, Popup } from "semantic-ui-react";
-import COURSELIST from "components/editor/settingsFiles/COURSELIST";
+import { COURSESLIST } from "components/editor/settingsFiles/COURSELIST";
 
 const CodeButtons = ({
   buttonValues,
@@ -12,7 +12,7 @@ const CodeButtons = ({
   style,
 }) => {
   const responsiveCP = () => {
-    const courseNotSlug = COURSELIST.find(({ slug }) => slug === course);
+    const courseNotSlug = COURSESLIST.find(({ slug }) => slug === course);
 
     return (
       <>

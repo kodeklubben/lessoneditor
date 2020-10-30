@@ -12,7 +12,7 @@ import { LessonContext } from "contexts/LessonContext";
 import submitLesson from "api/submit-lesson";
 import ShowSpinner from "../ShowSpinner";
 import { Dropdown, Popup } from "semantic-ui-react";
-import COURSELIST from "components/editor/settingsFiles/COURSELIST";
+import { COURSESLIST } from "components/editor/settingsFiles/COURSELIST";
 
 const Landingpage = () => {
   const [pageContent, setPageContent] = useState("lessontexts");
@@ -24,7 +24,7 @@ const Landingpage = () => {
   const lesson = useContext(LessonContext);
   const { data, saveLesson, lessonList } = lesson;
 
-  const courseNotSlug = COURSELIST.find(({ slug }) => slug === data.course);
+  const courseNotSlug = COURSESLIST.find(({ slug }) => slug === data.course);
 
   const options = [
     { key: 1, text: "Oppgaver", value: "lessontexts" },
