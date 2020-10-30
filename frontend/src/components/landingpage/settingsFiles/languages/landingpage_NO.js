@@ -1,46 +1,62 @@
-import Axios from "axios";
-const githubUrlKeys =
-  "https://raw.githubusercontent.com/kodeklubben/oppgaver/master/filtertags/keys.yml";
+// import Axios from "axios";
 
-const githubUrlTranslationNB =
-  "https://api.github.com/repos/kodeklubben/oppgaver/contents/filtertags/translation_nb.yml";
+// const githubUrlKeys =
+//   "https://raw.githubusercontent.com/kodeklubben/oppgaver/master/filtertags/keys.yml";
 
-const testGit =
-  "https://api.github.com/repos/kodeklubben/oppgaver/contents/src/";
+// const githubUrlTranslationNB =
+//   "https://api.github.com/repos/kodeklubben/oppgaver/contents/filtertags/translation_nb.yml";
 
-let courseList = [];
+// const testGit =
+//   "https://api.github.com/repos/kodeklubben/oppgaver/contents/src/";
 
-const yaml = require("js-yaml");
+// let courseList = {};
 
-const test = Axios.get(githubUrlKeys).then((response) => {
-  return yaml.safeLoad(response.data);
-});
+// const yaml = require("js-yaml");
 
-const test2 = Axios.get(githubUrlTranslationNB).then((response) => {
-  console.log(yaml.safeLoad(atob(response.data.content)));
-  return yaml.safeLoad(response.data);
-});
+// const test = Axios.get(githubUrlKeys).then(response => {
+//   return yaml.safeLoad(response.data);
+// });
 
-const test3 = Axios.get(testGit).then((response) => {
-  for (let i = 0; i < response.data.length; i++) {
-    console.log(response.data[i].type === "dir" ? response.data[i].name : "");
-    if (response.data[i].type === "dir")
-      courseList = [...courseList, response.data[i].name];
-  }
-  return response.data;
-});
+// const test2 = Axios.get(githubUrlTranslationNB).then(response => {
+//   let buff = new Buffer.from(response.data.content, "base64");
+//   let text = buff.toString("utf8");
+//   // console.log(text);
+//   console.log(yaml.safeLoad(text));
+//   return yaml.safeLoad(response.data);
+// });
 
-console.log(test);
+// const test3 = Axios.get(testGit).then(response => {
+//   for (let i of response.data) {
+//     // console.log(response.data[i].type === "dir" ? response.data[i].name : "");
+//     if (i.type === "dir") {
+//       console.log(i.name);
 
-console.log(test2);
+//       const title = Axios.get(testGit + i.name + "/index.md")
+//         .then(response => {
+//           let buff = new Buffer.from(response.data.content, "base64");
+//           let text = yaml.safeLoad(buff.toString("utf8").split("---")[1]);
+//           return text.title;
+//         })
+//         .then(response => {
+//           courseList = { ...courseList, [i.name]: response };
+//         });
+//     }
+//   }
+// });
 
-console.log(test3);
+// console.log(test);
 
-console.log(courseList);
+// console.log(test2);
 
-for (let a in courseList) {
-  console.log(a);
-}
+// console.log(test3);
+
+// console.log(courseList);
+
+// console.log(courseList);
+
+// setTimeout(() => {
+//   console.log(courseList);
+// }, 8000);
 
 // Languages title
 const LANGUAGES = [

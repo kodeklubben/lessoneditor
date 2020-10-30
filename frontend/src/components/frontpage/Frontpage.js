@@ -29,6 +29,7 @@ const Overview = () => {
 
         {showPopup ? (
           <NewLesson
+            showSpinner={showSpinner}
             setShowSpinner={setShowSpinner}
             setShowPopup={setShowPopup}
           />
