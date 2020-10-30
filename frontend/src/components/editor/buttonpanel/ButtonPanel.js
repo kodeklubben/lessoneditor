@@ -61,11 +61,9 @@ const ButtonPanel = ({
 
   const navigateToHome = async () => {
     let target = "";
-    newHeader().then(async (newHeader) => {
+    newHeader().then(async (result) => {
       const newMdText =
-        typeof newHeader !== "undefined"
-          ? newHeader + "\n\n\n" + mdText
-          : mdText;
+        typeof result !== "undefined" ? result + "\n\n\n" + mdText : mdText;
 
       if (file.slice(0, 6) === "README") {
         target = ["/landingpage", lessonId, "teacherguides"].join("/");
@@ -73,20 +71,32 @@ const ButtonPanel = ({
         target = ["/landingpage", lessonId, "lessontexts"].join("/");
       }
 
-      if (file.slice(0, 6) !== "README" && language === "nb") {
-        await saveMdText(lessonId, file, newMdText, true).then(() => {
-          history.push(target);
-          return;
-        });
+      if (file.slice(0, 6) !== "README") {
+        if (language === "nb") {
+          await saveMdText(lessonId, file, newMdText, true).then(() => {
+            history.push(target);
+            return;
+          });
+        } else {
+          await saveMdText(lessonId, file, newMdText).then(() => {
+            history.push(target);
+            return;
+          });
+        }
       } else {
-        await saveMdText(
-          lessonId,
-          language === "nb" ? file : `${file}_${language}`,
-          newMdText
-        ).then(() => {
-          history.push(target);
-          return;
-        });
+        if (language === "nb") {
+          await saveMdText(lessonId, file, newMdText).then(() => {
+            history.push(target);
+            return;
+          });
+        } else {
+          await saveMdText(lessonId, `${file}_${language}`, newMdText).then(
+            () => {
+              history.push(target);
+              return;
+            }
+          );
+        }
       }
     });
   };

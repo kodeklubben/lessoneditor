@@ -1,12 +1,12 @@
 import "./landingpage.scss";
-import React, { useContext } from "react";
+import React from "react";
 
 import LessonCard from "./LessonCard";
-import { LessonContext } from "contexts/LessonContext";
+// import { LessonContext } from "contexts/LessonContext";
 
-const LessonTexts = ({ lessonId }) => {
-  const lesson = useContext(LessonContext);
-  const { lessonList } = lesson;
+const LessonTexts = ({ lessonId, lessonList }) => {
+  // const lesson = useContext(LessonContext);
+  // const { lessonList } = lesson;
 
   let languages = [];
   let allLanguages = ["nb", "nn", "en", "is"];
@@ -21,8 +21,9 @@ const LessonTexts = ({ lessonId }) => {
         return;
       }
       switch (
-        element.filename.slice(0, 6) !== "README" &&
-        element.filename.slice(-6, -3)
+        element.filename.slice(0, 6) !== "README"
+          ? element.filename.slice(-6, -3)
+          : ""
       ) {
         case "_nn":
           if (!languages.includes("nn")) {
