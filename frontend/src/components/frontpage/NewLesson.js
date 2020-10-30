@@ -72,6 +72,7 @@ const NewLesson = ({ showSpinner, setShowPopup, setShowSpinner }) => {
     // eslint-disable-next-line
   }, []);
 
+
   const onChange = (e) => {
     const { name, value } = e.target;
     setValues((prevValues) => ({ ...prevValues, [name]: value }));
