@@ -60,11 +60,14 @@ const Languages = ({ mdText, setShowSpinner }) => {
           ? newHeader + "\n\n\n" + mdText
           : mdText;
 
-      await saveMdText(
-        lessonId,
-        language === "nb" ? file : `${file}_${language}`,
-        newMdText
-      ).then(() => {
+      let filename = "";
+      if (language === "nb") {
+        filename = file;
+      } else {
+        filename = `${file}_${language}`;
+      }
+
+      await saveMdText(lessonId, filename, newMdText).then(() => {
         if (target !== "") {
           history.push(target);
           window.location.reload();

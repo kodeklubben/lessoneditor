@@ -97,7 +97,7 @@ const Editor = () => {
         }
 
         fetchData().then(async (lessonText) => {
-          const parts = await lessonText.split("---\n");
+          const parts = lessonText.split("---\n");
           const parsedHeader = parts[1] ? parseMdHeader(parts[1]) : {};
           const body = parts[2] ? parts[2].trim() : "";
           if (body.length === 0) {

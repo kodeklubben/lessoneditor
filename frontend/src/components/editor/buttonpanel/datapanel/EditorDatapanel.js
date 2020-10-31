@@ -71,11 +71,15 @@ const EditorDatapanel = ({ mdText, file, openMetaData, setOpenMetaData }) => {
     const newHeader = createNewHeader(state);
     const newMdText =
       newHeader !== undefined ? newHeader + "\n\n\n" + mdText : mdText;
-    await saveMdText(
-      lessonId,
-      language === "nb" ? file : `${file}_${language}`,
-      newMdText
-    ).then(window.location.reload());
+    let filename = "";
+    if (language === "nb") {
+      filename = file;
+    } else {
+      filename = `${file}_${language}`;
+    }
+    await saveMdText(lessonId, filename, newMdText).then(
+      window.location.reload()
+    );
   };
 
   const onCancel = () => {

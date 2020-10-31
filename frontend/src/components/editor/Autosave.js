@@ -32,15 +32,19 @@ const Autosave = ({ mdText, setRenderContent }) => {
     } else if (counter === 5 && autoSaveMessage !== SAVED) {
       setRenderContent(true);
       newHeader().then(async (newHeader) => {
+        let filename = "";
+        if (language === "nb") {
+          filename = file;
+        } else {
+          filename = `${file}_${language}`;
+        }
         const newMdText =
           typeof newHeader !== "undefined"
             ? newHeader + "\n\n\n" + mdText
             : mdText;
-        await saveMdText(
-          lessonId,
-          language === "nb" ? file : `${file}_${language}`,
-          newMdText
-        ).then(setAutoSaveMessage(SAVED));
+        await saveMdText(lessonId, filename, newMdText).then(
+          setAutoSaveMessage(SAVED)
+        );
       });
     }
     if (counter === 15) {
