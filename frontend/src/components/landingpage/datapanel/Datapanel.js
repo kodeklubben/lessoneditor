@@ -40,10 +40,6 @@ const Datapanel = ({ open, setOpen }) => {
   }, [ymlData.tags]);
 
   const onSubmit = async () => {
-    setYmlData((prevState) => ({
-      ...prevState,
-      hasData: true,
-    }));
     await saveYml(ymlData).then(() => {
       setOpen(false);
     });

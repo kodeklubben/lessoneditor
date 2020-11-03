@@ -7,6 +7,7 @@ import Navbar from "../navbar/Navbar";
 import { useHistory } from "react-router-dom";
 import NewLessonButton from "./newLessonButton";
 import ShowSpinner from "../ShowSpinner";
+import COURSELIST from "../editor/settingsFiles/COURSELIST";
 
 const Overview = () => {
   const [showPopup, setShowPopup] = useState(false); // Les om useState i React
