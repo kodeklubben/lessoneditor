@@ -19,10 +19,11 @@ const Landingpage = () => {
   const [showSpinner, setShowSpinner] = useState(false);
   const [areYouSure, setAreYouSure] = useState(false);
   const [thankU, setThankU] = useState(false);
+  const [open, setOpen] = useState(false);
   const { lessonId, mode } = useParams();
   const history = useHistory();
   const lesson = useContext(LessonContext);
-  const { data, saveLesson, lessonList } = lesson;
+  const { data, getYmlData, saveLesson, lessonList } = lesson;
 
   const courseNotSlug = COURSESLIST.find(({ slug }) => slug === data.course);
 
@@ -43,6 +44,21 @@ const Landingpage = () => {
       setShowSpinner(false);
     }
   }, [data.course]);
+
+  useEffect(() => {
+    async function compareObjects() {
+      getYmlData().then((res) => {
+        console.log("RES " + JSON.stringify(res));
+        if (
+          JSON.stringify(res?.tags) ===
+          JSON.stringify({ topic: [], subject: [], grade: [] })
+        ) {
+          setOpen(true);
+        }
+      });
+    }
+    compareObjects();
+  }, [getYmlData]);
 
   const handleChange = (e, { value }) => {
     setPageContent(value);
@@ -144,7 +160,7 @@ const Landingpage = () => {
               }
             />
           </div>
-          <Datapanel />
+          <Datapanel open={open} setOpen={setOpen} />
         </div>
       </div>
 

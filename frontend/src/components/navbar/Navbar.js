@@ -3,11 +3,13 @@ import React, { useContext, useState } from "react";
 import { useParams } from "react-router";
 import ProfileMenu from "components/navbar/ProfileMenu";
 import { UserContext } from "contexts/UserContext";
+import { LessonContext } from "contexts/LessonContext";
 import NewLessonButton from "../frontpage/newLessonButton";
 import NewLesson from "../frontpage/NewLesson";
 
 const Navbar = () => {
   const userContext = useContext(UserContext);
+  const lessonContext = useContext(LessonContext);
   const [showPopup, setShowPopup] = useState(false);
 
   const { file } = useParams();
@@ -26,7 +28,8 @@ const Navbar = () => {
             <NewLessonButton setShowPopup={setShowPopup} />
           ) : (
             <h1 style={{ paddingRight: "17em" }}>
-              <span style={{ color: "gray" }}>Prosjekttittel: </span> {file}
+              <span style={{ color: "gray" }}>Prosjekttittel: </span>
+              {lessonContext.data.lesson}
             </h1>
           )}
           {showPopup ? <NewLesson setShowPopup={setShowPopup} /> : ""}

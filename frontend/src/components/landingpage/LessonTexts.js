@@ -42,7 +42,8 @@ const LessonTexts = ({ lessonId, lessonList }) => {
             }
             break;
           default:
-            lessonTitle = element.filename.slice(0, -6);
+            lessonTitle = element.filename.slice(0, -3);
+            console.log("LESSONTITLE : " + lessonTitle);
             if (!languages.includes("nb")) {
               languages.push("nb");
             }

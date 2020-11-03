@@ -11,7 +11,7 @@ import fetchMdText from "../../api/fetch-md-text";
 import { LessonContext } from "contexts/LessonContext";
 import ShowSpinner from "../ShowSpinner";
 import parseMdHeader from "./utils/parseMdHeader";
-import laererveiledningMal from "../editor/settingsFiles/laererveiledningMal";
+import laererveiledningMal from "./LaererveiledningMal";
 import oppgaveMal from "../editor/settingsFiles/oppgaveMal";
 
 const Editor = () => {
@@ -97,7 +97,7 @@ const Editor = () => {
         }
 
         fetchData().then(async (lessonText) => {
-          const parts = await lessonText.split("---\n");
+          const parts = lessonText.split("---\n");
           const parsedHeader = parts[1] ? parseMdHeader(parts[1]) : {};
           const body = parts[2] ? parts[2].trim() : "";
           if (body.length === 0) {

@@ -1,4 +1,4 @@
-const larerveiledningMal = `(TEKSTMAL FOR LÆRERVEILEDNING)
+const laererveiledningMal = `(TEKSTMAL FOR LÆRERVEILEDNING)
 
 # Om oppgaven {.activity}
 
@@ -72,4 +72,4 @@ oppgaven enda.*
 
 - [ ] Foreløpig ingen eksterne ressurser ...`;
 
-export default larerveiledningMal;
+export default laererveiledningMal;

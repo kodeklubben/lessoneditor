@@ -10,7 +10,7 @@ const NewLesson = ({ showSpinner, setShowPopup, setShowSpinner }) => {
   const user = useContext(UserContext);
   const [values, setValues] = useState({
     lessonTitle: "",
-    course: "COURSESLIST[0].slug",
+    course: COURSESLIST[0].slug,
   });
   const [error, setError] = useState("Oppgavetittel må være satt");
 
