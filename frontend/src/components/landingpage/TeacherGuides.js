@@ -12,7 +12,6 @@ const TeacherGuides = ({ lessonId, lessonList }) => {
     lessonList.constructor !== Object
   ) {
     lessonList.forEach((element) => {
-      console.log(element.filename.slice(-6, -3));
       if (element.filename.slice(-2) !== "md") {
         return;
       }

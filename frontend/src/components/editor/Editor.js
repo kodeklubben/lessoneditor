@@ -13,11 +13,16 @@ import ShowSpinner from "../ShowSpinner";
 import parseMdHeader from "./utils/parseMdHeader";
 import laererveiledningMal from "./LaererveiledningMal";
 import oppgaveMal from "../editor/settingsFiles/oppgaveMal";
+import {
+  GRADE,
+  SUBJECT,
+  TOPIC,
+} from "../editor/buttonpanel/datapanel/settings/landingpage_NO";
 
 const Editor = () => {
   const { lessonId, file, language } = useParams();
   const context = useContext(LessonContext);
-  const { data, setData, setHeaderData, getLessonData } = context;
+  const { data, getYmlData, setData, setHeaderData, getLessonData } = context;
   const [mdText, setMdText] = useState("");
   const [showSpinner, setShowSpinner] = useState(false);
   const [buttonValues, setButtonValues] = useState({});
@@ -101,10 +106,26 @@ const Editor = () => {
           const parsedHeader = parts[1] ? parseMdHeader(parts[1]) : {};
           const body = parts[2] ? parts[2].trim() : "";
           if (body.length === 0) {
+            const ymlData = await getYmlData();
+
+            let subject = ymlData.tags.subject.map((element) => {
+              return SUBJECT[element];
+            });
+            let topic = ymlData.tags.topic.map((element) => {
+              return TOPIC[element];
+            });
+            let grade = ymlData.tags.grade.map((element) => {
+              return GRADE[element];
+            });
+
+            const a = laererveiledningMal.replace(
+              /{subject}/,
+              subject.join(", ")
+            );
+            const b = a.replace(/{topic}/, topic.join(", "));
+            const c = b.replace(/{grade}/, grade.join(", "));
             setOpenMetaData(true);
-            file === "README"
-              ? setMdText(laererveiledningMal)
-              : setMdText(oppgaveMal);
+            file === "README" ? setMdText(c) : setMdText(oppgaveMal);
             setHeaderData({});
             setShowSpinner(false);
             return;

@@ -48,7 +48,6 @@ const Landingpage = () => {
   useEffect(() => {
     async function compareObjects() {
       getYmlData().then((res) => {
-        console.log("RES " + JSON.stringify(res));
         if (
           JSON.stringify(res?.tags) ===
           JSON.stringify({ topic: [], subject: [], grade: [] })

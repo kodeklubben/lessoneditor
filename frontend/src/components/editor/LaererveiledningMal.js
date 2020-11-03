@@ -6,11 +6,11 @@ I denne oppgaven...
 
 ## Oppgaven passer til: {.check}
 
- **Fag**:
+ **Fag**: {subject}
 
-**Anbefalte trinn**:
+**Anbefalte trinn**: {grade}
 
-**Tema**:
+**Tema**: {topic}
 
 **Tidsbruk**:
 

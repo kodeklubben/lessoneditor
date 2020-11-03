@@ -16,7 +16,6 @@ const LessonTexts = ({ lessonId, lessonList }) => {
     Object.keys(lessonList).length !== 0 &&
     lessonList.constructor !== Object
   ) {
-    console.log(lessonTitle);
     lessonList.forEach((element) => {
       if (element.filename.slice(-2) !== "md") {
         return;
@@ -43,7 +42,6 @@ const LessonTexts = ({ lessonId, lessonList }) => {
             break;
           default:
             lessonTitle = element.filename.slice(0, -3);
-            console.log("LESSONTITLE : " + lessonTitle);
             if (!languages.includes("nb")) {
               languages.push("nb");
             }
