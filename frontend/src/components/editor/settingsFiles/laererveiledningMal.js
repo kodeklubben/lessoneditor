@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import { useContext } from "react";
 import { LessonContext } from "contexts/LessonContext";
 
 const LaererveiledningMal = () => {
