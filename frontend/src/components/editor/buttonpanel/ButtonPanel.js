@@ -72,7 +72,6 @@ const ButtonPanel = ({
       }
 
       if (file.slice(0, 6) !== "README") {
-        console.log("languageBUTTONPANEL : " + language);
         if (language === "nb") {
           await saveMdText(lessonId, file, newMdText, true).then(() => {
             history.push(target);

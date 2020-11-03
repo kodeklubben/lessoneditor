@@ -43,8 +43,8 @@ const createIframe = (language) => {
     is: "is", // Icelandic
     it: "it", // Italian
     nl: "nl", // Dutch
-    nb: "no", // Norwegian
-    nn: "no", // Norwegian
+    nb: "nb", // Norwegian
+    nn: "nn-NO", // Norwegian
     sv: "sv-SE", // Swedish
     tr: "tr", // Turkish
   };
@@ -63,7 +63,7 @@ const createIframe = (language) => {
       "https://makecode.microbit.org/--docs?render=1&lang=" +
       microbitLanguages[language];
   } else {
-    f.src = "https://makecode.microbit.org/--docs?render=1&lang=en";
+    f.src = "https://makecode.microbit.org/--docs?render=1&lang=nb";
   }
   document.body.appendChild(f);
   window.addEventListener("message", processIframeMessage);

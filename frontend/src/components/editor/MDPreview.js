@@ -11,7 +11,7 @@ const MDPreview = ({ mdText, course, language, renderContent }) => {
   useEffect(() => {
     renderToggleButtons();
     if (course === "microbit" && renderContent) {
-      renderMicrobit(JSON.stringify(language));
+      renderMicrobit(language);
     }
   }, [course, parseMD, renderContent, language]);
 
