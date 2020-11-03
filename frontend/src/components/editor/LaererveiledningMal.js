@@ -1,13 +1,4 @@
-import { useContext } from "react";
-import { LessonContext } from "contexts/LessonContext";
-
-const LaererveiledningMal = () => {
-  const context = useContext(LessonContext);
-  const { ymlData } = context;
-
-  console.log(ymlData);
-
-  return `(TEKSTMAL FOR LÆRERVEILEDNING)
+const laererveiledningMal = `(TEKSTMAL FOR LÆRERVEILEDNING)
 
 # Om oppgaven {.activity}
 
@@ -15,11 +6,11 @@ I denne oppgaven...
 
 ## Oppgaven passer til: {.check}
 
- **Fag**: ${ymlData.tags.subject}
+ **Fag**:
 
-**Anbefalte trinn**: ${ymlData.tags.grade}
+**Anbefalte trinn**:
 
-**Tema**: ${ymlData.tags.topic}
+**Tema**:
 
 **Tidsbruk**:
 
@@ -80,6 +71,5 @@ oppgaven enda.*
 **ELLER**
 
 - [ ] Foreløpig ingen eksterne ressurser ...`;
-};
 
-export default LaererveiledningMal;
+export default laererveiledningMal;
