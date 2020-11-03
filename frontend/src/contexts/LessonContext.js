@@ -98,11 +98,7 @@ export const LessonContextProvider = (props) => {
     getYmlData: async () => {
       async function fetchData() {
         const res = await axios.get(lessonYMLDataUrl);
-        if (JSON.stringify(res.data) !== "{}") {
-          return res.data;
-        } else {
-          return ymlData;
-        }
+        return res.data;
       }
 
       const res = fetchData().then((res) => {
