@@ -11,7 +11,7 @@ import fetchMdText from "../../api/fetch-md-text";
 import { LessonContext } from "contexts/LessonContext";
 import ShowSpinner from "../ShowSpinner";
 import parseMdHeader from "./utils/parseMdHeader";
-import LaererveiledningMal from "./settingsFiles/LaererveiledningMal";
+import LaererveiledningMal from "./LaererveiledningMal";
 import oppgaveMal from "../editor/settingsFiles/oppgaveMal";
 
 const Editor = () => {
