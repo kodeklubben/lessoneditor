@@ -11,7 +11,7 @@ import fetchMdText from "../../api/fetch-md-text";
 import { LessonContext } from "contexts/LessonContext";
 import ShowSpinner from "../ShowSpinner";
 import parseMdHeader from "./utils/parseMdHeader";
-import laererveiledningMal from "../editor/settingsFiles/laererveiledningMal";
+import LaererveiledningMal from "./settingsFiles/LaererveiledningMal";
 import oppgaveMal from "../editor/settingsFiles/oppgaveMal";
 
 const Editor = () => {
@@ -103,7 +103,7 @@ const Editor = () => {
           if (body.length === 0) {
             setOpenMetaData(true);
             file === "README"
-              ? setMdText(laererveiledningMal)
+              ? setMdText(LaererveiledningMal)
               : setMdText(oppgaveMal);
             setHeaderData({});
             setShowSpinner(false);

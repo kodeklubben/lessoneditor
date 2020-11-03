@@ -8,16 +8,12 @@ import Levels from "./Levels";
 import License from "./License";
 import { LessonContext } from "contexts/LessonContext";
 
-const Datapanel = () => {
-  const [open, setOpen] = useState(false);
-  const [checkBoxState, setCheckBoxState] = useState({});
+const Datapanel = ({ open, setOpen }) => {
   const context = useContext(LessonContext);
   const { ymlData, setYmlData, saveYml } = context;
+  const [checkBoxState, setCheckBoxState] = useState({});
 
   useEffect(() => {
-    if (!ymlData.tags) {
-      return;
-    }
     let obj;
     obj = ymlData.tags.topic.reduce(
       (accumulator, currentValue) => {
@@ -44,6 +40,10 @@ const Datapanel = () => {
   }, [ymlData.tags]);
 
   const onSubmit = async () => {
+    setYmlData((prevState) => ({
+      ...prevState,
+      hasData: true,
+    }));
     await saveYml(ymlData).then(() => {
       setOpen(false);
     });

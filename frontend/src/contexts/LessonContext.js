@@ -95,6 +95,22 @@ export const LessonContextProvider = (props) => {
     getHeaderData: async () => {
       return headerData;
     },
+    getYmlData: async () => {
+      async function fetchData() {
+        const res = await axios.get(lessonYMLDataUrl);
+        if (JSON.stringify(res.data) !== "{}") {
+          return res.data;
+        } else {
+          return ymlData;
+        }
+      }
+
+      const res = fetchData().then((res) => {
+        return res;
+      });
+
+      return res;
+    },
   };
   return (
     <>
