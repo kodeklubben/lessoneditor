@@ -108,9 +108,15 @@ const Editor = () => {
           if (body.length === 0) {
             const ymlData = await getYmlData();
 
-            let subject = ymlData.tags.subject;
-            let topic = ymlData.tags.topic;
-            let grade = ymlData.tags.grade;
+            let subject = ymlData.tags.subject.map((element) => {
+              return SUBJECT[element];
+            });
+            let topic = ymlData.tags.topic.map((element) => {
+              return TOPIC[element];
+            });
+            let grade = ymlData.tags.grade.map((element) => {
+              return GRADE[element];
+            });
 
             const a = laererveiledningMal.replace(
               /{subject}/,
