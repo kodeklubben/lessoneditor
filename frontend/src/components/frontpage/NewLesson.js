@@ -34,7 +34,7 @@ const NewLesson = ({ showSpinner, setShowPopup, setShowSpinner }) => {
     setShowSpinner(true);
     const { course, lessonTitle } = values;
     if (lessonTitle) {
-      const lesson = slugify(lessonTitle);
+      const lesson = slugify(lessonTitle, { lower: true, strict: true });
       const lessonId = await user.addLesson(course, lesson);
       navigateToLandingpage(lessonId, lesson);
     } else {

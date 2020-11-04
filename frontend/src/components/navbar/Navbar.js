@@ -29,7 +29,9 @@ const Navbar = () => {
           ) : (
             <h1 style={{ paddingRight: "17em" }}>
               <span style={{ color: "gray" }}>Prosjekttittel: </span>
-              {lessonContext.data.lesson}
+              {lessonContext.data.lesson
+                ? lessonContext.data.lesson.replace(/-/g, " ")
+                : ""}
             </h1>
           )}
           {showPopup ? <NewLesson setShowPopup={setShowPopup} /> : ""}

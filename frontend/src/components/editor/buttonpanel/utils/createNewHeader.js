@@ -4,10 +4,12 @@ const createNewHeader = (state, language) => {
   }
   const newHeader = `---
 title: ${state.title ? `"${state.title}"` : ""}
-author: ${state.authorList.length > 0 ? `"${state.authorList}"` : ""} ${
+author: ${
+    state.authorList.length > 0 ? `"${state.authorList.join(", ")}"` : ""
+  } ${
     state.translatorList && state.translatorList.length > 0
       ? `
-translator: "${state.translatorList}"`
+translator: "${state.translatorList.join(", ")}"`
       : ""
   }
 language: ${language ? `"${language}"` : ""}
