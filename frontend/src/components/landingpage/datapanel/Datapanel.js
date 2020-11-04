@@ -13,6 +13,10 @@ const Datapanel = ({ open, setOpen }) => {
   const { ymlData, setYmlData, saveYml } = context;
   const [checkBoxState, setCheckBoxState] = useState({});
 
+  const isEmptyDatapanel =
+    JSON.stringify(ymlData.tags) ===
+    JSON.stringify({ topic: [], subject: [], grade: [] });
+
   useEffect(() => {
     let obj;
     obj = ymlData.tags.topic.reduce(
@@ -129,10 +133,25 @@ const Datapanel = ({ open, setOpen }) => {
           className="datapanel_BG"
         >
           <div className="datapanel_container">
-            <i
-              onClick={() => setOpen(!open)}
-              className="big grey x icon landingpage"
-            />
+            {!isEmptyDatapanel ? (
+              <i
+                onClick={() => setOpen(!open)}
+                className="big grey x icon landingpage"
+              />
+            ) : (
+              ""
+            )}
+            <h2
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                marginTop: "-2em",
+                marginLeft: "auto",
+                marginBottom: "2em",
+              }}
+            >
+              Oppgavedata
+            </h2>
             <div className="ui form datapanel">
               <div id="bigScreen" className="two fields">
                 <div className="field">
@@ -166,17 +185,44 @@ const Datapanel = ({ open, setOpen }) => {
                     }
                   />
                   <div>
+                    <div style={{ marginBottom: "2.3em" }} />
                     <Levels changeHandler={dropdownHandler} data={ymlData} />
+                    <div style={{ marginBottom: "5em" }} />
                     <License changeHandler={changeHandler} data={ymlData} />
                   </div>
                 </div>
               </div>
-              <button className="ui button" onClick={onSubmit}>
+              <button
+                className="ui button"
+                disabled={
+                  JSON.stringify(ymlData.tags) ===
+                  JSON.stringify({ topic: [], subject: [], grade: [] })
+                }
+                onClick={onSubmit}
+              >
                 OK
               </button>
-              <button className="ui button" onClick={onCancel}>
-                Avbryt
-              </button>
+              {!isEmptyDatapanel ? (
+                <button
+                  className="ui button"
+                  disabled={
+                    JSON.stringify(ymlData.tags) ===
+                    JSON.stringify({ topic: [], subject: [], grade: [] })
+                  }
+                  onClick={onCancel}
+                >
+                  Avbryt
+                </button>
+              ) : (
+                ""
+              )}
+              {isEmptyDatapanel ? (
+                <p style={{ color: "red" }}>
+                  Må inneholde minst ett valg av Tema, Fag, eller Klassetrinn
+                </p>
+              ) : (
+                <p></p>
+              )}
             </div>
           </div>
         </div>

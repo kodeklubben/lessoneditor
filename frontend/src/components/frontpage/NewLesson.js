@@ -7,7 +7,7 @@ import ShowSpinner from "../ShowSpinner";
 
 const NewLesson = ({ showSpinner, setShowPopup, setShowSpinner }) => {
   const history = useHistory();
-  const user = useContext(UserContext);
+  const { addLesson } = useContext(UserContext);
   const [values, setValues] = useState({
     lessonTitle: "",
     course: COURSESLIST[0].slug,
@@ -34,8 +34,12 @@ const NewLesson = ({ showSpinner, setShowPopup, setShowSpinner }) => {
     setShowSpinner(true);
     const { course, lessonTitle } = values;
     if (lessonTitle) {
-      const lesson = slugify(lessonTitle, { lower: true, strict: true });
-      const lessonId = await user.addLesson(course, lesson);
+      const lesson = {
+        title: lessonTitle,
+        slug: slugify(lessonTitle, { lower: true, strict: true }),
+      };
+      //TODO: Bruke lesson.title andre plasser i editoren
+      const lessonId = await addLesson(course, lesson.slug);
       navigateToLandingpage(lessonId, lesson);
     } else {
       setError("Oppgavetittel er ikke satt");
