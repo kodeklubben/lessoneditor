@@ -7,19 +7,24 @@ const AllFiles = () => {
   const lesson = useContext(LessonContext);
   const { lessonList } = lesson;
 
-  const filteredArray = lessonList.filter(
-    (filteredItem) =>
-      filteredItem.filename !== "data.json" &&
-      filteredItem.filename !== "preview.png"
-  );
+  const filteredArray =
+    lessonList.length > 0
+      ? lessonList.filter(
+          (filteredItem) =>
+            filteredItem.filename !== "data.json" &&
+            filteredItem.filename !== "preview.png"
+        )
+      : "";
 
   return (
     <>
       <div style={{ marginBottom: "5em" }}>
         <div style={{ marginLeft: "5em" }}>
-          {filteredArray.map((element, index) => {
-            return <h2>{element.filename}</h2>;
-          })}
+          {filteredArray.length > 0
+            ? filteredArray.map((element, index) => {
+                return <h2>{element.filename}</h2>;
+              })
+            : ""}
         </div>
       </div>
     </>

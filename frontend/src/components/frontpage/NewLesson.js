@@ -40,7 +40,7 @@ const NewLesson = ({ showSpinner, setShowPopup, setShowSpinner }) => {
       };
       //TODO: Bruke lesson.title andre plasser i editoren
       const lessonId = await addLesson(course, lesson.slug);
-      navigateToLandingpage(lessonId, lesson);
+      navigateToLandingpage(lessonId, lesson.slug);
     } else {
       setError("Oppgavetittel er ikke satt");
     }

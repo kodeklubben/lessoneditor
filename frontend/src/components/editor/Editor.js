@@ -89,9 +89,9 @@ const Editor = () => {
   };
 
   useEffect(() => {
+    setShowSpinner(true);
     getLessonData().then((res) => {
       setData(res.data);
-      setShowSpinner(true);
       if (lessonId && file) {
         async function fetchData() {
           const lessonText = await fetchMdText(
@@ -118,35 +118,45 @@ const Editor = () => {
               return GRADE[element];
             });
 
-            const a = laererveiledningMal.replace(
+            let veiledningWithData = laererveiledningMal.replace(
               /{subject}/,
               subject.join(", ")
             );
-            const b = a.replace(/{topic}/, topic.join(", "));
-            const c = b.replace(/{grade}/, grade.join(", "));
+            veiledningWithData = veiledningWithData.replace(
+              /{topic}/,
+              topic.join(", ")
+            );
+            veiledningWithData = veiledningWithData.replace(
+              /{grade}/,
+              grade.join(", ")
+            );
             setOpenMetaData(true);
-            file === "README" ? setMdText(c) : setMdText(oppgaveMal);
+            file === "README"
+              ? setMdText(veiledningWithData)
+              : setMdText(oppgaveMal);
             setHeaderData({});
             setShowSpinner(false);
             return;
-          } else setMdText(body);
-          setUndo([body]);
-          const newHeaderData = {
-            title: parsedHeader.title,
-            authorList: parsedHeader.author
-              ? parsedHeader.author.split(",").map((item) => {
-                  return item.trim();
-                })
-              : [],
-            translatorList: parsedHeader.translator
-              ? parsedHeader.translator.split(",").map((item) => {
-                  return item.trim();
-                })
-              : [],
-          };
-          setHeaderData(newHeaderData);
-          setShowSpinner(false);
-          return;
+          } else {
+            setMdText(body);
+            setUndo([body]);
+            const newHeaderData = {
+              title: parsedHeader.title,
+              authorList: parsedHeader.author
+                ? parsedHeader.author.split(",").map((item) => {
+                    return item.trim();
+                  })
+                : [],
+              translatorList: parsedHeader.translator
+                ? parsedHeader.translator.split(",").map((item) => {
+                    return item.trim();
+                  })
+                : [],
+            };
+            setHeaderData(newHeaderData);
+            setShowSpinner(false);
+            return;
+          }
         });
       }
     });
