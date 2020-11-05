@@ -133,7 +133,7 @@ const Editor = () => {
           if (lessonText.length <= 1) {
             setOpenMetaData(true);
             file === "README"
-              ? setMdText(insertMetaDataInTeacherGuide)
+              ? insertMetaDataInTeacherGuide().then((res) => setMdText(res))
               : setMdText(oppgaveMal);
             setHeaderData({});
             setShowSpinner(false);
