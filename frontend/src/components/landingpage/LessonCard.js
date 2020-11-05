@@ -37,29 +37,25 @@ const LessonCard = ({ title, lessonId, language, hasContent, lessonTitle }) => {
       <div className="ui fluid card">
         <div style={{ width: "360px" }} className="image itemListImage">
           {hasContent ? (
-            hasContent ? (
-              <>
-                <img
-                  style={{ opacity: "0.3" }}
-                  src={`/api/display/${lessonId}/preview.png?${performance.now()}`}
-                  alt="thumbUrl"
-                />
-                <div
-                  style={{
-                    position: "absolute",
-                    top: "3.4em",
-                    left: "2.5em",
-                    backgroundColor: "rgba(256,256,256,0.75)",
-                    padding: "0.7em",
-                    borderRadius: "20px",
-                  }}
-                >
-                  <h2>{title + " (" + languageOptions[language].text + ")"}</h2>
-                </div>
-              </>
-            ) : (
-              <div style={{ width: "360px" }}></div>
-            )
+            <>
+              <img
+                style={{ opacity: "0.3" }}
+                src={`/api/display/${lessonId}/preview.png?${performance.now()}`}
+                alt="thumbUrl"
+              />
+              <div
+                style={{
+                  position: "absolute",
+                  top: "3.4em",
+                  left: "2.5em",
+                  backgroundColor: "rgba(256,256,256,0.75)",
+                  padding: "0.7em",
+                  borderRadius: "20px",
+                }}
+              >
+                <h2>{title + " (" + languageOptions[language].text + ")"}</h2>
+              </div>
+            </>
           ) : (
             <h2
               style={{

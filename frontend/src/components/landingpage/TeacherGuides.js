@@ -1,6 +1,5 @@
 import "./landingpage.scss";
 import React from "react";
-
 import LessonCard from "./LessonCard";
 
 const TeacherGuides = ({ lessonId, lessonList }) => {
@@ -33,10 +32,7 @@ const TeacherGuides = ({ lessonId, lessonList }) => {
             }
             break;
           default:
-            if (
-              !languages.includes("nb") &&
-              element.filename.slice(0, 6) === "README"
-            ) {
+            if (!languages.includes("nb")) {
               languages.push("nb");
             }
             break;

@@ -88,6 +88,34 @@ const Editor = () => {
     setButtonValues({});
   };
 
+  const insertMetaDataInTeacherGuide = async () => {
+    const ymlData = await getYmlData();
+
+    let subject = ymlData.tags.subject.map((element) => {
+      return SUBJECT[element];
+    });
+    let topic = ymlData.tags.topic.map((element) => {
+      return TOPIC[element];
+    });
+    let grade = ymlData.tags.grade.map((element) => {
+      return GRADE[element];
+    });
+    let veiledningWithData = laererveiledningMal.replace(
+      /{subject}/,
+      subject.join(", ")
+    );
+    veiledningWithData = veiledningWithData.replace(
+      /{topic}/,
+      topic.join(", ")
+    );
+    veiledningWithData = veiledningWithData.replace(
+      /{grade}/,
+      grade.join(", ")
+    );
+
+    return veiledningWithData;
+  };
+
   useEffect(() => {
     setShowSpinner(true);
     getLessonData().then((res) => {
@@ -102,42 +130,18 @@ const Editor = () => {
         }
 
         fetchData().then(async (lessonText) => {
-          const parts = lessonText.split("---\n");
-          const parsedHeader = parts[1] ? parseMdHeader(parts[1]) : {};
-          const body = parts[2] ? parts[2].trim() : "";
-          if (body.length === 0) {
-            const ymlData = await getYmlData();
-
-            let subject = ymlData.tags.subject.map((element) => {
-              return SUBJECT[element];
-            });
-            let topic = ymlData.tags.topic.map((element) => {
-              return TOPIC[element];
-            });
-            let grade = ymlData.tags.grade.map((element) => {
-              return GRADE[element];
-            });
-
-            let veiledningWithData = laererveiledningMal.replace(
-              /{subject}/,
-              subject.join(", ")
-            );
-            veiledningWithData = veiledningWithData.replace(
-              /{topic}/,
-              topic.join(", ")
-            );
-            veiledningWithData = veiledningWithData.replace(
-              /{grade}/,
-              grade.join(", ")
-            );
+          if (lessonText.length <= 1) {
             setOpenMetaData(true);
             file === "README"
-              ? setMdText(veiledningWithData)
+              ? setMdText(insertMetaDataInTeacherGuide)
               : setMdText(oppgaveMal);
             setHeaderData({});
             setShowSpinner(false);
             return;
           } else {
+            const parts = lessonText.split("---\n");
+            const parsedHeader = parts[1] ? parseMdHeader(parts[1]) : {};
+            const body = parts[2] ? parts[2].trim() : "";
             setMdText(body);
             setUndo([body]);
             const newHeaderData = {

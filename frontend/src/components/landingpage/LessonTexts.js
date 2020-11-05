@@ -1,16 +1,14 @@
 import "./landingpage.scss";
-import React from "react";
-
+import React, { useContext } from "react";
+import { LessonContext } from "contexts/LessonContext";
 import LessonCard from "./LessonCard";
-// import { LessonContext } from "contexts/LessonContext";
 
 const LessonTexts = ({ lessonId, lessonList }) => {
-  // const lesson = useContext(LessonContext);
-  // const { lessonList } = lesson;
+  const lesson = useContext(LessonContext);
+  const { data } = lesson;
 
   let languages = [];
   let allLanguages = ["nb", "nn", "en", "is"];
-  let lessonTitle = "";
 
   if (
     Object.keys(lessonList).length !== 0 &&
@@ -23,25 +21,21 @@ const LessonTexts = ({ lessonId, lessonList }) => {
       if (element.filename.slice(0, 6) !== "README") {
         switch (element.filename.slice(-6, -3)) {
           case "_nn":
-            lessonTitle = element.filename.slice(0, -6);
             if (!languages.includes("nn")) {
               languages.push("nn");
             }
             break;
           case "_en":
-            lessonTitle = element.filename.slice(0, -6);
             if (!languages.includes("en")) {
               languages.push("en");
             }
             break;
           case "_is":
-            lessonTitle = element.filename.slice(0, -6);
             if (!languages.includes("is")) {
               languages.push("is");
             }
             break;
           default:
-            lessonTitle = element.filename.slice(0, -3);
             if (!languages.includes("nb")) {
               languages.push("nb");
             }
@@ -63,7 +57,7 @@ const LessonTexts = ({ lessonId, lessonList }) => {
                   language={element}
                   hasContent={languages.includes(element)}
                   lessonId={lessonId}
-                  lessonTitle={lessonTitle}
+                  lessonTitle={data.lesson}
                 />
               </div>
             );
