@@ -218,7 +218,8 @@ const Datapanel = ({ open, setOpen }) => {
               )}
               {isEmptyDatapanel ? (
                 <p style={{ color: "red" }}>
-                  Må inneholde minst ett valg av Tema, Fag, eller Klassetrinn
+                  Må inneholde minst ett valg i kategoriene Tema, Fag, eller
+                  Klassetrinn
                 </p>
               ) : (
                 <p></p>
