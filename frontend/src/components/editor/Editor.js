@@ -131,6 +131,7 @@ const Editor = () => {
 
         fetchData().then(async (lessonText) => {
           if (lessonText.length <= 1) {
+            console.log("lessonText.length <= 1");
             setOpenMetaData(true);
             file === "README"
               ? insertMetaDataInTeacherGuide().then((res) => setMdText(res))
@@ -139,6 +140,7 @@ const Editor = () => {
             setShowSpinner(false);
             return;
           } else {
+            console.log("lessonText.length not <= 1");
             const parts = lessonText.split("---\n");
             const parsedHeader = parts[1] ? parseMdHeader(parts[1]) : {};
             const body = parts[2] ? parts[2].trim() : "";
