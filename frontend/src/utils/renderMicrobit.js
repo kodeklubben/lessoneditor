@@ -1,5 +1,7 @@
 import md5 from "crypto-js/md5";
 
+let language;
+
 const microbitIframeId = "makecoderenderer";
 const getMicrobitSnippets = () =>
   Array.from(document.getElementsByClassName("microbit"));
@@ -131,6 +133,12 @@ const createImage = (msg) => {
   });
 };
 
+const removeIframe = () => {
+  window.removeEventListener("message", processIframeMessage);
+  document.getElementById(microbitIframeId).remove();
+  //console.log('Microbit iframe removed');
+};
+
 const processIframeMessage = (e) => {
   let msg = e.data;
   if (msg.source === "makecode") {
@@ -146,15 +154,18 @@ const processIframeMessage = (e) => {
         ),
       };
       createImage(msgCache[msg.id]);
+      removeIframe();
+      createIframe(language);
     }
   }
 };
 
-export const renderMicrobit = (language) => {
+export const renderMicrobit = (lang) => {
+  language = lang;
   const existingFrame = document.getElementById(microbitIframeId);
   renderSpinner();
   if (getMicrobitSnippets().length > 0 && !existingFrame) {
-    createIframe(language);
+    createIframe(lang);
   } else {
     renderSnippets();
   }
