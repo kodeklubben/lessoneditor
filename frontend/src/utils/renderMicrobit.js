@@ -131,6 +131,12 @@ const createImage = (msg) => {
   });
 };
 
+const removeIframe = () => {
+  window.removeEventListener("message", processIframeMessage);
+  document.getElementById(microbitIframeId).remove();
+  //console.log('Microbit iframe removed');
+};
+
 const processIframeMessage = (e) => {
   let msg = e.data;
   if (msg.source === "makecode") {
@@ -146,6 +152,7 @@ const processIframeMessage = (e) => {
         ),
       };
       createImage(msgCache[msg.id]);
+      removeIframe();
     }
   }
 };
