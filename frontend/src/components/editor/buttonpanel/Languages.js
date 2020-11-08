@@ -32,9 +32,9 @@ const languageOptions = [
   },
 ];
 
-const Languages = ({ mdText, setShowSpinner }) => {
+const Languages = ({ mdText, setShowSpinner, language }) => {
   const history = useHistory();
-  const { lessonId, file, language } = useParams();
+  const { lessonId, file } = useParams();
   const lessonContext = useContext(LessonContext);
   const { headerData, setLanguage } = lessonContext;
 
@@ -44,6 +44,9 @@ const Languages = ({ mdText, setShowSpinner }) => {
     return header;
   };
 
+  const filename =
+    file && file.slice(-3, -2) === "_" ? file.slice(0, -3) : file;
+
   useEffect(() => {
     setLanguage(language);
   }, [language, setLanguage]);
@@ -52,7 +55,11 @@ const Languages = ({ mdText, setShowSpinner }) => {
     setShowSpinner(true);
     let target = "";
     if (lessonId) {
-      target = ["/editor", lessonId, file, value].join("/");
+      target = [
+        "/editor",
+        lessonId,
+        value === "nb" ? filename : `${filename}_${value}`,
+      ].join("/");
     }
     newHeader(value).then(async (newHeader) => {
       const newMdText =
@@ -60,14 +67,7 @@ const Languages = ({ mdText, setShowSpinner }) => {
           ? newHeader + "\n\n\n" + mdText
           : mdText;
 
-      let filename = "";
-      if (language === "nb") {
-        filename = file;
-      } else {
-        filename = `${file}_${language}`;
-      }
-
-      await saveMdText(lessonId, filename, newMdText).then(() => {
+      await saveMdText(lessonId, file, newMdText).then(() => {
         if (target !== "") {
           history.push(target);
           window.location.reload();

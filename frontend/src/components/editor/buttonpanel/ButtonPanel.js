@@ -41,9 +41,10 @@ const ButtonPanel = ({
   openMetaData,
   setOpenMetaData,
   setShowSpinner,
+  language,
 }) => {
   const history = useHistory();
-  const { lessonId, file, language } = useParams();
+  const { lessonId, file } = useParams();
   const context = useContext(LessonContext);
   const { data, headerData } = context;
   const course = data.course;
@@ -70,36 +71,17 @@ const ButtonPanel = ({
       } else {
         target = ["/landingpage", lessonId, "lessontexts"].join("/");
       }
+      console.log(language === "nb" && file.slice(0, 6) !== "README");
 
-      if (file.slice(0, 6) !== "README") {
-        if (language === "nb") {
-          await saveMdText(lessonId, file, newMdText, true).then(() => {
-            history.push(target);
-            return;
-          });
-        } else {
-          await saveMdText(lessonId, `${file}_${language}`, newMdText).then(
-            () => {
-              history.push(target);
-              return;
-            }
-          );
-        }
-      } else {
-        if (language === "nb") {
-          await saveMdText(lessonId, file, newMdText).then(() => {
-            history.push(target);
-            return;
-          });
-        } else {
-          await saveMdText(lessonId, `${file}_${language}`, newMdText).then(
-            () => {
-              history.push(target);
-              return;
-            }
-          );
-        }
-      }
+      await saveMdText(
+        lessonId,
+        file,
+        newMdText,
+        language === "nb" && file.slice(0, 6) !== "README" ? true : "" //render thumbnail switch
+      ).then(() => {
+        history.push(target);
+        return;
+      });
     });
   };
 
@@ -169,12 +151,14 @@ const ButtonPanel = ({
             mdText={mdText}
             file={file}
             setShowSpinner={setShowSpinner}
+            language={language}
           />
           <EditorDatapanel
             mdText={mdText}
             file={file}
             openMetaData={openMetaData}
             setOpenMetaData={setOpenMetaData}
+            language={language}
           />
           <Popup
             content={"Til prosjektoversikt"}

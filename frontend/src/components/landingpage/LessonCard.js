@@ -28,7 +28,11 @@ const LessonCard = ({ title, lessonId, language, hasContent, lessonTitle }) => {
   const history = useHistory();
 
   const navigateToEditor = (lessonId, lessonTitle, language) => {
-    const target = ["/editor", lessonId, lessonTitle, language].join("/");
+    const target = [
+      "/editor",
+      lessonId,
+      language === "nb" ? lessonTitle : `${lessonTitle}_${language}`,
+    ].join("/");
     history.push(target);
   };
 

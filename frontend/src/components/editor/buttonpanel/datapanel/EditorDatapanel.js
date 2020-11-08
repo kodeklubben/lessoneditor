@@ -9,8 +9,14 @@ import { LessonContext } from "contexts/LessonContext";
 import { UserContext } from "contexts/UserContext";
 import saveMdText from "../../../../api/save-md-text";
 import createNewHeader from "../utils/createNewHeader";
-const EditorDatapanel = ({ mdText, file, openMetaData, setOpenMetaData }) => {
-  const { lessonId, language } = useParams();
+const EditorDatapanel = ({
+  mdText,
+  file,
+  openMetaData,
+  setOpenMetaData,
+  language,
+}) => {
+  const { lessonId } = useParams();
   const context = useContext(LessonContext);
   const userContext = useContext(UserContext);
   const { headerData, setHeaderData } = context;
@@ -71,15 +77,13 @@ const EditorDatapanel = ({ mdText, file, openMetaData, setOpenMetaData }) => {
     const newHeader = createNewHeader(state);
     const newMdText =
       newHeader !== undefined ? newHeader + "\n\n\n" + mdText : mdText;
-    let filename = "";
-    if (language === "nb") {
-      filename = file;
-    } else {
-      filename = `${file}_${language}`;
-    }
-    await saveMdText(lessonId, filename, newMdText).then(
-      window.location.reload()
-    );
+    // let filename = "";
+    // if (language === "nb") {
+    //   filename = file;
+    // } else {
+    //   filename = `${file}_${language}`;
+    // }
+    await saveMdText(lessonId, file, newMdText).then(window.location.reload());
   };
 
   const onCancel = () => {

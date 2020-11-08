@@ -5,11 +5,11 @@ import saveMdText from "../../api/save-md-text";
 import { SAVING, SAVED } from "./settingsFiles/languages/editor_NO";
 import createNewHeader from ".//buttonpanel/utils/createNewHeader";
 
-const Autosave = ({ mdText, setRenderContent }) => {
+const Autosave = ({ mdText, setRenderContent, language }) => {
   const [savedText, setSavedText] = useState("");
   const [counter, setCounter] = useState(0);
   const [autoSaveMessage, setAutoSaveMessage] = useState("");
-  const { lessonId, file, language } = useParams();
+  const { lessonId, file } = useParams();
   const lessonContext = useContext(LessonContext);
   const { headerData } = lessonContext;
 
@@ -32,17 +32,11 @@ const Autosave = ({ mdText, setRenderContent }) => {
     } else if (counter === 5 && autoSaveMessage !== SAVED) {
       setRenderContent(true);
       newHeader().then(async (newHeader) => {
-        let filename = "";
-        if (language === "nb") {
-          filename = file;
-        } else {
-          filename = `${file}_${language}`;
-        }
         const newMdText =
           typeof newHeader !== "undefined"
             ? newHeader + "\n\n\n" + mdText
             : mdText;
-        await saveMdText(lessonId, filename, newMdText).then(
+        await saveMdText(lessonId, file, newMdText).then(
           setAutoSaveMessage(SAVED)
         );
       });
