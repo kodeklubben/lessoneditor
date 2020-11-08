@@ -91,31 +91,30 @@ const Editor = () => {
   };
 
   const insertMetaDataInTeacherGuide = async () => {
-    const ymlData = await getYmlData();
-
-    let subject = ymlData.tags.subject.map((element) => {
-      return SUBJECT[element];
+    return await getYmlData().then((res) => {
+      let subject = res.tags.subject.map((element) => {
+        return SUBJECT[element];
+      });
+      let topic = res.tags.topic.map((element) => {
+        return TOPIC[element];
+      });
+      let grade = res.tags.grade.map((element) => {
+        return GRADE[element];
+      });
+      let veiledningWithData = laererveiledningMal.replace(
+        /{subject}/,
+        subject.join(", ")
+      );
+      veiledningWithData = veiledningWithData.replace(
+        /{topic}/,
+        topic.join(", ")
+      );
+      veiledningWithData = veiledningWithData.replace(
+        /{grade}/,
+        grade.join(", ")
+      );
+      return veiledningWithData;
     });
-    let topic = ymlData.tags.topic.map((element) => {
-      return TOPIC[element];
-    });
-    let grade = ymlData.tags.grade.map((element) => {
-      return GRADE[element];
-    });
-    let veiledningWithData = laererveiledningMal.replace(
-      /{subject}/,
-      subject.join(", ")
-    );
-    veiledningWithData = veiledningWithData.replace(
-      /{topic}/,
-      topic.join(", ")
-    );
-    veiledningWithData = veiledningWithData.replace(
-      /{grade}/,
-      grade.join(", ")
-    );
-
-    return veiledningWithData;
   };
 
   useEffect(() => {
