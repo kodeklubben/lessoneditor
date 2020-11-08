@@ -155,7 +155,9 @@ const processIframeMessage = (e) => {
       };
       createImage(msgCache[msg.id]);
       removeIframe();
-      createIframe(language);
+      if (document.getElementsByClassName("spinner").length > 0) {
+        createIframe(language);
+      }
     }
   }
 };

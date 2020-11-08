@@ -122,22 +122,35 @@ const Editor = () => {
       setData(res.data);
       if (lessonId && file) {
         async function fetchData() {
-          const lessonText = await fetchMdText(
+          return await fetchMdText(
             lessonId,
             language === "nb" ? file : `${file}_${language}`
           );
-          return lessonText;
         }
-
         fetchData().then(async (lessonText) => {
+          if (typeof lessonText !== "string") {
+            console.log(
+              "Err: something is wrong with lessontextFetch in editor: " +
+                lessonText
+            );
+            return;
+          }
+          console.log(typeof lessonText);
+          console.log(lessonText.length);
           if (lessonText.length <= 1) {
             console.log("lessonText.length <= 1");
             setOpenMetaData(true);
-            file === "README"
-              ? insertMetaDataInTeacherGuide().then((res) => setMdText(res))
-              : setMdText(oppgaveMal);
+            if (file === "README") {
+              insertMetaDataInTeacherGuide().then((res) => {
+                setMdText(res);
+                setShowSpinner(false);
+              });
+            } else {
+              setMdText(oppgaveMal);
+              setShowSpinner(false);
+            }
             setHeaderData({});
-            setShowSpinner(false);
+
             return;
           } else {
             console.log("lessonText.length not <= 1");
