@@ -1,6 +1,6 @@
 import React from "react";
 import { mount } from "enzyme";
-import { MemoryRouter, useParams } from "react-router-dom";
+import { MemoryRouter } from "react-router-dom";
 import Editor from "components/editor/Editor";
 import { LessonContextProvider } from "../../contexts/LessonContext";
 

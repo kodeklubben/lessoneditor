@@ -44,7 +44,8 @@ const Languages = ({ mdText, setShowSpinner, language }) => {
     return header;
   };
 
-  const filename = file.slice(-3, -2) === "_" ? file.slice(0, -3) : file;
+  const filename =
+    file && file.slice(-3, -2) === "_" ? file.slice(0, -3) : file;
 
   useEffect(() => {
     setLanguage(language);

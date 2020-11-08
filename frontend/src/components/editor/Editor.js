@@ -39,7 +39,7 @@ const Editor = () => {
     cursorInt: 0,
   });
 
-  const language = file.slice(-3, -2) === "_" ? file.slice(-2) : "nb";
+  const language = file && file.slice(-3, -2) === "_" ? file.slice(-2) : "nb";
 
   const [openMetaData, setOpenMetaData] = useState(false);
 
@@ -222,7 +222,7 @@ const Editor = () => {
         openMetaData={openMetaData}
         setOpenMetaData={setOpenMetaData}
         setShowSpinner={setShowSpinner}
-        language={language}
+        language={language ? language : ""}
       />
       <div className="textEditorContainer">
         <MDTextArea
@@ -249,7 +249,7 @@ const Editor = () => {
       <Autosave
         mdText={mdText}
         setRenderContent={setRenderContent}
-        language={language}
+        language={language ? language : ""}
       />
     </div>
   );
