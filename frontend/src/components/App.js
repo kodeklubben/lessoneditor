@@ -13,11 +13,7 @@ const App = () => {
     <>
       <BrowserRouter>
         <UserContextProvider>
-          <Route exact path="/" component={Frontpage}>
-            <LessonContextProvider>
-              <Frontpage />
-            </LessonContextProvider>
-          </Route>
+          <Route exact path="/" component={Frontpage} />
           <Route exact path="/landingpage" component={Landingpage} />
           <Route path="/landingpage/:lessonId/:mode">
             <LessonContextProvider>
@@ -25,7 +21,7 @@ const App = () => {
             </LessonContextProvider>
           </Route>
           <Route exact path="/editor" component={Editor} />
-          <Route path="/editor/:lessonId/:file/:language">
+          <Route path="/editor/:lessonId/:file">
             <LessonContextProvider>
               <Editor />
             </LessonContextProvider>

@@ -13,6 +13,7 @@ import ShowSpinner from "../ShowSpinner";
 import parseMdHeader from "./utils/parseMdHeader";
 import laererveiledningMal from "./LaererveiledningMal";
 import oppgaveMal from "../editor/settingsFiles/oppgaveMal";
+import getLanguageFromFilename from "components/getLanguageFromFilename";
 import {
   GRADE,
   SUBJECT,
@@ -20,7 +21,7 @@ import {
 } from "../editor/buttonpanel/datapanel/settings/landingpage_NO";
 
 const Editor = () => {
-  const { lessonId, file, language } = useParams();
+  const { lessonId, file } = useParams();
   const context = useContext(LessonContext);
   const { data, getYmlData, setData, setHeaderData, getLessonData } = context;
   const [mdText, setMdText] = useState("");
@@ -38,6 +39,8 @@ const Editor = () => {
     output: "",
     cursorInt: 0,
   });
+
+  const language = getLanguageFromFilename(file);
 
   const [openMetaData, setOpenMetaData] = useState(false);
 
@@ -122,10 +125,7 @@ const Editor = () => {
       setData(res.data);
       if (lessonId && file) {
         async function fetchData() {
-          return await fetchMdText(
-            lessonId,
-            language === "nb" ? file : `${file}_${language}`
-          );
+          return await fetchMdText(lessonId, file);
         }
         fetchData().then(async (lessonText) => {
           if (typeof lessonText !== "string") {
@@ -135,8 +135,8 @@ const Editor = () => {
             );
             return;
           }
-          console.log(typeof lessonText);
-          console.log(lessonText.length);
+          console.log("typeof lessontext : " + typeof lessonText);
+          console.log("lessonText.length : " + lessonText.length);
           if (lessonText.length <= 1) {
             console.log("lessonText.length <= 1");
             setOpenMetaData(true);
@@ -223,6 +223,7 @@ const Editor = () => {
         openMetaData={openMetaData}
         setOpenMetaData={setOpenMetaData}
         setShowSpinner={setShowSpinner}
+        language={language}
       />
       <div className="textEditorContainer">
         <MDTextArea
@@ -246,7 +247,11 @@ const Editor = () => {
           language={language ? language : ""}
         />
       </div>
-      <Autosave mdText={mdText} setRenderContent={setRenderContent} />
+      <Autosave
+        mdText={mdText}
+        setRenderContent={setRenderContent}
+        language={language}
+      />
     </div>
   );
 };

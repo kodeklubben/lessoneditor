@@ -25,7 +25,7 @@ const NewLesson = ({ showSpinner, setShowPopup, setShowSpinner }) => {
     }
   };
   const navigateToLandingpage = (lessonId, lesson) => {
-    const target = ["/editor", lessonId, lesson, "nb"].join("/");
+    const target = ["/editor", lessonId, lesson].join("/");
     history.push({ pathname: target });
     setShowSpinner(false);
   };

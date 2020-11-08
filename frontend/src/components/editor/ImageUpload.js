@@ -21,6 +21,8 @@ const ImageUpload = ({
   let start = cursorPositionStart + 2;
   let end = cursorPositionEnd + 18;
 
+  const { lessonId } = useParams();
+
   const fileNameErrorMessage =
     "Ugyldig filnavn, sjekk om det er mellomrom eller spesialtegn i filnavnet";
 
@@ -49,7 +51,6 @@ const ImageUpload = ({
     setCursorPositionEnd(end);
     setCursorPosition(start, end);
   };
-  const { lessonId } = useParams();
 
   const fileSelectedHandler = async (event) => {
     try {
