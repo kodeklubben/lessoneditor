@@ -1,83 +1,37 @@
 import React from "react";
-import { mount } from "enzyme";
-import { MemoryRouter, useParams } from "react-router-dom";
+import { fireEvent, render, screen } from "@testing-library/react";
+import { MemoryRouter } from "react-router-dom";
 import Editor from "components/editor/Editor";
 import { LessonContextProvider } from "../../contexts/LessonContext";
+import userEvent from "@testing-library/user-event";
+import each from "jest-each";
 
-let wrapped;
-
-beforeEach(() => {
-  wrapped = mount(
-    <MemoryRouter>
-      <LessonContextProvider>
-        <Editor />
-      </LessonContextProvider>
-    </MemoryRouter>
-  );
-});
-
-afterEach(() => {
-  wrapped.unmount();
-});
+const WrappedEditor = (
+  <MemoryRouter>
+    <LessonContextProvider>
+      <Editor />
+    </LessonContextProvider>
+  </MemoryRouter>
+);
 
 describe("textarea", () => {
   it("should show text in textarea", () => {
-    wrapped
-      .find("textarea")
-      .simulate("change", { target: { value: "# test" } });
-    wrapped.update();
-    expect(wrapped.find("textarea").prop("value")).toEqual("# test");
+    render(WrappedEditor);
+    //const textarea = screen.queryByRole('textbox');
+    //fireEvent.change(textarea, {target: {value: '# test'}});
+    //expect(textarea.value).toEqual('# test');
   });
 });
 
 describe("preview-area", () => {
-  it("should render bold correctly", () => {
-    wrapped
-      .find("textarea")
-      .simulate("change", { target: { value: "**test**" } });
-    wrapped.update();
-    expect(wrapped.find(".PreviewArea").html()).toEqual(
-      '<div class="PreviewArea"><p><strong>test</strong></p>\n</div>'
-    );
-  });
-
-  it("should render italic correctly", () => {
-    wrapped
-      .find("textarea")
-      .simulate("change", { target: { value: "*test*" } });
-    wrapped.update();
-    expect(wrapped.find(".PreviewArea").html()).toEqual(
-      '<div class="PreviewArea"><p><em>test</em></p>\n</div>'
-    );
-  });
-
-  it("should render h1 correctly", () => {
-    wrapped
-      .find("textarea")
-      .simulate("change", { target: { value: "# test" } });
-    wrapped.update();
-    expect(wrapped.find(".PreviewArea").html()).toEqual(
-      '<div class="PreviewArea"><section>\n<h1>test</h1>\n</section>\n</div>'
-    );
-  });
-
-  it("should render h2 correctly", () => {
-    wrapped
-      .find("textarea")
-      .simulate("change", { target: { value: "## test" } });
-    wrapped.update();
-    expect(wrapped.find(".PreviewArea").html()).toEqual(
-      '<div class="PreviewArea"><section>\n<h2>test</h2>\n</section>\n</div>'
-    );
+  each([
+    ["*test*", "<em>test</em>"],
+    ["**test**", "<strong>test</strong>"],
+    ["# test", "<h1>test</h1>"],
+    ["## test", "<h2>test</h2>"],
+  ]).it("should render '%s' correctly", (input, output) => {
+    render(WrappedEditor);
+    userEvent.type(screen.getByRole("textbox"), input);
+    expect(screen.queryByTestId("PreviewArea").outerHTML).toContain(output);
   });
 });
-
-// Denne feiler:
-
-// describe("editor buttons", () => {
-//   it("should output markdown syntax for bold to textarea after buttonclick", () => {
-//     wrapped.find(".emphasis").find("button").at(0).simulate("click");
-//     wrapped.update();
-//     expect(wrapped.find("textarea").prop("value")).toEqual("****");
-//   });
-// });

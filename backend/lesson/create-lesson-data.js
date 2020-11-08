@@ -1,17 +1,18 @@
 const saveFile = require("../storage/save-file");
 const lessonInit = require("../utils/lesson-init");
 
-module.exports = async (lessonData, username, edit = false) => {
+module.exports = async (lessonData, username) => {
   const data = lessonInit(lessonData, username);
-  const dataBuffer = Buffer.from(JSON.stringify(data));
-  const ymlBuffer = Buffer.from(JSON.stringify({}));
-  if (!edit) {
+  if (false) {
     await saveFile(
       ["drafts", data.lessonId, data.lesson + ".md"],
       Buffer.from(" ")
     );
   }
-  await saveFile(["drafts", data.lessonId, "data.json"], dataBuffer);
-  await saveFile(["drafts", data.lessonId, "lesson.yml"], ymlBuffer);
+  await saveFile(
+    ["drafts", data.lessonId, "data.json"],
+    Buffer.from(JSON.stringify(data))
+  );
+  await saveFile(["drafts", data.lessonId, "lesson.yml"], Buffer.from(""));
   return data;
 };

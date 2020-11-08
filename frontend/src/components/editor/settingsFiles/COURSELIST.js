@@ -61,6 +61,6 @@ async function fecthData() {
     COURSESLIST = COURSESLISTold;
   }
 }
-fecthData();
+//fecthData();
 
-export { COURSESLIST };
+export { COURSESLISTold as COURSESLIST };

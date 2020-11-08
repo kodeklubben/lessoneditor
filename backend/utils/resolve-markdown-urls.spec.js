@@ -1,5 +1,5 @@
 const resolveMarkdownUrls = require("./resolve-markdown-urls");
-const urlRegex = require("url-regex");
+const urlRegex = require("url-regex-safe");
 
 it("should resolve markdown urls", () => {
   const markdownContent = `

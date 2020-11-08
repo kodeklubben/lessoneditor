@@ -2,23 +2,27 @@
   "name": "lessoneditor",
   "version": "0.1.0",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kodeklubben/lessoneditor"
+  },
   "dependencies": {
-    "axios": "^0.20.0",
+    "axios": "^0.21.0",
     "crypto-js": "^4.0.0",
-    "highlight.js": "^10.2.1",
+    "highlight.js": "^10.3.2",
     "js-yaml": "^3.14.0",
-    "markdown-it": "^12.0.0",
+    "markdown-it": "^12.0.2",
     "markdown-it-attrs": "^3.0.3",
     "markdown-it-emoji": "^2.0.0",
-    "react": "^16.14.0",
-    "react-dom": "^16.14.0",
-    "react-hotkeys-hook": "^2.3.1",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-hotkeys-hook": "^2.4.0",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "scratchblocks": "^3.5.0",
     "semantic-ui-css": "^2.4.1",
-    "semantic-ui-react": "^2.0.0",
-    "slugify": "^1.4.4"
+    "semantic-ui-react": "^2.0.1",
+    "slugify": "^1.4.6"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -43,17 +47,22 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/dom": "^7.26.5",
+    "@testing-library/jest-dom": "^5.11.5",
+    "@testing-library/react": "^11.1.1",
+    "@testing-library/user-event": "^12.2.0",
     "cross-env": "^7.0.2",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.5",
     "enzyme-to-json": "^3.6.1",
     "husky": "^4.3.0",
+    "jest-each": "^26.6.2",
     "moxios": "^0.4.0",
     "node-sass": "^4.14.1",
     "prettier": "^2.1.2",
     "pretty-quick": "^3.1.0",
-    "react-scripts": "^3.4.3",
-    "react-test-renderer": "^16.14.0"
+    "react-scripts": "^4.0.0",
+    "react-test-renderer": "^17.0.1"
   },
   "husky": {
     "hooks": {

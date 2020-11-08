@@ -1,16 +1,15 @@
 import "./frontpage.scss";
 import React, { useContext, useState } from "react";
-import NewLesson from "./NewLesson";
+import NewLessonModal from "./NewLessonModal";
 import ItemList from "./ItemList";
 import { UserContext } from "../../contexts/UserContext";
 import Navbar from "../navbar/Navbar";
 import { useHistory } from "react-router-dom";
 import NewLessonButton from "./newLessonButton";
 import ShowSpinner from "../ShowSpinner";
+import { Button } from "semantic-ui-react";
 
 const Overview = () => {
-  const [showPopup, setShowPopup] = useState(false); // Les om useState i React
-  const [showSpinner, setShowSpinner] = useState(false);
   const history = useHistory();
   const context = useContext(UserContext);
   const { lessons } = context;
@@ -21,22 +20,10 @@ const Overview = () => {
 
   return (
     <div>
-      {showSpinner ? <ShowSpinner /> : ""}
       <Navbar />
       <div className="overViewContainer">
         <p id="welcome">Velkommen, </p>
-        <NewLessonButton setShowPopup={setShowPopup} id="newLessonButton" />
-
-        {showPopup ? (
-          <NewLesson
-            showSpinner={showSpinner}
-            setShowSpinner={setShowSpinner}
-            setShowPopup={setShowPopup}
-          />
-        ) : (
-          ""
-        )}
-
+        <NewLessonModal trigger={<Button>ny oppgave</Button>} />
         <div
           style={{
             backgroundColor: "grey",

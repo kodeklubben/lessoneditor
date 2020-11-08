@@ -17,12 +17,17 @@ import {
   GRADE,
   SUBJECT,
   TOPIC,
-} from "../editor/buttonpanel/datapanel/settings/landingpage_NO";
+} from "./buttonpanel/datapanel/settings/landingpage_NO";
 
 const Editor = () => {
   const { lessonId, file, language } = useParams();
-  const context = useContext(LessonContext);
-  const { data, getYmlData, setData, setHeaderData, getLessonData } = context;
+  const {
+    data,
+    getYmlData,
+    setData,
+    setHeaderData,
+    getLessonData,
+  } = useContext(LessonContext);
   const [mdText, setMdText] = useState("");
   const [showSpinner, setShowSpinner] = useState(false);
   const [buttonValues, setButtonValues] = useState({});

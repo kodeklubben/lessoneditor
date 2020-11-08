@@ -1,20 +1,13 @@
 .navbar_container {
-  padding: 0px;
   display: block;
-  margin-top: 10px;
-  height: 8vh;
-  border-radius: 5px;
-  display: flex;
-  position: static;
+  height: 6em;
 }
 
 .navbar_logo {
-  float: left;
-  height: 8vh;
+  height: 3em;
 }
 
 .navbar_profile {
-  display: flex;
   flex-direction: row;
   border-radius: 5px;
   margin: auto 1em auto auto;

@@ -1,49 +1,41 @@
 import "./itemlist.scss";
 import React from "react";
+import {
+  Button,
+  Card,
+  CardContent,
+  CardGroup,
+  CardHeader,
+  CardMeta,
+  Image,
+} from "semantic-ui-react";
 
 function ItemList({ items, removeLesson, navigateToHome }) {
   return (
-    <div className="ui five column grid">
+    <CardGroup>
       {items.length > 0 &&
-        items.map((listitem, index) => {
-          return (
-            <div key={"listitem" + index} className="column">
-              <div className="ui fluid card">
-                <div className="image itemListImage">
-                  <img
-                    src={`${listitem.thumb}?${performance.now()}`}
-                    alt={"oppgavebilde"}
-                  />
-                </div>
-                <div className="content">
-                  <div className="header">
-                    {listitem.lesson.replace(/-/g, " ")}
-                  </div>
-                  <div className="meta">
-                    <h4>{listitem.course}</h4>
-                  </div>
-                </div>
-                <div className="extra content">
-                  <button
-                    className="ui button"
-                    onClick={() => navigateToHome(listitem.lessonId)}
-                  >
-                    Åpne
-                  </button>
-                  <button
-                    className="ui button"
-                    onClick={async () => {
-                      await removeLesson(listitem.lessonId);
-                    }}
-                  >
-                    Fjerne
-                  </button>
-                </div>
-              </div>
-            </div>
-          );
-        })}
-    </div>
+        items.map((listitem, index) => (
+          <Card key={"cardgroup-card-" + index}>
+            <Image src={listitem.thumb} className={"itemListImage"}></Image>
+            <CardContent>
+              <CardHeader>{listitem.lesson.replace(/-/g, " ")}</CardHeader>
+              <CardMeta>{listitem.course}</CardMeta>
+            </CardContent>
+            <CardContent extra>
+              <Button onClick={() => navigateToHome(listitem.lessonId)}>
+                Åpne
+              </Button>
+              <Button
+                onClick={async () => {
+                  await removeLesson(listitem.lessonId);
+                }}
+              >
+                Fjerne
+              </Button>
+            </CardContent>
+          </Card>
+        ))}
+    </CardGroup>
   );
 }
 export default ItemList;

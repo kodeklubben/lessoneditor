@@ -1,8 +1,8 @@
-const loadFile = require("../storage/load-file");
+const loadUserLessons = require("../lesson/load-user-lessons");
 
 module.exports = async (username, course, title) => {
-  const result = await loadFile(["users", username, "lessons.json"]);
-  let lessonId = null;
+  const result = await loadUserLessons([username]);
+  let lessonId = undefined;
   if (result) {
     const lessons = JSON.parse(result);
     lessons.forEach((lesson) => {

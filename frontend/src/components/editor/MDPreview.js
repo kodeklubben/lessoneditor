@@ -7,7 +7,6 @@ import { renderToggleButtons } from "utils/renderToggleButton";
 
 const MDPreview = ({ mdText, course, language, renderContent }) => {
   const parseMD = mdParser(mdText);
-
   useEffect(() => {
     renderToggleButtons();
     if (course === "microbit" && renderContent) {
@@ -15,22 +14,18 @@ const MDPreview = ({ mdText, course, language, renderContent }) => {
     }
   }, [course, parseMD, renderContent, language]);
 
-  if (course === "scratch" && renderContent) {
-    let lessonContent = renderScratchBlocks(parseMD);
-    return (
-      <div
-        className="PreviewArea"
-        dangerouslySetInnerHTML={{ __html: lessonContent }}
-      />
-    );
-  } else {
-    return (
-      <div
-        className="PreviewArea"
-        dangerouslySetInnerHTML={{ __html: parseMD }}
-      />
-    );
-  }
+  const html =
+    course === "scratch" && renderContent
+      ? renderScratchBlocks(parseMD)
+      : parseMD;
+
+  return (
+    <div
+      data-testid="PreviewArea"
+      className="PreviewArea"
+      dangerouslySetInnerHTML={{ __html: html }}
+    />
+  );
 };
 
 export default MDPreview;
