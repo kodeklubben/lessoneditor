@@ -13,7 +13,6 @@ import ShowSpinner from "../ShowSpinner";
 import parseMdHeader from "./utils/parseMdHeader";
 import laererveiledningMal from "./LaererveiledningMal";
 import oppgaveMal from "../editor/settingsFiles/oppgaveMal";
-import getLanguageFromFilename from "components/getLanguageFromFilename";
 import {
   GRADE,
   SUBJECT,
@@ -40,7 +39,7 @@ const Editor = () => {
     cursorInt: 0,
   });
 
-  const language = getLanguageFromFilename(file);
+  const language = file.slice(-3, -2) === "_" ? file.slice(-2) : "nb";
 
   const [openMetaData, setOpenMetaData] = useState(false);
 
