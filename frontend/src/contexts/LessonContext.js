@@ -31,8 +31,7 @@ export const LessonContextProvider = (props) => {
 
   useEffect(() => {
     async function fetchData() {
-      const res = await axios.get(lessonDataUrl);
-      return res;
+      return await axios.get(lessonDataUrl);
     }
     if (lessonId) {
       fetchData().then((res) => setData(res.data));
@@ -41,8 +40,9 @@ export const LessonContextProvider = (props) => {
 
   useEffect(() => {
     async function fetchData() {
-      const res = await axios.get(lessonYMLDataUrl);
-      return res.data;
+      return axios.get(lessonYMLDataUrl).then((res) => {
+        return res.data;
+      });
     }
     if (lessonId) {
       fetchData().then((res) =>
@@ -56,8 +56,9 @@ export const LessonContextProvider = (props) => {
 
   useEffect(() => {
     async function fetchList() {
-      const res = await axios.get(lessonListUrl);
-      setLessonList(res.data);
+      axios.get(lessonListUrl).then((res) => {
+        setLessonList(res.data);
+      });
     }
     if (lessonId) fetchList();
   }, [lessonId, lessonListUrl]);
@@ -73,24 +74,26 @@ export const LessonContextProvider = (props) => {
     setLanguage,
 
     fetchList: async () => {
-      const res = await axios.get(lessonListUrl);
-      setLessonList(res.data);
+      axios.get(lessonListUrl).then((res) => {
+        setLessonList(res.data);
+      });
     },
     lessonList,
     saveLesson: async (data) => {
       if (lessonId) {
-        await axios.post(lessonDataUrl, data);
-        setData(data);
+        axios.post(lessonDataUrl, await data);
+        setData(await data);
       }
     },
     saveYml: async (ymlData) => {
       if (lessonId) {
-        await axios.post(lessonYMLDataUrl, ymlData);
+        axios.post(lessonYMLDataUrl, await ymlData);
       }
     },
     getLessonData: async () => {
-      const res = await axios.get(lessonDataUrl);
-      return res;
+      return await axios.get(lessonDataUrl).then((data) => {
+        return data;
+      });
     },
     getHeaderData: async () => {
       return headerData;
