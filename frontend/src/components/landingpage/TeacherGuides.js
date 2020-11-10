@@ -2,7 +2,7 @@ import "./landingpage.scss";
 import React from "react";
 import LessonCard from "./LessonCard";
 
-const TeacherGuides = ({ lessonId, lessonList }) => {
+const TeacherGuides = ({ lessonId, lessonList, setShowSpinner }) => {
   let languages = [];
   let allLanguages = ["nb", "nn", "en", "is"];
 
@@ -46,6 +46,7 @@ const TeacherGuides = ({ lessonId, lessonList }) => {
       <div style={{ marginBottom: "5em" }}>
         <div style={{ display: "flex" }}>
           {allLanguages.map((element, index) => {
+            if (languages.includes(element)) setShowSpinner(false);
             return (
               <div key={element + index}>
                 <LessonCard
