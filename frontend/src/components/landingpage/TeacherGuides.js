@@ -39,6 +39,7 @@ const TeacherGuides = ({ lessonId, lessonList, setShowSpinner }) => {
         }
       }
     });
+    setShowSpinner(false);
   }
 
   return (
@@ -46,7 +47,6 @@ const TeacherGuides = ({ lessonId, lessonList, setShowSpinner }) => {
       <div style={{ marginBottom: "5em" }}>
         <div style={{ display: "flex" }}>
           {allLanguages.map((element, index) => {
-            if (languages.includes(element)) setShowSpinner(false);
             return (
               <div key={element + index}>
                 <LessonCard
