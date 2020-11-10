@@ -36,10 +36,12 @@ const Languages = ({ mdText, setShowSpinner, language }) => {
   const history = useHistory();
   const { lessonId, file } = useParams();
   const lessonContext = useContext(LessonContext);
-  const { headerData, setLanguage } = lessonContext;
+  const { getHeaderData, setLanguage } = lessonContext;
 
   const newHeader = async (language) => {
-    const header = createNewHeader(await headerData, language);
+    const header = getHeaderData().then((res) => {
+      return createNewHeader(res, language);
+    });
 
     return header;
   };

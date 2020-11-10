@@ -46,11 +46,13 @@ const ButtonPanel = ({
   const history = useHistory();
   const { lessonId, file } = useParams();
   const context = useContext(LessonContext);
-  const { data, headerData } = context;
+  const { data, getHeaderData } = context;
   const course = data.course;
 
-  const newHeader = async () => {
-    const header = createNewHeader(await headerData, await language);
+  const newHeader = async (language) => {
+    const header = getHeaderData().then((res) => {
+      return createNewHeader(res, language);
+    });
 
     return header;
   };

@@ -91,14 +91,14 @@ const Editor = () => {
   };
 
   const insertMetaDataInTeacherGuide = async () => {
-    return await getYmlData().then(async (res) => {
-      let subject = await res.tags.subject.map((element) => {
+    const returnvalue = await getYmlData().then((res) => {
+      let subject = res.tags.subject.map((element) => {
         return SUBJECT[element];
       });
-      let topic = await res.tags.topic.map((element) => {
+      let topic = res.tags.topic.map((element) => {
         return TOPIC[element];
       });
-      let grade = await res.tags.grade.map((element) => {
+      let grade = res.tags.grade.map((element) => {
         return GRADE[element];
       });
       let veiledningWithData = laererveiledningMal.replace(
@@ -116,42 +116,32 @@ const Editor = () => {
       console.log(veiledningWithData);
       return veiledningWithData;
     });
+    return returnvalue;
   };
 
   useEffect(() => {
     setShowSpinner(true);
     async function fetchData() {
-      await getLessonData().then(async (res) => {
+      getLessonData().then(async (res) => {
         setData(res.data);
         if (lessonId && file) {
-          await fetchMdText(lessonId, file).then(async (lessonText) => {
-            if (typeof lessonText !== "string") {
-              console.log(
-                "Err: something is wrong with lessontextFetch in editor: " +
-                  lessonText
-              );
-              return;
-            }
-            console.log("typeof lessontext : " + typeof lessonText);
-            console.log("lessonText.length : " + lessonText.length);
+          fetchMdText(lessonId, file).then(async (lessonText) => {
             if (lessonText.length <= 1) {
-              console.log("lessonText.length <= 1");
               if (file.slice(0, 6) === "README") {
                 await insertMetaDataInTeacherGuide().then((res) => {
                   setMdText(res);
-                  setOpenMetaData(true);
                   setShowSpinner(false);
+                  setOpenMetaData(true);
                 });
               } else {
                 setMdText(oppgaveMal);
-                setOpenMetaData(true);
                 setShowSpinner(false);
+                setOpenMetaData(true);
               }
-              setHeaderData({});
+              // setHeaderData({});
 
               return;
             } else {
-              console.log("lessonText.length not <= 1");
               const parts = lessonText.split("---\n");
               const parsedHeader = parts[1] ? parseMdHeader(parts[1]) : {};
               const body = parts[2] ? parts[2].trim() : "";
