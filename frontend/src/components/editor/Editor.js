@@ -91,7 +91,7 @@ const Editor = () => {
   };
 
   const insertMetaDataInTeacherGuide = async () => {
-    return await getYmlData().then((res) => {
+    return getYmlData().then((res) => {
       let subject = res.tags.subject.map((element) => {
         return SUBJECT[element];
       });
@@ -113,6 +113,7 @@ const Editor = () => {
         /{grade}/,
         grade.join(", ")
       );
+      console.log(veiledningWithData);
       return veiledningWithData;
     });
   };
@@ -123,7 +124,7 @@ const Editor = () => {
       setData(res.data);
       if (lessonId && file) {
         async function fetchData() {
-          return await fetchMdText(lessonId, file);
+          return fetchMdText(lessonId, file);
         }
         fetchData().then(async (lessonText) => {
           if (typeof lessonText !== "string") {
@@ -138,7 +139,7 @@ const Editor = () => {
           if (lessonText.length <= 1) {
             console.log("lessonText.length <= 1");
             setOpenMetaData(true);
-            if (file === "README") {
+            if (file.slice(0, 6) === "README") {
               insertMetaDataInTeacherGuide().then((res) => {
                 setMdText(res);
                 setShowSpinner(false);

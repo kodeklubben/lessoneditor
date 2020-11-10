@@ -3,7 +3,7 @@ import React, { useContext } from "react";
 import { LessonContext } from "contexts/LessonContext";
 import LessonCard from "./LessonCard";
 
-const LessonTexts = ({ lessonId, lessonList }) => {
+const LessonTexts = ({ lessonId, lessonList, setShowSpinner }) => {
   const lesson = useContext(LessonContext);
   const { data } = lesson;
 
@@ -50,6 +50,7 @@ const LessonTexts = ({ lessonId, lessonList }) => {
       <div style={{ marginBottom: "5em" }}>
         <div style={{ display: "flex" }}>
           {allLanguages.map((element, index) => {
+            if (languages.includes(element)) setShowSpinner(false);
             return (
               <div key={element + index}>
                 <LessonCard

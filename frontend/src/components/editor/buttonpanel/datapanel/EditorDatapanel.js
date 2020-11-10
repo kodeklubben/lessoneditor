@@ -14,12 +14,13 @@ const EditorDatapanel = ({
   file,
   openMetaData,
   setOpenMetaData,
+  setShowSpinner,
   language,
 }) => {
   const { lessonId } = useParams();
   const context = useContext(LessonContext);
   const userContext = useContext(UserContext);
-  const { headerData, setHeaderData } = context;
+  const { getHeaderData, setHeaderData } = context;
 
   const [state, setState] = useState({ title: "", authorList: [] });
 
@@ -35,23 +36,27 @@ const EditorDatapanel = ({
   );
 
   useEffect(() => {
-    const setDataFromHeaderData = async () => {
-      if (Object.keys(await headerData).length > 0) {
-        setState(await headerData);
-      } else if (await userContext.user.name) {
-        setState((prevState) => ({
-          ...prevState,
-          authorList: [userContext.user.name],
-          title: context.data.lesson
-            ? context.data.lesson.replace(/-/g, " ")
-            : "",
-        }));
-      } else {
-        setState({ title: "", authorList: [] });
-      }
-    };
-    setDataFromHeaderData();
-  }, [headerData, context.data.lesson, userContext.user]);
+    setShowSpinner(true);
+    getHeaderData().then((headerData) => {
+      const setDataFromHeaderData = async () => {
+        if (Object.keys(await headerData).length > 0) {
+          setState(await headerData);
+        } else if (await userContext.user.name) {
+          setState((prevState) => ({
+            ...prevState,
+            authorList: [userContext.user.name],
+            title: context.data.lesson
+              ? context.data.lesson.replace(/-/g, " ")
+              : "",
+          }));
+        } else {
+          setState({ title: "", authorList: [] });
+        }
+      };
+      setDataFromHeaderData();
+      setShowSpinner(false);
+    });
+  }, [getHeaderData, setShowSpinner, context.data.lesson, userContext.user]);
 
   const changeHandler = (event) => {
     const nam = event.target.name;
@@ -77,12 +82,6 @@ const EditorDatapanel = ({
     const newHeader = createNewHeader(state);
     const newMdText =
       newHeader !== undefined ? newHeader + "\n\n\n" + mdText : mdText;
-    // let filename = "";
-    // if (language === "nb") {
-    //   filename = file;
-    // } else {
-    //   filename = `${file}_${language}`;
-    // }
     await saveMdText(lessonId, file, newMdText).then(window.location.reload());
   };
 

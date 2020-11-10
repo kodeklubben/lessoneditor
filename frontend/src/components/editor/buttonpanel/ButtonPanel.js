@@ -71,7 +71,6 @@ const ButtonPanel = ({
       } else {
         target = ["/landingpage", lessonId, "lessontexts"].join("/");
       }
-      console.log(language === "nb" && file.slice(0, 6) !== "README");
 
       await saveMdText(
         lessonId,
@@ -158,6 +157,7 @@ const ButtonPanel = ({
             file={file}
             openMetaData={openMetaData}
             setOpenMetaData={setOpenMetaData}
+            setShowSpinner={setShowSpinner}
             language={language}
           />
           <Popup
