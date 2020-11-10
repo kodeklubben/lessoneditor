@@ -58,6 +58,7 @@ const EditorDatapanel = ({
       });
     }
     fetchData();
+    setShowSpinner(false);
   }, [getHeaderData, setShowSpinner, context.data.lesson, userContext.user]);
 
   const changeHandler = (event) => {
