@@ -13,8 +13,8 @@ const Overview = () => {
   const [showSpinner, setShowSpinner] = useState(false);
   const history = useHistory();
   const context = useContext(UserContext);
-  const { lessons } = context;
-  const navigateToHome = (lessonId, file) => {
+  const { lessons, removeLesson } = context;
+  const navigateToHome = (lessonId) => {
     const target = ["/landingpage", lessonId, "lessontexts"].join("/");
     history.push(target);
   };
@@ -61,7 +61,7 @@ const Overview = () => {
             </p>
             <ItemList
               items={lessons}
-              removeLesson={context.removeLesson}
+              removeLesson={removeLesson}
               navigateToHome={navigateToHome}
             />
           </>

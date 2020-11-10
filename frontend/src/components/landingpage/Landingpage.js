@@ -91,7 +91,7 @@ const Landingpage = () => {
           <TeacherGuides
             lessonId={lessonId}
             lessonList={lessonList}
-            setShowSpinnerSpinner={setShowSpinner}
+            setShowSpinner={setShowSpinner}
           />
         );
         break;
