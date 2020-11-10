@@ -91,14 +91,14 @@ const Editor = () => {
   };
 
   const insertMetaDataInTeacherGuide = async () => {
-    return getYmlData().then((res) => {
-      let subject = res.tags.subject.map((element) => {
+    return await getYmlData().then(async (res) => {
+      let subject = await res.tags.subject.map((element) => {
         return SUBJECT[element];
       });
-      let topic = res.tags.topic.map((element) => {
+      let topic = await res.tags.topic.map((element) => {
         return TOPIC[element];
       });
-      let grade = res.tags.grade.map((element) => {
+      let grade = await res.tags.grade.map((element) => {
         return GRADE[element];
       });
       let veiledningWithData = laererveiledningMal.replace(
@@ -120,65 +120,65 @@ const Editor = () => {
 
   useEffect(() => {
     setShowSpinner(true);
-    getLessonData().then((res) => {
-      setData(res.data);
-      if (lessonId && file) {
-        async function fetchData() {
-          return fetchMdText(lessonId, file);
-        }
-        fetchData().then(async (lessonText) => {
-          if (typeof lessonText !== "string") {
-            console.log(
-              "Err: something is wrong with lessontextFetch in editor: " +
-                lessonText
-            );
-            return;
-          }
-          console.log("typeof lessontext : " + typeof lessonText);
-          console.log("lessonText.length : " + lessonText.length);
-          if (lessonText.length <= 1) {
-            console.log("lessonText.length <= 1");
-            setOpenMetaData(true);
-            if (file.slice(0, 6) === "README") {
-              insertMetaDataInTeacherGuide().then((res) => {
-                setMdText(res);
-                setShowSpinner(false);
-              });
-            } else {
-              setMdText(oppgaveMal);
-              setShowSpinner(false);
+    async function fetchData() {
+      await getLessonData().then(async (res) => {
+        setData(res.data);
+        if (lessonId && file) {
+          await fetchMdText(lessonId, file).then(async (lessonText) => {
+            if (typeof lessonText !== "string") {
+              console.log(
+                "Err: something is wrong with lessontextFetch in editor: " +
+                  lessonText
+              );
+              return;
             }
-            setHeaderData({});
+            console.log("typeof lessontext : " + typeof lessonText);
+            console.log("lessonText.length : " + lessonText.length);
+            if (lessonText.length <= 1) {
+              console.log("lessonText.length <= 1");
+              if (file.slice(0, 6) === "README") {
+                await insertMetaDataInTeacherGuide().then((res) => {
+                  setMdText(res);
+                  setOpenMetaData(true);
+                  setShowSpinner(false);
+                });
+              } else {
+                setMdText(oppgaveMal);
+                setOpenMetaData(true);
+                setShowSpinner(false);
+              }
+              setHeaderData({});
 
-            return;
-          } else {
-            console.log("lessonText.length not <= 1");
-            const parts = lessonText.split("---\n");
-            const parsedHeader = parts[1] ? parseMdHeader(parts[1]) : {};
-            const body = parts[2] ? parts[2].trim() : "";
-            setMdText(body);
-            setUndo([body]);
-            const newHeaderData = {
-              title: parsedHeader.title,
-              authorList: parsedHeader.author
-                ? parsedHeader.author.split(",").map((item) => {
-                    return item.trim();
-                  })
-                : [],
-              translatorList: parsedHeader.translator
-                ? parsedHeader.translator.split(",").map((item) => {
-                    return item.trim();
-                  })
-                : [],
-            };
-            setHeaderData(newHeaderData);
-            setShowSpinner(false);
-            return;
-          }
-        });
-      }
-    });
-
+              return;
+            } else {
+              console.log("lessonText.length not <= 1");
+              const parts = lessonText.split("---\n");
+              const parsedHeader = parts[1] ? parseMdHeader(parts[1]) : {};
+              const body = parts[2] ? parts[2].trim() : "";
+              setMdText(body);
+              setUndo([body]);
+              const newHeaderData = {
+                title: parsedHeader.title,
+                authorList: parsedHeader.author
+                  ? parsedHeader.author.split(",").map((item) => {
+                      return item.trim();
+                    })
+                  : [],
+                translatorList: parsedHeader.translator
+                  ? parsedHeader.translator.split(",").map((item) => {
+                      return item.trim();
+                    })
+                  : [],
+              };
+              setHeaderData(newHeaderData);
+              setShowSpinner(false);
+              return;
+            }
+          });
+        }
+      });
+    }
+    fetchData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [file, language, lessonId, setHeaderData]);
 
