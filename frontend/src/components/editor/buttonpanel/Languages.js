@@ -53,7 +53,7 @@ const Languages = ({ mdText, setShowSpinner, language }) => {
     setLanguage(language);
   }, [language, setLanguage]);
 
-  const handleChange = async (event, { value }) => {
+  const handleChange = (event, { value }) => {
     setShowSpinner(true);
     let target = "";
     if (lessonId) {
@@ -63,13 +63,13 @@ const Languages = ({ mdText, setShowSpinner, language }) => {
         value === "nb" ? filename : `${filename}_${value}`,
       ].join("/");
     }
-    newHeader(value).then(async (newHeader) => {
+    newHeader(value).then((newHeader) => {
       const newMdText =
         typeof newHeader !== "undefined"
           ? newHeader + "\n\n\n" + mdText
           : mdText;
 
-      await saveMdText(lessonId, file, newMdText).then(() => {
+      saveMdText(lessonId, file, newMdText).then(() => {
         if (target !== "") {
           history.push(target);
           window.location.reload();
