@@ -37,28 +37,27 @@ const EditorDatapanel = ({
 
   useEffect(() => {
     setShowSpinner(true);
-    async function fetchData() {
-      await getHeaderData().then((headerData) => {
-        const setDataFromHeaderData = async () => {
-          if (Object.keys(await headerData).length > 0) {
-            setState(await headerData);
-          } else if (await userContext.user.name) {
-            setState((prevState) => ({
-              ...prevState,
-              authorList: [userContext.user.name],
-              title: context.data.lesson
-                ? context.data.lesson.replace(/-/g, " ")
-                : "",
-            }));
-          } else {
-            setState({ title: "", authorList: [] });
-          }
-        };
-        setDataFromHeaderData();
+    function fetchData() {
+      getHeaderData().then((headerData) => {
+        if (Object.keys(headerData).length > 0) {
+          setState(headerData);
+          setShowSpinner(false);
+        } else if (userContext?.user?.name) {
+          setState((prevState) => ({
+            ...prevState,
+            authorList: [userContext?.user?.name],
+            title: context?.data?.lesson
+              ? context?.data?.lesson.replace(/-/g, " ")
+              : "",
+          }));
+          setShowSpinner(false);
+        } else {
+          setState({ title: "", authorList: [] });
+          setShowSpinner(false);
+        }
       });
     }
     fetchData();
-    setShowSpinner(false);
   }, [getHeaderData, setShowSpinner, context.data.lesson, userContext.user]);
 
   const changeHandler = (event) => {

@@ -49,7 +49,7 @@ const ButtonPanel = ({
   const { data, getHeaderData } = context;
   const course = data.course;
 
-  const newHeader = async (language) => {
+  const newHeader = (language) => {
     const header = getHeaderData().then((res) => {
       return createNewHeader(res, language);
     });
@@ -62,9 +62,9 @@ const ButtonPanel = ({
     navigateToHome();
   };
 
-  const navigateToHome = async () => {
+  const navigateToHome = () => {
     let target = "";
-    newHeader().then(async (result) => {
+    newHeader().then((result) => {
       const newMdText =
         typeof result !== "undefined" ? result + "\n\n\n" + mdText : mdText;
 
@@ -74,7 +74,7 @@ const ButtonPanel = ({
         target = ["/landingpage", lessonId, "lessontexts"].join("/");
       }
 
-      await saveMdText(
+      saveMdText(
         lessonId,
         file,
         newMdText,
