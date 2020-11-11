@@ -92,16 +92,16 @@ const Editor = () => {
 
   const insertMetaDataInTeacherGuide = async () => {
     const ymlData = await getYmlData();
-    let subject = ymlData?.tags?.subject.map((element) => {
+
+    let subject = ymlData.tags.subject.map((element) => {
       return SUBJECT[element];
     });
-    let topic = ymlData?.tags?.topic.map((element) => {
+    let topic = ymlData.tags.topic.map((element) => {
       return TOPIC[element];
     });
-    let grade = ymlData?.tags?.grade.map((element) => {
+    let grade = ymlData.tags.grade.map((element) => {
       return GRADE[element];
     });
-
     let veiledningWithData = laererveiledningMal.replace(
       /{subject}/,
       subject.join(", ")
@@ -114,58 +114,55 @@ const Editor = () => {
       /{grade}/,
       grade.join(", ")
     );
+
     return veiledningWithData;
   };
 
   useEffect(() => {
     setShowSpinner(true);
-    async function initLesson() {
-      await getLessonData().then(async (res) => {
-        setData(await res.data);
-        if (lessonId && file) {
-          await fetchMdText(lessonId, file).then(async (lessonText) => {
-            if (lessonText.length <= 1) {
-              if (file.slice(0, 6) === "README") {
-                insertMetaDataInTeacherGuide().then((res) => {
-                  setMdText(res);
-                  setOpenMetaData(true);
-                  setShowSpinner(false);
-                });
-              } else {
-                setMdText(oppgaveMal);
-                setOpenMetaData(true);
-                setShowSpinner(false);
-              }
-              // setHeaderData({});
-              return;
-            } else {
-              const parts = lessonText.split("---\n");
-              const parsedHeader = parts[1] ? parseMdHeader(parts[1]) : {};
-              const body = parts[2] ? parts[2].trim() : "";
-              setMdText(body);
-              setUndo([body]);
-              const newHeaderData = {
-                title: parsedHeader.title,
-                authorList: parsedHeader.author
-                  ? parsedHeader.author.split(",").map((item) => {
-                      return item.trim();
-                    })
-                  : [],
-                translatorList: parsedHeader.translator
-                  ? parsedHeader.translator.split(",").map((item) => {
-                      return item.trim();
-                    })
-                  : [],
-              };
-              setHeaderData(newHeaderData);
-              setShowSpinner(false);
-              return;
-            }
-          });
+    getLessonData().then((res) => {
+      setData(res.data);
+      if (lessonId && file) {
+        async function fetchData() {
+          const lessonText = await fetchMdText(lessonId, file);
+          return lessonText;
         }
-      });
-    }
-    initLesson();
+
+        fetchData().then(async (lessonText) => {
+          const parts = lessonText.split("---\n");
+          const parsedHeader = parts[1] ? parseMdHeader(parts[1]) : {};
+          const body = parts[2] ? parts[2].trim() : "";
+          if (body.length === 0) {
+            setOpenMetaData(true);
+            file.slice(0, 6) === "README"
+              ? insertMetaDataInTeacherGuide().then((res) => setMdText(res))
+              : setMdText(oppgaveMal);
+            setHeaderData({});
+            setShowSpinner(false);
+            return;
+          } else {
+            setMdText(body);
+            setUndo([body]);
+            const newHeaderData = {
+              title: parsedHeader.title,
+              authorList: parsedHeader.author
+                ? parsedHeader.author.split(",").map((item) => {
+                    return item.trim();
+                  })
+                : [],
+              translatorList: parsedHeader.translator
+                ? parsedHeader.translator.split(",").map((item) => {
+                    return item.trim();
+                  })
+                : [],
+            };
+            setHeaderData(newHeaderData);
+            setShowSpinner(false);
+            return;
+          }
+        });
+      }
+    });
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [file, language, lessonId, setHeaderData]);

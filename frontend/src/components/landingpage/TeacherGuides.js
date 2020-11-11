@@ -2,7 +2,7 @@ import "./landingpage.scss";
 import React from "react";
 import LessonCard from "./LessonCard";
 
-const TeacherGuides = ({ lessonId, lessonList, setShowSpinner }) => {
+const TeacherGuides = ({ lessonId, lessonList }) => {
   let languages = [];
   let allLanguages = ["nb", "nn", "en", "is"];
 
@@ -39,7 +39,6 @@ const TeacherGuides = ({ lessonId, lessonList, setShowSpinner }) => {
         }
       }
     });
-    setShowSpinner(false);
   }
 
   return (

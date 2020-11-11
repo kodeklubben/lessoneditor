@@ -13,7 +13,6 @@ export default async (lessonId, file) => {
     mdText = result.data;
   } catch (e) {
     console.error("No tempFile Found");
-    return mdText;
   }
   return mdText;
 };
