@@ -40,6 +40,8 @@ const Landingpage = () => {
   useEffect(() => {
     if (!data.course) {
       setShowSpinner(true);
+    } else {
+      setShowSpinner(false);
     }
   }, [data.course]);
 
@@ -79,20 +81,12 @@ const Landingpage = () => {
     switch (input) {
       case "lessontexts":
         returnValue = (
-          <LessonTexts
-            lessonId={lessonId}
-            lessonList={lessonList}
-            setShowSpinner={setShowSpinner}
-          />
+          <LessonTexts lessonId={lessonId} lessonList={lessonList} />
         );
         break;
       case "teacherguides":
         returnValue = (
-          <TeacherGuides
-            lessonId={lessonId}
-            lessonList={lessonList}
-            setShowSpinner={setShowSpinner}
-          />
+          <TeacherGuides lessonId={lessonId} lessonList={lessonList} />
         );
         break;
       case "allfiles":
