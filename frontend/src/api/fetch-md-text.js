@@ -9,8 +9,9 @@ export default async (lessonId, file) => {
       lessonId,
       file,
     });
-    const result = await axios.get(tempFileUrl + ".md");
-    mdText = result.data;
+    await axios.get(tempFileUrl + ".md").then((result) => {
+      mdText = result.data;
+    });
   } catch (e) {
     console.error("No tempFile Found");
   }
