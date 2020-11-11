@@ -90,32 +90,31 @@ const Editor = () => {
     setButtonValues({});
   };
 
-  const insertMetaDataInTeacherGuide = () => {
-    const returnvalue = getYmlData().then((res) => {
-      let subject = res.tags.subject.map((element) => {
-        return SUBJECT[element];
-      });
-      let topic = res.tags.topic.map((element) => {
-        return TOPIC[element];
-      });
-      let grade = res.tags.grade.map((element) => {
-        return GRADE[element];
-      });
-      let veiledningWithData = laererveiledningMal.replace(
-        /{subject}/,
-        subject.join(", ")
-      );
-      veiledningWithData = veiledningWithData.replace(
-        /{topic}/,
-        topic.join(", ")
-      );
-      veiledningWithData = veiledningWithData.replace(
-        /{grade}/,
-        grade.join(", ")
-      );
-      return veiledningWithData;
+  const insertMetaDataInTeacherGuide = async () => {
+    const ymlData = await getYmlData();
+    let subject = ymlData?.tags?.subject.map((element) => {
+      return SUBJECT[element];
     });
-    return returnvalue;
+    let topic = ymlData?.tags?.topic.map((element) => {
+      return TOPIC[element];
+    });
+    let grade = ymlData?.tags?.grade.map((element) => {
+      return GRADE[element];
+    });
+
+    let veiledningWithData = laererveiledningMal.replace(
+      /{subject}/,
+      subject.join(", ")
+    );
+    veiledningWithData = veiledningWithData.replace(
+      /{topic}/,
+      topic.join(", ")
+    );
+    veiledningWithData = veiledningWithData.replace(
+      /{grade}/,
+      grade.join(", ")
+    );
+    return veiledningWithData;
   };
 
   useEffect(() => {
@@ -124,12 +123,14 @@ const Editor = () => {
       await getLessonData().then(async (res) => {
         setData(await res.data);
         if (lessonId && file) {
-          fetchMdText(lessonId, file).then(async (lessonText) => {
+          await fetchMdText(lessonId, file).then(async (lessonText) => {
             if (lessonText.length <= 1) {
               if (file.slice(0, 6) === "README") {
-                setMdText(await insertMetaDataInTeacherGuide());
-                setOpenMetaData(true);
-                setShowSpinner(false);
+                insertMetaDataInTeacherGuide().then((res) => {
+                  setMdText(res);
+                  setOpenMetaData(true);
+                  setShowSpinner(false);
+                });
               } else {
                 setMdText(oppgaveMal);
                 setOpenMetaData(true);
