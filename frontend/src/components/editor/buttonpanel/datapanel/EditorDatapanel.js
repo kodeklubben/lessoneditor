@@ -37,7 +37,7 @@ const EditorDatapanel = ({
 
   useEffect(() => {
     setShowSpinner(true);
-    function fetchData() {
+    async function fetchData() {
       getHeaderData().then((headerData) => {
         if (Object.keys(headerData).length > 0) {
           setState(headerData);
@@ -57,8 +57,9 @@ const EditorDatapanel = ({
         }
       });
     }
-    fetchData();
-    setShowSpinner(false);
+    fetchData().then(() => {
+      setShowSpinner(false);
+    });
   }, [getHeaderData, setShowSpinner, context.data.lesson, userContext.user]);
 
   const changeHandler = (event) => {

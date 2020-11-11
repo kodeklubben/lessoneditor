@@ -30,22 +30,22 @@ export const LessonContextProvider = (props) => {
   });
 
   useEffect(() => {
-    async function fetchData() {
+    async function fetchLessonData() {
       return await axios.get(lessonDataUrl);
     }
     if (lessonId) {
-      fetchData().then((res) => setData(res.data));
+      fetchLessonData().then((res) => setData(res.data));
     }
   }, [lessonId, lessonDataUrl]);
 
   useEffect(() => {
-    async function fetchData() {
+    async function fetchYMLData() {
       return axios.get(lessonYMLDataUrl).then((res) => {
         return res.data;
       });
     }
     if (lessonId) {
-      fetchData().then((res) =>
+      fetchYMLData().then((res) =>
         setYmlData((prevState) => ({
           ...prevState,
           ...res,
@@ -55,12 +55,12 @@ export const LessonContextProvider = (props) => {
   }, [lessonId, lessonYMLDataUrl]);
 
   useEffect(() => {
-    async function fetchList() {
+    async function fetchFileList() {
       axios.get(lessonListUrl).then((res) => {
         setLessonList(res.data);
       });
     }
-    if (lessonId) fetchList();
+    if (lessonId) fetchFileList();
   }, [lessonId, lessonListUrl]);
 
   const context = {
@@ -72,13 +72,14 @@ export const LessonContextProvider = (props) => {
     setHeaderData,
     language,
     setLanguage,
+    lessonList,
 
     fetchList: async () => {
-      axios.get(lessonListUrl).then((res) => {
+      await axios.get(lessonListUrl).then((res) => {
         setLessonList(res.data);
       });
     },
-    lessonList,
+
     saveLesson: async (data) => {
       if (lessonId) {
         axios.post(lessonDataUrl, await data);
@@ -91,21 +92,20 @@ export const LessonContextProvider = (props) => {
       }
     },
     getLessonData: async () => {
-      return await axios.get(lessonDataUrl).then((data) => {
-        return data;
-      });
+      return await axios.get(lessonDataUrl);
     },
     getHeaderData: async () => {
-      return headerData;
+      return await headerData;
     },
     getYmlData: async () => {
       async function fetchData() {
-        const res = await axios.get(lessonYMLDataUrl);
-        if (JSON.stringify(res.data) === "{}") {
-          return ymlData;
-        } else {
-          return res.data;
-        }
+        return await axios.get(lessonYMLDataUrl).then((res) => {
+          if (JSON.stringify(res.data) === "{}") {
+            return ymlData;
+          } else {
+            return res.data;
+          }
+        });
       }
 
       const res = fetchData().then((res) => {
