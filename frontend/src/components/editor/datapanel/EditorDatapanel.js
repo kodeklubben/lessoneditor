@@ -42,20 +42,23 @@ const EditorDatapanel = ({
   const target = ["/editor", lessonId, file].join("/");
 
   useEffect(() => {
-    const setDataFromHeaderData = async () => {
+    function fetchData() {
+      // const headerData = getHeaderData();
       if (Object.keys(headerData).length > 0) {
-        setState(await headerData);
-      } else {
-        setState({ title: "", authorList: [] });
+        setState(headerData);
+      } else if (typeof user !== "undefined" && user.name) {
+        setState((prevState) => ({
+          ...prevState,
+          authorList: [user.name],
+          title: data.lessonTitle,
+        }));
       }
-    };
-    setDataFromHeaderData();
-    setState((prevState) => ({
-      ...prevState,
-      authorList: [user?.name ? user?.name : ""],
-      title: data?.lessonTitle,
-    }));
-  }, [headerData, data.lessonTitle, user]);
+      // else {
+      //   setState({ title: "", authorList: [] });
+      // }
+    }
+    fetchData();
+  }, [data.lessonTitle, user, headerData]);
 
   const changeHandler = (event) => {
     const nam = event.target.name;
