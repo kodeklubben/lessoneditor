@@ -1,6 +1,6 @@
 import "./editordatapanel.scss";
 import React, { useState, useEffect, useContext } from "react";
-import { useParams } from "react-router";
+import { useParams, useHistory } from "react-router";
 import { Button, Icon, Popup } from "semantic-ui-react";
 import MultiInput from "./MultiInput";
 import { FORM_TEXT } from "./settings/landingpage_NO.js";
@@ -18,6 +18,7 @@ const EditorDatapanel = ({
   language,
   setShowSpinner,
 }) => {
+  const history = useHistory();
   const { lessonId } = useParams();
   const lessonContext = useContext(LessonContext);
   const userContext = useContext(UserContext);
@@ -37,6 +38,8 @@ const EditorDatapanel = ({
   const getCourseFromSlug = COURSESLIST.find(
     ({ slug }) => slug === data?.course
   );
+
+  const target = ["/editor", lessonId, file].join("/");
 
   useEffect(() => {
     async function getData() {
@@ -91,11 +94,15 @@ const EditorDatapanel = ({
     setShowSpinner(true);
     await saveMdText(lessonId, file, newMdText);
     await fetchMdText(lessonId, file);
-    window.location.reload();
+    history.push({ pathname: "/" });
+    history.replace({ pathname: target });
   };
 
-  const onCancel = () => {
-    window.location.reload();
+  const onCancel = async () => {
+    setShowSpinner(true);
+    await fetchMdText(lessonId, file);
+    history.push({ pathname: "/" });
+    history.replace({ pathname: target });
   };
 
   return (

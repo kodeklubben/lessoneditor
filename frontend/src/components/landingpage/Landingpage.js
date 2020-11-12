@@ -154,7 +154,12 @@ const Landingpage = () => {
               }
             />
           </div>
-          <Datapanel open={open} setOpen={setOpen} />
+          <Datapanel
+            open={open}
+            setOpen={setOpen}
+            lessonId={lessonId}
+            mode={mode}
+          />
         </div>
       </div>
 
