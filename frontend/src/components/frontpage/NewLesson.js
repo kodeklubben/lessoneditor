@@ -38,8 +38,16 @@ const NewLesson = ({ showSpinner, setShowPopup, setShowSpinner }) => {
         title: lessonTitle,
         slug: slugify(lessonTitle, { lower: true, strict: true }),
       };
-      //TODO: Bruke lesson.title andre plasser i editoren
-      const lessonId = await addLesson(course, lesson.slug, lesson.title);
+      const getCourseFromSlug = COURSESLIST.find(
+        ({ slug }) => slug === values.course
+      );
+      const courseTitle = getCourseFromSlug.courseTitle;
+      const lessonId = await addLesson(
+        course,
+        courseTitle,
+        lesson.slug,
+        lesson.title
+      );
       navigateToLandingpage(lessonId, lesson.slug);
     } else {
       setError("Oppgavetittel er ikke satt");

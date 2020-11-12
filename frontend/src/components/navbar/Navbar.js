@@ -28,10 +28,14 @@ const Navbar = () => {
           {file === undefined ? (
             <NewLessonButton setShowPopup={setShowPopup} />
           ) : (
-            <h1 style={{ paddingRight: "17em" }}>
-              <span style={{ color: "gray" }}>Prosjekttittel: </span>
-              {data.lessonTitle}
-            </h1>
+            <>
+              <h1 style={{ paddingRight: "10em" }}>
+                <span style={{ color: "gray" }}>Prosjekttittel: </span>
+                {data.lessonTitle}
+                <span style={{ color: "gray", marginLeft: "1em" }}>Kurs: </span>
+                {data.courseTitle}
+              </h1>
+            </>
           )}
           {showPopup ? <NewLesson setShowPopup={setShowPopup} /> : ""}
           <a id="navbar_gohome" href={"/"}>

@@ -28,7 +28,7 @@ const CodeButton = ({
 }) => {
   const context = useContext(LessonContext);
   const { data } = context;
-  const course = data.course;
+  const course = data.courseTitle;
 
   const outputCodeBlock =
     config.codeblock.output.slice(0, 3) +
