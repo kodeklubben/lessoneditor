@@ -67,7 +67,7 @@ const Languages = ({ mdText, setShowSpinner, language }) => {
 
     await saveMdText(lessonId, file, newMdText);
     if (target !== "") {
-      history.push(target);
+      history.push({ pathname: target });
       window.location.reload();
       // setShowSpinner(false);
       return;

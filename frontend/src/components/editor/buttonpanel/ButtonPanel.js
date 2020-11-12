@@ -80,7 +80,7 @@ const ButtonPanel = ({
       newMdText,
       language === "nb" && file.slice(0, 6) !== "README" ? true : "" //render thumbnail switch
     );
-    history.push(target);
+    history.push({ pathname: target });
   };
 
   return (
