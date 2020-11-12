@@ -40,9 +40,7 @@ const EditorDatapanel = ({
     if (
       typeof user === "undefined" &&
       typeof data.lessonTitle === "undefined" &&
-      typeof data.courseTitle === "undefined" &&
-      user.name.length <= 0 &&
-      data.lessonTitle.length <= 0
+      typeof data.courseTitle === "undefined"
     ) {
       setShowSpinner(true);
     } else {
