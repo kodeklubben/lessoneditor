@@ -47,13 +47,11 @@ const ButtonPanel = ({
   const { lessonId, file } = useParams();
   const context = useContext(LessonContext);
   const { data, getHeaderData } = context;
-  const course = data.course;
+  const course = data?.course;
 
   const newHeader = (language) => {
-    const header = getHeaderData().then((res) => {
-      return createNewHeader(res, language);
-    });
-
+    const res = getHeaderData();
+    const header = createNewHeader(res, language);
     return header;
   };
 
@@ -62,28 +60,27 @@ const ButtonPanel = ({
     navigateToHome();
   };
 
-  const navigateToHome = () => {
+  const navigateToHome = async () => {
     let target = "";
-    newHeader().then((result) => {
-      const newMdText =
-        typeof result !== "undefined" ? result + "\n\n\n" + mdText : mdText;
+    const newHeaderText = newHeader();
+    const newMdText =
+      typeof newHeaderText !== "undefined"
+        ? newHeaderText + "\n\n\n" + mdText
+        : mdText;
 
-      if (file.slice(0, 6) === "README") {
-        target = ["/landingpage", lessonId, "teacherguides"].join("/");
-      } else {
-        target = ["/landingpage", lessonId, "lessontexts"].join("/");
-      }
+    if (file.slice(0, 6) === "README") {
+      target = ["/landingpage", lessonId, "teacherguides"].join("/");
+    } else {
+      target = ["/landingpage", lessonId, "lessontexts"].join("/");
+    }
 
-      saveMdText(
-        lessonId,
-        file,
-        newMdText,
-        language === "nb" && file.slice(0, 6) !== "README" ? true : "" //render thumbnail switch
-      ).then(() => {
-        history.push(target);
-        return;
-      });
-    });
+    await saveMdText(
+      lessonId,
+      file,
+      newMdText,
+      language === "nb" && file.slice(0, 6) !== "README" ? true : "" //render thumbnail switch
+    );
+    history.push(target);
   };
 
   return (

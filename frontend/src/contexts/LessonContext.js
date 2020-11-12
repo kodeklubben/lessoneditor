@@ -31,7 +31,8 @@ export const LessonContextProvider = (props) => {
 
   useEffect(() => {
     async function fetchLessonData() {
-      return await axios.get(lessonDataUrl);
+      const res = await axios.get(lessonDataUrl);
+      return res;
     }
     if (lessonId) {
       fetchLessonData().then((res) => setData(res.data));
@@ -40,27 +41,30 @@ export const LessonContextProvider = (props) => {
 
   useEffect(() => {
     async function fetchYMLData() {
-      return axios.get(lessonYMLDataUrl).then((res) => {
-        return res.data;
-      });
+      const res = await axios.get(lessonYMLDataUrl);
+      return res.data;
     }
     if (lessonId) {
-      fetchYMLData().then((res) =>
+      fetchYMLData().then((res) => {
         setYmlData((prevState) => ({
           ...prevState,
           ...res,
-        }))
-      );
+        }));
+      });
     }
   }, [lessonId, lessonYMLDataUrl]);
 
   useEffect(() => {
     async function fetchFileList() {
-      axios.get(lessonListUrl).then((res) => {
+      const res = await axios.get(lessonListUrl);
+
+      return res;
+    }
+    if (lessonId) {
+      fetchFileList().then((res) => {
         setLessonList(res.data);
       });
     }
-    if (lessonId) fetchFileList();
   }, [lessonId, lessonListUrl]);
 
   const context = {
@@ -75,42 +79,38 @@ export const LessonContextProvider = (props) => {
     lessonList,
 
     fetchList: async () => {
-      await axios.get(lessonListUrl).then((res) => {
-        setLessonList(res.data);
-      });
+      const res = await axios.get(lessonListUrl);
+      setLessonList(res.data);
     },
 
     saveLesson: async (data) => {
       if (lessonId) {
-        axios.post(lessonDataUrl, await data);
-        setData(await data);
+        await axios.post(lessonDataUrl, data);
+        setData(data);
       }
     },
     saveYml: async (ymlData) => {
       if (lessonId) {
-        axios.post(lessonYMLDataUrl, await ymlData);
+        await axios.post(lessonYMLDataUrl, ymlData);
       }
     },
     getLessonData: async () => {
       return await axios.get(lessonDataUrl);
     },
-    getHeaderData: async () => {
-      return await headerData;
+    getHeaderData: () => {
+      return headerData;
     },
     getYmlData: async () => {
       async function fetchData() {
-        return await axios.get(lessonYMLDataUrl).then((res) => {
-          if (JSON.stringify(res.data) === "{}") {
-            return ymlData;
-          } else {
-            return res.data;
-          }
-        });
+        const res = await axios.get(lessonYMLDataUrl);
+        if (JSON.stringify(res.data) === "{}") {
+          return ymlData;
+        } else {
+          return res.data;
+        }
       }
 
-      const res = fetchData().then((res) => {
-        return res;
-      });
+      const res = await fetchData();
 
       return res;
     },

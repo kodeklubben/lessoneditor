@@ -22,7 +22,7 @@ import {
 const Editor = () => {
   const { lessonId, file } = useParams();
   const context = useContext(LessonContext);
-  const { data, getYmlData, setData, setHeaderData, getLessonData } = context;
+  const { data, getYmlData, setHeaderData } = context;
   const [mdText, setMdText] = useState("");
   const [showSpinner, setShowSpinner] = useState(false);
   const [buttonValues, setButtonValues] = useState({});
@@ -90,9 +90,7 @@ const Editor = () => {
     setButtonValues({});
   };
 
-  const insertMetaDataInTeacherGuide = async () => {
-    const ymlData = await getYmlData();
-
+  const insertMetaDataInTeacherGuide = (ymlData) => {
     let subject = ymlData.tags.subject.map((element) => {
       return SUBJECT[element];
     });
@@ -102,6 +100,7 @@ const Editor = () => {
     let grade = ymlData.tags.grade.map((element) => {
       return GRADE[element];
     });
+
     let veiledningWithData = laererveiledningMal.replace(
       /{subject}/,
       subject.join(", ")
@@ -114,55 +113,50 @@ const Editor = () => {
       /{grade}/,
       grade.join(", ")
     );
-
     return veiledningWithData;
   };
 
   useEffect(() => {
-    setShowSpinner(true);
-    getLessonData().then((res) => {
-      setData(res.data);
-      if (lessonId && file) {
-        async function fetchData() {
-          const lessonText = await fetchMdText(lessonId, file);
-          return lessonText;
-        }
+    async function initLesson() {
+      setShowSpinner(true);
+      const lessonText = await fetchMdText(lessonId, file);
+      const parts = lessonText.split("---\n");
+      const parsedHeader = parts[1] ? parseMdHeader(parts[1]) : {};
+      const body = parts[2] ? parts[2].trim() : "";
 
-        fetchData().then(async (lessonText) => {
-          const parts = lessonText.split("---\n");
-          const parsedHeader = parts[1] ? parseMdHeader(parts[1]) : {};
-          const body = parts[2] ? parts[2].trim() : "";
-          if (body.length === 0) {
-            setOpenMetaData(true);
-            file.slice(0, 6) === "README"
-              ? insertMetaDataInTeacherGuide().then((res) => setMdText(res))
-              : setMdText(oppgaveMal);
-            setHeaderData({});
-            setShowSpinner(false);
-            return;
-          } else {
-            setMdText(body);
-            setUndo([body]);
-            const newHeaderData = {
-              title: parsedHeader.title,
-              authorList: parsedHeader.author
-                ? parsedHeader.author.split(",").map((item) => {
-                    return item.trim();
-                  })
-                : [],
-              translatorList: parsedHeader.translator
-                ? parsedHeader.translator.split(",").map((item) => {
-                    return item.trim();
-                  })
-                : [],
-            };
-            setHeaderData(newHeaderData);
-            setShowSpinner(false);
-            return;
-          }
-        });
+      setShowSpinner(false);
+      if (body.length === 0) {
+        if (file.slice(0, 6) === "README") {
+          const ymlData = await getYmlData();
+          setMdText(insertMetaDataInTeacherGuide(ymlData));
+          setOpenMetaData(true);
+        } else {
+          setMdText(oppgaveMal);
+          setOpenMetaData(true);
+        }
+        setHeaderData({});
+      } else {
+        setMdText(body);
+        setUndo([body]);
+        const newHeaderData = {
+          title: parsedHeader.title,
+          authorList: parsedHeader.author
+            ? parsedHeader.author.split(",").map((item) => {
+                return item.trim();
+              })
+            : [],
+          translatorList: parsedHeader.translator
+            ? parsedHeader.translator.split(",").map((item) => {
+                return item.trim();
+              })
+            : [],
+        };
+        setHeaderData(newHeaderData);
       }
-    });
+    }
+    if (lessonId && file) {
+      initLesson();
+    }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [file, language, lessonId, setHeaderData]);
@@ -181,7 +175,6 @@ const Editor = () => {
         setCursorPositionStart={setCursorPositionStart}
         setCursorPositionEnd={setCursorPositionEnd}
         setCursorPosition={setCursorPosition}
-        setShowSpinner={setShowSpinner}
       />
       <Navbar />
       <ButtonPanel

@@ -14,12 +14,11 @@ const Autosave = ({ mdText, setRenderContent, language }) => {
   const { getHeaderData } = lessonContext;
 
   const newHeader = () => {
-    return getHeaderData().then((res) => {
-      return createNewHeader(res, language);
-    });
+    const res = getHeaderData();
+    return createNewHeader(res, language);
   };
 
-  useInterval(() => {
+  useInterval(async () => {
     if (counter < 17) {
       setCounter(counter + 1);
     }
@@ -31,13 +30,13 @@ const Autosave = ({ mdText, setRenderContent, language }) => {
       setAutoSaveMessage(SAVING);
     } else if (counter === 5 && autoSaveMessage !== SAVED) {
       setRenderContent(true);
-      newHeader().then((newHeader) => {
-        const newMdText =
-          typeof newHeader !== "undefined"
-            ? newHeader + "\n\n\n" + mdText
-            : mdText;
-        saveMdText(lessonId, file, newMdText).then(setAutoSaveMessage(SAVED));
-      });
+      const newHeaderText = newHeader();
+      const newMdText =
+        typeof newHeaderText !== "undefined"
+          ? newHeaderText + "\n\n\n" + mdText
+          : mdText;
+      await saveMdText(lessonId, file, newMdText);
+      setAutoSaveMessage(SAVED);
     }
     if (counter === 15) {
       setAutoSaveMessage("");

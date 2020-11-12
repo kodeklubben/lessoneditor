@@ -8,19 +8,24 @@ import { COURSESLIST } from "components/editor/settingsFiles/COURSELIST";
 import { LessonContext } from "contexts/LessonContext";
 import { UserContext } from "contexts/UserContext";
 import saveMdText from "../../../../api/save-md-text";
+import fetchMdText from "../../../../api/fetch-md-text";
 import createNewHeader from "../utils/createNewHeader";
 const EditorDatapanel = ({
   mdText,
   file,
   openMetaData,
   setOpenMetaData,
-  setShowSpinner,
   language,
+  setShowSpinner,
 }) => {
   const { lessonId } = useParams();
   const context = useContext(LessonContext);
   const userContext = useContext(UserContext);
   const { getHeaderData, setHeaderData } = context;
+
+  const lessonTitle = context.data.lesson
+    ? context.data.lesson.replace(/-/g, " ")
+    : "";
 
   const [state, setState] = useState({ title: "", authorList: [] });
 
@@ -36,31 +41,25 @@ const EditorDatapanel = ({
   );
 
   useEffect(() => {
-    setShowSpinner(true);
-    async function fetchData() {
-      getHeaderData().then((headerData) => {
-        if (Object.keys(headerData).length > 0) {
-          setState(headerData);
-          setShowSpinner(false);
-        } else if (userContext?.user?.name) {
-          setState((prevState) => ({
-            ...prevState,
-            authorList: [userContext?.user?.name],
-            title: context?.data?.lesson
-              ? context?.data?.lesson.replace(/-/g, " ")
-              : "",
-          }));
-          setShowSpinner(false);
-        } else {
-          setState({ title: "", authorList: [] });
-          setShowSpinner(false);
-        }
-      });
+    function fetchData() {
+      const headerData = getHeaderData();
+      if (Object.keys(headerData).length > 0) {
+        setState(headerData);
+      } else if (userContext?.user?.name) {
+        setState((prevState) => ({
+          ...prevState,
+          authorList: [userContext?.user?.name],
+          title: context?.data?.lesson
+            ? context.data.lesson.replace(/-/g, " ")
+            : "",
+        }));
+      }
+      // else {
+      //   setState({ title: "", authorList: [] });
+      // }
     }
-    fetchData().then(() => {
-      setShowSpinner(false);
-    });
-  }, [getHeaderData, setShowSpinner, context.data.lesson, userContext.user]);
+    fetchData();
+  }, [getHeaderData, context.data.lesson, userContext.user]);
 
   const changeHandler = (event) => {
     const nam = event.target.name;
@@ -83,10 +82,12 @@ const EditorDatapanel = ({
 
   const onSubmit = async () => {
     setHeaderData(state);
-    const newHeader = createNewHeader(state);
-    const newMdText =
-      newHeader !== undefined ? newHeader + "\n\n\n" + mdText : mdText;
-    await saveMdText(lessonId, file, newMdText).then(window.location.reload());
+    const newHeader = createNewHeader(state, language);
+    const newMdText = newHeader + "\n\n\n" + mdText;
+    setShowSpinner(true);
+    await saveMdText(lessonId, file, newMdText);
+    await fetchMdText(lessonId, file);
+    window.location.reload();
   };
 
   const onCancel = () => {
@@ -132,7 +133,7 @@ const EditorDatapanel = ({
                 <span
                   style={{ color: "grey", marginRight: "1ch" }}
                 >{`Prosjekttittel: `}</span>
-                {`${context.data.lesson.replace(/-/g, " ")}`}
+                {lessonTitle}
               </h2>
               <p
                 style={{

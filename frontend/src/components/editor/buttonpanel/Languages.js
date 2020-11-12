@@ -38,12 +38,8 @@ const Languages = ({ mdText, setShowSpinner, language }) => {
   const lessonContext = useContext(LessonContext);
   const { getHeaderData, setLanguage } = lessonContext;
 
-  const newHeader = async (language) => {
-    const header = getHeaderData().then((res) => {
-      return createNewHeader(res, language);
-    });
-
-    return header;
+  const newHeader = (language) => {
+    return createNewHeader(getHeaderData(), language);
   };
 
   const filename =
@@ -53,7 +49,7 @@ const Languages = ({ mdText, setShowSpinner, language }) => {
     setLanguage(language);
   }, [language, setLanguage]);
 
-  const handleChange = (event, { value }) => {
+  const handleChange = async (event, { value }) => {
     setShowSpinner(true);
     let target = "";
     if (lessonId) {
@@ -63,23 +59,21 @@ const Languages = ({ mdText, setShowSpinner, language }) => {
         value === "nb" ? filename : `${filename}_${value}`,
       ].join("/");
     }
-    newHeader(value).then((newHeader) => {
-      const newMdText =
-        typeof newHeader !== "undefined"
-          ? newHeader + "\n\n\n" + mdText
-          : mdText;
+    const newHeaderText = newHeader(value);
+    const newMdText =
+      typeof newHeaderText !== "undefined"
+        ? newHeaderText + "\n\n\n" + mdText
+        : mdText;
 
-      saveMdText(lessonId, file, newMdText).then(() => {
-        if (target !== "") {
-          history.push(target);
-          window.location.reload();
-          // setShowSpinner(false);
-          return;
-        } else {
-          console.log("error");
-        }
-      });
-    });
+    await saveMdText(lessonId, file, newMdText);
+    if (target !== "") {
+      history.push(target);
+      window.location.reload();
+      // setShowSpinner(false);
+      return;
+    } else {
+      console.log("error");
+    }
   };
   return (
     <>
