@@ -58,7 +58,7 @@ const EditorDatapanel = ({
       // }
     }
     fetchData();
-  }, [data.course, data.lessonTitle, user, headerData]);
+  }, [data.lessonTitle, user, headerData]);
 
   const changeHandler = (event) => {
     const nam = event.target.name;
