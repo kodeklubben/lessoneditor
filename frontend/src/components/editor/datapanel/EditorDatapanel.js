@@ -138,7 +138,7 @@ const EditorDatapanel = ({
                   justifyContent: "center",
                   marginLeft: "auto",
                 }}
-              >{`Kurs: ${getCourseFromSlug.courseTitle}`}</p>
+              >{`Kurs: ${getCourseFromSlug?.courseTitle}`}</p>
               <br />
             </div>
             <div id="titleField" className="field">

@@ -25,7 +25,7 @@ const Landingpage = () => {
   const lesson = useContext(LessonContext);
   const { data, getYmlData, saveLesson, lessonList } = lesson;
 
-  const courseNotSlug = COURSESLIST.find(({ slug }) => slug === data.course);
+  const courseNotSlug = COURSESLIST.find(({ slug }) => slug === data?.course);
 
   const options = [
     { key: 1, text: "Oppgaver", value: "lessontexts" },
@@ -120,7 +120,7 @@ const Landingpage = () => {
               <span style={{ color: "grey", marginLeft: "1em" }}>
                 {" Kurs: "}
               </span>
-              <span>{`${courseNotSlug.courseTitle}`}</span>
+              <span>{`${courseNotSlug?.courseTitle}`}</span>
             </>
           ) : (
             <>
@@ -129,7 +129,7 @@ const Landingpage = () => {
               <span style={{ color: "grey", marginLeft: "1em" }}>
                 {" Kurs: "}
               </span>
-              <span>{`${courseNotSlug.courseTitle}`}</span>
+              <span>{`${courseNotSlug?.courseTitle}`}</span>
             </>
           )}
         </h2>
