@@ -116,10 +116,7 @@ const Landingpage = () => {
           {pageContent === "teacherguides" ? (
             <>
               <span style={{ color: "grey" }}>{"Prosjekttittel: "}</span>
-              <span>{`${
-                data.lesson ? data.lesson.replace(/-/g, " ") : ""
-              }`}</span>{" "}
-              <span>{`(Lærerveiledning)`}</span>
+              <span>{data.lessonTitle}</span> <span>{`(Lærerveiledning)`}</span>
               <span style={{ color: "grey", marginLeft: "1em" }}>
                 {" Kurs: "}
               </span>
@@ -128,9 +125,7 @@ const Landingpage = () => {
           ) : (
             <>
               <span style={{ color: "grey" }}>{"Prosjekttittel: "}</span>
-              <span>{`${
-                data.lesson ? data.lesson.replace(/-/g, " ") : ""
-              }`}</span>
+              <span>{data.lessonTitle}</span>
               <span style={{ color: "grey", marginLeft: "1em" }}>
                 {" Kurs: "}
               </span>

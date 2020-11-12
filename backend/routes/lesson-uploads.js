@@ -16,6 +16,7 @@ module.exports = (app) => {
       if (isAppEngine()) {
         loadFromGcs(storageParts.join("/")).pipe(res);
       } else {
+        await new Promise((resolve) => setTimeout(resolve, 1690));
         const localFilePath = getTempDir(storageParts);
         if (fs.existsSync(localFilePath)) {
           fs.createReadStream(localFilePath).pipe(res);

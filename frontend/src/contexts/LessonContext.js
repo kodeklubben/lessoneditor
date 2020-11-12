@@ -32,38 +32,33 @@ export const LessonContextProvider = (props) => {
   useEffect(() => {
     async function fetchLessonData() {
       const res = await axios.get(lessonDataUrl);
-      return res;
+      setData(res.data);
     }
     if (lessonId) {
-      fetchLessonData().then((res) => setData(res.data));
+      fetchLessonData();
     }
   }, [lessonId, lessonDataUrl]);
 
   useEffect(() => {
     async function fetchYMLData() {
       const res = await axios.get(lessonYMLDataUrl);
-      return res.data;
+      setYmlData((prevState) => ({
+        ...prevState,
+        ...res.data,
+      }));
     }
     if (lessonId) {
-      fetchYMLData().then((res) => {
-        setYmlData((prevState) => ({
-          ...prevState,
-          ...res,
-        }));
-      });
+      fetchYMLData();
     }
   }, [lessonId, lessonYMLDataUrl]);
 
   useEffect(() => {
     async function fetchFileList() {
       const res = await axios.get(lessonListUrl);
-
-      return res;
+      setLessonList(res.data);
     }
     if (lessonId) {
-      fetchFileList().then((res) => {
-        setLessonList(res.data);
-      });
+      fetchFileList();
     }
   }, [lessonId, lessonListUrl]);
 
@@ -95,7 +90,8 @@ export const LessonContextProvider = (props) => {
       }
     },
     getLessonData: async () => {
-      return await axios.get(lessonDataUrl);
+      const res = await axios.get(lessonDataUrl);
+      return res;
     },
     getHeaderData: () => {
       return headerData;

@@ -10,6 +10,7 @@ import NewLesson from "../frontpage/NewLesson";
 const Navbar = () => {
   const userContext = useContext(UserContext);
   const lessonContext = useContext(LessonContext);
+  const { data } = lessonContext;
   const [showPopup, setShowPopup] = useState(false);
 
   const { file } = useParams();
@@ -29,9 +30,7 @@ const Navbar = () => {
           ) : (
             <h1 style={{ paddingRight: "17em" }}>
               <span style={{ color: "gray" }}>Prosjekttittel: </span>
-              {lessonContext.data.lesson
-                ? lessonContext.data.lesson.replace(/-/g, " ")
-                : ""}
+              {data.lessonTitle}
             </h1>
           )}
           {showPopup ? <NewLesson setShowPopup={setShowPopup} /> : ""}

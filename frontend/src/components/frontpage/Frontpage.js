@@ -12,8 +12,8 @@ const Overview = () => {
   const [showPopup, setShowPopup] = useState(false); // Les om useState i React
   const [showSpinner, setShowSpinner] = useState(false);
   const history = useHistory();
-  const context = useContext(UserContext);
-  const { lessons, removeLesson } = context;
+  const userContext = useContext(UserContext);
+  const { lessons, removeLesson } = userContext;
   const navigateToHome = (lessonId) => {
     const target = ["/landingpage", lessonId, "lessontexts"].join("/");
     history.push(target);
