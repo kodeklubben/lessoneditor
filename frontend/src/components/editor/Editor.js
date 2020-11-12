@@ -13,11 +13,7 @@ import ShowSpinner from "../ShowSpinner";
 import parseMdHeader from "./utils/parseMdHeader";
 import laererveiledningMal from "./LaererveiledningMal";
 import oppgaveMal from "../editor/settingsFiles/oppgaveMal";
-import {
-  GRADE,
-  SUBJECT,
-  TOPIC,
-} from "../editor/buttonpanel/datapanel/settings/landingpage_NO";
+import { GRADE, SUBJECT, TOPIC } from "./datapanel/settings/landingpage_NO";
 
 const Editor = () => {
   const { lessonId, file } = useParams();

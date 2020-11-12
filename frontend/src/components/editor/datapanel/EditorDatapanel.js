@@ -7,9 +7,9 @@ import { FORM_TEXT } from "./settings/landingpage_NO.js";
 import { COURSESLIST } from "components/editor/settingsFiles/COURSELIST";
 import { LessonContext } from "contexts/LessonContext";
 import { UserContext } from "contexts/UserContext";
-import saveMdText from "../../../../api/save-md-text";
-import fetchMdText from "../../../../api/fetch-md-text";
-import createNewHeader from "../utils/createNewHeader";
+import saveMdText from "../../../api/save-md-text";
+import fetchMdText from "../../../api/fetch-md-text";
+import createNewHeader from "../buttonpanel/utils/createNewHeader";
 const EditorDatapanel = ({
   mdText,
   file,
@@ -19,13 +19,11 @@ const EditorDatapanel = ({
   setShowSpinner,
 }) => {
   const { lessonId } = useParams();
-  const context = useContext(LessonContext);
+  const lessonContext = useContext(LessonContext);
   const userContext = useContext(UserContext);
-  const { getHeaderData, setHeaderData } = context;
 
-  const lessonTitle = context.data.lesson
-    ? context.data.lesson.replace(/-/g, " ")
-    : "";
+  const { getHeaderData, setHeaderData, data } = lessonContext;
+  const { user } = userContext;
 
   const [state, setState] = useState({ title: "", authorList: [] });
 
@@ -37,7 +35,7 @@ const EditorDatapanel = ({
   };
 
   const getCourseFromSlug = COURSESLIST.find(
-    ({ slug }) => slug === context.data.course
+    ({ slug }) => slug === data.course
   );
 
   useEffect(() => {
@@ -45,21 +43,20 @@ const EditorDatapanel = ({
       const headerData = getHeaderData();
       if (Object.keys(headerData).length > 0) {
         setState(headerData);
-      } else if (userContext?.user?.name) {
+      } else if (user?.name && data?.lesson) {
         setState((prevState) => ({
           ...prevState,
-          authorList: [userContext?.user?.name],
-          title: context?.data?.lesson
-            ? context.data.lesson.replace(/-/g, " ")
-            : "",
+          authorList: [user.name],
+          title: data.lessonTitle,
         }));
       }
+
       // else {
       //   setState({ title: "", authorList: [] });
       // }
     }
     fetchData();
-  }, [getHeaderData, context.data.lesson, userContext.user]);
+  }, [getHeaderData, data, user]);
 
   const changeHandler = (event) => {
     const nam = event.target.name;
@@ -133,7 +130,7 @@ const EditorDatapanel = ({
                 <span
                   style={{ color: "grey", marginRight: "1ch" }}
                 >{`Prosjekttittel: `}</span>
-                {lessonTitle}
+                {data.lessonTitle}
               </h2>
               <p
                 style={{
@@ -141,7 +138,7 @@ const EditorDatapanel = ({
                   justifyContent: "center",
                   marginLeft: "auto",
                 }}
-              >{`Kurs: ${getCourseFromSlug?.courseTitle}`}</p>
+              >{`Kurs: ${getCourseFromSlug.courseTitle}`}</p>
               <br />
             </div>
             <div id="titleField" className="field">

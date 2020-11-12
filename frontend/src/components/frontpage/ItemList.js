@@ -1,5 +1,9 @@
 import "./itemlist.scss";
 import React from "react";
+import { COURSESLIST } from "components/editor/settingsFiles/COURSELIST";
+
+const getCourseFromSlug = (input) =>
+  COURSESLIST.find(({ slug }) => slug === input);
 
 function ItemList({ items, removeLesson, navigateToHome }) {
   return (
@@ -17,10 +21,12 @@ function ItemList({ items, removeLesson, navigateToHome }) {
                 </div>
                 <div className="content">
                   <div className="header">
-                    {listitem.lesson.replace(/-/g, " ")}
+                    {listitem.lessonTitle
+                      ? listitem.lessonTitle
+                      : listitem.lesson}
                   </div>
                   <div className="meta">
-                    <h4>{listitem.course}</h4>
+                    <h4>{getCourseFromSlug(listitem.course)?.courseTitle}</h4>
                   </div>
                 </div>
                 <div className="extra content">

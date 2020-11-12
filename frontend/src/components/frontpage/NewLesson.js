@@ -39,7 +39,7 @@ const NewLesson = ({ showSpinner, setShowPopup, setShowSpinner }) => {
         slug: slugify(lessonTitle, { lower: true, strict: true }),
       };
       //TODO: Bruke lesson.title andre plasser i editoren
-      const lessonId = await addLesson(course, lesson.slug);
+      const lessonId = await addLesson(course, lesson.slug, lesson.title);
       navigateToLandingpage(lessonId, lesson.slug);
     } else {
       setError("Oppgavetittel er ikke satt");
