@@ -43,7 +43,7 @@ const EditorDatapanel = ({
       const headerData = getHeaderData();
       if (Object.keys(headerData).length > 0) {
         setState(headerData);
-      } else if (user.name && data.lesson) {
+      } else if (user?.name && data?.lesson) {
         setState((prevState) => ({
           ...prevState,
           authorList: [user.name],

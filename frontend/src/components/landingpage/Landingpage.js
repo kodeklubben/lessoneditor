@@ -49,7 +49,7 @@ const Landingpage = () => {
     async function compareObjects() {
       getYmlData().then((res) => {
         if (
-          JSON.stringify(res?.tags) ===
+          JSON.stringify(res.tags) ===
           JSON.stringify({ topic: [], subject: [], grade: [] })
         ) {
           setOpen(true);
@@ -120,7 +120,7 @@ const Landingpage = () => {
               <span style={{ color: "grey", marginLeft: "1em" }}>
                 {" Kurs: "}
               </span>
-              <span>{`${courseNotSlug?.courseTitle}`}</span>
+              <span>{`${courseNotSlug.courseTitle}`}</span>
             </>
           ) : (
             <>
@@ -129,7 +129,7 @@ const Landingpage = () => {
               <span style={{ color: "grey", marginLeft: "1em" }}>
                 {" Kurs: "}
               </span>
-              <span>{`${courseNotSlug?.courseTitle}`}</span>
+              <span>{`${courseNotSlug.courseTitle}`}</span>
             </>
           )}
         </h2>

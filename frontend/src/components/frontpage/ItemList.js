@@ -26,7 +26,7 @@ function ItemList({ items, removeLesson, navigateToHome }) {
                       : listitem.lesson}
                   </div>
                   <div className="meta">
-                    <h4>{getCourseFromSlug(listitem.course).courseTitle}</h4>
+                    <h4>{getCourseFromSlug(listitem.course)?.courseTitle}</h4>
                   </div>
                 </div>
                 <div className="extra content">
