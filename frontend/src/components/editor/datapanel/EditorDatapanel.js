@@ -35,22 +35,29 @@ const EditorDatapanel = ({
   };
 
   const getCourseFromSlug = COURSESLIST.find(
-    ({ slug }) => slug === data.course
+    ({ slug }) => slug === data?.course
   );
 
   useEffect(() => {
-    function fetchData() {
-      const headerData = getHeaderData();
-      if (Object.keys(headerData).length > 0) {
-        setState(headerData);
-      } else if (user?.name && data?.lesson) {
-        setState((prevState) => ({
-          ...prevState,
-          authorList: [user.name],
-          title: data.lessonTitle,
-        }));
-      }
+    async function getData() {
+      const authorName = await user.name;
+      const title = await data.lessonTitle;
+      return { authorName, title };
+    }
 
+    function fetchData() {
+      getData().then((res) => {
+        const headerData = getHeaderData();
+        if (Object.keys(headerData).length > 0) {
+          setState(headerData);
+        } else {
+          setState((prevState) => ({
+            ...prevState,
+            authorList: [res.authorName],
+            title: res.title,
+          }));
+        }
+      });
       // else {
       //   setState({ title: "", authorList: [] });
       // }
@@ -130,7 +137,7 @@ const EditorDatapanel = ({
                 <span
                   style={{ color: "grey", marginRight: "1ch" }}
                 >{`Prosjekttittel: `}</span>
-                {data.lessonTitle}
+                {data?.lessonTitle}
               </h2>
               <p
                 style={{
