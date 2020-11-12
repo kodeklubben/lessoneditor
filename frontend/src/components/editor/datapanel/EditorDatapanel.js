@@ -23,7 +23,7 @@ const EditorDatapanel = ({
   const lessonContext = useContext(LessonContext);
   const userContext = useContext(UserContext);
 
-  const { getHeaderData, setHeaderData, data } = lessonContext;
+  const { headerData, setHeaderData, data } = lessonContext;
   const { user } = userContext;
 
   const [state, setState] = useState({ title: "", authorList: [] });
@@ -42,31 +42,20 @@ const EditorDatapanel = ({
   const target = ["/editor", lessonId, file].join("/");
 
   useEffect(() => {
-    async function getData() {
-      const authorName = await user.name;
-      const title = await data.lessonTitle;
-      return { authorName, title };
-    }
-
-    function fetchData() {
-      getData().then((res) => {
-        const headerData = getHeaderData();
-        if (Object.keys(headerData).length > 0) {
-          setState(headerData);
-        } else {
-          setState((prevState) => ({
-            ...prevState,
-            authorList: [res.authorName],
-            title: res.title,
-          }));
-        }
-      });
-      // else {
-      //   setState({ title: "", authorList: [] });
-      // }
-    }
-    fetchData();
-  }, [getHeaderData, data, user]);
+    const setDataFromHeaderData = async () => {
+      if (Object.keys(headerData).length > 0) {
+        setState(await headerData);
+      } else {
+        setState({ title: "", authorList: [] });
+      }
+    };
+    setDataFromHeaderData();
+    setState((prevState) => ({
+      ...prevState,
+      authorList: [user?.name ? user?.name : ""],
+      title: data?.lessonTitle,
+    }));
+  }, [headerData, data.lessonTitle, user]);
 
   const changeHandler = (event) => {
     const nam = event.target.name;
