@@ -12,7 +12,6 @@ import { LessonContext } from "contexts/LessonContext";
 import submitLesson from "api/submit-lesson";
 import ShowSpinner from "../ShowSpinner";
 import { Dropdown, Popup } from "semantic-ui-react";
-import { COURSESLIST } from "components/editor/settingsFiles/COURSELIST";
 
 const Landingpage = () => {
   const [pageContent, setPageContent] = useState("lessontexts");
@@ -25,8 +24,6 @@ const Landingpage = () => {
   const lesson = useContext(LessonContext);
   const { data, getYmlData, saveLesson, lessonList } = lesson;
 
-  const courseNotSlug = COURSESLIST.find(({ slug }) => slug === data?.course);
-
   const options = [
     { key: 1, text: "Oppgaver", value: "lessontexts" },
     { key: 2, text: "Lærerveiledning", value: "teacherguides" },
@@ -38,12 +35,12 @@ const Landingpage = () => {
   }, [mode, data]);
 
   useEffect(() => {
-    if (!data.course) {
+    if (!data.courseTitle) {
       setShowSpinner(true);
     } else {
       setShowSpinner(false);
     }
-  }, [data.course]);
+  }, [data.courseTitle]);
 
   useEffect(() => {
     async function compareObjects() {
@@ -120,7 +117,7 @@ const Landingpage = () => {
               <span style={{ color: "grey", marginLeft: "1em" }}>
                 {" Kurs: "}
               </span>
-              <span>{`${courseNotSlug?.courseTitle}`}</span>
+              <span>{data.courseTitle}</span>
             </>
           ) : (
             <>
@@ -129,7 +126,7 @@ const Landingpage = () => {
               <span style={{ color: "grey", marginLeft: "1em" }}>
                 {" Kurs: "}
               </span>
-              <span>{`${courseNotSlug?.courseTitle}`}</span>
+              <span>{data.courseTitle}</span>
             </>
           )}
         </h2>

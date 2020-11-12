@@ -1,6 +1,5 @@
 import React from "react";
 import { Button, Popup } from "semantic-ui-react";
-import { COURSESLIST } from "components/editor/settingsFiles/COURSELIST";
 
 const CodeButtons = ({
   buttonValues,
@@ -12,8 +11,6 @@ const CodeButtons = ({
   style,
 }) => {
   const responsiveCP = () => {
-    const courseNotSlug = COURSESLIST.find(({ slug }) => slug === course);
-
     return (
       <>
         <Popup
@@ -35,7 +32,7 @@ const CodeButtons = ({
                 <div style={{ position: "relative", top: "-5px" }}>
                   {"```Kodeblokk"}
                   <span style={{ color: "#008000" }}>
-                    {'("' + courseNotSlug?.courseTitle + '")'}
+                    {'("' + course + '")'}
                   </span>
                 </div>
               </Button>

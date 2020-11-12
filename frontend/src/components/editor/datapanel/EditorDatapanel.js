@@ -4,7 +4,6 @@ import { useParams, useHistory } from "react-router";
 import { Button, Icon, Popup } from "semantic-ui-react";
 import MultiInput from "./MultiInput";
 import { FORM_TEXT } from "./settings/landingpage_NO.js";
-import { COURSESLIST } from "components/editor/settingsFiles/COURSELIST";
 import { LessonContext } from "contexts/LessonContext";
 import { UserContext } from "contexts/UserContext";
 import saveMdText from "../../../api/save-md-text";
@@ -35,18 +34,33 @@ const EditorDatapanel = ({
     is: "Islandsk",
   };
 
-  const getCourseFromSlug = COURSESLIST.find(
-    ({ slug }) => slug === data?.course
-  );
-
   const target = ["/editor", lessonId, file].join("/");
+
+  useEffect(() => {
+    if (
+      typeof user === "undefined" &&
+      typeof data.lessonTitle === "undefined" &&
+      typeof data.courseTitle === "undefined" &&
+      user.name.length <= 0 &&
+      data.lessonTitle.length <= 0
+    ) {
+      setShowSpinner(true);
+    } else {
+      setShowSpinner(false);
+    }
+  }, [data.courseTitle, data.lessonTitle, setShowSpinner, user]);
 
   useEffect(() => {
     function fetchData() {
       // const headerData = getHeaderData();
       if (Object.keys(headerData).length > 0) {
         setState(headerData);
-      } else if (typeof user !== "undefined" && user.name) {
+      } else if (
+        typeof user !== "undefined" &&
+        typeof data.lessonTitle !== "undefined" &&
+        user.name.length > 0 &&
+        data.lessonTitle.length > 0
+      ) {
         setState((prevState) => ({
           ...prevState,
           authorList: [user.name],
@@ -144,7 +158,7 @@ const EditorDatapanel = ({
                   justifyContent: "center",
                   marginLeft: "auto",
                 }}
-              >{`Kurs: ${getCourseFromSlug?.courseTitle}`}</p>
+              >{`Kurs: ${data?.courseTitle}`}</p>
               <br />
             </div>
             <div id="titleField" className="field">
