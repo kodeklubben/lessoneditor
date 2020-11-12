@@ -54,20 +54,17 @@ const ImageUpload = ({
 
   const fileSelectedHandler = async (event) => {
     try {
-      setShowSpinner(true);
       if (event.target.files && event.target.files[0].size > 5000000) {
         imageSubmitHandler(imageSizeErrorMessage);
         return;
       }
       if (imgRegex.test(event.target.files[0].name)) {
-        const fileInfo = await uploadImage(
-          lessonId,
-          event.target.files[0]
-        ).then(setShowSpinner(false));
+        setShowSpinner(true);
+        const fileInfo = await uploadImage(lessonId, event.target.files[0]);
+        setShowSpinner(false);
         imageSubmitHandler(fileInfo.imageUrl);
       } else {
         imageSubmitHandler("fileNameError");
-        setShowSpinner(false);
       }
     } catch (err) {
       console.log(err);
