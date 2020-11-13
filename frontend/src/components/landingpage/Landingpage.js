@@ -35,12 +35,12 @@ const Landingpage = () => {
   }, [mode, data]);
 
   useEffect(() => {
-    if (!data.courseTitle) {
+    if (!data.course) {
       setShowSpinner(true);
     } else {
       setShowSpinner(false);
     }
-  }, [data.courseTitle]);
+  }, [data.course]);
 
   useEffect(() => {
     async function compareObjects() {

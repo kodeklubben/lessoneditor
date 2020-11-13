@@ -38,6 +38,7 @@ export const UserContextProvider = (props) => {
   };
   const context = {
     user,
+    setUser,
     lessons,
     setLessons,
     getLesson,
@@ -69,6 +70,14 @@ export const UserContextProvider = (props) => {
           lessonId
         );
       }
+    },
+    getUserData: async () => {
+      async function fetchData() {
+        const res = await axios.get(paths.USER);
+        return res;
+      }
+      const res = await fetchData();
+      return res;
     },
   };
   return (
