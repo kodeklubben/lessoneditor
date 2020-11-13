@@ -1,6 +1,5 @@
 import "./datapanel.scss";
 import React, { useState, useEffect, useContext } from "react";
-import { useHistory } from "react-router";
 import { Button, Icon, Popup } from "semantic-ui-react";
 import { YML_TEXT } from "../settingsFiles/languages/landingpage_NO";
 import { TagsGrade, TagsSubject, TagsTopic } from "./Tags";
@@ -10,7 +9,6 @@ import License from "./License";
 import { LessonContext } from "contexts/LessonContext";
 
 const Datapanel = ({ open, setOpen, lessonId, mode }) => {
-  const history = useHistory();
   const context = useContext(LessonContext);
   const { ymlData, setYmlData, saveYml } = context;
   const [checkBoxState, setCheckBoxState] = useState({});
@@ -18,8 +16,6 @@ const Datapanel = ({ open, setOpen, lessonId, mode }) => {
   const isEmptyDatapanel =
     JSON.stringify(ymlData.tags) ===
     JSON.stringify({ topic: [], subject: [], grade: [] });
-
-  const target = ["/landingpage", lessonId, mode].join("/");
 
   useEffect(() => {
     let obj;
@@ -54,10 +50,7 @@ const Datapanel = ({ open, setOpen, lessonId, mode }) => {
   };
 
   const onCancel = async () => {
-    const cancel = await ymlData;
-    console.log(cancel);
-    history.push({ pathname: "/" });
-    history.replace({ pathname: target });
+    window.location.reload();
   };
 
   const dropdownHandler = (event, { name, value }) => {

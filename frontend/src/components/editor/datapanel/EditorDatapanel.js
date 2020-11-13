@@ -1,6 +1,6 @@
 import "./editordatapanel.scss";
 import React, { useState, useEffect, useContext } from "react";
-import { useParams, useHistory } from "react-router";
+import { useParams } from "react-router";
 import { Button, Icon, Popup } from "semantic-ui-react";
 import MultiInput from "./MultiInput";
 import { FORM_TEXT } from "./settings/landingpage_NO.js";
@@ -19,7 +19,6 @@ const EditorDatapanel = ({
   courseTitle,
   userName,
 }) => {
-  const history = useHistory();
   const { lessonId } = useParams();
   const lessonContext = useContext(LessonContext);
   const { headerData, setHeaderData } = lessonContext;
@@ -32,8 +31,6 @@ const EditorDatapanel = ({
     en: "Engelsk",
     is: "Islandsk",
   };
-
-  const target = ["/editor", lessonId, file].join("/");
 
   useEffect(() => {
     function fetchData() {
@@ -75,18 +72,17 @@ const EditorDatapanel = ({
     const newHeader = createNewHeader(state, language);
     const newMdText = newHeader + "\n\n\n" + mdText;
     setShowSpinner(true);
-    await saveMdText(lessonId, file, newMdText);
-    fetchMdText(lessonId, file).then(() => {
-      history.push({ pathname: "/" });
-      history.replace({ pathname: target });
+    saveMdText(lessonId, file, newMdText).then(() => {
+      fetchMdText(lessonId, file).then(() => {
+        window.location.reload();
+      });
     });
   };
 
   const onCancel = async () => {
     setShowSpinner(true);
     fetchMdText(lessonId, file).then(() => {
-      history.push({ pathname: "/" });
-      history.replace({ pathname: target });
+      window.location.reload();
     });
   };
 
