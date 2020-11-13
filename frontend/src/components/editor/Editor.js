@@ -24,7 +24,7 @@ const Editor = () => {
     getLessonData,
     data,
     setData,
-    getYmlData,
+    ymlData,
     setHeaderData,
   } = lessonContext;
   const { user, getUserData, setUser } = userContext;
@@ -96,14 +96,13 @@ const Editor = () => {
   };
 
   const insertMetaDataInTeacherGuide = (ymlData) => {
-    console.log("ymldata : " + JSON.stringify(ymlData));
-    let subject = ymlData?.tags.subject.map((element) => {
+    let subject = ymlData.subject.map((element) => {
       return SUBJECT[element];
     });
-    let topic = ymlData?.tags.topic.map((element) => {
+    let topic = ymlData.topic.map((element) => {
       return TOPIC[element];
     });
-    let grade = ymlData?.tags.grade.map((element) => {
+    let grade = ymlData.grade.map((element) => {
       return GRADE[element];
     });
 
@@ -119,7 +118,6 @@ const Editor = () => {
       /{grade}/,
       grade.join(", ")
     );
-    console.log("veiledniingwithData : " + veiledningWithData);
     return veiledningWithData;
   };
 
@@ -132,6 +130,7 @@ const Editor = () => {
         setUser(userRes.data);
         async function fetchData() {
           const lessonText = await fetchMdText(lessonId, file);
+          setShowSpinner(false);
           return lessonText;
         }
         fetchData().then(async (lessonText) => {
@@ -142,17 +141,18 @@ const Editor = () => {
           if (body.length === 0) {
             console.log("BODYLENGTH === 0");
             if (file.slice(0, 6) === "README") {
-              const ymlData = await getYmlData();
-              const newTeacherGuide = insertMetaDataInTeacherGuide(ymlData);
               console.log("isREADME ");
+              console.log("ymlData.tags : " + JSON.stringify(ymlData.tags));
+              const newTeacherGuide = insertMetaDataInTeacherGuide(
+                ymlData.tags
+              );
+              console.log("newTeacherGuide : " + newTeacherGuide);
               setMdText(newTeacherGuide);
               setOpenMetaData(true);
-              setShowSpinner(false);
             } else {
               console.log("isLESSONTEXT");
               setMdText(oppgaveMal);
               setOpenMetaData(true);
-              setShowSpinner(false);
             }
             setHeaderData({});
           } else {
@@ -173,7 +173,6 @@ const Editor = () => {
                 : [],
             };
             setHeaderData(newHeaderData);
-            setShowSpinner(false);
           }
         });
       });
@@ -184,7 +183,7 @@ const Editor = () => {
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [file, language, lessonId]);
+  }, [file, language, lessonId, ymlData.tags]);
 
   return (
     <div className="editor">
