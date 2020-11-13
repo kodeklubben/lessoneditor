@@ -85,9 +85,7 @@ export const LessonContextProvider = (props) => {
       }
     },
     saveYml: async (ymlData) => {
-      if (lessonId) {
-        await axios.post(lessonYMLDataUrl, ymlData);
-      }
+      await axios.post(lessonYMLDataUrl, ymlData);
     },
     getLessonData: async () => {
       async function fetchData() {
