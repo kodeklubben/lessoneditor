@@ -76,16 +76,18 @@ const EditorDatapanel = ({
     const newMdText = newHeader + "\n\n\n" + mdText;
     setShowSpinner(true);
     await saveMdText(lessonId, file, newMdText);
-    await fetchMdText(lessonId, file);
-    history.push({ pathname: "/" });
-    history.replace({ pathname: target });
+    fetchMdText(lessonId, file).then(() => {
+      history.push({ pathname: "/" });
+      history.replace({ pathname: target });
+    });
   };
 
   const onCancel = async () => {
     setShowSpinner(true);
-    await fetchMdText(lessonId, file);
-    history.push({ pathname: "/" });
-    history.replace({ pathname: target });
+    fetchMdText(lessonId, file).then(() => {
+      history.push({ pathname: "/" });
+      history.replace({ pathname: target });
+    });
   };
 
   return (
