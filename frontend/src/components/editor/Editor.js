@@ -128,45 +128,52 @@ const Editor = () => {
       setShowSpinner(true);
       getLessonData().then(async (res) => {
         setData(res);
-
-        const lessonText = await fetchMdText(lessonId, file);
-        const parts = lessonText.split("---\n");
-        const parsedHeader = parts[1] ? parseMdHeader(parts[1]) : {};
-        const body = parts[2] ? parts[2].trim() : "";
-        setShowSpinner(false);
-        if (body.length === 0) {
-          if (file.slice(0, 6) === "README") {
-            const newTeacherGuide = insertMetaDataInTeacherGuide(
-              await getYmlData()
-            );
-            console.log("isREADME ");
-            setMdText(newTeacherGuide);
-            setOpenMetaData(true);
-          } else {
-            setMdText(oppgaveMal);
-            setOpenMetaData(true);
-          }
-          setHeaderData({});
-        } else {
-          setMdText(body);
-          setUndo([body]);
-          const newHeaderData = {
-            title: parsedHeader.title,
-            authorList: parsedHeader.author
-              ? parsedHeader.author.split(",").map((item) => {
-                  return item.trim();
-                })
-              : [],
-            translatorList: parsedHeader.translator
-              ? parsedHeader.translator.split(",").map((item) => {
-                  return item.trim();
-                })
-              : [],
-          };
-          setHeaderData(newHeaderData);
+        async function fetchData() {
+          const lessonText = await fetchMdText(lessonId, file);
+          return lessonText;
         }
+        fetchData().then(async (lessonText) => {
+          const parts = lessonText.split("---\n");
+          const parsedHeader = parts[1] ? parseMdHeader(parts[1]) : {};
+          const body = parts[2] ? parts[2].trim() : "";
+
+          if (body.length === 0) {
+            if (file.slice(0, 6) === "README") {
+              const ymlData = await getYmlData();
+              const newTeacherGuide = insertMetaDataInTeacherGuide(ymlData);
+              console.log("isREADME ");
+              setMdText(newTeacherGuide);
+              setOpenMetaData(true);
+              setShowSpinner(false);
+            } else {
+              setMdText(oppgaveMal);
+              setOpenMetaData(true);
+              setShowSpinner(false);
+            }
+            setHeaderData({});
+          } else {
+            setMdText(body);
+            setUndo([body]);
+            const newHeaderData = {
+              title: parsedHeader.title,
+              authorList: parsedHeader.author
+                ? parsedHeader.author.split(",").map((item) => {
+                    return item.trim();
+                  })
+                : [],
+              translatorList: parsedHeader.translator
+                ? parsedHeader.translator.split(",").map((item) => {
+                    return item.trim();
+                  })
+                : [],
+            };
+            setHeaderData(newHeaderData);
+            setShowSpinner(false);
+          }
+        });
       });
     }
+
     if (lessonId && file) {
       initLesson();
     }
