@@ -40,7 +40,7 @@ const Landingpage = () => {
     } else {
       setShowSpinner(false);
     }
-  }, [data.courseTitle]);
+  }, [data.course]);
 
   useEffect(() => {
     async function compareObjects() {
