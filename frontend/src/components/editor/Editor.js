@@ -129,10 +129,7 @@ const Editor = () => {
       getLessonData().then(async (res) => {
         setData(res);
         async function fetchData() {
-          const lessonText = await fetchMdText(
-            lessonId,
-            language === "nb" ? file : `${file}_${language}`
-          );
+          const lessonText = await fetchMdText(lessonId, file);
           return lessonText;
         }
         fetchData().then(async (lessonText) => {
