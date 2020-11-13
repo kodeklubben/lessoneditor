@@ -22,7 +22,7 @@ const Landingpage = () => {
   const { lessonId, mode } = useParams();
   const history = useHistory();
   const lesson = useContext(LessonContext);
-  const { data, getYmlData, ymlData, saveLesson, lessonList } = lesson;
+  const { data, getYmlData, saveLesson, lessonList } = lesson;
 
   const options = [
     { key: 1, text: "Oppgaver", value: "lessontexts" },
@@ -44,15 +44,17 @@ const Landingpage = () => {
 
   useEffect(() => {
     async function compareObjects() {
-      if (
-        JSON.stringify(ymlData?.tags) ===
-        JSON.stringify({ topic: [], subject: [], grade: [] })
-      ) {
-        setOpen(true);
-      }
+      getYmlData().then((res) => {
+        if (
+          JSON.stringify(res?.tags) ===
+          JSON.stringify({ topic: [], subject: [], grade: [] })
+        ) {
+          setOpen(true);
+        }
+      });
     }
     compareObjects();
-  }, [getYmlData, ymlData.tags]);
+  }, [getYmlData]);
 
   const handleChange = (e, { value }) => {
     setPageContent(value);
