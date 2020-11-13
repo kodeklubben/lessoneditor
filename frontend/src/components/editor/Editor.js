@@ -96,6 +96,7 @@ const Editor = () => {
   };
 
   const insertMetaDataInTeacherGuide = (ymlData) => {
+    console.log("ymldata : " + JSON.stringify(ymlData));
     let subject = ymlData.tags.subject.map((element) => {
       return SUBJECT[element];
     });
@@ -118,6 +119,7 @@ const Editor = () => {
       /{grade}/,
       grade.join(", ")
     );
+    console.log("veiledniingwithData : " + veiledningWithData);
     return veiledningWithData;
   };
 
@@ -135,8 +137,9 @@ const Editor = () => {
       setShowSpinner(false);
       if (body.length === 0) {
         if (file.slice(0, 6) === "README") {
-          const ymlData = await getYmlData();
-          setMdText(insertMetaDataInTeacherGuide(ymlData));
+          getYmlData().then((res) => {
+            setMdText(insertMetaDataInTeacherGuide(res));
+          });
           setOpenMetaData(true);
         } else {
           setMdText(oppgaveMal);

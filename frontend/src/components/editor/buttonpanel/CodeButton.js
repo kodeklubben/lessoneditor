@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import CodeButtonComponent from "./CodeButtonComponent";
 import { useHotkeys } from "react-hotkeys-hook";
 import {
