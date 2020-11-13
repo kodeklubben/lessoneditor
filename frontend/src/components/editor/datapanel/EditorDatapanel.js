@@ -5,7 +5,6 @@ import { Button, Icon, Popup } from "semantic-ui-react";
 import MultiInput from "./MultiInput";
 import { FORM_TEXT } from "./settings/landingpage_NO.js";
 import { LessonContext } from "contexts/LessonContext";
-import { UserContext } from "contexts/UserContext";
 import saveMdText from "../../../api/save-md-text";
 import fetchMdText from "../../../api/fetch-md-text";
 import createNewHeader from "../buttonpanel/utils/createNewHeader";
@@ -16,14 +15,14 @@ const EditorDatapanel = ({
   setOpenMetaData,
   language,
   setShowSpinner,
+  lessonTitle,
+  courseTitle,
+  userName,
 }) => {
   const history = useHistory();
   const { lessonId } = useParams();
   const lessonContext = useContext(LessonContext);
-  const userContext = useContext(UserContext);
-
-  const { headerData, setHeaderData, data } = lessonContext;
-  const { user } = userContext;
+  const { headerData, setHeaderData } = lessonContext;
 
   const [state, setState] = useState({ title: "", authorList: [] });
 
@@ -37,40 +36,20 @@ const EditorDatapanel = ({
   const target = ["/editor", lessonId, file].join("/");
 
   useEffect(() => {
-    if (
-      typeof user === "undefined" &&
-      typeof data.lessonTitle === "undefined" &&
-      typeof data.courseTitle === "undefined"
-    ) {
-      setShowSpinner(true);
-    } else {
-      setShowSpinner(false);
-    }
-  }, [data.courseTitle, data.lessonTitle, setShowSpinner, user]);
-
-  useEffect(() => {
     function fetchData() {
       // const headerData = getHeaderData();
       if (Object.keys(headerData).length > 0) {
         setState(headerData);
-      } else if (
-        typeof user !== "undefined" &&
-        typeof data.lessonTitle !== "undefined" &&
-        user.name.length > 0 &&
-        data.lessonTitle.length > 0
-      ) {
+      } else {
         setState((prevState) => ({
           ...prevState,
-          authorList: [user.name],
-          title: data.lessonTitle,
+          authorList: [userName],
+          title: lessonTitle,
         }));
       }
-      // else {
-      //   setState({ title: "", authorList: [] });
-      // }
     }
     fetchData();
-  }, [data.lessonTitle, user, headerData]);
+  }, [headerData, lessonTitle, userName]);
 
   const changeHandler = (event) => {
     const nam = event.target.name;
@@ -148,7 +127,7 @@ const EditorDatapanel = ({
                 <span
                   style={{ color: "grey", marginRight: "1ch" }}
                 >{`Prosjekttittel: `}</span>
-                {data?.lessonTitle}
+                {lessonTitle}
               </h2>
               <p
                 style={{
@@ -156,7 +135,7 @@ const EditorDatapanel = ({
                   justifyContent: "center",
                   marginLeft: "auto",
                 }}
-              >{`Kurs: ${data?.courseTitle}`}</p>
+              >{`Kurs: ${courseTitle}`}</p>
               <br />
             </div>
             <div id="titleField" className="field">

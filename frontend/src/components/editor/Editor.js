@@ -9,6 +9,7 @@ import ButtonPanel from "./buttonpanel/ButtonPanel";
 import ImageUpload from "./ImageUpload";
 import fetchMdText from "../../api/fetch-md-text";
 import { LessonContext } from "contexts/LessonContext";
+import { UserContext } from "contexts/UserContext";
 import ShowSpinner from "../ShowSpinner";
 import parseMdHeader from "./utils/parseMdHeader";
 import laererveiledningMal from "./LaererveiledningMal";
@@ -17,8 +18,16 @@ import { GRADE, SUBJECT, TOPIC } from "./datapanel/settings/landingpage_NO";
 
 const Editor = () => {
   const { lessonId, file } = useParams();
-  const context = useContext(LessonContext);
-  const { data, getYmlData, setHeaderData } = context;
+  const lessonContext = useContext(LessonContext);
+  const userContext = useContext(UserContext);
+  const {
+    data,
+    getLessonData,
+    setData,
+    getYmlData,
+    setHeaderData,
+  } = lessonContext;
+  const { user } = userContext;
   const [mdText, setMdText] = useState("");
   const [showSpinner, setShowSpinner] = useState(false);
   const [buttonValues, setButtonValues] = useState({});
@@ -87,6 +96,7 @@ const Editor = () => {
   };
 
   const insertMetaDataInTeacherGuide = (ymlData) => {
+    console.log("ymldata : " + JSON.stringify(ymlData));
     let subject = ymlData.tags.subject.map((element) => {
       return SUBJECT[element];
     });
@@ -109,12 +119,16 @@ const Editor = () => {
       /{grade}/,
       grade.join(", ")
     );
+    console.log("veiledniingwithData : " + veiledningWithData);
     return veiledningWithData;
   };
 
   useEffect(() => {
     async function initLesson() {
       setShowSpinner(true);
+      const lessonData = await getLessonData();
+      setData(lessonData);
+
       const lessonText = await fetchMdText(lessonId, file);
       const parts = lessonText.split("---\n");
       const parsedHeader = parts[1] ? parseMdHeader(parts[1]) : {};
@@ -123,8 +137,10 @@ const Editor = () => {
       setShowSpinner(false);
       if (body.length === 0) {
         if (file.slice(0, 6) === "README") {
-          const ymlData = await getYmlData();
-          setMdText(insertMetaDataInTeacherGuide(ymlData));
+          console.log("isREADME ");
+          getYmlData().then((res) => {
+            setMdText(insertMetaDataInTeacherGuide(res));
+          });
           setOpenMetaData(true);
         } else {
           setMdText(oppgaveMal);
@@ -197,6 +213,9 @@ const Editor = () => {
         setOpenMetaData={setOpenMetaData}
         setShowSpinner={setShowSpinner}
         language={language ? language : ""}
+        lessonTitle={data?.lessonTitle}
+        courseTitle={data?.courseTitle}
+        userName={user?.name}
       />
       <div className="textEditorContainer">
         <MDTextArea

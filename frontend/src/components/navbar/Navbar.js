@@ -24,18 +24,26 @@ const Navbar = () => {
           </a>
         </div>
 
+        {file !== undefined ? (
+          <div className="navbar_course_title">
+            <h1 style={{ margin: "auto" }}>
+              <span style={{ color: "gray" }}>Prosjekttittel: </span>
+              {data.lessonTitle}
+            </h1>
+            <h3 style={{ margin: "auto" }}>
+              <span style={{ color: "gray" }}>Kurs: </span>
+              {data.courseTitle}
+            </h3>
+          </div>
+        ) : (
+          ""
+        )}
+
         <div className="navbar_profile">
           {file === undefined ? (
             <NewLessonButton setShowPopup={setShowPopup} />
           ) : (
-            <>
-              <h1 style={{ paddingRight: "10em" }}>
-                <span style={{ color: "gray" }}>Prosjekttittel: </span>
-                {data.lessonTitle}
-                <span style={{ color: "gray", marginLeft: "1em" }}>Kurs: </span>
-                {data.courseTitle}
-              </h1>
-            </>
+            ""
           )}
           {showPopup ? <NewLesson setShowPopup={setShowPopup} /> : ""}
           <a id="navbar_gohome" href={"/"}>
