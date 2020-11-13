@@ -216,6 +216,7 @@ const ButtonPanel = ({
             setCursorPosition={setCursorPosition}
             setCursor={setCursor}
             setButtonValues={setButtonValues}
+            courseTitle={courseTitle}
           />
         </span>
       </div>

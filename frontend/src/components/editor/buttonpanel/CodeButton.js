@@ -1,7 +1,6 @@
 import React, { useContext } from "react";
 import CodeButtonComponent from "./CodeButtonComponent";
 import { useHotkeys } from "react-hotkeys-hook";
-import { LessonContext } from "contexts/LessonContext";
 import {
   buttonAction as codeAction,
   cancelButton,
@@ -25,10 +24,9 @@ const CodeButton = ({
   setCursorPosition,
   setCursor,
   setButtonValues,
+  courseTitle,
 }) => {
-  const context = useContext(LessonContext);
-  const { data } = context;
-  const course = data.courseTitle;
+  const course = courseTitle;
 
   const outputCodeBlock =
     config.codeblock.output.slice(0, 3) +
