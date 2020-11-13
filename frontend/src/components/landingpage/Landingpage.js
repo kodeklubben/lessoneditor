@@ -113,20 +113,23 @@ const Landingpage = () => {
           {pageContent === "teacherguides" ? (
             <>
               <span style={{ color: "grey" }}>{"Prosjekttittel: "}</span>
-              <span>{data.lessonTitle}</span> <span>{`(Lærerveiledning)`}</span>
+              <span>
+                {data.lessonTitle ? data.lessonTitle : data.lesson}
+              </span>{" "}
+              <span>{`(Lærerveiledning)`}</span>
               <span style={{ color: "grey", marginLeft: "1em" }}>
                 {" Kurs: "}
               </span>
-              <span>{data.courseTitle}</span>
+              <span>{data.courseTitle ? data.courseTitle : data.course}</span>
             </>
           ) : (
             <>
               <span style={{ color: "grey" }}>{"Prosjekttittel: "}</span>
-              <span>{data.lessonTitle}</span>
+              <span>{data.lessonTitle ? data.lessonTitle : data.lesson}</span>
               <span style={{ color: "grey", marginLeft: "1em" }}>
                 {" Kurs: "}
               </span>
-              <span>{data.courseTitle}</span>
+              <span>{data.courseTitle ? data.courseTitle : data.course}</span>
             </>
           )}
         </h2>

@@ -28,11 +28,11 @@ const Navbar = () => {
           <div className="navbar_course_title">
             <h1 style={{ margin: "auto" }}>
               <span style={{ color: "gray" }}>Prosjekttittel: </span>
-              {data.lessonTitle}
+              {data.lessonTitle ? data.lessonTitle : data.lesson}
             </h1>
             <h3 style={{ margin: "auto" }}>
               <span style={{ color: "gray" }}>Kurs: </span>
-              {data.courseTitle}
+              {data.courseTitle ? data.courseTitle : data.course}
             </h3>
           </div>
         ) : (
