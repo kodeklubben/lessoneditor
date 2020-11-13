@@ -35,7 +35,7 @@ const Landingpage = () => {
   }, [mode, data]);
 
   useEffect(() => {
-    if (!data.courseTitle) {
+    if (!data.course) {
       setShowSpinner(true);
     } else {
       setShowSpinner(false);
