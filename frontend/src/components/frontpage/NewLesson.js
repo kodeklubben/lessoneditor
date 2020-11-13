@@ -26,8 +26,11 @@ const NewLesson = ({ showSpinner, setShowPopup, setShowSpinner }) => {
   };
   const navigateToLandingpage = (lessonId, lesson) => {
     const target = ["/editor", lessonId, lesson].join("/");
-    history.push({ pathname: target });
-    setShowSpinner(false);
+    setTimeout(() => {
+      history.push({ pathname: target });
+      setShowSpinner(false);
+      window.location.reload();
+    }, 50);
   };
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -42,13 +45,11 @@ const NewLesson = ({ showSpinner, setShowPopup, setShowSpinner }) => {
         ({ slug }) => slug === values.course
       );
       const courseTitle = getCourseFromSlug.courseTitle;
-      const lessonId = await addLesson(
-        course,
-        courseTitle,
-        lesson.slug,
-        lesson.title
+      addLesson(course, courseTitle, lesson.slug, lesson.title).then(
+        (lessonId) => {
+          navigateToLandingpage(lessonId, lesson.slug);
+        }
       );
-      navigateToLandingpage(lessonId, lesson.slug);
     } else {
       setError("Oppgavetittel er ikke satt");
     }

@@ -24,7 +24,7 @@ const Editor = () => {
     getLessonData,
     data,
     setData,
-    ymlData,
+    getYmlData,
     setHeaderData,
   } = lessonContext;
   const { user, getUserData, setUser } = userContext;
@@ -142,13 +142,17 @@ const Editor = () => {
             console.log("BODYLENGTH === 0");
             if (file.slice(0, 6) === "README") {
               console.log("isREADME ");
-              console.log("ymlData.tags : " + JSON.stringify(ymlData.tags));
-              const newTeacherGuide = insertMetaDataInTeacherGuide(
-                ymlData.tags
-              );
-              console.log("newTeacherGuide : " + newTeacherGuide);
-              setMdText(newTeacherGuide);
-              setOpenMetaData(true);
+              setShowSpinner(true);
+              getYmlData().then((ymlData) => {
+                console.log("ymlData.tags : " + JSON.stringify(ymlData.tags));
+                const newTeacherGuide = insertMetaDataInTeacherGuide(
+                  ymlData.tags
+                );
+                console.log("newTeacherGuide : " + newTeacherGuide);
+                setMdText(newTeacherGuide);
+                setOpenMetaData(true);
+                setShowSpinner(false);
+              });
             } else {
               console.log("isLESSONTEXT");
               setMdText(oppgaveMal);
@@ -183,7 +187,7 @@ const Editor = () => {
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [file, language, lessonId, ymlData.tags]);
+  }, [file, language, lessonId]);
 
   return (
     <div className="editor">
