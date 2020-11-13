@@ -44,7 +44,7 @@ const Datapanel = ({ open, setOpen, lessonId, mode }) => {
   }, [ymlData.tags]);
 
   const onSubmit = async () => {
-    await saveYml(ymlData).then(() => {
+    saveYml(ymlData).then(() => {
       setOpen(false);
     });
   };

@@ -85,9 +85,7 @@ export const LessonContextProvider = (props) => {
       }
     },
     saveYml: async (ymlData) => {
-      if (lessonId) {
-        await axios.post(lessonYMLDataUrl, ymlData);
-      }
+      await axios.post(lessonYMLDataUrl, ymlData);
     },
     getLessonData: async () => {
       async function fetchData() {
@@ -111,11 +109,13 @@ export const LessonContextProvider = (props) => {
         return res.data;
       }
 
-      const res = fetchData().then((res) => {
+      const res = await fetchData();
+      console.log("RES : " + res);
+      if (res !== undefined) {
         return res;
-      });
-
-      return res;
+      } else {
+        return ymlData;
+      }
     },
   };
   return (
