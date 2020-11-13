@@ -42,6 +42,9 @@ const ButtonPanel = ({
   setOpenMetaData,
   setShowSpinner,
   language,
+  lessonTitle,
+  courseTitle,
+  userName,
 }) => {
   const history = useHistory();
   const { lessonId, file } = useParams();
@@ -158,6 +161,9 @@ const ButtonPanel = ({
             setOpenMetaData={setOpenMetaData}
             setShowSpinner={setShowSpinner}
             language={language}
+            lessonTitle={lessonTitle}
+            courseTitle={courseTitle}
+            userName={userName}
           />
           <Popup
             content={"Til prosjektoversikt"}
