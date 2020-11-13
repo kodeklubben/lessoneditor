@@ -40,15 +40,17 @@ export const LessonContextProvider = (props) => {
   }, [lessonId, lessonDataUrl]);
 
   useEffect(() => {
-    async function fetchYMLData() {
+    async function fetchData() {
       const res = await axios.get(lessonYMLDataUrl);
-      setYmlData((prevState) => ({
-        ...prevState,
-        ...res.data,
-      }));
+      return res.data;
     }
     if (lessonId) {
-      fetchYMLData();
+      fetchData().then((res) =>
+        setYmlData((prevState) => ({
+          ...prevState,
+          ...res,
+        }))
+      );
     }
   }, [lessonId, lessonYMLDataUrl]);
 
@@ -85,18 +87,12 @@ export const LessonContextProvider = (props) => {
       }
     },
     saveYml: async (ymlData) => {
-      await axios.post(lessonYMLDataUrl, ymlData);
+      if (lessonId) {
+        await axios.post(lessonYMLDataUrl, ymlData);
+      }
     },
     getLessonData: async () => {
-      async function fetchData() {
-        const res = await axios.get(lessonDataUrl);
-        if (JSON.stringify(res.data) === "{}") {
-          return ymlData;
-        } else {
-          return res.data;
-        }
-      }
-      const res = await fetchData();
+      const res = await axios.get(lessonDataUrl);
       return res;
     },
     getHeaderData: () => {
@@ -104,16 +100,16 @@ export const LessonContextProvider = (props) => {
     },
     getYmlData: async () => {
       async function fetchData() {
-        const res = await axios.get(lessonYMLDataUrl);
+        return await axios.get(lessonYMLDataUrl);
+      }
+
+      const res = fetchData().then((res) => {
+        console.log("LESSONCONTEXT FETCHYMLDATA RES : " + res);
         if (JSON.stringify(res.data) === "{}") {
           return ymlData;
         } else {
           return res.data;
         }
-      }
-
-      const res = fetchData().then((res) => {
-        return res;
       });
 
       return res;
