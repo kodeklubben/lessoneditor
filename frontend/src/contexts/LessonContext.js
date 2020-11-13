@@ -112,8 +112,11 @@ export const LessonContextProvider = (props) => {
       const res = fetchData().then((res) => {
         return res;
       });
-
-      return res;
+      if (res !== undefined) {
+        return res;
+      } else {
+        return ymlData;
+      }
     },
   };
   return (
