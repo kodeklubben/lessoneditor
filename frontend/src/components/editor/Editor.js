@@ -27,7 +27,7 @@ const Editor = () => {
     getYmlData,
     setHeaderData,
   } = lessonContext;
-  const { user } = userContext;
+  const { user, getUserData, setUser } = userContext;
   const [mdText, setMdText] = useState("");
   const [showSpinner, setShowSpinner] = useState(false);
   const [buttonValues, setButtonValues] = useState({});
@@ -128,6 +128,8 @@ const Editor = () => {
       setShowSpinner(true);
       getLessonData().then(async (res) => {
         setData(res);
+        const userRes = await getUserData();
+        setUser(userRes.data);
         async function fetchData() {
           const lessonText = await fetchMdText(lessonId, file);
           return lessonText;
@@ -135,9 +137,10 @@ const Editor = () => {
         fetchData().then(async (lessonText) => {
           const parts = lessonText.split("---\n");
           const parsedHeader = parts[1] ? parseMdHeader(parts[1]) : {};
-          const body = parts[2] ? parts[2].trim() : "";
+          const body = parts[2] ? parts[2]?.trim() : "";
 
           if (body.length === 0) {
+            console.log("BODYLENGTH === 0");
             if (file.slice(0, 6) === "README") {
               const ymlData = await getYmlData();
               const newTeacherGuide = insertMetaDataInTeacherGuide(ymlData);
@@ -146,12 +149,14 @@ const Editor = () => {
               setOpenMetaData(true);
               setShowSpinner(false);
             } else {
+              console.log("isLESSONTEXT");
               setMdText(oppgaveMal);
               setOpenMetaData(true);
               setShowSpinner(false);
             }
             setHeaderData({});
           } else {
+            console.log("HAS BODY TEXT");
             setMdText(body);
             setUndo([body]);
             const newHeaderData = {
