@@ -109,9 +109,8 @@ export const LessonContextProvider = (props) => {
         return res.data;
       }
 
-      const res = fetchData().then((res) => {
-        return res;
-      });
+      const res = await fetchData();
+      console.log("RES : " + res);
       if (res !== undefined) {
         return res;
       } else {
