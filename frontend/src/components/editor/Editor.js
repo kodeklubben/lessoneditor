@@ -21,8 +21,8 @@ const Editor = () => {
   const lessonContext = useContext(LessonContext);
   const userContext = useContext(UserContext);
   const {
-    data,
     getLessonData,
+    data,
     setData,
     getYmlData,
     setHeaderData,
@@ -97,13 +97,13 @@ const Editor = () => {
 
   const insertMetaDataInTeacherGuide = (ymlData) => {
     console.log("ymldata : " + JSON.stringify(ymlData));
-    let subject = ymlData.tags.subject.map((element) => {
+    let subject = ymlData?.tags.subject.map((element) => {
       return SUBJECT[element];
     });
-    let topic = ymlData.tags.topic.map((element) => {
+    let topic = ymlData?.tags.topic.map((element) => {
       return TOPIC[element];
     });
-    let grade = ymlData.tags.grade.map((element) => {
+    let grade = ymlData?.tags.grade.map((element) => {
       return GRADE[element];
     });
 
@@ -111,11 +111,11 @@ const Editor = () => {
       /{subject}/,
       subject.join(", ")
     );
-    veiledningWithData = veiledningWithData.replace(
+    veiledningWithData = veiledningWithData?.replace(
       /{topic}/,
       topic.join(", ")
     );
-    veiledningWithData = veiledningWithData.replace(
+    veiledningWithData = veiledningWithData?.replace(
       /{grade}/,
       grade.join(", ")
     );
@@ -126,52 +126,53 @@ const Editor = () => {
   useEffect(() => {
     async function initLesson() {
       setShowSpinner(true);
-      const lessonData = await getLessonData();
-      setData(lessonData);
+      getLessonData().then(async (res) => {
+        setData(res);
 
-      const lessonText = await fetchMdText(lessonId, file);
-      const parts = lessonText.split("---\n");
-      const parsedHeader = parts[1] ? parseMdHeader(parts[1]) : {};
-      const body = parts[2] ? parts[2].trim() : "";
-
-      setShowSpinner(false);
-      if (body.length === 0) {
-        if (file.slice(0, 6) === "README") {
-          console.log("isREADME ");
-          getYmlData().then((res) => {
-            setMdText(insertMetaDataInTeacherGuide(res));
-          });
-          setOpenMetaData(true);
+        const lessonText = await fetchMdText(lessonId, file);
+        const parts = lessonText.split("---\n");
+        const parsedHeader = parts[1] ? parseMdHeader(parts[1]) : {};
+        const body = parts[2] ? parts[2].trim() : "";
+        setShowSpinner(false);
+        if (body.length === 0) {
+          if (file.slice(0, 6) === "README") {
+            const newTeacherGuide = insertMetaDataInTeacherGuide(
+              await getYmlData()
+            );
+            console.log("isREADME ");
+            setMdText(newTeacherGuide);
+            setOpenMetaData(true);
+          } else {
+            setMdText(oppgaveMal);
+            setOpenMetaData(true);
+          }
+          setHeaderData({});
         } else {
-          setMdText(oppgaveMal);
-          setOpenMetaData(true);
+          setMdText(body);
+          setUndo([body]);
+          const newHeaderData = {
+            title: parsedHeader.title,
+            authorList: parsedHeader.author
+              ? parsedHeader.author.split(",").map((item) => {
+                  return item.trim();
+                })
+              : [],
+            translatorList: parsedHeader.translator
+              ? parsedHeader.translator.split(",").map((item) => {
+                  return item.trim();
+                })
+              : [],
+          };
+          setHeaderData(newHeaderData);
         }
-        setHeaderData({});
-      } else {
-        setMdText(body);
-        setUndo([body]);
-        const newHeaderData = {
-          title: parsedHeader.title,
-          authorList: parsedHeader.author
-            ? parsedHeader.author.split(",").map((item) => {
-                return item.trim();
-              })
-            : [],
-          translatorList: parsedHeader.translator
-            ? parsedHeader.translator.split(",").map((item) => {
-                return item.trim();
-              })
-            : [],
-        };
-        setHeaderData(newHeaderData);
-      }
+      });
     }
     if (lessonId && file) {
       initLesson();
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [file, language, lessonId, setHeaderData]);
+  }, [file, language, lessonId]);
 
   return (
     <div className="editor">
@@ -230,12 +231,12 @@ const Editor = () => {
           setCursor={setCursor}
           pushUndoValue={pushUndoValue}
           resetButtons={resetButtons}
-          course={data.course ? data.course : ""}
+          course={data?.course ? data?.course : ""}
         />
         <MDPreview
           mdText={mdText}
           renderContent={renderContent}
-          course={data.course ? data.course : ""}
+          course={data?.course ? data?.course : ""}
           language={language ? language : ""}
         />
       </div>
