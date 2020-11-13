@@ -137,6 +137,7 @@ const Editor = () => {
       setShowSpinner(false);
       if (body.length === 0) {
         if (file.slice(0, 6) === "README") {
+          console.log("isREADME ");
           getYmlData().then((res) => {
             setMdText(insertMetaDataInTeacherGuide(res));
           });
