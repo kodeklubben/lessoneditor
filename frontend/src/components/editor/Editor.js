@@ -95,14 +95,15 @@ const Editor = () => {
     setButtonValues({});
   };
 
-  const insertMetaDataInTeacherGuide = (ymlData) => {
-    let subject = ymlData.subject.map((element) => {
+  const insertMetaDataInTeacherGuide = async () => {
+    const ymlData = await getYmlData();
+    const subject = ymlData.tags.subject.map((element) => {
       return SUBJECT[element];
     });
-    let topic = ymlData.topic.map((element) => {
+    const topic = ymlData.tags.topic.map((element) => {
       return TOPIC[element];
     });
-    let grade = ymlData.grade.map((element) => {
+    const grade = ymlData.tags.grade.map((element) => {
       return GRADE[element];
     });
 
@@ -143,16 +144,11 @@ const Editor = () => {
             if (file.slice(0, 6) === "README") {
               console.log("isREADME ");
               setShowSpinner(true);
-              getYmlData().then((ymlData) => {
-                console.log("ymlData.tags : " + JSON.stringify(ymlData.tags));
-                const newTeacherGuide = insertMetaDataInTeacherGuide(
-                  ymlData.tags
-                );
-                console.log("newTeacherGuide : " + newTeacherGuide);
-                setMdText(newTeacherGuide);
-                setOpenMetaData(true);
-                setShowSpinner(false);
-              });
+              const newTeacherGuide = await insertMetaDataInTeacherGuide();
+              console.log("newTeacherGuide : " + newTeacherGuide);
+              setMdText(newTeacherGuide);
+              setOpenMetaData(true);
+              setShowSpinner(false);
             } else {
               console.log("isLESSONTEXT");
               setMdText(oppgaveMal);
