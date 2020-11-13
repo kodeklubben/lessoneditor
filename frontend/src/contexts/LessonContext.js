@@ -31,9 +31,8 @@ export const LessonContextProvider = (props) => {
 
   useEffect(() => {
     async function fetchLessonData() {
-      axios.get(lessonDataUrl).then((res) => {
-        setData(res.data);
-      });
+      const res = await axios.get(lessonDataUrl);
+      setData(res.data);
     }
     if (lessonId) {
       fetchLessonData();
@@ -42,12 +41,11 @@ export const LessonContextProvider = (props) => {
 
   useEffect(() => {
     async function fetchYMLData() {
-      axios.get(lessonYMLDataUrl).then((res) => {
-        setYmlData((prevState) => ({
-          ...prevState,
-          ...res.data,
-        }));
-      });
+      const res = await axios.get(lessonYMLDataUrl);
+      setYmlData((prevState) => ({
+        ...prevState,
+        ...res.data,
+      }));
     }
     if (lessonId) {
       fetchYMLData();
@@ -108,14 +106,11 @@ export const LessonContextProvider = (props) => {
     },
     getYmlData: async () => {
       async function fetchData() {
-        if (
-          JSON.stringify(ymlData.tags) ===
-          "{ topic: [], subject: [], grade: [] }"
-        ) {
-          const res = await axios.get(lessonYMLDataUrl);
-          return res.data;
-        } else {
+        const res = await axios.get(lessonYMLDataUrl);
+        if (JSON.stringify(res.data) === "{}") {
           return ymlData;
+        } else {
+          return res.data;
         }
       }
 
