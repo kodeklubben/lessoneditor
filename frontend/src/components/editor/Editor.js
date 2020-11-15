@@ -14,13 +14,20 @@ import ShowSpinner from "../ShowSpinner";
 import parseMdHeader from "./utils/parseMdHeader";
 import laererveiledningMal from "./LaererveiledningMal";
 import oppgaveMal from "../editor/settingsFiles/oppgaveMal";
-// import { GRADE, SUBJECT, TOPIC } from "./datapanel/settings/landingpage_NO";
+import { GRADE, SUBJECT, TOPIC } from "./datapanel/settings/landingpage_NO";
 
 const Editor = () => {
   const { lessonId, file } = useParams();
   const lessonContext = useContext(LessonContext);
   const userContext = useContext(UserContext);
-  const { getLessonData, data, setData, setHeaderData } = lessonContext;
+  const {
+    getLessonData,
+    data,
+    getYmlData,
+    setYmlData,
+    setData,
+    setHeaderData,
+  } = lessonContext;
   const { user, getUserData, setUser } = userContext;
   const [mdText, setMdText] = useState("");
   const [showSpinner, setShowSpinner] = useState(false);
@@ -89,38 +96,38 @@ const Editor = () => {
     setButtonValues({});
   };
 
-  // const insertMetaDataInTeacherGuide = async () => {
-  //   const ymlData = await getYmlData();
-  //   const subject = ymlData.tags.subject.map(element => {
-  //     return SUBJECT[element];
-  //   });
-  //   const topic = ymlData.tags.topic.map(element => {
-  //     return TOPIC[element];
-  //   });
-  //   const grade = ymlData.tags.grade.map(element => {
-  //     return GRADE[element];
-  //   });
+  const insertMetaDataInTeacherGuide = async (ymlData) => {
+    const subject = ymlData.tags.subject.map((element) => {
+      return SUBJECT[element];
+    });
+    const topic = ymlData.tags.topic.map((element) => {
+      return TOPIC[element];
+    });
+    const grade = ymlData.tags.grade.map((element) => {
+      return GRADE[element];
+    });
 
-  //   let veiledningWithData = laererveiledningMal.replace(
-  //     /{subject}/,
-  //     subject.join(", ")
-  //   );
-  //   veiledningWithData = veiledningWithData?.replace(
-  //     /{topic}/,
-  //     topic.join(", ")
-  //   );
-  //   veiledningWithData = veiledningWithData?.replace(
-  //     /{grade}/,
-  //     grade.join(", ")
-  //   );
-  //   return veiledningWithData;
-  // };
+    let veiledningWithData = laererveiledningMal.replace(
+      /{subject}/,
+      subject.join(", ")
+    );
+    veiledningWithData = veiledningWithData?.replace(
+      /{topic}/,
+      topic.join(", ")
+    );
+    veiledningWithData = veiledningWithData?.replace(
+      /{grade}/,
+      grade.join(", ")
+    );
+    return veiledningWithData;
+  };
 
   useEffect(() => {
     async function initLesson() {
       setShowSpinner(true);
       getLessonData().then(async (res) => {
         setData(res);
+        console.log("RES : " + JSON.stringify(res));
         const userRes = await getUserData();
         setUser(userRes.data);
         async function fetchData() {
@@ -129,6 +136,7 @@ const Editor = () => {
           return lessonText;
         }
         fetchData().then(async (lessonText) => {
+          console.log("LESSONTEXT : " + JSON.stringify(lessonText));
           const parts = lessonText.split("---\n");
           const parsedHeader = parts[1] ? parseMdHeader(parts[1]) : {};
           const body = parts[2] ? parts[2]?.trim() : "";
@@ -137,10 +145,11 @@ const Editor = () => {
             console.log("BODYLENGTH === 0");
             if (file.slice(0, 6) === "README") {
               console.log("isREADME ");
+              const ymlData = await getYmlData();
+              setYmlData(ymlData);
+              console.log(JSON.stringify(ymlData));
               setShowSpinner(true);
-              // const newTeacherGuide = await insertMetaDataInTeacherGuide();
-              // console.log("newTeacherGuide : " + newTeacherGuide);
-              setMdText(laererveiledningMal);
+              setMdText(await insertMetaDataInTeacherGuide(ymlData));
               setOpenMetaData(true);
               setShowSpinner(false);
             } else {

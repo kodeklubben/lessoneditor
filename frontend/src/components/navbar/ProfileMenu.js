@@ -1,7 +1,7 @@
 import "./profileMenu.scss";
 import React from "react";
 
-const ProfileMenu = ({ name, email, photo }) => {
+const ProfileMenu = ({ name, photo }) => {
   return (
     <div style={{ marginBottom: "1em", marginLeft: "1em" }}>
       <span style={{ position: "relative", left: "-1em" }}>{name}</span>

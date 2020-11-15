@@ -71,6 +71,7 @@ const EditorDatapanel = ({
     setHeaderData(state);
     const newHeader = createNewHeader(state, language);
     const newMdText = newHeader + "\n\n\n" + mdText;
+    console.log(mdText);
     setShowSpinner(true);
     saveMdText(lessonId, file, newMdText).then(() => {
       fetchMdText(lessonId, file).then(() => {
