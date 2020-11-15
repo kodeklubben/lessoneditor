@@ -19,6 +19,8 @@ const Overview = () => {
     history.push(target);
   };
 
+  console.log(lessons);
+
   return (
     <div>
       {showSpinner ? <ShowSpinner /> : ""}

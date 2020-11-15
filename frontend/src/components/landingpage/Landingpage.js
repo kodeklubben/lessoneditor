@@ -46,7 +46,7 @@ const Landingpage = () => {
     async function compareObjects() {
       getYmlData().then((res) => {
         if (
-          JSON.stringify(res?.tags) ===
+          JSON.stringify(res.tags) ===
           JSON.stringify({ topic: [], subject: [], grade: [] })
         ) {
           setOpen(true);
@@ -64,8 +64,8 @@ const Landingpage = () => {
 
   const onSubmit = async (lessonId) => {
     setShowSpinner(true);
-    await saveLesson(data)
-      .then(await submitLesson(lessonId))
+    saveLesson(data)
+      .then(submitLesson(lessonId))
       .then(() => {
         setShowSpinner(false);
         setAreYouSure(false);
