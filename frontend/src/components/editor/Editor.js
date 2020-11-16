@@ -222,7 +222,7 @@ const Editor = () => {
         lessonTitle={lessonData.lessonTitle}
         courseTitle={lessonData.courseTitle}
         course={lessonData.course}
-        userName={user.name}
+        userName={user?.name}
       />
       <div className="textEditorContainer">
         <MDTextArea
