@@ -26,7 +26,7 @@ const Editor = () => {
     setYmlData,
     setHeaderData,
   } = lessonContext;
-  const { user, getUserData, setUser } = userContext;
+  const { user } = userContext;
   const [mdText, setMdText] = useState("");
   const [lessonData, setLessonData] = useState({});
   const [showSpinner, setShowSpinner] = useState(false);
