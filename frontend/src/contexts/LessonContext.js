@@ -103,11 +103,15 @@ export const LessonContextProvider = (props) => {
       return headerData;
     },
     getYmlData: async () => {
-      const res = await axios.get(lessonYMLDataUrl);
-      if (JSON.stringify(res.data) !== JSON.stringify({})) {
-        return res.data;
-      } else {
-        return ymlData;
+      try {
+        const res = await axios.get(lessonYMLDataUrl);
+        if (JSON.stringify(res.data) !== JSON.stringify({})) {
+          return res.data;
+        } else {
+          return ymlData;
+        }
+      } catch (e) {
+        console.log("FetcthYMLDATA failed : " + e);
       }
     },
   };

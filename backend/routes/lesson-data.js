@@ -6,12 +6,12 @@ module.exports = (app) => {
   app.post(paths.LESSON_DATA, async (req, res) => {
     const { lessonId, filename } = req.params;
     const buffer = Buffer.from(JSON.stringify(req.body));
-    saveFile(["drafts", lessonId, filename], buffer).then(res.send("ok"));
+    await saveFile(["drafts", lessonId, filename], buffer);
+    res.send("ok");
   });
   app.get(paths.LESSON_DATA, async (req, res) => {
     const { lessonId, filename } = req.params;
-    loadFile(["drafts", lessonId, filename]).then((content) => {
-      res.send(JSON.parse(content));
-    });
+    const content = await loadFile(["drafts", lessonId, filename]);
+    res.send(JSON.parse(content));
   });
 };
