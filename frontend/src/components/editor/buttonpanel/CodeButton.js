@@ -24,10 +24,9 @@ const CodeButton = ({
   setCursorPosition,
   setCursor,
   setButtonValues,
+  course,
   courseTitle,
 }) => {
-  const course = courseTitle;
-
   const outputCodeBlock =
     config.codeblock.output.slice(0, 3) +
     (course === "scratch" ? "blocks" : course) +
@@ -153,6 +152,7 @@ const CodeButton = ({
           buttonTitle={element[1].buttonTitle}
           shortcutKey={element[1].shortcut}
           course={course}
+          courseTitle={courseTitle}
           style={element[1].style}
         />
       ))}
