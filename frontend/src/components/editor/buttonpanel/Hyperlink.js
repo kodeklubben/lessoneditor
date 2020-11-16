@@ -28,10 +28,13 @@ const Popup = ({
   const [openNewWindow, setOpenNewWindow] = useState(false);
   const [url, setUrl] = useState("https://");
 
-  let start = cursorPositionStart + 1;
-  let end = cursorPositionEnd + languageNO.linkText.length + 1;
-
   const clickOKHandler = () => {
+    const start = cursorPositionStart + 1;
+    const end =
+      cursorPositionStart === cursorPositionEnd
+        ? cursorPositionEnd + languageNO.linkText.length + 1
+        : cursorPositionStart + (cursorPositionEnd - cursorPositionStart + 1);
+
     if (cursorPositionStart === cursorPositionEnd) {
       openNewWindow
         ? setMdText(
