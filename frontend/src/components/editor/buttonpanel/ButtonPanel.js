@@ -41,7 +41,6 @@ const ButtonPanel = ({
   openMetaData,
   setOpenMetaData,
   setShowSpinner,
-  language,
   lessonTitle,
   courseTitle,
   userName,
@@ -51,6 +50,8 @@ const ButtonPanel = ({
   const context = useContext(LessonContext);
   const { data, getHeaderData } = context;
   const course = data.course;
+
+  const language = file && file.slice(-3, -2) === "_" ? file.slice(-2) : "nb";
 
   const newHeader = (language) => {
     const res = getHeaderData();
@@ -65,7 +66,7 @@ const ButtonPanel = ({
 
   const navigateToHome = async () => {
     let target = "";
-    const newHeaderText = newHeader();
+    const newHeaderText = newHeader(language);
     const newMdText =
       typeof newHeaderText !== "undefined"
         ? newHeaderText + "\n\n\n" + mdText
@@ -152,7 +153,7 @@ const ButtonPanel = ({
             mdText={mdText}
             file={file}
             setShowSpinner={setShowSpinner}
-            language={language}
+            language={language ? language : ""}
           />
           <EditorDatapanel
             mdText={mdText}
@@ -160,7 +161,7 @@ const ButtonPanel = ({
             openMetaData={openMetaData}
             setOpenMetaData={setOpenMetaData}
             setShowSpinner={setShowSpinner}
-            language={language}
+            language={language ? language : ""}
             lessonTitle={lessonTitle}
             courseTitle={courseTitle}
             userName={userName}

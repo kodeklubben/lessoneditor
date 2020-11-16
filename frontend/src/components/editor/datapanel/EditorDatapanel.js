@@ -10,20 +10,20 @@ import fetchMdText from "../../../api/fetch-md-text";
 import createNewHeader from "../buttonpanel/utils/createNewHeader";
 const EditorDatapanel = ({
   mdText,
-  file,
   openMetaData,
   setOpenMetaData,
-  language,
   setShowSpinner,
   lessonTitle,
   courseTitle,
   userName,
 }) => {
-  const { lessonId } = useParams();
+  const { lessonId, file } = useParams();
   const lessonContext = useContext(LessonContext);
   const { headerData, setHeaderData } = lessonContext;
 
   const [state, setState] = useState({ title: "", authorList: [] });
+
+  const language = file && file.slice(-3, -2) === "_" ? file.slice(-2) : "nb";
 
   const getLanguageFromSlug = {
     nb: "Bokmål",

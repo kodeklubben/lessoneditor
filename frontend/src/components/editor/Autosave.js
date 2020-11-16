@@ -5,7 +5,7 @@ import saveMdText from "../../api/save-md-text";
 import { SAVING, SAVED } from "./settingsFiles/languages/editor_NO";
 import createNewHeader from ".//buttonpanel/utils/createNewHeader";
 
-const Autosave = ({ mdText, setRenderContent, language }) => {
+const Autosave = ({ mdText, setRenderContent }) => {
   const [savedText, setSavedText] = useState("");
   const [counter, setCounter] = useState(0);
   const [autoSaveMessage, setAutoSaveMessage] = useState("");
@@ -13,9 +13,12 @@ const Autosave = ({ mdText, setRenderContent, language }) => {
   const lessonContext = useContext(LessonContext);
   const { getHeaderData } = lessonContext;
 
-  const newHeader = () => {
+  const language = file && file.slice(-3, -2) === "_" ? file.slice(-2) : "nb";
+
+  const newHeader = (language) => {
     const res = getHeaderData();
-    return createNewHeader(res, language);
+    const header = createNewHeader(res, language);
+    return header;
   };
 
   useInterval(async () => {
@@ -30,7 +33,7 @@ const Autosave = ({ mdText, setRenderContent, language }) => {
       setAutoSaveMessage(SAVING);
     } else if (counter === 5 && autoSaveMessage !== SAVED) {
       setRenderContent(true);
-      const newHeaderText = newHeader();
+      const newHeaderText = newHeader(language);
       const newMdText =
         typeof newHeaderText !== "undefined"
           ? newHeaderText + "\n\n\n" + mdText

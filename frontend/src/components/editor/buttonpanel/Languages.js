@@ -32,15 +32,19 @@ const languageOptions = [
   },
 ];
 
-const Languages = ({ mdText, setShowSpinner, language }) => {
+const Languages = ({ mdText, setShowSpinner }) => {
   const history = useHistory();
   const { lessonId, file } = useParams();
   const lessonContext = useContext(LessonContext);
   const { getHeaderData, setLanguage } = lessonContext;
 
   const newHeader = (language) => {
-    return createNewHeader(getHeaderData(), language);
+    const res = getHeaderData();
+    const header = createNewHeader(res, language);
+    return header;
   };
+
+  const language = file && file.slice(-3, -2) === "_" ? file.slice(-2) : "nb";
 
   const filename =
     file && file.slice(-3, -2) === "_" ? file.slice(0, -3) : file;
@@ -59,7 +63,7 @@ const Languages = ({ mdText, setShowSpinner, language }) => {
         value === "nb" ? filename : `${filename}_${value}`,
       ].join("/");
     }
-    const newHeaderText = newHeader(value);
+    const newHeaderText = newHeader(language);
     const newMdText =
       typeof newHeaderText !== "undefined"
         ? newHeaderText + "\n\n\n" + mdText
