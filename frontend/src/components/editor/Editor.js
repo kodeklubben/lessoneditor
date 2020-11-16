@@ -224,7 +224,7 @@ const Editor = () => {
         language={language ? language : ""}
         lessonTitle={data.lessonTitle ? data.lessonTitle : data.lesson}
         courseTitle={data.courseTitle ? data.courseTitle : data.course}
-        userName={user.name}
+        userName={user?.name}
       />
       <div className="textEditorContainer">
         <MDTextArea
