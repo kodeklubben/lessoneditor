@@ -112,6 +112,7 @@ export const LessonContextProvider = (props) => {
         }
       } catch (e) {
         console.log("FetcthYMLDATA failed : " + e);
+        window.location.reload();
       }
     },
   };
