@@ -22,14 +22,13 @@ const Editor = () => {
   const userContext = useContext(UserContext);
   const {
     getLessonData,
-    data,
     getYmlData,
     setYmlData,
-    setData,
     setHeaderData,
   } = lessonContext;
-  const { user, getUserData, setUser } = userContext;
+  const { user } = userContext;
   const [mdText, setMdText] = useState("");
+  const [lessonData, setLessonData] = useState({});
   const [showSpinner, setShowSpinner] = useState(false);
   const [buttonValues, setButtonValues] = useState({});
   const [cursorPositionStart, setCursorPositionStart] = useState(0);
@@ -126,9 +125,7 @@ const Editor = () => {
     async function initLesson() {
       setShowSpinner(true);
       getLessonData().then(async (res) => {
-        setData(await res);
-        const userRes = await getUserData();
-        setUser(await userRes.data);
+        setLessonData(res.data);
         async function fetchData() {
           const lessonText = await fetchMdText(lessonId, file);
           setShowSpinner(false);
@@ -221,9 +218,10 @@ const Editor = () => {
         openMetaData={openMetaData}
         setOpenMetaData={setOpenMetaData}
         setShowSpinner={setShowSpinner}
-        language={language ? language : ""}
-        lessonTitle={data.lessonTitle ? data.lessonTitle : data.lesson}
-        courseTitle={data.courseTitle ? data.courseTitle : data.course}
+        language={language}
+        lessonTitle={lessonData.lessonTitle}
+        courseTitle={lessonData.courseTitle}
+        course={lessonData.course}
         userName={user?.name}
       />
       <div className="textEditorContainer">
@@ -239,19 +237,19 @@ const Editor = () => {
           setCursor={setCursor}
           pushUndoValue={pushUndoValue}
           resetButtons={resetButtons}
-          course={data.course ? data.course : ""}
+          course={lessonData.course}
         />
         <MDPreview
           mdText={mdText}
           renderContent={renderContent}
-          course={data.course ? data.course : ""}
-          language={language ? language : ""}
+          course={lessonData.course}
+          language={language}
         />
       </div>
       <Autosave
         mdText={mdText}
         setRenderContent={setRenderContent}
-        language={language ? language : ""}
+        language={language}
       />
     </div>
   );

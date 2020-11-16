@@ -8,6 +8,7 @@ const CodeButtons = ({
   buttonTitle,
   shortcutKey,
   course,
+  courseTitle,
   style,
 }) => {
   const responsiveCP = () => {
@@ -32,7 +33,7 @@ const CodeButtons = ({
                 <div style={{ position: "relative", top: "-5px" }}>
                   {"```Kodeblokk"}
                   <span style={{ color: "#008000" }}>
-                    {'("' + course + '")'}
+                    {'("' + courseTitle + '")'}
                   </span>
                 </div>
               </Button>

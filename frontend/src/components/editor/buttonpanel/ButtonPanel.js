@@ -43,13 +43,13 @@ const ButtonPanel = ({
   setShowSpinner,
   lessonTitle,
   courseTitle,
+  course,
   userName,
 }) => {
   const history = useHistory();
   const { lessonId, file } = useParams();
   const context = useContext(LessonContext);
-  const { data, getHeaderData } = context;
-  const course = data.course;
+  const { getHeaderData } = context;
 
   const language = file && file.slice(-3, -2) === "_" ? file.slice(-2) : "nb";
 
@@ -217,6 +217,7 @@ const ButtonPanel = ({
             setCursorPosition={setCursorPosition}
             setCursor={setCursor}
             setButtonValues={setButtonValues}
+            course={course}
             courseTitle={courseTitle}
           />
         </span>
