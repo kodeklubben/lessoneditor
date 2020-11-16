@@ -111,11 +111,11 @@ const Editor = () => {
       /{subject}/,
       subject.join(", ")
     );
-    veiledningWithData = veiledningWithData?.replace(
+    veiledningWithData = veiledningWithData.replace(
       /{topic}/,
       topic.join(", ")
     );
-    veiledningWithData = veiledningWithData?.replace(
+    veiledningWithData = veiledningWithData.replace(
       /{grade}/,
       grade.join(", ")
     );
@@ -126,20 +126,18 @@ const Editor = () => {
     async function initLesson() {
       setShowSpinner(true);
       getLessonData().then(async (res) => {
-        setData(res);
-        console.log("RES : " + JSON.stringify(res));
+        setData(await res);
         const userRes = await getUserData();
-        setUser(userRes.data);
+        setUser(await userRes.data);
         async function fetchData() {
           const lessonText = await fetchMdText(lessonId, file);
           setShowSpinner(false);
           return lessonText;
         }
         fetchData().then(async (lessonText) => {
-          console.log("LESSONTEXT : " + JSON.stringify(lessonText));
           const parts = lessonText.split("---\n");
           const parsedHeader = parts[1] ? parseMdHeader(parts[1]) : {};
-          const body = parts[2] ? parts[2]?.trim() : "";
+          const body = parts[2] ? parts[2].trim() : "";
 
           if (body.length === 0) {
             if (file.slice(0, 6) === "README") {
@@ -197,6 +195,7 @@ const Editor = () => {
         setCursorPositionStart={setCursorPositionStart}
         setCursorPositionEnd={setCursorPositionEnd}
         setCursorPosition={setCursorPosition}
+        setShowSpinner={setShowSpinner}
       />
       <Navbar />
       <ButtonPanel
@@ -223,8 +222,8 @@ const Editor = () => {
         setOpenMetaData={setOpenMetaData}
         setShowSpinner={setShowSpinner}
         language={language ? language : ""}
-        lessonTitle={data?.lessonTitle ? data?.lessonTitle : data?.lesson}
-        courseTitle={data?.courseTitle ? data?.courseTitle : data?.course}
+        lessonTitle={data.lessonTitle ? data.lessonTitle : data.lesson}
+        courseTitle={data.courseTitle ? data.courseTitle : data.course}
         userName={user?.name}
       />
       <div className="textEditorContainer">
@@ -240,12 +239,12 @@ const Editor = () => {
           setCursor={setCursor}
           pushUndoValue={pushUndoValue}
           resetButtons={resetButtons}
-          course={data?.course ? data?.course : ""}
+          course={data.course ? data.course : ""}
         />
         <MDPreview
           mdText={mdText}
           renderContent={renderContent}
-          course={data?.course ? data?.course : ""}
+          course={data.course ? data.course : ""}
           language={language ? language : ""}
         />
       </div>
