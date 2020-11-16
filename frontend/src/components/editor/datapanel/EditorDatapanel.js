@@ -73,8 +73,8 @@ const EditorDatapanel = ({
     const newMdText = newHeader + "\n\n\n" + mdText;
     console.log(mdText);
     setShowSpinner(true);
-    saveMdText(lessonId, file, newMdText).then(() => {
-      fetchMdText(lessonId, file).then(() => {
+    await saveMdText(lessonId, file, newMdText).then(async () => {
+      await fetchMdText(lessonId, file).then(() => {
         window.location.reload();
       });
     });

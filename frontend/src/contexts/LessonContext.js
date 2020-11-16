@@ -45,12 +45,16 @@ export const LessonContextProvider = (props) => {
       return res.data;
     }
     if (lessonId) {
-      fetchData().then((res) =>
-        setYmlData((prevState) => ({
-          ...prevState,
-          ...res,
-        }))
-      );
+      try {
+        fetchData().then((res) =>
+          setYmlData((prevState) => ({
+            ...prevState,
+            ...res,
+          }))
+        );
+      } catch (e) {
+        console.log("FetcthYMLDATA failed : " + e);
+      }
     }
   }, [lessonId, lessonYMLDataUrl]);
 

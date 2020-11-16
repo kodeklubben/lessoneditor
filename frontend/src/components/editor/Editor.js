@@ -142,24 +142,19 @@ const Editor = () => {
           const body = parts[2] ? parts[2]?.trim() : "";
 
           if (body.length === 0) {
-            console.log("BODYLENGTH === 0");
             if (file.slice(0, 6) === "README") {
-              console.log("isREADME ");
               const ymlData = await getYmlData();
-              setYmlData(ymlData);
-              console.log(JSON.stringify(ymlData));
+              setYmlData(await ymlData);
               setShowSpinner(true);
               setMdText(await insertMetaDataInTeacherGuide(ymlData));
               setOpenMetaData(true);
               setShowSpinner(false);
             } else {
-              console.log("isLESSONTEXT");
               setMdText(oppgaveMal);
               setOpenMetaData(true);
             }
             setHeaderData({});
           } else {
-            console.log("HAS BODY TEXT");
             setMdText(body);
             setUndo([body]);
             const newHeaderData = {
