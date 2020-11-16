@@ -32,17 +32,38 @@ const Popup = ({
   let end = cursorPositionEnd + languageNO.linkText.length + 1;
 
   const clickOKHandler = () => {
-    openNewWindow
-      ? setMdText(
-          mdText.slice(0, cursorPositionStart) +
-            `[${languageNO.linkText}](${url}){target=_blank}` +
-            mdText.slice(cursorPositionStart)
-        )
-      : setMdText(
-          mdText.slice(0, cursorPositionStart) +
-            `[${languageNO.linkText}](${url})` +
-            mdText.slice(cursorPositionStart)
-        );
+    if (cursorPositionStart === cursorPositionEnd) {
+      openNewWindow
+        ? setMdText(
+            mdText.slice(0, cursorPositionStart) +
+              `[${languageNO.linkText}](${url}){target=_blank}` +
+              mdText.slice(cursorPositionStart)
+          )
+        : setMdText(
+            mdText.slice(0, cursorPositionStart) +
+              `[${languageNO.linkText}](${url})` +
+              mdText.slice(cursorPositionStart)
+          );
+    } else {
+      openNewWindow
+        ? setMdText(
+            mdText.slice(0, cursorPositionStart) +
+              `[${mdText.slice(
+                cursorPositionStart,
+                cursorPositionEnd
+              )}](${url}){target=_blank}` +
+              mdText.slice(cursorPositionEnd)
+          )
+        : setMdText(
+            mdText.slice(0, cursorPositionStart) +
+              `[${mdText.slice(
+                cursorPositionStart,
+                cursorPositionEnd
+              )}](${url})` +
+              mdText.slice(cursorPositionEnd)
+          );
+    }
+
     setIsOpen(false);
     setOpenNewWindow(false);
     setUrl("https://");

@@ -62,7 +62,7 @@ const ImageUpload = ({
         setShowSpinner(true);
         const fileInfo = await uploadImage(lessonId, event.target.files[0]);
         setShowSpinner(false);
-        imageSubmitHandler(fileInfo.imageUrl);
+        imageSubmitHandler(await fileInfo.imageUrl);
       } else {
         imageSubmitHandler("fileNameError");
       }
