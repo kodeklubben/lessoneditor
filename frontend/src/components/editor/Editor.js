@@ -127,6 +127,7 @@ const Editor = () => {
       setShowSpinner(true);
       getLessonData().then(async (res) => {
         setData(res);
+        console.log("RES : " + JSON.stringify(res));
         const userRes = await getUserData();
         setUser(userRes.data);
         async function fetchData() {
@@ -135,6 +136,7 @@ const Editor = () => {
           return lessonText;
         }
         fetchData().then(async (lessonText) => {
+          console.log("LESSONTEXT : " + JSON.stringify(lessonText));
           const parts = lessonText.split("---\n");
           const parsedHeader = parts[1] ? parseMdHeader(parts[1]) : {};
           const body = parts[2] ? parts[2]?.trim() : "";
