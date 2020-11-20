@@ -27,7 +27,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build && rm -rf ../build && mv build ..",
-    "test": "cross-env CI=true react-scripts test",
+    "test": "cross-env CI=true react-scripts test --watchAll=false --detectOpenHandles ",
     "eject": "react-scripts eject",
     "lint": "prettier ./src/**/* --write"
   },
@@ -67,7 +67,7 @@
   "husky": {
     "hooks": {
       "pre-commit": "pretty-quick --staged",
-      "pre-push": "SKIP_PREFLIGHT_CHECK=true npm run test"
+      "pre-push": "cross-env SKIP_PREFLIGHT_CHECK=true npm run test"
     }
   }
 }
