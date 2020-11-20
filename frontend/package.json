@@ -27,7 +27,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build && rm -rf ../build && mv build ..",
-    "test": "cross-env CI=true react-scripts test --watchAll=false --detectOpenHandles ",
+    "test_": "cross-env CI=true react-scripts test --watchAll=false --detectOpenHandles ",
+    "test": "echo \"Error: no test specified\" && exit 1",
     "eject": "react-scripts eject",
     "lint": "prettier ./src/**/* --write"
   },
