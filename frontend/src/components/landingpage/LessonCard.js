@@ -34,7 +34,7 @@ const LessonCard = ({ title, lessonId, language, hasContent, lessonTitle }) => {
       language === "nb" ? lessonTitle : `${lessonTitle}_${language}`,
     ].join("/");
     history.push({ pathname: target });
-    window.location.reload();
+    //window.location.reload();
   };
 
   return (

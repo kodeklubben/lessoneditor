@@ -5,8 +5,8 @@ import Frontpage from "./frontpage/Frontpage";
 import { BrowserRouter, Route } from "react-router-dom";
 import { LessonContextProvider } from "../contexts/LessonContext";
 import { UserContextProvider } from "../contexts/UserContext";
+import { FileContextProvider } from "../contexts/FileContext";
 import SimplePreview from "./simple-preview/simple-preview";
-//import NewLessonButton from "./frontpage/newLessonButton";
 
 const App = () => {
   return (
@@ -15,7 +15,7 @@ const App = () => {
         <UserContextProvider>
           <Route exact path="/" component={Frontpage} />
           <Route exact path="/landingpage" component={Landingpage} />
-          <Route path="/landingpage/:lessonId/:mode">
+          <Route exact path="/landingpage/:lessonId/:mode">
             <LessonContextProvider>
               <Landingpage />
             </LessonContextProvider>
@@ -23,10 +23,16 @@ const App = () => {
           <Route exact path="/editor" component={Editor} />
           <Route path="/editor/:lessonId/:file">
             <LessonContextProvider>
-              <Editor />
+              <FileContextProvider>
+                <Editor />
+              </FileContextProvider>
             </LessonContextProvider>
           </Route>
-          <Route path="/preview/:lessonId/:file" component={SimplePreview} />
+          <Route exact path="/preview/:lessonId/:file">
+            <FileContextProvider>
+              <SimplePreview />
+            </FileContextProvider>
+          </Route>
         </UserContextProvider>
       </BrowserRouter>
     </>

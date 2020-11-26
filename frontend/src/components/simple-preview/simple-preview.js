@@ -1,41 +1,22 @@
 import "./simple-preview.scss";
-import React, { useEffect, useState } from "react";
-import fetchMdText from "../../api/fetch-md-text";
+import React, { useContext } from "react";
 import MDPreview from "../editor/MDPreview";
-import { useParams } from "react-router";
+import { FileContext } from "../../contexts/FileContext";
+import ShowSpinner from "../ShowSpinner";
 
 const SimplePreview = () => {
-  const { lessonId, file } = useParams();
-  const [mdText, setMdText] = useState("");
-  const [status, setStatus] = useState("Loading...");
-  useEffect(() => {
-    if (lessonId && file) {
-      async function fetchData() {
-        const text = await fetchMdText(lessonId, file);
-        if (mdText === "") {
-          setStatus("Not found...");
-        }
-        const lessonText =
-          text && text.slice(0, 3) === "---"
-            ? text.split("---\n")[2].trim()
-            : text;
-        setMdText(lessonText);
-      }
-
-      fetchData();
-    }
-  }, [lessonId, file, mdText]);
+  const { savedFileBody } = useContext(FileContext);
   return (
     <div className={"simple-preview"}>
-      {mdText !== "" ? (
+      {savedFileBody !== "" ? (
         <MDPreview
-          mdText={mdText}
+          mdText={savedFileBody}
           course={"python"}
           language={"nb"}
           renderContent={true}
         />
       ) : (
-        <div>{status}</div>
+        <ShowSpinner />
       )}
     </div>
   );

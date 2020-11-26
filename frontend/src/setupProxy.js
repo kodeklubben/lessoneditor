@@ -1,13 +1,19 @@
+const path = require("path");
 module.exports = function (app) {
-  require("../../backend/routes/auth.local")(app);
-  require("../../backend/routes/configure")(app);
-  require("../../backend/routes/current-user")(app);
-  require("../../backend/routes/current-user-lessons")(app);
-  require("../../backend/routes/lesson-create")(app);
-  require("../../backend/routes/lesson-data")(app);
-  require("../../backend/routes/lesson-files")(app);
-  require("../../backend/routes/lesson-proxy")(app);
-  require("../../backend/routes/lesson-uploads")(app);
-  require("../../backend/routes/lesson-thumb")(app);
-  require("../../backend/routes/serve-file")(app);
+  [
+    "auth.local",
+    "configure",
+    "current-user",
+    "current-user-lessons",
+    "lesson-create",
+    "lesson-data",
+    "lesson-files",
+    "lesson-proxy",
+    "lesson-submit",
+    "lesson-thumb",
+    "lesson-uploads",
+    "serve-file",
+  ].forEach((route) => {
+    require(path.join(__dirname, "../../backend/src/routes/", route))(app);
+  });
 };

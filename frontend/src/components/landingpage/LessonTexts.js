@@ -1,12 +1,8 @@
 import "./landingpage.scss";
-import React, { useContext } from "react";
-import { LessonContext } from "contexts/LessonContext";
+import React from "react";
 import LessonCard from "./LessonCard";
 
-const LessonTexts = ({ lessonId, lessonList }) => {
-  const lesson = useContext(LessonContext);
-  const { data } = lesson;
-
+const LessonTexts = ({ lessonId, lessonList, lessonTitle }) => {
   let languages = [];
   let allLanguages = ["nb", "nn", "en", "is"];
 
@@ -57,7 +53,7 @@ const LessonTexts = ({ lessonId, lessonList }) => {
                   language={element}
                   hasContent={languages.includes(element)}
                   lessonId={lessonId}
-                  lessonTitle={data.lesson}
+                  lessonTitle={lessonTitle}
                 />
               </div>
             );

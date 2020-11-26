@@ -1,29 +1,23 @@
 import "./editordatapanel.scss";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useParams } from "react-router";
 import { Button, Icon, Popup } from "semantic-ui-react";
 import MultiInput from "./MultiInput";
 import { FORM_TEXT } from "./settings/landingpage_NO.js";
-import { LessonContext } from "contexts/LessonContext";
-import saveMdText from "../../../api/save-md-text";
-import fetchMdText from "../../../api/fetch-md-text";
-import createNewHeader from "../buttonpanel/utils/createNewHeader";
+import { FileContext } from "contexts/FileContext";
+
 const EditorDatapanel = ({
-  mdText,
+  courseTitle,
+  lessonTitle,
   openMetaData,
   setOpenMetaData,
   setShowSpinner,
-  lessonTitle,
-  courseTitle,
   userName,
 }) => {
   const { lessonId, file } = useParams();
-  const lessonContext = useContext(LessonContext);
-  const { headerData, setHeaderData } = lessonContext;
-
-  const [state, setState] = useState({ title: "", authorList: [] });
-
+  const { headerData, saveFileHeader } = useContext(FileContext);
   const language = file && file.slice(-3, -2) === "_" ? file.slice(-2) : "nb";
+  const [state, setState] = useState(headerData);
 
   const getLanguageFromSlug = {
     nb: "Bokmål",
@@ -32,26 +26,17 @@ const EditorDatapanel = ({
     is: "Islandsk",
   };
 
-  useEffect(() => {
-    function fetchData() {
-      // const headerData = getHeaderData();
-      if (Object.keys(headerData).length > 0) {
-        setState(headerData);
-      } else {
-        setState((prevState) => ({
-          ...prevState,
-          authorList: [userName],
-          title: lessonTitle,
-        }));
-      }
-    }
-    fetchData();
-  }, [headerData, lessonTitle, userName]);
+  if (state.title === "") {
+    setState((prevState) => ({
+      ...prevState,
+      authorList: [userName],
+      title: lessonTitle,
+    }));
+  }
 
   const changeHandler = (event) => {
-    const nam = event.target.name;
-    const val = event.target.value;
-    setState((prevState) => ({ ...prevState, [nam]: val }));
+    const { name, value } = event.target;
+    setState((prevState) => ({ ...prevState, [name]: value }));
     if (state.author) {
       setState((prevState) => ({ ...prevState, err: "" }));
     }
@@ -68,24 +53,16 @@ const EditorDatapanel = ({
   };
 
   const onSubmit = async () => {
-    setHeaderData(state);
-    const newHeader = createNewHeader(state, language);
-    const newMdText = newHeader + "\n\n\n" + mdText;
+    const newHeaderData = Object.assign({ language }, state);
     setShowSpinner(true);
-    await saveMdText(lessonId, file, newMdText).then(async () => {
-      await fetchMdText(lessonId, file).then(() => {
-        window.location.reload();
-      });
-    });
+    await saveFileHeader(lessonId, file, newHeaderData);
+    setShowSpinner(false);
+    setOpenMetaData(false);
   };
 
   const onCancel = async () => {
-    setShowSpinner(true);
-    fetchMdText(lessonId, file).then(() => {
-      window.location.reload();
-    });
+    setOpenMetaData(false);
   };
-
   return (
     <>
       <Popup
@@ -98,7 +75,7 @@ const EditorDatapanel = ({
             className={`ui button`}
             id="next"
             size="big"
-            onClick={() => setOpenMetaData(!openMetaData)}
+            onClick={() => setOpenMetaData(false)}
           >
             <span>
               <Icon color={"grey"} name={"address card"} /> Oppgavedata
@@ -166,14 +143,14 @@ const EditorDatapanel = ({
             <br />
             <MultiInput
               changeHandler={changeHandler}
-              multiInputHandler={multiInputHandler}
-              name="author"
-              title={FORM_TEXT.AUTHOR.heading}
               inputArray={state.authorList}
               inputValue={state.author}
-              validateMessage={state.err}
-              required="(obligatorisk)"
+              multiInputHandler={multiInputHandler}
+              name="author"
               placeholder={FORM_TEXT.AUTHOR.placeholder}
+              required="(obligatorisk)"
+              title={FORM_TEXT.AUTHOR.heading}
+              validateMessage={state.err}
             />
             {state.authorList.length === 0 && !state.author ? (
               <p style={{ color: "red" }}>Må ha forfatter</p>
@@ -183,12 +160,12 @@ const EditorDatapanel = ({
             <br />
             <MultiInput
               changeHandler={changeHandler}
-              multiInputHandler={multiInputHandler}
-              name="translator"
-              title={FORM_TEXT.TRANSLATOR.heading}
               inputArray={state.translatorList}
               inputValue={state.translator}
+              multiInputHandler={multiInputHandler}
+              name="translator"
               placeholder={FORM_TEXT.TRANSLATOR.placeholder}
+              title={FORM_TEXT.TRANSLATOR.heading}
             />
             <button
               className="ui button"

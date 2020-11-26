@@ -8,6 +8,7 @@
 /.idea
 /backend/.env
 /backend/.env.local
+/backend/examples/.env
 /package.json
 /paths.json
 build/

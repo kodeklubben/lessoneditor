@@ -29,7 +29,7 @@ const NewLesson = ({ showSpinner, setShowPopup, setShowSpinner }) => {
     setTimeout(() => {
       history.push({ pathname: target });
       setShowSpinner(false);
-      window.location.reload();
+      //window.location.reload();
     }, 50);
   };
   const onSubmit = async (e) => {
