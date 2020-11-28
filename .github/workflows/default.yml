@@ -28,7 +28,6 @@ jobs:
       - run: npm ci --ignore-scripts --no-optional --prefer-offline --no-audit --prefix frontend
       - run: npm ci --ignore-scripts --no-optional --prefer-offline --no-audit --prefix backend
       - run: node frontend/node_modules/node-sass/scripts/install.js
-      - run: node backend/node_modules/re2/scripts/verify-build.js
       - run: npm rebuild re2 --prefix backend
       - run: npm rebuild node-sass --prefix frontend
       - run: npm test --prefix frontend
