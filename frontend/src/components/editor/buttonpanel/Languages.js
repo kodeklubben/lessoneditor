@@ -23,7 +23,12 @@ const Languages = ({ setShowSpinner, saveEditorText, lessonId, file }) => {
     }
     await saveEditorText();
     if (target !== "") {
-      history.push({ pathname: target });
+      /**
+       * need to refresh webite to fetch data. This react.router.history
+       * trick gets the job done.
+       */
+      history.push({ pathname: "/" });
+      history.replace({ pathname: target });
     } else {
       console.error("error targetLanguage is not set");
     }

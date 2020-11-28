@@ -11,7 +11,7 @@ import {
 import {
   KEY_COMBINATIONS as KEY,
   lists as config,
-} from "../settingsFiles/buttonConfig";
+} from "./settings/buttonConfig";
 
 let cancelResults;
 let results;

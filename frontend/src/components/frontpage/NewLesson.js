@@ -45,11 +45,14 @@ const NewLesson = ({ showSpinner, setShowPopup, setShowSpinner }) => {
         ({ slug }) => slug === values.course
       );
       const courseTitle = getCourseFromSlug.courseTitle;
-      addLesson(course, courseTitle, lesson.slug, lesson.title).then(
-        (lessonId) => {
-          navigateToLandingpage(lessonId, lesson.slug);
-        }
+      const lessonId = await addLesson(
+        course,
+        courseTitle,
+        lesson.slug,
+        lesson.title
       );
+      console.log(lesson.slug);
+      navigateToLandingpage(lessonId, lesson.slug);
     } else {
       setError("Oppgavetittel er ikke satt");
     }

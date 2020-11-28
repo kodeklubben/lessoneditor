@@ -15,7 +15,9 @@ import { UserContext } from "contexts/UserContext";
 const Editor = () => {
   const { lessonId, file } = useParams();
   const { lessonData } = useContext(LessonContext);
-  const { saveFileBody, savedFileBody } = useContext(FileContext);
+  const { saveFileBody, savedFileBody, rawMdFileContent } = useContext(
+    FileContext
+  );
   const { user } = useContext(UserContext);
   const [mdText, setMdText] = useState("");
   const [showSpinner, setShowSpinner] = useState(true);
@@ -70,9 +72,10 @@ const Editor = () => {
     setCursorPositionEnd(pos2);
   };
 
-  const setCursorPosition = (positionStart, positionEnd) => {
-    editorRef.current.selectionStart = positionStart;
-    editorRef.current.selectionEnd = positionEnd;
+  //av en eller annen grunn må denne funksjonen være async for å fungere...
+  const setCursorPosition = async (positionStart, positionEnd) => {
+    editorRef.current.selectionStart = await positionStart;
+    editorRef.current.selectionEnd = await positionEnd;
   };
 
   const resetButtons = () => {
@@ -86,6 +89,9 @@ const Editor = () => {
     setShowSpinner(false);
   }
   if (savedFileBody && mdText === "") {
+    if (rawMdFileContent.slice(0, 8) === "---\n---\n") {
+      setOpenMetaData(true);
+    }
     setMdText(savedFileBody);
   }
 

@@ -17,6 +17,8 @@ const Datapanel = ({ open, setOpen, lessonId, mode }) => {
     JSON.stringify(ymlData.tags) ===
     JSON.stringify({ topic: [], subject: [], grade: [] });
 
+  console.log({ ymlData });
+
   const mapYamlTags = () => {
     let obj;
     obj = ymlData.tags.topic.reduce(
@@ -77,16 +79,16 @@ const Datapanel = ({ open, setOpen, lessonId, mode }) => {
       setYmlData((prevState) => ({
         ...prevState,
         tags: {
-          ...prevState?.tags,
-          [subtag]: [...prevState?.tags[subtag], name],
+          ...prevState.tags,
+          [subtag]: [...prevState.tags[subtag], name],
         },
       }));
     } else {
       setYmlData((prevState) => ({
         ...prevState,
         tags: {
-          ...prevState?.tags,
-          [subtag]: prevState?.tags[subtag].filter((e) => e !== name),
+          ...prevState.tags,
+          [subtag]: prevState.tags[subtag].filter((e) => e !== name),
         },
       }));
     }

@@ -11,7 +11,7 @@ import {
 import {
   KEY_COMBINATIONS_MICROBIT as KEY,
   microbitbuttons as config,
-} from "../settingsFiles/microbitAndScratchButtonConfig";
+} from "./settings/microbitAndScratchButtonConfig";
 
 let results;
 let cancelResults;

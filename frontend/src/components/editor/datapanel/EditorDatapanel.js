@@ -1,5 +1,5 @@
 import "./editordatapanel.scss";
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { Button, Icon, Popup } from "semantic-ui-react";
 import MultiInput from "./MultiInput";
@@ -19,6 +19,10 @@ const EditorDatapanel = ({
   const language = file && file.slice(-3, -2) === "_" ? file.slice(-2) : "nb";
   const [state, setState] = useState(headerData);
 
+  useEffect(() => {
+    setState(headerData);
+  }, [headerData]);
+
   const getLanguageFromSlug = {
     nb: "Bokmål",
     nn: "Nynorsk",
@@ -26,7 +30,7 @@ const EditorDatapanel = ({
     is: "Islandsk",
   };
 
-  if (state.title === "") {
+  if (state.title === undefined && lessonTitle !== undefined) {
     setState((prevState) => ({
       ...prevState,
       authorList: [userName],
@@ -75,7 +79,7 @@ const EditorDatapanel = ({
             className={`ui button`}
             id="next"
             size="big"
-            onClick={() => setOpenMetaData(false)}
+            onClick={() => setOpenMetaData(true)}
           >
             <span>
               <Icon color={"grey"} name={"address card"} /> Oppgavedata

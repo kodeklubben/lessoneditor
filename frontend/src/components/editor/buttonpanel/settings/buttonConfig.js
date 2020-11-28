@@ -1,4 +1,7 @@
-import { BUTTON_TITLE, SECTION_TEXT } from "./languages/editor_NO";
+import {
+  BUTTON_TITLE,
+  SECTION_TEXT,
+} from "../../settingsFiles/languages/editor_NO";
 
 // !!!!
 // if new buttons are added remember to update buttons-state in editor.js

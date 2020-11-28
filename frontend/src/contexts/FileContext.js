@@ -73,6 +73,7 @@ export const FileContextProvider = (props) => {
   };
   const context = {
     headerData,
+    rawMdFileContent,
     savedFileBody,
     saveFileBody,
     saveFileHeader,

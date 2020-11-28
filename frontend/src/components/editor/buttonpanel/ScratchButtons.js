@@ -11,7 +11,7 @@ import {
 import {
   KEY_COMBINATIONS_SCRATCH as KEY,
   scratchbuttons as config,
-} from "../settingsFiles/microbitAndScratchButtonConfig";
+} from "./settings/microbitAndScratchButtonConfig";
 
 let results;
 let cancelResults;

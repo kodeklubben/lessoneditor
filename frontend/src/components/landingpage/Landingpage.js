@@ -1,5 +1,5 @@
 import "./landingpage.scss";
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router";
 import Navbar from "components/navbar/Navbar";
 import TeacherGuides from "./TeacherGuides";
@@ -25,6 +25,18 @@ const Landingpage = () => {
     LessonContext
   );
 
+  useEffect(() => {
+    async function compareObjects() {
+      if (
+        JSON.stringify(ymlData.tags) ===
+        JSON.stringify({ topic: [], subject: [], grade: [] })
+      ) {
+        setOpen(true);
+      }
+    }
+    compareObjects();
+  }, [ymlData]);
+
   const options = [
     { key: 1, text: "Oppgaver", value: "lessontexts" },
     { key: 2, text: "Lærerveiledning", value: "teacherguides" },
@@ -44,12 +56,10 @@ const Landingpage = () => {
     setAreYouSure(false);
     setThankU(true);
   };
-  const lessonTitle = lessonData.lessonTitle
-    ? lessonData.lessonTitle
-    : lessonData.lesson;
-  const courseTitle = lessonData.courseTitle
-    ? lessonData.courseTitle
-    : lessonData.course;
+  const lessonTitle = lessonData.lessonTitle;
+  const lessonSlug = lessonData.lesson;
+  const courseTitle = lessonData.courseTitle;
+
   const dropdownValue = (input) => {
     switch (input) {
       case "lessontexts":
@@ -57,7 +67,7 @@ const Landingpage = () => {
           <LessonTexts
             lessonId={lessonId}
             lessonList={lessonList}
-            lessonTitle={lessonTitle}
+            lessonTitle={lessonSlug}
           />
         );
       case "teacherguides":

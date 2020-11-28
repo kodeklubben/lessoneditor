@@ -4,7 +4,7 @@ import { useHotkeys } from "react-hotkeys-hook";
 import {
   KEY_COMBINATIONS as KEY,
   hyperlink as config,
-} from "../settingsFiles/buttonConfig";
+} from "./settings/buttonConfig";
 
 const languageNO = {
   insertLink: "Sett inn URL for din link",

@@ -6,7 +6,7 @@ import { useHotkeys } from "react-hotkeys-hook";
 import {
   KEY_COMBINATIONS as KEY,
   undoRedo as config,
-} from "../settingsFiles/buttonConfig";
+} from "./settings/buttonConfig";
 
 let position;
 
