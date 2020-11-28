@@ -5,116 +5,72 @@ import resolveUrlTemplate from "../utils/resolve-url-template";
 import paths from "../paths.json";
 
 export const LessonContext = React.createContext({});
-
+const resolveLessonUrls = (lessonId) => {
+  return {
+    files: resolveUrlTemplate(paths.LESSON_FILES, { lessonId }),
+    data: resolveUrlTemplate(paths.LESSON_DATA, {
+      lessonId,
+      filename: "data.json",
+    }),
+    ymlData: resolveUrlTemplate(paths.LESSON_DATA, {
+      lessonId,
+      filename: "lesson.yml",
+    }),
+  };
+};
 export const LessonContextProvider = (props) => {
   const { lessonId } = useParams();
-  const [data, setData] = useState({});
-  const [ymlData, setYmlData] = useState({
-    level: 1,
-    license: "CC BY-SA 4.0",
-    tags: { topic: [], subject: [], grade: [] },
-  });
-  const [headerData, setHeaderData] = useState({});
-  const [language, setLanguage] = useState("nb");
-  const [lessonList, setLessonList] = useState({});
-
-  const lessonListUrl = resolveUrlTemplate(paths.LESSON_FILES, { lessonId });
-  const lessonDataUrl = resolveUrlTemplate(paths.LESSON_DATA, {
-    lessonId,
-    filename: "data.json",
-  });
-
-  const lessonYMLDataUrl = resolveUrlTemplate(paths.LESSON_DATA, {
-    lessonId,
-    filename: "lesson.yml",
+  const [lessonData, setLessonData] = useState({
+    files: {},
+    yml: {
+      level: 1,
+      license: "CC BY-SA 4.0",
+      tags: { topic: [], subject: [], grade: [] },
+    },
   });
 
   useEffect(() => {
     async function fetchLessonData() {
-      const res = await axios.get(lessonDataUrl);
-      setData(res.data);
+      const lessonUrls = resolveLessonUrls(lessonId);
+      const lessonDataRes = await axios.get(lessonUrls.data);
+      const lessonListRes = await axios.get(lessonUrls.files);
+      const lessonYMLDataRes = await axios.get(lessonUrls.ymlData);
+      const rootDataObj = lessonDataRes.data;
+      rootDataObj.files = lessonListRes.data;
+      rootDataObj.yml = lessonYMLDataRes.data;
+      setLessonData(rootDataObj);
     }
     if (lessonId) {
       fetchLessonData();
     }
-  }, [lessonId, lessonDataUrl]);
-
-  useEffect(() => {
-    async function fetchData() {
-      const res = await axios.get(lessonYMLDataUrl);
-      return res.data;
-    }
-    if (lessonId) {
-      try {
-        fetchData().then((res) =>
-          setYmlData((prevState) => ({
-            ...prevState,
-            ...res,
-          }))
-        );
-      } catch (e) {
-        console.log("FetcthYMLDATA failed : " + e);
-      }
-    }
-  }, [lessonId, lessonYMLDataUrl]);
-
-  useEffect(() => {
-    async function fetchFileList() {
-      const res = await axios.get(lessonListUrl);
-      setLessonList(res.data);
-    }
-    if (lessonId) {
-      fetchFileList();
-    }
-  }, [lessonId, lessonListUrl]);
-
+  }, [lessonId]);
+  const lessonUrls = resolveLessonUrls(lessonId);
   const context = {
-    data,
-    setData,
-    ymlData,
-    setYmlData,
-    headerData,
-    setHeaderData,
-    language,
-    setLanguage,
-    lessonList,
-
-    fetchList: async () => {
-      const res = await axios.get(lessonListUrl);
-      setLessonList(res.data);
-    },
-
+    lessonData,
+    setLessonData,
+    ymlData: lessonData.yml,
+    lessonList: lessonData.files,
+    fetchList: () => lessonData.files,
     saveLesson: async (data) => {
       if (lessonId) {
-        await axios.post(lessonDataUrl, data);
-        setData(data);
+        await axios.post(lessonUrls.data, data);
+        data.files = lessonData.files;
+        data.yml = lessonData.yml;
+        setLessonData(data);
+      } else {
+        console.error("No lessonId set in context aborting");
       }
     },
-    saveYml: async (ymlData) => {
+    saveYml: async (data) => {
       if (lessonId) {
-        await axios.post(lessonYMLDataUrl, ymlData);
+        await axios.post(lessonUrls.ymlData, data);
+        lessonData.yml = data;
+      } else {
+        console.error("No lessonId set in context aborting");
       }
     },
-    getLessonData: async () => {
-      const res = await axios.get(lessonDataUrl);
-      return res;
-    },
-    getHeaderData: () => {
-      return headerData;
-    },
-    getYmlData: async () => {
-      try {
-        const res = await axios.get(lessonYMLDataUrl);
-        if (JSON.stringify(res.data) !== JSON.stringify({})) {
-          return res.data;
-        } else {
-          return ymlData;
-        }
-      } catch (e) {
-        console.log("FetcthYMLDATA failed : " + e);
-        window.location.reload();
-      }
-    },
+    getLessonData: () => lessonData,
+    getYmlData: () => lessonData.yml,
   };
   return (
     <>

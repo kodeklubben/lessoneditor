@@ -3,6 +3,7 @@ import { mount } from "enzyme";
 import { MemoryRouter } from "react-router-dom";
 import Editor from "components/editor/Editor";
 import { LessonContextProvider } from "../../contexts/LessonContext";
+import { FileContextProvider } from "../../contexts/FileContext";
 
 let wrapped;
 
@@ -10,7 +11,9 @@ beforeEach(() => {
   wrapped = mount(
     <MemoryRouter>
       <LessonContextProvider>
-        <Editor />
+        <FileContextProvider>
+          <Editor />
+        </FileContextProvider>
       </LessonContextProvider>
     </MemoryRouter>
   );

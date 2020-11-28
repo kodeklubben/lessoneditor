@@ -1,5 +1,5 @@
 import "./datapanel.scss";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Button, Icon, Popup } from "semantic-ui-react";
 import { YML_TEXT } from "../settingsFiles/languages/landingpage_NO";
 import { TagsGrade, TagsSubject, TagsTopic } from "./Tags";
@@ -17,7 +17,7 @@ const Datapanel = ({ open, setOpen, lessonId, mode }) => {
     JSON.stringify(ymlData.tags) ===
     JSON.stringify({ topic: [], subject: [], grade: [] });
 
-  useEffect(() => {
+  const mapYamlTags = () => {
     let obj;
     obj = ymlData.tags.topic.reduce(
       (accumulator, currentValue) => {
@@ -41,7 +41,10 @@ const Datapanel = ({ open, setOpen, lessonId, mode }) => {
       { ...obj }
     );
     setCheckBoxState((prevState) => ({ ...prevState, ...obj }));
-  }, [ymlData.tags]);
+  };
+  if (ymlData.tags) {
+    mapYamlTags();
+  }
 
   const onSubmit = async () => {
     saveYml(ymlData).then(() => {
@@ -50,7 +53,7 @@ const Datapanel = ({ open, setOpen, lessonId, mode }) => {
   };
 
   const onCancel = async () => {
-    window.location.reload();
+    //window.location.reload();
   };
 
   const dropdownHandler = (event, { name, value }) => {

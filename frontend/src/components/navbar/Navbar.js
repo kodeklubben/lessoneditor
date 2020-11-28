@@ -8,9 +8,8 @@ import NewLessonButton from "../frontpage/newLessonButton";
 import NewLesson from "../frontpage/NewLesson";
 
 const Navbar = () => {
-  const userContext = useContext(UserContext);
-  const lessonContext = useContext(LessonContext);
-  const { data } = lessonContext;
+  const { user } = useContext(UserContext);
+  const { lessonData } = useContext(LessonContext);
   const [showPopup, setShowPopup] = useState(false);
 
   const { file } = useParams();
@@ -28,11 +27,15 @@ const Navbar = () => {
           <div className="navbar_course_title">
             <h1 style={{ margin: "auto" }}>
               <span style={{ color: "gray" }}>Prosjekttittel: </span>
-              {data.lessonTitle ? data.lessonTitle : data.lesson}
+              {lessonData.lessonTitle
+                ? lessonData.lessonTitle
+                : lessonData.lesson}
             </h1>
             <h3 style={{ margin: "auto" }}>
               <span style={{ color: "gray" }}>Kurs: </span>
-              {data.courseTitle ? data.courseTitle : data.course}
+              {lessonData.courseTitle
+                ? lessonData.courseTitle
+                : lessonData.course}
             </h3>
           </div>
         ) : (
@@ -48,9 +51,9 @@ const Navbar = () => {
           {showPopup ? <NewLesson setShowPopup={setShowPopup} /> : ""}
           <a id="navbar_gohome" href={"/"}>
             <ProfileMenu
-              name={userContext.user ? userContext.user.name : ""}
-              email={userContext.user ? userContext.user.email : ""}
-              photo={userContext.user ? userContext.user.photo : ""}
+              name={user ? user.name : ""}
+              email={user ? user.email : ""}
+              photo={user ? user.photo : ""}
             />
           </a>
         </div>
