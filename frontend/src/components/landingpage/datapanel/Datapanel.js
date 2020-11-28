@@ -1,5 +1,5 @@
 import "./datapanel.scss";
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Button, Icon, Popup } from "semantic-ui-react";
 import { YML_TEXT } from "../settingsFiles/languages/landingpage_NO";
 import { TagsGrade, TagsSubject, TagsTopic } from "./Tags";
@@ -9,17 +9,44 @@ import License from "./License";
 import { LessonContext } from "contexts/LessonContext";
 
 const Datapanel = ({ open, setOpen, lessonId, mode }) => {
-  const context = useContext(LessonContext);
-  const { ymlData, setYmlData, saveYml } = context;
   const [checkBoxState, setCheckBoxState] = useState({});
+  const context = useContext(LessonContext);
+  const { ymlData, setLessonData, saveYml } = context;
 
   const isEmptyDatapanel =
     JSON.stringify(ymlData.tags) ===
     JSON.stringify({ topic: [], subject: [], grade: [] });
 
-  console.log({ ymlData });
+  // const mapYamlTags = () => {
+  //   let obj;
+  //   obj = ymlData.tags.topic.reduce(
+  //     (accumulator, currentValue) => {
+  //       accumulator[currentValue] = true;
+  //       return accumulator;
+  //     },
+  //     { ...obj }
+  //   );
+  //   obj = ymlData.tags.subject.reduce(
+  //     (accumulator, currentValue) => {
+  //       accumulator[currentValue] = true;
+  //       return accumulator;
+  //     },
+  //     { ...obj }
+  //   );
+  //   obj = ymlData.tags.grade.reduce(
+  //     (accumulator, currentValue) => {
+  //       accumulator[currentValue] = true;
+  //       return accumulator;
+  //     },
+  //     { ...obj }
+  //   );
+  //   setCheckBoxState((prevState) => ({ ...prevState, ...obj }));
+  // };
+  // if (ymlData.tags) {
+  //   mapYamlTags();
+  // }
 
-  const mapYamlTags = () => {
+  useEffect(() => {
     let obj;
     obj = ymlData.tags.topic.reduce(
       (accumulator, currentValue) => {
@@ -43,10 +70,7 @@ const Datapanel = ({ open, setOpen, lessonId, mode }) => {
       { ...obj }
     );
     setCheckBoxState((prevState) => ({ ...prevState, ...obj }));
-  };
-  if (ymlData.tags) {
-    mapYamlTags();
-  }
+  }, [ymlData.tags, setCheckBoxState]);
 
   const onSubmit = async () => {
     saveYml(ymlData).then(() => {
@@ -55,13 +79,13 @@ const Datapanel = ({ open, setOpen, lessonId, mode }) => {
   };
 
   const onCancel = async () => {
-    //window.location.reload();
+    setOpen(false);
   };
 
   const dropdownHandler = (event, { name, value }) => {
-    setYmlData((prevState) => ({
+    setLessonData((prevState) => ({
       ...prevState,
-      [name]: value,
+      yml: { ...prevState.yml, [name]: value },
     }));
   };
 
@@ -72,23 +96,29 @@ const Datapanel = ({ open, setOpen, lessonId, mode }) => {
 
     setCheckBoxState((prevState) => ({
       ...prevState,
-      [name]: value,
+      yml: { ...prevState.yml, [name]: value },
     }));
 
     if (!ymlData.tags[subtag].includes(name)) {
-      setYmlData((prevState) => ({
+      setLessonData((prevState) => ({
         ...prevState,
-        tags: {
-          ...prevState.tags,
-          [subtag]: [...prevState.tags[subtag], name],
+        yml: {
+          ...prevState.yml,
+          tags: {
+            ...prevState.yml.tags,
+            [subtag]: [...prevState.yml.tags[subtag], name],
+          },
         },
       }));
     } else {
-      setYmlData((prevState) => ({
+      setLessonData((prevState) => ({
         ...prevState,
-        tags: {
-          ...prevState.tags,
-          [subtag]: prevState.tags[subtag].filter((e) => e !== name),
+        yml: {
+          ...prevState.yml,
+          tags: {
+            ...prevState.yml.tags,
+            [subtag]: prevState.yml.tags[subtag].filter((e) => e !== name),
+          },
         },
       }));
     }
@@ -102,9 +132,9 @@ const Datapanel = ({ open, setOpen, lessonId, mode }) => {
         ? event.target.checked
         : event.target.value;
 
-    setYmlData((prevState) => ({
+    setLessonData((prevState) => ({
       ...prevState,
-      [name]: value,
+      yml: { ...prevState.yml, [name]: value },
     }));
   };
 

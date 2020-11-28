@@ -34,7 +34,7 @@ export const FileContextProvider = (props) => {
   const saveFileBody = async (lessonId, filename, body) => {
     const fileHeader = rawMdFileContent.split(separator)[1];
     const newRawText = ["", fileHeader, body].join(separator);
-    await saveMdText(lessonId, filename, newRawText);
+    await saveMdText(lessonId, filename, newRawText, true);
     setRawMdFileContent(newRawText);
     setSavedFileBody(body);
   };
@@ -52,8 +52,17 @@ export const FileContextProvider = (props) => {
       setSavedFileBody(body);
       setHeaderData(yamlHeaderLoad(header, language));
       console.log("FileContext done loading...");
+
       if (!body || body.trim().length === 0) {
-        await saveDefaultFileBody(lessonId, file);
+        if (
+          file.slice(0, 6) === "README" &&
+          JSON.stringify(ymlData.tags) ===
+            JSON.stringify({ topic: [], subject: [], grade: [] })
+        ) {
+          console.log("Error: need YMLdata to complete load");
+        } else {
+          await saveDefaultFileBody(lessonId, file);
+        }
       }
     }
 
@@ -61,7 +70,7 @@ export const FileContextProvider = (props) => {
       fetchData();
     }
     // eslint-disable-next-line
-  }, [lessonId, file, language]);
+  }, [lessonId, file, language, ymlData]);
 
   const saveFileHeader = async (lessonId, filename, headerData) => {
     const fileBody = rawMdFileContent.split(separator)[2];

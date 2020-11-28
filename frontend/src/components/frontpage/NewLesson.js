@@ -26,11 +26,9 @@ const NewLesson = ({ showSpinner, setShowPopup, setShowSpinner }) => {
   };
   const navigateToLandingpage = (lessonId, lesson) => {
     const target = ["/editor", lessonId, lesson].join("/");
-    setTimeout(() => {
-      history.push({ pathname: target });
-      setShowSpinner(false);
-      //window.location.reload();
-    }, 50);
+
+    history.push({ pathname: target });
+    setShowSpinner(false);
   };
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -51,7 +49,6 @@ const NewLesson = ({ showSpinner, setShowPopup, setShowSpinner }) => {
         lesson.slug,
         lesson.title
       );
-      console.log(lesson.slug);
       navigateToLandingpage(lessonId, lesson.slug);
     } else {
       setError("Oppgavetittel er ikke satt");

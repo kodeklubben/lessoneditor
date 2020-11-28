@@ -21,12 +21,13 @@ const Landingpage = () => {
   const { lessonId, mode } = useParams();
   const pageContent = mode;
   const history = useHistory();
-  const { lessonData, ymlData, saveLesson, lessonList } = useContext(
+  const { lessonData, getYmlData, saveLesson, lessonList } = useContext(
     LessonContext
   );
 
   useEffect(() => {
     async function compareObjects() {
+      const ymlData = await getYmlData();
       if (
         JSON.stringify(ymlData.tags) ===
         JSON.stringify({ topic: [], subject: [], grade: [] })
@@ -35,7 +36,7 @@ const Landingpage = () => {
       }
     }
     compareObjects();
-  }, [ymlData]);
+  }, [getYmlData]);
 
   const options = [
     { key: 1, text: "Oppgaver", value: "lessontexts" },
@@ -88,7 +89,6 @@ const Landingpage = () => {
     lessonId,
     mode,
     lessonData,
-    ymlData,
   });
   if (showSpinner || !lessonData.lesson) {
     return <ShowSpinner />;
