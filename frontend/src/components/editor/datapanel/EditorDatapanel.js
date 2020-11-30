@@ -1,6 +1,6 @@
 import "./editordatapanel.scss";
-import React, { useContext, useState } from "react";
-import { useParams } from "react-router";
+import React, { useContext, useState, useEffect } from "react";
+import { useParams, useHistory } from "react-router";
 import { Button, Icon, Popup } from "semantic-ui-react";
 import MultiInput from "./MultiInput";
 import { FORM_TEXT } from "./settings/landingpage_NO.js";
@@ -14,10 +14,11 @@ const EditorDatapanel = ({
   setShowSpinner,
   userName,
 }) => {
+  const history = useHistory();
   const { lessonId, file } = useParams();
-  const { headerData, saveFileHeader } = useContext(FileContext);
+  const { headerData, saveFileHeader, fetchMdText } = useContext(FileContext);
   const language = file && file.slice(-3, -2) === "_" ? file.slice(-2) : "nb";
-  const [state, setState] = useState(headerData);
+  const [state, setState] = useState();
 
   const getLanguageFromSlug = {
     nb: "Bokmål",
@@ -26,13 +27,19 @@ const EditorDatapanel = ({
     is: "Islandsk",
   };
 
-  if (state.title === "") {
-    setState((prevState) => ({
-      ...prevState,
-      authorList: [userName],
-      title: lessonTitle,
-    }));
-  }
+  console.log({ headerData });
+
+  // if (state.title === "") {
+  //   setState((prevState) => ({
+  //     ...prevState,
+  //     authorList: [userName],
+  //     title: lessonTitle,
+  //   }));
+  // }
+
+  useEffect(() => {
+    setState(headerData);
+  }, [headerData]);
 
   const changeHandler = (event) => {
     const { name, value } = event.target;
@@ -58,10 +65,17 @@ const EditorDatapanel = ({
     await saveFileHeader(lessonId, file, newHeaderData);
     setShowSpinner(false);
     setOpenMetaData(false);
+    //må fortsatt bruke denne refresh-hacken for at data skal lades.
+    history.push("/");
+    history.replace(["editor", lessonId, file].join("/"));
   };
 
   const onCancel = async () => {
     setOpenMetaData(false);
+    await fetchMdText(lessonId, file);
+    //må fortsatt bruke denne refresh-hacken..
+    history.push("/");
+    history.replace(["editor", lessonId, file].join("/"));
   };
   return (
     <>

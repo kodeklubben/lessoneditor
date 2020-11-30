@@ -1,6 +1,6 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useRef, useState, useEffect } from "react";
 import "./editor.scss";
-import Autosave from "./Autosave";
+// import Autosave from "./Autosave";
 import ButtonPanel from "./buttonpanel/ButtonPanel";
 import ImageUpload from "./ImageUpload";
 import MDPreview from "./MDPreview";
@@ -15,7 +15,9 @@ import { UserContext } from "contexts/UserContext";
 const Editor = () => {
   const { lessonId, file } = useParams();
   const { lessonData } = useContext(LessonContext);
-  const { saveFileBody, savedFileBody } = useContext(FileContext);
+  const { saveFileBody, savedFileBody, rawMdFileContent } = useContext(
+    FileContext
+  );
   const { user } = useContext(UserContext);
   const [mdText, setMdText] = useState("");
   const [showSpinner, setShowSpinner] = useState(true);
@@ -26,7 +28,7 @@ const Editor = () => {
   const [redo, setRedo] = useState([]);
   const [undoCursorPosition, setUndoCursorPosition] = useState([]);
   const [redoCursorPosition, setRedoCursorPosition] = useState([]);
-  const [renderContent, setRenderContent] = useState(false);
+  // const [renderContent, setRenderContent] = useState(false);
   const [openMetaData, setOpenMetaData] = useState(false);
   const [listButtonValues, setListButtonValues] = useState({
     bTitle: "",
@@ -35,6 +37,11 @@ const Editor = () => {
   });
   const editorRef = useRef();
   const uploadImageRef = useRef();
+
+  useEffect(() => {
+    setOpenMetaData(rawMdFileContent.slice(0, 8) === "---\n---\n");
+  }, [rawMdFileContent]);
+
   const pushUndoValue = (mdText, cursorPositionStart) => {
     if (
       undo[undo.length - 1] !== mdText &&
@@ -85,6 +92,7 @@ const Editor = () => {
   /**
    * Gjør litt state greier her:
    */
+
   if (savedFileBody && lessonData && showSpinner) {
     setShowSpinner(false);
   }
@@ -95,6 +103,7 @@ const Editor = () => {
   const saveEditorText = async () => {
     await saveFileBody(lessonId, file, mdText);
   };
+
   const language = file && file.slice(-3, -2) === "_" ? file.slice(-2) : "nb";
 
   return (
@@ -163,15 +172,15 @@ const Editor = () => {
           course={lessonData.course}
           language={language}
           mdText={mdText}
-          renderContent={renderContent}
+          // renderContent={renderContent}
         />
       </div>
-      <Autosave
+      {/* <Autosave
         language={language}
         mdText={mdText}
         saveEditorText={saveEditorText}
         setRenderContent={setRenderContent}
-      />
+      /> */}
     </div>
   );
 };

@@ -23,7 +23,9 @@ const Languages = ({ setShowSpinner, saveEditorText, lessonId, file }) => {
     }
     await saveEditorText();
     if (target !== "") {
-      history.push({ pathname: target });
+      //refresh hack to get things going.
+      history.push("/");
+      history.replace(target);
     } else {
       console.error("error targetLanguage is not set");
     }

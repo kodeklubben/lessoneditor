@@ -34,7 +34,7 @@ export const FileContextProvider = (props) => {
   const saveFileBody = async (lessonId, filename, body) => {
     const fileHeader = rawMdFileContent.split(separator)[1];
     const newRawText = ["", fileHeader, body].join(separator);
-    await saveMdText(lessonId, filename, newRawText);
+    await saveMdText(lessonId, filename, newRawText, true);
     setRawMdFileContent(newRawText);
     setSavedFileBody(body);
   };
@@ -77,6 +77,8 @@ export const FileContextProvider = (props) => {
     savedFileBody,
     saveFileBody,
     saveFileHeader,
+    rawMdFileContent,
+    fetchMdText,
   };
   return (
     <>
