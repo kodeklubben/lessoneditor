@@ -38,6 +38,7 @@ const Editor = () => {
   const editorRef = useRef();
   const uploadImageRef = useRef();
 
+  //useeffect her for å forhindre infinite loop
   useEffect(() => {
     setOpenMetaData(rawMdFileContent.slice(0, 8) === "---\n---\n");
   }, [rawMdFileContent]);

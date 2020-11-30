@@ -1,5 +1,5 @@
 runtime: nodejs12
-entrypoint: node ./backend/server.js
+entrypoint: node ./backend/src/server.js
 handlers:
   - url: /static
     static_dir: build/static

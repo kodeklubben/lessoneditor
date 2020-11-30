@@ -9,8 +9,7 @@
 /backend/.env
 /backend/.env.local
 /backend/examples/.env
-/package.json
-/package-lock.json
+/package*
 /paths.json
 build/
 node_modules/
