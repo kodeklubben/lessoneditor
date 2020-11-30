@@ -70,9 +70,12 @@ const Editor = () => {
     setCursorPositionEnd(pos2);
   };
 
-  const setCursorPosition = (positionStart, positionEnd) => {
-    editorRef.current.selectionStart = positionStart;
-    editorRef.current.selectionEnd = positionEnd;
+  /*
+   * Av en eller annen grunn må denne funksjonen være async for å fungere.
+   */
+  const setCursorPosition = async (positionStart, positionEnd) => {
+    editorRef.current.selectionStart = await positionStart;
+    editorRef.current.selectionEnd = await positionEnd;
   };
 
   const resetButtons = () => {

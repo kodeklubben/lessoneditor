@@ -17,7 +17,7 @@ const Landingpage = () => {
   const [showSpinner, setShowSpinner] = useState(false);
   const [areYouSure, setAreYouSure] = useState(false);
   const [thankU, setThankU] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [openDataPopup, setOpenDataPopup] = useState(false);
   const { lessonId, mode } = useParams();
   const pageContent = mode;
   const history = useHistory();
@@ -44,12 +44,10 @@ const Landingpage = () => {
     setAreYouSure(false);
     setThankU(true);
   };
-  const lessonTitle = lessonData.lessonTitle
-    ? lessonData.lessonTitle
-    : lessonData.lesson;
-  const courseTitle = lessonData.courseTitle
-    ? lessonData.courseTitle
-    : lessonData.course;
+  const lessonTitle = lessonData.lessonTitle;
+
+  const courseTitle = lessonData.courseTitle;
+
   const dropdownValue = (input) => {
     switch (input) {
       case "lessontexts":
@@ -57,7 +55,7 @@ const Landingpage = () => {
           <LessonTexts
             lessonId={lessonId}
             lessonList={lessonList}
-            lessonTitle={lessonTitle}
+            lessonTitle={lessonData.lesson}
           />
         );
       case "teacherguides":
@@ -74,7 +72,7 @@ const Landingpage = () => {
     showSpinner,
     areYouSure,
     thankU,
-    open,
+    openDataPopup,
     lessonId,
     mode,
     lessonData,
@@ -135,8 +133,8 @@ const Landingpage = () => {
               />
             </div>
             <Datapanel
-              open={open}
-              setOpen={setOpen}
+              openDataPopup={openDataPopup}
+              setOpenDataPopup={setOpenDataPopup}
               lessonId={lessonId}
               mode={mode}
             />

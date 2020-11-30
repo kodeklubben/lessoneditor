@@ -18,7 +18,7 @@ function createDefaultFileBody(file, ymlData) {
 
 export const FileContextProvider = (props) => {
   const { lessonId, file } = useParams();
-  const { ymlData } = useContext(LessonContext);
+  const { getYmlData } = useContext(LessonContext);
   const [rawMdFileContent, setRawMdFileContent] = useState("");
   const language = file && file.slice(-3, -2) === "_" ? file.slice(-2) : "nb";
 
@@ -39,6 +39,7 @@ export const FileContextProvider = (props) => {
     setSavedFileBody(body);
   };
   const saveDefaultFileBody = async (id, filename) => {
+    const ymlData = await getYmlData();
     const defaultFileBody = createDefaultFileBody(filename, ymlData);
     await saveFileBody(id, filename, defaultFileBody);
   };

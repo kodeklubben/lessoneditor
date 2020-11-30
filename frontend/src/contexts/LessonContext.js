@@ -37,7 +37,14 @@ export const LessonContextProvider = (props) => {
       const lessonYMLDataRes = await axios.get(lessonUrls.ymlData);
       const rootDataObj = lessonDataRes.data;
       rootDataObj.files = lessonListRes.data;
-      rootDataObj.yml = lessonYMLDataRes.data;
+      rootDataObj.yml =
+        JSON.stringify(lessonYMLDataRes.data) !== JSON.stringify({})
+          ? lessonYMLDataRes.data
+          : {
+              level: 1,
+              license: "CC BY-SA 4.0",
+              tags: { topic: [], subject: [], grade: [] },
+            };
       setLessonData(rootDataObj);
     }
     if (lessonId) {
@@ -70,7 +77,14 @@ export const LessonContextProvider = (props) => {
       }
     },
     getLessonData: () => lessonData,
-    getYmlData: () => lessonData.yml,
+    /*
+    trenger getyYmlData()-metoden til å hente oppdatert ymlData når FileContext skal generere lærerveiledning. 
+    */
+    getYmlData: async () => {
+      const lessonUrls = resolveLessonUrls(lessonId);
+      const lessonYMLDataRes = await axios.get(lessonUrls.ymlData);
+      return lessonYMLDataRes.data;
+    },
   };
   return (
     <>

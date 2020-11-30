@@ -1,5 +1,5 @@
 import "./datapanel.scss";
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { Button, Icon, Popup } from "semantic-ui-react";
 import { YML_TEXT } from "../settingsFiles/languages/landingpage_NO";
 import { TagsGrade, TagsSubject, TagsTopic } from "./Tags";
@@ -8,47 +8,56 @@ import Levels from "./Levels";
 import License from "./License";
 import { LessonContext } from "contexts/LessonContext";
 
-const Datapanel = ({ open, setOpen, lessonId, mode }) => {
+const Datapanel = ({ openDataPopup, setOpenDataPopup, lessonId, mode }) => {
   const context = useContext(LessonContext);
-  const { ymlData, setYmlData, saveYml } = context;
+  const { ymlData, setLessonData, saveYml } = context;
   const [checkBoxState, setCheckBoxState] = useState({});
 
   const isEmptyDatapanel =
     JSON.stringify(ymlData.tags) ===
     JSON.stringify({ topic: [], subject: [], grade: [] });
 
-  const mapYamlTags = () => {
-    let obj;
-    obj = ymlData.tags.topic.reduce(
-      (accumulator, currentValue) => {
-        accumulator[currentValue] = true;
-        return accumulator;
-      },
-      { ...obj }
-    );
-    obj = ymlData.tags.subject.reduce(
-      (accumulator, currentValue) => {
-        accumulator[currentValue] = true;
-        return accumulator;
-      },
-      { ...obj }
-    );
-    obj = ymlData.tags.grade.reduce(
-      (accumulator, currentValue) => {
-        accumulator[currentValue] = true;
-        return accumulator;
-      },
-      { ...obj }
-    );
-    setCheckBoxState((prevState) => ({ ...prevState, ...obj }));
-  };
-  if (ymlData.tags) {
-    mapYamlTags();
+  if (isEmptyDatapanel) {
+    setOpenDataPopup(true);
   }
+
+  /*
+   * Det ser ut som vi trenger denne useEffecten for å forhindre inifite loop
+   */
+  useEffect(() => {
+    const mapYamlTags = () => {
+      let obj;
+      obj = ymlData.tags.topic.reduce(
+        (accumulator, currentValue) => {
+          accumulator[currentValue] = true;
+          return accumulator;
+        },
+        { ...obj }
+      );
+      obj = ymlData.tags.subject.reduce(
+        (accumulator, currentValue) => {
+          accumulator[currentValue] = true;
+          return accumulator;
+        },
+        { ...obj }
+      );
+      obj = ymlData.tags.grade.reduce(
+        (accumulator, currentValue) => {
+          accumulator[currentValue] = true;
+          return accumulator;
+        },
+        { ...obj }
+      );
+      setCheckBoxState((prevState) => ({ ...prevState, ...obj }));
+    };
+    if (ymlData.tags) {
+      mapYamlTags();
+    }
+  }, [ymlData.tags]);
 
   const onSubmit = async () => {
     saveYml(ymlData).then(() => {
-      setOpen(false);
+      setOpenDataPopup(false);
     });
   };
 
@@ -57,9 +66,9 @@ const Datapanel = ({ open, setOpen, lessonId, mode }) => {
   };
 
   const dropdownHandler = (event, { name, value }) => {
-    setYmlData((prevState) => ({
+    setLessonData((prevState) => ({
       ...prevState,
-      [name]: value,
+      yml: { ...prevState.yml, [name]: value },
     }));
   };
 
@@ -74,19 +83,25 @@ const Datapanel = ({ open, setOpen, lessonId, mode }) => {
     }));
 
     if (!ymlData.tags[subtag].includes(name)) {
-      setYmlData((prevState) => ({
+      setLessonData((prevState) => ({
         ...prevState,
-        tags: {
-          ...prevState?.tags,
-          [subtag]: [...prevState?.tags[subtag], name],
+        yml: {
+          ...prevState.yml,
+          tags: {
+            ...prevState.yml.tags,
+            [subtag]: [...prevState.yml.tags[subtag], name],
+          },
         },
       }));
     } else {
-      setYmlData((prevState) => ({
+      setLessonData((prevState) => ({
         ...prevState,
-        tags: {
-          ...prevState?.tags,
-          [subtag]: prevState?.tags[subtag].filter((e) => e !== name),
+        yml: {
+          ...prevState.yml,
+          tags: {
+            ...prevState.yml.tags,
+            [subtag]: prevState.yml.tags[subtag].filter((e) => e !== name),
+          },
         },
       }));
     }
@@ -100,9 +115,9 @@ const Datapanel = ({ open, setOpen, lessonId, mode }) => {
         ? event.target.checked
         : event.target.value;
 
-    setYmlData((prevState) => ({
+    setLessonData((prevState) => ({
       ...prevState,
-      [name]: value,
+      yml: { ...prevState.yml, [name]: value },
     }));
   };
 
@@ -121,7 +136,7 @@ const Datapanel = ({ open, setOpen, lessonId, mode }) => {
             className={`ui button`}
             id="tagButton"
             size="medium"
-            onClick={() => setOpen(!open)}
+            onClick={() => setOpenDataPopup(!openDataPopup)}
           >
             <span>
               <Icon color={"grey"} name={"tags"} /> Oppgavedata
@@ -130,15 +145,15 @@ const Datapanel = ({ open, setOpen, lessonId, mode }) => {
         }
       />
 
-      {open ? (
+      {openDataPopup ? (
         <div
-          style={open ? { display: "flex" } : { display: "none" }}
+          style={openDataPopup ? { display: "flex" } : { display: "none" }}
           className="datapanel_BG"
         >
           <div className="datapanel_container">
             {!isEmptyDatapanel ? (
               <i
-                onClick={() => setOpen(!open)}
+                onClick={() => setOpenDataPopup(!openDataPopup)}
                 className="big grey x icon landingpage"
               />
             ) : (

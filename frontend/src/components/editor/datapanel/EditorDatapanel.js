@@ -75,7 +75,7 @@ const EditorDatapanel = ({
             className={`ui button`}
             id="next"
             size="big"
-            onClick={() => setOpenMetaData(false)}
+            onClick={() => setOpenMetaData(true)}
           >
             <span>
               <Icon color={"grey"} name={"address card"} /> Oppgavedata
