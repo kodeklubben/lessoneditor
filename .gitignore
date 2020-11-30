@@ -10,6 +10,7 @@
 /backend/.env.local
 /backend/examples/.env
 /package.json
+/package-lock.json
 /paths.json
 build/
 node_modules/
