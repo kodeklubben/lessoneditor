@@ -9,7 +9,7 @@
 /backend/.env
 /backend/.env.local
 /backend/examples/.env
-/package.json
+/package*
 /paths.json
 build/
 node_modules/
