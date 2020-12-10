@@ -42,7 +42,7 @@ jobs:
     name: Deploy to Google App Engine
     timeout-minutes: 3
     needs: test
-    if: github.ref == 'refs/heads/fixEditorDataPopup' && github.event_name != 'pull_request'
+    if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
