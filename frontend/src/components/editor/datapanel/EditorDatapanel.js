@@ -9,16 +9,18 @@ import { FileContext } from "contexts/FileContext";
 const EditorDatapanel = ({
   courseTitle,
   lessonTitle,
-  openMetaData,
-  setOpenMetaData,
   setShowSpinner,
   userName,
 }) => {
   const history = useHistory();
   const { lessonId, file } = useParams();
-  const { headerData, saveFileHeader, fetchMdText } = useContext(FileContext);
-  const language = file && file.slice(-3, -2) === "_" ? file.slice(-2) : "nb";
+  const { headerData, saveFileHeader, rawMdFileContent } = useContext(
+    FileContext
+  );
+  const [openMetaData, setOpenMetaData] = useState(false);
   const [state, setState] = useState();
+
+  const language = file && file.slice(-3, -2) === "_" ? file.slice(-2) : "nb";
 
   const getLanguageFromSlug = {
     nb: "Bokmål",
@@ -27,19 +29,11 @@ const EditorDatapanel = ({
     is: "Islandsk",
   };
 
-  console.log({ headerData });
-
-  // if (state.title === "") {
-  //   setState((prevState) => ({
-  //     ...prevState,
-  //     authorList: [userName],
-  //     title: lessonTitle,
-  //   }));
-  // }
-
+  //useeffect her for å forhindre infinite loop når metadata åpnes
   useEffect(() => {
+    setOpenMetaData(rawMdFileContent.slice(0, 8) === "---\n---\n");
     setState(headerData);
-  }, [headerData]);
+  }, [headerData, rawMdFileContent]);
 
   const changeHandler = (event) => {
     const { name, value } = event.target;
@@ -65,17 +59,13 @@ const EditorDatapanel = ({
     await saveFileHeader(lessonId, file, newHeaderData);
     setShowSpinner(false);
     setOpenMetaData(false);
-    //må fortsatt bruke denne refresh-hacken for at data skal lades.
     history.push("/");
     history.replace(["editor", lessonId, file].join("/"));
   };
 
   const onCancel = async () => {
+    setState(headerData);
     setOpenMetaData(false);
-    await fetchMdText(lessonId, file);
-    //må fortsatt bruke denne refresh-hacken..
-    history.push("/");
-    history.replace(["editor", lessonId, file].join("/"));
   };
   return (
     <>

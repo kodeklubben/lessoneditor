@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import ShowSpinner from "../ShowSpinner";
 import uploadImage from "../../api/upload-image";
 import { useParams } from "react-router";
 
@@ -16,12 +17,12 @@ const ImageUpload = ({
   setCursorPositionStart,
   setCursorPositionEnd,
   setCursorPosition,
-  setShowSpinner,
 }) => {
   let start = cursorPositionStart + 2;
   let end = cursorPositionEnd + 18;
 
   const { lessonId } = useParams();
+  const [showSpinner, setShowSpinner] = useState(false);
 
   const fileNameErrorMessage =
     "Ugyldig filnavn, sjekk om det er mellomrom eller spesialtegn i filnavnet";
@@ -73,13 +74,16 @@ const ImageUpload = ({
   };
 
   return (
-    <input
-      style={{ display: "none" }}
-      type="file"
-      accept=".jpg,.jpeg,.png,.gif"
-      ref={uploadImageRef}
-      onChange={fileSelectedHandler}
-    />
+    <>
+      {showSpinner ? <ShowSpinner /> : ""}
+      <input
+        style={{ display: "none" }}
+        type="file"
+        accept=".jpg,.jpeg,.png,.gif"
+        ref={uploadImageRef}
+        onChange={fileSelectedHandler}
+      />
+    </>
   );
 };
 

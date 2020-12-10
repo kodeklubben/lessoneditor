@@ -1,6 +1,6 @@
-import React, { useContext, useRef, useState, useEffect } from "react";
+import React, { useContext, useRef, useState } from "react";
 import "./editor.scss";
-// import Autosave from "./Autosave";
+import Autosave from "./Autosave";
 import ButtonPanel from "./buttonpanel/ButtonPanel";
 import ImageUpload from "./ImageUpload";
 import MDPreview from "./MDPreview";
@@ -15,9 +15,7 @@ import { UserContext } from "contexts/UserContext";
 const Editor = () => {
   const { lessonId, file } = useParams();
   const { lessonData } = useContext(LessonContext);
-  const { saveFileBody, savedFileBody, rawMdFileContent } = useContext(
-    FileContext
-  );
+  const { saveFileBody, savedFileBody } = useContext(FileContext);
   const { user } = useContext(UserContext);
   const [mdText, setMdText] = useState("");
   const [showSpinner, setShowSpinner] = useState(true);
@@ -28,8 +26,7 @@ const Editor = () => {
   const [redo, setRedo] = useState([]);
   const [undoCursorPosition, setUndoCursorPosition] = useState([]);
   const [redoCursorPosition, setRedoCursorPosition] = useState([]);
-  // const [renderContent, setRenderContent] = useState(false);
-  const [openMetaData, setOpenMetaData] = useState(false);
+  const [renderContent, setRenderContent] = useState(false);
   const [listButtonValues, setListButtonValues] = useState({
     bTitle: "",
     output: "",
@@ -38,10 +35,7 @@ const Editor = () => {
   const editorRef = useRef();
   const uploadImageRef = useRef();
 
-  //useeffect her for å forhindre infinite loop
-  useEffect(() => {
-    setOpenMetaData(rawMdFileContent.slice(0, 8) === "---\n---\n");
-  }, [rawMdFileContent]);
+  const language = file && file.slice(-3, -2) === "_" ? file.slice(-2) : "nb";
 
   const pushUndoValue = (mdText, cursorPositionStart) => {
     if (
@@ -105,8 +99,6 @@ const Editor = () => {
     await saveFileBody(lessonId, file, mdText);
   };
 
-  const language = file && file.slice(-3, -2) === "_" ? file.slice(-2) : "nb";
-
   return (
     <div className="editor">
       {showSpinner ? <ShowSpinner /> : ""}
@@ -134,7 +126,6 @@ const Editor = () => {
         language={language}
         lessonTitle={lessonData.lessonTitle}
         mdText={mdText}
-        openMetaData={openMetaData}
         pushRedoValue={pushRedoValue}
         pushUndoValue={pushUndoValue}
         redo={redo}
@@ -145,7 +136,6 @@ const Editor = () => {
         setCursorPosition={setCursorPosition}
         setListButtonValues={setListButtonValues}
         setMdText={setMdText}
-        setOpenMetaData={setOpenMetaData}
         setRedoCursorPosition={setRedoCursorPosition}
         setShowSpinner={setShowSpinner}
         setUndoCursorPosition={setUndoCursorPosition}
@@ -173,15 +163,15 @@ const Editor = () => {
           course={lessonData.course}
           language={language}
           mdText={mdText}
-          // renderContent={renderContent}
+          renderContent={renderContent}
         />
       </div>
-      {/* <Autosave
+      <Autosave
         language={language}
         mdText={mdText}
         saveEditorText={saveEditorText}
         setRenderContent={setRenderContent}
-      /> */}
+      />
     </div>
   );
 };

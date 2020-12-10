@@ -1,11 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router";
 import { Dropdown, Popup } from "semantic-ui-react";
 import languageOptions from "./LanguageOptions";
+import ShowSpinner from "../../ShowSpinner";
 
-const Languages = ({ setShowSpinner, saveEditorText, lessonId, file }) => {
+const Languages = ({ saveEditorText, lessonId, file }) => {
   const history = useHistory();
-
+  const [showSpinner, setShowSpinner] = useState(false);
   const language = file && file.slice(-3, -2) === "_" ? file.slice(-2) : "nb";
 
   const filename =
@@ -23,7 +24,6 @@ const Languages = ({ setShowSpinner, saveEditorText, lessonId, file }) => {
     }
     await saveEditorText();
     if (target !== "") {
-      //refresh hack to get things going.
       history.push("/");
       history.replace(target);
     } else {
@@ -34,6 +34,7 @@ const Languages = ({ setShowSpinner, saveEditorText, lessonId, file }) => {
 
   return (
     <>
+      {showSpinner ? <ShowSpinner /> : ""}
       <Popup
         content={"Endre språk for oppgavetekst"}
         mouseEnterDelay={250}
