@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import "./buttonpanel.scss";
 import { Button, Icon, Popup } from "semantic-ui-react";
+import ShowSpinner from "../../ShowSpinner";
 import Emphasis from "./Emphasis";
 import UndoRedo from "./UndoRedo";
 import Hyperlink from "./Hyperlink";
@@ -37,13 +38,13 @@ const ButtonPanel = ({
   setMdText,
   setOpenMetaData,
   setRedoCursorPosition,
-  setShowSpinner,
   setUndoCursorPosition,
   undo,
   undoCursorPosition,
   uploadImageRef,
   userName,
 }) => {
+  const [showSpinner, setShowSpinner] = useState(false);
   const history = useHistory();
   const { lessonId, file } = useParams();
   const language = file && file.slice(-3, -2) === "_" ? file.slice(-2) : "nb";
@@ -63,178 +64,181 @@ const ButtonPanel = ({
   };
 
   return (
-    <div className="buttonpanel" style={{ paddingBottom: "0.25em" }}>
-      <div style={{ display: "inline" }}>
-        <div className="ui icon buttons">
-          <Emphasis
-            buttonValues={buttonValues}
-            cursorPositionEnd={cursorPositionEnd}
-            cursorPositionStart={cursorPositionStart}
-            editorRef={editorRef}
-            mdText={mdText}
-            setButtonValues={setButtonValues}
-            setCursor={setCursor}
-            setCursorPosition={setCursorPosition}
-            setMdText={setMdText}
-          />
+    <>
+      {showSpinner ? <ShowSpinner /> : ""}
+      <div className="buttonpanel" style={{ paddingBottom: "0.25em" }}>
+        <div style={{ display: "inline" }}>
+          <div className="ui icon buttons">
+            <Emphasis
+              buttonValues={buttonValues}
+              cursorPositionEnd={cursorPositionEnd}
+              cursorPositionStart={cursorPositionStart}
+              editorRef={editorRef}
+              mdText={mdText}
+              setButtonValues={setButtonValues}
+              setCursor={setCursor}
+              setCursorPosition={setCursorPosition}
+              setMdText={setMdText}
+            />
+          </div>
+          <span style={{ margin: "1.5em" }} />
+          <div className="ui icon buttons">
+            <UndoRedo
+              cursorPositionStart={cursorPositionStart}
+              editorRef={editorRef}
+              mdText={mdText}
+              pushRedoValue={pushRedoValue}
+              pushUndoValue={pushUndoValue}
+              redo={redo}
+              redoCursorPosition={redoCursorPosition}
+              setCursorPosition={setCursorPosition}
+              setRedoCursorPosition={setRedoCursorPosition}
+              setUndoCursorPosition={setUndoCursorPosition}
+              undo={undo}
+              undoCursorPosition={undoCursorPosition}
+            />
+          </div>
+          <span style={{ margin: "1.5em" }} />
+          <div className="ui icon buttons">
+            <Hyperlink
+              cursorPositionEnd={cursorPositionEnd}
+              cursorPositionStart={cursorPositionStart}
+              editorRef={editorRef}
+              mdText={mdText}
+              setCursor={setCursor}
+              setCursorPosition={setCursorPosition}
+              setMdText={setMdText}
+            />
+            <Image editorRef={editorRef} uploadImageRef={uploadImageRef} />
+          </div>
+          <span style={{ margin: "1.5em" }} />
+          <div className="ui icon buttons">
+            <Lists
+              buttonValues={buttonValues}
+              cursorPositionEnd={cursorPositionEnd}
+              cursorPositionStart={cursorPositionStart}
+              editorRef={editorRef}
+              mdText={mdText}
+              setButtonValues={setButtonValues}
+              setCursor={setCursor}
+              setCursorPosition={setCursorPosition}
+              setListButtonValues={setListButtonValues}
+              setMdText={setMdText}
+            />
+          </div>
+          <div style={{ display: "flex", float: "right", height: "1em" }}>
+            <Languages
+              file={file}
+              lessonId={lessonId}
+              setShowSpinner={setShowSpinner}
+              saveEditorText={saveEditorText}
+              language={language ? language : ""}
+            />
+            <EditorDatapanel
+              courseTitle={courseTitle}
+              file={file}
+              language={language ? language : ""}
+              lessonTitle={lessonTitle}
+              mdText={mdText}
+              openMetaData={openMetaData}
+              setOpenMetaData={setOpenMetaData}
+              setShowSpinner={setShowSpinner}
+              userName={userName}
+            />
+            <Popup
+              content={"Til prosjektoversikt"}
+              mouseEnterDelay={250}
+              mouseLeaveDelay={250}
+              trigger={
+                <Button
+                  style={{
+                    height: "2em",
+                    marginRight: "-0.5em",
+                    padding: "0 1em 0 1em",
+                  }}
+                  className={`ui ${
+                    mdText && mdText.length < 1 ? `disabled` : ``
+                  } button`}
+                  id="next"
+                  disabled={!mdText || mdText.length === 0}
+                  // className="CPButton"
+                  size="big"
+                  onClick={onSubmit}
+                >
+                  <Icon color={"grey"} name={"arrow right"} />
+                </Button>
+              }
+            />
+          </div>
         </div>
-        <span style={{ margin: "1.5em" }} />
-        <div className="ui icon buttons">
-          <UndoRedo
-            cursorPositionStart={cursorPositionStart}
-            editorRef={editorRef}
-            mdText={mdText}
-            pushRedoValue={pushRedoValue}
-            pushUndoValue={pushUndoValue}
-            redo={redo}
-            redoCursorPosition={redoCursorPosition}
-            setCursorPosition={setCursorPosition}
-            setRedoCursorPosition={setRedoCursorPosition}
-            setUndoCursorPosition={setUndoCursorPosition}
-            undo={undo}
-            undoCursorPosition={undoCursorPosition}
-          />
-        </div>
-        <span style={{ margin: "1.5em" }} />
-        <div className="ui icon buttons">
-          <Hyperlink
-            cursorPositionEnd={cursorPositionEnd}
-            cursorPositionStart={cursorPositionStart}
-            editorRef={editorRef}
-            mdText={mdText}
-            setCursor={setCursor}
-            setCursorPosition={setCursorPosition}
-            setMdText={setMdText}
-          />
-          <Image editorRef={editorRef} uploadImageRef={uploadImageRef} />
-        </div>
-        <span style={{ margin: "1.5em" }} />
-        <div className="ui icon buttons">
-          <Lists
-            buttonValues={buttonValues}
-            cursorPositionEnd={cursorPositionEnd}
-            cursorPositionStart={cursorPositionStart}
-            editorRef={editorRef}
-            mdText={mdText}
-            setButtonValues={setButtonValues}
-            setCursor={setCursor}
-            setCursorPosition={setCursorPosition}
-            setListButtonValues={setListButtonValues}
-            setMdText={setMdText}
-          />
-        </div>
-        <div style={{ display: "flex", float: "right", height: "1em" }}>
-          <Languages
-            file={file}
-            lessonId={lessonId}
-            setShowSpinner={setShowSpinner}
-            saveEditorText={saveEditorText}
-            language={language ? language : ""}
-          />
-          <EditorDatapanel
-            courseTitle={courseTitle}
-            file={file}
-            language={language ? language : ""}
-            lessonTitle={lessonTitle}
-            mdText={mdText}
-            openMetaData={openMetaData}
-            setOpenMetaData={setOpenMetaData}
-            setShowSpinner={setShowSpinner}
-            userName={userName}
-          />
-          <Popup
-            content={"Til prosjektoversikt"}
-            mouseEnterDelay={250}
-            mouseLeaveDelay={250}
-            trigger={
-              <Button
-                style={{
-                  height: "2em",
-                  marginRight: "-0.5em",
-                  padding: "0 1em 0 1em",
-                }}
-                className={`ui ${
-                  mdText && mdText.length < 1 ? `disabled` : ``
-                } button`}
-                id="next"
-                disabled={!mdText || mdText.length === 0}
-                // className="CPButton"
-                size="big"
-                onClick={onSubmit}
-              >
-                <Icon color={"grey"} name={"arrow right"} />
-              </Button>
-            }
-          />
-        </div>
-      </div>
 
-      <br />
-      <div>
-        <Sections
-          editorRef={editorRef}
-          mdText={mdText}
-          buttonValues={buttonValues}
-          cursorPositionStart={cursorPositionStart}
-          cursorPositionEnd={cursorPositionEnd}
-          setMdText={setMdText}
-          setCursorPosition={setCursorPosition}
-          setCursor={setCursor}
-          setButtonValues={setButtonValues}
-        />
-        <span style={{ marginLeft: "5em" }}>
-          <CodeButton
+        <br />
+        <div>
+          <Sections
             editorRef={editorRef}
             mdText={mdText}
+            buttonValues={buttonValues}
             cursorPositionStart={cursorPositionStart}
             cursorPositionEnd={cursorPositionEnd}
-            buttonValues={buttonValues}
             setMdText={setMdText}
             setCursorPosition={setCursorPosition}
             setCursor={setCursor}
             setButtonValues={setButtonValues}
-            course={course}
-            courseTitle={courseTitle}
           />
-        </span>
-      </div>
-      <div>
-        {course === "microbit" ? (
-          <>
-            <MicrobitButtons
+          <span style={{ marginLeft: "5em" }}>
+            <CodeButton
               editorRef={editorRef}
               mdText={mdText}
-              buttonValues={buttonValues}
               cursorPositionStart={cursorPositionStart}
               cursorPositionEnd={cursorPositionEnd}
+              buttonValues={buttonValues}
               setMdText={setMdText}
               setCursorPosition={setCursorPosition}
               setCursor={setCursor}
               setButtonValues={setButtonValues}
+              course={course}
+              courseTitle={courseTitle}
             />
-          </>
-        ) : (
-          ""
-        )}
-        {course === "scratch" ? (
-          <>
-            <SratchButtons
-              editorRef={editorRef}
-              mdText={mdText}
-              buttonValues={buttonValues}
-              cursorPositionStart={cursorPositionStart}
-              cursorPositionEnd={cursorPositionEnd}
-              setMdText={setMdText}
-              setCursorPosition={setCursorPosition}
-              setCursor={setCursor}
-              setButtonValues={setButtonValues}
-            />
-          </>
-        ) : (
-          ""
-        )}
+          </span>
+        </div>
+        <div>
+          {course === "microbit" ? (
+            <>
+              <MicrobitButtons
+                editorRef={editorRef}
+                mdText={mdText}
+                buttonValues={buttonValues}
+                cursorPositionStart={cursorPositionStart}
+                cursorPositionEnd={cursorPositionEnd}
+                setMdText={setMdText}
+                setCursorPosition={setCursorPosition}
+                setCursor={setCursor}
+                setButtonValues={setButtonValues}
+              />
+            </>
+          ) : (
+            ""
+          )}
+          {course === "scratch" ? (
+            <>
+              <SratchButtons
+                editorRef={editorRef}
+                mdText={mdText}
+                buttonValues={buttonValues}
+                cursorPositionStart={cursorPositionStart}
+                cursorPositionEnd={cursorPositionEnd}
+                setMdText={setMdText}
+                setCursorPosition={setCursorPosition}
+                setCursor={setCursor}
+                setButtonValues={setButtonValues}
+              />
+            </>
+          ) : (
+            ""
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

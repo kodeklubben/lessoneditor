@@ -18,7 +18,7 @@ function createDefaultFileBody(file, ymlData) {
 
 export const FileContextProvider = (props) => {
   const { lessonId, file } = useParams();
-  const { ymlData } = useContext(LessonContext);
+  const { getYmlData } = useContext(LessonContext);
   const [rawMdFileContent, setRawMdFileContent] = useState("");
   const language = file && file.slice(-3, -2) === "_" ? file.slice(-2) : "nb";
 
@@ -34,11 +34,12 @@ export const FileContextProvider = (props) => {
   const saveFileBody = async (lessonId, filename, body) => {
     const fileHeader = rawMdFileContent.split(separator)[1];
     const newRawText = ["", fileHeader, body].join(separator);
-    await saveMdText(lessonId, filename, newRawText);
+    await saveMdText(lessonId, filename, newRawText, true);
     setRawMdFileContent(newRawText);
     setSavedFileBody(body);
   };
   const saveDefaultFileBody = async (id, filename) => {
+    const ymlData = await getYmlData();
     const defaultFileBody = createDefaultFileBody(filename, ymlData);
     await saveFileBody(id, filename, defaultFileBody);
   };
@@ -76,6 +77,8 @@ export const FileContextProvider = (props) => {
     savedFileBody,
     saveFileBody,
     saveFileHeader,
+    rawMdFileContent,
+    fetchMdText,
   };
   return (
     <>

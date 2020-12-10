@@ -27,7 +27,6 @@ const Editor = () => {
   const [undoCursorPosition, setUndoCursorPosition] = useState([]);
   const [redoCursorPosition, setRedoCursorPosition] = useState([]);
   const [renderContent, setRenderContent] = useState(false);
-  const [openMetaData, setOpenMetaData] = useState(false);
   const [listButtonValues, setListButtonValues] = useState({
     bTitle: "",
     output: "",
@@ -35,6 +34,9 @@ const Editor = () => {
   });
   const editorRef = useRef();
   const uploadImageRef = useRef();
+
+  const language = file && file.slice(-3, -2) === "_" ? file.slice(-2) : "nb";
+
   const pushUndoValue = (mdText, cursorPositionStart) => {
     if (
       undo[undo.length - 1] !== mdText &&
@@ -70,9 +72,12 @@ const Editor = () => {
     setCursorPositionEnd(pos2);
   };
 
-  const setCursorPosition = (positionStart, positionEnd) => {
-    editorRef.current.selectionStart = positionStart;
-    editorRef.current.selectionEnd = positionEnd;
+  /*
+   * Av en eller annen grunn må denne funksjonen være async for å fungere.
+   */
+  const setCursorPosition = async (positionStart, positionEnd) => {
+    editorRef.current.selectionStart = await positionStart;
+    editorRef.current.selectionEnd = await positionEnd;
   };
 
   const resetButtons = () => {
@@ -82,6 +87,7 @@ const Editor = () => {
   /**
    * Gjør litt state greier her:
    */
+
   if (savedFileBody && lessonData && showSpinner) {
     setShowSpinner(false);
   }
@@ -92,7 +98,6 @@ const Editor = () => {
   const saveEditorText = async () => {
     await saveFileBody(lessonId, file, mdText);
   };
-  const language = file && file.slice(-3, -2) === "_" ? file.slice(-2) : "nb";
 
   return (
     <div className="editor">
@@ -121,7 +126,6 @@ const Editor = () => {
         language={language}
         lessonTitle={lessonData.lessonTitle}
         mdText={mdText}
-        openMetaData={openMetaData}
         pushRedoValue={pushRedoValue}
         pushUndoValue={pushUndoValue}
         redo={redo}
@@ -132,7 +136,6 @@ const Editor = () => {
         setCursorPosition={setCursorPosition}
         setListButtonValues={setListButtonValues}
         setMdText={setMdText}
-        setOpenMetaData={setOpenMetaData}
         setRedoCursorPosition={setRedoCursorPosition}
         setShowSpinner={setShowSpinner}
         setUndoCursorPosition={setUndoCursorPosition}

@@ -1,6 +1,6 @@
 import "./editordatapanel.scss";
-import React, { useContext, useState } from "react";
-import { useParams } from "react-router";
+import React, { useContext, useState, useEffect } from "react";
+import { useParams, useHistory } from "react-router";
 import { Button, Icon, Popup } from "semantic-ui-react";
 import MultiInput from "./MultiInput";
 import { FORM_TEXT } from "./settings/landingpage_NO.js";
@@ -9,15 +9,18 @@ import { FileContext } from "contexts/FileContext";
 const EditorDatapanel = ({
   courseTitle,
   lessonTitle,
-  openMetaData,
-  setOpenMetaData,
   setShowSpinner,
   userName,
 }) => {
+  const history = useHistory();
   const { lessonId, file } = useParams();
-  const { headerData, saveFileHeader } = useContext(FileContext);
+  const { headerData, saveFileHeader, rawMdFileContent } = useContext(
+    FileContext
+  );
+  const [openMetaData, setOpenMetaData] = useState(false);
+  const [state, setState] = useState();
+
   const language = file && file.slice(-3, -2) === "_" ? file.slice(-2) : "nb";
-  const [state, setState] = useState(headerData);
 
   const getLanguageFromSlug = {
     nb: "Bokmål",
@@ -26,13 +29,11 @@ const EditorDatapanel = ({
     is: "Islandsk",
   };
 
-  if (state.title === "") {
-    setState((prevState) => ({
-      ...prevState,
-      authorList: [userName],
-      title: lessonTitle,
-    }));
-  }
+  //useeffect her for å forhindre infinite loop når metadata åpnes
+  useEffect(() => {
+    setOpenMetaData(rawMdFileContent.slice(0, 8) === "---\n---\n");
+    setState(headerData);
+  }, [headerData, rawMdFileContent]);
 
   const changeHandler = (event) => {
     const { name, value } = event.target;
@@ -58,9 +59,12 @@ const EditorDatapanel = ({
     await saveFileHeader(lessonId, file, newHeaderData);
     setShowSpinner(false);
     setOpenMetaData(false);
+    history.push("/");
+    history.replace(["editor", lessonId, file].join("/"));
   };
 
   const onCancel = async () => {
+    setState(headerData);
     setOpenMetaData(false);
   };
   return (
@@ -75,7 +79,7 @@ const EditorDatapanel = ({
             className={`ui button`}
             id="next"
             size="big"
-            onClick={() => setOpenMetaData(false)}
+            onClick={() => setOpenMetaData(true)}
           >
             <span>
               <Icon color={"grey"} name={"address card"} /> Oppgavedata
