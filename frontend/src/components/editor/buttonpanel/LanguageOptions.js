@@ -1,4 +1,4 @@
-export default [
+const LanguageOptions = [
   {
     key: 1,
     text: "Bokmål",
@@ -24,3 +24,5 @@ export default [
     image: { avatar: true, src: "/languagesFlag/flag_is.svg" },
   },
 ];
+
+export default LanguageOptions;
