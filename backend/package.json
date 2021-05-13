@@ -25,10 +25,10 @@
     "@octokit/rest": "^18.0.9",
     "axios": "^0.21.1",
     "body-parser": "^1.19.0",
-    "dotenv": "^8.2.0",
+    "dotenv": "^9.0.2",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
-    "js-yaml": "^3.14.0",
+    "js-yaml": "^4.1.0",
     "jsonwebtoken": "^8.5.1",
     "morgan": "^1.10.0",
     "multer": "^1.4.2",
@@ -41,6 +41,6 @@
     "faker": "^5.1.0",
     "jest": "^26.6.3",
     "nodemon": "^2.0.6",
-    "url-regex-safe": "^1.0.2"
+    "url-regex-safe": "^2.0.2"
   }
 }
