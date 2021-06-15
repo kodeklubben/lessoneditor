@@ -110,20 +110,6 @@ Semantic UI is a front-end development framework similar to bootstrap designed f
 
 https://react.semantic-ui.com/
 
-# Backend
-
-## Node js + express (backend)
-
-An Express application is most often used as backend application in a client-server architecture whereas the client could
-be written in React.js, the server could be written in Express. We used express as our server.
-Express ensured that all middleware can respond to HTTP requests and routing tables were setup to respond to different actions
-based on the HTTP method.
-
-## Redux
-
-Redux is a Javascript Library for managing application state. Redux provides a real time current state of the lesson with all the
-state variables that the app has at a given time. This helps to keep control of how the lesson state changes overtime and it is also very useful for debugging.
-
 ## markdown-it
 
 Markdown-it is a markdown parser package for node used for parsing markdown plaintext to html in the real-time previewer.
@@ -145,6 +131,15 @@ All self developed plugins are located at: `frontend/src/utils/markdown-it-plugi
   The plugin is based on markdown-it-header-section by arve0: [https://github.com/arve0/markdown-it-header-sections](https://github.com/arve0/markdown-it-header-sections).
 
 - markdown-it-insert-img: A plugin for parsing markdown links to html `<img>`-elements displaying the image form a specific URL.
+
+# Backend
+
+## Node js + express (backend)
+
+An Express application is most often used as backend application in a client-server architecture whereas the client could
+be written in React.js, the server could be written in Express. We used express as our server.
+Express ensured that all middleware can respond to HTTP requests and routing tables were setup to respond to different actions
+based on the HTTP method.
 
 ## Prop types
 
