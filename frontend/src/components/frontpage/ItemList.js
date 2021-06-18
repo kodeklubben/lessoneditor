@@ -1,55 +1,40 @@
-import "./itemlist.scss";
-import React from "react";
+import './itemlist.scss';
+import React from 'react';
+import {Button, Card, Image} from 'semantic-ui-react';
 
-function ItemList({ items, removeLesson, navigateToHome }) {
+function ItemList({items, removeLesson, navigateToHome}) {
   return (
-    <div className="ui five column grid">
-      {items.length > 0 &&
-        items.map((listitem, index) => {
-          return (
-            <div key={"listitem" + index} className="column">
-              <div className="ui fluid card">
-                <div className="image itemListImage">
-                  <img
-                    src={`${listitem.thumb}?${performance.now()}`}
-                    alt={"oppgavebilde"}
-                  />
-                </div>
-                <div className="content">
-                  <div className="header">
+      <Card.Group>
+        {items.length > 0 &&
+        items.map((listitem, index) =>
+            (
+                <Card key={'listitem' + index}>
+                  <Image className={'itemListImage'} src={`${listitem.thumb}?${performance.now()}`} wrapped ui={false}/>
+                  <Card.Header>
                     {listitem.lessonTitle
-                      ? listitem.lessonTitle
-                      : listitem.lesson}
-                  </div>
-                  <div className="meta">
-                    <h4>
-                      {listitem.courseTitle
+                        ? listitem.lessonTitle
+                        : listitem.lesson}
+                  </Card.Header>
+                  <Card.Meta>
+                    {listitem.courseTitle
                         ? listitem.courseTitle
                         : listitem.course}
-                    </h4>
-                  </div>
-                </div>
-                <div className="extra content">
-                  <button
-                    className="ui button"
-                    onClick={() => navigateToHome(listitem.lessonId)}
-                  >
-                    Åpne
-                  </button>
-                  <button
-                    className="ui button"
-                    onClick={async () => {
-                      await removeLesson(listitem.lessonId);
-                    }}
-                  >
-                    Fjerne
-                  </button>
-                </div>
-              </div>
-            </div>
-          );
-        })}
-    </div>
+                  </Card.Meta>
+                  <Card.Content extra>
+                    <div className="ui two buttons">
+                      <Button onClick={() => navigateToHome(listitem.lessonId)}>
+                        Åpne
+                      </Button>
+                      <Button onClick={async () => {await removeLesson(listitem.lessonId);}}>
+                        Fjerne
+                      </Button>
+                    </div>
+                  </Card.Content>
+                </Card>
+            ),
+        )}
+      </Card.Group>
   );
 }
+
 export default ItemList;

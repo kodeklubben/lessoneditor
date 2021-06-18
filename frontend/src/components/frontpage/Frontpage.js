@@ -7,6 +7,7 @@ import Navbar from "../navbar/Navbar";
 import { useHistory } from "react-router-dom";
 import NewLessonButton from "./newLessonButton";
 import ShowSpinner from "../ShowSpinner";
+import {Divider, Header, Message} from 'semantic-ui-react';
 
 const Overview = () => {
   const [showPopup, setShowPopup] = useState(false); // Les om useState i React
@@ -24,9 +25,7 @@ const Overview = () => {
       {showSpinner ? <ShowSpinner /> : ""}
       <Navbar />
       <div className="overViewContainer">
-        <p id="welcome">Velkommen, </p>
-        <NewLessonButton setShowPopup={setShowPopup} id="newLessonButton" />
-
+        <NewLessonButton setShowPopup={setShowPopup} />
         {showPopup ? (
           <NewLesson
             showSpinner={showSpinner}
@@ -36,29 +35,10 @@ const Overview = () => {
         ) : (
           ""
         )}
-
-        <div
-          style={{
-            backgroundColor: "grey",
-            width: "90%",
-            margin: "auto",
-            marginTop: "60px",
-            marginBottom: "50px",
-            height: "2px",
-          }}
-          className="ui horizontal divider"
-        />
-
+        <Divider style={{height: "2px"}} section/>
         {lessons.length > 0 ? (
           <>
-            <p
-              style={{
-                fontStyle: 'Arial, "Times New Roman", Times, serif',
-                fontSize: "23px",
-              }}
-            >
-              Mine oppgaver
-            </p>
+            <Header as="h2">Mine oppgaver</Header>
             <ItemList
               items={lessons}
               removeLesson={removeLesson}
@@ -66,14 +46,12 @@ const Overview = () => {
             />
           </>
         ) : (
-          <p
-            style={{
-              fontStyle: 'Arial, "Times New Roman", Times, serif',
-              fontSize: "23px",
-            }}
-          >
-            Du har ingen kurs
-          </p>
+            <Message>
+              <Message.Header>Du har ingen kurs</Message.Header>
+              <Message.Content>Opprett en ny oppgave ved å
+              trykke på knappen "Ny oppgave"
+              </Message.Content>
+            </Message>
         )}
         <br />
       </div>
