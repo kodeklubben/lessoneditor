@@ -1,16 +1,12 @@
-import "./newLessonButton.scss";
-import React from "react";
+import React from 'react';
+import {Button, Icon} from 'semantic-ui-react';
 
-const NewLessonButton = ({ setShowPopup }) => {
+const NewLessonButton = ({setShowPopup}) => {
   return (
-    <div className="newLessonButton">
-      <div className="content">
-        <div className="new-lesson-button" onClick={setShowPopup}>
-          <img id="plusSign" alt="plusSign" src={"/plusSign.png"} />
-          Ny oppgave
-        </div>
-      </div>
-    </div>
+      <Button icon labelPosition="left" positive onClick={setShowPopup}>
+        <Icon name="plus"/>
+        Ny oppgave
+      </Button>
   );
 };
 export default NewLessonButton;
