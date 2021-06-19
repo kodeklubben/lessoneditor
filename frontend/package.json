@@ -22,8 +22,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build && rm -rf ../build && mv build ..",
-    "test": "cross-env CI=true react-scripts test",
+    "build": "cross-env SKIP_PREFLIGHT_CHECK=true react-scripts build && rm -rf ../dist/apps/frontend2020 && mv build ../dist/apps/frontend2020",
+    "test": "cross-env SKIP_PREFLIGHT_CHECK=true CI=true react-scripts test",
     "test-disabled": "echo \"Temporarily disabled tests.\" && exit 0",
     "eject": "react-scripts eject",
     "lint": "prettier ./src/**/* --write"
@@ -44,6 +44,8 @@
     ]
   },
   "devDependencies": {
+    "jest": "26.6.0",
+    "babel-loader": "8.1.0",
     "cross-env": "^7.0.2",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.5",

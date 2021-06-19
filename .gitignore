@@ -9,9 +9,9 @@
 /backend/.env
 /backend/.env.local
 /backend/examples/.env
-/package*
 /paths.json
 build/
+dist/
 node_modules/
 npm-debug.log*
 yarn-debug.log*

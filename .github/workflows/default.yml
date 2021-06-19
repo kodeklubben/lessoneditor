@@ -6,16 +6,19 @@ on:
       - "*"
   pull_request:
     branches:
-      - master
+      - main
 
 jobs:
   test:
-    name: Run tests
+    name: Run Test and Build Apps
     timeout-minutes: 3
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - run: git fetch origin main
       - name: Cache node modules
         uses: actions/cache@v1
         with:
@@ -26,23 +29,24 @@ jobs:
             ${{ runner.os }}-build-
             ${{ runner.os }}-
       - run: npm ci --ignore-scripts --no-optional --prefer-offline --no-audit --prefix frontend
-      - run: npm ci --ignore-scripts --no-optional --prefer-offline --no-audit --prefix backend
+      - run: npm ci --ignore-scripts --no-optional --prefer-offline --no-audit
       - run: node frontend/node_modules/node-sass/scripts/install.js
-      - run: npm rebuild re2 --prefix backend
       - run: npm rebuild node-sass --prefix frontend
+      - run: npm rebuild re2
       - run: npm test --prefix frontend
-      - run: npm test --prefix backend
+      - run: npm test backend
+      - run: npm run build backend
       - run: npm run build --prefix frontend
       - name: Archive build artifacts
         uses: actions/upload-artifact@v1
         with:
-          name: build
-          path: build
+          name: dist
+          path: dist
   deploy:
     name: Deploy to Google App Engine
     timeout-minutes: 3
     needs: test
-    if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -50,9 +54,8 @@ jobs:
       - name: Download build artifacts
         uses: actions/download-artifact@v1
         with:
-          name: build
-      - run: echo "${{ secrets.DOTENV }}" > ./backend/.env
-      - run: cp ./frontend/src/paths.json . && cp ./backend/package.json .
+          name: dist
+      - run: echo "${{ secrets.DOTENV }}" > .env
       - name: Deploy to Google App Engine
         uses: atRobertoFlores/gae_deploy_action@master
         with:
