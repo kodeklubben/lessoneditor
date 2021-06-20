@@ -19,6 +19,15 @@
       "sourceRoot": "apps/backend/src",
       "projectType": "application",
       "targets": {
+        "build-dev": {
+          "executor": "@nrwl/node:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/backend-dev",
+            "main": "apps/backend/src/app/setupDevServer.ts",
+            "tsConfig": "apps/backend/tsconfig.app.json"
+          }
+        },
         "build": {
           "executor": "@nrwl/node:build",
           "outputs": ["{options.outputPath}"],

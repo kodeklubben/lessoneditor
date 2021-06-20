@@ -1,9 +1,11 @@
+import {Application} from "express";
+
 const express = require("express");
 const path = require("path");
 const fs = require("fs");
 const buildFolder = path.resolve(__dirname, "..", "frontend2020");
 
-const serveFrontend = (app) => {
+const serveFrontend = (app: Application) => {
     console.log({buildFolder});
     app.use(express.static(buildFolder, {index: false}));
     app.get("/*", function (req, res) {

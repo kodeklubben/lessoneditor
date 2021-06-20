@@ -1,15 +1,17 @@
 import {paths} from "@lessoneditor/api-interfaces";
 import getLessonData from "../lesson/get-lesson-data";
 import submitLesson from "../github/submitLesson";
+import {Application} from "express";
 
 
-const lessonSubmit = (app) => {
+const lessonSubmit = (app: Application) => {
     app.post(paths.LESSON_SUBMIT, async (req, res) => {
         try {
             const {lessonId} = req.params;
             const lessonData = await getLessonData(lessonId);
             if (lessonData) {
                 console.debug(paths.LESSON_SUBMIT, lessonData);
+                // @ts-ignore
                 const submitRes = await submitLesson(req.user.token, lessonData);
                 console.log({submitRes});
                 if (submitRes.status === 201) {

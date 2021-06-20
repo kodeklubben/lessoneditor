@@ -24,6 +24,7 @@ exports.thumbnailService = async (req, res) => {
   } else {
     res
       .status(400)
+      .set("txt")
       .send("Url and token need to be set. Function created: " + initTime);
   }
 };

@@ -3,13 +3,14 @@ import appSession from "../auth/session";
 import ensureAuthenticated from "../auth/ensure-authenticated";
 import {paths} from "@lessoneditor/api-interfaces";
 import githubStrategy from "../auth/strategy";
+import {Application} from "express";
 
 
 passport.serializeUser((user, done) => done(null, user));
 passport.deserializeUser((obj, done) => done(null, obj));
 passport.use("github", githubStrategy);
 
-const authConfig = (app) => {
+const authConfig = (app: Application) => {
     app.set("trust proxy", 1);
     app.use(appSession);
     app.use(passport.initialize());
@@ -19,11 +20,13 @@ const authConfig = (app) => {
         res.send("<code>Login failed, sorry.</code>")
     );
     app.get("/login-tests/display-user", (req, res) => res.send(req.user));
+
     app.get(
         paths.AUTH_CALLBACK,
         passport.authenticate("github", {
             failureRedirect: paths.AUTH_LOGIN_FAILED,
         }),
+        // @ts-ignore
         (req, res) => res.redirect(req.session.redirectAfter || "/")
     );
 };
