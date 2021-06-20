@@ -1,4 +1,6 @@
-const shoot = require("./shoot");
+import takeScreenshot from "./app/take-screenshot";
+import {HttpFunction} from "@google-cloud/functions-framework";
+
 const initTime = new Date().toISOString();
 /**
  * Responds to any HTTP request.
@@ -6,12 +8,12 @@ const initTime = new Date().toISOString();
  * @param {!express:Request} req HTTP request context.
  * @param {!express:Response} res HTTP response context.
  */
-exports.thumbnailService = async (req, res) => {
+export const thumbnailer: HttpFunction = async (req, res) => {
   const { url, token } = req.query;
   if (url && token) {
     try {
       console.log("Waiting for", url);
-      const buffer = await shoot(url, token);
+      const buffer = await takeScreenshot(url, token);
       res.writeHead(200, {
         "Content-Type": "image/png",
       });
@@ -23,8 +25,8 @@ exports.thumbnailService = async (req, res) => {
     }
   } else {
     res
-      .status(400)
-      .set("txt")
-      .send("Url and token need to be set. Function created: " + initTime);
+        .status(400)
+        .set("txt")
+        .send("Url and token need to be set. Function created: " + initTime);
   }
 };

@@ -13,4 +13,4 @@ env_variables:
   BUCKET: "lessoneditor"
   GITHUB_LESSON_REPO: "oppgaver"
   GITHUB_LESSON_REPO_OWNER: "kodeklubben"
-  THUMB_SERVICE_URL: "https://europe-west1-lessoneditor.cloudfunctions.net/thumbnailService"
+  THUMB_SERVICE_URL: "https://europe-west1-lessoneditor.cloudfunctions.net/thumbnailer"
