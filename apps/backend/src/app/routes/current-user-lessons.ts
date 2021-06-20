@@ -2,12 +2,14 @@ import {paths} from "@lessoneditor/api-interfaces";
 import loadFile from "../storage/load-file";
 import resolveUrlTemplate from "../utils/resolve-url-template";
 import upsertUserLessons from "../lesson/upsert-user-lessons";
+import {Application} from "express";
 
 
 
 
-const currentUserLessons = (app) => {
+const currentUserLessons = (app: Application) => {
     app.post(paths.USER_LESSONS, async (req, res) => {
+        // @ts-ignore
         await upsertUserLessons(req.body, req.user.username);
         res.send("ok");
     });
@@ -15,6 +17,7 @@ const currentUserLessons = (app) => {
         try {
             const result = await loadFile([
                 "users",
+                // @ts-ignore
                 req.user.username,
                 "lessons.json",
             ]);

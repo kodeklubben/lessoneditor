@@ -3,10 +3,11 @@ import afterStar from "../utils/after-star";
 import isAppEngine from "../utils/isAppEngine";
 import gcsUrl from "../utils/gcs-url";
 import getTempDir from "../utils/get-temp-dir";
+import {Application} from "express";
 
 const fs = require("fs");
 
-const serveFile = (app) => {
+const serveFile = (app: Application) => {
     app.get(paths.FILE, function (req, res) {
         const resource = afterStar(paths.FILE, req.path).split("/");
         if (isAppEngine()) {

@@ -10,9 +10,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "puppeteer": "^9.1.1"
+    "puppeteer": "^10.0.0"
   },
   "devDependencies": {
-    "@google-cloud/functions-framework": "^1.6.0"
+    "@google-cloud/functions-framework": "^1.8.0"
   }
 }

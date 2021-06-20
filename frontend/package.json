@@ -21,7 +21,7 @@
     "slugify": "^1.4.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "cross-env SKIP_PREFLIGHT_CHECK=true react-scripts start",
     "build": "cross-env SKIP_PREFLIGHT_CHECK=true react-scripts build && rm -rf ../dist/apps/frontend2020 && mv build ../dist/apps/frontend2020",
     "test": "cross-env SKIP_PREFLIGHT_CHECK=true CI=true react-scripts test",
     "test-disabled": "echo \"Temporarily disabled tests.\" && exit 0",

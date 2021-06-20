@@ -6,10 +6,11 @@ import saveFile from "../storage/save-file";
 import isAppEngine from "../utils/isAppEngine";
 import thumbRefresh from "../thumb/thumb-refresh";
 import getTempDir from "../utils/get-temp-dir";
+import {Application} from "express";
 const fs = require("fs");
 
 
-const lessonUploads = (app) => {
+const lessonUploads = (app: Application) => {
     app.get(paths.DISPLAY_FILE, async (req, res) => {
         const {lessonId, file} = req.params;
         const storageParts = ["drafts", lessonId, file];
@@ -40,14 +41,18 @@ const lessonUploads = (app) => {
         res.send("ok");
     });
     app.post(paths.LESSON_UPLOADS, multerInstance.single("file"), async (req, res) => {
+        // @ts-ignore
         if (!req.file) {
             res.status(400).send("No file uploaded.");
             return;
         }
         const {lessonId} = req.params;
+        // @ts-ignore
         const fileInfo = req.file;
         fileInfo.imageUrl = await saveFile(
+            // @ts-ignore
             ["drafts", lessonId, req.file.originalname],
+            // @ts-ignore
             req.file.buffer
         );
         delete fileInfo.buffer;

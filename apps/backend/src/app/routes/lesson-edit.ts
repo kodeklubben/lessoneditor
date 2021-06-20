@@ -8,16 +8,19 @@ import getRepoContent from "../github/getRepoContent";
 import parseLessonFilename from "../utils/parse-lesson-filename";
 import downloadImage from "../storage/download-image";
 import yaml from "js-yaml";
+import {Application} from "express";
 
 const imgRegex = /([a-zA-Z0-9\s_\\.\-:])+(.png|.jpeg|.jpg|.gif)$/i;
 const mdRegex = /([a-zA-Z0-9\s_\\.\-:])+(.md)$/i;
 const yamlRegex = /([a-zA-Z0-9\s_\\.\-:])+(.yml)$/i;
 
 // Todo: Refactor, finne bedre løsning på resolve markdown urls.
-const lessonEdit = (app) => {
+const lessonEdit = (app: Application) => {
     app.post("/not-implemented", async (req, res) => {
+        // @ts-ignore
         const {course, lesson, filename} = req.params;
         const savedLessonId = await isLessonSaved(
+            // @ts-ignore
             req.user.username,
             course,
             lesson
@@ -29,8 +32,10 @@ const lessonEdit = (app) => {
             }
             const lessonData = await createLessonData(
                 {course: course, lesson: lesson},
+                // @ts-ignore
                 req.user.username
             );
+            // @ts-ignore
             await addUserLesson(lessonData, req.user.username);
             for (const i in files.data) {
                 if (files.data[i].name.match(imgRegex)) {

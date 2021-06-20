@@ -3,9 +3,10 @@ import githubLessonUrl from "../utils/github-lesson-url";
 import axios from "axios";
 import afterStar from "../utils/after-star";
 import resolveMarkdownUrls from "../utils/resolve-markdown-urls";
+import {Application} from "express";
 
 
-const lessonProxy = (app) => {
+const lessonProxy = (app: Application) => {
     app.get(paths.LESSON_PROXY, async (req, res) => {
         const resource = afterStar(paths.LESSON_PROXY, req.path);
         const url = githubLessonUrl([resource + ".md"]);
