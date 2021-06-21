@@ -1,10 +1,21 @@
-import puppeteer from "puppeteer";
+import * as puppeteer from "puppeteer";
+import {Browser} from "puppeteer";
+import logger from "./logger";
 
-let browser;
+let browser: Browser;
 
-const takeScreenshot = async (url, token) => {
+export async function killBrowser() {
+    if (browser) {
+        await browser.close()
+    }
+}
+
+const takeScreenshot = async (url, token, waitForSelector?) => {
+    const metadata = {
+        component: "takeScreenshot",
+    }
     if (!browser) {
-        console.log("Creating a new browser.");
+        logger.info("Creating a new browser", metadata)
         browser = await puppeteer.launch({
             headless: true,
             args: [
@@ -29,16 +40,28 @@ const takeScreenshot = async (url, token) => {
         height: 1000,
         deviceScaleFactor: 1,
     });
-    await page.goto(url);
-    await page.waitForSelector("div.PreviewArea", {
-        timeout: 5000,
+    await page.goto(url,{
+        waitUntil: 'networkidle0'
     });
+    if (waitForSelector) {
+        logger.info("Waiting for selector: " + waitForSelector)
+        await page.waitForSelector(waitForSelector, {
+            timeout: 5000,
+        });
+
+    } else {
+        await page.waitForTimeout(5000)
+    }
     const screenShotBuffer = await page.screenshot({
-        encoding: "binary",
-        waitUntil: "networkidle0",
+        type: "png",
+        encoding: "binary"
     });
     await page.close();
-    return screenShotBuffer;
+    if (screenShotBuffer instanceof Buffer) {
+        return screenShotBuffer;
+    } else {
+        throw Error("Something failed, page.screenshot did not return a buffer as expected")
+    }
 };
 
 export default takeScreenshot
