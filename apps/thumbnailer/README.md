@@ -22,7 +22,7 @@ gcloud functions deploy thumbnailer \
 
 ## Test the application in production
 
-https://europe-west1-lessoneditor.cloudfunctions.net/thumbnailailer
+https://europe-west1-lessoneditor.cloudfunctions.net/thumbnailer
 
 https://lessoneditor.ew.r.appspot.com/preview/microbit/pxt_gangespill/gangespill
 token=

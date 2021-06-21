@@ -12,7 +12,7 @@ try {
   const packageJsonContent = fs.readFileSync(packageJsonPath, 'utf-8');
   const packageJson = JSON.parse(packageJsonContent);
   const dependenciesThatShouldBeCopied = [
-    'puppeteer', 'tslib',
+    'puppeteer', 'tslib'
   ];
   dependenciesThatShouldBeCopied.forEach(dependency => {
     if (packageJson.devDependencies[dependency]) {

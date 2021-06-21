@@ -7,6 +7,8 @@ import isAppEngine from "../utils/isAppEngine";
 import thumbRefresh from "../thumb/thumb-refresh";
 import getTempDir from "../utils/get-temp-dir";
 import {Application} from "express";
+import * as mime from "mime/lite";
+
 const fs = require("fs");
 
 
@@ -14,7 +16,9 @@ const lessonUploads = (app: Application) => {
     app.get(paths.DISPLAY_FILE, async (req, res) => {
         const {lessonId, file} = req.params;
         const storageParts = ["drafts", lessonId, file];
+        res.set('Content-Type', mime.getType(file));
         try {
+
             if (isAppEngine()) {
                 loadFromGcs(storageParts.join("/")).pipe(res);
             } else {
