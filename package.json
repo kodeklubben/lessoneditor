@@ -83,7 +83,7 @@
     "eslint-plugin-react": "7.23.1",
     "eslint-plugin-react-hooks": "4.2.0",
     "faker": "^5.5.3",
-    "jest": "27.0.3",
+    "jest": "27.0.5",
     "prettier": "2.2.1",
     "puppeteer": "^10.0.0",
     "react": "17.0.2",
