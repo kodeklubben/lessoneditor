@@ -1,41 +1,41 @@
-import React, { useContext, useRef, useState } from "react";
-import "./editor.scss";
-import Autosave from "./Autosave";
-import ButtonPanel from "./buttonpanel/ButtonPanel";
-import ImageUpload from "./ImageUpload";
-import MDPreview from "./MDPreview";
-import MDTextArea from "./MDTextArea";
-import Navbar from "components/navbar/Navbar";
-import ShowSpinner from "../ShowSpinner";
-import { FileContext } from "../../contexts/FileContext";
-import { LessonContext } from "contexts/LessonContext";
-import { useParams } from "react-router";
-import { UserContext } from "contexts/UserContext";
+import React, { useContext, useRef, useState } from 'react';
+import './editor.scss';
+import Autosave from './Autosave';
+import ButtonPanel from './buttonpanel/ButtonPanel';
+import ImageUpload from './ImageUpload';
+import MDPreview from './MDPreview';
+import MDTextArea from './MDTextArea';
+import Navbar from 'components/navbar/Navbar';
+import ShowSpinner from '../ShowSpinner';
+import { FileContext } from '../../contexts/FileContext';
+import { LessonContext } from 'contexts/LessonContext';
+import { useParams } from 'react-router';
+import { UserContext } from 'contexts/UserContext';
 
 const Editor = () => {
   const { lessonId, file } = useParams();
   const { lessonData } = useContext(LessonContext);
   const { saveFileBody, savedFileBody } = useContext(FileContext);
   const { user } = useContext(UserContext);
-  const [mdText, setMdText] = useState("");
+  const [mdText, setMdText] = useState('');
   const [showSpinner, setShowSpinner] = useState(true);
   const [buttonValues, setButtonValues] = useState({});
   const [cursorPositionStart, setCursorPositionStart] = useState(0);
   const [cursorPositionEnd, setCursorPositionEnd] = useState(0);
-  const [undo, setUndo] = useState([""]);
+  const [undo, setUndo] = useState(['']);
   const [redo, setRedo] = useState([]);
   const [undoCursorPosition, setUndoCursorPosition] = useState([]);
   const [redoCursorPosition, setRedoCursorPosition] = useState([]);
   const [renderContent, setRenderContent] = useState(false);
   const [listButtonValues, setListButtonValues] = useState({
-    bTitle: "",
-    output: "",
+    bTitle: '',
+    output: '',
     cursorInt: 0,
   });
   const editorRef = useRef();
   const uploadImageRef = useRef();
 
-  const language = file && file.slice(-3, -2) === "_" ? file.slice(-2) : "nb";
+  const language = file && file.slice(-3, -2) === '_' ? file.slice(-2) : 'nb';
 
   const pushUndoValue = (mdText, cursorPositionStart) => {
     if (
@@ -88,11 +88,9 @@ const Editor = () => {
    * Gjør litt state greier her:
    */
 
-  if (savedFileBody && lessonData && showSpinner) {
-    setShowSpinner(false);
-  }
-  if (savedFileBody && mdText === "") {
+  if (showSpinner && savedFileBody && mdText === '') {
     setMdText(savedFileBody);
+    setShowSpinner(false);
   }
 
   const saveEditorText = async () => {
@@ -101,7 +99,7 @@ const Editor = () => {
 
   return (
     <div className="editor">
-      {showSpinner ? <ShowSpinner /> : ""}
+      {showSpinner ? <ShowSpinner /> : ''}
       <ImageUpload
         cursorPositionEnd={cursorPositionEnd}
         cursorPositionStart={cursorPositionStart}
