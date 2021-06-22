@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import paths from '../paths.json';
-import createLesson from '../api/create-lesson';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import paths from "../paths.json";
+import createLesson from "../api/create-lesson";
 
 export const UserContext = React.createContext({});
 
 export const UserContextProvider = (props) => {
   const [user, setUser] = useState({
-    name: '',
-    email: '',
-    photo: '',
+    name: "",
+    email: "",
+    photo: "",
   });
   const [lessons, setLessons] = useState([]);
   useEffect(() => {
