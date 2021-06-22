@@ -32,6 +32,7 @@ const Editor = () => {
     output: "",
     cursorInt: 0,
   });
+
   const editorRef = useRef();
   const uploadImageRef = useRef();
 
@@ -88,11 +89,9 @@ const Editor = () => {
    * Gjør litt state greier her:
    */
 
-  if (savedFileBody && lessonData && showSpinner) {
-    setShowSpinner(false);
-  }
-  if (savedFileBody && mdText === "") {
+  if (showSpinner && savedFileBody && mdText === "") {
     setMdText(savedFileBody);
+    setShowSpinner(false);
   }
 
   const saveEditorText = async () => {
