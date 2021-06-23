@@ -3,11 +3,18 @@ import slugify from "slugify";
 import { COURSESLIST } from "components/editor/settingsFiles/COURSELIST";
 import { UserContext } from "../../contexts/UserContext";
 import { useHistory } from "react-router";
-import { Button, Grid, GridColumn, Input, Modal } from "semantic-ui-react";
+import {
+  Button,
+  Grid,
+  GridColumn,
+  Input,
+  Icon,
+  Modal,
+} from "semantic-ui-react";
 
-const NewLessonModal = ({ trigger }) => {
-  const [open, setOpen] = React.useState(false);
-  const [loading, setLoading] = React.useState(false);
+const NewLessonModal = () => {
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const history = useHistory();
   const user = useContext(UserContext);
   const [values, setValues] = useState({
@@ -44,74 +51,81 @@ const NewLessonModal = ({ trigger }) => {
     setLoading(false);
   };
   return (
-    <Modal
-      onClose={() => setOpen(false)}
-      onOpen={() => setOpen(true)}
-      open={open}
-      trigger={trigger}
-    >
-      <Modal.Header>Opprett en ny oppgave</Modal.Header>
-      <Modal.Content>
-        <form
-          id={"skjema-for-oppretting-av-ny-oppgave"}
-          method={"POST"}
-          onSubmit={onSubmit}
-        >
-          <Grid className={"equal width"}>
-            <GridColumn>
-              <label>
-                Tittel:
-                <br />
-                <Input
-                  disabled={loading}
-                  autoFocus
-                  onChange={onChange}
-                  name={"lessonTitle"}
-                  defaultValue={values["lessonTitle"]}
-                />
-              </label>
-            </GridColumn>
-            <GridColumn>
-              <label>
-                Kurs:
-                <br />
-                <select
-                  className="ui dropdown"
-                  name="course"
-                  onChange={onChange}
-                  disabled={loading}
-                >
-                  {COURSESLIST.map((course) => (
-                    <option
-                      key={course.slug}
-                      value={course.slug}
-                      name={"course"}
-                    >
-                      {course.courseTitle}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            </GridColumn>
-          </Grid>
-        </form>
-      </Modal.Content>
-      <Modal.Actions>
-        <Button
-          loading={loading}
-          form={"skjema-for-oppretting-av-ny-oppgave"}
-          type={"submit"}
-          disabled={values.lessonTitle.length === 0}
-        >
-          Neste
-        </Button>
-        <Button disabled={loading} onClick={() => setOpen(false)}>
-          Avbryt
-        </Button>
-        <br />
-        <i style={{ color: "red" }}>{error}</i>
-      </Modal.Actions>
-    </Modal>
+    <>
+      <Modal
+        onClose={() => setOpen(false)}
+        onOpen={() => setOpen(true)}
+        open={open}
+        trigger={
+          <Button icon labelPosition="left" positive>
+            <Icon name="plus" />
+            Ny oppgave
+          </Button>
+        }
+      >
+        <Modal.Header>Opprett en ny oppgave</Modal.Header>
+        <Modal.Content>
+          <form
+            id={"skjema-for-oppretting-av-ny-oppgave"}
+            method={"POST"}
+            onSubmit={onSubmit}
+          >
+            <Grid className={"equal width"}>
+              <GridColumn>
+                <label>
+                  Tittel:
+                  <br />
+                  <Input
+                    disabled={loading}
+                    autoFocus
+                    onChange={onChange}
+                    name={"lessonTitle"}
+                    defaultValue={values["lessonTitle"]}
+                  />
+                </label>
+              </GridColumn>
+              <GridColumn>
+                <label>
+                  Kurs:
+                  <br />
+                  <select
+                    className="ui dropdown"
+                    name="course"
+                    onChange={onChange}
+                    disabled={loading}
+                  >
+                    {COURSESLIST.map((course) => (
+                      <option
+                        key={course.slug}
+                        value={course.slug}
+                        name={"course"}
+                      >
+                        {course.courseTitle}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </GridColumn>
+            </Grid>
+          </form>
+        </Modal.Content>
+        <Modal.Actions>
+          <Button
+            loading={loading}
+            form={"skjema-for-oppretting-av-ny-oppgave"}
+            type={"submit"}
+            disabled={values.lessonTitle.length === 0}
+          >
+            Neste
+          </Button>
+          <Button disabled={loading} onClick={() => setOpen(false)}>
+            Avbryt
+          </Button>
+          <br />
+          <i style={{ color: "red" }}>{error}</i>
+        </Modal.Actions>
+      </Modal>
+    </>
   );
 };
 

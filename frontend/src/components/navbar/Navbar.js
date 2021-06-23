@@ -1,16 +1,14 @@
 import "./navbar.scss";
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { useParams } from "react-router";
 import ProfileMenu from "components/navbar/ProfileMenu";
 import { UserContext } from "contexts/UserContext";
 import { LessonContext } from "contexts/LessonContext";
-import NewLessonButton from "../frontpage/newLessonButton";
-import NewLesson from "../frontpage/NewLesson";
+import NewLessonModal from "components/frontpage/NewLessonModal";
 
 const Navbar = () => {
   const { user } = useContext(UserContext);
   const { lessonData } = useContext(LessonContext);
-  const [showPopup, setShowPopup] = useState(false);
 
   const { file } = useParams();
 
@@ -41,14 +39,9 @@ const Navbar = () => {
         ) : (
           ""
         )}
-
         <div className="navbar_profile">
-          {file === undefined ? (
-            <NewLessonButton setShowPopup={setShowPopup} />
-          ) : (
-            ""
-          )}
-          {showPopup ? <NewLesson setShowPopup={setShowPopup} /> : ""}
+          {file === undefined ? <NewLessonModal /> : ""}
+
           <a id="navbar_gohome" href={"/"}>
             <ProfileMenu
               name={user ? user.name : ""}
