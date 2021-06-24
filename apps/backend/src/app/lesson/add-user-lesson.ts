@@ -8,9 +8,9 @@ import upsertUserLessons from "./upsert-user-lessons";
  * @return {Promise<void>}
  */
 const addUserLesson = async (lessonData, username) => {
-    const lessons = await loadUserLessons(username);
-    lessons.push(lessonData);
-    await upsertUserLessons(lessons, username);
+  const lessons = (await loadUserLessons(username)) || [];
+  lessons.push(lessonData);
+  await upsertUserLessons(lessons, username);
 };
 
-export default addUserLesson
+export default addUserLesson;
