@@ -11,7 +11,7 @@ import ThankU from "./ThankU";
 import { LessonContext } from "contexts/LessonContext";
 import submitLesson from "api/submit-lesson";
 import ShowSpinner from "../ShowSpinner";
-import { Dropdown, Popup, Button, Icon } from "semantic-ui-react";
+import { Dropdown, Popup, Button } from "semantic-ui-react";
 
 const Landingpage = () => {
   const [showSpinner, setShowSpinner] = useState(false);
@@ -144,18 +144,20 @@ const Landingpage = () => {
 
         {thankU ? <ThankU setThankU={setThankU} /> : ""}
 
-        <a href={"/"}>
-          <Button>
-            <Button.Content visible>Tilbake</Button.Content>
+        <div className="temporary" style={{ marginTop: "3em" }}>
+          <a href={"/"}>
+            <Button>
+              <Button.Content visible>Tilbake</Button.Content>
+            </Button>
+          </a>
+          <Button
+            onClick={() => {
+              setAreYouSure(true);
+            }}
+          >
+            <Button.Content visible>Sende inn</Button.Content>
           </Button>
-        </a>
-        <Button
-          onClick={() => {
-            setAreYouSure(true);
-          }}
-        >
-          <Button.Content visible>Sende inn</Button.Content>
-        </Button>
+        </div>
       </>
     );
   }
