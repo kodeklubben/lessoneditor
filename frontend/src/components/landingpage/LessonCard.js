@@ -1,5 +1,8 @@
 import React from "react";
 import { useHistory } from "react-router";
+import { fileExists } from "utils/fileExists";
+
+import { Button, Card, Icon, Image } from "semantic-ui-react";
 
 const languageOptions = {
   nb: {
@@ -37,49 +40,43 @@ const LessonCard = ({ title, lessonId, language, hasContent, lessonTitle }) => {
   };
 
   return (
-    <div style={{ margin: "1em" }}>
-      <div className="ui fluid card">
-        <div style={{ width: "360px" }} className="image itemListImage">
+    <>
+      <Card centered>
+        <Card.Content>
           {hasContent ? (
             <>
-              <img
-                style={{ opacity: "0.3" }}
-                src={`/api/display/${lessonId}/preview.png?${performance.now()}`}
+              <Image
+                src={
+                  fileExists("/api/display/${lessonId}/preview.png")
+                    ? `/api/display/${lessonId}/preview.png?${performance.now()}`
+                    : "https://react.semantic-ui.com/images/wireframe/image.png"
+                }
+                size="medium"
                 alt="thumbUrl"
               />
-              <div
-                style={{
-                  position: "absolute",
-                  top: "3.4em",
-                  left: "2.5em",
-                  backgroundColor: "rgba(256,256,256,0.75)",
-                  padding: "0.7em",
-                  borderRadius: "20px",
-                }}
-              >
-                <h2>{title + " (" + languageOptions[language].text + ")"}</h2>
-              </div>
+
+              <h2>{title + " (" + languageOptions[language].text + ")"}</h2>
             </>
           ) : (
-            <h2
-              style={{
-                position: "relative",
-                left: "25%",
-                width: "360px",
-                marginTop: "2em",
-                padding: "10px",
-              }}
-            >
-              Ingen innhold
-            </h2>
+            <>
+              <Image
+                src="https://react.semantic-ui.com/images/wireframe/image.png"
+                size="medium"
+                disabled
+              />
+              <h2>
+                {"Ingen innhold" + " (" + languageOptions[language].text + ")"}
+              </h2>
+            </>
           )}
+
           {language ? (
-            <img
+            <Image
               style={{
                 width: "15%",
                 position: "absolute",
-                left: "85%",
-                top: "79%",
+                left: "80%",
+                top: "57%",
               }}
               src={languageOptions[language].image.src}
               alt={""}
@@ -87,18 +84,15 @@ const LessonCard = ({ title, lessonId, language, hasContent, lessonTitle }) => {
           ) : (
             ""
           )}
-        </div>
 
-        <div className="extra content">
-          <button
-            className="ui button"
+          <Button
             onClick={() => navigateToEditor(lessonId, lessonTitle, language)}
           >
             {hasContent ? "Åpne" : "Lag tekstfil"}
-          </button>
-        </div>
-      </div>
-    </div>
+          </Button>
+        </Card.Content>
+      </Card>
+    </>
   );
 };
 
