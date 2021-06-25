@@ -55,6 +55,7 @@ const NewLessonModal = () => {
       <Modal
         onClose={() => setOpen(false)}
         onOpen={() => setOpen(true)}
+        dimmer={"blurring"}
         open={open}
         trigger={
           <Button icon labelPosition="left" positive>
