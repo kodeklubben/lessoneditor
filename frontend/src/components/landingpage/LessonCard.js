@@ -1,8 +1,7 @@
 import React from "react";
 import { useHistory } from "react-router";
 import { fileExists } from "utils/fileExists";
-
-import { Button, Card, Icon, Image } from "semantic-ui-react";
+import { Button, Card, Image } from "semantic-ui-react";
 
 const languageOptions = {
   nb: {
@@ -84,12 +83,12 @@ const LessonCard = ({ title, lessonId, language, hasContent, lessonTitle }) => {
           ) : (
             ""
           )}
-
-          <Button
-            onClick={() => navigateToEditor(lessonId, lessonTitle, language)}
-          >
-            {hasContent ? "Åpne" : "Lag tekstfil"}
-          </Button>
+          <div className="extra content">
+            <Button
+              onClick={() => navigateToEditor(lessonId, lessonTitle, language)}
+              content={hasContent ? "Åpne" : "Lag tekstfil"}
+            />
+          </div>
         </Card.Content>
       </Card>
     </>

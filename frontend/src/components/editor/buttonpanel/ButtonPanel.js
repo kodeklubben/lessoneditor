@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./buttonpanel.scss";
-import { Button, Icon, Popup } from "semantic-ui-react";
+import { Button, Popup } from "semantic-ui-react";
 import ShowSpinner from "../../ShowSpinner";
 import Emphasis from "./Emphasis";
 import UndoRedo from "./UndoRedo";
@@ -156,17 +156,12 @@ const ButtonPanel = ({
                     marginRight: "-0.5em",
                     padding: "0 1em 0 1em",
                   }}
-                  className={`ui ${
-                    mdText && mdText.length < 1 ? `disabled` : ``
-                  } button`}
                   id="next"
                   disabled={!mdText || mdText.length === 0}
-                  // className="CPButton"
                   size="big"
                   onClick={onSubmit}
-                >
-                  <Icon color={"grey"} name={"arrow right"} />
-                </Button>
+                  icon="arrow right"
+                />
               }
             />
           </div>
