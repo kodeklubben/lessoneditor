@@ -1,6 +1,6 @@
 import "./datapanel.scss";
-import React, { useContext, useState, useEffect } from "react";
-import { Button, Icon, Popup } from "semantic-ui-react";
+import React, { useContext, useEffect, useState } from "react";
+import { Button, Popup } from "semantic-ui-react";
 import { YML_TEXT } from "../settingsFiles/languages/landingpage_NO";
 import { TagsGrade, TagsSubject, TagsTopic } from "./Tags";
 import CheckboxField from "./CheckboxField";
@@ -62,7 +62,7 @@ const Datapanel = ({ openDataPopup, setOpenDataPopup, lessonId, mode }) => {
   };
 
   const onCancel = async () => {
-    //window.location.reload();
+    setOpenDataPopup(!openDataPopup);
   };
 
   const dropdownHandler = (event, { name, value }) => {
@@ -129,19 +129,13 @@ const Datapanel = ({ openDataPopup, setOpenDataPopup, lessonId, mode }) => {
         mouseLeaveDelay={250}
         trigger={
           <Button
-            style={{
-              position: "relative",
-              top: "-3.5em",
-            }}
-            className={`ui button`}
+            style={{ position: "relative", top: "-3.5em" }}
             id="tagButton"
             size="medium"
-            onClick={() => setOpenDataPopup(!openDataPopup)}
-          >
-            <span>
-              <Icon color={"grey"} name={"tags"} /> Oppgavedata
-            </span>
-          </Button>
+            onClick={onCancel}
+            content="Oppgavedata"
+            icon="tags"
+          />
         }
       />
 
@@ -152,9 +146,13 @@ const Datapanel = ({ openDataPopup, setOpenDataPopup, lessonId, mode }) => {
         >
           <div className="datapanel_container">
             {!isEmptyDatapanel ? (
-              <i
+              <Button
+                icon="x"
+                circular={true}
+                size="big"
+                floated="right"
                 onClick={() => setOpenDataPopup(!openDataPopup)}
-                className="big grey x icon landingpage"
+                className="landingpage"
               />
             ) : (
               ""
@@ -210,27 +208,23 @@ const Datapanel = ({ openDataPopup, setOpenDataPopup, lessonId, mode }) => {
                   </div>
                 </div>
               </div>
-              <button
-                className="ui button"
+              <Button
                 disabled={
                   JSON.stringify(ymlData.tags) ===
                   JSON.stringify({ topic: [], subject: [], grade: [] })
                 }
                 onClick={onSubmit}
-              >
-                OK
-              </button>
+                content="OK"
+              />
               {!isEmptyDatapanel ? (
-                <button
-                  className="ui button"
+                <Button
                   disabled={
                     JSON.stringify(ymlData.tags) ===
                     JSON.stringify({ topic: [], subject: [], grade: [] })
                   }
                   onClick={onCancel}
-                >
-                  Avbryt
-                </button>
+                  content="Avbryt"
+                />
               ) : (
                 ""
               )}
@@ -251,4 +245,5 @@ const Datapanel = ({ openDataPopup, setOpenDataPopup, lessonId, mode }) => {
     </>
   );
 };
+
 export default Datapanel;

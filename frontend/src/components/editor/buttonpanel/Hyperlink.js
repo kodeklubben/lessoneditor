@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import CPButton from "./ButtonComponent";
 import { useHotkeys } from "react-hotkeys-hook";
 import {
-  KEY_COMBINATIONS as KEY,
   hyperlink as config,
+  KEY_COMBINATIONS as KEY,
 } from "../settingsFiles/buttonConfig";
+import { Button } from "semantic-ui-react";
 
 const languageNO = {
   insertLink: "Sett inn URL for din link",
@@ -131,16 +132,12 @@ const Popup = ({
             <label>{languageNO.openNewWindow}</label>
           </div>
         </div>
-        <button
+        <Button
           disabled={url === "https://"}
-          className="ui button"
           onClick={clickOKHandler}
-        >
-          {languageNO.ok}
-        </button>
-        <button className="ui button" onClick={clickCancelHandler}>
-          {languageNO.cancel}
-        </button>
+          content={languageNO.ok}
+        />
+        <Button onClick={clickCancelHandler} content={languageNO.cancel} />
       </div>
     </div>
   );

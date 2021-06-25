@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Icon, Popup } from "semantic-ui-react";
+import { Button, Popup } from "semantic-ui-react";
 
 const ButtonComponent = ({
   buttonValues,
@@ -40,10 +40,9 @@ const ButtonComponent = ({
                 }
                 className="CPButton"
                 size="huge"
+                icon={icon}
                 onClick={() => onButtonClick(buttonTitle)}
-              >
-                <Icon name={icon} />
-              </Button>
+              />
             ) : (
               <Button
                 style={

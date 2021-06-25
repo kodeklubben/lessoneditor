@@ -1,4 +1,5 @@
 import React from "react";
+import { Button } from "semantic-ui-react";
 
 const ThankU = ({ setThankU }) => {
   return (
@@ -30,13 +31,11 @@ const ThankU = ({ setThankU }) => {
         <h1>Takk for ditt birdrag til Lær Kidsa Koding!</h1>
         <div style={{ marginTop: "5em" }}>
           <div style={{ float: "left", marginRight: "auto" }}>
-            <i className="big heart icon"></i>
-            <a onClick={() => setThankU(false)} href="/">
-              <button style={{ backgroundColor: "red" }} className="ui button">
-                Tilbake
-              </button>
-            </a>
-            <i className="big heart icon"></i>
+            <Button
+              color="red"
+              content="Tilbake"
+              onClick={() => setThankU(false)}
+            />
           </div>
         </div>
       </div>

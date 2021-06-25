@@ -1,11 +1,12 @@
 import React from "react";
 import ShowSpinner from "../ShowSpinner";
+import { Button } from "semantic-ui-react";
 
 const AreyousurePopup = ({
   onSubmit,
   setAreYouSure,
   showSpinner,
-  lessonId
+  lessonId,
 }) => {
   return (
     <div
@@ -16,7 +17,7 @@ const AreyousurePopup = ({
         zIndex: "1",
         width: "100%",
         height: "100%",
-        backgroundColor: "rgb(256,256,256,0.7)"
+        backgroundColor: "rgb(256,256,256,0.7)",
       }}
     >
       {showSpinner ? (
@@ -33,32 +34,26 @@ const AreyousurePopup = ({
             width: "50%",
             height: "40%",
             backgroundColor: "white",
-            border: "5px solid red"
+            border: "5px solid red",
           }}
         >
           <h1>Alert(!):Vil du __virkelig__ sende inn oppgaven...?</h1>
           <div style={{ marginTop: "5em" }}>
             <div style={{ float: "left", marginRight: "auto" }}>
-              <i className="big bomb icon"></i>
-              <button
-                style={{ backgroundColor: "red" }}
-                className="ui button"
+              <Button
+                icon="big bomb"
+                color="red"
                 onClick={() => onSubmit(lessonId)}
-              >
-                Sende inn
-              </button>
-              <i className="big bomb icon"></i>
+                content="Sende inn"
+              />
             </div>
             <div style={{ float: "right", marginLeft: "auto" }}>
-              <i className="big red heart icon"></i>
-              <button
-                style={{ backgroundColor: "green" }}
-                className="ui button"
+              <Button
+                icon="big red heart"
+                color="green"
                 onClick={() => setAreYouSure(false)}
-              >
-                Få meg tilbake til trygg grunn...
-              </button>
-              <i className="big birthday cake icon"></i>
+                content="Få meg tilbake til trygg grunn..."
+              />
             </div>
           </div>
         </div>
