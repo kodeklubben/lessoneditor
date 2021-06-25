@@ -1,5 +1,6 @@
 import React from "react";
 import { useHistory } from "react-router";
+import { Button } from "semantic-ui-react";
 
 const languageOptions = {
   nb: {
@@ -90,12 +91,10 @@ const LessonCard = ({ title, lessonId, language, hasContent, lessonTitle }) => {
         </div>
 
         <div className="extra content">
-          <button
-            className="ui button"
+          <Button
             onClick={() => navigateToEditor(lessonId, lessonTitle, language)}
-          >
-            {hasContent ? "Åpne" : "Lag tekstfil"}
-          </button>
+            content={hasContent ? "Åpne" : "Lag tekstfil"}
+          />
         </div>
       </div>
     </div>

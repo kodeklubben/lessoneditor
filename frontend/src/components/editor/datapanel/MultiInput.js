@@ -1,4 +1,5 @@
 import React from "react";
+import { Button } from "semantic-ui-react";
 
 const MultiInput = ({
   changeHandler,
@@ -76,33 +77,26 @@ const MultiInput = ({
         </div>
 
         {inputArray.map((element) => (
-          <button
-            className="ui right icon button"
+          <Button
+            icon="x"
+            floated="right"
+            content={element}
             style={{ order: inputOrder - 1 }}
             id="removeNameButton"
-            type="button"
             key={element}
             onClick={() => removeClickHandler(name, element)}
-          >
-            <span>
-              {element} <i className="x icon"></i>
-            </span>
-          </button>
+          />
         ))}
-
-        <button
+        <Button
+          icon="plus"
           style={{
             order: inputOrder + 1,
             backgroundColor: "white",
           }}
           id="addNameButton"
-          className="ui icon button"
           name={name}
-          type="button"
           onClick={handleClick}
-        >
-          <i id="addNameButtonChild" className="plus icon" />
-        </button>
+        />
       </div>
       {validateMessage ? (
         <div className="validateError">{validateMessage}</div>

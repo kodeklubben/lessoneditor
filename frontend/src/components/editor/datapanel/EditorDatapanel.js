@@ -1,7 +1,7 @@
 import "./editordatapanel.scss";
-import React, { useContext, useState, useEffect } from "react";
-import { useParams, useHistory } from "react-router";
-import { Button, Icon, Popup } from "semantic-ui-react";
+import React, { useContext, useEffect, useState } from "react";
+import { useHistory, useParams } from "react-router";
+import { Button, Popup } from "semantic-ui-react";
 import MultiInput from "./MultiInput";
 import { FORM_TEXT } from "./settings/landingpage_NO.js";
 import { FileContext } from "contexts/FileContext";
@@ -14,9 +14,8 @@ const EditorDatapanel = ({
 }) => {
   const history = useHistory();
   const { lessonId, file } = useParams();
-  const { headerData, saveFileHeader, rawMdFileContent } = useContext(
-    FileContext
-  );
+  const { headerData, saveFileHeader, rawMdFileContent } =
+    useContext(FileContext);
   const [openMetaData, setOpenMetaData] = useState(false);
   const [state, setState] = useState();
 
@@ -76,15 +75,12 @@ const EditorDatapanel = ({
         trigger={
           <Button
             style={{ height: "2em", padding: "0 1em 0 1em", margin: "0" }}
-            className={`ui button`}
             id="next"
             size="big"
+            icon="address card"
+            content="Oppgavedata"
             onClick={() => setOpenMetaData(true)}
-          >
-            <span>
-              <Icon color={"grey"} name={"address card"} /> Oppgavedata
-            </span>
-          </Button>
+          />
         }
       />
 
@@ -171,18 +167,14 @@ const EditorDatapanel = ({
               placeholder={FORM_TEXT.TRANSLATOR.placeholder}
               title={FORM_TEXT.TRANSLATOR.heading}
             />
-            <button
-              className="ui button"
+            <Button
               disabled={
                 !state.title || (!state.author && state.authorList.length === 0)
               }
               onClick={onSubmit}
-            >
-              OK
-            </button>
-            <button className="ui button" onClick={onCancel}>
-              Avbryt
-            </button>
+              content="OK"
+            />
+            <Button onClick={onCancel} content="Avbryt" />
           </div>
         </div>
       ) : (

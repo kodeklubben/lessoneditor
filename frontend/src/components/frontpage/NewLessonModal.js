@@ -3,14 +3,7 @@ import slugify from "slugify";
 import { COURSESLIST } from "components/editor/settingsFiles/COURSELIST";
 import { UserContext } from "../../contexts/UserContext";
 import { useHistory } from "react-router";
-import {
-  Button,
-  Grid,
-  GridColumn,
-  Input,
-  Icon,
-  Modal,
-} from "semantic-ui-react";
+import { Button, Grid, GridColumn, Input, Modal } from "semantic-ui-react";
 
 const NewLessonModal = () => {
   const [open, setOpen] = useState(false);
@@ -57,10 +50,12 @@ const NewLessonModal = () => {
         onOpen={() => setOpen(true)}
         open={open}
         trigger={
-          <Button icon labelPosition="left" positive>
-            <Icon name="plus" />
-            Ny oppgave
-          </Button>
+          <Button
+            icon="plus"
+            labelPosition="left"
+            positive
+            content="Ny oppgave"
+          />
         }
       >
         <Modal.Header>Opprett en ny oppgave</Modal.Header>
@@ -115,12 +110,13 @@ const NewLessonModal = () => {
             form={"skjema-for-oppretting-av-ny-oppgave"}
             type={"submit"}
             disabled={values.lessonTitle.length === 0}
-          >
-            Neste
-          </Button>
-          <Button disabled={loading} onClick={() => setOpen(false)}>
-            Avbryt
-          </Button>
+            content="Neste"
+          />
+          <Button
+            disabled={loading}
+            onClick={() => setOpen(false)}
+            content="Avbryt"
+          />
           <br />
           <i style={{ color: "red" }}>{error}</i>
         </Modal.Actions>

@@ -11,7 +11,7 @@ import ThankU from "./ThankU";
 import { LessonContext } from "contexts/LessonContext";
 import submitLesson from "api/submit-lesson";
 import ShowSpinner from "../ShowSpinner";
-import { Dropdown, Popup } from "semantic-ui-react";
+import { Button, Dropdown, Popup } from "semantic-ui-react";
 
 const Landingpage = () => {
   const [showSpinner, setShowSpinner] = useState(false);
@@ -21,9 +21,8 @@ const Landingpage = () => {
   const { lessonId, mode } = useParams();
   const pageContent = mode;
   const history = useHistory();
-  const { lessonData, ymlData, saveLesson, lessonList } = useContext(
-    LessonContext
-  );
+  const { lessonData, ymlData, saveLesson, lessonList } =
+    useContext(LessonContext);
 
   const options = [
     { key: 1, text: "Oppgaver", value: "lessontexts" },
@@ -157,16 +156,9 @@ const Landingpage = () => {
         {thankU ? <ThankU setThankU={setThankU} /> : ""}
 
         <a href={"/"}>
-          <button className="ui button">Tilbake</button>
+          <Button content="Tilbake" />
         </a>
-        <button
-          className="ui button"
-          onClick={() => {
-            setAreYouSure(true);
-          }}
-        >
-          Sende inn
-        </button>
+        <Button onClick={() => setAreYouSure(true)} content="Sende inn" />
       </>
     );
   }
