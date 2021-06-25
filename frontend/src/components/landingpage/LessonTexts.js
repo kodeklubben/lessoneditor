@@ -2,6 +2,8 @@ import "./landingpage.scss";
 import React from "react";
 import LessonCard from "./LessonCard";
 
+import { Card } from "semantic-ui-react";
+
 const LessonTexts = ({ lessonId, lessonList, lessonTitle }) => {
   let languages = [];
   let allLanguages = ["nb", "nn", "en", "is"];
@@ -43,23 +45,20 @@ const LessonTexts = ({ lessonId, lessonList, lessonTitle }) => {
 
   return (
     <>
-      <div style={{ marginBottom: "5em" }}>
-        <div style={{ display: "flex" }}>
-          {allLanguages.map((element, index) => {
-            return (
-              <div key={element + index}>
-                <LessonCard
-                  title={"Oppgavetekst"}
-                  language={element}
-                  hasContent={languages.includes(element)}
-                  lessonId={lessonId}
-                  lessonTitle={lessonTitle}
-                />
-              </div>
-            );
-          })}
-        </div>
-      </div>
+      <Card.Group centered>
+        {allLanguages.map((element, index) => {
+          return (
+            <LessonCard
+              key={element + index}
+              title={"Oppgavetekst"}
+              language={element}
+              hasContent={languages.includes(element)}
+              lessonId={lessonId}
+              lessonTitle={lessonTitle}
+            />
+          );
+        })}
+      </Card.Group>
     </>
   );
 };
