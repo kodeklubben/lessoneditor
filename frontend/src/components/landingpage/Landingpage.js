@@ -21,8 +21,7 @@ const Landingpage = () => {
   const { lessonId, mode } = useParams();
   const pageContent = mode;
   const history = useHistory();
-  const { lessonData, ymlData, saveLesson, lessonList } =
-    useContext(LessonContext);
+  const { lessonData, saveLesson, lessonList } = useContext(LessonContext);
 
   const options = [
     { key: 1, text: "Oppgaver", value: "lessontexts" },

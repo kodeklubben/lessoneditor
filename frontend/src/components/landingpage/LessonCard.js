@@ -46,9 +46,9 @@ const LessonCard = ({ title, lessonId, language, hasContent, lessonTitle }) => {
             <>
               <Image
                 src={
-                  fileExists("/api/display/${lessonId}/preview.png")
+                  fileExists(`/api/display/${lessonId}/preview.png`)
                     ? `/api/display/${lessonId}/preview.png?${performance.now()}`
-                    : "https://react.semantic-ui.com/images/wireframe/image.png"
+                    : "/landingPage/image.png"
                 }
                 size="medium"
                 alt="thumbUrl"
@@ -58,13 +58,9 @@ const LessonCard = ({ title, lessonId, language, hasContent, lessonTitle }) => {
             </>
           ) : (
             <>
-              <Image
-                src="https://react.semantic-ui.com/images/wireframe/image.png"
-                size="medium"
-                disabled
-              />
+              <Image src="/landingPage/image.png" size="medium" disabled />
               <h2>
-                {"Ingen innhold" + " (" + languageOptions[language].text + ")"}
+                {"Ingen innhold (" + languageOptions[language].text + ")"}
               </h2>
             </>
           )}
