@@ -146,17 +146,9 @@ const Landingpage = () => {
 
         <div className="temporary" style={{ marginTop: "3em" }}>
           <a href={"/"}>
-            <Button>
-              <Button.Content visible>Tilbake</Button.Content>
-            </Button>
+            <Button content="Tilbake" />
           </a>
-          <Button
-            onClick={() => {
-              setAreYouSure(true);
-            }}
-          >
-            <Button.Content visible>Sende inn</Button.Content>
-          </Button>
+          <Button onClick={() => setAreYouSure(true)} content="Sende inn" />
         </div>
       </>
     );
