@@ -1,7 +1,6 @@
 import "./itemlist.scss";
 import React from "react";
 import { Button, Card, Image } from "semantic-ui-react";
-import { fileExists } from "utils/fileExists";
 
 function ItemList({ items, removeLesson, navigateToHome }) {
   return (
