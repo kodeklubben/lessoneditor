@@ -6,12 +6,7 @@ import MultiInput from "./MultiInput";
 import { FORM_TEXT } from "./settings/landingpage_NO.js";
 import { FileContext } from "contexts/FileContext";
 
-const EditorDatapanel = ({
-  courseTitle,
-  lessonTitle,
-  setShowSpinner,
-  userName,
-}) => {
+const EditorDatapanel = ({ courseTitle, lessonTitle, setShowSpinner }) => {
   const history = useHistory();
   const { lessonId, file } = useParams();
   const { headerData, saveFileHeader, rawMdFileContent } =
