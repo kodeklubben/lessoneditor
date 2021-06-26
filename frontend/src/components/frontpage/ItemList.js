@@ -12,11 +12,7 @@ function ItemList({ items, removeLesson, navigateToHome }) {
             <Card.Content>
               <Image
                 className={"itemListImage"}
-                src={
-                  fileExists(listitem.thumb)
-                    ? `${listitem.thumb}?${performance.now()}`
-                    : "/landingPage/image.png"
-                }
+                src={`${listitem.thumb}?${performance.now()}`}
                 size="medium"
                 rounded
               />
