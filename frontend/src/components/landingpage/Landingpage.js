@@ -5,7 +5,7 @@ import Navbar from "components/navbar/Navbar";
 import TeacherGuides from "./TeacherGuides";
 import LessonTexts from "./LessonTexts";
 import AllFiles from "./AllFiles";
-import Datapanel from "./datapanel/Datapanel";
+import DatapanelModal from "./datapanel/DatapanelModal";
 import Areyousure from "./AreyousurePopup";
 import ThankU from "./ThankU";
 import { LessonContext } from "contexts/LessonContext";
@@ -17,7 +17,6 @@ const Landingpage = () => {
   const [showSpinner, setShowSpinner] = useState(false);
   const [areYouSure, setAreYouSure] = useState(false);
   const [thankU, setThankU] = useState(false);
-  const [openDataPopup, setOpenDataPopup] = useState(false);
   const { lessonId, mode } = useParams();
   const pageContent = mode;
   const history = useHistory();
@@ -53,7 +52,7 @@ const Landingpage = () => {
           <LessonTexts
             lessonId={lessonId}
             lessonList={lessonList}
-            lessonTitle={lessonData.lesson}
+            lessonTitle={lessonData.lessonTitle}
           />
         );
       case "teacherguides":
@@ -119,12 +118,7 @@ const Landingpage = () => {
                 }
               />
             </div>
-            <Datapanel
-              openDataPopup={openDataPopup}
-              setOpenDataPopup={setOpenDataPopup}
-              lessonId={lessonId}
-              mode={mode}
-            />
+            <DatapanelModal />
           </div>
         </div>
 
@@ -147,7 +141,11 @@ const Landingpage = () => {
           <a href={"/"}>
             <Button content="Tilbake" />
           </a>
-          <Button onClick={() => setAreYouSure(true)} content="Sende inn" />
+          <Button
+            onClick={() => setAreYouSure(true)}
+            content="Sende inn"
+            positive
+          />
         </div>
       </>
     );

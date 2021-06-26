@@ -52,13 +52,21 @@ const LessonCard = ({ title, lessonId, language, hasContent, lessonTitle }) => {
                 }
                 size="medium"
                 alt="thumbUrl"
+                rounded
               />
 
-              <h2>{title + " (" + languageOptions[language].text + ")"}</h2>
+              <h2>
+                {lessonTitle + " (" + languageOptions[language].text + ")"}
+              </h2>
             </>
           ) : (
             <>
-              <Image src="/landingPage/image.png" size="medium" disabled />
+              <Image
+                src="/landingPage/image.png"
+                size="medium"
+                disabled
+                rounded
+              />
               <h2>
                 {"Ingen innhold (" + languageOptions[language].text + ")"}
               </h2>
@@ -83,6 +91,7 @@ const LessonCard = ({ title, lessonId, language, hasContent, lessonTitle }) => {
             <Button
               onClick={() => navigateToEditor(lessonId, lessonTitle, language)}
               content={hasContent ? "Åpne" : "Lag tekstfil"}
+              positive={hasContent}
             />
           </div>
         </Card.Content>

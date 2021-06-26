@@ -3,7 +3,7 @@ import { Loader, Modal } from "semantic-ui-react";
 
 const ShowSpinner = () => {
   return (
-    <Modal defaultOpen dimmer={"inverted"}>
+    <Modal defaultOpen>
       <Loader />
     </Modal>
   );

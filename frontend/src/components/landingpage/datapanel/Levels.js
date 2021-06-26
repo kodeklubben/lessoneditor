@@ -7,10 +7,9 @@ import {
 
 const Levels = ({ changeHandler, data }) => {
   return (
-    <div>
+    <>
       <h3 className="formLabel">{FORM_TEXT.LEVEL.heading}</h3>
       <Dropdown
-        style={{ width: "13em" }}
         placeholder="Velg Nivå"
         name="level"
         defaultValue={levelOptions[0].value}
@@ -19,8 +18,9 @@ const Levels = ({ changeHandler, data }) => {
         selection
         onChange={changeHandler}
         options={levelOptions}
+        label={FORM_TEXT.LEVEL.heading}
       />
-    </div>
+    </>
   );
 };
 

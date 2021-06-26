@@ -9,7 +9,7 @@ const NewLessonModal = () => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const history = useHistory();
-  const user = useContext(UserContext);
+  const { addLesson } = useContext(UserContext);
   const [values, setValues] = useState({
     lessonTitle: "",
     course: COURSESLIST[0].slug,
@@ -35,9 +35,19 @@ const NewLessonModal = () => {
     setLoading(true);
     const { course, lessonTitle } = values;
     if (lessonTitle) {
-      const lessonSlug = slugify(lessonTitle);
-      const lessonId = await user.addLesson(course, lessonSlug, lessonTitle);
-      navigateToLandingpage(lessonId, lessonSlug);
+      const lesson = {
+        title: lessonTitle,
+        slug: slugify(lessonTitle, { lower: true, strict: true }),
+      };
+      const getCourseFromSlug = COURSESLIST.find(
+        ({ slug }) => slug === values.course
+      );
+      const courseTitle = getCourseFromSlug.courseTitle;
+      addLesson(course, courseTitle, lesson.slug, lesson.title).then(
+        (lessonId) => {
+          navigateToLandingpage(lessonId, lesson.slug);
+        }
+      );
     } else {
       setError("Oppgavetittel er ikke satt");
     }
@@ -48,7 +58,6 @@ const NewLessonModal = () => {
       <Modal
         onClose={() => setOpen(false)}
         onOpen={() => setOpen(true)}
-        dimmer={"blurring"}
         open={open}
         trigger={
           <Button
@@ -112,6 +121,7 @@ const NewLessonModal = () => {
             type={"submit"}
             disabled={values.lessonTitle.length === 0}
             content="Neste"
+            positive
           />
           <Button
             disabled={loading}
