@@ -1,5 +1,4 @@
 import React from "react";
-import { TextArea } from "semantic-ui-react";
 
 let orderedListIndex = 2;
 let tabSize = 2;
