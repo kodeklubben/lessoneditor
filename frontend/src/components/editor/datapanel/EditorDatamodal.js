@@ -87,7 +87,16 @@ const EditorDatamodal = ({ courseTitle, lessonTitle, setShowSpinner }) => {
       <Modal
         closeOnDimmerClick={false}
         closeIcon={
-          !(!state.title || (!state.author && state.authorList.length === 0))
+          !(
+            !headerData.title ||
+            (!headerData.author && headerData.authorList.length === 0)
+          )
+            ? {
+                name: "remove",
+                size: "large",
+                style: { float: "right" },
+              }
+            : false
         }
         onClose={() => setOpen(false)}
         onOpen={() => setOpen(true)}
@@ -163,10 +172,12 @@ const EditorDatamodal = ({ courseTitle, lessonTitle, setShowSpinner }) => {
         <Modal.Actions className="editor_modal">
           <Button
             disabled={
-              !state.title || (!state.author && state.authorList.length === 0)
+              !headerData.title ||
+              (!headerData.author && headerData.authorList.length === 0)
             }
             color={
-              state.title && (state.author || state.authorList.length > 0)
+              headerData.title &&
+              (headerData.author || headerData.authorList.length > 0)
                 ? "black"
                 : "grey"
             }

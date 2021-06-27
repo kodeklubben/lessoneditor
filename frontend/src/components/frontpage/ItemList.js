@@ -1,4 +1,3 @@
-import "./itemlist.scss";
 import React from "react";
 import { Button, Card, Image } from "semantic-ui-react";
 
@@ -10,12 +9,15 @@ function ItemList({ items, removeLesson, navigateToHome }) {
           <Card key={"listitem" + index}>
             <Card.Content>
               <Image
-                className={"itemListImage"}
                 src={`${listitem.thumb}?${performance.now()}`}
                 size="medium"
                 bordered
                 rounded
-                style={{ maxHeight: "796px" }}
+                style={{
+                  maxHeight: "220px",
+                  overflow: "hidden",
+                  objectFit: "cover",
+                }}
               />
             </Card.Content>
             <Card.Content>
