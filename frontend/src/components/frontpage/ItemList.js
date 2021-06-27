@@ -17,6 +17,7 @@ function ItemList({ items, removeLesson, navigateToHome }) {
                   maxHeight: "220px",
                   overflow: "hidden",
                   objectFit: "cover",
+                  objectPosition: "0 0",
                 }}
               />
             </Card.Content>
@@ -37,6 +38,7 @@ function ItemList({ items, removeLesson, navigateToHome }) {
                 Åpne
               </Button>
               <Button
+                color="black"
                 onClick={async () => {
                   await removeLesson(listitem.lessonId);
                 }}

@@ -53,10 +53,12 @@ const LessonCard = ({ title, lessonId, language, hasContent, lessonTitle }) => {
                 size="medium"
                 alt="thumbUrl"
                 rounded
+                bordered
                 style={{
                   maxHeight: "220px",
                   overflow: "hidden",
                   objectFit: "cover",
+                  objectPosition: "0 0",
                 }}
               />
 

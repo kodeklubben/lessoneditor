@@ -118,11 +118,6 @@ const Hyperlink = ({
       ))}
 
       <Modal
-        closeIcon={{
-          name: "remove",
-          size: "large",
-          style: { float: "right" },
-        }}
         dimmer="inverted"
         onClose={() => setIsOpen(false)}
         onOpen={() => setIsOpen(true)}
@@ -154,12 +149,18 @@ const Hyperlink = ({
 
         <Modal.Actions className="hyperlink_modal">
           <Button
+            onClick={clickCancelHandler}
+            content={languageNO.cancel}
+            color="black"
+          />
+          <Button
             disabled={isEmptyField}
             onClick={clickOKHandler}
             content={languageNO.ok}
             positive
+            labelPosition="right"
+            icon="checkmark"
           />
-          <Button onClick={clickCancelHandler} content={languageNO.cancel} />
         </Modal.Actions>
       </Modal>
     </>

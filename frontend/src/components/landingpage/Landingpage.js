@@ -73,10 +73,10 @@ const Landingpage = () => {
         <div
           style={
             pageContent === "lessontexts"
-              ? { backgroundColor: "#b1daae" }
+              ? { backgroundColor: "#7cd3c31a" }
               : pageContent === "teacherguides"
-              ? { backgroundColor: "#a3cccb" }
-              : { backgroundColor: "#cca3a3" }
+              ? { backgroundColor: "#897cd31a" }
+              : { backgroundColor: "#d37cb21a" }
           }
           className="landing_navbar"
         >
@@ -121,31 +121,34 @@ const Landingpage = () => {
             <DatapanelModal />
           </div>
         </div>
+        <div id="landingPageContainer">
+          {dropdownValue(pageContent)}
 
-        {dropdownValue(pageContent)}
+          {areYouSure ? (
+            <Areyousure
+              onSubmit={onSubmit}
+              setAreYouSure={setAreYouSure}
+              showSpinner={showSpinner}
+              lessonId={lessonId}
+            />
+          ) : (
+            ""
+          )}
 
-        {areYouSure ? (
-          <Areyousure
-            onSubmit={onSubmit}
-            setAreYouSure={setAreYouSure}
-            showSpinner={showSpinner}
-            lessonId={lessonId}
-          />
-        ) : (
-          ""
-        )}
+          {thankU ? <ThankU setThankU={setThankU} /> : ""}
 
-        {thankU ? <ThankU setThankU={setThankU} /> : ""}
-
-        <div className="temporary" style={{ marginTop: "3em" }}>
-          <a href={"/"}>
-            <Button content="Tilbake" />
-          </a>
-          <Button
-            onClick={() => setAreYouSure(true)}
-            content="Sende inn"
-            positive
-          />
+          <div id="landingpageButtonContainer">
+            <a href={"/"}>
+              <Button content="Tilbake" color="black" />
+            </a>
+            <Button
+              onClick={() => setAreYouSure(true)}
+              content="Sende inn"
+              positive
+              labelPosition="right"
+              icon="arrow right"
+            />
+          </div>
         </div>
       </>
     );
