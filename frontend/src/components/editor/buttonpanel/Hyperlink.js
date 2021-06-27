@@ -118,7 +118,12 @@ const Hyperlink = ({
       ))}
 
       <Modal
-        closeIcon
+        closeIcon={{
+          name: "remove",
+          size: "large",
+          style: { float: "right" },
+        }}
+        dimmer="inverted"
         onClose={() => setIsOpen(false)}
         onOpen={() => setIsOpen(true)}
         open={isOpen}

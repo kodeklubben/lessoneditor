@@ -14,7 +14,7 @@ const License = ({ changeHandler, data }) => {
           name="license"
           placeholder={FORM_TEXT.LICENSE.placeholder}
           onChange={changeHandler}
-          value={data.license === "CC BY-SA 4.0" ? "" : data.license}
+          value={data["license"] === "CC BY-SA 4.0" ? "" : data.license}
           fluid
         />
       </label>

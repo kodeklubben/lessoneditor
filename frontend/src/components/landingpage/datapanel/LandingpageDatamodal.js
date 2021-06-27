@@ -136,13 +136,6 @@ const Datapanel = () => {
         }
       />
       <Modal
-        closeOnDimmerClick={false}
-        closeIcon={
-          !(
-            JSON.stringify(ymlData.tags) ===
-            JSON.stringify({ topic: [], subject: [], grade: [] })
-          )
-        }
         onClose={() => setOpen(false)}
         onOpen={() => setOpen(true)}
         open={open}
@@ -211,13 +204,6 @@ const Datapanel = () => {
           ) : (
             <p style={{ height: "1.3em" }}></p>
           )}
-
-          <Button
-            disabled={isEmptyDatapanel}
-            color={!isEmptyDatapanel ? "black" : ""}
-            onClick={() => setOpen(false)}
-            content="Avbryt"
-          />
 
           <Button
             disabled={isEmptyDatapanel}
