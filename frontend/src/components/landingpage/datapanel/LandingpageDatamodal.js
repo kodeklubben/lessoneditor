@@ -134,6 +134,7 @@ const Datapanel = () => {
         }
       />
       <Modal
+        closeOnDimmerClick={isEmptyDatapanel ? false : true}
         onClose={() => setOpen(false)}
         onOpen={() => setOpen(true)}
         open={open}

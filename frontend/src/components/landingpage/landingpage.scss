@@ -4,5 +4,18 @@
   width: 100%;
   height: 4em;
   border-radius: 5px;
-  margin-bottom: 5em;
+}
+
+#landingPageContainer {
+  margin-top: 4em;
+  position: relative;
+  background-color: #99ffed1a !important;
+  padding: 0em 5em 0em 5em;
+  min-height: 70vh;
+}
+
+#landingpageButtonContainer {
+  position: absolute;
+  bottom: 5vh;
+  right: 5vh;
 }

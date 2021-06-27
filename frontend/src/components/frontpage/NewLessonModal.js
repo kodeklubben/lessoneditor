@@ -1,3 +1,5 @@
+import "./newlessonmodal.scss";
+
 import React, { useContext, useState } from "react";
 import slugify from "slugify";
 import { COURSESLIST } from "components/editor/settingsFiles/COURSELIST";
@@ -51,6 +53,7 @@ const NewLessonModal = () => {
     <>
       {loading ? <ShowSpinner /> : ""}
       <Modal
+        closeOnDimmerClick={loading ? false : true}
         onClose={() => setOpen(false)}
         onOpen={() => setOpen(true)}
         open={open}
@@ -64,8 +67,10 @@ const NewLessonModal = () => {
           />
         }
       >
-        <Modal.Header>Opprett en ny oppgave</Modal.Header>
-        <Modal.Content>
+        <Modal.Header className="newLessonModal">
+          Opprett en ny oppgave
+        </Modal.Header>
+        <Modal.Content className="newLessonModal">
           <form
             id={"skjema-for-oppretting-av-ny-oppgave"}
             method={"POST"}
@@ -117,19 +122,22 @@ const NewLessonModal = () => {
             </Grid>
           </form>
         </Modal.Content>
-        <Modal.Actions>
+        <Modal.Actions className="newLessonModal">
+          <Button
+            disabled={loading}
+            color="black"
+            onClick={() => setOpen(false)}
+            content="Avbryt"
+          />
           <Button
             loading={loading}
             form={"skjema-for-oppretting-av-ny-oppgave"}
             type={"submit"}
             disabled={values.lessonTitle.length === 0}
             content="Neste"
+            labelPosition="right"
+            icon="right arrow"
             positive
-          />
-          <Button
-            disabled={loading}
-            onClick={() => setOpen(false)}
-            content="Avbryt"
           />
         </Modal.Actions>
       </Modal>

@@ -85,18 +85,11 @@ const EditorDatamodal = ({ courseTitle, lessonTitle, setShowSpinner }) => {
         }
       />
       <Modal
-        closeOnDimmerClick={false}
-        closeIcon={
-          !(
-            !headerData.title ||
-            (!headerData.author && headerData.authorList.length === 0)
-          )
-            ? {
-                name: "remove",
-                size: "large",
-                style: { float: "right" },
-              }
-            : false
+        closeOnDimmerClick={
+          !headerData.title ||
+          (!headerData.author && headerData.authorList.length === 0)
+            ? false
+            : true
         }
         onClose={() => setOpen(false)}
         onOpen={() => setOpen(true)}
