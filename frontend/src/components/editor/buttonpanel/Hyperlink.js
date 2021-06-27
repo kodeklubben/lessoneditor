@@ -5,7 +5,8 @@ import {
   hyperlink as config,
   KEY_COMBINATIONS as KEY,
 } from "../settingsFiles/buttonConfig";
-import { Button } from "semantic-ui-react";
+
+import { Button, Checkbox, Modal, Header, Input } from "semantic-ui-react";
 
 const languageNO = {
   insertLink: "Sett inn URL for din link",
@@ -13,21 +14,40 @@ const languageNO = {
   ok: "OK",
   cancel: "Avbryt",
   linkText: "linkbeskrivelse",
+  mandatoryText: "Må fylle ut URL",
 };
 
-const Popup = ({
-  setIsOpen,
+const Hyperlink = ({
+  editorRef,
   mdText,
-  setMdText,
   cursorPositionStart,
   cursorPositionEnd,
-  setCursor,
+  setMdText,
   setCursorPosition,
-  displayStyleValue,
-  editorRef,
+  setCursor,
 }) => {
-  const [openNewWindow, setOpenNewWindow] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [url, setUrl] = useState("https://");
+  const [openNewWindow, setOpenNewWindow] = useState(false);
+
+  const isEmptyField = url === "https://" || url === "";
+
+  useHotkeys(
+    `${KEY.hyperlink}`,
+    (event) => {
+      event.preventDefault();
+
+      handleButtonClick();
+
+      return false;
+    },
+    { enableOnTags: "TEXTAREA", keydown: true }
+  );
+
+  const handleButtonClick = () => {
+    setIsOpen(!isOpen);
+    return;
+  };
 
   const clickOKHandler = () => {
     const start = cursorPositionStart + 1;
@@ -84,94 +104,6 @@ const Popup = ({
   };
 
   return (
-    <div
-      style={{
-        display: displayStyleValue,
-        position: "absolute",
-        top: "0%",
-        left: "0%",
-        zIndex: "1",
-        width: "100%",
-        height: "100%",
-        backgroundColor: "rgb(256,256,256,0.7)",
-      }}
-    >
-      <div
-        style={{
-          zIndex: "2",
-          margin: "auto",
-          marginTop: "10%",
-          backgroundColor: "white",
-          border: "1px solid black",
-          borderRadius: "10px",
-          padding: "7% 10%",
-          width: "50%",
-          height: "50%",
-          boxShadow: "0px 0px 5px",
-        }}
-        className="ui form"
-      >
-        <div className="field">
-          <label>{languageNO.insertLink}</label>
-          <input
-            type="text"
-            name="linkUrl"
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-            placeholder="URL"
-          />
-        </div>
-
-        <div className="field">
-          <div className="ui checkbox">
-            <input
-              type="checkbox"
-              checked={openNewWindow}
-              onChange={() => setOpenNewWindow(!openNewWindow)}
-            />
-            <label>{languageNO.openNewWindow}</label>
-          </div>
-        </div>
-        <Button
-          disabled={url === "https://"}
-          onClick={clickOKHandler}
-          content={languageNO.ok}
-        />
-        <Button onClick={clickCancelHandler} content={languageNO.cancel} />
-      </div>
-    </div>
-  );
-};
-
-const Hyperlink = ({
-  editorRef,
-  mdText,
-  cursorPositionStart,
-  cursorPositionEnd,
-  setMdText,
-  setCursorPosition,
-  setCursor,
-}) => {
-  const [isOpen, setIsOpen] = useState(false);
-
-  useHotkeys(
-    `${KEY.hyperlink}`,
-    (event) => {
-      event.preventDefault();
-
-      handleButtonClick();
-
-      return false;
-    },
-    { enableOnTags: "TEXTAREA", keydown: true }
-  );
-
-  const handleButtonClick = () => {
-    setIsOpen(!isOpen);
-    return;
-  };
-
-  return (
     <>
       {Object.entries(config).map((element, index) => (
         <ButtonComponent
@@ -185,18 +117,46 @@ const Hyperlink = ({
         />
       ))}
 
-      <Popup
-        setIsOpen={setIsOpen}
-        isOpen={isOpen}
-        mdText={mdText}
-        setMdText={setMdText}
-        cursorPositionStart={cursorPositionStart}
-        cursorPositionEnd={cursorPositionEnd}
-        setCursor={setCursor}
-        setCursorPosition={setCursorPosition}
-        editorRef={editorRef}
-        displayStyleValue={isOpen ? "block" : "none"}
-      />
+      <Modal
+        closeIcon
+        onClose={() => setIsOpen(false)}
+        onOpen={() => setIsOpen(true)}
+        open={isOpen}
+        size="mini"
+        className="hyperlink_modal"
+      >
+        <Modal.Header className="hyperlink_modal">
+          <Header as="h1">Sett inn lenke</Header>
+        </Modal.Header>
+        <Modal.Content className="hyperlink_modal">
+          <Header as="h3">{languageNO.insertLink}</Header>
+          <Input
+            focus
+            type="text"
+            name="linkUrl"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            placeholder="URL"
+          />
+        </Modal.Content>
+        <Modal.Content className="hyperlink_modal">
+          <Checkbox
+            checked={openNewWindow}
+            onChange={() => setOpenNewWindow(!openNewWindow)}
+            label={languageNO.openNewWindow}
+          />
+        </Modal.Content>
+
+        <Modal.Actions className="hyperlink_modal">
+          <Button
+            disabled={isEmptyField}
+            onClick={clickOKHandler}
+            content={languageNO.ok}
+            positive
+          />
+          <Button onClick={clickCancelHandler} content={languageNO.cancel} />
+        </Modal.Actions>
+      </Modal>
     </>
   );
 };

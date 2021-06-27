@@ -14,8 +14,7 @@ const ImageUpload = ({
   cursorPositionStart,
   cursorPositionEnd,
   setMdText,
-  setCursorPositionStart,
-  setCursorPositionEnd,
+  setCursor,
   setCursorPosition,
 }) => {
   let start = cursorPositionStart + 2;
@@ -48,8 +47,7 @@ const ImageUpload = ({
     }
 
     editorRef.current.focus();
-    setCursorPositionStart(start);
-    setCursorPositionEnd(end);
+    setCursor(start, end);
     setCursorPosition(start, end);
   };
 

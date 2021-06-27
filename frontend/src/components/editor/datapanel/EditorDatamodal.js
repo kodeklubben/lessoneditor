@@ -74,6 +74,7 @@ const EditorDatamodal = ({ courseTitle, lessonTitle, setShowSpinner }) => {
         mouseLeaveDelay={250}
         trigger={
           <Button
+            basic
             style={{ height: "2em", padding: "0 1em 0 1em", margin: "0" }}
             id="next"
             size="big"
@@ -92,6 +93,7 @@ const EditorDatamodal = ({ courseTitle, lessonTitle, setShowSpinner }) => {
         onOpen={() => setOpen(true)}
         open={open}
         size="large"
+        dimmer="inverted"
         className="editor_modal"
       >
         <Modal.Header className="editor_modal">
@@ -120,12 +122,12 @@ const EditorDatamodal = ({ courseTitle, lessonTitle, setShowSpinner }) => {
             fluid
           />
           {!state.title ? (
-            <p style={{ color: "red" }}>Må ha tittel</p>
+            <p style={{ color: "red" }}>
+              <i>Må ha tittel</i>
+            </p>
           ) : (
-            <p> </p>
+            <p style={{ height: "1.35em" }}></p>
           )}
-
-          <div className="validateError">{state.err}</div>
         </Modal.Content>
         <Modal.Content className="editor_modal">
           <MultiInput
@@ -137,12 +139,13 @@ const EditorDatamodal = ({ courseTitle, lessonTitle, setShowSpinner }) => {
             placeholder={FORM_TEXT.AUTHOR.placeholder}
             required="(obligatorisk)"
             title={FORM_TEXT.AUTHOR.heading}
-            validateMessage={state.err}
           />
           {state.authorList.length === 0 && !state.author ? (
-            <p style={{ color: "red" }}>Må ha forfatter</p>
+            <p>
+              <i style={{ color: "red" }}>Må ha forfatter</i>
+            </p>
           ) : (
-            <p></p>
+            <p style={{ height: "1.35em" }}></p>
           )}
         </Modal.Content>
         <Modal.Content className="editor_modal">
@@ -162,16 +165,23 @@ const EditorDatamodal = ({ courseTitle, lessonTitle, setShowSpinner }) => {
             disabled={
               !state.title || (!state.author && state.authorList.length === 0)
             }
-            onClick={onSubmit}
-            content="OK"
-            positive
+            color={
+              state.title && (state.author || state.authorList.length > 0)
+                ? "black"
+                : ""
+            }
+            onClick={onCancel}
+            content="Avbryt"
           />
           <Button
             disabled={
               !state.title || (!state.author && state.authorList.length === 0)
             }
-            onClick={onCancel}
-            content="Avbryt"
+            onClick={onSubmit}
+            content="OK"
+            positive
+            labelPosition="right"
+            icon="checkmark"
           />
         </Modal.Actions>
       </Modal>

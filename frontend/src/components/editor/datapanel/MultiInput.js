@@ -10,7 +10,6 @@ const MultiInput = ({
   inputValue,
   placeholder,
   required,
-  validateMessage,
 }) => {
   let inputOrder = 1;
 
@@ -89,12 +88,17 @@ const MultiInput = ({
             />
           ))}
         </Button.Group>
+        <Button
+          icon="plus"
+          style={{
+            order: inputOrder + 1,
+            backgroundColor: "white",
+          }}
+          id="addNameButton"
+          name={name}
+          onClick={handleClick}
+        />
       </div>
-      {validateMessage ? (
-        <div className="validateError">{validateMessage}</div>
-      ) : (
-        ""
-      )}
     </>
   );
 };

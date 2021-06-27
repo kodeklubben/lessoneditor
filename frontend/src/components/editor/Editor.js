@@ -109,8 +109,7 @@ const Editor = () => {
         cursorPositionStart={cursorPositionStart}
         cursorPositionEnd={cursorPositionEnd}
         setMdText={setMdText}
-        setCursorPositionStart={setCursorPositionStart}
-        setCursorPositionEnd={setCursorPositionEnd}
+        setCursor
         setCursorPosition={setCursorPosition}
       />
       <Navbar />

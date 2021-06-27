@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import { useHistory } from "react-router";
 import { Dropdown, Popup } from "semantic-ui-react";
 import languageOptions from "./LanguageOptions";
-import ShowSpinner from "../../ShowSpinner";
 
 const Languages = ({ saveEditorText, lessonId, file, setShowSpinner }) => {
   const history = useHistory();
@@ -39,17 +38,14 @@ const Languages = ({ saveEditorText, lessonId, file, setShowSpinner }) => {
         mouseLeaveDelay={250}
         trigger={
           <Dropdown
-            style={{
-              width: "12em",
-            }}
             placeholder="Velg Språk"
             name="language"
             defaultValue={language}
-            fluid
             selection
             onChange={handleChange}
             options={languageOptions}
-          />
+            id="lang_dropdown"
+          ></Dropdown>
         }
       />
     </>

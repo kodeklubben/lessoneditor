@@ -125,6 +125,7 @@ const Datapanel = () => {
         mouseLeaveDelay={250}
         trigger={
           <Button
+            basic
             onClick={() => setOpen(true)}
             content="Oppgavedata"
             style={{ position: "relative", top: "-3.5em" }}
@@ -146,6 +147,7 @@ const Datapanel = () => {
         onOpen={() => setOpen(true)}
         open={open}
         size="large"
+        dimmer="inverted"
         className="landingpage_modal"
       >
         <Modal.Header className="landingpage_modal">Oppgavedata</Modal.Header>
@@ -200,9 +202,11 @@ const Datapanel = () => {
 
         <Modal.Actions className="landingpage_modal">
           {isEmptyDatapanel ? (
-            <p style={{ color: "red" }}>
-              Må inneholde minst ett valg i kategoriene Tema, Fag, eller
-              Klassetrinn
+            <p>
+              <i style={{ color: "red" }}>
+                Må inneholde minst ett valg i kategoriene Tema, Fag, eller
+                Klassetrinn
+              </i>
             </p>
           ) : (
             <p style={{ height: "1.3em" }}></p>
