@@ -5,7 +5,7 @@ import Navbar from "components/navbar/Navbar";
 import TeacherGuides from "./TeacherGuides";
 import LessonTexts from "./LessonTexts";
 import AllFiles from "./AllFiles";
-import DatapanelModal from "./datapanel/DatapanelModal";
+import DatapanelModal from "./datapanel/LandingpageDatamodal";
 import Areyousure from "./AreyousurePopup";
 import ThankU from "./ThankU";
 import { LessonContext } from "contexts/LessonContext";

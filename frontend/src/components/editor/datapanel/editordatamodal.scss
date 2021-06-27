@@ -1,0 +1,23 @@
+.editor_modal {
+  background-color: #eef7ee !important;
+}
+
+.labelTextSpan {
+  color: grey;
+  margin-left: 0.3em;
+}
+
+/* MultiInput */
+
+.inputField {
+  width: 100%;
+  max-width: 100% !important;
+  display: flex;
+  flex-direction: row;
+  height: 2.7rem;
+}
+
+#removeNameButton {
+  min-width: max-content;
+  background-color: white !important;
+}

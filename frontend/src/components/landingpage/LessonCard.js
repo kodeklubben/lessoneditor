@@ -53,6 +53,7 @@ const LessonCard = ({ title, lessonId, language, hasContent, lessonTitle }) => {
                 size="medium"
                 alt="thumbUrl"
                 rounded
+                style={{ maxHeight: "796px" }}
               />
 
               <h2>
@@ -66,6 +67,8 @@ const LessonCard = ({ title, lessonId, language, hasContent, lessonTitle }) => {
                 size="medium"
                 disabled
                 rounded
+                bordered
+                style={{ maxHeight: "796px" }}
               />
               <h2>
                 {"Ingen innhold (" + languageOptions[language].text + ")"}

@@ -4,6 +4,7 @@ import { COURSESLIST } from "components/editor/settingsFiles/COURSELIST";
 import { UserContext } from "../../contexts/UserContext";
 import { useHistory } from "react-router";
 import { Button, Grid, GridColumn, Input, Modal } from "semantic-ui-react";
+import ShowSpinner from "components/ShowSpinner";
 
 const NewLessonModal = () => {
   const [open, setOpen] = useState(false);
@@ -14,17 +15,12 @@ const NewLessonModal = () => {
     lessonTitle: "",
     course: COURSESLIST[0].slug,
   });
-  const [error, setError] = useState("Oppgavetittel må være satt");
+
+  const errorMessage = "Oppgavetittel må være satt";
 
   const onChange = (e) => {
     const { name, value } = e.target;
     setValues((prevValues) => ({ ...prevValues, [name]: value }));
-    const { lessonTitle } = values;
-    if (lessonTitle.length >= 0) {
-      setError("");
-    } else if (!lessonTitle) {
-      setError("Oppgavetittel må være satt");
-    }
   };
   const navigateToLandingpage = (lessonId, lessonSlug) => {
     const target = ["/editor", lessonId, lessonSlug, "nb"].join("/");
@@ -34,31 +30,31 @@ const NewLessonModal = () => {
     e.preventDefault();
     setLoading(true);
     const { course, lessonTitle } = values;
-    if (lessonTitle) {
-      const lesson = {
-        title: lessonTitle,
-        slug: slugify(lessonTitle, { lower: true, strict: true }),
-      };
-      const getCourseFromSlug = COURSESLIST.find(
-        ({ slug }) => slug === values.course
-      );
-      const courseTitle = getCourseFromSlug.courseTitle;
-      addLesson(course, courseTitle, lesson.slug, lesson.title).then(
-        (lessonId) => {
-          navigateToLandingpage(lessonId, lesson.slug);
-        }
-      );
-    } else {
-      setError("Oppgavetittel er ikke satt");
-    }
+
+    const lesson = {
+      title: lessonTitle,
+      slug: slugify(lessonTitle, { lower: true, strict: true }),
+    };
+    const getCourseFromSlug = COURSESLIST.find(
+      ({ slug }) => slug === values.course
+    );
+    const courseTitle = getCourseFromSlug.courseTitle;
+    addLesson(course, courseTitle, lesson.slug, lesson.title).then(
+      (lessonId) => {
+        navigateToLandingpage(lessonId, lesson.slug);
+      }
+    );
+
     setLoading(false);
   };
   return (
     <>
+      {loading ? <ShowSpinner /> : ""}
       <Modal
         onClose={() => setOpen(false)}
         onOpen={() => setOpen(true)}
         open={open}
+        dimmer="inverted"
         trigger={
           <Button
             icon="plus"
@@ -87,6 +83,13 @@ const NewLessonModal = () => {
                     name={"lessonTitle"}
                     defaultValue={values["lessonTitle"]}
                   />
+                  {!values.lessonTitle ? (
+                    <p>
+                      <i style={{ color: "red" }}>{errorMessage}</i>
+                    </p>
+                  ) : (
+                    <p style={{ height: "1.35em" }}></p>
+                  )}
                 </label>
               </GridColumn>
               <GridColumn>
@@ -128,8 +131,6 @@ const NewLessonModal = () => {
             onClick={() => setOpen(false)}
             content="Avbryt"
           />
-          <br />
-          <i style={{ color: "red" }}>{error}</i>
         </Modal.Actions>
       </Modal>
     </>

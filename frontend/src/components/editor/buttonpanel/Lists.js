@@ -1,5 +1,5 @@
 import React from "react";
-import CPButton from "./ButtonComponent";
+import ButtonComponent from "./ButtonComponent";
 
 import { useHotkeys } from "react-hotkeys-hook";
 
@@ -171,7 +171,7 @@ const Lists = ({
   return (
     <>
       {Object.entries(config).map((element, index) => (
-        <CPButton
+        <ButtonComponent
           key={"element" + index}
           buttonValues={buttonValues}
           icon={element[1].icon}

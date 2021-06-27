@@ -3,6 +3,18 @@ import React from "react";
 let orderedListIndex = 2;
 let tabSize = 2;
 
+// const segments = [
+//   "intro",
+//   "activity",
+//   "check",
+//   "tip",
+//   "protip",
+//   "challenge",
+//   "flag",
+//   "try",
+//   "save"
+// ];
+
 const MDTextArea = ({
   editorRef,
   mdText,
@@ -17,6 +29,16 @@ const MDTextArea = ({
   resetButtons,
   course,
 }) => {
+  // const getButtonName = cursorPositionStart => {
+  //   let output = "";
+  //   let i = cursorPositionStart;
+  //   while (mdText[i] !== "}") {
+  //     output += mdText[i];
+  //     i++;
+  //   }
+  //   return output;
+  // };
+
   const handleChange = (event) => {
     setCursor(event.target.selectionStart, event.target.selectionEnd);
     let inputText = event.target.value;
@@ -58,6 +80,42 @@ const MDTextArea = ({
         end -= 1;
       }
     }
+
+    //______
+
+    // if (
+    //   mdText.slice(start - 2, start) === "# " &&
+    //   mdText.slice(end, end + 2) === " {"
+    // ) {
+    //   let buttonName = getButtonName(end + 3);
+    //   if (!segments.includes(buttonName)) return;
+    //   setButtonValues(prevButtonValues => ({
+    //     ...prevButtonValues,
+    //     ["sec_" + buttonName]: true
+    //   }));
+    // }
+
+    // if (
+    //   (mdText.slice(start, start + 2) === "##" ||
+    //     mdText.slice(start, start + 2) === "# ") &&
+    //   mdText.slice(end - 1, end) === "}" &&
+    //   end - start > 1
+    // ) {
+    //   while (mdText[end] !== "{") {
+    //     end--;
+    //   }
+    //   mdText.slice(start, start + 2) === "##"
+    //     ? setCursorPosition(start + 3, end - 1)
+    //     : setCursorPosition(start + 2, end - 1);
+    //   let buttonName = getButtonName(end + 3);
+    //   if (!segments.includes(buttonName)) return;
+    //   setButtonValues(prevButtonValues => ({
+    //     ...prevButtonValues,
+    //     ["sec_" + buttonName]: true
+    //   }));
+    // }
+
+    //______
 
     if (
       mdText.slice(start - 1, start) === "*" &&
@@ -113,6 +171,105 @@ const MDTextArea = ({
     ) {
       setCursorPosition(start + 2, end - 2);
     }
+
+    // //-------------
+    // if (
+    //   mdText.slice(start, start + 3) === "```" &&
+    //   mdText.slice(end - 3, end) === "```"
+    // ) {
+    //   setButtonValues((prevButtonValues) => ({
+    //     ...prevButtonValues,
+    //     codeblock: true,
+    //   }));
+    // }
+
+    // if (
+    //   mdText.slice(start, start + 3) === "```" &&
+    //   mdText.slice(end - 3, end) === "```" &&
+    //   end - start > 1
+    // ) {
+    //   setCursorPosition(start + 3 + course.length + 1, end - 3);
+    // }
+
+    // // ----------------
+
+    // if (
+    //   mdText.slice(start - 1, start) === "`" &&
+    //   mdText.slice(end, end + 1) === "`" &&
+    //   mdText.slice(end, end + 2) !== "``" &&
+    //   end - start > 1
+    // ) {
+    //   if (mdText.slice(end, end + 11) === "`{.microbit") {
+    //     let buttonName = getButtonName(end + 11);
+    //     if (!buttonValues[buttonName]) {
+    //       setButtonValues((prevButtonValues) => ({
+    //         ...prevButtonValues,
+    //         [buttonName]: true,
+    //       }));
+
+    //       return;
+    //     }
+    //   } else if (mdText.slice(end, end + 8) === "`{.block") {
+    //     let buttonName = getButtonName(end + 8);
+    //     if (!buttonValues[buttonName]) {
+    //       setButtonValues((prevButtonValues) => ({
+    //         ...prevButtonValues,
+    //         [buttonName]: true,
+    //       }));
+
+    //       return;
+    //     }
+    //   } else if (!buttonValues.inline) {
+    //     setButtonValues((prevButtonValues) => ({
+    //       ...prevButtonValues,
+    //       inline: true,
+    //     }));
+    //   }
+    // }
+
+    // //-------------------
+
+    // if (
+    //   mdText.slice(start, start + 1) === "`" &&
+    //   (mdText.slice(end - 1, end) === "}" ||
+    //     mdText.slice(end - 1, end) === "`") &&
+    //   mdText.slice(end - 2, end) !== "``" &&
+    //   end - start > 1
+    // ) {
+    //   let i = end;
+    //   while (mdText[i] !== "`") {
+    //     i--;
+    //   }
+    //   if (end - start > 1) {
+    //     setCursorPosition(start + 1, i);
+    //   }
+    //   if (mdText.slice(i, i + 11) === "`{.microbit") {
+    //     let buttonName = getButtonName(i + 11);
+    //     if (!buttonValues[buttonName]) {
+    //       setButtonValues((prevButtonValues) => ({
+    //         ...prevButtonValues,
+    //         [buttonName]: true,
+    //       }));
+
+    //       return;
+    //     }
+    //   } else if (mdText.slice(i, i + 8) === "`{.block") {
+    //     let buttonName = getButtonName(i + 8);
+    //     if (!buttonValues[buttonName]) {
+    //       setButtonValues((prevButtonValues) => ({
+    //         ...prevButtonValues,
+    //         [buttonName]: true,
+    //       }));
+
+    //       return;
+    //     }
+    //   } else if (!buttonValues.inline) {
+    //     setButtonValues((prevButtonValues) => ({
+    //       ...prevButtonValues,
+    //       inline: true,
+    //     }));
+    //   }
+    // }
   };
 
   const onTextareaMouseDown = (event) => {
@@ -239,6 +396,7 @@ const MDTextArea = ({
       onMouseDown={(event) => onTextareaMouseDown(event)}
       onTouchEnd={(event) => onTextareaMouseDown(event)}
       onSelect={(event) => onTextareaSelect(event)}
+      // onWheel={event => onTextareaMouseDown(event)}
     />
   );
 };

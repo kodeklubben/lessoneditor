@@ -10,13 +10,11 @@ import ShowSpinner from "../ShowSpinner";
 import { FileContext } from "../../contexts/FileContext";
 import { LessonContext } from "contexts/LessonContext";
 import { useParams } from "react-router";
-import { UserContext } from "contexts/UserContext";
 
 const Editor = () => {
   const { lessonId, file } = useParams();
   const { lessonData } = useContext(LessonContext);
   const { saveFileBody, savedFileBody } = useContext(FileContext);
-  const { user } = useContext(UserContext);
   const [mdText, setMdText] = useState("");
   const [showSpinner, setShowSpinner] = useState(true);
   const [buttonValues, setButtonValues] = useState({});
@@ -102,17 +100,15 @@ const Editor = () => {
     <div className="editor">
       {showSpinner ? <ShowSpinner /> : ""}
       <ImageUpload
-        cursorPositionEnd={cursorPositionEnd}
-        cursorPositionStart={cursorPositionStart}
         editorRef={editorRef}
+        uploadImageRef={uploadImageRef}
         mdText={mdText}
         pushUndoValue={pushUndoValue}
-        setCursorPosition={setCursorPosition}
-        setCursorPositionEnd={setCursorPositionEnd}
-        setCursorPositionStart={setCursorPositionStart}
+        cursorPositionStart={cursorPositionStart}
+        cursorPositionEnd={cursorPositionEnd}
         setMdText={setMdText}
-        setShowSpinner={setShowSpinner}
-        uploadImageRef={uploadImageRef}
+        setCursor
+        setCursorPosition={setCursorPosition}
       />
       <Navbar />
       <ButtonPanel
@@ -122,7 +118,6 @@ const Editor = () => {
         cursorPositionEnd={cursorPositionEnd}
         cursorPositionStart={cursorPositionStart}
         editorRef={editorRef}
-        language={language}
         lessonTitle={lessonData.lessonTitle}
         mdText={mdText}
         pushRedoValue={pushRedoValue}
@@ -136,37 +131,34 @@ const Editor = () => {
         setListButtonValues={setListButtonValues}
         setMdText={setMdText}
         setRedoCursorPosition={setRedoCursorPosition}
-        setShowSpinner={setShowSpinner}
         setUndoCursorPosition={setUndoCursorPosition}
         undo={undo}
         undoCursorPosition={undoCursorPosition}
         uploadImageRef={uploadImageRef}
-        userName={user?.name}
       />
       <div className="textEditorContainer">
         <MDTextArea
-          buttonValues={buttonValues}
-          course={lessonData.course}
-          cursorPositionStart={cursorPositionStart}
           editorRef={editorRef}
-          listButtonValues={listButtonValues}
           mdText={mdText}
-          pushUndoValue={pushUndoValue}
-          resetButtons={resetButtons}
-          setButtonValues={setButtonValues}
-          setCursor={setCursor}
+          buttonValues={buttonValues}
+          listButtonValues={listButtonValues}
+          cursorPositionStart={cursorPositionStart}
           setCursorPosition={setCursorPosition}
           setMdText={setMdText}
+          setButtonValues={setButtonValues}
+          setCursor={setCursor}
+          pushUndoValue={pushUndoValue}
+          resetButtons={resetButtons}
+          course={lessonData.course}
         />
         <MDPreview
+          mdText={mdText}
           course={lessonData.course}
           language={language}
-          mdText={mdText}
           renderContent={renderContent}
         />
       </div>
       <Autosave
-        language={language}
         mdText={mdText}
         saveEditorText={saveEditorText}
         setRenderContent={setRenderContent}
