@@ -4,9 +4,8 @@ import { Dropdown, Popup } from "semantic-ui-react";
 import languageOptions from "./LanguageOptions";
 import ShowSpinner from "../../ShowSpinner";
 
-const Languages = ({ saveEditorText, lessonId, file }) => {
+const Languages = ({ saveEditorText, lessonId, file, setShowSpinner }) => {
   const history = useHistory();
-  const [showSpinner, setShowSpinner] = useState(false);
   const language = file && file.slice(-3, -2) === "_" ? file.slice(-2) : "nb";
 
   const filename =
@@ -34,7 +33,6 @@ const Languages = ({ saveEditorText, lessonId, file }) => {
 
   return (
     <>
-      {showSpinner ? <ShowSpinner /> : ""}
       <Popup
         content={"Endre språk for oppgavetekst"}
         mouseEnterDelay={250}

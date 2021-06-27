@@ -25,7 +25,6 @@ const ButtonPanel = ({
   editorRef,
   lessonTitle,
   mdText,
-  openMetaData,
   pushRedoValue,
   pushUndoValue,
   redo,
@@ -36,18 +35,15 @@ const ButtonPanel = ({
   setCursorPosition,
   setListButtonValues,
   setMdText,
-  setOpenMetaData,
   setRedoCursorPosition,
   setUndoCursorPosition,
   undo,
   undoCursorPosition,
   uploadImageRef,
-  userName,
 }) => {
   const [showSpinner, setShowSpinner] = useState(false);
   const history = useHistory();
   const { lessonId, file } = useParams();
-  const language = file && file.slice(-3, -2) === "_" ? file.slice(-2) : "nb";
 
   const onSubmit = async () => {
     setShowSpinner(true);
@@ -70,80 +66,73 @@ const ButtonPanel = ({
         <div style={{ display: "inline" }}>
           <div className="ui icon buttons">
             <Emphasis
-              buttonValues={buttonValues}
-              cursorPositionEnd={cursorPositionEnd}
-              cursorPositionStart={cursorPositionStart}
               editorRef={editorRef}
               mdText={mdText}
-              setButtonValues={setButtonValues}
-              setCursor={setCursor}
-              setCursorPosition={setCursorPosition}
+              buttonValues={buttonValues}
+              cursorPositionStart={cursorPositionStart}
+              cursorPositionEnd={cursorPositionEnd}
               setMdText={setMdText}
+              setCursorPosition={setCursorPosition}
+              setCursor={setCursor}
+              setButtonValues={setButtonValues}
             />
           </div>
           <span style={{ margin: "1.5em" }} />
           <div className="ui icon buttons">
             <UndoRedo
-              cursorPositionStart={cursorPositionStart}
               editorRef={editorRef}
               mdText={mdText}
-              pushRedoValue={pushRedoValue}
-              pushUndoValue={pushUndoValue}
-              redo={redo}
-              redoCursorPosition={redoCursorPosition}
-              setCursorPosition={setCursorPosition}
-              setRedoCursorPosition={setRedoCursorPosition}
-              setUndoCursorPosition={setUndoCursorPosition}
               undo={undo}
+              redo={redo}
+              cursorPositionStart={cursorPositionStart}
               undoCursorPosition={undoCursorPosition}
+              redoCursorPosition={redoCursorPosition}
+              setUndoCursorPosition={setUndoCursorPosition}
+              setRedoCursorPosition={setRedoCursorPosition}
+              pushUndoValue={pushUndoValue}
+              pushRedoValue={pushRedoValue}
+              setCursorPosition={setCursorPosition}
             />
           </div>
           <span style={{ margin: "1.5em" }} />
           <div className="ui icon buttons">
             <Hyperlink
-              cursorPositionEnd={cursorPositionEnd}
-              cursorPositionStart={cursorPositionStart}
               editorRef={editorRef}
               mdText={mdText}
-              setCursor={setCursor}
-              setCursorPosition={setCursorPosition}
+              cursorPositionStart={cursorPositionStart}
+              cursorPositionEnd={cursorPositionEnd}
               setMdText={setMdText}
+              setCursorPosition={setCursorPosition}
+              setCursor={setCursor}
             />
             <Image editorRef={editorRef} uploadImageRef={uploadImageRef} />
           </div>
           <span style={{ margin: "1.5em" }} />
           <div className="ui icon buttons">
             <Lists
-              buttonValues={buttonValues}
-              cursorPositionEnd={cursorPositionEnd}
-              cursorPositionStart={cursorPositionStart}
               editorRef={editorRef}
+              cursorPositionStart={cursorPositionStart}
+              cursorPositionEnd={cursorPositionEnd}
               mdText={mdText}
-              setButtonValues={setButtonValues}
-              setCursor={setCursor}
-              setCursorPosition={setCursorPosition}
-              setListButtonValues={setListButtonValues}
+              buttonValues={buttonValues}
               setMdText={setMdText}
+              setCursorPosition={setCursorPosition}
+              setCursor={setCursor}
+              setListButtonValues={setListButtonValues}
+              setButtonValues={setButtonValues}
             />
           </div>
           <div style={{ display: "flex", float: "right", height: "1em" }}>
             <Languages
-              file={file}
-              lessonId={lessonId}
-              setShowSpinner={setShowSpinner}
               saveEditorText={saveEditorText}
-              language={language ? language : ""}
+              lessonId={lessonId}
+              file={file}
+              setShowSpinner={setShowSpinner}
             />
             <EditorDatamodal
               courseTitle={courseTitle}
-              file={file}
-              language={language ? language : ""}
               lessonTitle={lessonTitle}
-              mdText={mdText}
-              openMetaData={openMetaData}
-              setOpenMetaData={setOpenMetaData}
               setShowSpinner={setShowSpinner}
-              userName={userName}
             />
             <Popup
               content={"Til prosjektoversikt"}
@@ -171,10 +160,10 @@ const ButtonPanel = ({
         <div>
           <Sections
             editorRef={editorRef}
-            mdText={mdText}
-            buttonValues={buttonValues}
             cursorPositionStart={cursorPositionStart}
             cursorPositionEnd={cursorPositionEnd}
+            mdText={mdText}
+            buttonValues={buttonValues}
             setMdText={setMdText}
             setCursorPosition={setCursorPosition}
             setCursor={setCursor}
@@ -201,10 +190,10 @@ const ButtonPanel = ({
             <>
               <MicrobitButtons
                 editorRef={editorRef}
-                mdText={mdText}
-                buttonValues={buttonValues}
                 cursorPositionStart={cursorPositionStart}
                 cursorPositionEnd={cursorPositionEnd}
+                mdText={mdText}
+                buttonValues={buttonValues}
                 setMdText={setMdText}
                 setCursorPosition={setCursorPosition}
                 setCursor={setCursor}
@@ -218,10 +207,10 @@ const ButtonPanel = ({
             <>
               <SratchButtons
                 editorRef={editorRef}
-                mdText={mdText}
-                buttonValues={buttonValues}
                 cursorPositionStart={cursorPositionStart}
                 cursorPositionEnd={cursorPositionEnd}
+                mdText={mdText}
+                buttonValues={buttonValues}
                 setMdText={setMdText}
                 setCursorPosition={setCursorPosition}
                 setCursor={setCursor}

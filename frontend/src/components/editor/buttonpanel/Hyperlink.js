@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import CPButton from "./ButtonComponent";
+import ButtonComponent from "./ButtonComponent";
 import { useHotkeys } from "react-hotkeys-hook";
 import {
   hyperlink as config,
@@ -174,7 +174,7 @@ const Hyperlink = ({
   return (
     <>
       {Object.entries(config).map((element, index) => (
-        <CPButton
+        <ButtonComponent
           key={"element" + index}
           buttonValues={""}
           icon={element[1].icon}

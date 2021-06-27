@@ -1,23 +1,15 @@
 import React from "react";
 import ButtonComponent from "./ButtonComponent";
-
 import { useHotkeys } from "react-hotkeys-hook";
-
 import {
   cancelButton,
   buttonAction as emphasisAction,
   heading,
 } from "./utils/buttonMethods";
-
 import {
   KEY_COMBINATIONS as KEY,
   emphasis as config,
 } from "../settingsFiles/buttonConfig";
-
-let output;
-let cancelResults;
-let results;
-let buttonTitle;
 
 const Emphasis = ({
   editorRef,
@@ -30,6 +22,11 @@ const Emphasis = ({
   setCursor,
   setButtonValues,
 }) => {
+  let output;
+  let cancelResults;
+  let results;
+  let buttonTitle;
+
   const setChanges = (mdText, cursorPositionStart, cursorPositionEnd) => {
     setCursor(cursorPositionStart, cursorPositionEnd);
     setCursorPosition(cursorPositionStart, cursorPositionEnd);
@@ -179,7 +176,6 @@ const Emphasis = ({
   return (
     <>
       {Object.entries(config).map((element, index) => {
-        // console.log(element);
         return (
           <ButtonComponent
             key={"element" + index}

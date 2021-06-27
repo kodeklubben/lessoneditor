@@ -1,5 +1,5 @@
 import React from "react";
-import CPButton from "./ButtonComponent";
+import ButtonComponent from "./ButtonComponent";
 
 import { useHotkeys } from "react-hotkeys-hook";
 
@@ -22,7 +22,6 @@ const UndoRedo = ({
   setRedoCursorPosition,
   pushUndoValue,
   pushRedoValue,
-
   setCursorPosition,
 }) => {
   const set = {
@@ -90,7 +89,7 @@ const UndoRedo = ({
   return (
     <>
       {Object.entries(config).map((element, index) => (
-        <CPButton
+        <ButtonComponent
           key={"element" + index}
           buttonValues={""}
           icon={element[1].icon}

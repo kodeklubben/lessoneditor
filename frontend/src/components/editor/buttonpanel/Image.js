@@ -1,5 +1,5 @@
 import React from "react";
-import CPButton from "./ButtonComponent";
+import ButtonComponent from "./ButtonComponent";
 
 import { useHotkeys } from "react-hotkeys-hook";
 
@@ -28,7 +28,7 @@ const Image = ({ editorRef, uploadImageRef }) => {
   return (
     <>
       {Object.entries(config).map((element, index) => (
-        <CPButton
+        <ButtonComponent
           key={"element" + index}
           buttonValues={""}
           icon={element[1].icon}

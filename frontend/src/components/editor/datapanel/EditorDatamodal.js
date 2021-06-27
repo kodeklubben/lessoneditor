@@ -117,6 +117,7 @@ const EditorDatamodal = ({ courseTitle, lessonTitle, setShowSpinner }) => {
             placeholder={FORM_TEXT.TITLE.placeholder}
             value={state.title}
             onChange={changeHandler}
+            fluid
           />
           {!state.title ? (
             <p style={{ color: "red" }}>Må ha tittel</p>
