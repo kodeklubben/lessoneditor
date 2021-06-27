@@ -8,6 +8,8 @@ import Levels from "./Levels";
 import License from "./License";
 import { LessonContext } from "contexts/LessonContext";
 
+// TODO: FIKSE AVBRYTKNAPP
+
 const Datapanel = () => {
   const context = useContext(LessonContext);
   const { ymlData, setLessonData, saveYml } = context;
@@ -104,12 +106,8 @@ const Datapanel = () => {
   };
 
   const changeHandler = (event) => {
-    let name =
-      event.target.type === "checkbox" ? event.target.value : event.target.name;
-    let value =
-      event.target.type === "checkbox"
-        ? event.target.checked
-        : event.target.value;
+    let name = event.target.name;
+    let value = event.target.value;
 
     setLessonData((prevState) => ({
       ...prevState,
