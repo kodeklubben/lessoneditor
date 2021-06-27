@@ -229,7 +229,7 @@ const MDTextArea = ({
   };
 
   return (
-    <TextArea
+    <textarea
       autoFocus
       ref={editorRef}
       className="TextArea"
