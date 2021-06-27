@@ -168,7 +168,7 @@ const EditorDatamodal = ({ courseTitle, lessonTitle, setShowSpinner }) => {
             color={
               state.title && (state.author || state.authorList.length > 0)
                 ? "black"
-                : ""
+                : "grey"
             }
             onClick={onCancel}
             content="Avbryt"

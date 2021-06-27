@@ -10,13 +10,11 @@ import ShowSpinner from "../ShowSpinner";
 import { FileContext } from "../../contexts/FileContext";
 import { LessonContext } from "contexts/LessonContext";
 import { useParams } from "react-router";
-import { UserContext } from "contexts/UserContext";
 
 const Editor = () => {
   const { lessonId, file } = useParams();
   const { lessonData } = useContext(LessonContext);
   const { saveFileBody, savedFileBody } = useContext(FileContext);
-  const { user } = useContext(UserContext);
   const [mdText, setMdText] = useState("");
   const [showSpinner, setShowSpinner] = useState(true);
   const [buttonValues, setButtonValues] = useState({});
