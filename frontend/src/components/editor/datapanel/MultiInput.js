@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "semantic-ui-react";
+import { Button, Header, Input } from "semantic-ui-react";
 
 const MultiInput = ({
   changeHandler,
@@ -47,13 +47,11 @@ const MultiInput = ({
   };
 
   return (
-    <div id="multiInputContainer" className="row">
-      <h3 className="formLabel">
+    <>
+      <Header as="h3">
         {title}
-        <span style={{ color: "grey" }} className="requiredText">
-          {required}
-        </span>
-      </h3>
+        <span className="labelTextSpan">{required}</span>
+      </Header>
       <div className="inputField">
         <div
           style={{
@@ -61,7 +59,7 @@ const MultiInput = ({
             width: "100%",
           }}
         >
-          <input
+          <Input
             ref={(element) => (textInput = element)}
             autoComplete="off"
             type="text"
@@ -73,37 +71,31 @@ const MultiInput = ({
             onChange={changeHandler}
             onKeyUp={(e) => (e.key === "Enter" ? handleClick(e) : "")}
             onBlur={(e) => onBlur(e)}
+            fluid
           />
         </div>
 
-        {inputArray.map((element) => (
-          <Button
-            icon="x"
-            floated="right"
-            content={element}
-            style={{ order: inputOrder - 1 }}
-            id="removeNameButton"
-            key={element}
-            onClick={() => removeClickHandler(name, element)}
-          />
-        ))}
-        <Button
-          icon="plus"
-          style={{
-            order: inputOrder + 1,
-            backgroundColor: "white",
-          }}
-          id="addNameButton"
-          name={name}
-          onClick={handleClick}
-        />
+        <Button.Group>
+          {inputArray.map((element) => (
+            <Button
+              basic
+              icon="x"
+              floated="right"
+              content={element}
+              style={{ order: inputOrder - 1 }}
+              id="removeNameButton"
+              key={element}
+              onClick={() => removeClickHandler(name, element)}
+            />
+          ))}
+        </Button.Group>
       </div>
       {validateMessage ? (
         <div className="validateError">{validateMessage}</div>
       ) : (
         ""
       )}
-    </div>
+    </>
   );
 };
 

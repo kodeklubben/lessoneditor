@@ -13,7 +13,9 @@ function ItemList({ items, removeLesson, navigateToHome }) {
                 className={"itemListImage"}
                 src={`${listitem.thumb}?${performance.now()}`}
                 size="medium"
+                bordered
                 rounded
+                style={{ maxHeight: "796px" }}
               />
             </Card.Content>
             <Card.Content>

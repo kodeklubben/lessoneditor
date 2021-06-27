@@ -1,4 +1,4 @@
-import "./datapanelmodal.scss";
+import "./ladingpagedatamodal.scss";
 import React, { useContext, useEffect, useState } from "react";
 import { Button, Popup, Modal, Grid } from "semantic-ui-react";
 import { YML_TEXT } from "../settingsFiles/languages/landingpage_NO";
@@ -135,6 +135,7 @@ const Datapanel = () => {
         }
       />
       <Modal
+        closeOnDimmerClick={false}
         closeIcon={
           !(
             JSON.stringify(ymlData.tags) ===

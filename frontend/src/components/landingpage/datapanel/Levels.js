@@ -1,5 +1,5 @@
 import React from "react";
-import { Dropdown } from "semantic-ui-react";
+import { Dropdown, Header } from "semantic-ui-react";
 import {
   levelOptions,
   FORM_TEXT,
@@ -8,7 +8,7 @@ import {
 const Levels = ({ changeHandler, data }) => {
   return (
     <>
-      <h3 className="formLabel">{FORM_TEXT.LEVEL.heading}</h3>
+      <Header as="h3">{FORM_TEXT.LEVEL.heading}</Header>
       <Dropdown
         placeholder="Velg Nivå"
         name="level"

@@ -1,16 +1,15 @@
 import React from "react";
+import { Segment, Grid, Header } from "semantic-ui-react";
 
 const CheckboxField = ({ labelTitle, content }) => {
   return (
     <>
-      <label>
-        <h3>{labelTitle}</h3>
-      </label>
-      <div className="ui segment">
-        <div className="ui grid">
-          <div className="stackable two columnd row">{content}</div>
-        </div>
-      </div>
+      <Header as="h3">{labelTitle}</Header>
+      <Segment>
+        <Grid stackable columns={2}>
+          <Grid.Row>{content}</Grid.Row>
+        </Grid>
+      </Segment>
     </>
   );
 };

@@ -12,7 +12,7 @@ import Sections from "./Sections";
 import CodeButton from "./CodeButton";
 import MicrobitButtons from "./MicrobitButtons";
 import SratchButtons from "./ScratchButtons";
-import EditorDatapanel from "../datapanel/EditorDatapanel";
+import EditorDatamodal from "../datapanel/EditorDatamodal";
 import { useHistory } from "react-router-dom";
 import { useParams } from "react-router";
 
@@ -134,7 +134,7 @@ const ButtonPanel = ({
               saveEditorText={saveEditorText}
               language={language ? language : ""}
             />
-            <EditorDatapanel
+            <EditorDatamodal
               courseTitle={courseTitle}
               file={file}
               language={language ? language : ""}

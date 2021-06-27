@@ -4,6 +4,7 @@ import { COURSESLIST } from "components/editor/settingsFiles/COURSELIST";
 import { UserContext } from "../../contexts/UserContext";
 import { useHistory } from "react-router";
 import { Button, Grid, GridColumn, Input, Modal } from "semantic-ui-react";
+import ShowSpinner from "components/ShowSpinner";
 
 const NewLessonModal = () => {
   const [open, setOpen] = useState(false);
@@ -55,6 +56,7 @@ const NewLessonModal = () => {
   };
   return (
     <>
+      {loading ? <ShowSpinner /> : ""}
       <Modal
         onClose={() => setOpen(false)}
         onOpen={() => setOpen(true)}
