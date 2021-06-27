@@ -72,15 +72,11 @@ const LessonCard = ({ title, lessonId, language, hasContent, lessonTitle }) => {
                 disabled
                 rounded
                 bordered
-<<<<<<< HEAD
                 style={{
                   maxHeight: "220px",
                   overflow: "hidden",
                   objectFit: "cover",
                 }}
-=======
-                style={{ maxHeight: "796px" }}
->>>>>>> 91e410d95790a346ffde3fc175bdadef7b9dc468
               />
               <h2>
                 {"Ingen innhold (" + languageOptions[language].text + ")"}
