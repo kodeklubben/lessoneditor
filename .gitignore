@@ -5,7 +5,6 @@
 .env.production.local
 .env.test.local
 .eslintrc.js
-/.vscode
 /.idea
 /backend/.env
 /backend/.env.local
