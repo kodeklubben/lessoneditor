@@ -205,7 +205,7 @@ const MDTextArea = ({
     }
 
     if (event.key === "Tab") {
-      event.preventDefault();
+      // event.preventDefault();
       pushUndoValue(mdText, cursorPositionStart);
       let outputText =
         mdText.slice(0, cursorPositionStart) +
