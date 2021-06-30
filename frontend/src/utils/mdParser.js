@@ -4,7 +4,7 @@ import { generateChecklist } from "./markdown-it-plugins/markdown-it-checklist";
 
 const hljs = require("highlight.js");
 var emoji = require("markdown-it-emoji");
-const { html5Media, guessMediaType } = require("markdown-it-html5-media");
+const { html5Media } = require("markdown-it-html5-media");
 const markdownCustomContainer = require("markdown-it-container");
 
 const md = require("markdown-it")({

@@ -9,11 +9,11 @@ import {
 import { Button, Checkbox, Modal, Header, Input } from "semantic-ui-react";
 
 const languageNO = {
-  insertLink: "Sett inn URL for din link",
-  openNewWindow: "Åpne link i ny fane",
+  insertLink: "Sett inn URL for din lenke",
+  openNewWindow: "Åpne lenke i ny fane",
   ok: "OK",
   cancel: "Avbryt",
-  linkText: "linkbeskrivelse",
+  linkText: "lenkbeskrivelse",
   mandatoryText: "Må fylle ut URL",
 };
 
