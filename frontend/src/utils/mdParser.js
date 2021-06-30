@@ -42,9 +42,8 @@ const md = require("markdown-it")({
         const matches = tokens[idx].info.trim().match(/^youtube\s*\[(.*)]$/);
         if (matches && matches[1]) {
           return (
-            '<div class="text-center video-container">' +
-            getYoutubeIframeMarkup({ url: matches[1].trim() }) +
-            '</div><div class="text-center font-weight-light text-capitalize">'
+            '<div class="video-container">' +
+            getYoutubeIframeMarkup({ url: matches[1].trim() })
           );
         }
       } else if (tokens[idx].type === "container_youtube_close") {
