@@ -92,6 +92,14 @@ a:hover {
     @include a_hover;
   }
 
+  .video-container {
+    margin-bottom: -0vh !important;
+  }
+
+  .html5-video-player {
+    width: 100%;
+  }
+
   .checklist-item a {
     @include a_style;
     margin-left: 0px;

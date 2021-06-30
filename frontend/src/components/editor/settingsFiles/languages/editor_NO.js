@@ -23,7 +23,7 @@ const BUTTON_TITLE = {
   strikethrough: "Gjennomstreking",
   undo: "Angre",
   redo: "Gjøre om",
-  hyperlink: "Sett inn link",
+  hyperlink: "Sett inn lenke",
   image: "Bilde",
   preview: "Forhåndsvisning",
   listUl: "Uordnet liste",
