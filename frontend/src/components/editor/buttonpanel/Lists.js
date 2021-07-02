@@ -169,7 +169,7 @@ const Lists = ({
     }
   };
   return (
-    <>
+    <div>
       {Object.entries(config).map((element, index) => (
         <ButtonComponent
           key={"element" + index}
@@ -181,7 +181,7 @@ const Lists = ({
           shortcutKey={element[1].shortcut}
         />
       ))}
-    </>
+    </div>
   );
 };
 

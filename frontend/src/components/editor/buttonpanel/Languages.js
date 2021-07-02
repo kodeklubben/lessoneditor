@@ -33,7 +33,7 @@ const Languages = ({ saveEditorText, setShowSpinner }) => {
   };
 
   return (
-    <>
+    <div>
       <Popup
         content={"Endre språk for oppgavetekst"}
         mouseEnterDelay={250}
@@ -50,7 +50,7 @@ const Languages = ({ saveEditorText, setShowSpinner }) => {
           ></Dropdown>
         }
       />
-    </>
+    </div>
   );
 };
 

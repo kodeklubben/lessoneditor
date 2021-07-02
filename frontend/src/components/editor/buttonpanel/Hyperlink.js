@@ -104,18 +104,15 @@ const Hyperlink = ({
   };
 
   return (
-    <>
-      {Object.entries(config).map((element, index) => (
-        <ButtonComponent
-          key={"element" + index}
-          buttonValues={""}
-          icon={element[1].icon}
-          title={element[1].title}
-          onButtonClick={handleButtonClick}
-          buttonTitle={element[1].buttonTitle}
-          shortcutKey={element[1].shortcut}
-        />
-      ))}
+    <div>
+      <ButtonComponent
+        buttonValues={""}
+        icon={config.hyperlink.icon}
+        title={config.hyperlink.title}
+        onButtonClick={handleButtonClick}
+        buttonTitle={config.hyperlink.buttonTitle}
+        shortcutKey={config.hyperlink.shortcut}
+      />
 
       <Modal
         dimmer="inverted"
@@ -163,7 +160,7 @@ const Hyperlink = ({
           />
         </Modal.Actions>
       </Modal>
-    </>
+    </div>
   );
 };
 

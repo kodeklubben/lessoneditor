@@ -87,7 +87,7 @@ const UndoRedo = ({
     }
   };
   return (
-    <>
+    <div>
       {Object.entries(config).map((element, index) => (
         <ButtonComponent
           key={"element" + index}
@@ -99,7 +99,7 @@ const UndoRedo = ({
           shortcutKey={element[1].shortcut}
         />
       ))}
-    </>
+    </div>
   );
 };
 

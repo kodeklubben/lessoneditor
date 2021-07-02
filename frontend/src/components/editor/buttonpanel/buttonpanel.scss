@@ -6,12 +6,32 @@
   background-image: linear-gradient(white, #eef7ee);
 }
 
+.sectiongroup {
+  display: inline;
+}
+
+.firstrow {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.secondrow {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
 .buttongroup {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .settingspanel {
-  // display: inline;
-  //style={{ display: "flex", float: "right", height: "1em" }}
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: nowrap;
 }
 
 .MBButton {
@@ -22,23 +42,11 @@
   margin-top: 1px !important;
 }
 
-.CPButton:active,
-.MBButton:active {
-  padding-top: 0.25em !important;
-  padding-bottom: 0.25em !important;
-  background-color: #bbb !important;
-}
-
-#next {
-  float: right;
-  margin-right: -0.5em;
-}
-
-// #lang_dropdown {
-//   min-height: auto !important;
-//   height: 2.62em;
-// }
-
 .hyperlink_modal {
   background-color: #eef7ee !important;
+}
+
+#lang_dropdown {
+  min-height: auto !important;
+  height: 2.62em;
 }

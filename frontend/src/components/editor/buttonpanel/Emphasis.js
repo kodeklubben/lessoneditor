@@ -174,7 +174,7 @@ const Emphasis = ({
     }
   };
   return (
-    <>
+    <div>
       {Object.entries(config).map((element, index) => {
         return (
           <ButtonComponent
@@ -188,7 +188,7 @@ const Emphasis = ({
           />
         );
       })}
-    </>
+    </div>
   );
 };
 

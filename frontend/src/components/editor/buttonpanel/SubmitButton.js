@@ -3,7 +3,7 @@ import { Button, Popup } from "semantic-ui-react";
 import { useHistory } from "react-router-dom";
 import { useParams } from "react-router";
 
-const SubmitButton = (mdText, setShowSpinner, saveEditorText) => {
+const SubmitButton = ({ mdText, setShowSpinner, saveEditorText }) => {
   const history = useHistory();
   const { lessonId, file } = useParams();
 
@@ -22,26 +22,27 @@ const SubmitButton = (mdText, setShowSpinner, saveEditorText) => {
   };
 
   return (
-    <Popup
-      content={"Til prosjektoversikt"}
-      mouseEnterDelay={250}
-      mouseLeaveDelay={250}
-      trigger={
-        <Button
-          style={{
-            height: "2em",
-            marginRight: "-0.5em",
-            padding: "0 1em 0 1em",
-          }}
-          basic
-          id="next"
-          disabled={!mdText || mdText.length === 0}
-          size="big"
-          onClick={onSubmit}
-          icon="arrow right"
-        />
-      }
-    />
+    <div>
+      <Popup
+        content={"Til prosjektoversikt"}
+        mouseEnterDelay={250}
+        mouseLeaveDelay={250}
+        trigger={
+          <Button
+            style={{
+              height: "2em",
+              marginRight: "-0.5em",
+              padding: "0 1em 0 1em",
+            }}
+            basic
+            disabled={!mdText || mdText.length === 0}
+            size="big"
+            onClick={onSubmit}
+            icon="arrow right"
+          />
+        }
+      />
+    </div>
   );
 };
 

@@ -67,7 +67,7 @@ const EditorDatamodal = ({ courseTitle, lessonTitle, setShowSpinner }) => {
   };
 
   return (
-    <>
+    <div>
       <Popup
         content={"Endre data for oppgavetekst"}
         mouseEnterDelay={250}
@@ -189,7 +189,7 @@ const EditorDatamodal = ({ courseTitle, lessonTitle, setShowSpinner }) => {
           />
         </Modal.Actions>
       </Modal>
-    </>
+    </div>
   );
 };
 
