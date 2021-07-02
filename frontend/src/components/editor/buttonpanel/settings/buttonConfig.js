@@ -52,6 +52,7 @@ const KEY_COMBINATIONS = {
   redo: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.z].join(""),
   hyperlink: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.h].join(""),
   image: [SHORTCUTKEY, plus, chars.p].join(""),
+  video: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.u].join(""),
   listul: [SHORTCUTKEY, plus, chars.u].join(""),
   listol: [SHORTCUTKEY, plus, chars.o].join(""),
   listcheck: [SHORTCUTKEY, plus, chars.r].join(""),
@@ -150,6 +151,18 @@ const image = {
     cursorIntON: 0,
     cursorIntOFF: 0,
     shortcut: KEY_COMBINATIONS.image,
+  },
+};
+
+const video = {
+  video: {
+    buttonTitle: "video",
+    icon: "file video",
+    output: "",
+    title: BUTTON_TITLE.video,
+    cursorIntON: 0,
+    cursorIntOFF: 0,
+    shortcut: KEY_COMBINATIONS.video,
   },
 };
 
@@ -405,6 +418,7 @@ export {
   undoRedo,
   hyperlink,
   image,
+  video,
   lists,
   preview,
   sections,

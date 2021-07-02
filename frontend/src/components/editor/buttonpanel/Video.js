@@ -2,22 +2,15 @@ import React, { useState } from "react";
 import ButtonComponent from "./ButtonComponent";
 import { useHotkeys } from "react-hotkeys-hook";
 import {
-  hyperlink as config,
+  video as config,
   KEY_COMBINATIONS as KEY,
 } from "./settings/buttonConfig";
 
-import {
-  Button,
-  Checkbox,
-  Modal,
-  Header,
-  Input,
-  Label,
-} from "semantic-ui-react";
+import { Button, Modal, Header, Input, Icon, Label } from "semantic-ui-react";
 
 const languageNO = {
-  insertLink: "Sett inn URL for din lenke",
-  openNewWindow: "Åpne lenke i ny fane",
+  header: "Sett inn videolenke",
+  insertLink: "Sett inn URL til din video",
   ok: "OK",
   cancel: "Avbryt",
   linkText: "lenkebeskrivelse",
@@ -34,10 +27,13 @@ const Hyperlink = ({
   setCursor,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [url, setUrl] = useState("https://");
-  const [openNewWindow, setOpenNewWindow] = useState(false);
+  const [url, setUrl] = useState("");
+  const [contentProvider, setContentProvider] = useState("");
 
-  const isEmptyField = url === "https://" || url === "";
+  const isEmptyField = url === "";
+
+  console.log({ url });
+  console.log(url.match(/^youtube\s*\[(.*)]$/));
 
   useHotkeys(
     `${KEY.hyperlink}`,
@@ -64,40 +60,22 @@ const Hyperlink = ({
         : cursorPositionStart + (cursorPositionEnd - cursorPositionStart + 1);
 
     if (cursorPositionStart === cursorPositionEnd) {
-      openNewWindow
-        ? setMdText(
-            mdText.slice(0, cursorPositionStart) +
-              `[${languageNO.linkText}](${url}){target=_blank}` +
-              mdText.slice(cursorPositionStart)
-          )
-        : setMdText(
-            mdText.slice(0, cursorPositionStart) +
-              `[${languageNO.linkText}](${url})` +
-              mdText.slice(cursorPositionStart)
-          );
+      setMdText(
+        mdText.slice(0, cursorPositionStart) +
+          `:::${contentProvider}[${url}]
+:::` +
+          mdText.slice(cursorPositionStart)
+      );
     } else {
-      openNewWindow
-        ? setMdText(
-            mdText.slice(0, cursorPositionStart) +
-              `[${mdText.slice(
-                cursorPositionStart,
-                cursorPositionEnd
-              )}](${url}){target=_blank}` +
-              mdText.slice(cursorPositionEnd)
-          )
-        : setMdText(
-            mdText.slice(0, cursorPositionStart) +
-              `[${mdText.slice(
-                cursorPositionStart,
-                cursorPositionEnd
-              )}](${url})` +
-              mdText.slice(cursorPositionEnd)
-          );
+      setMdText(
+        mdText.slice(0, cursorPositionStart) +
+          `[${mdText.slice(cursorPositionStart, cursorPositionEnd)}](${url})` +
+          mdText.slice(cursorPositionEnd)
+      );
     }
 
     setIsOpen(false);
-    setOpenNewWindow(false);
-    setUrl("https://");
+    setUrl("");
     editorRef.current.focus();
     setCursor(start, end);
     setCursorPosition(start, end);
@@ -105,8 +83,7 @@ const Hyperlink = ({
 
   const clickCancelHandler = () => {
     setIsOpen(false);
-    setOpenNewWindow(false);
-    setUrl("https://");
+    setUrl("");
     editorRef.current.focus();
   };
 
@@ -114,11 +91,11 @@ const Hyperlink = ({
     <div>
       <ButtonComponent
         buttonValues={""}
-        icon={config.hyperlink.icon}
-        title={config.hyperlink.title}
+        icon={config.video.icon}
+        title={config.video.title}
         onButtonClick={handleButtonClick}
-        buttonTitle={config.hyperlink.buttonTitle}
-        shortcutKey={config.hyperlink.shortcut}
+        buttonTitle={config.video.buttonTitle}
+        shortcutKey={config.video.shortcut}
       />
 
       <Modal
@@ -130,31 +107,32 @@ const Hyperlink = ({
         className="hyperlink_modal"
       >
         <Modal.Header className="hyperlink_modal">
-          <Header as="h1">Sett inn lenke</Header>
+          <Header as="h1">{languageNO.header}</Header>
         </Modal.Header>
+
         <Modal.Content className="hyperlink_modal">
           <Header as="h3">{languageNO.insertLink}</Header>
+
           <Label id="video_modal_label">
             URL
             <Input
               autoFocus
               type="text"
-              name="linkUrl"
+              name="videoUrl"
               value={url}
               onChange={(e) => setUrl(e.target.value)}
               style={{ width: "100%" }}
               size="big"
-              placeholder="URL"
+              placeholder="Støtter YouTube og Vimeo"
             />
+            <div style={{ display: "flex", float: "right" }}>
+              <Icon name="youtube" size="large" color="red" />
+              <Icon name="vimeo" size="large" color="blue" />
+            </div>
           </Label>
         </Modal.Content>
-        <Modal.Content className="hyperlink_modal">
-          <Checkbox
-            checked={openNewWindow}
-            onChange={() => setOpenNewWindow(!openNewWindow)}
-            label={languageNO.openNewWindow}
-          />
-        </Modal.Content>
+
+        <Modal.Content className="hyperlink_modal"></Modal.Content>
 
         <Modal.Actions className="hyperlink_modal">
           <Button

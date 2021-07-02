@@ -6,6 +6,7 @@ import Emphasis from "./Emphasis";
 import UndoRedo from "./UndoRedo";
 import Hyperlink from "./Hyperlink";
 import Image from "./Image";
+import Video from "./Video";
 import Languages from "./Languages";
 import Lists from "./Lists";
 import Sections from "./Sections";
@@ -90,9 +91,16 @@ const ButtonPanel = ({
               setCursor={setCursor}
             />
 
-            <div style={{ marginRight: "3em" }} />
-
             <Image editorRef={editorRef} uploadImageRef={uploadImageRef} />
+            <Video
+              editorRef={editorRef}
+              mdText={mdText}
+              cursorPositionStart={cursorPositionStart}
+              cursorPositionEnd={cursorPositionEnd}
+              setMdText={setMdText}
+              setCursorPosition={setCursorPosition}
+              setCursor={setCursor}
+            />
 
             <div style={{ marginRight: "3em" }} />
 
