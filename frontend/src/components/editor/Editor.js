@@ -96,7 +96,7 @@ const Editor = () => {
   };
 
   return (
-    <div className="editor">
+    <>
       {showSpinner ? <ShowSpinner /> : ""}
       <ImageUpload
         editorRef={editorRef}
@@ -158,7 +158,7 @@ const Editor = () => {
           renderContent={renderContent}
         />
       </div>
-    </div>
+    </>
   );
 };
 export default Editor;

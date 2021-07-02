@@ -1,14 +1,14 @@
 /* EDITOR */
-.editor {
-  overflow: hidden;
-  position: relative;
-}
+// .editor {
+//   overflow: hidden;
+//   position: relative;
+// }
 
 .PreviewArea {
   padding: 1em;
   margin: 0em 0.5em 0.5em 0.5em;
-  height: 79vh;
-  width: 55vw;
+  height: 75vh;
+  width: 100%;
   background-color: white;
   overflow: auto;
 }
@@ -16,16 +16,39 @@
 .TextArea {
   padding: 1em;
   margin: 0em 0.5em 0.5em 0.5em;
-  height: 79vh;
-  width: 55vw;
+  min-height: 100%;
+  width: 100%;
   outline: none;
   resize: none;
   overflow: auto;
   border-color: white;
 }
 
+// .PreviewArea {
+//   padding: 1em;
+//   margin: 0em 0.5em 0.5em 0.5em;
+//   height: 75vh;
+//   width: 55vw;
+//   background-color: white;
+//   overflow: auto;
+// }
+
+// .TextArea {
+//   padding: 1em;
+//   margin: 0em 0.5em 0.5em 0.5em;
+//   height: 75vh;
+//   width: 55vw;
+//   outline: none;
+//   resize: none;
+//   overflow: auto;
+//   border-color: white;
+// }
+
 .textEditorContainer {
   display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  height: auto;
   padding-top: 0.25em;
   background-image: linear-gradient(to bottom right, #eef7ee, #eef7ee, #b1daae);
   border: 1px #b1daae;

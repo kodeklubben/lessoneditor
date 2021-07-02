@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "./buttonpanel.scss";
-import { Button, Popup } from "semantic-ui-react";
 import ShowSpinner from "../../ShowSpinner";
 import Autosave from "../Autosave";
 import Emphasis from "./Emphasis";
@@ -14,8 +13,7 @@ import CodeButton from "./CodeButton";
 import MicrobitButtons from "./MicrobitButtons";
 import SratchButtons from "./ScratchButtons";
 import EditorDatamodal from "../datapanel/EditorDatamodal";
-import { useHistory } from "react-router-dom";
-import { useParams } from "react-router";
+import SubmitButton from "./SubmitButton";
 
 const ButtonPanel = ({
   buttonValues,
@@ -44,28 +42,12 @@ const ButtonPanel = ({
   uploadImageRef,
 }) => {
   const [showSpinner, setShowSpinner] = useState(false);
-  const history = useHistory();
-  const { lessonId, file } = useParams();
-
-  const onSubmit = async () => {
-    setShowSpinner(true);
-    await navigateToHome();
-    setShowSpinner(false);
-  };
-
-  const navigateToHome = async () => {
-    await saveEditorText();
-    const slug =
-      file.slice(0, 6) === "README" ? "teacherguides" : "lessontexts";
-    const target = ["/landingpage", lessonId, slug].join("/");
-    history.push({ pathname: target });
-  };
 
   return (
     <>
       {showSpinner ? <ShowSpinner /> : ""}
-      <div className="buttonpanel" style={{ paddingBottom: "0.25em" }}>
-        <div style={{ display: "inline" }}>
+      <div className="buttonpanel">
+        <div className="buttongroup">
           <Emphasis
             editorRef={editorRef}
             mdText={mdText}
@@ -122,40 +104,22 @@ const ButtonPanel = ({
             setListButtonValues={setListButtonValues}
             setButtonValues={setButtonValues}
           />
-
-          <div style={{ display: "flex", float: "right", height: "1em" }}>
-            <Languages
-              saveEditorText={saveEditorText}
-              lessonId={lessonId}
-              file={file}
-              setShowSpinner={setShowSpinner}
-            />
-            <EditorDatamodal
-              courseTitle={courseTitle}
-              lessonTitle={lessonTitle}
-              setShowSpinner={setShowSpinner}
-            />
-            <Popup
-              content={"Til prosjektoversikt"}
-              mouseEnterDelay={250}
-              mouseLeaveDelay={250}
-              trigger={
-                <Button
-                  style={{
-                    height: "2em",
-                    marginRight: "-0.5em",
-                    padding: "0 1em 0 1em",
-                  }}
-                  basic
-                  id="next"
-                  disabled={!mdText || mdText.length === 0}
-                  size="big"
-                  onClick={onSubmit}
-                  icon="arrow right"
-                />
-              }
-            />
-          </div>
+        </div>
+        <div className="settingspanel">
+          <Languages
+            saveEditorText={saveEditorText}
+            setShowSpinner={setShowSpinner}
+          />
+          <EditorDatamodal
+            courseTitle={courseTitle}
+            lessonTitle={lessonTitle}
+            setShowSpinner={setShowSpinner}
+          />
+          <SubmitButton
+            mdText={mdText}
+            setShowSpinner={setShowSpinner}
+            saveEditorText={saveEditorText}
+          />
         </div>
 
         <br />
@@ -194,36 +158,32 @@ const ButtonPanel = ({
         </div>
         <div>
           {course === "microbit" ? (
-            <>
-              <MicrobitButtons
-                editorRef={editorRef}
-                cursorPositionStart={cursorPositionStart}
-                cursorPositionEnd={cursorPositionEnd}
-                mdText={mdText}
-                buttonValues={buttonValues}
-                setMdText={setMdText}
-                setCursorPosition={setCursorPosition}
-                setCursor={setCursor}
-                setButtonValues={setButtonValues}
-              />
-            </>
+            <MicrobitButtons
+              editorRef={editorRef}
+              cursorPositionStart={cursorPositionStart}
+              cursorPositionEnd={cursorPositionEnd}
+              mdText={mdText}
+              buttonValues={buttonValues}
+              setMdText={setMdText}
+              setCursorPosition={setCursorPosition}
+              setCursor={setCursor}
+              setButtonValues={setButtonValues}
+            />
           ) : (
             ""
           )}
           {course === "scratch" ? (
-            <>
-              <SratchButtons
-                editorRef={editorRef}
-                cursorPositionStart={cursorPositionStart}
-                cursorPositionEnd={cursorPositionEnd}
-                mdText={mdText}
-                buttonValues={buttonValues}
-                setMdText={setMdText}
-                setCursorPosition={setCursorPosition}
-                setCursor={setCursor}
-                setButtonValues={setButtonValues}
-              />
-            </>
+            <SratchButtons
+              editorRef={editorRef}
+              cursorPositionStart={cursorPositionStart}
+              cursorPositionEnd={cursorPositionEnd}
+              mdText={mdText}
+              buttonValues={buttonValues}
+              setMdText={setMdText}
+              setCursorPosition={setCursorPosition}
+              setCursor={setCursor}
+              setButtonValues={setButtonValues}
+            />
           ) : (
             ""
           )}

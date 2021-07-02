@@ -6,6 +6,14 @@
   background-image: linear-gradient(white, #eef7ee);
 }
 
+.buttongroup {
+}
+
+.settingspanel {
+  // display: inline;
+  //style={{ display: "flex", float: "right", height: "1em" }}
+}
+
 .MBButton {
   color: #fff !important;
   height: 1em !important;
@@ -26,10 +34,10 @@
   margin-right: -0.5em;
 }
 
-#lang_dropdown {
-  min-height: auto !important;
-  height: 2.62em;
-}
+// #lang_dropdown {
+//   min-height: auto !important;
+//   height: 2.62em;
+// }
 
 .hyperlink_modal {
   background-color: #eef7ee !important;
