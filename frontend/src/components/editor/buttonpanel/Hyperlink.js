@@ -4,7 +4,7 @@ import { useHotkeys } from "react-hotkeys-hook";
 import {
   hyperlink as config,
   KEY_COMBINATIONS as KEY,
-} from "../settingsFiles/buttonConfig";
+} from "./settings/buttonConfig";
 
 import { Button, Checkbox, Modal, Header, Input } from "semantic-ui-react";
 

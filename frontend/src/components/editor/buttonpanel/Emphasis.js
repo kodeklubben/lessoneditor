@@ -9,7 +9,7 @@ import {
 import {
   KEY_COMBINATIONS as KEY,
   emphasis as config,
-} from "../settingsFiles/buttonConfig";
+} from "./settings/buttonConfig";
 
 const Emphasis = ({
   editorRef,

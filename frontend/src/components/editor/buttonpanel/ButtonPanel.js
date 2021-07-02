@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import "./buttonpanel.scss";
 import { Button, Popup } from "semantic-ui-react";
 import ShowSpinner from "../../ShowSpinner";
+import Autosave from "../Autosave";
 import Emphasis from "./Emphasis";
 import UndoRedo from "./UndoRedo";
 import Hyperlink from "./Hyperlink";
@@ -37,6 +38,7 @@ const ButtonPanel = ({
   setMdText,
   setRedoCursorPosition,
   setUndoCursorPosition,
+  setRenderContent,
   undo,
   undoCursorPosition,
   uploadImageRef,
@@ -169,7 +171,7 @@ const ButtonPanel = ({
             setCursor={setCursor}
             setButtonValues={setButtonValues}
           />
-          <span style={{ marginLeft: "5em" }}>
+          <div style={{ display: "inline", marginLeft: "5em" }}>
             <CodeButton
               editorRef={editorRef}
               mdText={mdText}
@@ -183,7 +185,12 @@ const ButtonPanel = ({
               course={course}
               courseTitle={courseTitle}
             />
-          </span>
+            <Autosave
+              mdText={mdText}
+              saveEditorText={saveEditorText}
+              setRenderContent={setRenderContent}
+            />
+          </div>
         </div>
         <div>
           {course === "microbit" ? (
