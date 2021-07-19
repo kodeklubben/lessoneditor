@@ -1,6 +1,9 @@
 .overViewContainer {
   padding: 5rem;
   margin: auto;
-  background-color: #99ffed1a;
+  background-image: linear-gradient(to bottom right, #fff, #eef7ee);
   min-height: 80vh;
+  border: 1px #b1daae;
+  border-style: solid solid solid solid;
+  border-radius: 5px;
 }
