@@ -6,7 +6,7 @@ import { useHotkeys } from "react-hotkeys-hook";
 import {
   KEY_COMBINATIONS as KEY,
   image as config,
-} from "../settingsFiles/buttonConfig";
+} from "./settings/buttonConfig";
 
 const Image = ({ editorRef, uploadImageRef }) => {
   useHotkeys(
@@ -26,19 +26,16 @@ const Image = ({ editorRef, uploadImageRef }) => {
     return;
   };
   return (
-    <>
-      {Object.entries(config).map((element, index) => (
-        <ButtonComponent
-          key={"element" + index}
-          buttonValues={""}
-          icon={element[1].icon}
-          title={element[1].title}
-          onButtonClick={handleButtonClick}
-          buttonTitle={element[1].buttonTitle}
-          shortcutKey={element[1].shortcut}
-        />
-      ))}
-    </>
+    <div>
+      <ButtonComponent
+        buttonValues={""}
+        icon={config.image.icon}
+        title={config.image.title}
+        onButtonClick={handleButtonClick}
+        buttonTitle={config.image.buttonTitle}
+        shortcutKey={config.image.shortcut}
+      />
+    </div>
   );
 };
 

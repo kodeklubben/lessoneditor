@@ -4,16 +4,23 @@ import { useHotkeys } from "react-hotkeys-hook";
 import {
   hyperlink as config,
   KEY_COMBINATIONS as KEY,
-} from "../settingsFiles/buttonConfig";
+} from "./settings/buttonConfig";
 
-import { Button, Checkbox, Modal, Header, Input } from "semantic-ui-react";
+import {
+  Button,
+  Checkbox,
+  Modal,
+  Header,
+  Input,
+  Label,
+} from "semantic-ui-react";
 
 const languageNO = {
   insertLink: "Sett inn URL for din lenke",
   openNewWindow: "Åpne lenke i ny fane",
   ok: "OK",
   cancel: "Avbryt",
-  linkText: "lenkbeskrivelse",
+  linkText: "lenkebeskrivelse",
   mandatoryText: "Må fylle ut URL",
 };
 
@@ -104,18 +111,15 @@ const Hyperlink = ({
   };
 
   return (
-    <>
-      {Object.entries(config).map((element, index) => (
-        <ButtonComponent
-          key={"element" + index}
-          buttonValues={""}
-          icon={element[1].icon}
-          title={element[1].title}
-          onButtonClick={handleButtonClick}
-          buttonTitle={element[1].buttonTitle}
-          shortcutKey={element[1].shortcut}
-        />
-      ))}
+    <div>
+      <ButtonComponent
+        buttonValues={""}
+        icon={config.hyperlink.icon}
+        title={config.hyperlink.title}
+        onButtonClick={handleButtonClick}
+        buttonTitle={config.hyperlink.buttonTitle}
+        shortcutKey={config.hyperlink.shortcut}
+      />
 
       <Modal
         dimmer="inverted"
@@ -130,14 +134,19 @@ const Hyperlink = ({
         </Modal.Header>
         <Modal.Content className="hyperlink_modal">
           <Header as="h3">{languageNO.insertLink}</Header>
-          <Input
-            focus
-            type="text"
-            name="linkUrl"
-            value={url}
-            onChange={(e) => setUrl(e.target.value)}
-            placeholder="URL"
-          />
+          <Label id="video_modal_label">
+            URL
+            <Input
+              autoFocus
+              type="text"
+              name="linkUrl"
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+              style={{ width: "100%" }}
+              size="big"
+              placeholder="URL"
+            />
+          </Label>
         </Modal.Content>
         <Modal.Content className="hyperlink_modal">
           <Checkbox
@@ -163,7 +172,7 @@ const Hyperlink = ({
           />
         </Modal.Actions>
       </Modal>
-    </>
+    </div>
   );
 };
 

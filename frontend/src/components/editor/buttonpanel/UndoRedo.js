@@ -6,7 +6,7 @@ import { useHotkeys } from "react-hotkeys-hook";
 import {
   KEY_COMBINATIONS as KEY,
   undoRedo as config,
-} from "../settingsFiles/buttonConfig";
+} from "./settings/buttonConfig";
 
 let position;
 
@@ -87,7 +87,7 @@ const UndoRedo = ({
     }
   };
   return (
-    <>
+    <div>
       {Object.entries(config).map((element, index) => (
         <ButtonComponent
           key={"element" + index}
@@ -99,7 +99,7 @@ const UndoRedo = ({
           shortcutKey={element[1].shortcut}
         />
       ))}
-    </>
+    </div>
   );
 };
 

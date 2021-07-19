@@ -8,7 +8,7 @@ import {
 import {
   KEY_COMBINATIONS as KEY,
   codebutton as config,
-} from "../settingsFiles/buttonConfig";
+} from "./settings/buttonConfig";
 
 let results;
 let cancelResults;

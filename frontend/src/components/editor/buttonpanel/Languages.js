@@ -1,9 +1,11 @@
 import React from "react";
 import { useHistory } from "react-router";
+import { useParams } from "react-router";
 import { Dropdown, Popup } from "semantic-ui-react";
 import languageOptions from "./LanguageOptions";
 
-const Languages = ({ saveEditorText, lessonId, file, setShowSpinner }) => {
+const Languages = ({ saveEditorText, setShowSpinner }) => {
+  const { lessonId, file } = useParams();
   const history = useHistory();
   const language = file && file.slice(-3, -2) === "_" ? file.slice(-2) : "nb";
 
@@ -31,7 +33,7 @@ const Languages = ({ saveEditorText, lessonId, file, setShowSpinner }) => {
   };
 
   return (
-    <>
+    <div>
       <Popup
         content={"Endre språk for oppgavetekst"}
         mouseEnterDelay={250}
@@ -48,7 +50,7 @@ const Languages = ({ saveEditorText, lessonId, file, setShowSpinner }) => {
           ></Dropdown>
         }
       />
-    </>
+    </div>
   );
 };
 

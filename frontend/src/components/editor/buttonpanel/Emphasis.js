@@ -9,7 +9,7 @@ import {
 import {
   KEY_COMBINATIONS as KEY,
   emphasis as config,
-} from "../settingsFiles/buttonConfig";
+} from "./settings/buttonConfig";
 
 const Emphasis = ({
   editorRef,
@@ -174,7 +174,7 @@ const Emphasis = ({
     }
   };
   return (
-    <>
+    <div>
       {Object.entries(config).map((element, index) => {
         return (
           <ButtonComponent
@@ -188,7 +188,7 @@ const Emphasis = ({
           />
         );
       })}
-    </>
+    </div>
   );
 };
 

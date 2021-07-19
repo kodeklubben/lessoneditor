@@ -4,6 +4,35 @@
   border-style: solid solid hidden solid;
   border-radius: 5px;
   background-image: linear-gradient(white, #eef7ee);
+  min-height: 9vh;
+}
+
+.sectiongroup {
+  display: inline;
+}
+
+.firstrow {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.secondrow {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.buttongroup {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.settingspanel {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: nowrap;
 }
 
 .MBButton {
@@ -14,16 +43,8 @@
   margin-top: 1px !important;
 }
 
-.CPButton:active,
-.MBButton:active {
-  padding-top: 0.25em !important;
-  padding-bottom: 0.25em !important;
-  background-color: #bbb !important;
-}
-
-#next {
-  float: right;
-  margin-right: -0.5em;
+.hyperlink_modal {
+  background-color: #eef7ee !important;
 }
 
 #lang_dropdown {
@@ -31,6 +52,7 @@
   height: 2.62em;
 }
 
-.hyperlink_modal {
+#video_modal_label {
+  border-style: none;
   background-color: #eef7ee !important;
 }

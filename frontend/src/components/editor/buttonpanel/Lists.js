@@ -11,7 +11,7 @@ import {
 import {
   KEY_COMBINATIONS as KEY,
   lists as config,
-} from "../settingsFiles/buttonConfig";
+} from "./settings/buttonConfig";
 
 let cancelResults;
 let results;
@@ -169,7 +169,7 @@ const Lists = ({
     }
   };
   return (
-    <>
+    <div>
       {Object.entries(config).map((element, index) => (
         <ButtonComponent
           key={"element" + index}
@@ -181,7 +181,7 @@ const Lists = ({
           shortcutKey={element[1].shortcut}
         />
       ))}
-    </>
+    </div>
   );
 };
 

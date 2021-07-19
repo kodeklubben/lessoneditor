@@ -45,7 +45,9 @@ const Autosave = ({ mdText, setRenderContent, saveEditorText }) => {
   }
 
   return (
-    <div style={{ display: "block" }}>{savedText ? autoSaveMessage : ""}</div>
+    <div>
+      <p>{savedText ? autoSaveMessage : ""}</p>
+    </div>
   );
 };
 

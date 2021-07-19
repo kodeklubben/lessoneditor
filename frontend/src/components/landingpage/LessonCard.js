@@ -41,9 +41,9 @@ const LessonCard = ({ title, lessonId, language, hasContent, lessonTitle }) => {
   return (
     <>
       <Card centered>
-        <Card.Content>
-          {hasContent ? (
-            <>
+        {hasContent ? (
+          <>
+            <Card.Content>
               <Image
                 src={
                   fileExists(`/api/display/${lessonId}/preview.png`)
@@ -61,13 +61,15 @@ const LessonCard = ({ title, lessonId, language, hasContent, lessonTitle }) => {
                   objectPosition: "0 0",
                 }}
               />
-
-              <h2>
-                {lessonTitle + " (" + languageOptions[language].text + ")"}
-              </h2>
-            </>
-          ) : (
-            <>
+            </Card.Content>
+            <Card.Content>
+              <Card.Header>{lessonTitle}</Card.Header>
+              <Card.Meta>{languageOptions[language].text}</Card.Meta>
+            </Card.Content>
+          </>
+        ) : (
+          <>
+            <Card.Content>
               <Image
                 src="/landingPage/image.png"
                 size="medium"
@@ -80,34 +82,35 @@ const LessonCard = ({ title, lessonId, language, hasContent, lessonTitle }) => {
                   objectFit: "cover",
                 }}
               />
-              <h2>
-                {"Ingen innhold (" + languageOptions[language].text + ")"}
-              </h2>
-            </>
-          )}
+            </Card.Content>
+            <Card.Content>
+              <Card.Header style={{ color: "gray" }}>Ingen innhold</Card.Header>
+              <Card.Meta>{languageOptions[language].text}</Card.Meta>
+            </Card.Content>
+          </>
+        )}
 
-          {language ? (
-            <Image
-              style={{
-                width: "15%",
-                position: "absolute",
-                left: "80%",
-                top: "57%",
-              }}
-              src={languageOptions[language].image.src}
-              alt={""}
-            />
-          ) : (
-            ""
-          )}
-          <div className="extra content">
-            <Button
-              onClick={() => navigateToEditor(lessonId, lessonTitle, language)}
-              content={hasContent ? "Åpne" : "Lag tekstfil"}
-              positive={hasContent}
-            />
-          </div>
-        </Card.Content>
+        {language ? (
+          <Image
+            style={{
+              width: "15%",
+              position: "absolute",
+              left: "80%",
+              top: "57%",
+            }}
+            src={languageOptions[language].image.src}
+            alt={""}
+          />
+        ) : (
+          ""
+        )}
+        <div className="extra content">
+          <Button
+            onClick={() => navigateToEditor(lessonId, lessonTitle, language)}
+            content={hasContent ? "Åpne" : "Lag tekstfil"}
+            positive={hasContent}
+          />
+        </div>
       </Card>
     </>
   );

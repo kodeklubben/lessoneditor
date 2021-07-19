@@ -10,7 +10,7 @@ import { LessonContext } from "contexts/LessonContext";
 
 // TODO: FIKSE AVBRYTKNAPP
 
-const Datapanel = () => {
+const LandingpageDatamodal = () => {
   const context = useContext(LessonContext);
   const { ymlData, setLessonData, saveYml } = context;
   const [checkBoxState, setCheckBoxState] = useState({});
@@ -126,7 +126,6 @@ const Datapanel = () => {
             basic
             onClick={() => setOpen(true)}
             content="Oppgavedata"
-            style={{ position: "relative", top: "-3.5em" }}
             id="tagButton"
             size="medium"
             icon="tags"
@@ -218,4 +217,4 @@ const Datapanel = () => {
   );
 };
 
-export default Datapanel;
+export default LandingpageDatamodal;

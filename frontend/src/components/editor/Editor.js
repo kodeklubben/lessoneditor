@@ -1,6 +1,5 @@
 import React, { useContext, useRef, useState } from "react";
 import "./editor.scss";
-import Autosave from "./Autosave";
 import ButtonPanel from "./buttonpanel/ButtonPanel";
 import ImageUpload from "./ImageUpload";
 import MDPreview from "./MDPreview";
@@ -97,7 +96,7 @@ const Editor = () => {
   };
 
   return (
-    <div className="editor">
+    <>
       {showSpinner ? <ShowSpinner /> : ""}
       <ImageUpload
         editorRef={editorRef}
@@ -132,6 +131,7 @@ const Editor = () => {
         setMdText={setMdText}
         setRedoCursorPosition={setRedoCursorPosition}
         setUndoCursorPosition={setUndoCursorPosition}
+        setRenderContent={setRenderContent}
         undo={undo}
         undoCursorPosition={undoCursorPosition}
         uploadImageRef={uploadImageRef}
@@ -158,12 +158,7 @@ const Editor = () => {
           renderContent={renderContent}
         />
       </div>
-      <Autosave
-        mdText={mdText}
-        saveEditorText={saveEditorText}
-        setRenderContent={setRenderContent}
-      />
-    </div>
+    </>
   );
 };
 export default Editor;

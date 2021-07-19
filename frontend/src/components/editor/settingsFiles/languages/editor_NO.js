@@ -25,6 +25,7 @@ const BUTTON_TITLE = {
   redo: "Gjøre om",
   hyperlink: "Sett inn lenke",
   image: "Bilde",
+  video: "Video",
   preview: "Forhåndsvisning",
   listUl: "Uordnet liste",
   listOl: "Ordnet liste",

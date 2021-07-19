@@ -4,7 +4,6 @@ import { generateChecklist } from "./markdown-it-plugins/markdown-it-checklist";
 
 const hljs = require("highlight.js");
 var emoji = require("markdown-it-emoji");
-const { html5Media } = require("markdown-it-html5-media");
 const markdownCustomContainer = require("markdown-it-container");
 
 const md = require("markdown-it")({
@@ -31,7 +30,6 @@ const md = require("markdown-it")({
   .use(insertImg)
   .use(generateChecklist)
   .use(emoji)
-  .use(html5Media)
   .use(markdownCustomContainer, "youtube", {
     validate: function (params) {
       return params.trim().match(/^youtube\s*\[(.*)]$/);
@@ -50,7 +48,31 @@ const md = require("markdown-it")({
         return "</div>";
       }
     },
+  })
+  .use(markdownCustomContainer, "vimeo", {
+    validate: function (params) {
+      return params.trim().match(/^vimeo\s*\[(.*)]$/);
+    },
+
+    render: function (tokens, idx) {
+      if (tokens[idx].type === "container_vimeo_open") {
+        const matches = tokens[idx].info.trim().match(/^vimeo\s*\[(.*)]$/);
+        if (matches && matches[1]) {
+          return (
+            '<div class="video-container">' +
+            getVimeoIframeMarkup({ url: matches[1].trim() })
+          );
+        }
+      } else if (tokens[idx].type === "container_vimeo_close") {
+        return "</div>";
+      }
+    },
   });
+
+/*
+  <iframe src="https://player.vimeo.com/video/562113065" width="640" height="360" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+<p><a href="https://vimeo.com/562113065">THE DESERT</a> from <a href="https://vimeo.com/michaeldockery">Michael Dockery</a> on <a href="https://vimeo.com">Vimeo</a>.</p> 
+*/
 
 /*
   youtube-embedding beskrevet her
@@ -68,6 +90,21 @@ function getYoutubeIframeMarkup(url) {
     return "";
   }
   return `<iframe src="https://www.youtube-nocookie.com/embed/${videoId}" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+}
+
+function getVimeoVideoId(url) {
+  const regExp = /^(http:\/\/|https:\/\/)?(www\.)?(vimeo\.com\/)([0-9]+)$/;
+  const match = url.url.match(regExp);
+  const videoId = match[match.length - 1];
+  return videoId;
+}
+
+function getVimeoIframeMarkup(url) {
+  const videoId = getVimeoVideoId(url);
+  if (!videoId) {
+    return "";
+  }
+  return `<iframe src="https://player.vimeo.com/video/${videoId}" width="640" height="360" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
 }
 
 export const mdParser = (content) => {

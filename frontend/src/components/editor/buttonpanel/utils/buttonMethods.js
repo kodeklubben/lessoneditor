@@ -1,5 +1,5 @@
 import { SECTION_TEXT } from "components/editor/settingsFiles/languages/editor_NO";
-import { lists } from "components/editor/settingsFiles/buttonConfig";
+import { lists } from "components/editor/buttonpanel/settings/buttonConfig";
 
 const buttonAction = (
   isOn,
