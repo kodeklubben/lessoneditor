@@ -13,8 +13,7 @@ const languageNO = {
   insertLink: "Sett inn URL til din video",
   ok: "OK",
   cancel: "Avbryt",
-  linkText: "lenkebeskrivelse",
-  mandatoryText: "Må fylle ut URL",
+  mandatoryText: "Må være gyldig lenke til youtube eller vimeo",
 };
 
 const Hyperlink = ({
@@ -28,12 +27,17 @@ const Hyperlink = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [url, setUrl] = useState("");
-  const [contentProvider, setContentProvider] = useState("");
+  const [validateUrl, setValidateUrl] = useState("");
 
   const isEmptyField = url === "";
 
-  console.log({ url });
-  console.log(url.match(/^youtube\s*\[(.*)]$/));
+  const isYoutube = url.match(
+    /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=|\?v=)([^#&?]*).*/
+  );
+
+  const isVimeo = url.match(
+    /^(http:\/\/|https:\/\/)?(www\.)?(vimeo\.com\/)([0-9]+)$/
+  );
 
   useHotkeys(
     `${KEY.hyperlink}`,
@@ -53,37 +57,37 @@ const Hyperlink = ({
   };
 
   const clickOKHandler = () => {
-    const start = cursorPositionStart + 1;
-    const end =
-      cursorPositionStart === cursorPositionEnd
-        ? cursorPositionEnd + languageNO.linkText.length + 1
-        : cursorPositionStart + (cursorPositionEnd - cursorPositionStart + 1);
-
-    if (cursorPositionStart === cursorPositionEnd) {
-      setMdText(
-        mdText.slice(0, cursorPositionStart) +
-          `:::${contentProvider}[${url}]
-:::` +
-          mdText.slice(cursorPositionStart)
-      );
+    let contentProvider = "";
+    if (isYoutube) {
+      contentProvider = "youtube";
+    } else if (isVimeo) {
+      contentProvider = "vimeo";
     } else {
-      setMdText(
-        mdText.slice(0, cursorPositionStart) +
-          `[${mdText.slice(cursorPositionStart, cursorPositionEnd)}](${url})` +
-          mdText.slice(cursorPositionEnd)
-      );
+      setValidateUrl(languageNO.mandatoryText);
+      return;
     }
+    const end = cursorPositionEnd + contentProvider.length + url.length + 10;
+
+    setMdText(
+      mdText.slice(0, cursorPositionStart) +
+        `:::${contentProvider}[${url}]
+:::
+` +
+        mdText.slice(cursorPositionStart)
+    );
 
     setIsOpen(false);
     setUrl("");
+    setValidateUrl("");
     editorRef.current.focus();
-    setCursor(start, end);
-    setCursorPosition(start, end);
+    setCursor(end, end);
+    setCursorPosition(end, end);
   };
 
   const clickCancelHandler = () => {
     setIsOpen(false);
     setUrl("");
+    setValidateUrl("");
     editorRef.current.focus();
   };
 
@@ -114,7 +118,10 @@ const Hyperlink = ({
           <Header as="h3">{languageNO.insertLink}</Header>
 
           <Label id="video_modal_label">
-            URL
+            <div style={{ display: "flex", float: "left" }}>
+              <Icon name="youtube" size="large" color="red" />
+              <Icon name="vimeo" size="large" color="blue" />
+            </div>
             <Input
               autoFocus
               type="text"
@@ -124,11 +131,8 @@ const Hyperlink = ({
               style={{ width: "100%" }}
               size="big"
               placeholder="Støtter YouTube og Vimeo"
-            />
-            <div style={{ display: "flex", float: "right" }}>
-              <Icon name="youtube" size="large" color="red" />
-              <Icon name="vimeo" size="large" color="blue" />
-            </div>
+            ></Input>
+            <p style={{ color: "red" }}>{validateUrl}</p>
           </Label>
         </Modal.Content>
 

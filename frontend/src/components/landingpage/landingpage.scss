@@ -1,23 +1,24 @@
 .landing_navbar {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
   width: 100%;
   min-height: 8vh;
   padding: 1em;
 }
 
 .card_container {
-  margin-top: 5vh;
+  margin: 5vh;
 }
 
 .landingpage_container {
   display: flex;
+  min-height: 92vh;
   flex-direction: column;
-  margin: 1em;
   background-image: linear-gradient(to bottom right, #eef7ee, #fff, #eef7ee);
-  min-height: 90vh;
+
   border: 1px #b1daae;
-  border-style: hidden solid solid solid;
+  border-style: solid solid solid solid;
 }
 
 #landingpageButtonContainer {

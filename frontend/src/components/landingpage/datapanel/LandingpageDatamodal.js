@@ -126,7 +126,6 @@ const LandingpageDatamodal = () => {
             basic
             onClick={() => setOpen(true)}
             content="Oppgavedata"
-            style={{ position: "relative", top: "-3.5em" }}
             id="tagButton"
             size="medium"
             icon="tags"
