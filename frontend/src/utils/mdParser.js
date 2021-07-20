@@ -70,11 +70,6 @@ const md = require("markdown-it")({
   });
 
 /*
-  <iframe src="https://player.vimeo.com/video/562113065" width="640" height="360" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
-<p><a href="https://vimeo.com/562113065">THE DESERT</a> from <a href="https://vimeo.com/michaeldockery">Michael Dockery</a> on <a href="https://vimeo.com">Vimeo</a>.</p> 
-*/
-
-/*
   youtube-embedding beskrevet her
   https://blog.bhanuteja.dev/embed-you-tube-videos-into-your-markdown-editor
   */
