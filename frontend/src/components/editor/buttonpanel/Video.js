@@ -6,10 +6,10 @@ import {
   KEY_COMBINATIONS as KEY,
 } from "./settings/buttonConfig";
 
-import { Button, Modal, Header, Input, Icon, Label } from "semantic-ui-react";
+import { Button, Modal, Header, Input } from "semantic-ui-react";
 
 const languageNO = {
-  header: "Sett inn videolenke",
+  header: "Video",
   insertLink: "Sett inn URL til din video",
   ok: "OK",
   cancel: "Avbryt",
@@ -107,7 +107,7 @@ const Hyperlink = ({
         onClose={() => setIsOpen(false)}
         onOpen={() => setIsOpen(true)}
         open={isOpen}
-        size="mini"
+        size="small"
         className="hyperlink_modal"
       >
         <Modal.Header className="hyperlink_modal">
@@ -117,23 +117,26 @@ const Hyperlink = ({
         <Modal.Content className="hyperlink_modal">
           <Header as="h3">{languageNO.insertLink}</Header>
 
-          <Label id="video_modal_label">
-            <div style={{ display: "flex", float: "left" }}>
-              <Icon name="youtube" size="large" color="red" />
-              <Icon name="vimeo" size="large" color="blue" />
-            </div>
-            <Input
-              autoFocus
-              type="text"
-              name="videoUrl"
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              style={{ width: "100%" }}
-              size="big"
-              placeholder="Støtter YouTube og Vimeo"
-            ></Input>
-            <p style={{ color: "red" }}>{validateUrl}</p>
-          </Label>
+          <Input
+            fluid
+            icon={isYoutube ? "youtube" : isVimeo ? "vimeo" : "video"}
+            style={
+              isYoutube
+                ? { color: "red" }
+                : isVimeo
+                ? { color: "blue" }
+                : { color: "grey" }
+            }
+            autoFocus
+            type="text"
+            name="videoUrl"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            size="big"
+            placeholder="Støtter YouTube og Vimeo"
+          ></Input>
+
+          <p style={{ color: "red" }}>{validateUrl}</p>
         </Modal.Content>
 
         <Modal.Content className="hyperlink_modal"></Modal.Content>
