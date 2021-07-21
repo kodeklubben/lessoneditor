@@ -5,6 +5,7 @@ let tabSize = 2;
 
 const MDTextArea = ({
   editorRef,
+  previewRef,
   mdText,
   buttonValues,
   listButtonValues,
@@ -117,13 +118,11 @@ const MDTextArea = ({
 
   const onTextareaMouseDown = (event) => {
     setCursor(event.target.selectionStart, event.target.selectionEnd);
-
     resetButtons();
   };
 
   const onTextareaKeyDown = (event) => {
     setCursor(event.target.selectionStart, event.target.selectionEnd);
-
     if (event.key === "Enter") {
       if (buttonValues[listButtonValues["bTitle"]]) {
         event.preventDefault();
@@ -200,7 +199,7 @@ const MDTextArea = ({
           i++;
         }
         setCursorPosition(i, i);
-        setButtonValues({});
+        resetButtons();
       }
     }
 
@@ -227,6 +226,11 @@ const MDTextArea = ({
     }
   };
 
+  // const onScroll = (event) => {
+  //   previewRef.current.scrollTop =
+  //     event.target.scrollTop + previewRef.current.scrollTop / 2;
+  // };
+
   return (
     <textarea
       autoFocus
@@ -239,6 +243,7 @@ const MDTextArea = ({
       onMouseDown={(event) => onTextareaMouseDown(event)}
       onTouchEnd={(event) => onTextareaMouseDown(event)}
       onSelect={(event) => onTextareaSelect(event)}
+      // onScroll={(event) => onScroll(event)}
     />
   );
 };

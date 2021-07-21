@@ -31,6 +31,7 @@ const Editor = () => {
   });
 
   const editorRef = useRef();
+  const previewRef = useRef();
   const uploadImageRef = useRef();
 
   const language = file && file.slice(-3, -2) === "_" ? file.slice(-2) : "nb";
@@ -139,6 +140,7 @@ const Editor = () => {
       <div className="textEditorContainer">
         <MDTextArea
           editorRef={editorRef}
+          previewRef={previewRef}
           mdText={mdText}
           buttonValues={buttonValues}
           listButtonValues={listButtonValues}
@@ -152,6 +154,8 @@ const Editor = () => {
           course={lessonData.course}
         />
         <MDPreview
+          previewRef={previewRef}
+          editorRef={editorRef}
           mdText={mdText}
           course={lessonData.course}
           language={language}

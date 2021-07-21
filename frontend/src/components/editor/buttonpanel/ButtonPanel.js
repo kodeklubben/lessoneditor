@@ -148,6 +148,8 @@ const ButtonPanel = ({
               setButtonValues={setButtonValues}
             />
 
+            <span style={{ marginRight: "5em" }} />
+
             <CodeButton
               editorRef={editorRef}
               mdText={mdText}

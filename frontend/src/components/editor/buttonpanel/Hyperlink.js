@@ -6,16 +6,10 @@ import {
   KEY_COMBINATIONS as KEY,
 } from "./settings/buttonConfig";
 
-import {
-  Button,
-  Checkbox,
-  Modal,
-  Header,
-  Input,
-  Label,
-} from "semantic-ui-react";
+import { Button, Checkbox, Modal, Header, Input } from "semantic-ui-react";
 
 const languageNO = {
+  header: "Sette inn lenke",
   insertLink: "Sett inn URL for din lenke",
   openNewWindow: "Åpne lenke i ny fane",
   ok: "OK",
@@ -126,27 +120,26 @@ const Hyperlink = ({
         onClose={() => setIsOpen(false)}
         onOpen={() => setIsOpen(true)}
         open={isOpen}
-        size="mini"
+        size="small"
         className="hyperlink_modal"
       >
         <Modal.Header className="hyperlink_modal">
-          <Header as="h1">Sett inn lenke</Header>
+          <Header as="h1">{languageNO.header}</Header>
         </Modal.Header>
         <Modal.Content className="hyperlink_modal">
           <Header as="h3">{languageNO.insertLink}</Header>
-          <Label id="video_modal_label">
-            URL
-            <Input
-              autoFocus
-              type="text"
-              name="linkUrl"
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              style={{ width: "100%" }}
-              size="big"
-              placeholder="URL"
-            />
-          </Label>
+
+          <Input
+            fluid
+            autoFocus
+            icon="linkify"
+            type="text"
+            name="linkUrl"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            size="big"
+            placeholder="URL"
+          />
         </Modal.Content>
         <Modal.Content className="hyperlink_modal">
           <Checkbox

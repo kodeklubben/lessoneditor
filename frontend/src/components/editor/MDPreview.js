@@ -5,7 +5,14 @@ import { renderScratchBlocks } from "utils/renderScratchblocks";
 import { mdParser } from "../../utils/mdParser";
 import { renderToggleButtons } from "utils/renderToggleButton";
 
-const MDPreview = ({ mdText, course, language, renderContent }) => {
+const MDPreview = ({
+  previewRef,
+  editorRef,
+  mdText,
+  course,
+  language,
+  renderContent,
+}) => {
   const parseMD = mdParser(mdText);
 
   useEffect(() => {
@@ -26,6 +33,7 @@ const MDPreview = ({ mdText, course, language, renderContent }) => {
   } else {
     return (
       <div
+        ref={previewRef}
         className="PreviewArea"
         dangerouslySetInnerHTML={{ __html: parseMD }}
       />
