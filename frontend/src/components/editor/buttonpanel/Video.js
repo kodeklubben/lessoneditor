@@ -57,20 +57,15 @@ const Hyperlink = ({
   };
 
   const clickOKHandler = () => {
-    let contentProvider = "";
-    if (isYoutube) {
-      contentProvider = "youtube";
-    } else if (isVimeo) {
-      contentProvider = "vimeo";
-    } else {
+    if (!(isYoutube || isVimeo)) {
       setValidateUrl(languageNO.mandatoryText);
       return;
     }
-    const end = cursorPositionEnd + contentProvider.length + url.length + 10;
+    const end = cursorPositionEnd + url.length + 15;
 
     setMdText(
       mdText.slice(0, cursorPositionStart) +
-        `:::${contentProvider}[${url}]
+        `:::${"video"}[${url}]
 :::
 ` +
         mdText.slice(cursorPositionStart)

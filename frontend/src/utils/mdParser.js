@@ -30,76 +30,63 @@ const md = require("markdown-it")({
   .use(insertImg)
   .use(generateChecklist)
   .use(emoji)
-  .use(markdownCustomContainer, "youtube", {
+  .use(markdownCustomContainer, "video", {
     validate: function (params) {
-      return params.trim().match(/^youtube\s*\[(.*)]$/);
+      return params.trim().match(/^video\s*\[(.*)]$/);
     },
 
     render: function (tokens, idx) {
-      if (tokens[idx].type === "container_youtube_open") {
-        const matches = tokens[idx].info.trim().match(/^youtube\s*\[(.*)]$/);
-        if (matches && matches[1]) {
-          return (
-            '<div class="video-container">' +
-            getYoutubeIframeMarkup({ url: matches[1].trim() })
-          );
-        }
-      } else if (tokens[idx].type === "container_youtube_close") {
-        return "</div>";
-      }
-    },
-  })
-  .use(markdownCustomContainer, "vimeo", {
-    validate: function (params) {
-      return params.trim().match(/^vimeo\s*\[(.*)]$/);
-    },
+      if (tokens[idx].type === "container_video_open") {
+        const matches = tokens[idx].info.trim().match(/^video\s*\[(.*)]$/);
 
-    render: function (tokens, idx) {
-      if (tokens[idx].type === "container_vimeo_open") {
-        const matches = tokens[idx].info.trim().match(/^vimeo\s*\[(.*)]$/);
         if (matches && matches[1]) {
           return (
             '<div class="video-container">' +
-            getVimeoIframeMarkup({ url: matches[1].trim() })
+            getVideoIframeMarkup({ url: matches[1].trim() })
           );
         }
-      } else if (tokens[idx].type === "container_vimeo_close") {
+      } else if (tokens[idx].type === "container_video_close") {
         return "</div>";
       }
     },
   });
 
-/*
-  youtube-embedding beskrevet her
-  https://blog.bhanuteja.dev/embed-you-tube-videos-into-your-markdown-editor
-  */
-function getYoutubeVideoId(url) {
-  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-  const match = url.url.match(regExp);
-  return match && match[2].length === 11 ? match[2] : null;
-}
+function getVideoIframeMarkup(url) {
+  const providerAndVideoID = getVideoId(url);
 
-function getYoutubeIframeMarkup(url) {
-  const videoId = getYoutubeVideoId(url);
+  const videoId = Object.values(providerAndVideoID)[0];
+  const provider = Object.keys(providerAndVideoID)[0];
+
   if (!videoId) {
     return "";
   }
-  return `<iframe src="https://www.youtube-nocookie.com/embed/${videoId}" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
-}
-
-function getVimeoVideoId(url) {
-  const regExp = /^(http:\/\/|https:\/\/)?(www\.)?(vimeo\.com\/)([0-9]+)$/;
-  const match = url.url.match(regExp);
-  const videoId = match[match.length - 1];
-  return videoId;
-}
-
-function getVimeoIframeMarkup(url) {
-  const videoId = getVimeoVideoId(url);
-  if (!videoId) {
-    return "";
+  if (provider === "youtube") {
+    return `<iframe src="https://www.youtube-nocookie.com/embed/${videoId}" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+  } else if (provider === "vimeo") {
+    return `<iframe src="https://player.vimeo.com/video/${videoId}" width="640" height="360" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+  } else {
+    console.error("markdown custom container error");
   }
-  return `<iframe src="https://player.vimeo.com/video/${videoId}" width="640" height="360" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+}
+
+function getVideoId(url) {
+  const youtubeRegEx =
+    /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+
+  const vimeoRegEx = /^(http:\/\/|https:\/\/)?(www\.)?(vimeo\.com\/)([0-9]+)$/;
+
+  const isYoutube = url.url.match(youtubeRegEx);
+  const isVimeo = url.url.match(vimeoRegEx);
+
+  const match = isYoutube || isVimeo;
+
+  if (isYoutube) {
+    return match && match[2].length === 11 ? { youtube: match[2] } : null;
+  } else if (isVimeo) {
+    return match ? { vimeo: match[match.length - 1] } : null;
+  } else {
+    console.error("RegEx validate error");
+  }
 }
 
 export const mdParser = (content) => {
