@@ -57,7 +57,7 @@ const lessonEdit = (app: Application) => {
                 } else if (files.data[i].name.match(yamlRegex)) {
                     const file = await axios.get(files.data[i].download_url);
                     const ymlBuffer = Buffer.from(
-                        JSON.stringify(yaml.safeLoad(file.data))
+                        JSON.stringify(yaml.load(file.data))
                     );
                     await saveFile(
                         ["drafts", lessonData.lessonId, files.data[i].name],

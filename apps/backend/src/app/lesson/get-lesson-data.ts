@@ -32,7 +32,7 @@ const getLessonData = async (lessonId) => {
             content: await loadFile(["drafts", lessonId, fileList[i].filename])
         };
         if (data.filename === "lesson.yml") {
-            data.content = yaml.safeDump(JSON.parse(data.content), {flowLevel: 2});
+            data.content = yaml.dump(JSON.parse(data.content), {flowLevel: 2});
         }
         lessonFiles.push(data);
     }

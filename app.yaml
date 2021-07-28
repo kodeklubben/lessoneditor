@@ -2,7 +2,7 @@ runtime: nodejs14
 entrypoint: node -r dotenv/config ./dist/apps/backend/main.js
 handlers:
   - url: /static
-    static_dir: dist/apps/frontend2020/static
+    static_dir: dist/apps/frontend/static
 
   - url: /.*
     secure: always

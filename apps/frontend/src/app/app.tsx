@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import { Message } from '@lessoneditor/api-interfaces';
+import React, { useEffect, useState } from "react";
+import { Message } from "@lessoneditor/api-interfaces";
 
 export const App = () => {
-  const [m, setMessage] = useState<Message>({ message: '' });
+  const [m, setMessage] = useState<Message>({ message: "" });
 
   useEffect(() => {
-    fetch('/api')
+    fetch("/api")
       .then((r) => r.json())
       .then(setMessage);
   }, []);
 
   return (
     <>
-      <div style={{ textAlign: 'center' }}>
+      <div style={{ textAlign: "center" }}>
         <h1>Welcome to editor!</h1>
         <img
           width="450"
