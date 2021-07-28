@@ -8,6 +8,10 @@ on:
     branches:
       - main
 
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test:
     name: Run Test and Build Apps
@@ -18,30 +22,32 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - run: git fetch origin main
       - name: Cache node modules
         uses: actions/cache@v1
         with:
-          path: ~/.npm # npm cache files are stored in `~/.npm` on Linux/macOS
+          path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
-      - run: npm ci --ignore-scripts --no-optional --prefer-offline --no-audit --prefix frontend
       - run: npm ci --ignore-scripts --no-optional --prefer-offline --no-audit
-      - run: node frontend/node_modules/node-sass/scripts/install.js
-      - run: npm rebuild node-sass --prefix frontend
-      - run: npm rebuild re2
-      - run: npm test --prefix frontend
-      - run: npm test backend
-      - run: npm run build backend
-      - run: npm run build --prefix frontend
-      - name: Archive build artifacts
-        uses: actions/upload-artifact@v1
+      - name: Caching Nx
+        uses: actions/cache@v2
         with:
-          name: dist
-          path: dist
+          path: node_modules/.cache
+          key: cache-nx-${{ hashFiles('package-lock.json') }}-${{ github.sha }}
+          restore-keys: |
+            cache-nx-${{ hashFiles('package-lock.json') }}-
+            cache-nx-
+      - run: npm run test-all
+      - run: npm run build-all
+      - name: Caching Dist Folder
+        uses: actions/cache@v2
+        with:
+          path: ./dist
+          key: cache-dist-${{ github.sha }}
+
   deploy:
     name: Deploy to Google App Engine
     timeout-minutes: 3
@@ -51,10 +57,11 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
-      - name: Download build artifacts
-        uses: actions/download-artifact@v1
+      - name: Restoring Dist Folder
+        uses: actions/cache@v2
         with:
-          name: dist
+          path: ./dist
+          key: cache-dist-${{ github.sha }}
       - run: echo "${{ secrets.DOTENV }}" > .env
       - name: Deploy to Google App Engine
         uses: atRobertoFlores/gae_deploy_action@master

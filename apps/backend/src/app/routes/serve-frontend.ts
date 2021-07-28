@@ -3,7 +3,7 @@ import {Application} from "express";
 const express = require("express");
 const path = require("path");
 const fs = require("fs");
-const buildFolder = path.resolve(__dirname, "..", "frontend2020");
+const buildFolder = path.resolve(__dirname, "..", "frontend");
 
 const serveFrontend = (app: Application) => {
     console.log({buildFolder});

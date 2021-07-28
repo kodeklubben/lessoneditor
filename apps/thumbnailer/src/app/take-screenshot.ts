@@ -29,6 +29,7 @@ const takeScreenshot = async (url, token, waitForSelector?) => {
                 "--disable-gpu",
             ],
         });
+        logger.debug("Browser created",metadata)
     }
     const page = await browser.newPage();
     await page.setExtraHTTPHeaders({
@@ -50,7 +51,8 @@ const takeScreenshot = async (url, token, waitForSelector?) => {
         });
 
     } else {
-        await page.waitForTimeout(5000)
+        logger.info("Waiting for timeout",metadata)
+        await page.waitForTimeout(1000)
     }
     const screenShotBuffer = await page.screenshot({
         type: "png",
