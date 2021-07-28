@@ -1,8 +1,13 @@
+import * as dotenv from "dotenv";
 import * as express from 'express';
-
 import setupServer from './app/setupServer'
 import isAppEngine from "./app/utils/isAppEngine";
 import getTempDir from "./app/utils/get-temp-dir";
+import {join} from 'path';
+
+if (isAppEngine()) {
+    dotenv.config({path: join(process.cwd(), ".env")});
+}
 
 const app = express();
 
