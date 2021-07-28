@@ -6,12 +6,7 @@
 # For more information, run:
 #   $ gcloud topic gcloudignore
 #
-.gcloudignore
-.git
-.gitignore
-package-lock.json
-node_modules/
-frontend/
-thumbnail-service/
-.github/
-!build/
+/*
+!dist/
+!.env
+!package.json
