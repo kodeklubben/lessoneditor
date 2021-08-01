@@ -6,7 +6,7 @@ import CheckboxField from "./CheckboxField";
 import Levels from "./Levels";
 import License from "./License";
 import { LessonContext } from "../../../contexts/LessonContext";
-import {YML_TEXT} from "../settingsFiles/languages/landingpage_NO";
+import { YML_TEXT } from "../settingsFiles/languages/landingpage_NO";
 
 // TODO: FIKSE AVBRYTKNAPP
 
@@ -30,22 +30,31 @@ const LandingpageDatamodal = () => {
     const mapYamlTags = () => {
       let obj: {};
       obj = ymlData.tags.topic.reduce(
-        (accumulator: { [x: string]: boolean; }, currentValue: string | number) => {
+        (
+          accumulator: { [x: string]: boolean },
+          currentValue: string | number
+        ) => {
           accumulator[currentValue] = true;
           return accumulator;
         },
-          // @ts-ignore
+        // @ts-ignore
         { ...obj }
       );
       obj = ymlData.tags.subject.reduce(
-        (accumulator: { [x: string]: boolean; }, currentValue: string | number) => {
+        (
+          accumulator: { [x: string]: boolean },
+          currentValue: string | number
+        ) => {
           accumulator[currentValue] = true;
           return accumulator;
         },
         { ...obj }
       );
       obj = ymlData.tags.grade.reduce(
-        (accumulator: { [x: string]: boolean; }, currentValue: string | number) => {
+        (
+          accumulator: { [x: string]: boolean },
+          currentValue: string | number
+        ) => {
           accumulator[currentValue] = true;
           return accumulator;
         },
@@ -64,14 +73,18 @@ const LandingpageDatamodal = () => {
     });
   };
 
-  const dropdownHandler = (event: any, {name, value}: any) => {
-    setLessonData((prevState: { yml: any; }) => ({
+  const dropdownHandler = (event: any, { name, value }: any) => {
+    setLessonData((prevState: { yml: any }) => ({
       ...prevState,
       yml: { ...prevState.yml, [name]: value },
     }));
   };
 
-  const checboxHandler = (event: { target: { getAttribute: (arg0: string) => any; value: any; checked: any; }; }) => {
+  const checboxHandler = (event: {
+    target: { getAttribute: (arg0: string) => any; value: any; checked: any };
+  }) => {
+    console.log({ ymlData });
+    console.log(event.target);
     let subtag = event.target.getAttribute("subtag");
     let name = event.target.value;
     let value = event.target.checked;
@@ -82,7 +95,7 @@ const LandingpageDatamodal = () => {
     }));
 
     if (!ymlData.tags[subtag].includes(name)) {
-      setLessonData((prevState: { yml: { tags: { [x: string]: any; }; }; }) => ({
+      setLessonData((prevState: { yml: { tags: { [x: string]: any } } }) => ({
         ...prevState,
         yml: {
           ...prevState.yml,
@@ -93,7 +106,7 @@ const LandingpageDatamodal = () => {
         },
       }));
     } else {
-      setLessonData((prevState: { yml: { tags: { [x: string]: any[]; }; }; }) => ({
+      setLessonData((prevState: { yml: { tags: { [x: string]: any[] } } }) => ({
         ...prevState,
         yml: {
           ...prevState.yml,
@@ -106,11 +119,11 @@ const LandingpageDatamodal = () => {
     }
   };
 
-  const changeHandler = (event: { target: { name: any; value: any; }; }) => {
+  const changeHandler = (event: { target: { name: any; value: any } }) => {
     let name = event.target.name;
     let value = event.target.value;
 
-    setLessonData((prevState: { yml: any; }) => ({
+    setLessonData((prevState: { yml: any }) => ({
       ...prevState,
       yml: { ...prevState.yml, [name]: value },
     }));
@@ -201,7 +214,7 @@ const LandingpageDatamodal = () => {
               </i>
             </p>
           ) : (
-            <p style={{ height: "1.3em" }}/>
+            <p style={{ height: "1.3em" }} />
           )}
 
           <Button
