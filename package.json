@@ -30,7 +30,7 @@
   "private": true,
   "dependencies": {
     "@google-cloud/connect-datastore": "^5.0.2",
-    "@google-cloud/datastore": "^6.4.1",
+    "@google-cloud/datastore": "^6.4.7",
     "@google-cloud/storage": "^5.8.5",
     "@octokit/rest": "^18.6.0",
     "axios": "^0.21.1",
