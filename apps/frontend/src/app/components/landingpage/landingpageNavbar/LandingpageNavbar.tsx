@@ -1,9 +1,9 @@
 import { useHistory, useParams } from "react-router";
 import LandingpageDatamodal from "../datapanel/LandingpageDatamodal";
 import { Dropdown, Popup } from "semantic-ui-react";
-import {FC} from "react";
+import { FC } from "react";
 
-const LandingageNavbar:FC<any> = ({ lessonTitle, courseTitle }) => {
+const LandingageNavbar: FC<any> = ({ lessonTitle, courseTitle }) => {
   const history = useHistory();
   const { lessonId, mode } = useParams<any>();
 
@@ -13,13 +13,10 @@ const LandingageNavbar:FC<any> = ({ lessonTitle, courseTitle }) => {
     { key: 3, text: "Alle filer", value: "allfiles" },
   ];
 
-
-    const handleChange = (e:any,value:any) => {
+  const handleChange = (e: any, value: any) => {
     const target = ["/landingpage", lessonId, value].join("/");
     history.push(target);
   };
-
-  console.log({ mode });
 
   return (
     <>

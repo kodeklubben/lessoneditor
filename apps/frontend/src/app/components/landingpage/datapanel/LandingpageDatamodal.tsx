@@ -83,11 +83,9 @@ const LandingpageDatamodal = () => {
   const checboxHandler = (event: {
     target: { getAttribute: (arg0: string) => any; value: any; checked: any };
   }) => {
-    console.log({ ymlData });
-    console.log(event.target);
-    let subtag = event.target.getAttribute("subtag");
-    let name = event.target.value;
-    let value = event.target.checked;
+    const subtag = event.target.getAttribute("subtag");
+    const name = event.target.value;
+    const value = event.target.checked;
 
     setCheckBoxState((prevState) => ({
       ...prevState,
@@ -120,8 +118,8 @@ const LandingpageDatamodal = () => {
   };
 
   const changeHandler = (event: { target: { name: any; value: any } }) => {
-    let name = event.target.name;
-    let value = event.target.value;
+    const name = event.target.name;
+    const value = event.target.value;
 
     setLessonData((prevState: { yml: any }) => ({
       ...prevState,

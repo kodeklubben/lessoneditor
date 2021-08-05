@@ -265,7 +265,7 @@ const sections = {
       borderRadius: "10px",
       padding: "8px",
     },
-    imageurl: "/sectionSVG/check.svg",
+    imageurl: "assets/public/sectionSVG/check.svg",
   },
   tip: {
     buttonTitle: "sec_tip",
@@ -340,7 +340,7 @@ const sections = {
       background: "#fff",
       padding: "7px",
     },
-    imageurl: "/sectionSVG/flag.svg",
+    imageurl: "assets/public/sectionSVG/flag.svg",
   },
   try: {
     buttonTitle: "sec_try",
@@ -376,7 +376,7 @@ const sections = {
       padding: "7px",
       border: "3px solid rgb(36, 90, 154)",
     },
-    imageurl: "/sectionSVG/save.svg",
+    imageurl: "assets/public/sectionSVG/save.svg",
   },
 };
 
