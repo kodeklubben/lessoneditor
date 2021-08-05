@@ -4,7 +4,6 @@ import { useParams } from "react-router";
 import ProfileMenu from "./ProfileMenu";
 import { UserContext } from "../../contexts/UserContext";
 import { LessonContext } from "../../contexts/LessonContext";
-import NewLessonModal from "../frontpage/NewLessonModal";
 
 import logo from "/assets/public/lav_logo.jpg";
 

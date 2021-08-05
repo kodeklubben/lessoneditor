@@ -35,7 +35,6 @@ const Overview = () => {
               >
                 <Icon.Group>
                   <Icon color="grey" name="file text outline" size="massive" />
-                  <Icon color="grey" name="plus" size="big" />
                 </Icon.Group>
               </div>
             </Card.Content>
