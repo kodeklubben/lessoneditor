@@ -1,12 +1,12 @@
-import {FC} from "react";
+import { FC } from "react";
 // @ts-ignore
-import {gradeSettings} from "../settingsFiles/LESSONTAGSSETTINGS";
+import { gradeSettings } from "../settingsFiles/LESSONTAGSSETTINGS";
 // @ts-ignore
-import {subjectSettings} from "../settingsFiles/LESSONTAGSSETTINGS";
+import { subjectSettings } from "../settingsFiles/LESSONTAGSSETTINGS";
 // @ts-ignore
-import {topicSettings} from "../settingsFiles/LESSONTAGSSETTINGS";
+import { topicSettings } from "../settingsFiles/LESSONTAGSSETTINGS";
 
-const Checkbox:FC<any> = ({ value, onCheck, data, name, subtag }) => {
+const Checkbox: FC<any> = ({ value, onCheck, data, name, subtag }) => {
   const onInputChange = (event: any) => {
     onCheck(event);
   };
@@ -17,6 +17,8 @@ const Checkbox:FC<any> = ({ value, onCheck, data, name, subtag }) => {
         type="checkbox"
         checked={data[value]}
         name={name}
+        //@ts-expect-error
+        subtag={subtag}
         id={value}
         value={value}
         onChange={onInputChange}
@@ -28,9 +30,8 @@ const Checkbox:FC<any> = ({ value, onCheck, data, name, subtag }) => {
   );
 };
 
-
-const TagsGrade:FC<any> = ({ changeHandler, data }) => {
-    return (
+const TagsGrade: FC<any> = ({ changeHandler, data }) => {
+  return (
     <>
       {gradeSettings.map((element, index) => (
         <div className="column" key={"element" + index}>
@@ -47,7 +48,7 @@ const TagsGrade:FC<any> = ({ changeHandler, data }) => {
   );
 };
 
-const TagsSubject:FC<any> = ({ changeHandler, data }) => {
+const TagsSubject: FC<any> = ({ changeHandler, data }) => {
   return (
     <>
       {subjectSettings.map((element, index) => (
@@ -65,8 +66,8 @@ const TagsSubject:FC<any> = ({ changeHandler, data }) => {
   );
 };
 
-const TagsTopic:FC<any> = ({ changeHandler, data }) => {
-    return (
+const TagsTopic: FC<any> = ({ changeHandler, data }) => {
+  return (
     <>
       {topicSettings.map((element, index) => (
         <div className="column" key={"element-" + index}>

@@ -4,13 +4,14 @@ The aim of this project was to create web application possibility for a teacher 
 Our minimal requirement is to have a basic functioning application where the teacher don’t need to have any knowledge with Git when they want to edit or create an exercise for Lær kidza koding website.
 
 ## Quick start
+
 Require nodejs and a normal developer setup. Run `npm install`.
 
 ### Frontend:
 
 - Install all dependencies with [npm](https://www.npmjs.com/) `npm install --prefix frontend`
 - Start the application with `npm start-frontend`
-- Open `http://localhost:3000/` in your browser
+- Open `http://localhost:4200/` in your browser
 
 ### Thumbnailer (The Lessoneditor Thumbnail Service):
 
@@ -21,8 +22,7 @@ Require nodejs and a normal developer setup. Run `npm install`.
 ### Backend:
 
 - Start the server with `npm start backend`
-- Open `http://localhost:3232` in your browser
-
+- Open `http://localhost:3333` in your browser
 
 ## Project structure
 
@@ -31,16 +31,19 @@ Our project structure is divided in two parts, a client part and a server part. 
 ### Frontend
 
 #### React js
+
 React is an open-source front-end JavaScript library for building user interfaces or UI components. It is maintained by Facebook and a community of individual developers and companies. React can be used as a base in the development of single-page or mobile applications.
 
 https://reactjs.org/
 
 #### Semantic UI React
+
 Semantic UI is a front-end development framework similar to bootstrap designed for theming. It contains pre-built semantic components that helps create beautiful and responsive layouts using human-friendly HTML.
 
 https://react.semantic-ui.com/
 
 #### markdown-it
+
 Markdown-it is a markdown parser package for node used for parsing markdown plaintext to html in the real-time previewer.
 The package is fast and easy to extend and suites specific needs through the plugin feature.
 
@@ -67,7 +70,6 @@ We have also implemented proptypes in our react component structures which is a 
 the right type of props passed to our react components. It is not really a form of testing, but it helps maintain
 correctness in the app.
 
-
 ### Backend
 
 #### Node js + express (backend)
@@ -76,5 +78,3 @@ An Express application is most often used as backend application in a client-ser
 be written in React.js, the server could be written in Express. We used express as our server.
 Express ensured that all middleware can respond to HTTP requests and routing tables were setup to respond to different actions
 based on the HTTP method.
-
-

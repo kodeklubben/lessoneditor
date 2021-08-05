@@ -1,28 +1,34 @@
 import { useHistory } from "react-router";
 import { Button, Card, Image } from "semantic-ui-react";
 import { FC } from "react";
-import {fileExists} from "../../utils/fileExists";
+import { fileExists } from "../../utils/fileExists";
+
+import nbFlag from "/assets/public/languagesFlag/flag_nb.svg";
+import nnFlag from "/assets/public/languagesFlag/flag_nn.svg";
+import enFlag from "/assets/public/languagesFlag/flag_en.svg";
+import isFlag from "/assets/public/languagesFlag/flag_is.svg";
+import noLessonPreviewImage from "/assets/public/landingPage/image.png";
 
 const languageOptions = {
   nb: {
     text: "Bokmål",
     value: "nb",
-    image: { avatar: true, src: "/languagesFlag/flag_nb.svg" },
+    image: { avatar: true, src: nbFlag },
   },
   nn: {
     text: "Nynorsk",
     value: "nn",
-    image: { avatar: true, src: "/languagesFlag/flag_nn.svg" },
+    image: { avatar: true, src: nnFlag },
   },
   en: {
     text: "Engelsk",
     value: "en",
-    image: { avatar: true, src: "/languagesFlag/flag_en.svg" },
+    image: { avatar: true, src: enFlag },
   },
   is: {
     text: "Islandsk",
     value: "is",
-    image: { avatar: true, src: "/languagesFlag/flag_is.svg" },
+    image: { avatar: true, src: isFlag },
   },
 };
 
@@ -49,11 +55,11 @@ const LessonCard: FC<any> = ({
   };
   const imgSrc = fileExists(`/api/display/${lessonId}/preview.png`)
     ? `/api/display/${lessonId}/preview.png?${performance.now()}`
-    : "/landingPage/image.png";
+    : noLessonPreviewImage;
   // @ts-ignore
   const languageText = languageOptions[language].text;
   // @ts-ignore
-  const languageImage = languageOptions[language].image.src
+  const languageImage = languageOptions[language].image.src;
   return (
     <>
       <Card centered>
@@ -83,7 +89,7 @@ const LessonCard: FC<any> = ({
           <>
             <Card.Content>
               <Image
-                src="/landingPage/image.png"
+                src={noLessonPreviewImage}
                 size="medium"
                 disabled
                 rounded

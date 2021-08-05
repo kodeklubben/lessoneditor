@@ -4,7 +4,8 @@ import { useParams } from "react-router";
 import ProfileMenu from "./ProfileMenu";
 import { UserContext } from "../../contexts/UserContext";
 import { LessonContext } from "../../contexts/LessonContext";
-import NewLessonModal from "../frontpage/NewLessonModal";
+
+import logo from "/assets/public/lav_logo.jpg";
 
 const Navbar: FC<any> = () => {
   const { user } = useContext<any>(UserContext);
@@ -17,7 +18,7 @@ const Navbar: FC<any> = () => {
       <nav className="navbar_container">
         <div className="navbar_logo">
           <a href={"/"}>
-            <img className="navbar_logo" alt="" src={"/lav_logo.jpg"} />
+            <img className="navbar_logo" alt="" src={logo} />
           </a>
         </div>
 
@@ -40,8 +41,6 @@ const Navbar: FC<any> = () => {
           ""
         )}
         <div className="navbar_profile">
-          {file === undefined ? <NewLessonModal /> : ""}
-
           <a id="navbar_gohome" href={"/"}>
             <ProfileMenu
               name={user ? user.name : ""}

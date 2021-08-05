@@ -23,7 +23,7 @@ const MDPreview: FC<any> = ({
   }, [course, parseMD, renderContent, language]);
 
   if (course === "scratch" && renderContent) {
-    let lessonContent = renderScratchBlocks(parseMD);
+    const lessonContent = renderScratchBlocks(parseMD);
     return (
       <div
         className="PreviewArea"
