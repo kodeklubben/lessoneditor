@@ -2,15 +2,15 @@ import { Button, Popup } from "semantic-ui-react";
 import { FC } from "react";
 
 const CodeButtons: FC<any> = ({
-  buttonValues,
-  title,
-  onButtonClick,
-  buttonTitle,
-  shortcutKey,
-  course,
-  courseTitle,
-  style,
-}) => {
+                                buttonValues,
+                                title,
+                                onButtonClick,
+                                buttonTitle,
+                                shortcutKey,
+                                course,
+                                courseTitle,
+                                style
+                              }) => {
   const responsiveCP = () => {
     return (
       <>
@@ -33,7 +33,7 @@ const CodeButtons: FC<any> = ({
                 <div style={{ position: "relative", top: "-5px" }}>
                   {"```Kodeblokk"}
                   <span style={{ color: "#008000" }}>
-                    {'("' + courseTitle + '")'}
+                    {"(\"" + courseTitle + "\")"}
                   </span>
                 </div>
               </Button>

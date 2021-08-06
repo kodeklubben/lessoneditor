@@ -1,13 +1,7 @@
 import CodeButtonComponent from "./CodeButtonComponent";
 import { useHotkeys } from "react-hotkeys-hook";
-import {
-  buttonAction as codeAction,
-  cancelButton,
-} from "./utils/buttonMethods";
-import {
-  codebutton as config,
-  KEY_COMBINATIONS as KEY,
-} from "./settings/buttonConfig";
+import { buttonAction as codeAction, cancelButton } from "./utils/buttonMethods";
+import { codebutton as config, KEY_COMBINATIONS as KEY } from "./settings/buttonConfig";
 import { FC } from "react";
 
 let results;
@@ -15,18 +9,18 @@ let cancelResults;
 let buttonTitle;
 
 const CodeButton: FC<any> = ({
-  editorRef,
-  mdText,
-  cursorPositionStart,
-  cursorPositionEnd,
-  buttonValues,
-  setMdText,
-  setCursorPosition,
-  setCursor,
-  setButtonValues,
-  course,
-  courseTitle,
-}) => {
+                               editorRef,
+                               mdText,
+                               cursorPositionStart,
+                               cursorPositionEnd,
+                               buttonValues,
+                               setMdText,
+                               setCursorPosition,
+                               setCursor,
+                               setButtonValues,
+                               course,
+                               courseTitle
+                             }) => {
   const outputCodeBlock =
     config.codeblock.output.slice(0, 3) +
     (course === "scratch" ? "blocks" : course) +
@@ -45,7 +39,7 @@ const CodeButton: FC<any> = ({
   const setButton = (value: string) => {
     setButtonValues((prevButtonValues: any) => ({
       ...prevButtonValues,
-      [value]: !buttonValues[value],
+      [value]: !buttonValues[value]
     }));
   };
 
@@ -66,7 +60,7 @@ const CodeButton: FC<any> = ({
     if (cancelResults.cancel) {
 
       setChanges(
-          // @ts-ignore
+        // @ts-ignore
         cancelResults?.mdText,
         cancelResults?.cursorPositionStart,
         cancelResults?.cursorPositionEnd
@@ -85,7 +79,7 @@ const CodeButton: FC<any> = ({
     );
 
     setChanges(
-        // @ts-ignore
+      // @ts-ignore
       results?.mdText,
       results?.cursorPositionStart,
       results?.cursorPositionEnd
@@ -109,11 +103,11 @@ const CodeButton: FC<any> = ({
       setCode(
         buttonTitle,
         config.codeblock.cursorIntON +
-          (course === "scratch" ? 6 : course.length),
+        (course === "scratch" ? 6 : course.length),
         config.codeblock.cursorIntOFF,
         outputCodeBlock
       );
-    },
+    }
   };
 
   useHotkeys(
@@ -140,7 +134,7 @@ const CodeButton: FC<any> = ({
     editorRef.current.focus();
     setButtonValues((prevState: any) => ({
       ...prevState,
-      [button]: !buttonValues[button],
+      [button]: !buttonValues[button]
     }));
     switch (button) {
       case config.inline.buttonTitle:

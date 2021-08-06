@@ -32,7 +32,7 @@ const SubmitButton: FC<any> = ({ mdText, setShowSpinner, saveEditorText }) => {
             style={{
               height: "2em",
               marginRight: "-0.5em",
-              padding: "0 1em 0 1em",
+              padding: "0 1em 0 1em"
             }}
             basic
             disabled={!mdText || mdText.length === 0}

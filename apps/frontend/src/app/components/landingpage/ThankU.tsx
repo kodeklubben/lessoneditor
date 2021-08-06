@@ -11,7 +11,7 @@ const ThankU: FC<any> = ({ setThankU }) => {
         zIndex: 1,
         width: "100%",
         height: "100%",
-        backgroundColor: "rgb(256,256,256,0.7)",
+        backgroundColor: "rgb(256,256,256,0.7)"
       }}
     >
       <div
@@ -25,7 +25,7 @@ const ThankU: FC<any> = ({ setThankU }) => {
           width: "50%",
           height: "40%",
           backgroundColor: "white",
-          border: "5px solid red",
+          border: "5px solid red"
         }}
       >
         <h1>Takk for ditt birdrag til Lær Kidsa Koding!</h1>

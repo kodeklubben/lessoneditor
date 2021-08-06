@@ -43,6 +43,7 @@ export function insertImg(md: { core: { ruler: string[] } }) {
     }
     state.tokens = tokens;
   }
+
   // @ts-ignore
   md.core.ruler.push("insert_img", addImgs);
 }

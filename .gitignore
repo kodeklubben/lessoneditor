@@ -9,7 +9,6 @@
 /backend/.env
 /backend/.env.local
 /backend/examples/.env
-/paths.json
 build/
 dist/
 node_modules/

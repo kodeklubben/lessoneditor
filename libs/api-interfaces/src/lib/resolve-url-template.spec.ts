@@ -1,6 +1,6 @@
-import resolveUrlTemplate from "./resolve-url-template";
+import {resolveUrlTemplate} from "./resolve-url-template";
 
-it("should resolve", () => {
+it("should resolve url template", () => {
     const resolved = resolveUrlTemplate("/:first/:second", {
         first: "hello",
         second: "world",

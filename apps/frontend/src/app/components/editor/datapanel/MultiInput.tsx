@@ -1,21 +1,21 @@
 import { Button, Header, Input } from "semantic-ui-react";
-import {FC} from "react";
+import { FC } from "react";
 
-const MultiInput:FC<any> = ({
-  changeHandler,
-  multiInputHandler,
-  name,
-  title,
-  inputArray = [],
-  inputValue,
-  placeholder,
-  required,
-}) => {
+const MultiInput: FC<any> = ({
+                               changeHandler,
+                               multiInputHandler,
+                               name,
+                               title,
+                               inputArray = [],
+                               inputValue,
+                               placeholder,
+                               required
+                             }) => {
   let inputOrder = 1;
 
   let textInput: Input | null = null;
 
-  const handleClick = (event:any) => {
+  const handleClick = (event: any) => {
     if (inputValue && !inputArray.includes(inputValue)) {
       let i = event.target.name + "List";
       let temp = { [i]: [...inputArray, inputValue] };
@@ -23,7 +23,7 @@ const MultiInput:FC<any> = ({
       inputOrder += 1;
 
       // @ts-ignore
-        textInput.focus();
+      textInput.focus();
     }
   };
 
@@ -33,7 +33,7 @@ const MultiInput:FC<any> = ({
 
   const inputClick = () => {
     // @ts-ignore
-      textInput.focus();
+    textInput.focus();
   };
 
   const removeClickHandler = (name: string, value: any) => {
@@ -57,7 +57,7 @@ const MultiInput:FC<any> = ({
         <div
           style={{
             order: inputOrder,
-            width: "100%",
+            width: "100%"
           }}
         >
           <Input
@@ -70,14 +70,14 @@ const MultiInput:FC<any> = ({
             onClick={inputClick}
             onTouchStart={inputClick}
             onChange={changeHandler}
-            onKeyUp={(e:any) => (e.key === "Enter" ? handleClick(e) : "")}
-            onBlur={(e:any) => onBlur(e)}
+            onKeyUp={(e: any) => (e.key === "Enter" ? handleClick(e) : "")}
+            onBlur={(e: any) => onBlur(e)}
             fluid
           />
         </div>
 
         <Button.Group>
-          {inputArray.map((element: {} | null | undefined,index:number) => (
+          {inputArray.map((element: {} | null | undefined, index: number) => (
             <Button
               basic
               icon="x"
@@ -85,7 +85,7 @@ const MultiInput:FC<any> = ({
               content={element}
               style={{ order: inputOrder - 1 }}
               id="removeNameButton"
-              key={"button-"+index}
+              key={"button-" + index}
               onClick={() => removeClickHandler(name, element)}
             />
           ))}
@@ -94,7 +94,7 @@ const MultiInput:FC<any> = ({
           icon="plus"
           style={{
             order: inputOrder + 1,
-            backgroundColor: "white",
+            backgroundColor: "white"
           }}
           id="addNameButton"
           name={name}

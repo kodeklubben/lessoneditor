@@ -1,31 +1,31 @@
 // Languages title
 const LANGUAGES = [
   {
-    nb: "Bokmål",
+    nb: "Bokmål"
   },
   {
-    nn: "Nynorsk",
+    nn: "Nynorsk"
   },
   {
-    en: "Engelsk",
+    en: "Engelsk"
   },
   {
-    is: "Islandsk",
-  },
+    is: "Islandsk"
+  }
 ];
 
 // Page navigation buttons
 const NAV_BUTTONS = {
   prev: "Tilbake",
   next: "Neste",
-  submit: "Sende inn",
+  submit: "Sende inn"
 };
 
 // YML page text
 const YML_TEXT = {
   topic: "Tema",
   subject: "Fag",
-  grade: "Klassetrinn",
+  grade: "Klassetrinn"
 };
 
 // FORM TEXT
@@ -34,11 +34,11 @@ const FORM_TEXT = {
   AUTHOR: { heading: "Forfatter", placeholder: "Navn" },
   TRANSLATOR: {
     heading: "Oversatt av",
-    placeholder: "Navn",
+    placeholder: "Navn"
   },
   LICENSE: {
     heading: "Lisens",
-    placeholder: "standard: CC BY-SA 4.0",
+    placeholder: "standard: CC BY-SA 4.0"
   },
   COURSE: { heading: "Kurs" },
   LANGUAGE: { heading: "Språk" },
@@ -47,8 +47,8 @@ const FORM_TEXT = {
     { name: "Introduksjon", value: 1 },
     { name: "Nybegynner", value: 2 },
     { name: "Erfaren", value: 3 },
-    { name: "Ekspert", value: 4 },
-  ],
+    { name: "Ekspert", value: 4 }
+  ]
 };
 
 const levelOptions = [
@@ -56,26 +56,26 @@ const levelOptions = [
     key: "Introduksjon",
     text: "Introduksjon",
     value: 1,
-    image: { avatar: true, src: "/level1.png" },
+    image: { avatar: true, src: "/level1.png" }
   },
   {
     key: "Nybegynner",
     text: "Nybegynner",
     value: 2,
-    image: { avatar: true, src: "/level2.png" },
+    image: { avatar: true, src: "/level2.png" }
   },
   {
     key: "Erfaren",
     text: "Erfaren",
     value: 3,
-    image: { avatar: true, src: "/level3.png" },
+    image: { avatar: true, src: "/level3.png" }
   },
   {
     key: "Ekspert",
     text: "Ekspert",
     value: 4,
-    image: { avatar: true, src: "/level4.png" },
-  },
+    image: { avatar: true, src: "/level4.png" }
+  }
 ];
 
 // Grade titles
@@ -84,7 +84,7 @@ const GRADE = {
   primary: "1.-4. klasse",
   secondary: "5.-7. klasse",
   junior: "8.-10. klasse",
-  senior: "Videregående Skole",
+  senior: "Videregående Skole"
 };
 
 // Subject titles
@@ -97,7 +97,7 @@ const SUBJECT = {
   first_language: "Norsk",
   english: "Engelsk",
   arts_and_crafts: "Kunst og Håndverk",
-  social_science: "Samfunnsfag",
+  social_science: "Samfunnsfag"
 };
 
 // Topic titles
@@ -113,7 +113,7 @@ const TOPIC = {
   robot: "Robot",
   game: "Spill",
   step_based: "Stegbasert",
-  text_based: "Tekstbasert",
+  text_based: "Tekstbasert"
 };
 
 export {
@@ -124,5 +124,5 @@ export {
   FORM_TEXT,
   YML_TEXT,
   NAV_BUTTONS,
-  levelOptions,
+  levelOptions
 };

@@ -2,15 +2,15 @@ import React, { FC } from "react";
 import { Button, Popup } from "semantic-ui-react";
 
 const ButtonComponent: FC<any> = ({
-  buttonValues,
-  icon,
-  title,
-  onButtonClick,
-  buttonTitle,
-  shortcutKey,
-  style,
-  imageurl,
-}) => {
+                                    buttonValues,
+                                    icon,
+                                    title,
+                                    onButtonClick,
+                                    buttonTitle,
+                                    shortcutKey,
+                                    style,
+                                    imageurl
+                                  }) => {
   const responsiveCP = () => {
     return (
       <>
@@ -24,19 +24,19 @@ const ButtonComponent: FC<any> = ({
                 style={
                   buttonValues[buttonTitle]
                     ? {
-                        marginTop: "0.3em",
-                        paddingTop: "0.25em",
-                        paddingBottom: "0.25em",
-                        borderRadius: "10px",
-                        backgroundColor: "#bbb",
-                      }
+                      marginTop: "0.3em",
+                      paddingTop: "0.25em",
+                      paddingBottom: "0.25em",
+                      borderRadius: "10px",
+                      backgroundColor: "#bbb"
+                    }
                     : {
-                        marginTop: "0.3em",
-                        paddingTop: "0.25em",
-                        paddingBottom: "0.75em",
-                        borderRadius: "10px",
-                        backgroundColor: "rgba(0, 0, 0, 0)",
-                      }
+                      marginTop: "0.3em",
+                      paddingTop: "0.25em",
+                      paddingBottom: "0.75em",
+                      borderRadius: "10px",
+                      backgroundColor: "rgba(0, 0, 0, 0)"
+                    }
                 }
                 className="CPButton"
                 size="huge"
@@ -61,7 +61,7 @@ const ButtonComponent: FC<any> = ({
                         position: "relative",
                         top: "-3px",
                         height: "1.5em",
-                        margin: "-4px",
+                        margin: "-4px"
                       }}
                       src={imageurl}
                       alt="test"
@@ -71,7 +71,7 @@ const ButtonComponent: FC<any> = ({
                         position: "relative",
                         top: "-5px",
                         margin: "0.5em",
-                        display: "inline",
+                        display: "inline"
                       }}
                     >
                       {title}

@@ -12,7 +12,7 @@ export function headerSections(md: { core: { ruler: string[]; }; }) {
       t.block = true;
       t.attrs =
         attrs &&
-        attrs.map(function (attr) {
+        attrs.map(function(attr) {
           return [attr[0], "section_" + attr[1]];
         });
       return t;
@@ -58,7 +58,7 @@ export function headerSections(md: { core: { ruler: string[]; }; }) {
       if (token.type === "heading_open") {
         let section = {
           header: headingLevel(token.tag),
-          nesting: nestedLevel,
+          nesting: nestedLevel
         };
         if (last(sections) && section.header <= last(sections).header) {
           closeSections(section);
@@ -76,6 +76,7 @@ export function headerSections(md: { core: { ruler: string[]; }; }) {
     closeAllSections();
     state.tokens = tokens;
   }
+
   // @ts-ignore
   md.core.ruler.push("header_sections", addSections);
 }

@@ -2,28 +2,25 @@ import ButtonComponent from "./ButtonComponent";
 
 import { useHotkeys } from "react-hotkeys-hook";
 
-import {
-  KEY_COMBINATIONS as KEY,
-  undoRedo as config,
-} from "./settings/buttonConfig";
+import { KEY_COMBINATIONS as KEY, undoRedo as config } from "./settings/buttonConfig";
 import { FC } from "react";
 
 let position: any;
 
 const UndoRedo: FC<any> = ({
-  editorRef,
-  mdText,
-  undo,
-  redo,
-  cursorPositionStart,
-  undoCursorPosition,
-  redoCursorPosition,
-  setUndoCursorPosition,
-  setRedoCursorPosition,
-  pushUndoValue,
-  pushRedoValue,
-  setCursorPosition,
-}) => {
+                             editorRef,
+                             mdText,
+                             undo,
+                             redo,
+                             cursorPositionStart,
+                             undoCursorPosition,
+                             redoCursorPosition,
+                             setUndoCursorPosition,
+                             setRedoCursorPosition,
+                             pushUndoValue,
+                             pushRedoValue,
+                             setCursorPosition
+                           }) => {
   const set = {
     undo: () => {
       if (undoCursorPosition.length > 0) {
@@ -51,7 +48,7 @@ const UndoRedo: FC<any> = ({
       }
       pushUndoValue(mdText, cursorPositionStart);
       setCursorPosition(position, position);
-    },
+    }
   };
   useHotkeys(
     `${KEY.undo}, ${KEY.redo}`,

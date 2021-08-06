@@ -1,13 +1,13 @@
 import ShowSpinner from "../ShowSpinner";
 import { Button } from "semantic-ui-react";
-import {FC} from "react";
+import { FC } from "react";
 
-const AreyousurePopup:FC<any> = ({
-  onSubmit,
-  setAreYouSure,
-  showSpinner,
-  lessonId,
-}) => {
+const AreyousurePopup: FC<any> = ({
+                                    onSubmit,
+                                    setAreYouSure,
+                                    showSpinner,
+                                    lessonId
+                                  }) => {
   return (
     <div
       style={{
@@ -17,7 +17,7 @@ const AreyousurePopup:FC<any> = ({
         zIndex: 1,
         width: "100%",
         height: "100%",
-        backgroundColor: "rgb(256,256,256,0.7)",
+        backgroundColor: "rgb(256,256,256,0.7)"
       }}
     >
       {showSpinner ? (
@@ -34,7 +34,7 @@ const AreyousurePopup:FC<any> = ({
             width: "50%",
             height: "40%",
             backgroundColor: "white",
-            border: "5px solid red",
+            border: "5px solid red"
           }}
         >
           <h1>Alert(!):Vil du __virkelig__ sende inn oppgaven...?</h1>

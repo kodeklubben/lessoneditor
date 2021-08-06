@@ -2,14 +2,11 @@ import ButtonComponent from "./MicroScratchButtonComponent";
 
 import { useHotkeys } from "react-hotkeys-hook";
 
-import {
-  buttonAction as codeAction,
-  cancelButton,
-} from "./utils/buttonMethods";
+import { buttonAction as codeAction, cancelButton } from "./utils/buttonMethods";
 
 import {
   KEY_COMBINATIONS_SCRATCH as KEY,
-  scratchbuttons as config,
+  scratchbuttons as config
 } from "../settingsFiles/microbitAndScratchButtonConfig";
 import { FC } from "react";
 
@@ -18,16 +15,16 @@ let cancelResults;
 let buttonTitle: string;
 
 const ScratchButtons: FC<any> = ({
-  editorRef,
-  cursorPositionStart,
-  cursorPositionEnd,
-  mdText,
-  buttonValues,
-  setMdText,
-  setCursorPosition,
-  setCursor,
-  setButtonValues,
-}) => {
+                                   editorRef,
+                                   cursorPositionStart,
+                                   cursorPositionEnd,
+                                   mdText,
+                                   buttonValues,
+                                   setMdText,
+                                   setCursorPosition,
+                                   setCursor,
+                                   setButtonValues
+                                 }) => {
   const setChanges = (
     mdText: any,
     cursorPositionStart: any,
@@ -41,7 +38,7 @@ const ScratchButtons: FC<any> = ({
   const setButton = (value: string) => {
     setButtonValues((prevButtonValues: any) => ({
       ...prevButtonValues,
-      [value]: !buttonValues[value],
+      [value]: !buttonValues[value]
     }));
   };
 
@@ -184,13 +181,13 @@ const ScratchButtons: FC<any> = ({
         config.moreblocks.cursorIntOFF,
         config.moreblocks.output
       );
-    },
+    }
   };
 
   useHotkeys(
     `${KEY.motion}, ${KEY.looks}, ${KEY.sound}, ${KEY.pen}, ` +
-      `${KEY.data}, ${KEY.events}, ${KEY.control}, ${KEY.sensing}, ` +
-      `${KEY.operators}, ${KEY.moreblocks}`,
+    `${KEY.data}, ${KEY.events}, ${KEY.control}, ${KEY.sensing}, ` +
+    `${KEY.operators}, ${KEY.moreblocks}`,
     (event, handler) => {
       event.preventDefault();
       switch (handler.key) {
@@ -239,7 +236,7 @@ const ScratchButtons: FC<any> = ({
     setButtonValues((prevState: any) => ({
       ...prevState,
       // @ts-ignore
-      [button]: !button[button],
+      [button]: !button[button]
     }));
     switch (button) {
       case config.motion.buttonTitle:

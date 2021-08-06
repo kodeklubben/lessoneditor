@@ -13,32 +13,32 @@ const languageOptions = {
   nb: {
     text: "Bokmål",
     value: "nb",
-    image: { avatar: true, src: nbFlag },
+    image: { avatar: true, src: nbFlag }
   },
   nn: {
     text: "Nynorsk",
     value: "nn",
-    image: { avatar: true, src: nnFlag },
+    image: { avatar: true, src: nnFlag }
   },
   en: {
     text: "Engelsk",
     value: "en",
-    image: { avatar: true, src: enFlag },
+    image: { avatar: true, src: enFlag }
   },
   is: {
     text: "Islandsk",
     value: "is",
-    image: { avatar: true, src: isFlag },
-  },
+    image: { avatar: true, src: isFlag }
+  }
 };
 
 const LessonCard: FC<any> = ({
-  title,
-  lessonId,
-  language,
-  hasContent,
-  lessonTitle,
-}) => {
+                               title,
+                               lessonId,
+                               language,
+                               hasContent,
+                               lessonTitle
+                             }) => {
   const history = useHistory();
 
   const navigateToEditor = (
@@ -49,7 +49,7 @@ const LessonCard: FC<any> = ({
     const target = [
       "/editor",
       lessonId,
-      language === "nb" ? lessonTitle : `${lessonTitle}_${language}`,
+      language === "nb" ? lessonTitle : `${lessonTitle}_${language}`
     ].join("/");
     history.push({ pathname: target });
   };
@@ -76,7 +76,7 @@ const LessonCard: FC<any> = ({
                   maxHeight: "220px",
                   overflow: "hidden",
                   objectFit: "cover",
-                  objectPosition: "0 0",
+                  objectPosition: "0 0"
                 }}
               />
             </Card.Content>
@@ -97,7 +97,7 @@ const LessonCard: FC<any> = ({
                 style={{
                   maxHeight: "220px",
                   overflow: "hidden",
-                  objectFit: "cover",
+                  objectFit: "cover"
                 }}
               />
             </Card.Content>
@@ -114,7 +114,7 @@ const LessonCard: FC<any> = ({
               width: "15%",
               position: "absolute",
               left: "80%",
-              top: "57%",
+              top: "57%"
             }}
             src={languageImage}
             alt={""}

@@ -2,10 +2,7 @@ import ButtonComponent from "./ButtonComponent";
 
 import { useHotkeys } from "react-hotkeys-hook";
 
-import {
-  image as config,
-  KEY_COMBINATIONS as KEY,
-} from "./settings/buttonConfig";
+import { image as config, KEY_COMBINATIONS as KEY } from "./settings/buttonConfig";
 import { FC } from "react";
 
 const Image: FC<any> = ({ editorRef, uploadImageRef }) => {

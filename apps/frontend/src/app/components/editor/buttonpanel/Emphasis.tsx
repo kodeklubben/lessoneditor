@@ -1,27 +1,20 @@
 import ButtonComponent from "./ButtonComponent";
 import { useHotkeys } from "react-hotkeys-hook";
-import {
-  buttonAction as emphasisAction,
-  cancelButton,
-  heading,
-} from "./utils/buttonMethods";
-import {
-  emphasis as config,
-  KEY_COMBINATIONS as KEY,
-} from "./settings/buttonConfig";
+import { buttonAction as emphasisAction, cancelButton, heading } from "./utils/buttonMethods";
+import { emphasis as config, KEY_COMBINATIONS as KEY } from "./settings/buttonConfig";
 import { FC } from "react";
 
 const Emphasis: FC<any> = ({
-  editorRef,
-  mdText,
-  buttonValues,
-  cursorPositionStart,
-  cursorPositionEnd,
-  setMdText,
-  setCursorPosition,
-  setCursor,
-  setButtonValues,
-}) => {
+                             editorRef,
+                             mdText,
+                             buttonValues,
+                             cursorPositionStart,
+                             cursorPositionEnd,
+                             setMdText,
+                             setCursorPosition,
+                             setCursor,
+                             setButtonValues
+                           }) => {
   let output;
   let cancelResults;
   let results: {
@@ -45,7 +38,7 @@ const Emphasis: FC<any> = ({
   const setButton = (value: any) => {
     setButtonValues((prevButtonValues: any) => ({
       ...prevButtonValues,
-      [value]: !buttonValues[value],
+      [value]: !buttonValues[value]
     }));
   };
 
@@ -123,7 +116,7 @@ const Emphasis: FC<any> = ({
       );
       setButtonValues((prevButtonValues: any) => ({
         ...prevButtonValues,
-        [buttonTitle]: results?.isOn,
+        [buttonTitle]: results?.isOn
       }));
       setChanges(
         results?.mdText,
@@ -140,7 +133,7 @@ const Emphasis: FC<any> = ({
         config.strikethrough.cursorIntOFF,
         config.strikethrough.output
       );
-    },
+    }
   };
 
   useHotkeys(

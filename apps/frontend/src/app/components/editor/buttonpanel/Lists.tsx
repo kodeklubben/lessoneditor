@@ -2,15 +2,9 @@ import ButtonComponent from "./ButtonComponent";
 
 import { useHotkeys } from "react-hotkeys-hook";
 
-import {
-  buttonAction as listsAction,
-  cancelButton,
-} from "./utils/buttonMethods";
+import { buttonAction as listsAction, cancelButton } from "./utils/buttonMethods";
 
-import {
-  KEY_COMBINATIONS as KEY,
-  lists as config,
-} from "./settings/buttonConfig";
+import { KEY_COMBINATIONS as KEY, lists as config } from "./settings/buttonConfig";
 import { FC } from "react";
 
 let cancelResults;
@@ -18,17 +12,17 @@ let results;
 let buttonTitle;
 
 const Lists: FC<any> = ({
-  editorRef,
-  cursorPositionStart,
-  cursorPositionEnd,
-  mdText,
-  buttonValues,
-  setMdText,
-  setCursorPosition,
-  setCursor,
-  setListButtonValues,
-  setButtonValues,
-}) => {
+                          editorRef,
+                          cursorPositionStart,
+                          cursorPositionEnd,
+                          mdText,
+                          buttonValues,
+                          setMdText,
+                          setCursorPosition,
+                          setCursor,
+                          setListButtonValues,
+                          setButtonValues
+                        }) => {
   const setChanges = (
     mdText: any,
     cursorPositionStart: any,
@@ -42,7 +36,7 @@ const Lists: FC<any> = ({
   const setButton = (value: string) => {
     setButtonValues((prevButtonValues: any) => ({
       ...prevButtonValues,
-      [value]: !buttonValues[value],
+      [value]: !buttonValues[value]
     }));
   };
 
@@ -93,7 +87,7 @@ const Lists: FC<any> = ({
       setListButtonValues({
         bTitle: buttonTitle,
         output: config.listUl.outputOnEnter,
-        cursorInt: config.listUl.cursorIntON,
+        cursorInt: config.listUl.cursorIntON
       });
       setList(
         buttonTitle,
@@ -108,7 +102,7 @@ const Lists: FC<any> = ({
       setListButtonValues({
         bTitle: buttonTitle,
         output: config.listOl.outputOnEnter,
-        cursorInt: config.listOl.cursorIntON,
+        cursorInt: config.listOl.cursorIntON
       });
       setList(
         buttonTitle,
@@ -123,7 +117,7 @@ const Lists: FC<any> = ({
       setListButtonValues({
         bTitle: buttonTitle,
         output: config.listCheck.outputOnEnter,
-        cursorInt: config.listCheck.cursorIntON,
+        cursorInt: config.listCheck.cursorIntON
       });
       setList(
         buttonTitle,
@@ -131,7 +125,7 @@ const Lists: FC<any> = ({
         config.listCheck.cursorIntOFF,
         config.listCheck.output
       );
-    },
+    }
   };
 
   useHotkeys(
@@ -161,7 +155,7 @@ const Lists: FC<any> = ({
     editorRef.current.focus();
     setButtonValues((prevState: any) => ({
       ...prevState,
-      [button]: !buttonValues[button],
+      [button]: !buttonValues[button]
     }));
     switch (button) {
       case config.listUl.buttonTitle:

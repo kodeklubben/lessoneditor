@@ -1,19 +1,21 @@
-import { useContext, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import "./editor.scss";
 import ButtonPanel from "./buttonpanel/ButtonPanel";
 import ImageUpload from "./ImageUpload";
 import MDPreview from "./MDPreview";
 import MDTextArea from "./MDTextArea";
 import ShowSpinner from "../ShowSpinner";
-import { FileContext } from "../../contexts/FileContext";
+import { useFileContext } from "../../contexts/FileContext";
 import { useParams } from "react-router";
-import { LessonContext } from "../../contexts/LessonContext";
+import { useLessonContext } from "../../contexts/LessonContext";
 import Navbar from "../navbar/Navbar";
+import { filenameParser } from "../../utils/filename-parser";
 
 const Editor = () => {
   const { lessonId, file } = useParams<any>();
-  const { lessonData } = useContext<any>(LessonContext);
-  const { saveFileBody, savedFileBody } = useContext<any>(FileContext);
+
+  const { lessonData } = useLessonContext();
+  const { saveFileBody, savedFileBody } = useFileContext();
   const [mdText, setMdText] = useState("");
   const [showSpinner, setShowSpinner] = useState(true);
   const [buttonValues, setButtonValues] = useState({});
@@ -27,14 +29,14 @@ const Editor = () => {
   const [listButtonValues, setListButtonValues] = useState({
     bTitle: "",
     output: "",
-    cursorInt: 0,
+    cursorInt: 0
   });
 
   const editorRef = useRef();
   const previewRef = useRef();
   const uploadImageRef = useRef();
 
-  const language = file && file.slice(-3, -2) === "_" ? file.slice(-2) : "nb";
+  const { language } = filenameParser(file);
 
   const pushUndoValue = (mdText: string, cursorPositionStart: never[]) => {
     if (
@@ -45,7 +47,7 @@ const Editor = () => {
       // @ts-ignore
       setUndoCursorPosition((undoCursorPosition) => [
         ...undoCursorPosition,
-        cursorPositionStart,
+        cursorPositionStart
       ]);
       setRedo(redo.slice(0, redo.length - 1));
       setMdText(redo[redo.length - 1]);
@@ -62,7 +64,7 @@ const Editor = () => {
       // @ts-ignore
       setRedoCursorPosition((redoCursorPosition) => [
         ...redoCursorPosition,
-        cursorPositionStart,
+        cursorPositionStart
       ]);
       setUndo(undo.slice(0, undo.length - 1));
       setMdText(undo[undo.length - 1]);
@@ -98,7 +100,9 @@ const Editor = () => {
   }
 
   const saveEditorText = async () => {
-    await saveFileBody(lessonId, file, mdText);
+    if (saveFileBody) {
+      await saveFileBody(lessonId, file, mdText);
+    }
   };
 
   return (

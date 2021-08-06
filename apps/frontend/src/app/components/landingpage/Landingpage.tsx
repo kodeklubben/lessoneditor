@@ -1,5 +1,5 @@
 import "./landingpage.scss";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { useParams } from "react-router";
 
 import TeacherGuides from "./TeacherGuides";
@@ -11,8 +11,8 @@ import ThankU from "./ThankU";
 import submitLesson from "../../api/submit-lesson";
 import ShowSpinner from "../ShowSpinner";
 import { Button } from "semantic-ui-react";
-import {LessonContext} from "../../contexts/LessonContext";
 import Navbar from "../navbar/Navbar";
+import { useLessonContext } from "../../contexts/LessonContext";
 
 const Landingpage = () => {
   const [showSpinner, setShowSpinner] = useState(false);
@@ -20,9 +20,9 @@ const Landingpage = () => {
   const [thankU, setThankU] = useState(false);
   const { lessonId, mode } = useParams<any>();
   const pageContent = mode;
-  const { lessonData, saveLesson, lessonList } = useContext<any>(LessonContext);
+  const { lessonData, saveLesson, lessonList } = useLessonContext();
 
-  const onSubmit = async (lessonId:string) => {
+  const onSubmit = async (lessonId: string) => {
     setShowSpinner(true);
     await saveLesson(lessonData);
     await submitLesson(lessonId);
@@ -35,7 +35,7 @@ const Landingpage = () => {
   const courseTitle = lessonData.courseTitle;
 
   // @ts-ignore
-  const dropdownValue = (input:string) => {
+  const dropdownValue = (input: string) => {
     switch (input) {
       case "lessontexts":
         return (

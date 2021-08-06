@@ -42,7 +42,7 @@ describe("preview-area", () => {
       .simulate("change", { target: { value: "**test**" } });
     wrapped.update();
     expect(wrapped.find(".PreviewArea").html()).toEqual(
-      '<div class="PreviewArea"><p><strong>test</strong></p>\n</div>'
+      "<div class=\"PreviewArea\"><p><strong>test</strong></p>\n</div>"
     );
   });
 
@@ -52,7 +52,7 @@ describe("preview-area", () => {
       .simulate("change", { target: { value: "*test*" } });
     wrapped.update();
     expect(wrapped.find(".PreviewArea").html()).toEqual(
-      '<div class="PreviewArea"><p><em>test</em></p>\n</div>'
+      "<div class=\"PreviewArea\"><p><em>test</em></p>\n</div>"
     );
   });
 
@@ -62,7 +62,7 @@ describe("preview-area", () => {
       .simulate("change", { target: { value: "# test" } });
     wrapped.update();
     expect(wrapped.find(".PreviewArea").html()).toEqual(
-      '<div class="PreviewArea"><section>\n<h1>test</h1>\n</section>\n</div>'
+      "<div class=\"PreviewArea\"><section>\n<h1>test</h1>\n</section>\n</div>"
     );
   });
 
@@ -72,7 +72,7 @@ describe("preview-area", () => {
       .simulate("change", { target: { value: "## test" } });
     wrapped.update();
     expect(wrapped.find(".PreviewArea").html()).toEqual(
-      '<div class="PreviewArea"><section>\n<h2>test</h2>\n</section>\n</div>'
+      "<div class=\"PreviewArea\"><section>\n<h2>test</h2>\n</section>\n</div>"
     );
   });
 });

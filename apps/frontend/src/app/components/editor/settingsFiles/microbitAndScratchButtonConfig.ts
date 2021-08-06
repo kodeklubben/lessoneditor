@@ -41,7 +41,7 @@ const chars = {
   w: "w",
   x: "x",
   y: "y",
-  z: "z",
+  z: "z"
 };
 
 // SHORTCUTKEYS config
@@ -62,7 +62,7 @@ const KEY_COMBINATIONS_MICROBIT = {
   images: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.fem].join(""),
   pins: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.seks].join(""),
   serial: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.syv].join(""),
-  control: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.atte].join(""),
+  control: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.atte].join("")
 };
 
 const KEY_COMBINATIONS_SCRATCH = {
@@ -75,7 +75,7 @@ const KEY_COMBINATIONS_SCRATCH = {
   control: [SHORTCUTKEY, plus, chars.syv].join(""),
   sensing: [SHORTCUTKEY, plus, chars.atte].join(""),
   operators: [SHORTCUTKEY, plus, chars.ni].join(""),
-  moreblocks: [SHORTCUTKEY, plus, chars.null].join(""),
+  moreblocks: [SHORTCUTKEY, plus, chars.null].join("")
 };
 
 const microbitbuttons = {
@@ -86,7 +86,7 @@ const microbitbuttons = {
     cursorIntON: 1,
     cursorIntOFF: 17,
     shortcut: KEY_COMBINATIONS_MICROBIT.basic,
-    color: "#1e90ff",
+    color: "#1e90ff"
   },
   input: {
     buttonTitle: "input",
@@ -95,7 +95,7 @@ const microbitbuttons = {
     cursorIntON: 1,
     cursorIntOFF: 17,
     shortcut: KEY_COMBINATIONS_MICROBIT.input,
-    color: "#d400d4",
+    color: "#d400d4"
   },
   music: {
     buttonTitle: "music",
@@ -104,7 +104,7 @@ const microbitbuttons = {
     cursorIntON: 1,
     cursorIntOFF: 17,
     shortcut: KEY_COMBINATIONS_MICROBIT.music,
-    color: "#e63022",
+    color: "#e63022"
   },
   led: {
     buttonTitle: "led",
@@ -113,7 +113,7 @@ const microbitbuttons = {
     cursorIntON: 1,
     cursorIntOFF: 15,
     shortcut: KEY_COMBINATIONS_MICROBIT.led,
-    color: "#5c2d91",
+    color: "#5c2d91"
   },
   radio: {
     buttonTitle: "radio",
@@ -122,7 +122,7 @@ const microbitbuttons = {
     cursorIntON: 1,
     cursorIntOFF: 17,
     shortcut: KEY_COMBINATIONS_MICROBIT.radio,
-    color: "#e3008c",
+    color: "#e3008c"
   },
   loops: {
     buttonTitle: "loops",
@@ -131,7 +131,7 @@ const microbitbuttons = {
     cursorIntON: 1,
     cursorIntOFF: 17,
     shortcut: KEY_COMBINATIONS_MICROBIT.loops,
-    color: "#0a0",
+    color: "#0a0"
   },
   logic: {
     buttonTitle: "logic",
@@ -140,7 +140,7 @@ const microbitbuttons = {
     cursorIntON: 1,
     cursorIntOFF: 17,
     shortcut: KEY_COMBINATIONS_MICROBIT.logic,
-    color: "#00a4a6",
+    color: "#00a4a6"
   },
   variables: {
     buttonTitle: "variables",
@@ -149,7 +149,7 @@ const microbitbuttons = {
     cursorIntON: 1,
     cursorIntOFF: 21,
     shortcut: KEY_COMBINATIONS_MICROBIT.variables,
-    color: "#dc143c",
+    color: "#dc143c"
   },
   math: {
     buttonTitle: "math",
@@ -158,7 +158,7 @@ const microbitbuttons = {
     cursorIntON: 1,
     cursorIntOFF: 16,
     shortcut: KEY_COMBINATIONS_MICROBIT.math,
-    color: "#9400d3",
+    color: "#9400d3"
   },
   functions: {
     buttonTitle: "functions",
@@ -167,7 +167,7 @@ const microbitbuttons = {
     cursorIntON: 1,
     cursorIntOFF: 21,
     shortcut: KEY_COMBINATIONS_MICROBIT.functions,
-    color: "#3455db",
+    color: "#3455db"
   },
   arrays: {
     buttonTitle: "arrays",
@@ -176,7 +176,7 @@ const microbitbuttons = {
     cursorIntON: 1,
     cursorIntOFF: 18,
     shortcut: KEY_COMBINATIONS_MICROBIT.arrays,
-    color: "#e65722",
+    color: "#e65722"
   },
   text: {
     buttonTitle: "text",
@@ -185,7 +185,7 @@ const microbitbuttons = {
     cursorIntON: 1,
     cursorIntOFF: 16,
     shortcut: KEY_COMBINATIONS_MICROBIT.text,
-    color: "#b8860b",
+    color: "#b8860b"
   },
   game: {
     buttonTitle: "game",
@@ -194,7 +194,7 @@ const microbitbuttons = {
     cursorIntON: 1,
     cursorIntOFF: 16,
     shortcut: KEY_COMBINATIONS_MICROBIT.game,
-    color: "#007a4b",
+    color: "#007a4b"
   },
   images: {
     buttonTitle: "images",
@@ -203,7 +203,7 @@ const microbitbuttons = {
     cursorIntON: 1,
     cursorIntOFF: 18,
     shortcut: KEY_COMBINATIONS_MICROBIT.images,
-    color: "#7600a8",
+    color: "#7600a8"
   },
   pins: {
     buttonTitle: "pins",
@@ -212,7 +212,7 @@ const microbitbuttons = {
     cursorIntON: 1,
     cursorIntOFF: 16,
     shortcut: KEY_COMBINATIONS_MICROBIT.pins,
-    color: "#b22222",
+    color: "#b22222"
   },
   serial: {
     buttonTitle: "seial",
@@ -221,7 +221,7 @@ const microbitbuttons = {
     cursorIntON: 1,
     cursorIntOFF: 18,
     shortcut: KEY_COMBINATIONS_MICROBIT.serial,
-    color: "#002050",
+    color: "#002050"
   },
   control: {
     buttonTitle: "control",
@@ -230,8 +230,8 @@ const microbitbuttons = {
     cursorIntON: 1,
     cursorIntOFF: 19,
     shortcut: KEY_COMBINATIONS_MICROBIT.control,
-    color: "#333",
-  },
+    color: "#333"
+  }
 };
 
 const scratchbuttons = {
@@ -242,7 +242,7 @@ const scratchbuttons = {
     cursorIntON: 1,
     cursorIntOFF: 15,
     shortcut: KEY_COMBINATIONS_SCRATCH.motion,
-    color: "#4c97ff",
+    color: "#4c97ff"
   },
   looks: {
     buttonTitle: "looks",
@@ -251,7 +251,7 @@ const scratchbuttons = {
     cursorIntON: 1,
     cursorIntOFF: 14,
     shortcut: KEY_COMBINATIONS_SCRATCH.looks,
-    color: "#96f",
+    color: "#96f"
   },
   sound: {
     buttonTitle: "sound",
@@ -260,7 +260,7 @@ const scratchbuttons = {
     cursorIntON: 1,
     cursorIntOFF: 14,
     shortcut: KEY_COMBINATIONS_SCRATCH.sound,
-    color: "#cf63cf",
+    color: "#cf63cf"
   },
   pen: {
     buttonTitle: "pen",
@@ -269,7 +269,7 @@ const scratchbuttons = {
     cursorIntON: 1,
     cursorIntOFF: 12,
     shortcut: KEY_COMBINATIONS_SCRATCH.pen,
-    color: "#0fbd8c",
+    color: "#0fbd8c"
   },
   data: {
     buttonTitle: "data",
@@ -278,7 +278,7 @@ const scratchbuttons = {
     cursorIntON: 1,
     cursorIntOFF: 13,
     shortcut: KEY_COMBINATIONS_SCRATCH.data,
-    color: "#ff8c1a",
+    color: "#ff8c1a"
   },
   events: {
     buttonTitle: "events",
@@ -287,7 +287,7 @@ const scratchbuttons = {
     cursorIntON: 1,
     cursorIntOFF: 15,
     shortcut: KEY_COMBINATIONS_SCRATCH.events,
-    color: "#ffbf00",
+    color: "#ffbf00"
   },
   control: {
     buttonTitle: "control",
@@ -296,7 +296,7 @@ const scratchbuttons = {
     cursorIntON: 1,
     cursorIntOFF: 16,
     shortcut: KEY_COMBINATIONS_SCRATCH.control,
-    color: "#ffab19",
+    color: "#ffab19"
   },
   sensing: {
     buttonTitle: "sensing",
@@ -305,7 +305,7 @@ const scratchbuttons = {
     cursorIntON: 1,
     cursorIntOFF: 16,
     shortcut: KEY_COMBINATIONS_SCRATCH.sensing,
-    color: "#5cb1d6",
+    color: "#5cb1d6"
   },
   operators: {
     buttonTitle: "operators",
@@ -314,7 +314,7 @@ const scratchbuttons = {
     cursorIntON: 1,
     cursorIntOFF: 18,
     shortcut: KEY_COMBINATIONS_SCRATCH.operators,
-    color: "#59c059",
+    color: "#59c059"
   },
   moreblocks: {
     buttonTitle: "moreblocks",
@@ -323,13 +323,13 @@ const scratchbuttons = {
     cursorIntON: 1,
     cursorIntOFF: 19,
     shortcut: KEY_COMBINATIONS_SCRATCH.moreblocks,
-    color: "#ff6680",
-  },
+    color: "#ff6680"
+  }
 };
 
 export {
   microbitbuttons,
   scratchbuttons,
   KEY_COMBINATIONS_MICROBIT,
-  KEY_COMBINATIONS_SCRATCH,
+  KEY_COMBINATIONS_SCRATCH
 };

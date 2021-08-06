@@ -1,15 +1,15 @@
 import "./navbar.scss";
-import { FC, useContext } from "react";
+import { FC } from "react";
 import { useParams } from "react-router";
 import ProfileMenu from "./ProfileMenu";
-import { UserContext } from "../../contexts/UserContext";
-import { LessonContext } from "../../contexts/LessonContext";
+import { useUserContext } from "../../contexts/UserContext";
 
 import logo from "/assets/public/lav_logo.jpg";
+import { useLessonContext } from "../../contexts/LessonContext";
 
 const Navbar: FC<any> = () => {
-  const { user } = useContext<any>(UserContext);
-  const { lessonData } = useContext<any>(LessonContext);
+  const { user } = useUserContext();
+  const { lessonData } = useLessonContext();
 
   const { file } = useParams<any>();
 
@@ -41,6 +41,8 @@ const Navbar: FC<any> = () => {
           ""
         )}
         <div className="navbar_profile">
+
+
           <a id="navbar_gohome" href={"/"}>
             <ProfileMenu
               name={user ? user.name : ""}

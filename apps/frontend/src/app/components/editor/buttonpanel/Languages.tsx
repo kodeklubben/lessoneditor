@@ -2,11 +2,12 @@ import { useHistory, useParams } from "react-router";
 import { Dropdown, Popup } from "semantic-ui-react";
 import languageOptions from "./settings/LanguageOptions";
 import { FC } from "react";
+import { filenameParser } from "../../../utils/filename-parser";
 
 const Languages: FC<any> = ({ saveEditorText, setShowSpinner }) => {
   const { lessonId, file } = useParams<any>();
   const history = useHistory();
-  const language = file && file.slice(-3, -2) === "_" ? file.slice(-2) : "nb";
+  const { language } = filenameParser(file);
 
   const filename =
     file && file.slice(-3, -2) === "_" ? file.slice(0, -3) : file;
@@ -18,7 +19,7 @@ const Languages: FC<any> = ({ saveEditorText, setShowSpinner }) => {
       target = [
         "/editor",
         lessonId,
-        value === "nb" ? filename : `${filename}_${value}`,
+        value === "nb" ? filename : `${filename}_${value}`
       ].join("/");
     }
     await saveEditorText();

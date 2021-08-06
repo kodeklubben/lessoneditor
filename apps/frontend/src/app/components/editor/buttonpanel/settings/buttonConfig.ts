@@ -1,7 +1,4 @@
-import {
-  BUTTON_TITLE,
-  SECTION_TEXT,
-} from "../../settingsFiles/languages/editor_NO";
+import { BUTTON_TITLE, SECTION_TEXT } from "../../settingsFiles/languages/editor_NO";
 
 // !!!!
 // if new buttons are added remember to update buttons-state in editor.js
@@ -39,7 +36,7 @@ const chars = {
   w: "w",
   x: "x",
   y: "y",
-  z: "z",
+  z: "z"
 };
 
 // SHORTCUTKEYS config
@@ -67,7 +64,7 @@ const KEY_COMBINATIONS = {
   save: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.s].join(""),
   inline: [SHORTCUTKEY, plus, chars.e].join(""),
   codeblock: [SHORTCUTKEY, plus, chars.k].join(""),
-  preview: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.y].join(""),
+  preview: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.y].join("")
 };
 
 const emphasis = {
@@ -78,7 +75,7 @@ const emphasis = {
     title: BUTTON_TITLE.bold,
     cursorIntON: 2,
     cursorIntOFF: 2,
-    shortcut: KEY_COMBINATIONS.bold,
+    shortcut: KEY_COMBINATIONS.bold
   },
   italic: {
     buttonTitle: "italic",
@@ -87,7 +84,7 @@ const emphasis = {
     title: BUTTON_TITLE.italic,
     cursorIntON: 1,
     cursorIntOFF: 1,
-    shortcut: KEY_COMBINATIONS.italic,
+    shortcut: KEY_COMBINATIONS.italic
   },
   heading: {
     buttonTitle: "heading",
@@ -96,7 +93,7 @@ const emphasis = {
     title: BUTTON_TITLE.heading,
     cursorIntON: 0,
     cursorIntOFF: 0,
-    shortcut: KEY_COMBINATIONS.heading,
+    shortcut: KEY_COMBINATIONS.heading
   },
   strikethrough: {
     buttonTitle: "strikethrough",
@@ -105,8 +102,8 @@ const emphasis = {
     title: BUTTON_TITLE.strikethrough,
     cursorIntON: 2,
     cursorIntOFF: 2,
-    shortcut: KEY_COMBINATIONS.strikethrough,
-  },
+    shortcut: KEY_COMBINATIONS.strikethrough
+  }
 };
 
 const undoRedo = {
@@ -117,7 +114,7 @@ const undoRedo = {
     title: BUTTON_TITLE.undo,
     cursorIntON: 0,
     cursorIntOFF: 0,
-    shortcut: KEY_COMBINATIONS.undo,
+    shortcut: KEY_COMBINATIONS.undo
   },
   redo: {
     buttonTitle: "redo",
@@ -126,8 +123,8 @@ const undoRedo = {
     title: BUTTON_TITLE.redo,
     cursorIntON: 0,
     cursorIntOFF: 0,
-    shortcut: KEY_COMBINATIONS.redo,
-  },
+    shortcut: KEY_COMBINATIONS.redo
+  }
 };
 
 const hyperlink = {
@@ -138,8 +135,8 @@ const hyperlink = {
     title: BUTTON_TITLE.hyperlink,
     cursorIntON: 0,
     cursorIntOFF: 0,
-    shortcut: KEY_COMBINATIONS.hyperlink,
-  },
+    shortcut: KEY_COMBINATIONS.hyperlink
+  }
 };
 
 const image = {
@@ -150,8 +147,8 @@ const image = {
     title: BUTTON_TITLE.image,
     cursorIntON: 0,
     cursorIntOFF: 0,
-    shortcut: KEY_COMBINATIONS.image,
-  },
+    shortcut: KEY_COMBINATIONS.image
+  }
 };
 
 const video = {
@@ -162,8 +159,8 @@ const video = {
     title: BUTTON_TITLE.video,
     cursorIntON: 0,
     cursorIntOFF: 0,
-    shortcut: KEY_COMBINATIONS.video,
-  },
+    shortcut: KEY_COMBINATIONS.video
+  }
 };
 
 const preview = {
@@ -174,8 +171,8 @@ const preview = {
     title: BUTTON_TITLE.preview,
     cursorIntON: 0,
     cursorIntOFF: 0,
-    shortcut: KEY_COMBINATIONS.preview,
-  },
+    shortcut: KEY_COMBINATIONS.preview
+  }
 };
 
 const lists = {
@@ -187,7 +184,7 @@ const lists = {
     title: BUTTON_TITLE.listUl,
     cursorIntON: 2,
     cursorIntOFF: 0,
-    shortcut: KEY_COMBINATIONS.listul,
+    shortcut: KEY_COMBINATIONS.listul
   },
   listOl: {
     buttonTitle: "listOl",
@@ -197,7 +194,7 @@ const lists = {
     title: BUTTON_TITLE.listOl,
     cursorIntON: 3,
     cursorIntOFF: 0,
-    shortcut: KEY_COMBINATIONS.listol,
+    shortcut: KEY_COMBINATIONS.listol
   },
   listCheck: {
     buttonTitle: "listCheck",
@@ -207,8 +204,8 @@ const lists = {
     title: BUTTON_TITLE.listCheck,
     cursorIntON: 6,
     cursorIntOFF: 0,
-    shortcut: KEY_COMBINATIONS.listcheck,
-  },
+    shortcut: KEY_COMBINATIONS.listcheck
+  }
 };
 
 const sections = {
@@ -227,9 +224,9 @@ const sections = {
       padding: "8px",
       borderRadius: "10px",
       background: "#fff",
-      fontWeigth: "bold",
+      fontWeigth: "bold"
     },
-    imageurl: null,
+    imageurl: null
   },
   activity: {
     buttonTitle: "sec_activity",
@@ -245,9 +242,9 @@ const sections = {
       color: "#fff",
       background: "#349946",
       padding: "10px",
-      borderRadius: "10px",
+      borderRadius: "10px"
     },
-    imageurl: null,
+    imageurl: null
   },
   check: {
     buttonTitle: "sec_check",
@@ -263,9 +260,9 @@ const sections = {
       height: "2em",
       border: " 2px solid black",
       borderRadius: "10px",
-      padding: "8px",
+      padding: "8px"
     },
-    imageurl: "assets/public/sectionSVG/check.svg",
+    imageurl: "assets/public/sectionSVG/check.svg"
   },
   tip: {
     buttonTitle: "sec_tip",
@@ -282,9 +279,9 @@ const sections = {
       background: "#fff99d",
       borderRadius: "10px",
       padding: "7px",
-      fontWeigth: "lighter",
+      fontWeigth: "lighter"
     },
-    imageurl: null,
+    imageurl: null
   },
   protip: {
     buttonTitle: "sec_protip",
@@ -301,9 +298,9 @@ const sections = {
       background: "#fff99d",
       borderRadius: "10px",
       padding: "7px",
-      fontWeigth: "bold",
+      fontWeigth: "bold"
     },
-    imageurl: null,
+    imageurl: null
   },
   challenge: {
     buttonTitle: "sec_challenge",
@@ -319,9 +316,9 @@ const sections = {
       color: "#fff",
       background: "#00b1da",
       padding: "10px",
-      borderRadius: "10px",
+      borderRadius: "10px"
     },
-    imageurl: null,
+    imageurl: null
   },
   flag: {
     buttonTitle: "sec_flag",
@@ -338,9 +335,9 @@ const sections = {
       borderRadius: "10px",
       color: "rgb(54, 161, 55)",
       background: "#fff",
-      padding: "7px",
+      padding: "7px"
     },
-    imageurl: "assets/public/sectionSVG/flag.svg",
+    imageurl: "assets/public/sectionSVG/flag.svg"
   },
   try: {
     buttonTitle: "sec_try",
@@ -355,9 +352,9 @@ const sections = {
       height: "2em",
       background: "#abdbea",
       borderRadius: "10px",
-      padding: "10px",
+      padding: "10px"
     },
-    imageurl: null,
+    imageurl: null
   },
   save: {
     buttonTitle: "sec_save",
@@ -374,10 +371,10 @@ const sections = {
       background: "white",
       borderRadius: "10px",
       padding: "7px",
-      border: "3px solid rgb(36, 90, 154)",
+      border: "3px solid rgb(36, 90, 154)"
     },
-    imageurl: "assets/public/sectionSVG/save.svg",
-  },
+    imageurl: "assets/public/sectionSVG/save.svg"
+  }
 };
 
 const codebutton = {
@@ -396,8 +393,8 @@ const codebutton = {
       backgroundColor: "#f9f2f4",
       border: "3px solid #ccc",
       borderRadius: "10px",
-      fontWeigth: "normal",
-    },
+      fontWeigth: "normal"
+    }
   },
   codeblock: {
     buttonTitle: "codeblock",
@@ -414,9 +411,9 @@ const codebutton = {
       backgroundColor: "#f5f5f5",
       border: "3px solid #ccc",
       borderRadius: "10px",
-      fontWeigth: "normal",
-    },
-  },
+      fontWeigth: "normal"
+    }
+  }
 };
 
 export {
@@ -431,5 +428,5 @@ export {
   codebutton,
   KEY_COMBINATIONS,
   SHORTCUTKEY,
-  SHORTCUTKEY2,
+  SHORTCUTKEY2
 };

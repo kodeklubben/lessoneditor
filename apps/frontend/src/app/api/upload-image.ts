@@ -1,5 +1,4 @@
-import resolveUrlTemplate from "../utils/resolve-url-template";
-import paths from "../../paths.json";
+import { paths, resolveUrlTemplate } from "@lessoneditor/api-interfaces";
 import axios from "axios";
 
 const uploadImage = async (lessonId: string, file: any) => {
@@ -7,8 +6,8 @@ const uploadImage = async (lessonId: string, file: any) => {
   formData.append("file", file);
   const config = {
     headers: {
-      "content-type": "multipart/form-data",
-    },
+      "content-type": "multipart/form-data"
+    }
   };
   const uploadUrl = resolveUrlTemplate(paths.LESSON_UPLOADS, { lessonId });
   const result = await axios.post(uploadUrl, formData, config);

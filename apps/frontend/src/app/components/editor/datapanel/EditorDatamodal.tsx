@@ -1,49 +1,33 @@
 import "./editordatamodal.scss";
-import { useContext, useEffect, useState } from "react";
+import { useState } from "react";
 import { useHistory, useParams } from "react-router";
 import { Button, Header, Input, Modal, Popup } from "semantic-ui-react";
 import MultiInput from "./MultiInput";
 import { FORM_TEXT } from "./settings/landingpage_NO";
-import { FileContext } from "../../../contexts/FileContext";
+import { useFileContext } from "../../../contexts/FileContext";
+import { filenameParser } from "../../../utils/filename-parser";
 
 // @ts-ignore
 const EditorDatamodal = ({ courseTitle, lessonTitle, setShowSpinner }) => {
   const history = useHistory();
   const { lessonId, file } = useParams<any>();
-  const { headerData, saveFileHeader, rawMdFileContent } =
-    useContext<any>(FileContext);
-  const [open, setOpen] = useState(false);
-  const [state, setState] = useState({
-    title: "",
-    authorList: [],
-    translatorList: [],
-    author: false,
-    translator: undefined
-  });
+  const { headerData, saveFileHeader, setHeaderData } = useFileContext();
+  const [open, setOpen] = useState<boolean>(false);
 
-  const language = file && file.slice(-3, -2) === "_" ? file.slice(-2) : "nb";
 
-  const getLanguageFromSlug = {
-    nb: "Bokmål",
-    nn: "Nynorsk",
-    en: "Engelsk",
-    is: "Islandsk",
-  };
+  const { language, languageName } = filenameParser(file);
 
-  //useeffect her for å forhindre infinite loop når metadata åpnes
-  useEffect(() => {
-    setOpen(rawMdFileContent.slice(0, 8) === "---\n---\n");
-    setState(headerData);
-  }, [headerData, rawMdFileContent]);
 
   const changeHandler = (event: { target: { name: any; value: any; }; }) => {
     const { name, value } = event.target;
-    setState((prevState) => ({ ...prevState, [name]: value }));
-    if (state.author) {
-      setState((prevState) => ({ ...prevState, err: "" }));
-    }
-    if (state.title) {
-      setState((prevState) => ({ ...prevState, err: "" }));
+    if (setHeaderData) {
+      setHeaderData((prevState) => ({ ...prevState, [name]: value }));
+      if (headerData?.author) {
+        setHeaderData((prevState) => ({ ...prevState, err: "" }));
+      }
+      if (headerData?.title) {
+        setHeaderData((prevState) => ({ ...prevState, err: "" }));
+      }
     }
   };
 
@@ -53,23 +37,29 @@ const EditorDatamodal = ({ courseTitle, lessonTitle, setShowSpinner }) => {
   ) => {
     const key = Object.keys(object)[0];
     const value = Object.values(object)[0];
-    setState((prevState) => ({ ...prevState, [key]: value }));
-    setState((prevState) => ({ ...prevState, [name]: "" }));
+    if (setHeaderData) {
+      setHeaderData((prevState) => ({ ...prevState, [key]: value }));
+      setHeaderData((prevState) => ({ ...prevState, [name]: "" }));
+    }
   };
 
   const onSubmit = async () => {
-    const newHeaderData = Object.assign({ language }, state);
-    setShowSpinner(true);
-    await saveFileHeader(lessonId, file, newHeaderData);
-    setShowSpinner(false);
-    setOpen(false);
-    history.push("/");
-    history.replace(["editor", lessonId, file].join("/"));
+    if (saveFileHeader) {
+      const newHeaderData = Object.assign({ language }, headerData);
+      setShowSpinner(true);
+      await saveFileHeader(lessonId, file, newHeaderData);
+      setShowSpinner(false);
+      setOpen(false);
+      history.push("/");
+      history.replace(["editor", lessonId, file].join("/"));
+    }
   };
 
   const onCancel = async () => {
-    setState(headerData);
-    setOpen(false);
+    if (setHeaderData && headerData) {
+      setHeaderData(headerData);
+      setOpen(false);
+    }
   };
 
   return (
@@ -92,8 +82,8 @@ const EditorDatamodal = ({ courseTitle, lessonTitle, setShowSpinner }) => {
       />
       <Modal
         closeOnDimmerClick={
-          !(!headerData.title ||
-              (!headerData.author && headerData.authorList.length === 0))
+          !(!headerData?.title ||
+            (!headerData?.author && headerData.authorList.length === 0))
         }
         onClose={() => setOpen(false)}
         onOpen={() => setOpen(true)}
@@ -114,7 +104,7 @@ const EditorDatamodal = ({ courseTitle, lessonTitle, setShowSpinner }) => {
         <Modal.Content className="editor_modal">
           <Header as="h3" className="formLabel">
             { /* @ts-ignore */}
-            {`${FORM_TEXT.TITLE.heading} på ${getLanguageFromSlug[language]}`}
+            {`${FORM_TEXT.TITLE.heading} på ${languageName}`}
             <span className="labelTextSpan">(obligatorisk)</span>
           </Header>
 
@@ -124,11 +114,11 @@ const EditorDatamodal = ({ courseTitle, lessonTitle, setShowSpinner }) => {
             type="text"
             name="title"
             placeholder={FORM_TEXT.TITLE.placeholder}
-            value={state.title}
+            value={headerData?.title}
             onChange={changeHandler}
             fluid
           />
-          {!state.title ? (
+          {!headerData?.title ? (
             <p style={{ color: "red" }}>
               <i>Må ha tittel</i>
             </p>
@@ -139,15 +129,15 @@ const EditorDatamodal = ({ courseTitle, lessonTitle, setShowSpinner }) => {
         <Modal.Content className="editor_modal">
           <MultiInput
             changeHandler={changeHandler}
-            inputArray={state.authorList}
-            inputValue={state.author}
+            inputArray={headerData?.authorList}
+            inputValue={headerData?.author}
             multiInputHandler={multiInputHandler}
             name="author"
             placeholder={FORM_TEXT.AUTHOR.placeholder}
             required="(obligatorisk)"
             title={FORM_TEXT.AUTHOR.heading}
           />
-          {state.authorList.length === 0 && !state.author ? (
+          {headerData?.authorList.length === 0 && !headerData?.author ? (
             <p>
               <i style={{ color: "red" }}>Må ha forfatter</i>
             </p>
@@ -158,8 +148,8 @@ const EditorDatamodal = ({ courseTitle, lessonTitle, setShowSpinner }) => {
         <Modal.Content className="editor_modal">
           <MultiInput
             changeHandler={changeHandler}
-            inputArray={state.translatorList}
-            inputValue={state.translator}
+            inputArray={headerData?.translatorList}
+            inputValue={headerData?.translator}
             multiInputHandler={multiInputHandler}
             name="translator"
             placeholder={FORM_TEXT.TRANSLATOR.placeholder}
@@ -170,11 +160,11 @@ const EditorDatamodal = ({ courseTitle, lessonTitle, setShowSpinner }) => {
         <Modal.Actions className="editor_modal">
           <Button
             disabled={
-              !headerData.title ||
+              !headerData?.title ||
               (!headerData.author && headerData.authorList.length === 0)
             }
             color={
-              headerData.title &&
+              headerData?.title &&
               (headerData.author || headerData.authorList.length > 0)
                 ? "black"
                 : "grey"
@@ -184,7 +174,7 @@ const EditorDatamodal = ({ courseTitle, lessonTitle, setShowSpinner }) => {
           />
           <Button
             disabled={
-              !state.title || (!state.author && state.authorList.length === 0)
+              !headerData?.title || (!headerData.author && headerData.authorList.length === 0)
             }
             onClick={onSubmit}
             content="OK"
