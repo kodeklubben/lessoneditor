@@ -85,7 +85,7 @@
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.3",
     "babel-jest": "27.0.6",
     "crypto-js": "^4.1.1",
-    "document-register-element": "1.13.1",
+    "document-register-element": "1.14.10",
     "enzyme": "^3.11.0",
     "eslint": "7.32.0",
     "eslint-config-prettier": "8.3.0",
