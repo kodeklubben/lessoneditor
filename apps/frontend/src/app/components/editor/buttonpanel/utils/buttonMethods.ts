@@ -1,5 +1,5 @@
 import { lists } from "../settings/buttonConfig";
-import {SECTION_TEXT} from "../../settingsFiles/languages/editor_NO";
+import { SECTION_TEXT } from "../../settingsFiles/languages/editor_NO";
 // @ts-ignore
 const buttonAction = (
   isOn: any,
@@ -41,7 +41,7 @@ const buttonAction = (
         i[i.length - 1] === " " ||
         i[0] === "\n" ||
         i[i.length - 1] === "\n"
-      ) {
+        ) {
         if (i[0] === " " || i[0] === "\n") {
           i = i.slice(1);
           cursorPositionStart += 1;
@@ -73,7 +73,7 @@ const buttonAction = (
     return {
       mdText,
       cursorPositionStart,
-      cursorPositionEnd,
+      cursorPositionEnd
     };
   } else if (isOn) {
     if (cursorPositionStart !== cursorPositionEnd) {
@@ -111,7 +111,7 @@ const cancelButton = (
   ) {
 
     mdText =
-        // @ts-ignore
+      // @ts-ignore
       mdText.slice(0, cursorPositionStart - cursorIntON) +
       mdText.slice(cursorPositionStart - cursorIntON + output.length);
     cursorPositionEnd = cursorPositionStart -= cursorIntON;
@@ -119,14 +119,14 @@ const cancelButton = (
       cancel: true,
       mdText,
       cursorPositionStart,
-      cursorPositionEnd,
+      cursorPositionEnd
     };
   } else {
     return {
       cancel: false,
       mdText,
       cursorPositionStart,
-      cursorPositionEnd,
+      cursorPositionEnd
     };
   }
 };
@@ -163,7 +163,7 @@ const heading = (isOn: boolean, mdText: string | string[], cursorPositionStart: 
     if (mdText.slice(cursorPositionStart - 2, cursorPositionStart) === "# ") {
 
       mdText =
-          // @ts-ignore
+        // @ts-ignore
         mdText.slice(0, cursorPositionStart - 2) +
         mdText.slice(cursorPositionStart);
       cursorPositionStart -= 2;
@@ -180,13 +180,13 @@ const heading = (isOn: boolean, mdText: string | string[], cursorPositionStart: 
 
 const ifNewLine = (mdText: string | string[], cursorPositionStart: number) => {
   return mdText[cursorPositionStart - 1] === "\n" ||
-    mdText === "" ||
-    cursorPositionStart === 0 ||
-    mdText.slice(cursorPositionStart - 3, cursorPositionStart) === "## " ||
-    mdText.slice(cursorPositionStart - 2, cursorPositionStart) === "# " ||
-    mdText.slice(cursorPositionStart - 2, cursorPositionStart) === "- " ||
-    mdText.slice(cursorPositionStart - 3, cursorPositionStart) === "1. " ||
-    mdText.slice(cursorPositionStart - 6, cursorPositionStart) === "- [\u0020] "
+  mdText === "" ||
+  cursorPositionStart === 0 ||
+  mdText.slice(cursorPositionStart - 3, cursorPositionStart) === "## " ||
+  mdText.slice(cursorPositionStart - 2, cursorPositionStart) === "# " ||
+  mdText.slice(cursorPositionStart - 2, cursorPositionStart) === "- " ||
+  mdText.slice(cursorPositionStart - 3, cursorPositionStart) === "1. " ||
+  mdText.slice(cursorPositionStart - 6, cursorPositionStart) === "- [\u0020] "
     ? true
     : false;
 };
@@ -230,7 +230,7 @@ const insertSection = (
         i[i.length - 1] === " " ||
         i[0] === "\n" ||
         i[i.length - 1] === "\n"
-      ) {
+        ) {
         if (i[0] === " " || i[0] === "\n") {
           i = i.slice(1);
           cursorPositionStart += 1;

@@ -3,10 +3,7 @@ import ButtonComponent from "./ButtonComponent";
 import { useHotkeys } from "react-hotkeys-hook";
 
 import { cancelButton, insertSection } from "./utils/buttonMethods";
-import {
-  KEY_COMBINATIONS as KEY,
-  sections as config,
-} from "./settings/buttonConfig";
+import { KEY_COMBINATIONS as KEY, sections as config } from "./settings/buttonConfig";
 import { SECTION_TEXT } from "../settingsFiles/languages/editor_NO";
 import { FC } from "react";
 
@@ -15,16 +12,16 @@ let cancelResults;
 let buttonTitle;
 
 const Sections: FC<any> = ({
-  editorRef,
-  cursorPositionStart,
-  cursorPositionEnd,
-  mdText,
-  buttonValues,
-  setMdText,
-  setCursorPosition,
-  setCursor,
-  setButtonValues,
-}) => {
+                             editorRef,
+                             cursorPositionStart,
+                             cursorPositionEnd,
+                             mdText,
+                             buttonValues,
+                             setMdText,
+                             setCursorPosition,
+                             setCursor,
+                             setButtonValues
+                           }) => {
   const setChanges = (
     mdText: any,
     cursorPositionStart: any,
@@ -38,7 +35,7 @@ const Sections: FC<any> = ({
   const setButton = (value: any) => {
     setButtonValues((prevButtonValues: any) => ({
       ...prevButtonValues,
-      [value]: !buttonValues[value],
+      [value]: !buttonValues[value]
     }));
   };
 
@@ -183,12 +180,12 @@ const Sections: FC<any> = ({
         config.save.output,
         config.save.cancelInt
       );
-    },
+    }
   };
 
   useHotkeys(
     `${KEY.activity}, ${KEY.intro}, ${KEY.check}, ${KEY.tip}, ` +
-      `${KEY.protip}, ${KEY.challenge}, ${KEY.flag}, ${KEY.try}, ${KEY.save}`,
+    `${KEY.protip}, ${KEY.challenge}, ${KEY.flag}, ${KEY.try}, ${KEY.save}`,
     (event, handler) => {
       event.preventDefault();
       switch (handler.key) {

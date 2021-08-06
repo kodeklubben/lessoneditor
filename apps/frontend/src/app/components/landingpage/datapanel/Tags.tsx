@@ -1,10 +1,8 @@
 import { FC } from "react";
 // @ts-ignore
-import { gradeSettings } from "../settingsFiles/LESSONTAGSSETTINGS";
 // @ts-ignore
-import { subjectSettings } from "../settingsFiles/LESSONTAGSSETTINGS";
 // @ts-ignore
-import { topicSettings } from "../settingsFiles/LESSONTAGSSETTINGS";
+import { gradeSettings, subjectSettings, topicSettings } from "../settingsFiles/LESSONTAGSSETTINGS";
 
 const Checkbox: FC<any> = ({ value, onCheck, data, name, subtag }) => {
   const onInputChange = (event: any) => {

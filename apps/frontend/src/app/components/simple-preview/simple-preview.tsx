@@ -1,11 +1,10 @@
 import "./simple-preview.scss";
-import { useContext } from "react";
 import MDPreview from "../editor/MDPreview";
-import { FileContext } from "../../contexts/FileContext";
+import { useFileContext } from "../../contexts/FileContext";
 import ShowSpinner from "../ShowSpinner";
 
 const SimplePreview = () => {
-  const { savedFileBody } = useContext<any>(FileContext);
+  const { savedFileBody } = useFileContext();
   return (
     <div className={"simple-preview"}>
       {savedFileBody !== "" ? (

@@ -9,10 +9,10 @@ const ToggleButton: FC<any> = ({ buttonText, hiddenHTML }) => {
     padding: "10px",
     border: "1px solid black",
     borderRadius: "5px",
-    backgroundColor: "#eee",
+    backgroundColor: "#eee"
   };
   const contentStyle = {
-    paddingTop: "20px",
+    paddingTop: "20px"
   };
   return (
     <div style={containerStyle}>

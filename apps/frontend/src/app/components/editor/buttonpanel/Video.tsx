@@ -1,10 +1,7 @@
 import { FC, useState } from "react";
 import ButtonComponent from "./ButtonComponent";
 import { useHotkeys } from "react-hotkeys-hook";
-import {
-  video as config,
-  KEY_COMBINATIONS as KEY,
-} from "./settings/buttonConfig";
+import { KEY_COMBINATIONS as KEY, video as config } from "./settings/buttonConfig";
 
 import { Button, Header, Input, Modal } from "semantic-ui-react";
 
@@ -13,18 +10,18 @@ const languageNO = {
   insertLink: "Sett inn URL til din video",
   ok: "OK",
   cancel: "Avbryt",
-  mandatoryText: "Må være gyldig lenke til youtube eller vimeo",
+  mandatoryText: "Må være gyldig lenke til youtube eller vimeo"
 };
 
 const Hyperlink: FC<any> = ({
-  editorRef,
-  mdText,
-  cursorPositionStart,
-  cursorPositionEnd,
-  setMdText,
-  setCursorPosition,
-  setCursor,
-}) => {
+                              editorRef,
+                              mdText,
+                              cursorPositionStart,
+                              cursorPositionEnd,
+                              setMdText,
+                              setCursorPosition,
+                              setCursor
+                            }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [url, setUrl] = useState("");
   const [validateUrl, setValidateUrl] = useState("");
@@ -63,10 +60,10 @@ const Hyperlink: FC<any> = ({
 
     setMdText(
       mdText.slice(0, cursorPositionStart) +
-        `:::${"video"}[${url}]
+      `:::${"video"}[${url}]
 :::
 ` +
-        mdText.slice(cursorPositionStart)
+      mdText.slice(cursorPositionStart)
     );
 
     setIsOpen(false);

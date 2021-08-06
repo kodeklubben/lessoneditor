@@ -54,7 +54,7 @@ const createIframe = (language: string) => {
     nb: "nb", // Norwegian
     nn: "nn-NO", // Norwegian
     sv: "sv-SE", // Swedish
-    tr: "tr", // Turkish
+    tr: "tr" // Turkish
   };
   const f = document.createElement("iframe");
   f.addEventListener("load", (e) => {
@@ -94,7 +94,7 @@ const renderSnippets = () => {
         {
           type: "renderblocks",
           id: checksum,
-          code: codeBlock.innerText,
+          code: codeBlock.innerText
         },
         "https://makecode.microbit.org/"
       );
@@ -173,7 +173,7 @@ const processIframeMessage = (e: { data: any }) => {
         height: msg.height,
         src: URL.createObjectURL(
           new Blob([msg.svg], { type: "image/svg+xml" })
-        ),
+        )
       };
       // @ts-ignore
       createImage(msgCache[msg.id]);

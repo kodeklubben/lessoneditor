@@ -10,20 +10,22 @@ const md = require("markdown-it")({
   html: false,
   breaks: true,
   langPrefix: "",
-  highlight: function (str: any, lang: any) {
+  highlight: function(str: any, lang: any) {
     if (lang && hljs.getLanguage(lang)) {
       try {
         return hljs.highlight(lang, str).value;
-      } catch (__) {}
+      } catch (__) {
+      }
     }
     if (!lang) {
       // autodetect language
       try {
         return hljs.highlightAuto(str).value;
-      } catch (e) {}
+      } catch (e) {
+      }
     }
     return "";
-  },
+  }
 })
   .use(require("markdown-it-attrs"), { allowedAttributes: ["class"] })
   .use(headerSections)
@@ -31,11 +33,11 @@ const md = require("markdown-it")({
   .use(generateChecklist)
   .use(emoji)
   .use(markdownCustomContainer, "video", {
-    validate: function (params: string) {
+    validate: function(params: string) {
       return params.trim().match(/^video\s*\[(.*)]$/);
     },
     // @ts-ignore
-    render: function (
+    render: function(
       tokens: {
         [x: string]: {
           info: any;
@@ -49,14 +51,14 @@ const md = require("markdown-it")({
 
         if (matches && matches[1]) {
           return (
-            '<div class="video-container">' +
+            "<div class=\"video-container\">" +
             getVideoIframeMarkup({ url: matches[1].trim() })
           );
         }
       } else if (tokens[idx].type === "container_video_close") {
         return "</div>";
       }
-    },
+    }
   });
 
 // @ts-ignore
@@ -81,7 +83,8 @@ function getVideoIframeMarkup(url: { url: any }) {
 
 // @ts-ignore
 function getVideoId(url: { url: any }) {
-  const youtubeRegEx = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+  const youtubeRegEx =
+    /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
 
   const vimeoRegEx = /^(http:\/\/|https:\/\/)?(www\.)?(vimeo\.com\/)([0-9]+)$/;
 

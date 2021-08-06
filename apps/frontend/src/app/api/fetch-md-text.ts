@@ -1,13 +1,13 @@
-import paths from "../../paths.json";
+import { paths, resolveUrlTemplate } from "@lessoneditor/api-interfaces";
 import axios from "axios";
-import resolveUrlTemplate from "../utils/resolve-url-template";
+
 
 const fetchMdText = async (lessonId: any, file: any) => {
   let mdText = "";
   try {
     const tempFileUrl = resolveUrlTemplate(paths.DISPLAY_FILE, {
       lessonId,
-      file,
+      file
     });
     const result = await axios.get(tempFileUrl + ".md");
     mdText = result.data;

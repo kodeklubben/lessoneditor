@@ -1,9 +1,9 @@
 import "./newlessonmodal.scss";
 
-import { useContext, useState } from "react";
+import { useState } from "react";
 import slugify from "slugify";
 import { COURSESLIST } from "../editor/settingsFiles/COURSELIST";
-import { UserContext } from "../../contexts/UserContext";
+import { useUserContext } from "../../contexts/UserContext";
 import { useHistory } from "react-router";
 import { Button, Grid, GridColumn, Input, Modal } from "semantic-ui-react";
 import ShowSpinner from "../ShowSpinner";
@@ -12,10 +12,10 @@ const NewLessonModal = () => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const history = useHistory();
-  const { addLesson } = useContext<any>(UserContext);
+  const { addLesson } = useUserContext();
   const [values, setValues] = useState({
     lessonTitle: "",
-    course: COURSESLIST[0].slug,
+    course: COURSESLIST[0].slug
   });
 
   const errorMessage = "Oppgavetittel må være satt";
@@ -35,13 +35,13 @@ const NewLessonModal = () => {
 
     const lesson = {
       title: lessonTitle,
-      slug: slugify(lessonTitle, { lower: true, strict: true }),
+      slug: slugify(lessonTitle, { lower: true, strict: true })
     };
     const getCourseFromSlug = COURSESLIST.find(
       ({ slug }) => slug === values.course
     );
     // @ts-ignore
-      const courseTitle = getCourseFromSlug.courseTitle;
+    const courseTitle = getCourseFromSlug.courseTitle;
     addLesson(course, courseTitle, lesson.slug, lesson.title).then(
       (lessonId: any) => {
         navigateToLandingpage(lessonId, lesson.slug);
@@ -51,7 +51,7 @@ const NewLessonModal = () => {
     setLoading(false);
   };
   // @ts-ignore
-    return (
+  return (
     <>
       {loading ? <ShowSpinner /> : ""}
       <Modal
@@ -95,7 +95,7 @@ const NewLessonModal = () => {
                       <i style={{ color: "red" }}>{errorMessage}</i>
                     </p>
                   ) : (
-                    <p style={{ height: "1.35em" }}/>
+                    <p style={{ height: "1.35em" }} />
                   )}
                 </label>
               </GridColumn>
@@ -109,7 +109,7 @@ const NewLessonModal = () => {
                     onChange={onChange}
                     disabled={loading}
                   >
-                    {COURSESLIST.map((course:any) => (
+                    {COURSESLIST.map((course: any) => (
                       <option
                         key={course.slug}
                         value={course.slug}

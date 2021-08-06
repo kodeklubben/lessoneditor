@@ -23,14 +23,14 @@ export const renderScratchBlocks = (content: string) => {
   scratchblocks.loadLanguages({
     nb: require("scratchblocks/locales/nb.json"),
     nn: require("scratchblocks/locales/nn.json"),
-    is: require("scratchblocks/locales/is.json"),
+    is: require("scratchblocks/locales/is.json")
   });
 
   let replace = [];
 
   replace.push({
-    start: '<pre><code class="blocks">',
-    end: "</code></pre>",
+    start: "<pre><code class=\"blocks\">",
+    end: "</code></pre>"
   });
 
   let returnContent = content;
@@ -48,7 +48,7 @@ export const renderScratchBlocks = (content: string) => {
         } else {
           let doc = scratchblocks.parse(code, {
             inline: false,
-            languages: LANGUAGES,
+            languages: LANGUAGES
           });
           let docView = scratchblocks.newView(doc, { style: "scratch3" });
           let svg = docView.render();

@@ -10,13 +10,14 @@ const LandingageNavbar: FC<any> = ({ lessonTitle, courseTitle }) => {
   const options = [
     { key: 1, text: "Oppgaver", value: "lessontexts" },
     { key: 2, text: "Lærerveiledning", value: "teacherguides" },
-    { key: 3, text: "Alle filer", value: "allfiles" },
+    { key: 3, text: "Alle filer", value: "allfiles" }
   ];
 
   const handleChange = (e: any, value: any) => {
     const target = ["/landingpage", lessonId, value].join("/");
     history.push(target);
   };
+
 
   return (
     <>

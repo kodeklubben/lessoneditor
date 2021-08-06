@@ -1,8 +1,8 @@
 import { Header, Input } from "semantic-ui-react";
-import {FORM_TEXT} from "../settingsFiles/languages/landingpage_NO";
-import {FC} from "react";
+import { FORM_TEXT } from "../settingsFiles/languages/landingpage_NO";
+import { FC } from "react";
 
-const License:FC<any> = ({ changeHandler, data }) => {
+const License: FC<any> = ({ changeHandler, data }) => {
   return (
     <>
       <label>

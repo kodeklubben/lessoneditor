@@ -1,17 +1,17 @@
 import "./ladingpagedatamodal.scss";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Grid, Modal, Popup } from "semantic-ui-react";
 import { TagsGrade, TagsSubject, TagsTopic } from "./Tags";
 import CheckboxField from "./CheckboxField";
 import Levels from "./Levels";
 import License from "./License";
-import { LessonContext } from "../../../contexts/LessonContext";
+import { useLessonContext } from "../../../contexts/LessonContext";
 import { YML_TEXT } from "../settingsFiles/languages/landingpage_NO";
 
 // TODO: FIKSE AVBRYTKNAPP
 
 const LandingpageDatamodal = () => {
-  const context = useContext<any>(LessonContext);
+  const context = useLessonContext();
   const { ymlData, setLessonData, saveYml } = context;
   const [checkBoxState, setCheckBoxState] = useState({});
   const [open, setOpen] = useState(false);
@@ -30,9 +30,8 @@ const LandingpageDatamodal = () => {
     const mapYamlTags = () => {
       let obj: {};
       obj = ymlData.tags.topic.reduce(
-        (
-          accumulator: { [x: string]: boolean },
-          currentValue: string | number
+        (accumulator: { [x: string]: boolean },
+         currentValue: string | number
         ) => {
           accumulator[currentValue] = true;
           return accumulator;
@@ -41,20 +40,16 @@ const LandingpageDatamodal = () => {
         { ...obj }
       );
       obj = ymlData.tags.subject.reduce(
-        (
-          accumulator: { [x: string]: boolean },
-          currentValue: string | number
+        (accumulator: { [x: string]: boolean },
+         currentValue: string | number
         ) => {
           accumulator[currentValue] = true;
           return accumulator;
         },
         { ...obj }
       );
-      obj = ymlData.tags.grade.reduce(
-        (
-          accumulator: { [x: string]: boolean },
-          currentValue: string | number
-        ) => {
+      obj = ymlData.tags.grade.reduce((
+        accumulator: { [x: string]: boolean }, currentValue: string | number) => {
           accumulator[currentValue] = true;
           return accumulator;
         },
@@ -76,7 +71,7 @@ const LandingpageDatamodal = () => {
   const dropdownHandler = (event: any, { name, value }: any) => {
     setLessonData((prevState: { yml: any }) => ({
       ...prevState,
-      yml: { ...prevState.yml, [name]: value },
+      yml: { ...prevState.yml, [name]: value }
     }));
   };
 
@@ -89,7 +84,7 @@ const LandingpageDatamodal = () => {
 
     setCheckBoxState((prevState) => ({
       ...prevState,
-      [name]: value,
+      [name]: value
     }));
 
     if (!ymlData.tags[subtag].includes(name)) {
@@ -99,9 +94,9 @@ const LandingpageDatamodal = () => {
           ...prevState.yml,
           tags: {
             ...prevState.yml.tags,
-            [subtag]: [...prevState.yml.tags[subtag], name],
-          },
-        },
+            [subtag]: [...prevState.yml.tags[subtag], name]
+          }
+        }
       }));
     } else {
       setLessonData((prevState: { yml: { tags: { [x: string]: any[] } } }) => ({
@@ -110,9 +105,9 @@ const LandingpageDatamodal = () => {
           ...prevState.yml,
           tags: {
             ...prevState.yml.tags,
-            [subtag]: prevState.yml.tags[subtag].filter((e: any) => e !== name),
-          },
-        },
+            [subtag]: prevState.yml.tags[subtag].filter((e: any) => e !== name)
+          }
+        }
       }));
     }
   };
@@ -123,7 +118,7 @@ const LandingpageDatamodal = () => {
 
     setLessonData((prevState: { yml: any }) => ({
       ...prevState,
-      yml: { ...prevState.yml, [name]: value },
+      yml: { ...prevState.yml, [name]: value }
     }));
   };
 

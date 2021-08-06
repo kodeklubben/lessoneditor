@@ -1,10 +1,7 @@
 import { FC, useState } from "react";
 import ButtonComponent from "./ButtonComponent";
 import { useHotkeys } from "react-hotkeys-hook";
-import {
-  hyperlink as config,
-  KEY_COMBINATIONS as KEY,
-} from "./settings/buttonConfig";
+import { hyperlink as config, KEY_COMBINATIONS as KEY } from "./settings/buttonConfig";
 
 import { Button, Checkbox, Header, Input, Modal } from "semantic-ui-react";
 
@@ -15,18 +12,18 @@ const languageNO = {
   ok: "OK",
   cancel: "Avbryt",
   linkText: "lenkebeskrivelse",
-  mandatoryText: "Må fylle ut URL",
+  mandatoryText: "Må fylle ut URL"
 };
 
 const Hyperlink: FC<any> = ({
-  editorRef,
-  mdText,
-  cursorPositionStart,
-  cursorPositionEnd,
-  setMdText,
-  setCursorPosition,
-  setCursor,
-}) => {
+                              editorRef,
+                              mdText,
+                              cursorPositionStart,
+                              cursorPositionEnd,
+                              setMdText,
+                              setCursorPosition,
+                              setCursor
+                            }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [url, setUrl] = useState("https://");
   const [openNewWindow, setOpenNewWindow] = useState(false);
@@ -58,33 +55,33 @@ const Hyperlink: FC<any> = ({
     if (cursorPositionStart === cursorPositionEnd) {
       openNewWindow
         ? setMdText(
-            mdText.slice(0, cursorPositionStart) +
-              `[${languageNO.linkText}](${url}){target=_blank}` +
-              mdText.slice(cursorPositionStart)
-          )
+        mdText.slice(0, cursorPositionStart) +
+        `[${languageNO.linkText}](${url}){target=_blank}` +
+        mdText.slice(cursorPositionStart)
+        )
         : setMdText(
-            mdText.slice(0, cursorPositionStart) +
-              `[${languageNO.linkText}](${url})` +
-              mdText.slice(cursorPositionStart)
-          );
+        mdText.slice(0, cursorPositionStart) +
+        `[${languageNO.linkText}](${url})` +
+        mdText.slice(cursorPositionStart)
+        );
     } else {
       openNewWindow
         ? setMdText(
-            mdText.slice(0, cursorPositionStart) +
-              `[${mdText.slice(
-                cursorPositionStart,
-                cursorPositionEnd
-              )}](${url}){target=_blank}` +
-              mdText.slice(cursorPositionEnd)
-          )
+        mdText.slice(0, cursorPositionStart) +
+        `[${mdText.slice(
+          cursorPositionStart,
+          cursorPositionEnd
+        )}](${url}){target=_blank}` +
+        mdText.slice(cursorPositionEnd)
+        )
         : setMdText(
-            mdText.slice(0, cursorPositionStart) +
-              `[${mdText.slice(
-                cursorPositionStart,
-                cursorPositionEnd
-              )}](${url})` +
-              mdText.slice(cursorPositionEnd)
-          );
+        mdText.slice(0, cursorPositionStart) +
+        `[${mdText.slice(
+          cursorPositionStart,
+          cursorPositionEnd
+        )}](${url})` +
+        mdText.slice(cursorPositionEnd)
+        );
     }
 
     setIsOpen(false);

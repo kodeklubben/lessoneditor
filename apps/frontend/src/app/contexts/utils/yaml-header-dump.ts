@@ -1,6 +1,7 @@
 import yaml from "js-yaml";
+import { HeaderData } from "../FileContext";
 
-const yamlHeaderDump = (headerData: any, language?: string) => {
+const yamlHeaderDump = (headerData: HeaderData, language?: string) => {
   const { title } = headerData || {};
   const author = headerData.authorList.join(", ");
   const translator = headerData.translatorList.join(", ");
@@ -8,7 +9,7 @@ const yamlHeaderDump = (headerData: any, language?: string) => {
     title,
     author,
     translator,
-    language,
+    language
   });
 };
 

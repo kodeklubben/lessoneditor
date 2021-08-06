@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import paths from "../../paths.json";
+import { paths } from "@lessoneditor/api-interfaces";
 import createLesson from "../api/create-lesson";
 
 export const UserContext = React.createContext({});
@@ -9,7 +9,7 @@ export const UserContextProvider = (props: any) => {
   const [user, setUser] = useState({
     name: "",
     email: "",
-    photo: "",
+    photo: ""
   });
   const [lessons, setLessons] = useState<any>([]);
   useEffect(() => {
@@ -58,7 +58,7 @@ export const UserContextProvider = (props: any) => {
           course,
           courseTitle,
           lesson,
-          lessonTitle,
+          lessonTitle
         });
 
         lessons.push({ lessonId, course, courseTitle, lesson, lessonTitle });
@@ -74,26 +74,23 @@ export const UserContextProvider = (props: any) => {
         );
       } else {
         console.error(
-          "Trying to remove a lesson that doesn't exists",
+          "Trying to remove a lesson that doesn't exists.",
           lessonId
         );
       }
     },
     getUserData: async () => {
       async function fetchData() {
-        const res = await axios.get(paths.USER);
-        return res;
+        return await axios.get(paths.USER);
       }
 
-      const res = await fetchData();
-      return res;
-    },
+      return await fetchData();
+    }
   };
   return (
-    <>
-      <UserContext.Provider value={context}>
-        {props.children}
-      </UserContext.Provider>
-    </>
+    <UserContext.Provider value={context}>
+      {props.children}
+    </UserContext.Provider>
   );
 };
+export const useUserContext = (): Partial<any> => useContext(UserContext);

@@ -44,6 +44,7 @@ const Autosave = ({ mdText, setRenderContent, saveEditorText }) => {
         // @ts-ignore
         savedCallback.current();
       }
+
       if (delay !== null) {
         let id = setInterval(tick, delay);
         return () => clearInterval(id);

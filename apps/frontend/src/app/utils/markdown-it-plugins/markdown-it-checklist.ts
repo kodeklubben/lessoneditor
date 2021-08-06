@@ -95,15 +95,19 @@ function isChecklistItem(tokens: { type: string; }[], index: number) {
 function isInline(token: { type: string; }) {
   return token.type === "inline";
 }
+
 function isParagraph(token: { type: string; }) {
   return token.type === "paragraph_open";
 }
+
 function isListItem(token: { type: string; }) {
   return token.type === "list_item_open";
 }
+
 function startsWithTodoMarkdown(token: {
   content: any;
-  type: string }) {
+  type: string
+}) {
   return (
     token.content.indexOf("[ ] ") === 0 ||
     token.content.indexOf("[x] ") === 0 ||

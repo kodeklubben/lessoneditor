@@ -4,20 +4,20 @@ let orderedListIndex = 2;
 let tabSize = 2;
 
 const MDTextArea: FC<any> = ({
-  editorRef,
-  previewRef,
-  mdText,
-  buttonValues,
-  listButtonValues,
-  cursorPositionStart,
-  setCursorPosition,
-  setMdText,
-  setButtonValues,
-  setCursor,
-  pushUndoValue,
-  resetButtons,
-  course,
-}) => {
+                               editorRef,
+                               previewRef,
+                               mdText,
+                               buttonValues,
+                               listButtonValues,
+                               cursorPositionStart,
+                               setCursorPosition,
+                               setMdText,
+                               setButtonValues,
+                               setCursor,
+                               pushUndoValue,
+                               resetButtons,
+                               course
+                             }) => {
   const handleChange = (event: any) => {
     setCursor(event.target.selectionStart, event.target.selectionEnd);
     let inputText = event.target.value;
@@ -49,7 +49,7 @@ const MDTextArea: FC<any> = ({
       i[i.length - 1] === " " ||
       i[0] === "\n" ||
       i[i.length - 1] === "\n"
-    ) {
+      ) {
       if (i[0] === " " || i[0] === "\n") {
         i = i.slice(1);
         start += 1;
@@ -68,7 +68,7 @@ const MDTextArea: FC<any> = ({
     ) {
       setButtonValues((prevButtonValues: any) => ({
         ...prevButtonValues,
-        italic: true,
+        italic: true
       }));
     }
     if (
@@ -86,7 +86,7 @@ const MDTextArea: FC<any> = ({
     ) {
       setButtonValues((prevButtonValues: any) => ({
         ...prevButtonValues,
-        bold: true,
+        bold: true
       }));
     }
 
@@ -104,7 +104,7 @@ const MDTextArea: FC<any> = ({
     ) {
       setButtonValues((prevButtonValues: any) => ({
         ...prevButtonValues,
-        strikethrough: true,
+        strikethrough: true
       }));
     }
     if (
@@ -136,12 +136,12 @@ const MDTextArea: FC<any> = ({
             cursorPositionStart - listButtonValues["cursorInt"],
             cursorPositionStart
           ) ===
-            orderedListIndex - 1 + ". "
+          orderedListIndex - 1 + ". "
         ) {
           setButtonValues((prevState: any) => ({
             ...prevState,
             [listButtonValues["bTitle"]]:
-              !buttonValues[listButtonValues["bTitle"]],
+              !buttonValues[listButtonValues["bTitle"]]
           }));
           setMdText(
             mdText.slice(
@@ -159,9 +159,9 @@ const MDTextArea: FC<any> = ({
         if (listButtonValues["bTitle"] === "listOl") {
           setMdText(
             mdText.slice(0, cursorPositionStart) +
-              "\n\n" +
-              (orderedListIndex + ". ") +
-              mdText.slice(cursorPositionStart)
+            "\n\n" +
+            (orderedListIndex + ". ") +
+            mdText.slice(cursorPositionStart)
           );
           setCursorPosition(
             cursorPositionStart + listButtonValues["cursorInt"] + 2,
@@ -173,9 +173,9 @@ const MDTextArea: FC<any> = ({
 
         setMdText(
           mdText.slice(0, cursorPositionStart) +
-            "\n\n" +
-            listButtonValues["output"] +
-            mdText.slice(cursorPositionStart)
+          "\n\n" +
+          listButtonValues["output"] +
+          mdText.slice(cursorPositionStart)
         );
         setCursorPosition(
           cursorPositionStart + listButtonValues["cursorInt"] + 2,
@@ -187,7 +187,7 @@ const MDTextArea: FC<any> = ({
       if (buttonValues["heading"]) {
         setButtonValues((prevButtonValues: any) => ({
           ...prevButtonValues,
-          heading: !buttonValues["heading"],
+          heading: !buttonValues["heading"]
         }));
       }
 

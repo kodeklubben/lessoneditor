@@ -1,4 +1,4 @@
-import paths from "../../paths.json";
+import { paths } from "@lessoneditor/api-interfaces";
 import axios from "axios";
 
 const createLesson = async (data: any) => {

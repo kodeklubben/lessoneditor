@@ -2,14 +2,11 @@ import ButtonComponent from "./MicroScratchButtonComponent";
 
 import { useHotkeys } from "react-hotkeys-hook";
 
-import {
-  buttonAction as codeAction,
-  cancelButton,
-} from "./utils/buttonMethods";
+import { buttonAction as codeAction, cancelButton } from "./utils/buttonMethods";
 
 import {
   KEY_COMBINATIONS_MICROBIT as KEY,
-  microbitbuttons as config,
+  microbitbuttons as config
 } from "../settingsFiles/microbitAndScratchButtonConfig";
 import { FC } from "react";
 
@@ -18,16 +15,16 @@ let cancelResults;
 let buttonTitle: string;
 
 const MicrobitButtons: FC<any> = ({
-  editorRef,
-  cursorPositionStart,
-  cursorPositionEnd,
-  mdText,
-  buttonValues,
-  setMdText,
-  setCursorPosition,
-  setCursor,
-  setButtonValues,
-}) => {
+                                    editorRef,
+                                    cursorPositionStart,
+                                    cursorPositionEnd,
+                                    mdText,
+                                    buttonValues,
+                                    setMdText,
+                                    setCursorPosition,
+                                    setCursor,
+                                    setButtonValues
+                                  }) => {
   const setChanges = (
     mdText: any,
     cursorPositionStart: any,
@@ -41,7 +38,7 @@ const MicrobitButtons: FC<any> = ({
   const setButton = (value: string) => {
     setButtonValues((prevButtonValues: any) => ({
       ...prevButtonValues,
-      [value]: !buttonValues[value],
+      [value]: !buttonValues[value]
     }));
   };
 
@@ -254,14 +251,14 @@ const MicrobitButtons: FC<any> = ({
         config.control.cursorIntOFF,
         config.control.output
       );
-    },
+    }
   };
 
   useHotkeys(
     `${KEY.basic}, ${KEY.input}, ${KEY.music}, ${KEY.led}, ` +
-      `${KEY.radio}, ${KEY.loops}, ${KEY.logic}, ${KEY.variables}, ` +
-      `${KEY.math}, ${KEY.functions}, ${KEY.arrays}, ${KEY.text}, ` +
-      `${KEY.game}, ${KEY.images}, ${KEY.pins}, ${KEY.serial}, ${KEY.control}`,
+    `${KEY.radio}, ${KEY.loops}, ${KEY.logic}, ${KEY.variables}, ` +
+    `${KEY.math}, ${KEY.functions}, ${KEY.arrays}, ${KEY.text}, ` +
+    `${KEY.game}, ${KEY.images}, ${KEY.pins}, ${KEY.serial}, ${KEY.control}`,
     (event, handler) => {
       event.preventDefault();
       switch (handler.key) {
@@ -330,7 +327,7 @@ const MicrobitButtons: FC<any> = ({
     setButtonValues((prevState: any) => ({
       ...prevState,
       // @ts-ignore
-      [button]: !button[button],
+      [button]: !button[button]
     }));
     switch (button) {
       case config.basic.buttonTitle:

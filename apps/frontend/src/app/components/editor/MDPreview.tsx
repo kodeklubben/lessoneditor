@@ -6,13 +6,13 @@ import { mdParser } from "../../utils/mdParser";
 import { renderToggleButtons } from "../../utils/renderToggleButton";
 
 const MDPreview: FC<any> = ({
-  previewRef,
-  editorRef,
-  mdText,
-  course,
-  language,
-  renderContent,
-}) => {
+                              previewRef,
+                              editorRef,
+                              mdText,
+                              course,
+                              language,
+                              renderContent
+                            }) => {
   const parseMD = mdParser(mdText);
 
   useEffect(() => {

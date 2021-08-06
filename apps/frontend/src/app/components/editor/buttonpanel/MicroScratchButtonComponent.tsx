@@ -2,13 +2,13 @@ import { Button, Popup } from "semantic-ui-react";
 import { FC } from "react";
 
 const Buttons: FC<any> = ({
-  buttonValues,
-  title,
-  onButtonClick,
-  buttonTitle,
-  shortcutKey,
-  color,
-}) => {
+                            buttonValues,
+                            title,
+                            onButtonClick,
+                            buttonTitle,
+                            shortcutKey,
+                            color
+                          }) => {
   const responsiveCP = () => {
     return (
       <>
