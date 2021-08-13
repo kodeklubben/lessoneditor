@@ -55,7 +55,7 @@
     "@google-cloud/functions-framework": "^1.9.0",
     "@nrwl/cli": "12.6.5",
     "@nrwl/eslint-plugin-nx": "12.6.5",
-    "@nrwl/express": "12.6.5",
+    "@nrwl/express": "12.7.1",
     "@nrwl/jest": "12.6.5",
     "@nrwl/linter": "12.6.5",
     "@nrwl/node": "12.6.5",
