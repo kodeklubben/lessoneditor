@@ -45,7 +45,7 @@
     "nanoid": "^3.1.23",
     "passport": "^0.4.1",
     "passport-github2": "^0.1.12",
-    "tslib": "^2.3.0"
+    "tslib": "^2.3.1"
   },
   "devDependencies": {
     "@babel/core": "7.14.8",
