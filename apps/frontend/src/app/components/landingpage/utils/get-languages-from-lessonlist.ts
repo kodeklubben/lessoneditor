@@ -1,12 +1,8 @@
 import { filenameParser } from "../../../utils/filename-parser";
 
-
-export const getLanuagesFromLessonlist = (lessonList: [{ filename: string }]) => {
+export const getLanguagesFromLessonlist = (lessonList: [{ filename: string }]) => {
   const languages: string[] = [];
-  if (
-    Object.keys(lessonList).length !== 0 &&
-    lessonList.constructor !== Object
-  ) {
+  if (Object.keys(lessonList).length !== 0 && lessonList.constructor !== Object) {
     lessonList.forEach((element: { filename: string }) => {
       const { isMarkdown, isReadme, language } = filenameParser(element.filename);
       if (!isMarkdown) {

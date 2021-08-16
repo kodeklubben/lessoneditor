@@ -20,7 +20,7 @@ const Landingpage = () => {
   const [thankU, setThankU] = useState(false);
   const { lessonId, mode } = useParams<any>();
   const pageContent = mode;
-  const { lessonData, saveLesson, lessonList } = useLessonContext();
+  const { lessonData, saveLesson } = useLessonContext();
 
   const onSubmit = async (lessonId: string) => {
     setShowSpinner(true);
@@ -31,6 +31,7 @@ const Landingpage = () => {
     setThankU(true);
   };
 
+  const lessonList = lessonData.files;
   const lessonTitle = lessonData.lessonTitle;
   const courseTitle = lessonData.courseTitle;
 
@@ -39,11 +40,7 @@ const Landingpage = () => {
     switch (input) {
       case "lessontexts":
         return (
-          <LessonTexts
-            lessonId={lessonId}
-            lessonList={lessonList}
-            lessonTitle={lessonTitle}
-          />
+          <LessonTexts lessonId={lessonId} lessonList={lessonList} lessonTitle={lessonTitle} />
         );
       case "teacherguides":
         return <TeacherGuides lessonId={lessonId} lessonList={lessonList} />;
@@ -61,10 +58,7 @@ const Landingpage = () => {
       <>
         <Navbar />
         <div className="landingpage_container">
-          <LandingageNavbar
-            lessonTitle={lessonTitle}
-            courseTitle={courseTitle}
-          />
+          <LandingageNavbar lessonTitle={lessonTitle} courseTitle={courseTitle} />
 
           <div className="card_container">
             {dropdownValue(pageContent)}

@@ -12,13 +12,14 @@ import { YML_TEXT } from "../settingsFiles/languages/landingpage_NO";
 
 const LandingpageDatamodal = () => {
   const context = useLessonContext();
-  const { ymlData, setLessonData, saveYml } = context;
+  const { lessonData, setLessonData, saveYml } = context;
   const [checkBoxState, setCheckBoxState] = useState({});
   const [open, setOpen] = useState(false);
 
+  const ymlData = lessonData.yml;
+
   const isEmptyDatapanel =
-    JSON.stringify(ymlData.tags) ===
-    JSON.stringify({ topic: [], subject: [], grade: [] });
+    JSON.stringify(ymlData.tags) === JSON.stringify({ topic: [], subject: [], grade: [] });
 
   /*
    * Det ser ut som vi trenger denne useEffecten for å forhindre inifite loop
@@ -30,9 +31,7 @@ const LandingpageDatamodal = () => {
     const mapYamlTags = () => {
       let obj: {};
       obj = ymlData.tags.topic.reduce(
-        (accumulator: { [x: string]: boolean },
-         currentValue: string | number
-        ) => {
+        (accumulator: { [x: string]: boolean }, currentValue: string | number) => {
           accumulator[currentValue] = true;
           return accumulator;
         },
@@ -40,16 +39,14 @@ const LandingpageDatamodal = () => {
         { ...obj }
       );
       obj = ymlData.tags.subject.reduce(
-        (accumulator: { [x: string]: boolean },
-         currentValue: string | number
-        ) => {
+        (accumulator: { [x: string]: boolean }, currentValue: string | number) => {
           accumulator[currentValue] = true;
           return accumulator;
         },
         { ...obj }
       );
-      obj = ymlData.tags.grade.reduce((
-        accumulator: { [x: string]: boolean }, currentValue: string | number) => {
+      obj = ymlData.tags.grade.reduce(
+        (accumulator: { [x: string]: boolean }, currentValue: string | number) => {
           accumulator[currentValue] = true;
           return accumulator;
         },
@@ -71,7 +68,7 @@ const LandingpageDatamodal = () => {
   const dropdownHandler = (event: any, { name, value }: any) => {
     setLessonData((prevState: { yml: any }) => ({
       ...prevState,
-      yml: { ...prevState.yml, [name]: value }
+      yml: { ...prevState.yml, [name]: value },
     }));
   };
 
@@ -84,7 +81,7 @@ const LandingpageDatamodal = () => {
 
     setCheckBoxState((prevState) => ({
       ...prevState,
-      [name]: value
+      [name]: value,
     }));
 
     if (!ymlData.tags[subtag].includes(name)) {
@@ -94,9 +91,9 @@ const LandingpageDatamodal = () => {
           ...prevState.yml,
           tags: {
             ...prevState.yml.tags,
-            [subtag]: [...prevState.yml.tags[subtag], name]
-          }
-        }
+            [subtag]: [...prevState.yml.tags[subtag], name],
+          },
+        },
       }));
     } else {
       setLessonData((prevState: { yml: { tags: { [x: string]: any[] } } }) => ({
@@ -105,9 +102,9 @@ const LandingpageDatamodal = () => {
           ...prevState.yml,
           tags: {
             ...prevState.yml.tags,
-            [subtag]: prevState.yml.tags[subtag].filter((e: any) => e !== name)
-          }
-        }
+            [subtag]: prevState.yml.tags[subtag].filter((e: any) => e !== name),
+          },
+        },
       }));
     }
   };
@@ -118,7 +115,7 @@ const LandingpageDatamodal = () => {
 
     setLessonData((prevState: { yml: any }) => ({
       ...prevState,
-      yml: { ...prevState.yml, [name]: value }
+      yml: { ...prevState.yml, [name]: value },
     }));
   };
 
@@ -155,23 +152,13 @@ const LandingpageDatamodal = () => {
               <Grid.Column>
                 <CheckboxField
                   labelTitle={YML_TEXT.topic}
-                  content={
-                    <TagsTopic
-                      data={checkBoxState}
-                      changeHandler={checboxHandler}
-                    />
-                  }
+                  content={<TagsTopic data={checkBoxState} changeHandler={checboxHandler} />}
                 />
               </Grid.Column>
               <Grid.Column>
                 <CheckboxField
                   labelTitle={YML_TEXT.subject}
-                  content={
-                    <TagsSubject
-                      data={checkBoxState}
-                      changeHandler={checboxHandler}
-                    />
-                  }
+                  content={<TagsSubject data={checkBoxState} changeHandler={checboxHandler} />}
                 />
               </Grid.Column>
             </Grid.Row>
@@ -181,12 +168,7 @@ const LandingpageDatamodal = () => {
               <Grid.Column>
                 <CheckboxField
                   labelTitle={YML_TEXT.grade}
-                  content={
-                    <TagsGrade
-                      data={checkBoxState}
-                      changeHandler={checboxHandler}
-                    />
-                  }
+                  content={<TagsGrade data={checkBoxState} changeHandler={checboxHandler} />}
                 />
               </Grid.Column>
               <Grid.Column>
@@ -202,8 +184,7 @@ const LandingpageDatamodal = () => {
           {isEmptyDatapanel ? (
             <p>
               <i style={{ color: "red" }}>
-                Må inneholde minst ett valg i kategoriene Tema, Fag, eller
-                Klassetrinn
+                Må inneholde minst ett valg i kategoriene Tema, Fag, eller Klassetrinn
               </i>
             </p>
           ) : (

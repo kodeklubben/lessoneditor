@@ -1,4 +1,5 @@
-import "./frontpage.scss";
+import "./overview.scss";
+import { FC } from "react";
 import NewLessonModal from "./NewLessonModal";
 import ItemList from "./ItemList";
 import { useUserContext } from "../../contexts/UserContext";
@@ -6,11 +7,13 @@ import Navbar from "../navbar/Navbar";
 import { useHistory } from "react-router-dom";
 import { Card, Divider, Header, Icon, Message } from "semantic-ui-react";
 
-const Overview = () => {
+const Overview: FC = () => {
   const history = useHistory();
   const { lessons, removeLesson } = useUserContext();
 
-  const navigateToHome = (lessonId: any) => {
+  console.log(lessons);
+
+  const navigateToHome = (lessonId: string) => {
     const target = ["/landingpage", lessonId, "lessontexts"].join("/");
     history.push(target);
   };
@@ -27,7 +30,7 @@ const Overview = () => {
                   display: "flex",
                   justifyContent: "center",
                   alignItems: "center",
-                  height: "220px"
+                  height: "220px",
                 }}
               >
                 <Icon.Group>
@@ -51,11 +54,7 @@ const Overview = () => {
         {lessons.length > 0 ? (
           <>
             <Header as="h2">Mine oppgaver</Header>
-            <ItemList
-              items={lessons}
-              removeLesson={removeLesson}
-              navigateToHome={navigateToHome}
-            />
+            <ItemList items={lessons} removeLesson={removeLesson} navigateToHome={navigateToHome} />
           </>
         ) : (
           <Message>

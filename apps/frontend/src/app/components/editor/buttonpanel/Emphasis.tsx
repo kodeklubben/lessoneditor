@@ -5,16 +5,16 @@ import { emphasis as config, KEY_COMBINATIONS as KEY } from "./settings/buttonCo
 import { FC } from "react";
 
 const Emphasis: FC<any> = ({
-                             editorRef,
-                             mdText,
-                             buttonValues,
-                             cursorPositionStart,
-                             cursorPositionEnd,
-                             setMdText,
-                             setCursorPosition,
-                             setCursor,
-                             setButtonValues
-                           }) => {
+  editorRef,
+  mdText,
+  buttonValues,
+  cursorPositionStart,
+  cursorPositionEnd,
+  setMdText,
+  setCursorPosition,
+  setCursor,
+  setButtonValues,
+}) => {
   let output;
   let cancelResults;
   let results: {
@@ -25,11 +25,7 @@ const Emphasis: FC<any> = ({
   };
   let buttonTitle: string;
 
-  const setChanges = (
-    mdText: any,
-    cursorPositionStart: any,
-    cursorPositionEnd: any
-  ) => {
+  const setChanges = (mdText: any, cursorPositionStart: any, cursorPositionEnd: any) => {
     setCursor(cursorPositionStart, cursorPositionEnd);
     setCursorPosition(cursorPositionStart, cursorPositionEnd);
     setMdText(mdText);
@@ -38,16 +34,11 @@ const Emphasis: FC<any> = ({
   const setButton = (value: any) => {
     setButtonValues((prevButtonValues: any) => ({
       ...prevButtonValues,
-      [value]: !buttonValues[value]
+      [value]: !buttonValues[value],
     }));
   };
 
-  const setEmphasis = (
-    isON: any,
-    cursorIntON: any,
-    cursorIntOFF: any,
-    output: any
-  ) => {
+  const setEmphasis = (isON: any, cursorIntON: any, cursorIntOFF: any, output: any) => {
     cancelResults = cancelButton(
       isON,
       mdText,
@@ -76,11 +67,7 @@ const Emphasis: FC<any> = ({
       output
     );
 
-    setChanges(
-      results?.mdText,
-      results?.cursorPositionStart,
-      results?.cursorPositionEnd
-    );
+    setChanges(results?.mdText, results?.cursorPositionStart, results?.cursorPositionEnd);
   };
 
   const set = {
@@ -108,21 +95,12 @@ const Emphasis: FC<any> = ({
       buttonTitle = config.heading.buttonTitle;
       output = config.heading.output;
 
-      results = heading(
-        buttonValues[buttonTitle],
-        mdText,
-        cursorPositionStart,
-        output
-      );
+      results = heading(buttonValues[buttonTitle], mdText, cursorPositionStart, output);
       setButtonValues((prevButtonValues: any) => ({
         ...prevButtonValues,
-        [buttonTitle]: results?.isOn
+        [buttonTitle]: results?.isOn,
       }));
-      setChanges(
-        results?.mdText,
-        results?.cursorPositionStart,
-        results?.cursorPositionStart
-      );
+      setChanges(results?.mdText, results?.cursorPositionStart, results?.cursorPositionStart);
     },
     strikethrough: () => {
       buttonTitle = config.strikethrough.buttonTitle;
@@ -133,7 +111,7 @@ const Emphasis: FC<any> = ({
         config.strikethrough.cursorIntOFF,
         config.strikethrough.output
       );
-    }
+    },
   };
 
   useHotkeys(
