@@ -9,7 +9,7 @@ export const UserContextProvider = (props: any) => {
   const [user, setUser] = useState({
     name: "",
     email: "",
-    photo: ""
+    photo: "",
   });
   const [lessons, setLessons] = useState<any>([]);
   useEffect(() => {
@@ -18,6 +18,7 @@ export const UserContextProvider = (props: any) => {
       const userLessonsRes = await axios.get(paths.USER_LESSONS);
       setUser({ ...userRes.data });
       setLessons(userLessonsRes.data);
+      console.log(lessons);
     }
 
     fetchData().then();
@@ -28,9 +29,7 @@ export const UserContextProvider = (props: any) => {
   };
 
   const getLessonByCourseAndLesson = (course: string, lesson: string) => {
-    return lessons.find(
-      (item: any) => item.course === course && item.lesson === lesson
-    );
+    return lessons.find((item: any) => item.course === course && item.lesson === lesson);
   };
 
   const saveLessons = async (updatedLessons: any) => {
@@ -58,7 +57,7 @@ export const UserContextProvider = (props: any) => {
           course,
           courseTitle,
           lesson,
-          lessonTitle
+          lessonTitle,
         });
 
         lessons.push({ lessonId, course, courseTitle, lesson, lessonTitle });
@@ -69,14 +68,9 @@ export const UserContextProvider = (props: any) => {
     removeLesson: async (lessonId: string) => {
       const existing = getLesson(lessonId);
       if (existing) {
-        await saveLessons(
-          lessons.filter((lesson: any) => lesson.lessonId !== lessonId)
-        );
+        await saveLessons(lessons.filter((lesson: any) => lesson.lessonId !== lessonId));
       } else {
-        console.error(
-          "Trying to remove a lesson that doesn't exists.",
-          lessonId
-        );
+        console.error("Trying to remove a lesson that doesn't exists.", lessonId);
       }
     },
     getUserData: async () => {
@@ -85,12 +79,8 @@ export const UserContextProvider = (props: any) => {
       }
 
       return await fetchData();
-    }
+    },
   };
-  return (
-    <UserContext.Provider value={context}>
-      {props.children}
-    </UserContext.Provider>
-  );
+  return <UserContext.Provider value={context}>{props.children}</UserContext.Provider>;
 };
 export const useUserContext = (): Partial<any> => useContext(UserContext);

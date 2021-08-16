@@ -1,6 +1,6 @@
 import Editor from "./editor/Editor";
 import Landingpage from "./landingpage/Landingpage";
-import Frontpage from "./frontpage/Frontpage";
+import Overview from "./frontpage/Overview";
 import { BrowserRouter, Route } from "react-router-dom";
 import { LessonContextProvider } from "../contexts/LessonContext";
 import { UserContextProvider } from "../contexts/UserContext";
@@ -12,7 +12,7 @@ const App = () => {
     <>
       <BrowserRouter>
         <UserContextProvider>
-          <Route exact path="/" component={Frontpage} />
+          <Route exact path="/" component={Overview} />
           <Route exact path="/landingpage" component={Landingpage} />
           <Route exact path="/landingpage/:lessonId/:mode">
             <LessonContextProvider>

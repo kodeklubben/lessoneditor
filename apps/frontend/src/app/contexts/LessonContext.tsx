@@ -3,10 +3,7 @@ import { useParams } from "react-router";
 import axios from "axios";
 import { getLessonPaths } from "./utils/get-lesson-paths";
 
-
-interface LessonContextProps {
-
-}
+interface LessonContextProps {}
 
 const LessonContext = React.createContext<Partial<LessonContextProps>>({});
 
@@ -15,12 +12,12 @@ export const LessonContextProvider = (props: any) => {
   const defaultYml = {
     level: 1,
     license: "CC BY-SA 4.0",
-    tags: { topic: [], subject: [], grade: [] }
+    tags: { topic: [], subject: [], grade: [] },
   };
   const { lessonDataPath, lessonYamlPath, lessonFilesPath } = getLessonPaths(lessonId);
   const [lessonData, setLessonData] = useState({
     files: {},
-    yml: defaultYml
+    yml: defaultYml,
   });
 
   useEffect(() => {
@@ -42,12 +39,21 @@ export const LessonContextProvider = (props: any) => {
 
   const context = {
     lessonData,
+    setLessonData,
     saveLesson: async (data: any) => {
       if (lessonId) {
         await axios.post(lessonDataPath, data);
         data.files = lessonData.files;
         data.yml = lessonData.yml;
         setLessonData(data);
+      } else {
+        console.error("No lessonId set in context aborting");
+      }
+    },
+    saveYml: async (data: any) => {
+      if (lessonId) {
+        await axios.post(lessonYamlPath, data);
+        lessonData.yml = data;
       } else {
         console.error("No lessonId set in context aborting");
       }
@@ -59,13 +65,11 @@ export const LessonContextProvider = (props: any) => {
     getYmlData: async () => {
       const lessonYMLDataRes = await axios.get(lessonYamlPath);
       return lessonYMLDataRes.data;
-    }
+    },
   };
   return (
     <>
-      <LessonContext.Provider value={context}>
-        {props.children}
-      </LessonContext.Provider>
+      <LessonContext.Provider value={context}>{props.children}</LessonContext.Provider>
     </>
   );
 };

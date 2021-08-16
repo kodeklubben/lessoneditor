@@ -3,10 +3,10 @@ import LessonCard from "./LessonCard";
 
 import { Card } from "semantic-ui-react";
 import { FC } from "react";
-import { getLanuagesFromLessonlist } from "./utils/get-lanuages-from-lessonlist";
+import { getLanguagesFromLessonlist } from "./utils/get-languages-from-lessonlist";
 
 const LessonTexts: FC<any> = ({ lessonId, lessonList, lessonTitle }) => {
-  const languages = getLanuagesFromLessonlist(lessonList);
+  const languages = getLanguagesFromLessonlist(lessonList);
   const allLanguages = ["nb", "nn", "en", "is"];
 
   return (

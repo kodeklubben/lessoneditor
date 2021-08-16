@@ -11,7 +11,7 @@ import { useLessonContext } from "../../contexts/LessonContext";
 import Navbar from "../navbar/Navbar";
 import { filenameParser } from "../../utils/filename-parser";
 
-const Editor = () => {
+const Editor: React.FC = () => {
   const { lessonId, file } = useParams<any>();
 
   const { lessonData } = useLessonContext();
@@ -29,7 +29,7 @@ const Editor = () => {
   const [listButtonValues, setListButtonValues] = useState({
     bTitle: "",
     output: "",
-    cursorInt: 0
+    cursorInt: 0,
   });
 
   const editorRef = useRef();
@@ -39,33 +39,21 @@ const Editor = () => {
   const { language } = filenameParser(file);
 
   const pushUndoValue = (mdText: string, cursorPositionStart: never[]) => {
-    if (
-      undo[undo.length - 1] !== mdText &&
-      undoCursorPosition !== cursorPositionStart
-    ) {
+    if (undo[undo.length - 1] !== mdText && undoCursorPosition !== cursorPositionStart) {
       setUndo((undo) => [...undo, mdText]);
       // @ts-ignore
-      setUndoCursorPosition((undoCursorPosition) => [
-        ...undoCursorPosition,
-        cursorPositionStart
-      ]);
+      setUndoCursorPosition((undoCursorPosition) => [...undoCursorPosition, cursorPositionStart]);
       setRedo(redo.slice(0, redo.length - 1));
       setMdText(redo[redo.length - 1]);
     }
   };
 
   const pushRedoValue = (mdText: any, cursorPositionStart: never[]) => {
-    if (
-      redo[redo.length] !== mdText &&
-      redoCursorPosition !== cursorPositionStart
-    ) {
+    if (redo[redo.length] !== mdText && redoCursorPosition !== cursorPositionStart) {
       // @ts-ignore
       setRedo((redo) => [...redo, mdText]);
       // @ts-ignore
-      setRedoCursorPosition((redoCursorPosition) => [
-        ...redoCursorPosition,
-        cursorPositionStart
-      ]);
+      setRedoCursorPosition((redoCursorPosition) => [...redoCursorPosition, cursorPositionStart]);
       setUndo(undo.slice(0, undo.length - 1));
       setMdText(undo[undo.length - 1]);
     }

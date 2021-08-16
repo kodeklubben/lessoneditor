@@ -1,6 +1,6 @@
 import "./newlessonmodal.scss";
 
-import { useState } from "react";
+import { FC, useState } from "react";
 import slugify from "slugify";
 import { COURSESLIST } from "../editor/settingsFiles/COURSELIST";
 import { useUserContext } from "../../contexts/UserContext";
@@ -8,49 +8,45 @@ import { useHistory } from "react-router";
 import { Button, Grid, GridColumn, Input, Modal } from "semantic-ui-react";
 import ShowSpinner from "../ShowSpinner";
 
-const NewLessonModal = () => {
+const NewLessonModal: FC = () => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const history = useHistory();
   const { addLesson } = useUserContext();
   const [values, setValues] = useState({
     lessonTitle: "",
-    course: COURSESLIST[0].slug
+    course: COURSESLIST[0].slug,
   });
 
   const errorMessage = "Oppgavetittel må være satt";
 
-  const onChange = (e: { target: { name: any; value: any; }; }) => {
+  const onChange = (e: { target: { name: string; value: string } }) => {
     const { name, value } = e.target;
     setValues((prevValues) => ({ ...prevValues, [name]: value }));
   };
-  const navigateToLandingpage = (lessonId: any, lessonSlug: string) => {
+  const navigateToLandingpage = (lessonId: string, lessonSlug: string) => {
     const target = ["/editor", lessonId, lessonSlug, "nb"].join("/");
     history.push({ pathname: target });
   };
-  const onSubmit = async (e: { preventDefault: () => void; }) => {
+  const onSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     setLoading(true);
     const { course, lessonTitle } = values;
 
     const lesson = {
       title: lessonTitle,
-      slug: slugify(lessonTitle, { lower: true, strict: true })
+      slug: slugify(lessonTitle, { lower: true, strict: true }),
     };
-    const getCourseFromSlug = COURSESLIST.find(
-      ({ slug }) => slug === values.course
-    );
-    // @ts-ignore
-    const courseTitle = getCourseFromSlug.courseTitle;
-    addLesson(course, courseTitle, lesson.slug, lesson.title).then(
-      (lessonId: any) => {
-        navigateToLandingpage(lessonId, lesson.slug);
-      }
-    );
+    const getCourseFromSlug = COURSESLIST.find(({ slug }) => slug === values.course);
+
+    const courseTitle: string = getCourseFromSlug ? getCourseFromSlug.courseTitle : "";
+    addLesson(course, courseTitle, lesson.slug, lesson.title).then((lessonId: string) => {
+      navigateToLandingpage(lessonId, lesson.slug);
+    });
 
     setLoading(false);
   };
-  // @ts-ignore
+
   return (
     <>
       {loading ? <ShowSpinner /> : ""}
@@ -60,24 +56,11 @@ const NewLessonModal = () => {
         onOpen={() => setOpen(true)}
         open={open}
         dimmer="inverted"
-        trigger={
-          <Button
-            icon="plus"
-            labelPosition="left"
-            positive
-            content="Ny oppgave"
-          />
-        }
+        trigger={<Button icon="plus" labelPosition="left" positive content="Ny oppgave" />}
       >
-        <Modal.Header className="newLessonModal">
-          Opprett en ny oppgave
-        </Modal.Header>
+        <Modal.Header className="newLessonModal">Opprett en ny oppgave</Modal.Header>
         <Modal.Content className="newLessonModal">
-          <form
-            id={"skjema-for-oppretting-av-ny-oppgave"}
-            method={"POST"}
-            onSubmit={onSubmit}
-          >
+          <form id={"skjema-for-oppretting-av-ny-oppgave"} method={"POST"} onSubmit={onSubmit}>
             <Grid className={"equal width"}>
               <GridColumn>
                 <label>
@@ -109,11 +92,8 @@ const NewLessonModal = () => {
                     onChange={onChange}
                     disabled={loading}
                   >
-                    {COURSESLIST.map((course: any) => (
-                      <option
-                        key={course.slug}
-                        value={course.slug}
-                      >
+                    {COURSESLIST.map((course: { courseTitle: string; slug: string }) => (
+                      <option key={course.slug} value={course.slug}>
                         {course.courseTitle}
                       </option>
                     ))}
