@@ -13,10 +13,11 @@ const NewLessonModal: FC = () => {
   const [loading, setLoading] = useState(false);
   const history = useHistory();
   const { addLesson } = useUserContext();
-  const [values, setValues] = useState({
+  const defaultState = {
     lessonTitle: "",
     course: COURSESLIST[0].slug,
-  });
+  };
+  const [values, setValues] = useState(defaultState);
 
   const errorMessage = "Oppgavetittel må være satt";
 
@@ -40,9 +41,8 @@ const NewLessonModal: FC = () => {
     const getCourseFromSlug = COURSESLIST.find(({ slug }) => slug === values.course);
 
     const courseTitle: string = getCourseFromSlug ? getCourseFromSlug.courseTitle : "";
-    addLesson(course, courseTitle, lesson.slug, lesson.title).then((lessonId: string) => {
-      navigateToLandingpage(lessonId, lesson.slug);
-    });
+    const lessonId = await addLesson(course, courseTitle, lesson.slug, lesson.title);
+    navigateToLandingpage(lessonId, lesson.slug);
 
     setLoading(false);
   };
@@ -107,7 +107,10 @@ const NewLessonModal: FC = () => {
           <Button
             disabled={loading}
             color="black"
-            onClick={() => setOpen(false)}
+            onClick={() => {
+              setValues(defaultState);
+              setOpen(false);
+            }}
             content="Avbryt"
           />
           <Button
