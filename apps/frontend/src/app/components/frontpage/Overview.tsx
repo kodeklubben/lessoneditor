@@ -11,8 +11,6 @@ const Overview: FC = () => {
   const history = useHistory();
   const { lessons, removeLesson } = useUserContext();
 
-  console.log(lessons);
-
   const navigateToHome = (lessonId: string) => {
     const target = ["/landingpage", lessonId, "lessontexts"].join("/");
     history.push(target);

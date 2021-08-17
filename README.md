@@ -10,7 +10,7 @@ Require nodejs and a normal developer setup. Run `npm install`.
 ### Frontend:
 
 - Install all dependencies with [npm](https://www.npmjs.com/) `npm install --prefix frontend`
-- Start the application with `npm start-frontend`
+- Start the application with `npm start frontend`
 - Open `http://localhost:4200/` in your browser
 
 ### Thumbnailer (The Lessoneditor Thumbnail Service):
@@ -23,6 +23,22 @@ Require nodejs and a normal developer setup. Run `npm install`.
 
 - Start the server with `npm start backend`
 - Open `http://localhost:3333` in your browser
+
+### Setup Dev Environment:
+
+- Create new oAuth app at Github (`https://github.com/settings/developers`)
+- Create env-file at `/apps/backend/.env.local`
+- Populate the env-file with env variables:
+
+´´´
+GITHUB_CLIENT_ID= your client ID
+GITHUB_CLIENT_SECRET= your client secret
+GITHUB_CALLBACK_URL= your callback url. ex: http://localhost:3333/callback
+GITHUB_LESSON_REPO_OWNER= your gitname
+GITHUB_LESSON_REPO= your lesson_repo name
+BUCKET=lessoneditor
+THUMB_SERVICE_URL= your thumbnailer url. ex: http://localhost:3012
+´´´
 
 ## Project structure
 

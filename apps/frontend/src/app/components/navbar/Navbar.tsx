@@ -7,11 +7,11 @@ import { useUserContext } from "../../contexts/UserContext";
 import logo from "/assets/public/lav_logo.jpg";
 import { useLessonContext } from "../../contexts/LessonContext";
 
-const Navbar: FC<any> = () => {
+const Navbar: FC = () => {
   const { user } = useUserContext();
   const { lessonData } = useLessonContext();
 
-  const { file } = useParams<any>();
+  const { file } = useParams<{ file: string }>();
 
   return (
     <div>
@@ -24,31 +24,21 @@ const Navbar: FC<any> = () => {
 
         {file !== undefined ? (
           <div className="navbar_course_title">
-            <h1 style={{ margin: "auto" }}>
+            <h1>
               <span style={{ color: "gray" }}>Prosjekttittel: </span>
-              {lessonData.lessonTitle
-                ? lessonData.lessonTitle
-                : lessonData.lesson}
+              {lessonData.lessonTitle ? lessonData.lessonTitle : lessonData.lesson}
             </h1>
-            <h3 style={{ margin: "auto" }}>
+            <h1>
               <span style={{ color: "gray" }}>Kurs: </span>
-              {lessonData.courseTitle
-                ? lessonData.courseTitle
-                : lessonData.course}
-            </h3>
+              {lessonData.courseTitle ? lessonData.courseTitle : lessonData.course}
+            </h1>
           </div>
         ) : (
           ""
         )}
-        <div className="navbar_profile">
-
-
+        <div className="profileMenu_container">
           <a id="navbar_gohome" href={"/"}>
-            <ProfileMenu
-              name={user ? user.name : ""}
-              email={user ? user.email : ""}
-              photo={user ? user.photo : ""}
-            />
+            <ProfileMenu name={user ? user.name : ""} photo={user ? user.photo : ""} />
           </a>
         </div>
       </nav>

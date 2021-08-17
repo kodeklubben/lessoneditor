@@ -18,7 +18,6 @@ export const UserContextProvider = (props: any) => {
       const userLessonsRes = await axios.get(paths.USER_LESSONS);
       setUser({ ...userRes.data });
       setLessons(userLessonsRes.data);
-      console.log(lessons);
     }
 
     fetchData().then();
