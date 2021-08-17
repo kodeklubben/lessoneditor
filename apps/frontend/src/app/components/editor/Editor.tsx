@@ -12,7 +12,7 @@ import Navbar from "../navbar/Navbar";
 import { filenameParser } from "../../utils/filename-parser";
 
 const Editor: React.FC = () => {
-  const { lessonId, file } = useParams<any>();
+  const { lessonId, file } = useParams<{ lessonId: string; file: string }>();
 
   const { lessonData } = useLessonContext();
   const { saveFileBody, savedFileBody } = useFileContext();
@@ -21,10 +21,10 @@ const Editor: React.FC = () => {
   const [buttonValues, setButtonValues] = useState({});
   const [cursorPositionStart, setCursorPositionStart] = useState(0);
   const [cursorPositionEnd, setCursorPositionEnd] = useState(0);
-  const [undo, setUndo] = useState([""]);
-  const [redo, setRedo] = useState([]);
-  const [undoCursorPosition, setUndoCursorPosition] = useState([]);
-  const [redoCursorPosition, setRedoCursorPosition] = useState([]);
+  const [undo, setUndo] = useState<string[]>([]);
+  const [redo, setRedo] = useState<string[]>([]);
+  const [undoCursorPosition, setUndoCursorPosition] = useState<number[]>([]);
+  const [redoCursorPosition, setRedoCursorPosition] = useState<number[]>([]);
   const [renderContent, setRenderContent] = useState(false);
   const [listButtonValues, setListButtonValues] = useState({
     bTitle: "",
@@ -32,45 +32,42 @@ const Editor: React.FC = () => {
     cursorInt: 0,
   });
 
-  const editorRef = useRef();
-  const previewRef = useRef();
-  const uploadImageRef = useRef();
+  const editorRef = useRef<HTMLTextAreaElement>(null);
+  const uploadImageRef = useRef<HTMLInputElement>(null);
 
   const { language } = filenameParser(file);
 
-  const pushUndoValue = (mdText: string, cursorPositionStart: never[]) => {
-    if (undo[undo.length - 1] !== mdText && undoCursorPosition !== cursorPositionStart) {
+  const pushUndoValue = (mdText: string, cursorPositionStart: number) => {
+    if (undo[undo.length - 1] !== mdText) {
       setUndo((undo) => [...undo, mdText]);
-      // @ts-ignore
       setUndoCursorPosition((undoCursorPosition) => [...undoCursorPosition, cursorPositionStart]);
       setRedo(redo.slice(0, redo.length - 1));
       setMdText(redo[redo.length - 1]);
     }
   };
 
-  const pushRedoValue = (mdText: any, cursorPositionStart: never[]) => {
-    if (redo[redo.length] !== mdText && redoCursorPosition !== cursorPositionStart) {
-      // @ts-ignore
+  const pushRedoValue = (mdText: string, cursorPositionStart: number) => {
+    if (redo[redo.length] !== mdText) {
       setRedo((redo) => [...redo, mdText]);
-      // @ts-ignore
       setRedoCursorPosition((redoCursorPosition) => [...redoCursorPosition, cursorPositionStart]);
       setUndo(undo.slice(0, undo.length - 1));
       setMdText(undo[undo.length - 1]);
     }
   };
 
-  const setCursor = (pos1: any, pos2: any) => {
+  const setCursor = (pos1: number, pos2: number) => {
     setCursorPositionStart(pos1);
     setCursorPositionEnd(pos2);
   };
 
   /*
-   * Av en eller annen grunn må denne funksjonen være async for å fungere.
+   * Av en eller annen grunn må denne funksjonen være async med awaitfor å fungere.
    */
-  const setCursorPosition = async (positionStart: any, positionEnd: any) => {
-    // @ts-ignore
+  const setCursorPosition = async (positionStart: number, positionEnd: number) => {
+    if (!editorRef.current) {
+      return;
+    }
     editorRef.current.selectionStart = await positionStart;
-    // @ts-ignore
     editorRef.current.selectionEnd = await positionEnd;
   };
 
@@ -97,7 +94,6 @@ const Editor: React.FC = () => {
     <>
       {showSpinner ? <ShowSpinner /> : ""}
       <ImageUpload
-        editorRef={editorRef}
         uploadImageRef={uploadImageRef}
         mdText={mdText}
         pushUndoValue={pushUndoValue}
@@ -137,7 +133,6 @@ const Editor: React.FC = () => {
       <div className="textEditorContainer">
         <MDTextArea
           editorRef={editorRef}
-          previewRef={previewRef}
           mdText={mdText}
           buttonValues={buttonValues}
           listButtonValues={listButtonValues}
@@ -151,8 +146,6 @@ const Editor: React.FC = () => {
           course={lessonData.course}
         />
         <MDPreview
-          previewRef={previewRef}
-          editorRef={editorRef}
           mdText={mdText}
           course={lessonData.course}
           language={language}

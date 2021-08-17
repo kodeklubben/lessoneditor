@@ -1,8 +1,6 @@
 import { useHistory } from "react-router";
 import { Button, Card, Image } from "semantic-ui-react";
 import { FC } from "react";
-import { fileExists } from "../../utils/fileExists";
-
 import nbFlag from "/assets/public/languagesFlag/flag_nb.svg";
 import nnFlag from "/assets/public/languagesFlag/flag_nn.svg";
 import enFlag from "/assets/public/languagesFlag/flag_en.svg";
@@ -13,49 +11,38 @@ const languageOptions = {
   nb: {
     text: "Bokmål",
     value: "nb",
-    image: { avatar: true, src: nbFlag }
+    image: { avatar: true, src: nbFlag },
   },
   nn: {
     text: "Nynorsk",
     value: "nn",
-    image: { avatar: true, src: nnFlag }
+    image: { avatar: true, src: nnFlag },
   },
   en: {
     text: "Engelsk",
     value: "en",
-    image: { avatar: true, src: enFlag }
+    image: { avatar: true, src: enFlag },
   },
   is: {
     text: "Islandsk",
     value: "is",
-    image: { avatar: true, src: isFlag }
-  }
+    image: { avatar: true, src: isFlag },
+  },
 };
 
-const LessonCard: FC<any> = ({
-                               title,
-                               lessonId,
-                               language,
-                               hasContent,
-                               lessonTitle
-                             }) => {
+const LessonCard: FC<any> = ({ title, lessonId, language, hasContent, lessonTitle }) => {
   const history = useHistory();
 
-  const navigateToEditor = (
-    lessonId: any,
-    lessonTitle: any,
-    language: string
-  ) => {
+  const navigateToEditor = (lessonId: any, lessonTitle: any, language: string) => {
     const target = [
       "/editor",
       lessonId,
-      language === "nb" ? lessonTitle : `${lessonTitle}_${language}`
+      language === "nb" ? lessonTitle : `${lessonTitle}_${language}`,
     ].join("/");
     history.push({ pathname: target });
   };
-  const imgSrc = fileExists(`/api/display/${lessonId}/preview.png`)
-    ? `/api/display/${lessonId}/preview.png?${performance.now()}`
-    : noLessonPreviewImage;
+  const imgSrc = `/api/display/${lessonId}/preview.png?${performance.now()}`;
+
   // @ts-ignore
   const languageText = languageOptions[language].text;
   // @ts-ignore
@@ -76,7 +63,7 @@ const LessonCard: FC<any> = ({
                   maxHeight: "220px",
                   overflow: "hidden",
                   objectFit: "cover",
-                  objectPosition: "0 0"
+                  objectPosition: "0 0",
                 }}
               />
             </Card.Content>
@@ -97,7 +84,7 @@ const LessonCard: FC<any> = ({
                 style={{
                   maxHeight: "220px",
                   overflow: "hidden",
-                  objectFit: "cover"
+                  objectFit: "cover",
                 }}
               />
             </Card.Content>
@@ -114,7 +101,7 @@ const LessonCard: FC<any> = ({
               width: "15%",
               position: "absolute",
               left: "80%",
-              top: "57%"
+              top: "57%",
             }}
             src={languageImage}
             alt={""}
