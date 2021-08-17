@@ -5,15 +5,11 @@ import ShowSpinner from "../ShowSpinner";
 
 const SimplePreview = () => {
   const { savedFileBody } = useFileContext();
+
   return (
     <div className={"simple-preview"}>
-      {savedFileBody !== "" ? (
-        <MDPreview
-          mdText={savedFileBody}
-          course={"python"}
-          language={"nb"}
-          renderContent={true}
-        />
+      {typeof savedFileBody === "string" && savedFileBody !== "" ? (
+        <MDPreview mdText={savedFileBody} course={"python"} language={"nb"} renderContent={true} />
       ) : (
         <ShowSpinner />
       )}

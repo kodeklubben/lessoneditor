@@ -1,40 +1,55 @@
-import { FC } from "react";
+import { FC, Ref } from "react";
 
 let orderedListIndex = 2;
-let tabSize = 2;
+const tabSize = 2;
 
-const MDTextArea: FC<any> = ({
-                               editorRef,
-                               previewRef,
-                               mdText,
-                               buttonValues,
-                               listButtonValues,
-                               cursorPositionStart,
-                               setCursorPosition,
-                               setMdText,
-                               setButtonValues,
-                               setCursor,
-                               pushUndoValue,
-                               resetButtons,
-                               course
-                             }) => {
-  const handleChange = (event: any) => {
+interface MDTextAreaProps {
+  editorRef: Ref<HTMLTextAreaElement>;
+  mdText: string;
+  buttonValues: Record<string, boolean>;
+  listButtonValues: {
+    bTitle: string;
+    output: string;
+    cursorInt: number;
+  };
+  cursorPositionStart: number;
+  setCursorPosition: (positionStart: number, positionEnd: number) => void;
+  setMdText: React.Dispatch<React.SetStateAction<string>>;
+  setButtonValues: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
+  setCursor: (pos1: number, pos2: number) => void;
+  pushUndoValue: (mdText: string, cursorPositionStart: number) => void;
+  resetButtons: () => void;
+  course: string;
+}
+
+const MDTextArea: FC<MDTextAreaProps> = ({
+  editorRef,
+  mdText,
+  buttonValues,
+  listButtonValues,
+  cursorPositionStart,
+  setCursorPosition,
+  setMdText,
+  setButtonValues,
+  setCursor,
+  pushUndoValue,
+  resetButtons,
+  course,
+}) => {
+  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setCursor(event.target.selectionStart, event.target.selectionEnd);
-    let inputText = event.target.value;
-    if (
-      inputText[cursorPositionStart] === " " ||
-      inputText[cursorPositionStart] === "\n"
-    ) {
+    const inputText = event.target.value;
+    if (inputText[cursorPositionStart] === " " || inputText[cursorPositionStart] === "\n") {
       pushUndoValue(inputText, cursorPositionStart);
     }
     setMdText(inputText);
   };
 
-  const onTextareaKeyUp = (event: any) => {
-    setCursor(event.target.selectionStart, event.target.selectionEnd);
+  const onTextareaKeyUp = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    setCursor(event.location, event.location);
   };
 
-  const onTextareaSelect = (event: any) => {
+  const onTextareaSelect = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     let start = event.target.selectionStart;
     let end = event.target.selectionEnd;
 
@@ -44,12 +59,7 @@ const MDTextArea: FC<any> = ({
 
     setCursor(start, end);
     let i = mdText.slice(start, end);
-    while (
-      i[0] === " " ||
-      i[i.length - 1] === " " ||
-      i[0] === "\n" ||
-      i[i.length - 1] === "\n"
-      ) {
+    while (i[0] === " " || i[i.length - 1] === " " || i[0] === "\n" || i[i.length - 1] === "\n") {
       if (i[0] === " " || i[0] === "\n") {
         i = i.slice(1);
         start += 1;
@@ -66,9 +76,9 @@ const MDTextArea: FC<any> = ({
       mdText.slice(start - 2, start) !== "**" &&
       !buttonValues.italic
     ) {
-      setButtonValues((prevButtonValues: any) => ({
+      setButtonValues((prevButtonValues: Record<string, boolean>) => ({
         ...prevButtonValues,
-        italic: true
+        italic: true,
       }));
     }
     if (
@@ -80,13 +90,10 @@ const MDTextArea: FC<any> = ({
     ) {
       setCursorPosition(start + 1, end - 1);
     }
-    if (
-      mdText.slice(start - 2, start) === "**" &&
-      mdText.slice(end, end + 2) === "**"
-    ) {
-      setButtonValues((prevButtonValues: any) => ({
+    if (mdText.slice(start - 2, start) === "**" && mdText.slice(end, end + 2) === "**") {
+      setButtonValues((prevButtonValues: Record<string, boolean>) => ({
         ...prevButtonValues,
-        bold: true
+        bold: true,
       }));
     }
 
@@ -102,9 +109,9 @@ const MDTextArea: FC<any> = ({
       mdText.slice(end, end + 2) === "~~" &&
       !buttonValues.strikethrough
     ) {
-      setButtonValues((prevButtonValues: any) => ({
+      setButtonValues((prevButtonValues: Record<string, boolean>) => ({
         ...prevButtonValues,
-        strikethrough: true
+        strikethrough: true,
       }));
     }
     if (
@@ -116,38 +123,29 @@ const MDTextArea: FC<any> = ({
     }
   };
 
-  const onTextareaMouseDown = (event: any) => {
-    setCursor(event.target.selectionStart, event.target.selectionEnd);
+  const onTextareaMouseDown = (event: React.MouseEvent<HTMLTextAreaElement>) => {
     resetButtons();
   };
 
-  const onTextareaKeyDown = (event: any) => {
-    setCursor(event.target.selectionStart, event.target.selectionEnd);
+  const onTextareaKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    setCursor(event.location, event.location);
     if (event.key === "Enter") {
       if (buttonValues[listButtonValues["bTitle"]]) {
         event.preventDefault();
 
         if (
-          mdText.slice(
-            cursorPositionStart - listButtonValues["cursorInt"],
-            cursorPositionStart
-          ) === listButtonValues["output"] ||
-          mdText.slice(
-            cursorPositionStart - listButtonValues["cursorInt"],
-            cursorPositionStart
-          ) ===
-          orderedListIndex - 1 + ". "
+          mdText.slice(cursorPositionStart - listButtonValues["cursorInt"], cursorPositionStart) ===
+            listButtonValues["output"] ||
+          mdText.slice(cursorPositionStart - listButtonValues["cursorInt"], cursorPositionStart) ===
+            orderedListIndex - 1 + ". "
         ) {
-          setButtonValues((prevState: any) => ({
+          setButtonValues((prevState: Record<string, boolean>) => ({
             ...prevState,
-            [listButtonValues["bTitle"]]:
-              !buttonValues[listButtonValues["bTitle"]]
+            [listButtonValues["bTitle"]]: !buttonValues[listButtonValues["bTitle"]],
           }));
           setMdText(
-            mdText.slice(
-              0,
-              cursorPositionStart - listButtonValues["cursorInt"]
-            ) + mdText.slice(cursorPositionStart)
+            mdText.slice(0, cursorPositionStart - listButtonValues["cursorInt"]) +
+              mdText.slice(cursorPositionStart)
           );
           setCursorPosition(
             cursorPositionStart - listButtonValues["cursorInt"],
@@ -159,9 +157,9 @@ const MDTextArea: FC<any> = ({
         if (listButtonValues["bTitle"] === "listOl") {
           setMdText(
             mdText.slice(0, cursorPositionStart) +
-            "\n\n" +
-            (orderedListIndex + ". ") +
-            mdText.slice(cursorPositionStart)
+              "\n\n" +
+              (orderedListIndex + ". ") +
+              mdText.slice(cursorPositionStart)
           );
           setCursorPosition(
             cursorPositionStart + listButtonValues["cursorInt"] + 2,
@@ -173,9 +171,9 @@ const MDTextArea: FC<any> = ({
 
         setMdText(
           mdText.slice(0, cursorPositionStart) +
-          "\n\n" +
-          listButtonValues["output"] +
-          mdText.slice(cursorPositionStart)
+            "\n\n" +
+            listButtonValues["output"] +
+            mdText.slice(cursorPositionStart)
         );
         setCursorPosition(
           cursorPositionStart + listButtonValues["cursorInt"] + 2,
@@ -185,15 +183,13 @@ const MDTextArea: FC<any> = ({
       }
 
       if (buttonValues["heading"]) {
-        setButtonValues((prevButtonValues: any) => ({
+        setButtonValues((prevButtonValues: Record<string, boolean>) => ({
           ...prevButtonValues,
-          heading: !buttonValues["heading"]
+          heading: !buttonValues["heading"],
         }));
       }
 
-      if (
-        mdText.slice(cursorPositionStart, cursorPositionStart + 3) === " {."
-      ) {
+      if (mdText.slice(cursorPositionStart, cursorPositionStart + 3) === " {.") {
         let i = cursorPositionStart;
         while (mdText[i] !== "\n") {
           i++;
@@ -206,12 +202,12 @@ const MDTextArea: FC<any> = ({
     if (event.key === "Tab") {
       event.preventDefault();
       pushUndoValue(mdText, cursorPositionStart);
-      let outputText =
+      const outputText =
         mdText.slice(0, cursorPositionStart) +
         " ".repeat(tabSize) +
         mdText.slice(cursorPositionStart);
       setMdText(outputText);
-      let position = cursorPositionStart + tabSize;
+      const position = cursorPositionStart + tabSize;
       setCursorPosition(position, position);
       return;
     }
@@ -232,12 +228,11 @@ const MDTextArea: FC<any> = ({
       ref={editorRef}
       className="TextArea"
       value={mdText}
-      onChange={(event) => handleChange(event)}
-      onKeyDown={(event) => onTextareaKeyDown(event)}
-      onKeyUp={(event) => onTextareaKeyUp(event)}
-      onMouseDown={(event) => onTextareaMouseDown(event)}
-      onTouchEnd={(event) => onTextareaMouseDown(event)}
-      onSelect={(event) => onTextareaSelect(event)}
+      onChange={handleChange}
+      onKeyDown={onTextareaKeyDown}
+      onKeyUp={onTextareaKeyUp}
+      onMouseDown={onTextareaMouseDown}
+      onSelect={onTextareaSelect}
     />
   );
 };
