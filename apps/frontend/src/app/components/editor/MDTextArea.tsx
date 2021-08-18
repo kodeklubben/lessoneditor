@@ -39,6 +39,7 @@ const MDTextArea: FC<MDTextAreaProps> = ({
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setCursor(event.target.selectionStart, event.target.selectionEnd);
     const inputText = event.target.value;
+
     if (inputText[cursorPositionStart] === " " || inputText[cursorPositionStart] === "\n") {
       pushUndoValue(inputText, cursorPositionStart);
     }
@@ -46,7 +47,7 @@ const MDTextArea: FC<MDTextAreaProps> = ({
   };
 
   const onTextareaKeyUp = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    setCursor(event.location, event.location);
+    //setCursor(event.location, event.location);
   };
 
   const onTextareaSelect = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -128,7 +129,7 @@ const MDTextArea: FC<MDTextAreaProps> = ({
   };
 
   const onTextareaKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    setCursor(event.location, event.location);
+    //setCursor(event.location, event.location);
     if (event.key === "Enter") {
       if (buttonValues[listButtonValues["bTitle"]]) {
         event.preventDefault();

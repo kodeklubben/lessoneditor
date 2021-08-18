@@ -8,28 +8,23 @@ import { FC } from "react";
 let position: any;
 
 const UndoRedo: FC<any> = ({
-                             editorRef,
-                             mdText,
-                             undo,
-                             redo,
-                             cursorPositionStart,
-                             undoCursorPosition,
-                             redoCursorPosition,
-                             setUndoCursorPosition,
-                             setRedoCursorPosition,
-                             pushUndoValue,
-                             pushRedoValue,
-                             setCursorPosition
-                           }) => {
+  editorRef,
+  mdText,
+  cursorPositionStart,
+  undoCursorPosition,
+  redoCursorPosition,
+  setUndoCursorPosition,
+  setRedoCursorPosition,
+  pushUndoValue,
+  pushRedoValue,
+  setCursorPosition,
+}) => {
   const set = {
     undo: () => {
       if (undoCursorPosition.length > 0) {
         position = undoCursorPosition[undoCursorPosition.length - 1];
-        setUndoCursorPosition(
-          undoCursorPosition.slice(0, undoCursorPosition.length - 1)
-        );
-      }
-      if (undo.length <= 0) {
+        setUndoCursorPosition(undoCursorPosition.slice(0, undoCursorPosition.length - 1));
+      } else {
         return;
       }
 
@@ -39,16 +34,13 @@ const UndoRedo: FC<any> = ({
     redo: () => {
       if (redoCursorPosition.length > 0) {
         position = redoCursorPosition[redoCursorPosition.length - 1];
-        setRedoCursorPosition(
-          redoCursorPosition.slice(0, redoCursorPosition.length - 1)
-        );
-      }
-      if (redo.length <= 0) {
+        setRedoCursorPosition(redoCursorPosition.slice(0, redoCursorPosition.length - 1));
+      } else {
         return;
       }
       pushUndoValue(mdText, cursorPositionStart);
       setCursorPosition(position, position);
-    }
+    },
   };
   useHotkeys(
     `${KEY.undo}, ${KEY.redo}`,

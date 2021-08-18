@@ -19,8 +19,8 @@ const Editor: React.FC = () => {
   const [mdText, setMdText] = useState("");
   const [showSpinner, setShowSpinner] = useState(true);
   const [buttonValues, setButtonValues] = useState({});
-  const [cursorPositionStart, setCursorPositionStart] = useState(0);
-  const [cursorPositionEnd, setCursorPositionEnd] = useState(0);
+  const [cursorPositionStart, setCursorPositionStart] = useState<number>(0);
+  const [cursorPositionEnd, setCursorPositionEnd] = useState<number>(0);
   const [undo, setUndo] = useState<string[]>([]);
   const [redo, setRedo] = useState<string[]>([]);
   const [undoCursorPosition, setUndoCursorPosition] = useState<number[]>([]);
@@ -38,6 +38,7 @@ const Editor: React.FC = () => {
   const { language } = filenameParser(file);
 
   const pushUndoValue = (mdText: string, cursorPositionStart: number) => {
+    console.log(cursorPositionStart);
     if (undo[undo.length - 1] !== mdText) {
       setUndo((undo) => [...undo, mdText]);
       setUndoCursorPosition((undoCursorPosition) => [...undoCursorPosition, cursorPositionStart]);
@@ -67,8 +68,7 @@ const Editor: React.FC = () => {
     if (!editorRef.current) {
       return;
     }
-    editorRef.current.selectionStart = await positionStart;
-    editorRef.current.selectionEnd = await positionEnd;
+    editorRef.current.setSelectionRange(await positionStart, await positionEnd);
   };
 
   const resetButtons = () => {
