@@ -1,7 +1,9 @@
 import { GRADE, SUBJECT, TOPIC } from "../datapanel/settings/landingpage_NO";
-import laererveiledningMal from "../LaererveiledningMal";
+import laererveiledningMal from "../settingsFiles/LaererveiledningMal";
 
-const insertMetaDataInTeacherGuide = (ymlData: { tags: { subject: any[]; topic: any[]; grade: any[]; }; }) => {
+const insertMetaDataInTeacherGuide = (ymlData: {
+  tags: { subject: any[]; topic: any[]; grade: any[] };
+}) => {
   const subject = ymlData.tags.subject.map((element) => {
     // @ts-ignore
     return SUBJECT[element];
@@ -15,10 +17,7 @@ const insertMetaDataInTeacherGuide = (ymlData: { tags: { subject: any[]; topic: 
     return GRADE[element];
   });
 
-  let veiledningWithData = laererveiledningMal.replace(
-    /{subject}/,
-    subject.join(", ")
-  );
+  let veiledningWithData = laererveiledningMal.replace(/{subject}/, subject.join(", "));
   veiledningWithData = veiledningWithData.replace(/{topic}/, topic.join(", "));
   veiledningWithData = veiledningWithData.replace(/{grade}/, grade.join(", "));
   return veiledningWithData;

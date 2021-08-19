@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, Ref, useState } from "react";
 import "./buttonpanel.scss";
 import ShowSpinner from "../../ShowSpinner";
 import Autosave from "../Autosave";
@@ -16,12 +16,38 @@ import SratchButtons from "./ScratchButtons";
 import EditorDatamodal from "../datapanel/EditorDatamodal";
 import SubmitButton from "./SubmitButton";
 
-const ButtonPanel: FC<any> = ({
+interface ButtonPanelProps {
+  buttonValues: Record<string, boolean>;
+  course: string;
+  courseTitle: string;
+  cursorPositionStart: number;
+  cursorPositionEnd: number;
+  editorRef: Ref<HTMLTextAreaElement>;
+  lessonTitle: string;
+  mdText: string;
+  pushRedoValue: (mdText: string, cursorPositionStart: number) => void;
+  pushUndoValue: (mdText: string, cursorPositionStart: number) => void;
+  redoCursorPosition: number[];
+  saveEditorText: (regenThumb: boolean) => Promise<void>;
+  setButtonValues: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
+  setCursor: (pos1: number, pos2: number) => void;
+  setCursorPosition: (positionStart: number, positionEnd: number) => void;
+  setListButtonValues: React.Dispatch<
+    React.SetStateAction<{ bTitle: string; output: string; cursorInt: number }>
+  >;
+  setMdText: React.Dispatch<React.SetStateAction<string>>;
+  setRedoCursorPosition: React.Dispatch<React.SetStateAction<number[]>>;
+  setUndoCursorPosition: React.Dispatch<React.SetStateAction<number[]>>;
+  undoCursorPosition: number[];
+  uploadImageRef: Ref<HTMLInputElement>;
+}
+
+const ButtonPanel: FC<ButtonPanelProps> = ({
   buttonValues,
   course,
   courseTitle,
-  cursorPositionEnd,
   cursorPositionStart,
+  cursorPositionEnd,
   editorRef,
   lessonTitle,
   mdText,
@@ -36,7 +62,6 @@ const ButtonPanel: FC<any> = ({
   setMdText,
   setRedoCursorPosition,
   setUndoCursorPosition,
-  setRenderContent,
   undoCursorPosition,
   uploadImageRef,
 }) => {
@@ -157,11 +182,7 @@ const ButtonPanel: FC<any> = ({
               courseTitle={courseTitle}
             />
           </div>
-          <Autosave
-            mdText={mdText}
-            saveEditorText={saveEditorText}
-            setRenderContent={setRenderContent}
-          />
+          <Autosave mdText={mdText} saveEditorText={saveEditorText} />
         </div>
 
         <div>

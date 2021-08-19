@@ -12,22 +12,18 @@ let results;
 let buttonTitle;
 
 const Lists: FC<any> = ({
-                          editorRef,
-                          cursorPositionStart,
-                          cursorPositionEnd,
-                          mdText,
-                          buttonValues,
-                          setMdText,
-                          setCursorPosition,
-                          setCursor,
-                          setListButtonValues,
-                          setButtonValues
-                        }) => {
-  const setChanges = (
-    mdText: any,
-    cursorPositionStart: any,
-    cursorPositionEnd: any
-  ) => {
+  editorRef,
+  cursorPositionStart,
+  cursorPositionEnd,
+  mdText,
+  buttonValues,
+  setMdText,
+  setCursorPosition,
+  setCursor,
+  setListButtonValues,
+  setButtonValues,
+}) => {
+  const setChanges = (mdText: any, cursorPositionStart: any, cursorPositionEnd: any) => {
     setCursor(cursorPositionStart, cursorPositionEnd);
     setCursorPosition(cursorPositionStart, cursorPositionEnd);
     setMdText(mdText);
@@ -36,16 +32,11 @@ const Lists: FC<any> = ({
   const setButton = (value: string) => {
     setButtonValues((prevButtonValues: any) => ({
       ...prevButtonValues,
-      [value]: !buttonValues[value]
+      [value]: !buttonValues[value],
     }));
   };
 
-  const setList = (
-    button: string,
-    cursorIntON: number,
-    cursorIntOFF: number,
-    output: string
-  ) => {
+  const setList = (button: string, cursorIntON: number, cursorIntOFF: number, output: string) => {
     cancelResults = cancelButton(
       buttonValues[button],
       mdText,
@@ -73,11 +64,7 @@ const Lists: FC<any> = ({
       output
     );
 
-    setChanges(
-      results?.mdText,
-      results?.cursorPositionStart,
-      results?.cursorPositionEnd
-    );
+    setChanges(results?.mdText, results?.cursorPositionStart, results?.cursorPositionEnd);
   };
 
   const set = {
@@ -87,7 +74,7 @@ const Lists: FC<any> = ({
       setListButtonValues({
         bTitle: buttonTitle,
         output: config.listUl.outputOnEnter,
-        cursorInt: config.listUl.cursorIntON
+        cursorInt: config.listUl.cursorIntON,
       });
       setList(
         buttonTitle,
@@ -102,7 +89,7 @@ const Lists: FC<any> = ({
       setListButtonValues({
         bTitle: buttonTitle,
         output: config.listOl.outputOnEnter,
-        cursorInt: config.listOl.cursorIntON
+        cursorInt: config.listOl.cursorIntON,
       });
       setList(
         buttonTitle,
@@ -117,7 +104,7 @@ const Lists: FC<any> = ({
       setListButtonValues({
         bTitle: buttonTitle,
         output: config.listCheck.outputOnEnter,
-        cursorInt: config.listCheck.cursorIntON
+        cursorInt: config.listCheck.cursorIntON,
       });
       setList(
         buttonTitle,
@@ -125,7 +112,7 @@ const Lists: FC<any> = ({
         config.listCheck.cursorIntOFF,
         config.listCheck.output
       );
-    }
+    },
   };
 
   useHotkeys(
@@ -155,7 +142,7 @@ const Lists: FC<any> = ({
     editorRef.current.focus();
     setButtonValues((prevState: any) => ({
       ...prevState,
-      [button]: !buttonValues[button]
+      [button]: !buttonValues[button],
     }));
     switch (button) {
       case config.listUl.buttonTitle:
@@ -182,6 +169,8 @@ const Lists: FC<any> = ({
           onButtonClick={handleButtonClick}
           buttonTitle={element[1].buttonTitle}
           shortcutKey={element[1].shortcut}
+          style={{}}
+          imageurl=""
         />
       ))}
     </div>

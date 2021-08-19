@@ -30,7 +30,7 @@ const ImageUpload: FC<ImageUploadProps> = ({
   let start = cursorPositionStart + 2;
   let end = cursorPositionEnd + 18;
 
-  const { lessonId } = useParams<any>();
+  const { lessonId } = useParams<{ lessonId: string }>();
   const [showSpinner, setShowSpinner] = useState(false);
 
   const fileNameErrorMessage =

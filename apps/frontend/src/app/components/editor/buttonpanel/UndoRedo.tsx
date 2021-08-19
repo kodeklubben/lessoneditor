@@ -80,12 +80,14 @@ const UndoRedo: FC<any> = ({
       {Object.entries(config).map((element, index) => (
         <ButtonComponent
           key={"element" + index}
-          buttonValues={""}
+          buttonValues={{}}
           icon={element[1].icon}
           title={element[1].title}
           onButtonClick={handleButtonClick}
           buttonTitle={element[1].buttonTitle}
           shortcutKey={element[1].shortcut}
+          style={{}}
+          imageurl=""
         />
       ))}
     </div>

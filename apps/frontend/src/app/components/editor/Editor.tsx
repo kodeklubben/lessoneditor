@@ -16,17 +16,20 @@ const Editor: React.FC = () => {
 
   const { lessonData } = useLessonContext();
   const { saveFileBody, savedFileBody } = useFileContext();
-  const [mdText, setMdText] = useState("");
-  const [showSpinner, setShowSpinner] = useState(true);
-  const [buttonValues, setButtonValues] = useState({});
+  const [mdText, setMdText] = useState<string>("");
+  const [showSpinner, setShowSpinner] = useState<boolean>(true);
+  const [buttonValues, setButtonValues] = useState<Record<string, boolean>>({});
   const [cursorPositionStart, setCursorPositionStart] = useState<number>(0);
   const [cursorPositionEnd, setCursorPositionEnd] = useState<number>(0);
   const [undo, setUndo] = useState<string[]>([]);
   const [redo, setRedo] = useState<string[]>([]);
   const [undoCursorPosition, setUndoCursorPosition] = useState<number[]>([]);
   const [redoCursorPosition, setRedoCursorPosition] = useState<number[]>([]);
-  const [renderContent, setRenderContent] = useState(false);
-  const [listButtonValues, setListButtonValues] = useState({
+  const [listButtonValues, setListButtonValues] = useState<{
+    bTitle: string;
+    output: string;
+    cursorInt: number;
+  }>({
     bTitle: "",
     output: "",
     cursorInt: 0,
@@ -84,9 +87,9 @@ const Editor: React.FC = () => {
     setShowSpinner(false);
   }
 
-  const saveEditorText = async () => {
+  const saveEditorText = async (regenThumb: boolean) => {
     if (saveFileBody) {
-      await saveFileBody(lessonId, file, mdText);
+      await saveFileBody(lessonId, file, mdText, regenThumb);
     }
   };
 
@@ -108,14 +111,13 @@ const Editor: React.FC = () => {
         buttonValues={buttonValues}
         course={lessonData.course}
         courseTitle={lessonData.courseTitle}
-        cursorPositionEnd={cursorPositionEnd}
         cursorPositionStart={cursorPositionStart}
+        cursorPositionEnd={cursorPositionEnd}
         editorRef={editorRef}
         lessonTitle={lessonData.lessonTitle}
         mdText={mdText}
         pushRedoValue={pushRedoValue}
         pushUndoValue={pushUndoValue}
-        redo={redo}
         redoCursorPosition={redoCursorPosition}
         saveEditorText={saveEditorText}
         setButtonValues={setButtonValues}
@@ -125,8 +127,6 @@ const Editor: React.FC = () => {
         setMdText={setMdText}
         setRedoCursorPosition={setRedoCursorPosition}
         setUndoCursorPosition={setUndoCursorPosition}
-        setRenderContent={setRenderContent}
-        undo={undo}
         undoCursorPosition={undoCursorPosition}
         uploadImageRef={uploadImageRef}
       />
@@ -145,12 +145,7 @@ const Editor: React.FC = () => {
           resetButtons={resetButtons}
           course={lessonData.course}
         />
-        <MDPreview
-          mdText={mdText}
-          course={lessonData.course}
-          language={language}
-          renderContent={renderContent}
-        />
+        <MDPreview mdText={mdText} course={lessonData.course} language={language} />
       </div>
     </>
   );

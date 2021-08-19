@@ -12,18 +12,18 @@ const languageNO = {
   ok: "OK",
   cancel: "Avbryt",
   linkText: "lenkebeskrivelse",
-  mandatoryText: "Må fylle ut URL"
+  mandatoryText: "Må fylle ut URL",
 };
 
 const Hyperlink: FC<any> = ({
-                              editorRef,
-                              mdText,
-                              cursorPositionStart,
-                              cursorPositionEnd,
-                              setMdText,
-                              setCursorPosition,
-                              setCursor
-                            }) => {
+  editorRef,
+  mdText,
+  cursorPositionStart,
+  cursorPositionEnd,
+  setMdText,
+  setCursorPosition,
+  setCursor,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [url, setUrl] = useState("https://");
   const [openNewWindow, setOpenNewWindow] = useState(false);
@@ -55,33 +55,27 @@ const Hyperlink: FC<any> = ({
     if (cursorPositionStart === cursorPositionEnd) {
       openNewWindow
         ? setMdText(
-        mdText.slice(0, cursorPositionStart) +
-        `[${languageNO.linkText}](${url}){target=_blank}` +
-        mdText.slice(cursorPositionStart)
-        )
+            mdText.slice(0, cursorPositionStart) +
+              `[${languageNO.linkText}](${url}){target=_blank}` +
+              mdText.slice(cursorPositionStart)
+          )
         : setMdText(
-        mdText.slice(0, cursorPositionStart) +
-        `[${languageNO.linkText}](${url})` +
-        mdText.slice(cursorPositionStart)
-        );
+            mdText.slice(0, cursorPositionStart) +
+              `[${languageNO.linkText}](${url})` +
+              mdText.slice(cursorPositionStart)
+          );
     } else {
       openNewWindow
         ? setMdText(
-        mdText.slice(0, cursorPositionStart) +
-        `[${mdText.slice(
-          cursorPositionStart,
-          cursorPositionEnd
-        )}](${url}){target=_blank}` +
-        mdText.slice(cursorPositionEnd)
-        )
+            mdText.slice(0, cursorPositionStart) +
+              `[${mdText.slice(cursorPositionStart, cursorPositionEnd)}](${url}){target=_blank}` +
+              mdText.slice(cursorPositionEnd)
+          )
         : setMdText(
-        mdText.slice(0, cursorPositionStart) +
-        `[${mdText.slice(
-          cursorPositionStart,
-          cursorPositionEnd
-        )}](${url})` +
-        mdText.slice(cursorPositionEnd)
-        );
+            mdText.slice(0, cursorPositionStart) +
+              `[${mdText.slice(cursorPositionStart, cursorPositionEnd)}](${url})` +
+              mdText.slice(cursorPositionEnd)
+          );
     }
 
     setIsOpen(false);
@@ -102,12 +96,14 @@ const Hyperlink: FC<any> = ({
   return (
     <div>
       <ButtonComponent
-        buttonValues={""}
+        buttonValues={{}}
         icon={config.hyperlink.icon}
         title={config.hyperlink.title}
         onButtonClick={handleButtonClick}
         buttonTitle={config.hyperlink.buttonTitle}
         shortcutKey={config.hyperlink.shortcut}
+        style={{}}
+        imageurl=""
       />
 
       <Modal
@@ -145,11 +141,7 @@ const Hyperlink: FC<any> = ({
         </Modal.Content>
 
         <Modal.Actions className="hyperlink_modal">
-          <Button
-            onClick={clickCancelHandler}
-            content={languageNO.cancel}
-            color="black"
-          />
+          <Button onClick={clickCancelHandler} content={languageNO.cancel} color="black" />
           <Button
             disabled={isEmptyField}
             onClick={clickOKHandler}

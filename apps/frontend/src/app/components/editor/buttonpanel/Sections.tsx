@@ -12,21 +12,17 @@ let cancelResults;
 let buttonTitle;
 
 const Sections: FC<any> = ({
-                             editorRef,
-                             cursorPositionStart,
-                             cursorPositionEnd,
-                             mdText,
-                             buttonValues,
-                             setMdText,
-                             setCursorPosition,
-                             setCursor,
-                             setButtonValues
-                           }) => {
-  const setChanges = (
-    mdText: any,
-    cursorPositionStart: any,
-    cursorPositionEnd: any
-  ) => {
+  editorRef,
+  cursorPositionStart,
+  cursorPositionEnd,
+  mdText,
+  buttonValues,
+  setMdText,
+  setCursorPosition,
+  setCursor,
+  setButtonValues,
+}) => {
+  const setChanges = (mdText: any, cursorPositionStart: any, cursorPositionEnd: any) => {
     setCursor(cursorPositionStart, cursorPositionEnd);
     setCursorPosition(cursorPositionStart, cursorPositionEnd);
     setMdText(mdText);
@@ -35,7 +31,7 @@ const Sections: FC<any> = ({
   const setButton = (value: any) => {
     setButtonValues((prevButtonValues: any) => ({
       ...prevButtonValues,
-      [value]: !buttonValues[value]
+      [value]: !buttonValues[value],
     }));
   };
 
@@ -74,11 +70,7 @@ const Sections: FC<any> = ({
       SECTION_TEXT
     );
 
-    setChanges(
-      results?.mdText,
-      results?.cursorPositionStart,
-      results?.cursorPositionEnd
-    );
+    setChanges(results?.mdText, results?.cursorPositionStart, results?.cursorPositionEnd);
   };
 
   const set = {
@@ -180,12 +172,12 @@ const Sections: FC<any> = ({
         config.save.output,
         config.save.cancelInt
       );
-    }
+    },
   };
 
   useHotkeys(
     `${KEY.activity}, ${KEY.intro}, ${KEY.check}, ${KEY.tip}, ` +
-    `${KEY.protip}, ${KEY.challenge}, ${KEY.flag}, ${KEY.try}, ${KEY.save}`,
+      `${KEY.protip}, ${KEY.challenge}, ${KEY.flag}, ${KEY.try}, ${KEY.save}`,
     (event, handler) => {
       event.preventDefault();
       switch (handler.key) {
@@ -265,6 +257,7 @@ const Sections: FC<any> = ({
         <ButtonComponent
           key={"element" + index}
           buttonValues={buttonValues}
+          icon=""
           title={element[1].title}
           onButtonClick={handleButtonClick}
           buttonTitle={element[1].buttonTitle}

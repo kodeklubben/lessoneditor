@@ -25,12 +25,14 @@ const Image: FC<any> = ({ editorRef, uploadImageRef }) => {
   return (
     <div>
       <ButtonComponent
-        buttonValues={""}
+        buttonValues={{}}
         icon={config.image.icon}
         title={config.image.title}
         onButtonClick={handleButtonClick}
         buttonTitle={config.image.buttonTitle}
         shortcutKey={config.image.shortcut}
+        style={{}}
+        imageurl=""
       />
     </div>
   );
