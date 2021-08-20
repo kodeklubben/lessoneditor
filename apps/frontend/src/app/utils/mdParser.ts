@@ -68,7 +68,7 @@ function getVideoIframeMarkup(url: { url: any }) {
     return "";
   }
   if (provider === "youtube") {
-    return `<iframe style="position:absolute; left:0; bottom:0; width:1px; height:1px" src="https://www.youtube-nocookie.com/embed/${videoId}" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+    return `<iframe src="https://www.youtube-nocookie.com/embed/${videoId}" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
   } else if (provider === "vimeo") {
     return `<iframe src="https://player.vimeo.com/video/${videoId}" dnt="1" width="640" height="360" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
   } else {
