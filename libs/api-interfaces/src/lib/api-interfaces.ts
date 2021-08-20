@@ -17,3 +17,32 @@ export const paths = {
   "USER": "/api/user",
   "USER_LESSONS": "/api/user/lessons"
 }
+
+export interface Lesson
+{
+  lessonId: string
+  course: Course
+  courseTitle: string
+  lesson: string
+  lessonTitle?: string
+  created?: string
+  updated?: string
+  createdBy?: string
+}
+
+export interface User
+{
+  authenticated: boolean
+  name: string
+  email: string
+  username: string
+  photo: string
+
+}
+
+export interface Course
+{
+  courseTitle: string
+  slug: string
+
+}

@@ -25,7 +25,13 @@
     "backend": {
       "tags": []
     },
+    "data": {
+      "tags": []
+    },
     "frontend": {
+      "tags": []
+    },
+    "nestbackend": {
       "tags": []
     },
     "thumbnailer": {
