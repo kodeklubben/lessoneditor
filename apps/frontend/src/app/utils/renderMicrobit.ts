@@ -14,13 +14,6 @@ const renderSpinner = () => {
     codeBlock.style.borderStyle = "none";
     codeBlock.style.color = "#f5f5f5";
     const img = document.createElement("img");
-    const pre = img.parentElement;
-    if (pre) {
-      pre.style.backgroundColor = "red";
-      pre.style.display = "flex";
-      pre.style.justifyContent = "center";
-      pre.style.alignItems = "center";
-    }
     img.className = "spinner";
     img.src = "../../assets/public/spinner.gif";
     img.alt = "Spinner";
