@@ -13,8 +13,14 @@ const renderSpinner = () => {
   getMicrobitSnippets().forEach((codeBlock) => {
     codeBlock.style.borderStyle = "none";
     codeBlock.style.color = "#f5f5f5";
-    const preSize = codeBlock.getBoundingClientRect();
-    let img = document.createElement("img");
+    const img = document.createElement("img");
+    const pre = img.parentElement;
+    if (pre) {
+      pre.style.backgroundColor = "red";
+      pre.style.display = "flex";
+      pre.style.justifyContent = "center";
+      pre.style.alignItems = "center";
+    }
     img.className = "spinner";
     img.src = "../../assets/public/spinner.gif";
     img.alt = "Spinner";
@@ -72,6 +78,7 @@ const createIframe = (language: string) => {
 };
 
 const msgCache = {};
+
 // Taken from https://makecode.microbit.org/blocks-embed
 const renderSnippets = () => {
   const iframe = document.getElementById(microbitIframeId);
@@ -114,7 +121,7 @@ const cleanUpCache = () => {
  * @param {object} msg
  */
 const createImage = (msg: { src: string; width: number; height: number; id: string }) => {
-  let img = document.createElement("img");
+  const img = document.createElement("img");
   img.src = msg.src;
   img.width = msg.width;
   img.height = msg.height;
@@ -147,7 +154,7 @@ const removeIframe = () => {
 };
 
 const processIframeMessage = (e: { data: any }) => {
-  let msg = e.data;
+  const msg = e.data;
   if (msg.source === "makecode") {
     if (msg.type === "renderready") {
       renderSnippets();

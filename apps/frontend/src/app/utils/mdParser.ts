@@ -10,22 +10,20 @@ const md = require("markdown-it")({
   html: false,
   breaks: true,
   langPrefix: "",
-  highlight: function(str: any, lang: any) {
+  highlight: function (str: any, lang: any) {
     if (lang && hljs.getLanguage(lang)) {
       try {
         return hljs.highlight(lang, str).value;
-      } catch (__) {
-      }
+      } catch (__) {}
     }
     if (!lang) {
       // autodetect language
       try {
         return hljs.highlightAuto(str).value;
-      } catch (e) {
-      }
+      } catch (e) {}
     }
     return "";
-  }
+  },
 })
   .use(require("markdown-it-attrs"), { allowedAttributes: ["class"] })
   .use(headerSections)
@@ -33,11 +31,11 @@ const md = require("markdown-it")({
   .use(generateChecklist)
   .use(emoji)
   .use(markdownCustomContainer, "video", {
-    validate: function(params: string) {
+    validate: function (params: string) {
       return params.trim().match(/^video\s*\[(.*)]$/);
     },
     // @ts-ignore
-    render: function(
+    render: function (
       tokens: {
         [x: string]: {
           info: any;
@@ -50,15 +48,12 @@ const md = require("markdown-it")({
         const matches = tokens[idx].info.trim().match(/^video\s*\[(.*)]$/);
 
         if (matches && matches[1]) {
-          return (
-            "<div class=\"video-container\">" +
-            getVideoIframeMarkup({ url: matches[1].trim() })
-          );
+          return '<div class="video-container">' + getVideoIframeMarkup({ url: matches[1].trim() });
         }
       } else if (tokens[idx].type === "container_video_close") {
         return "</div>";
       }
-    }
+    },
   });
 
 // @ts-ignore
@@ -73,7 +68,7 @@ function getVideoIframeMarkup(url: { url: any }) {
     return "";
   }
   if (provider === "youtube") {
-    return `<iframe src="https://www.youtube-nocookie.com/embed/${videoId}" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+    return `<iframe style="position:absolute; left:0; bottom:0; width:1px; height:1px" src="https://www.youtube-nocookie.com/embed/${videoId}" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
   } else if (provider === "vimeo") {
     return `<iframe src="https://player.vimeo.com/video/${videoId}" dnt="1" width="640" height="360" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
   } else {
@@ -83,20 +78,17 @@ function getVideoIframeMarkup(url: { url: any }) {
 
 // @ts-ignore
 function getVideoId(url: { url: any }) {
-  const youtubeRegEx =
-    /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+  const youtubeRegEx = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
 
   const vimeoRegEx = /^(http:\/\/|https:\/\/)?(www\.)?(vimeo\.com\/)([0-9]+)$/;
 
   const isYoutube = url.url.match(youtubeRegEx);
   const isVimeo = url.url.match(vimeoRegEx);
 
-  const match = isYoutube || isVimeo;
-
   if (isYoutube) {
-    return match && match[2].length === 11 ? { youtube: match[2] } : null;
+    return isYoutube && isYoutube[2].length === 11 ? { youtube: isYoutube[2] } : null;
   } else if (isVimeo) {
-    return match ? { vimeo: match[match.length - 1] } : null;
+    return isVimeo ? { vimeo: isVimeo[isVimeo.length - 1] } : null;
   } else {
     console.error("RegEx validate error");
   }

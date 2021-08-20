@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import "./editor.scss";
 import ButtonPanel from "./buttonpanel/ButtonPanel";
 import ImageUpload from "./ImageUpload";
@@ -41,7 +41,6 @@ const Editor: React.FC = () => {
   const { language } = filenameParser(file);
 
   const pushUndoValue = (mdText: string, cursorPositionStart: number) => {
-    console.log(cursorPositionStart);
     if (undo[undo.length - 1] !== mdText) {
       setUndo((undo) => [...undo, mdText]);
       setUndoCursorPosition((undoCursorPosition) => [...undoCursorPosition, cursorPositionStart]);

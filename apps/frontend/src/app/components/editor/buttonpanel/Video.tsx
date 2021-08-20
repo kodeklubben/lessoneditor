@@ -92,7 +92,7 @@ const Hyperlink: FC<any> = ({
 
       <Modal
         dimmer="inverted"
-        onClose={() => setIsOpen(false)}
+        onClose={() => clickCancelHandler()}
         onOpen={() => setIsOpen(true)}
         open={isOpen}
         size="small"
@@ -125,8 +125,25 @@ const Hyperlink: FC<any> = ({
 
         <Modal.Actions className="hyperlink_modal">
           <Button onClick={clickCancelHandler} content={languageNO.cancel} color="black" />
+          <div
+            style={{
+              display: !(isYoutube || isVimeo) ? "hidden" : "none",
+              position: "absolute",
+              top: "84%",
+              left: "83.5%",
+              zIndex: 9999,
+              width: "7.2em",
+              height: "2.7em",
+            }}
+            onClick={() => {
+              if (!(isYoutube || isVimeo)) {
+                setValidateUrl(languageNO.mandatoryText);
+                return;
+              }
+            }}
+          ></div>
           <Button
-            disabled={isEmptyField}
+            disabled={isEmptyField || !(isYoutube || isVimeo)}
             onClick={clickOKHandler}
             content={languageNO.ok}
             positive

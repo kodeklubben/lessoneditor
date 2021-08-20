@@ -25,9 +25,9 @@ const Autosave: FC<AutosaveProps> = ({ mdText, saveEditorText }) => {
   }, [mdText]);
 
   return (
-    <div>
+    <>
       <p>{autoSaveMessage}</p>
-    </div>
+    </>
   );
 };
 

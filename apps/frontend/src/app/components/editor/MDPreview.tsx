@@ -1,5 +1,5 @@
 import "./mdpreview.scss";
-import { FC, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 import { renderMicrobit } from "../../utils/renderMicrobit";
 import { renderScratchBlocks } from "../../utils/renderScratchblocks";
 import { mdParser } from "../../utils/mdParser";
@@ -19,7 +19,7 @@ const MDPreview: FC<MDPreviewProps> = ({ mdText, course, language }) => {
     }
   }, [parseMD]);
 
-  if (course === "scratch") {
+  if (course === "scratch" && parseMD) {
     const lessonContent = renderScratchBlocks(parseMD);
     return <div className="PreviewArea" dangerouslySetInnerHTML={{ __html: lessonContent }} />;
   } else {
