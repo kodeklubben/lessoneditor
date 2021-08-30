@@ -63,7 +63,7 @@ jobs:
           path: ./dist
           key: cache-dist-${{ github.sha }}
       - run: echo "${{ secrets.DOTENV }}" > .env
-      #- run: mv dist/apps/backend/package.json package.json
+      - run: mv dist/apps/backend/package.json package.json
       - name: Deploy to Google App Engine
         uses: atRobertoFlores/gae_deploy_action@master
         with:
