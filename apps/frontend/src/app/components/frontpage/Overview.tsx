@@ -12,7 +12,7 @@ const Overview: FC = () => {
   const { lessons, removeLesson } = useUserContext();
 
   const navigateToHome = (lessonId: string) => {
-    const target = ["/landingpage", lessonId, "lessontexts"].join("/");
+    const target = ["/landingpage", lessonId].join("/");
     history.push(target);
   };
 

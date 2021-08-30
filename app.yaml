@@ -1,4 +1,4 @@
-runtime: nodejs14
+runtime: nodejs16
 entrypoint: node ./dist/apps/backend/main.js
 handlers:
   - url: /static

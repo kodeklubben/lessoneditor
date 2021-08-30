@@ -12,6 +12,7 @@ export const UserContextProvider = (props: any) => {
     photo: "",
   });
   const [lessons, setLessons] = useState<any>([]);
+
   useEffect(() => {
     async function fetchData() {
       const userRes = await axios.get(paths.USER);
@@ -20,7 +21,7 @@ export const UserContextProvider = (props: any) => {
       setLessons(userLessonsRes.data);
     }
 
-    fetchData().then();
+    fetchData();
   }, []);
 
   const getLesson = (lessonId: string) => {
@@ -41,12 +42,7 @@ export const UserContextProvider = (props: any) => {
     lessons,
     setLessons,
     getLesson,
-    addLesson: async (
-      course: string,
-      courseTitle: string,
-      lesson: string,
-      lessonTitle?: string
-    ) => {
+    addLesson: async (course: string, courseTitle: string, lesson: string, lessonTitle: string) => {
       let lessonId;
       const existing = getLessonByCourseAndLesson(course, lesson);
       if (existing) {

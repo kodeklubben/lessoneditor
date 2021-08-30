@@ -1,5 +1,5 @@
 import ButtonComponent from "./ButtonComponent";
-
+import { RefObject } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 
 import { cancelButton, insertSection } from "./utils/buttonMethods";
@@ -11,7 +11,19 @@ let results;
 let cancelResults;
 let buttonTitle;
 
-const Sections: FC<any> = ({
+interface SectionsProps {
+  editorRef: RefObject<HTMLTextAreaElement>;
+  cursorPositionStart: number;
+  cursorPositionEnd: number;
+  mdText: string;
+  buttonValues: Record<string, boolean>;
+  setMdText: React.Dispatch<React.SetStateAction<string>>;
+  setCursorPosition: (positionStart: number, positionEnd: number) => void;
+  setCursor: (pos1: number, pos2: number) => void;
+  setButtonValues: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
+}
+
+const Sections: FC<SectionsProps> = ({
   editorRef,
   cursorPositionStart,
   cursorPositionEnd,
@@ -22,25 +34,25 @@ const Sections: FC<any> = ({
   setCursor,
   setButtonValues,
 }) => {
-  const setChanges = (mdText: any, cursorPositionStart: any, cursorPositionEnd: any) => {
+  const setChanges = (mdText: string, cursorPositionStart: number, cursorPositionEnd: number) => {
     setCursor(cursorPositionStart, cursorPositionEnd);
     setCursorPosition(cursorPositionStart, cursorPositionEnd);
     setMdText(mdText);
   };
 
-  const setButton = (value: any) => {
-    setButtonValues((prevButtonValues: any) => ({
+  const setButton = (value: string) => {
+    setButtonValues((prevButtonValues: Record<string, boolean>) => ({
       ...prevButtonValues,
       [value]: !buttonValues[value],
     }));
   };
 
   const setSection = (
-    button: any,
-    cursorIntON: any,
-    cursorIntOFF: any,
-    output: any,
-    cancelInt: any
+    button: string,
+    cursorIntON: number,
+    cursorIntOFF: number,
+    output: string,
+    cancelInt: number
   ) => {
     cancelResults = cancelButton(
       buttonValues[button],
@@ -70,7 +82,7 @@ const Sections: FC<any> = ({
       SECTION_TEXT
     );
 
-    setChanges(results?.mdText, results?.cursorPositionStart, results?.cursorPositionEnd);
+    setChanges(results.mdText, results.cursorPositionStart, results.cursorPositionEnd);
   };
 
   const set = {
@@ -217,7 +229,10 @@ const Sections: FC<any> = ({
     [setButton, setSection]
   );
 
-  const handleButtonClick = (button: any) => {
+  const handleButtonClick = (button: string) => {
+    if (!editorRef.current) {
+      return;
+    }
     editorRef.current.focus();
     switch (button) {
       case config.activity.buttonTitle:

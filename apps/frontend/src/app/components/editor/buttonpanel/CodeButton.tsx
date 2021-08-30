@@ -2,53 +2,58 @@ import CodeButtonComponent from "./CodeButtonComponent";
 import { useHotkeys } from "react-hotkeys-hook";
 import { buttonAction as codeAction, cancelButton } from "./utils/buttonMethods";
 import { codebutton as config, KEY_COMBINATIONS as KEY } from "./settings/buttonConfig";
-import { FC } from "react";
+import { FC, RefObject } from "react";
 
 let results;
 let cancelResults;
 let buttonTitle;
 
-const CodeButton: FC<any> = ({
-                               editorRef,
-                               mdText,
-                               cursorPositionStart,
-                               cursorPositionEnd,
-                               buttonValues,
-                               setMdText,
-                               setCursorPosition,
-                               setCursor,
-                               setButtonValues,
-                               course,
-                               courseTitle
-                             }) => {
+interface CodeButtonProps {
+  editorRef: RefObject<HTMLTextAreaElement>;
+  mdText: string;
+  cursorPositionStart: number;
+  cursorPositionEnd: number;
+  buttonValues: Record<string, boolean>;
+  setMdText: React.Dispatch<React.SetStateAction<string>>;
+  setCursorPosition: (positionStart: number, positionEnd: number) => void;
+  setCursor: (pos1: number, pos2: number) => void;
+  setButtonValues: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
+  course: string;
+  courseTitle: string;
+}
+
+const CodeButton: FC<CodeButtonProps> = ({
+  editorRef,
+  mdText,
+  cursorPositionStart,
+  cursorPositionEnd,
+  buttonValues,
+  setMdText,
+  setCursorPosition,
+  setCursor,
+  setButtonValues,
+  course,
+  courseTitle,
+}) => {
   const outputCodeBlock =
     config.codeblock.output.slice(0, 3) +
     (course === "scratch" ? "blocks" : course) +
     config.codeblock.output.slice(3);
 
-  const setChanges = (
-    mdText: string,
-    cursorPositionStart: number,
-    cursorPositionEnd: number
-  ) => {
+  const setChanges = (mdText: string, cursorPositionStart: number, cursorPositionEnd: number) => {
     setCursor(cursorPositionStart, cursorPositionEnd);
     setCursorPosition(cursorPositionStart, cursorPositionEnd);
     setMdText(mdText);
   };
 
   const setButton = (value: string) => {
-    setButtonValues((prevButtonValues: any) => ({
+    setButtonValues((prevButtonValues: Record<string, boolean>) => ({
       ...prevButtonValues,
-      [value]: !buttonValues[value]
+      [value]: !buttonValues[value],
     }));
   };
 
-  const setCode = (
-    button: any,
-    cursorIntON: any,
-    cursorIntOFF: any,
-    output: any
-  ) => {
+  const setCode = (button: string, cursorIntON: number, cursorIntOFF: number, output: string) => {
     cancelResults = cancelButton(
       buttonValues[button],
       mdText,
@@ -58,12 +63,10 @@ const CodeButton: FC<any> = ({
       output
     );
     if (cancelResults.cancel) {
-
       setChanges(
-        // @ts-ignore
-        cancelResults?.mdText,
-        cancelResults?.cursorPositionStart,
-        cancelResults?.cursorPositionEnd
+        cancelResults.mdText,
+        cancelResults.cursorPositionStart,
+        cancelResults.cursorPositionEnd
       );
       return;
     }
@@ -78,12 +81,7 @@ const CodeButton: FC<any> = ({
       output
     );
 
-    setChanges(
-      // @ts-ignore
-      results?.mdText,
-      results?.cursorPositionStart,
-      results?.cursorPositionEnd
-    );
+    setChanges(results.mdText, results.cursorPositionStart, results.cursorPositionEnd);
   };
 
   const set = {
@@ -102,12 +100,11 @@ const CodeButton: FC<any> = ({
       setButton(buttonTitle);
       setCode(
         buttonTitle,
-        config.codeblock.cursorIntON +
-        (course === "scratch" ? 6 : course.length),
+        config.codeblock.cursorIntON + (course === "scratch" ? 6 : course.length),
         config.codeblock.cursorIntOFF,
         outputCodeBlock
       );
-    }
+    },
   };
 
   useHotkeys(
@@ -131,10 +128,13 @@ const CodeButton: FC<any> = ({
   );
 
   const handleButtonClick = (button: any) => {
+    if (!editorRef.current) {
+      return;
+    }
     editorRef.current.focus();
     setButtonValues((prevState: any) => ({
       ...prevState,
-      [button]: !buttonValues[button]
+      [button]: !buttonValues[button],
     }));
     switch (button) {
       case config.inline.buttonTitle:

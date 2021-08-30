@@ -5,7 +5,7 @@ import { FC } from "react";
 
 const SubmitButton: FC<any> = ({ mdText, setShowSpinner, saveEditorText }) => {
   const history = useHistory();
-  const { lessonId, file } = useParams<any>();
+  const { lessonId } = useParams<{ lessonId: string }>();
 
   const onSubmit = async () => {
     setShowSpinner(true);
@@ -15,9 +15,7 @@ const SubmitButton: FC<any> = ({ mdText, setShowSpinner, saveEditorText }) => {
 
   const navigateToHome = async () => {
     await saveEditorText();
-    const slug =
-      file.slice(0, 6) === "README" ? "teacherguides" : "lessontexts";
-    const target = ["/landingpage", lessonId, slug].join("/");
+    const target = ["/landingpage", lessonId].join("/");
     history.push({ pathname: target });
   };
 
@@ -32,7 +30,7 @@ const SubmitButton: FC<any> = ({ mdText, setShowSpinner, saveEditorText }) => {
             style={{
               height: "2em",
               marginRight: "-0.5em",
-              padding: "0 1em 0 1em"
+              padding: "0 1em 0 1em",
             }}
             basic
             disabled={!mdText || mdText.length === 0}

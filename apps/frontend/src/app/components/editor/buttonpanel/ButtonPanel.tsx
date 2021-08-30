@@ -1,4 +1,4 @@
-import { FC, Ref, useState } from "react";
+import { FC, RefObject, useState } from "react";
 import "./buttonpanel.scss";
 import ShowSpinner from "../../ShowSpinner";
 import Autosave from "../Autosave";
@@ -22,7 +22,7 @@ interface ButtonPanelProps {
   courseTitle: string;
   cursorPositionStart: number;
   cursorPositionEnd: number;
-  editorRef: Ref<HTMLTextAreaElement>;
+  editorRef: RefObject<HTMLTextAreaElement>;
   lessonTitle: string;
   mdText: string;
   pushRedoValue: (mdText: string, cursorPositionStart: number) => void;
@@ -39,7 +39,7 @@ interface ButtonPanelProps {
   setRedoCursorPosition: React.Dispatch<React.SetStateAction<number[]>>;
   setUndoCursorPosition: React.Dispatch<React.SetStateAction<number[]>>;
   undoCursorPosition: number[];
-  uploadImageRef: Ref<HTMLInputElement>;
+  uploadImageRef: RefObject<HTMLInputElement>;
 }
 
 const ButtonPanel: FC<ButtonPanelProps> = ({

@@ -6,7 +6,7 @@ import { buttonAction as codeAction, cancelButton } from "./utils/buttonMethods"
 
 import {
   KEY_COMBINATIONS_SCRATCH as KEY,
-  scratchbuttons as config
+  scratchbuttons as config,
 } from "../settingsFiles/microbitAndScratchButtonConfig";
 import { FC } from "react";
 
@@ -15,21 +15,17 @@ let cancelResults;
 let buttonTitle: string;
 
 const ScratchButtons: FC<any> = ({
-                                   editorRef,
-                                   cursorPositionStart,
-                                   cursorPositionEnd,
-                                   mdText,
-                                   buttonValues,
-                                   setMdText,
-                                   setCursorPosition,
-                                   setCursor,
-                                   setButtonValues
-                                 }) => {
-  const setChanges = (
-    mdText: any,
-    cursorPositionStart: any,
-    cursorPositionEnd: any
-  ) => {
+  editorRef,
+  cursorPositionStart,
+  cursorPositionEnd,
+  mdText,
+  buttonValues,
+  setMdText,
+  setCursorPosition,
+  setCursor,
+  setButtonValues,
+}) => {
+  const setChanges = (mdText: any, cursorPositionStart: any, cursorPositionEnd: any) => {
     setCursor(cursorPositionStart, cursorPositionEnd);
     setCursorPosition(cursorPositionStart, cursorPositionEnd);
     setMdText(mdText);
@@ -38,16 +34,11 @@ const ScratchButtons: FC<any> = ({
   const setButton = (value: string) => {
     setButtonValues((prevButtonValues: any) => ({
       ...prevButtonValues,
-      [value]: !buttonValues[value]
+      [value]: !buttonValues[value],
     }));
   };
 
-  const setCode = (
-    butonTitle: any,
-    cursorIntON: any,
-    cursorIntOFF: any,
-    output: any
-  ) => {
+  const setCode = (butonTitle: any, cursorIntON: any, cursorIntOFF: any, output: any) => {
     cancelResults = cancelButton(
       buttonValues[buttonTitle],
       mdText,
@@ -74,11 +65,7 @@ const ScratchButtons: FC<any> = ({
       output
     );
 
-    setChanges(
-      results?.mdText,
-      results?.cursorPositionStart,
-      results?.cursorPositionEnd
-    );
+    setChanges(results?.mdText, results?.cursorPositionStart, results?.cursorPositionEnd);
   };
 
   const set = {
@@ -115,22 +102,12 @@ const ScratchButtons: FC<any> = ({
     pen: () => {
       buttonTitle = config.pen.buttonTitle;
       setButton(buttonTitle);
-      setCode(
-        buttonTitle,
-        config.pen.cursorIntON,
-        config.pen.cursorIntOFF,
-        config.pen.output
-      );
+      setCode(buttonTitle, config.pen.cursorIntON, config.pen.cursorIntOFF, config.pen.output);
     },
     data: () => {
       buttonTitle = config.data.buttonTitle;
       setButton(buttonTitle);
-      setCode(
-        buttonTitle,
-        config.data.cursorIntON,
-        config.data.cursorIntOFF,
-        config.data.output
-      );
+      setCode(buttonTitle, config.data.cursorIntON, config.data.cursorIntOFF, config.data.output);
     },
     events: () => {
       buttonTitle = config.events.buttonTitle;
@@ -181,13 +158,13 @@ const ScratchButtons: FC<any> = ({
         config.moreblocks.cursorIntOFF,
         config.moreblocks.output
       );
-    }
+    },
   };
 
   useHotkeys(
     `${KEY.motion}, ${KEY.looks}, ${KEY.sound}, ${KEY.pen}, ` +
-    `${KEY.data}, ${KEY.events}, ${KEY.control}, ${KEY.sensing}, ` +
-    `${KEY.operators}, ${KEY.moreblocks}`,
+      `${KEY.data}, ${KEY.events}, ${KEY.control}, ${KEY.sensing}, ` +
+      `${KEY.operators}, ${KEY.moreblocks}`,
     (event, handler) => {
       event.preventDefault();
       switch (handler.key) {
@@ -236,7 +213,7 @@ const ScratchButtons: FC<any> = ({
     setButtonValues((prevState: any) => ({
       ...prevState,
       // @ts-ignore
-      [button]: !button[button]
+      [button]: !button[button],
     }));
     switch (button) {
       case config.motion.buttonTitle:

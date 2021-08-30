@@ -4,25 +4,25 @@ import languageOptions from "./settings/LanguageOptions";
 import { FC } from "react";
 import { filenameParser } from "../../../utils/filename-parser";
 
-const Languages: FC<any> = ({ saveEditorText, setShowSpinner }) => {
+interface LanguagesProps {
+  saveEditorText: (regenThumb: boolean) => void;
+  setShowSpinner: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const Languages: FC<LanguagesProps> = ({ saveEditorText, setShowSpinner }) => {
   const { lessonId, file } = useParams<any>();
   const history = useHistory();
   const { language } = filenameParser(file);
 
-  const filename =
-    file && file.slice(-3, -2) === "_" ? file.slice(0, -3) : file;
+  const filename = file && file.slice(-3, -2) === "_" ? file.slice(0, -3) : file;
 
   const handleChange = async (event: any, { value }: any) => {
     setShowSpinner(true);
     let target = "";
     if (lessonId) {
-      target = [
-        "/editor",
-        lessonId,
-        value === "nb" ? filename : `${filename}_${value}`
-      ].join("/");
+      target = ["/editor", lessonId, value === "nb" ? filename : `${filename}_${value}`].join("/");
     }
-    await saveEditorText();
+    await saveEditorText(false);
     if (target !== "") {
       history.push("/");
       history.replace(target);
