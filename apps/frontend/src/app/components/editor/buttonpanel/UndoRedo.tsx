@@ -3,11 +3,22 @@ import ButtonComponent from "./ButtonComponent";
 import { useHotkeys } from "react-hotkeys-hook";
 
 import { KEY_COMBINATIONS as KEY, undoRedo as config } from "./settings/buttonConfig";
-import { FC } from "react";
+import { FC, RefObject } from "react";
 
-let position: any;
+interface UndoRedoProps {
+  editorRef: RefObject<HTMLTextAreaElement>;
+  mdText: string;
+  cursorPositionStart: number;
+  undoCursorPosition: number[];
+  redoCursorPosition: number[];
+  setUndoCursorPosition: React.Dispatch<React.SetStateAction<number[]>>;
+  setRedoCursorPosition: React.Dispatch<React.SetStateAction<number[]>>;
+  pushUndoValue: (mdText: string, cursorPositionStart: number) => void;
+  pushRedoValue: (mdText: string, cursorPositionStart: number) => void;
+  setCursorPosition: (positionStart: number, positionEnd: number) => void;
+}
 
-const UndoRedo: FC<any> = ({
+const UndoRedo: FC<UndoRedoProps> = ({
   editorRef,
   mdText,
   cursorPositionStart,
@@ -22,24 +33,23 @@ const UndoRedo: FC<any> = ({
   const set = {
     undo: () => {
       if (undoCursorPosition.length > 0) {
-        position = undoCursorPosition[undoCursorPosition.length - 1];
+        const position = undoCursorPosition[undoCursorPosition.length - 1];
         setUndoCursorPosition(undoCursorPosition.slice(0, undoCursorPosition.length - 1));
+        pushRedoValue(mdText, cursorPositionStart);
+        setCursorPosition(position, position);
       } else {
         return;
       }
-
-      pushRedoValue(mdText, cursorPositionStart);
-      setCursorPosition(position, position);
     },
     redo: () => {
       if (redoCursorPosition.length > 0) {
-        position = redoCursorPosition[redoCursorPosition.length - 1];
+        const position = redoCursorPosition[redoCursorPosition.length - 1];
         setRedoCursorPosition(redoCursorPosition.slice(0, redoCursorPosition.length - 1));
+        pushUndoValue(mdText, cursorPositionStart);
+        setCursorPosition(position, position);
       } else {
         return;
       }
-      pushUndoValue(mdText, cursorPositionStart);
-      setCursorPosition(position, position);
     },
   };
   useHotkeys(
@@ -62,8 +72,8 @@ const UndoRedo: FC<any> = ({
     [pushUndoValue, pushRedoValue]
   );
 
-  const handleButtonClick = (button: any) => {
-    editorRef.current.focus();
+  const handleButtonClick = (button: string) => {
+    editorRef.current ? editorRef.current.focus() : "";
     switch (button) {
       case config.undo.buttonTitle:
         set.undo();

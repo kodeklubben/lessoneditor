@@ -5,13 +5,24 @@ import { useHotkeys } from "react-hotkeys-hook";
 import { buttonAction as listsAction, cancelButton } from "./utils/buttonMethods";
 
 import { KEY_COMBINATIONS as KEY, lists as config } from "./settings/buttonConfig";
-import { FC } from "react";
+import { FC, RefObject } from "react";
 
-let cancelResults;
-let results;
-let buttonTitle;
+interface ListsProps {
+  editorRef: RefObject<HTMLTextAreaElement>;
+  cursorPositionStart: number;
+  cursorPositionEnd: number;
+  mdText: string;
+  buttonValues: Record<string, boolean>;
+  setMdText: React.Dispatch<React.SetStateAction<string>>;
+  setCursorPosition: (positionStart: number, positionEnd: number) => void;
+  setCursor: (pos1: number, pos2: number) => void;
+  setListButtonValues: React.Dispatch<
+    React.SetStateAction<{ bTitle: string; output: string; cursorInt: number }>
+  >;
+  setButtonValues: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
+}
 
-const Lists: FC<any> = ({
+const Lists: FC<ListsProps> = ({
   editorRef,
   cursorPositionStart,
   cursorPositionEnd,
@@ -23,21 +34,21 @@ const Lists: FC<any> = ({
   setListButtonValues,
   setButtonValues,
 }) => {
-  const setChanges = (mdText: any, cursorPositionStart: any, cursorPositionEnd: any) => {
+  const setChanges = (mdText: string, cursorPositionStart: number, cursorPositionEnd: number) => {
     setCursor(cursorPositionStart, cursorPositionEnd);
     setCursorPosition(cursorPositionStart, cursorPositionEnd);
     setMdText(mdText);
   };
 
   const setButton = (value: string) => {
-    setButtonValues((prevButtonValues: any) => ({
+    setButtonValues((prevButtonValues) => ({
       ...prevButtonValues,
       [value]: !buttonValues[value],
     }));
   };
 
   const setList = (button: string, cursorIntON: number, cursorIntOFF: number, output: string) => {
-    cancelResults = cancelButton(
+    const cancelResults = cancelButton(
       buttonValues[button],
       mdText,
       cursorPositionStart,
@@ -54,7 +65,7 @@ const Lists: FC<any> = ({
       return;
     }
 
-    results = listsAction(
+    const results = listsAction(
       buttonValues[button],
       mdText,
       cursorPositionStart,
@@ -69,7 +80,7 @@ const Lists: FC<any> = ({
 
   const set = {
     listUl: () => {
-      buttonTitle = config.listUl.buttonTitle;
+      const buttonTitle = config.listUl.buttonTitle;
       setButton(buttonTitle);
       setListButtonValues({
         bTitle: buttonTitle,
@@ -84,7 +95,7 @@ const Lists: FC<any> = ({
       );
     },
     listOl: () => {
-      buttonTitle = config.listOl.buttonTitle;
+      const buttonTitle = config.listOl.buttonTitle;
       setButton(buttonTitle);
       setListButtonValues({
         bTitle: buttonTitle,
@@ -99,7 +110,7 @@ const Lists: FC<any> = ({
       );
     },
     listCheck: () => {
-      buttonTitle = config.listCheck.buttonTitle;
+      const buttonTitle = config.listCheck.buttonTitle;
       setButton(buttonTitle);
       setListButtonValues({
         bTitle: buttonTitle,
@@ -139,8 +150,8 @@ const Lists: FC<any> = ({
   );
 
   const handleButtonClick = (button: string | number) => {
-    editorRef.current.focus();
-    setButtonValues((prevState: any) => ({
+    editorRef.current ? editorRef.current.focus() : "";
+    setButtonValues((prevState) => ({
       ...prevState,
       [button]: !buttonValues[button],
     }));

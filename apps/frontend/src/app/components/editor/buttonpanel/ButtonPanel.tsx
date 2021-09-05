@@ -10,7 +10,7 @@ import Video from "./Video";
 import Languages from "./Languages";
 import Lists from "./Lists";
 import Sections from "./Sections";
-import CodeButton from "./CodeButton";
+import CodeButtons from "./CodeButtons";
 import MicrobitButtons from "./MicrobitButtons";
 import SratchButtons from "./ScratchButtons";
 import EditorDatamodal from "../datapanel/EditorDatamodal";
@@ -27,6 +27,7 @@ interface ButtonPanelProps {
   mdText: string;
   pushRedoValue: (mdText: string, cursorPositionStart: number) => void;
   pushUndoValue: (mdText: string, cursorPositionStart: number) => void;
+  undoCursorPosition: number[];
   redoCursorPosition: number[];
   saveEditorText: (regenThumb: boolean) => Promise<void>;
   setButtonValues: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
@@ -38,7 +39,6 @@ interface ButtonPanelProps {
   setMdText: React.Dispatch<React.SetStateAction<string>>;
   setRedoCursorPosition: React.Dispatch<React.SetStateAction<number[]>>;
   setUndoCursorPosition: React.Dispatch<React.SetStateAction<number[]>>;
-  undoCursorPosition: number[];
   uploadImageRef: RefObject<HTMLInputElement>;
 }
 
@@ -53,6 +53,7 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
   mdText,
   pushRedoValue,
   pushUndoValue,
+  undoCursorPosition,
   redoCursorPosition,
   saveEditorText,
   setButtonValues,
@@ -62,7 +63,7 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
   setMdText,
   setRedoCursorPosition,
   setUndoCursorPosition,
-  undoCursorPosition,
+
   uploadImageRef,
 }) => {
   const [showSpinner, setShowSpinner] = useState(false);
@@ -168,7 +169,7 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
 
             <span style={{ marginRight: "5em" }} />
 
-            <CodeButton
+            <CodeButtons
               editorRef={editorRef}
               mdText={mdText}
               cursorPositionStart={cursorPositionStart}

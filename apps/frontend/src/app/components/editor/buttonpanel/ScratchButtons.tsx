@@ -8,13 +8,21 @@ import {
   KEY_COMBINATIONS_SCRATCH as KEY,
   scratchbuttons as config,
 } from "../settingsFiles/microbitAndScratchButtonConfig";
-import { FC } from "react";
+import { FC, RefObject } from "react";
 
-let results;
-let cancelResults;
-let buttonTitle: string;
+interface ScratchButtonsProps {
+  editorRef: RefObject<HTMLTextAreaElement>;
+  cursorPositionStart: number;
+  cursorPositionEnd: number;
+  mdText: string;
+  buttonValues: Record<string, boolean>;
+  setMdText: React.Dispatch<React.SetStateAction<string>>;
+  setCursorPosition: (positionStart: number, positionEnd: number) => void;
+  setCursor: (pos1: number, pos2: number) => void;
+  setButtonValues: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
+}
 
-const ScratchButtons: FC<any> = ({
+const ScratchButtons: FC<ScratchButtonsProps> = ({
   editorRef,
   cursorPositionStart,
   cursorPositionEnd,
@@ -25,21 +33,26 @@ const ScratchButtons: FC<any> = ({
   setCursor,
   setButtonValues,
 }) => {
-  const setChanges = (mdText: any, cursorPositionStart: any, cursorPositionEnd: any) => {
+  const setChanges = (mdText: string, cursorPositionStart: number, cursorPositionEnd: number) => {
     setCursor(cursorPositionStart, cursorPositionEnd);
     setCursorPosition(cursorPositionStart, cursorPositionEnd);
     setMdText(mdText);
   };
 
   const setButton = (value: string) => {
-    setButtonValues((prevButtonValues: any) => ({
+    setButtonValues((prevButtonValues) => ({
       ...prevButtonValues,
       [value]: !buttonValues[value],
     }));
   };
 
-  const setCode = (butonTitle: any, cursorIntON: any, cursorIntOFF: any, output: any) => {
-    cancelResults = cancelButton(
+  const setCode = (
+    buttonTitle: string,
+    cursorIntON: number,
+    cursorIntOFF: number,
+    output: string
+  ) => {
+    const cancelResults = cancelButton(
       buttonValues[buttonTitle],
       mdText,
       cursorPositionStart,
@@ -55,7 +68,7 @@ const ScratchButtons: FC<any> = ({
       );
       return;
     }
-    results = codeAction(
+    const results = codeAction(
       buttonValues[buttonTitle],
       mdText,
       cursorPositionStart,
@@ -65,12 +78,12 @@ const ScratchButtons: FC<any> = ({
       output
     );
 
-    setChanges(results?.mdText, results?.cursorPositionStart, results?.cursorPositionEnd);
+    setChanges(results.mdText, results.cursorPositionStart, results.cursorPositionEnd);
   };
 
   const set = {
     motion: () => {
-      buttonTitle = config.motion.buttonTitle;
+      const buttonTitle = config.motion.buttonTitle;
       setButton(buttonTitle);
       setCode(
         buttonTitle,
@@ -80,7 +93,7 @@ const ScratchButtons: FC<any> = ({
       );
     },
     looks: () => {
-      buttonTitle = config.looks.buttonTitle;
+      const buttonTitle = config.looks.buttonTitle;
       setButton(buttonTitle);
       setCode(
         buttonTitle,
@@ -90,7 +103,7 @@ const ScratchButtons: FC<any> = ({
       );
     },
     sound: () => {
-      buttonTitle = config.sound.buttonTitle;
+      const buttonTitle = config.sound.buttonTitle;
       setButton(buttonTitle);
       setCode(
         buttonTitle,
@@ -100,17 +113,17 @@ const ScratchButtons: FC<any> = ({
       );
     },
     pen: () => {
-      buttonTitle = config.pen.buttonTitle;
+      const buttonTitle = config.pen.buttonTitle;
       setButton(buttonTitle);
       setCode(buttonTitle, config.pen.cursorIntON, config.pen.cursorIntOFF, config.pen.output);
     },
     data: () => {
-      buttonTitle = config.data.buttonTitle;
+      const buttonTitle = config.data.buttonTitle;
       setButton(buttonTitle);
       setCode(buttonTitle, config.data.cursorIntON, config.data.cursorIntOFF, config.data.output);
     },
     events: () => {
-      buttonTitle = config.events.buttonTitle;
+      const buttonTitle = config.events.buttonTitle;
       setButton(buttonTitle);
       setCode(
         buttonTitle,
@@ -120,7 +133,7 @@ const ScratchButtons: FC<any> = ({
       );
     },
     control: () => {
-      buttonTitle = config.control.buttonTitle;
+      const buttonTitle = config.control.buttonTitle;
       setButton(buttonTitle);
       setCode(
         buttonTitle,
@@ -130,7 +143,7 @@ const ScratchButtons: FC<any> = ({
       );
     },
     sensing: () => {
-      buttonTitle = config.sensing.buttonTitle;
+      const buttonTitle = config.sensing.buttonTitle;
       setButton(buttonTitle);
       setCode(
         buttonTitle,
@@ -140,7 +153,7 @@ const ScratchButtons: FC<any> = ({
       );
     },
     operators: () => {
-      buttonTitle = config.operators.buttonTitle;
+      const buttonTitle = config.operators.buttonTitle;
       setButton(buttonTitle);
       setCode(
         buttonTitle,
@@ -150,7 +163,7 @@ const ScratchButtons: FC<any> = ({
       );
     },
     moreblocks: () => {
-      buttonTitle = config.moreblocks.buttonTitle;
+      const buttonTitle = config.moreblocks.buttonTitle;
       setButton(buttonTitle);
       setCode(
         buttonTitle,
@@ -208,12 +221,12 @@ const ScratchButtons: FC<any> = ({
   );
 
   const handleButtonClick = (button: string | number) => {
-    editorRef.current.focus();
+    editorRef.current ? editorRef.current.focus() : "";
 
-    setButtonValues((prevState: any) => ({
+    setButtonValues((prevState) => ({
       ...prevState,
-      // @ts-ignore
-      [button]: !button[button],
+
+      [button]: !prevState[button],
     }));
     switch (button) {
       case config.motion.buttonTitle:

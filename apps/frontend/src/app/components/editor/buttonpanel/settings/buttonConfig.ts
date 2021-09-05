@@ -176,7 +176,7 @@ const lists = {
   listUl: {
     buttonTitle: "listUl",
     icon: "list ul",
-    output: "- " + SECTION_TEXT,
+    output: `- ${SECTION_TEXT}`,
     outputOnEnter: "- ",
     title: BUTTON_TITLE.listUl,
     cursorIntON: 2,
@@ -186,7 +186,7 @@ const lists = {
   listOl: {
     buttonTitle: "listOl",
     icon: "list ol",
-    output: "1. " + SECTION_TEXT,
+    output: `1. ${SECTION_TEXT}`,
     outputOnEnter: "1. ",
     title: BUTTON_TITLE.listOl,
     cursorIntON: 3,
@@ -196,8 +196,8 @@ const lists = {
   listCheck: {
     buttonTitle: "listCheck",
     icon: "tasks",
-    output: "- [\u0020] " + SECTION_TEXT,
-    outputOnEnter: "- [\u0020] ",
+    output: `- [ ] ${SECTION_TEXT}`,
+    outputOnEnter: `- [ ] `,
     title: BUTTON_TITLE.listCheck,
     cursorIntON: 6,
     cursorIntOFF: 0,
@@ -227,10 +227,10 @@ const sections = {
   },
   activity: {
     buttonTitle: "sec_activity",
-    output: "# " + SECTION_TEXT + " {.activity}\n#",
+    output: "# " + SECTION_TEXT + " {.activity}\n#\n",
     title: BUTTON_TITLE.activity,
     cursorIntON: 2,
-    cursorIntOFF: 13,
+    cursorIntOFF: 14,
     cancelInt: 2,
     shortcut: KEY_COMBINATIONS.activity,
     style: {

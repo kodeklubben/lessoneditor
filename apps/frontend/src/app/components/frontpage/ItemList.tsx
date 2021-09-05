@@ -1,7 +1,7 @@
 import { Button, Card, Image } from "semantic-ui-react";
 import { FC } from "react";
 
-interface ItemListProps {
+export interface ItemListProps {
   items: [
     {
       course: string;

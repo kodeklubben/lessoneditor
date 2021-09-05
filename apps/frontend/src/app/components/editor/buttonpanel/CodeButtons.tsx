@@ -4,11 +4,7 @@ import { buttonAction as codeAction, cancelButton } from "./utils/buttonMethods"
 import { codebutton as config, KEY_COMBINATIONS as KEY } from "./settings/buttonConfig";
 import { FC, RefObject } from "react";
 
-let results;
-let cancelResults;
-let buttonTitle;
-
-interface CodeButtonProps {
+export interface CodeButtonsProps {
   editorRef: RefObject<HTMLTextAreaElement>;
   mdText: string;
   cursorPositionStart: number;
@@ -22,7 +18,7 @@ interface CodeButtonProps {
   courseTitle: string;
 }
 
-const CodeButton: FC<CodeButtonProps> = ({
+const CodeButtons: FC<CodeButtonsProps> = ({
   editorRef,
   mdText,
   cursorPositionStart,
@@ -54,7 +50,7 @@ const CodeButton: FC<CodeButtonProps> = ({
   };
 
   const setCode = (button: string, cursorIntON: number, cursorIntOFF: number, output: string) => {
-    cancelResults = cancelButton(
+    const cancelResults = cancelButton(
       buttonValues[button],
       mdText,
       cursorPositionStart,
@@ -71,7 +67,7 @@ const CodeButton: FC<CodeButtonProps> = ({
       return;
     }
 
-    results = codeAction(
+    const results = codeAction(
       buttonValues[button],
       mdText,
       cursorPositionStart,
@@ -86,7 +82,7 @@ const CodeButton: FC<CodeButtonProps> = ({
 
   const set = {
     inline: () => {
-      buttonTitle = config.inline.buttonTitle;
+      const buttonTitle = config.inline.buttonTitle;
       setButton(buttonTitle);
       setCode(
         buttonTitle,
@@ -96,7 +92,7 @@ const CodeButton: FC<CodeButtonProps> = ({
       );
     },
     codeblock: () => {
-      buttonTitle = config.codeblock.buttonTitle;
+      const buttonTitle = config.codeblock.buttonTitle;
       setButton(buttonTitle);
       setCode(
         buttonTitle,
@@ -127,12 +123,9 @@ const CodeButton: FC<CodeButtonProps> = ({
     [setButton, setCode]
   );
 
-  const handleButtonClick = (button: any) => {
-    if (!editorRef.current) {
-      return;
-    }
-    editorRef.current.focus();
-    setButtonValues((prevState: any) => ({
+  const handleButtonClick = (button: string) => {
+    editorRef.current ? editorRef.current.focus() : "";
+    setButtonValues((prevState: Record<string, boolean>) => ({
       ...prevState,
       [button]: !buttonValues[button],
     }));
@@ -157,7 +150,6 @@ const CodeButton: FC<CodeButtonProps> = ({
           onButtonClick={handleButtonClick}
           buttonTitle={element[1].buttonTitle}
           shortcutKey={element[1].shortcut}
-          course={course}
           courseTitle={courseTitle}
           style={element[1].style}
         />
@@ -166,4 +158,4 @@ const CodeButton: FC<CodeButtonProps> = ({
   );
 };
 
-export default CodeButton;
+export default CodeButtons;

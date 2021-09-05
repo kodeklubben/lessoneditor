@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { Suspense, useRef, useState } from "react";
 import "./editor.scss";
 import ButtonPanel from "./buttonpanel/ButtonPanel";
 import ImageUpload from "./ImageUpload";
@@ -93,8 +93,7 @@ const Editor: React.FC = () => {
   };
 
   return (
-    <>
-      {showSpinner ? <ShowSpinner /> : ""}
+    <Suspense fallback={<ShowSpinner />}>
       <ImageUpload
         uploadImageRef={uploadImageRef}
         mdText={mdText}
@@ -146,7 +145,7 @@ const Editor: React.FC = () => {
         />
         <MDPreview mdText={mdText} course={lessonData.course} language={language} />
       </div>
-    </>
+    </Suspense>
   );
 };
 export default Editor;

@@ -2,9 +2,21 @@ import ButtonComponent from "./ButtonComponent";
 import { useHotkeys } from "react-hotkeys-hook";
 import { buttonAction as emphasisAction, cancelButton, heading } from "./utils/buttonMethods";
 import { emphasis as config, KEY_COMBINATIONS as KEY } from "./settings/buttonConfig";
-import { FC } from "react";
+import { FC, RefObject } from "react";
 
-const Emphasis: FC<any> = ({
+interface EmphasisProps {
+  editorRef: RefObject<HTMLTextAreaElement>;
+  mdText: string;
+  buttonValues: Record<string, boolean>;
+  cursorPositionStart: number;
+  cursorPositionEnd: number;
+  setMdText: React.Dispatch<React.SetStateAction<string>>;
+  setCursorPosition: (positionStart: number, positionEnd: number) => void;
+  setCursor: (pos1: number, pos2: number) => void;
+  setButtonValues: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
+}
+
+const Emphasis: FC<EmphasisProps> = ({
   editorRef,
   mdText,
   buttonValues,
@@ -15,31 +27,26 @@ const Emphasis: FC<any> = ({
   setCursor,
   setButtonValues,
 }) => {
-  let output;
-  let cancelResults;
-  let results: {
-    cursorPositionEnd?: any;
-    cursorPositionStart?: any;
-    isOn: any;
-    mdText: any;
-  };
-  let buttonTitle: string;
-
-  const setChanges = (mdText: any, cursorPositionStart: any, cursorPositionEnd: any) => {
+  const setChanges = (mdText: string, cursorPositionStart: number, cursorPositionEnd: number) => {
     setCursor(cursorPositionStart, cursorPositionEnd);
     setCursorPosition(cursorPositionStart, cursorPositionEnd);
     setMdText(mdText);
   };
 
-  const setButton = (value: any) => {
-    setButtonValues((prevButtonValues: any) => ({
+  const setButton = (value: string) => {
+    setButtonValues((prevButtonValues: Record<string, boolean>) => ({
       ...prevButtonValues,
       [value]: !buttonValues[value],
     }));
   };
 
-  const setEmphasis = (isON: any, cursorIntON: any, cursorIntOFF: any, output: any) => {
-    cancelResults = cancelButton(
+  const setEmphasis = (
+    isON: boolean,
+    cursorIntON: number,
+    cursorIntOFF: number,
+    output: string
+  ) => {
+    const cancelResults = cancelButton(
       isON,
       mdText,
       cursorPositionStart,
@@ -56,8 +63,7 @@ const Emphasis: FC<any> = ({
       return;
     }
 
-    // @ts-ignore
-    results = emphasisAction(
+    const results = emphasisAction(
       isON,
       mdText,
       cursorPositionStart,
@@ -72,7 +78,7 @@ const Emphasis: FC<any> = ({
 
   const set = {
     bold: () => {
-      buttonTitle = config.bold.buttonTitle;
+      const buttonTitle = config.bold.buttonTitle;
       setButton(buttonTitle);
       setEmphasis(
         buttonValues[buttonTitle],
@@ -82,7 +88,7 @@ const Emphasis: FC<any> = ({
       );
     },
     italic: () => {
-      buttonTitle = config.italic.buttonTitle;
+      const buttonTitle = config.italic.buttonTitle;
       setButton(buttonTitle);
       setEmphasis(
         buttonValues[buttonTitle],
@@ -92,18 +98,18 @@ const Emphasis: FC<any> = ({
       );
     },
     heading: () => {
-      buttonTitle = config.heading.buttonTitle;
-      output = config.heading.output;
+      const buttonTitle = config.heading.buttonTitle;
+      const output = config.heading.output;
 
-      results = heading(buttonValues[buttonTitle], mdText, cursorPositionStart, output);
-      setButtonValues((prevButtonValues: any) => ({
+      const results = heading(buttonValues[buttonTitle], mdText, cursorPositionStart, output);
+      setButtonValues((prevButtonValues) => ({
         ...prevButtonValues,
         [buttonTitle]: results?.isOn,
       }));
       setChanges(results?.mdText, results?.cursorPositionStart, results?.cursorPositionStart);
     },
     strikethrough: () => {
-      buttonTitle = config.strikethrough.buttonTitle;
+      const buttonTitle = config.strikethrough.buttonTitle;
       setButton(buttonTitle);
       setEmphasis(
         buttonValues[buttonTitle],
@@ -140,8 +146,8 @@ const Emphasis: FC<any> = ({
     [setButton, setEmphasis, heading]
   );
 
-  const handleButtonClick = (button: any) => {
-    editorRef.current.focus();
+  const handleButtonClick = (button: string) => {
+    editorRef.current ? editorRef.current.focus() : "";
     switch (button) {
       case config.bold.buttonTitle:
         set.bold();

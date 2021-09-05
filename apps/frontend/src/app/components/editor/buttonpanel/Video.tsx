@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useState, RefObject } from "react";
 import ButtonComponent from "./ButtonComponent";
 import { useHotkeys } from "react-hotkeys-hook";
 import { KEY_COMBINATIONS as KEY, video as config } from "./settings/buttonConfig";
@@ -13,7 +13,17 @@ const languageNO = {
   mandatoryText: "Må være gyldig lenke til youtube eller vimeo",
 };
 
-const Hyperlink: FC<any> = ({
+interface VideoProps {
+  editorRef: RefObject<HTMLTextAreaElement>;
+  mdText: string;
+  cursorPositionStart: number;
+  cursorPositionEnd: number;
+  setMdText: React.Dispatch<React.SetStateAction<string>>;
+  setCursorPosition: (positionStart: number, positionEnd: number) => void;
+  setCursor: (pos1: number, pos2: number) => void;
+}
+
+const Video: FC<VideoProps> = ({
   editorRef,
   mdText,
   cursorPositionStart,
@@ -65,7 +75,7 @@ const Hyperlink: FC<any> = ({
     setIsOpen(false);
     setUrl("");
     setValidateUrl("");
-    editorRef.current.focus();
+    editorRef.current ? editorRef.current.focus() : "";
     setCursor(end, end);
     setCursorPosition(end, end);
   };
@@ -74,7 +84,7 @@ const Hyperlink: FC<any> = ({
     setIsOpen(false);
     setUrl("");
     setValidateUrl("");
-    editorRef.current.focus();
+    editorRef.current ? editorRef.current.focus() : "";
   };
 
   return (
@@ -156,4 +166,4 @@ const Hyperlink: FC<any> = ({
   );
 };
 
-export default Hyperlink;
+export default Video;

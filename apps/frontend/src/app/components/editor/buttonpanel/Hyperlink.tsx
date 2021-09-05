@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useState, RefObject } from "react";
 import ButtonComponent from "./ButtonComponent";
 import { useHotkeys } from "react-hotkeys-hook";
 import { hyperlink as config, KEY_COMBINATIONS as KEY } from "./settings/buttonConfig";
@@ -15,7 +15,17 @@ const languageNO = {
   mandatoryText: "Må fylle ut URL",
 };
 
-const Hyperlink: FC<any> = ({
+interface HyperlinkProps {
+  editorRef: RefObject<HTMLTextAreaElement>;
+  mdText: string;
+  cursorPositionStart: number;
+  cursorPositionEnd: number;
+  setMdText: React.Dispatch<React.SetStateAction<string>>;
+  setCursorPosition: (positionStart: number, positionEnd: number) => void;
+  setCursor: (pos1: number, pos2: number) => void;
+}
+
+const Hyperlink: FC<HyperlinkProps> = ({
   editorRef,
   mdText,
   cursorPositionStart,
@@ -81,7 +91,7 @@ const Hyperlink: FC<any> = ({
     setIsOpen(false);
     setOpenNewWindow(false);
     setUrl("https://");
-    editorRef.current.focus();
+    editorRef.current ? editorRef.current.focus() : "";
     setCursor(start, end);
     setCursorPosition(start, end);
   };
@@ -90,7 +100,7 @@ const Hyperlink: FC<any> = ({
     setIsOpen(false);
     setOpenNewWindow(false);
     setUrl("https://");
-    editorRef.current.focus();
+    editorRef.current ? editorRef.current.focus() : "";
   };
 
   return (

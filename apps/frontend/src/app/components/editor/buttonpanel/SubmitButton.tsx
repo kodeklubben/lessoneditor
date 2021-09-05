@@ -3,20 +3,26 @@ import { useHistory } from "react-router-dom";
 import { useParams } from "react-router";
 import { FC } from "react";
 
-const SubmitButton: FC<any> = ({ mdText, setShowSpinner, saveEditorText }) => {
+interface SubmitButtonProps {
+  mdText: string;
+  setShowSpinner: React.Dispatch<React.SetStateAction<boolean>>;
+  saveEditorText: (regenThumb: boolean) => void;
+}
+
+const SubmitButton: FC<SubmitButtonProps> = ({ mdText, setShowSpinner, saveEditorText }) => {
   const history = useHistory();
   const { lessonId } = useParams<{ lessonId: string }>();
 
-  const onSubmit = async () => {
+  const onSubmit = () => {
     setShowSpinner(true);
-    await navigateToHome();
+    navigateToHome();
     setShowSpinner(false);
   };
 
-  const navigateToHome = async () => {
-    await saveEditorText();
+  const navigateToHome = () => {
+    saveEditorText(true);
     const target = ["/landingpage", lessonId].join("/");
-    history.push({ pathname: target });
+    history.push(target);
   };
 
   return (

@@ -1,14 +1,23 @@
 import { Button, Popup } from "semantic-ui-react";
 import { FC } from "react";
 
-const Buttons: FC<any> = ({
-                            buttonValues,
-                            title,
-                            onButtonClick,
-                            buttonTitle,
-                            shortcutKey,
-                            color
-                          }) => {
+interface MicroScratchButtonComponentProps {
+  buttonValues: Record<string, boolean>;
+  title: string;
+  onButtonClick: (button: string) => void;
+  buttonTitle: string;
+  shortcutKey: string;
+  color: string;
+}
+
+const MicroScratchButtonComponent: FC<MicroScratchButtonComponentProps> = ({
+  buttonValues,
+  title,
+  onButtonClick,
+  buttonTitle,
+  shortcutKey,
+  color,
+}) => {
   const responsiveCP = () => {
     return (
       <>
@@ -19,9 +28,7 @@ const Buttons: FC<any> = ({
           trigger={
             <Button
               style={
-                buttonValues[buttonTitle]
-                  ? { backgroundColor: "#AAA" }
-                  : { backgroundColor: color }
+                buttonValues[buttonTitle] ? { backgroundColor: "#AAA" } : { backgroundColor: color }
               }
               className="MBButton"
               size="tiny"
@@ -38,4 +45,4 @@ const Buttons: FC<any> = ({
   return responsiveCP();
 };
 
-export default Buttons;
+export default MicroScratchButtonComponent;

@@ -7,10 +7,6 @@ import { KEY_COMBINATIONS as KEY, sections as config } from "./settings/buttonCo
 import { SECTION_TEXT } from "../settingsFiles/languages/editor_NO";
 import { FC } from "react";
 
-let results;
-let cancelResults;
-let buttonTitle;
-
 interface SectionsProps {
   editorRef: RefObject<HTMLTextAreaElement>;
   cursorPositionStart: number;
@@ -54,7 +50,7 @@ const Sections: FC<SectionsProps> = ({
     output: string,
     cancelInt: number
   ) => {
-    cancelResults = cancelButton(
+    const cancelResults = cancelButton(
       buttonValues[button],
       mdText,
       cursorPositionStart,
@@ -70,7 +66,7 @@ const Sections: FC<SectionsProps> = ({
       );
       return;
     }
-    results = insertSection(
+    const results = insertSection(
       buttonValues[button],
       button,
       mdText,
@@ -87,7 +83,7 @@ const Sections: FC<SectionsProps> = ({
 
   const set = {
     activity: () => {
-      buttonTitle = config.activity.buttonTitle;
+      const buttonTitle = config.activity.buttonTitle;
       setButton(buttonTitle);
       setSection(
         buttonTitle,
@@ -98,7 +94,7 @@ const Sections: FC<SectionsProps> = ({
       );
     },
     intro: () => {
-      buttonTitle = config.intro.buttonTitle;
+      const buttonTitle = config.intro.buttonTitle;
       setButton(buttonTitle);
       setSection(
         buttonTitle,
@@ -109,7 +105,7 @@ const Sections: FC<SectionsProps> = ({
       );
     },
     check: () => {
-      buttonTitle = config.check.buttonTitle;
+      const buttonTitle = config.check.buttonTitle;
       setButton(buttonTitle);
       setSection(
         buttonTitle,
@@ -120,7 +116,7 @@ const Sections: FC<SectionsProps> = ({
       );
     },
     tip: () => {
-      buttonTitle = config.tip.buttonTitle;
+      const buttonTitle = config.tip.buttonTitle;
       setButton(buttonTitle);
       setSection(
         buttonTitle,
@@ -131,7 +127,7 @@ const Sections: FC<SectionsProps> = ({
       );
     },
     protip: () => {
-      buttonTitle = config.protip.buttonTitle;
+      const buttonTitle = config.protip.buttonTitle;
       setButton(buttonTitle);
       setSection(
         buttonTitle,
@@ -142,7 +138,7 @@ const Sections: FC<SectionsProps> = ({
       );
     },
     challenge: () => {
-      buttonTitle = config.challenge.buttonTitle;
+      const buttonTitle = config.challenge.buttonTitle;
       setButton(buttonTitle);
       setSection(
         buttonTitle,
@@ -153,7 +149,7 @@ const Sections: FC<SectionsProps> = ({
       );
     },
     flag: () => {
-      buttonTitle = config.flag.buttonTitle;
+      const buttonTitle = config.flag.buttonTitle;
       setButton(buttonTitle);
       setSection(
         buttonTitle,
@@ -164,7 +160,7 @@ const Sections: FC<SectionsProps> = ({
       );
     },
     try: () => {
-      buttonTitle = config.try.buttonTitle;
+      const buttonTitle = config.try.buttonTitle;
       setButton(buttonTitle);
       setSection(
         buttonTitle,
@@ -175,7 +171,7 @@ const Sections: FC<SectionsProps> = ({
       );
     },
     save: () => {
-      buttonTitle = config.save.buttonTitle;
+      const buttonTitle = config.save.buttonTitle;
       setButton(buttonTitle);
       setSection(
         buttonTitle,
@@ -230,10 +226,7 @@ const Sections: FC<SectionsProps> = ({
   );
 
   const handleButtonClick = (button: string) => {
-    if (!editorRef.current) {
-      return;
-    }
-    editorRef.current.focus();
+    editorRef.current ? editorRef.current.focus() : "";
     switch (button) {
       case config.activity.buttonTitle:
         set.activity();
