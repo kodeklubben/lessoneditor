@@ -39,11 +39,9 @@ const NewLessonModal: FC = () => {
       slug: slugify(lessonTitle, { lower: true, strict: true }),
     };
     const getCourseFromSlug = COURSESLIST.find(({ slug }) => slug === values.course);
-
     const courseTitle: string = getCourseFromSlug ? getCourseFromSlug.courseTitle : "";
     const lessonId = await addLesson(course, courseTitle, lesson.slug, lesson.title);
     navigateToEditor(lessonId, lesson.slug);
-
     setLoading(false);
   };
 

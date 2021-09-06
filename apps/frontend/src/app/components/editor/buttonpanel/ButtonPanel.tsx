@@ -1,4 +1,4 @@
-import { FC, RefObject, useState } from "react";
+import { Dispatch, SetStateAction, FC, RefObject, useState } from "react";
 import "./buttonpanel.scss";
 import ShowSpinner from "../../ShowSpinner";
 import Autosave from "../Autosave";
@@ -30,15 +30,15 @@ interface ButtonPanelProps {
   undoCursorPosition: number[];
   redoCursorPosition: number[];
   saveEditorText: (regenThumb: boolean) => Promise<void>;
-  setButtonValues: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
+  setButtonValues: Dispatch<SetStateAction<Record<string, boolean>>>;
   setCursor: (pos1: number, pos2: number) => void;
   setCursorPosition: (positionStart: number, positionEnd: number) => void;
-  setListButtonValues: React.Dispatch<
-    React.SetStateAction<{ bTitle: string; output: string; cursorInt: number }>
+  setListButtonValues: Dispatch<
+    SetStateAction<{ bTitle: string; output: string; cursorInt: number }>
   >;
-  setMdText: React.Dispatch<React.SetStateAction<string>>;
-  setRedoCursorPosition: React.Dispatch<React.SetStateAction<number[]>>;
-  setUndoCursorPosition: React.Dispatch<React.SetStateAction<number[]>>;
+  setMdText: Dispatch<SetStateAction<string>>;
+  setRedoCursorPosition: Dispatch<SetStateAction<number[]>>;
+  setUndoCursorPosition: Dispatch<SetStateAction<number[]>>;
   uploadImageRef: RefObject<HTMLInputElement>;
 }
 

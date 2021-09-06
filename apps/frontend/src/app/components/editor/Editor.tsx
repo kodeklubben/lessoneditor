@@ -1,4 +1,4 @@
-import { Suspense, useRef, useState } from "react";
+import { FC, useRef, useState } from "react";
 import "./editor.scss";
 import ButtonPanel from "./buttonpanel/ButtonPanel";
 import ImageUpload from "./ImageUpload";
@@ -11,9 +11,8 @@ import { useLessonContext } from "../../contexts/LessonContext";
 import Navbar from "../navbar/Navbar";
 import { filenameParser } from "../../utils/filename-parser";
 
-const Editor: React.FC = () => {
+const Editor: FC = () => {
   const { lessonId, file } = useParams<{ lessonId: string; file: string }>();
-
   const { lessonData } = useLessonContext();
   const { saveFileBody, savedFileBody } = useFileContext();
   const [mdText, setMdText] = useState<string>("");
@@ -93,7 +92,8 @@ const Editor: React.FC = () => {
   };
 
   return (
-    <Suspense fallback={<ShowSpinner />}>
+    <>
+      {showSpinner ? <ShowSpinner /> : ""}
       <ImageUpload
         uploadImageRef={uploadImageRef}
         mdText={mdText}
@@ -145,7 +145,7 @@ const Editor: React.FC = () => {
         />
         <MDPreview mdText={mdText} course={lessonData.course} language={language} />
       </div>
-    </Suspense>
+    </>
   );
 };
 export default Editor;

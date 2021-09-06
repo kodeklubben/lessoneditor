@@ -2,7 +2,7 @@ import { GRADE, SUBJECT, TOPIC } from "../datapanel/settings/landingpage_NO";
 import laererveiledningMal from "../settingsFiles/LaererveiledningMal";
 
 const insertMetaDataInTeacherGuide = (ymlData: {
-  tags: { subject: any[]; topic: any[]; grade: any[] };
+  tags: { subject: string[]; topic: string[]; grade: string[] };
 }) => {
   const subject = ymlData.tags.subject.map((element) => {
     // @ts-ignore

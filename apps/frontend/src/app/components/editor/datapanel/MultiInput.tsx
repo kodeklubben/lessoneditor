@@ -1,17 +1,28 @@
 import { Button, Header, Input } from "semantic-ui-react";
-import { FC } from "react";
+import { FC, SyntheticEvent } from "react";
+import { useFileContext } from "../../../contexts/FileContext";
 
-const MultiInput: FC<any> = ({
-                               changeHandler,
-                               multiInputHandler,
-                               name,
-                               title,
-                               inputArray = [],
-                               inputValue,
-                               placeholder,
-                               required
-                             }) => {
+interface MultiInputProps {
+  changeHandler: (event: SyntheticEvent, data: Record<string, string>) => void;
+  name: string;
+  title: string;
+  inputArray: string[];
+  inputValue: string;
+  placeholder: string;
+  required: string;
+}
+
+const MultiInput: FC<MultiInputProps> = ({
+  changeHandler,
+  name,
+  title,
+  inputArray = [],
+  inputValue,
+  placeholder,
+  required,
+}) => {
   let inputOrder = 1;
+  const { setHeaderData } = useFileContext();
 
   let textInput: Input | null = null;
 
@@ -24,6 +35,15 @@ const MultiInput: FC<any> = ({
 
       // @ts-ignore
       textInput.focus();
+    }
+  };
+
+  const multiInputHandler = (object: { [s: string]: unknown } | ArrayLike<unknown>, name: any) => {
+    const key = Object.keys(object)[0];
+    const value = Object.values(object)[0];
+    if (setHeaderData) {
+      setHeaderData((prevState) => ({ ...prevState, [key]: value }));
+      setHeaderData((prevState) => ({ ...prevState, [name]: "" }));
     }
   };
 
@@ -57,7 +77,7 @@ const MultiInput: FC<any> = ({
         <div
           style={{
             order: inputOrder,
-            width: "100%"
+            width: "100%",
           }}
         >
           <Input
@@ -94,7 +114,7 @@ const MultiInput: FC<any> = ({
           icon="plus"
           style={{
             order: inputOrder + 1,
-            backgroundColor: "white"
+            backgroundColor: "white",
           }}
           id="addNameButton"
           name={name}

@@ -1,18 +1,18 @@
 import { Button, Card, Image } from "semantic-ui-react";
 import { FC } from "react";
 
+interface Lesson {
+  course: string;
+  courseTitle: string;
+  lesson: string;
+  lessonId: string;
+  lessonTitle: string;
+  thumb?: string;
+}
+
 export interface ItemListProps {
-  items: [
-    {
-      course: string;
-      courseTitle: string;
-      lesson: string;
-      lessonId: string;
-      lessonTitle: string;
-      thumb: string;
-    }
-  ];
-  removeLesson: (lessonId: string) => void;
+  items: Lesson[];
+  removeLesson: (lessonId: string) => Promise<void>;
   navigateToHome: (lessonId: string) => void;
 }
 
@@ -28,7 +28,7 @@ const ItemList: FC<ItemListProps> = ({ items, removeLesson, navigateToHome }) =>
               lesson: string;
               lessonId: string;
               lessonTitle: string;
-              thumb: string;
+              thumb?: string;
             },
             index: number
           ) => (

@@ -18,8 +18,8 @@ describe("ItemList component", () => {
     const { getByText } = render(
       <ItemList
         items={fakeItem}
-        removeLesson={() => {
-          "lessonRemoved";
+        removeLesson={async () => {
+          await "lesson removed";
         }}
         navigateToHome={() => {
           "navigateToHome";

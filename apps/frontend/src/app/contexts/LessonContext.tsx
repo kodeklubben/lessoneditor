@@ -7,17 +7,14 @@ interface LessonContextProps {}
 
 const LessonContext = React.createContext<Partial<LessonContextProps>>({});
 
-export const LessonContextProvider = (props: any) => {
-  const { lessonId } = useParams<any>();
-  const defaultYml = {
-    level: 1,
-    license: "CC BY-SA 4.0",
-    tags: { topic: [], subject: [], grade: [] },
-  };
+export const LessonContextProvider = (props: {
+  children: boolean | React.ReactChild | React.ReactFragment | React.ReactPortal | null | undefined;
+}) => {
+  const { lessonId } = useParams<{ lessonId: string }>();
   const { lessonDataPath, lessonYamlPath, lessonFilesPath } = getLessonPaths(lessonId);
-  const [lessonData, setLessonData] = useState({
+  const [lessonData, setLessonData] = useState<Record<string, unknown>>({
     files: {},
-    yml: defaultYml,
+    yml: {},
   });
 
   useEffect(() => {
@@ -27,10 +24,8 @@ export const LessonContextProvider = (props: any) => {
       const lessonYMLDataRes = await axios.get(lessonYamlPath);
       const rootDataObj = lessonDataRes.data;
       rootDataObj.files = lessonListRes.data;
-      rootDataObj.yml =
-        JSON.stringify(lessonYMLDataRes.data) !== JSON.stringify({})
-          ? lessonYMLDataRes.data
-          : defaultYml;
+      rootDataObj.yml = lessonYMLDataRes.data;
+
       setLessonData(rootDataObj);
     }
 
@@ -40,7 +35,7 @@ export const LessonContextProvider = (props: any) => {
   const context = {
     lessonData,
     setLessonData,
-    saveLesson: async (data: any) => {
+    saveLesson: async (data: Record<string, unknown>) => {
       if (lessonId) {
         await axios.post(lessonDataPath, data);
         data.files = lessonData.files;
@@ -50,7 +45,7 @@ export const LessonContextProvider = (props: any) => {
         console.error("No lessonId set in context aborting");
       }
     },
-    saveYml: async (data: any) => {
+    saveYml: async (data: Record<string, unknown>) => {
       if (lessonId) {
         await axios.post(lessonYamlPath, data);
         lessonData.yml = data;

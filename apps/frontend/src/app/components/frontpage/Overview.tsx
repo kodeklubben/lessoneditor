@@ -47,8 +47,8 @@ const Overview: FC = () => {
             </Card.Content>
           </Card.Content>
         </Card>
-
         <Divider style={{ height: "2px" }} section />
+
         {lessons.length > 0 ? (
           <>
             <Header as="h2">Mine oppgaver</Header>

@@ -9,7 +9,7 @@ import oppgaveMal from "../components/editor/settingsFiles/oppgaveMal";
 import { useLessonContext } from "./LessonContext";
 import { filenameParser } from "../utils/filename-parser";
 
-interface ContextProps {
+interface FileContextProps {
   headerData: HeaderData;
   savedFileBody: string;
   saveFileBody: (
@@ -19,8 +19,8 @@ interface ContextProps {
     regenThumb: boolean
   ) => Promise<void>;
   saveFileHeader: (lessonId: string, filename: string, headerData: HeaderData) => Promise<void>;
-  rawMdFileContent: String;
-  fetchMdText: (lessonId: string, filename: string) => {};
+  rawMdFileContent: string;
+  fetchMdText: (lessonId: string, filename: string) => Promise<string>;
   setHeaderData: Dispatch<SetStateAction<HeaderData>>;
 }
 
@@ -33,15 +33,20 @@ export interface HeaderData {
   author: boolean;
 }
 
-const FileContext = React.createContext<Partial<ContextProps>>({});
+const FileContext = React.createContext<Partial<FileContextProps>>({});
 
-function createDefaultFileBody(file: string, ymlData: any) {
+function createDefaultFileBody(
+  file: string,
+  ymlData: {
+    tags: { subject: string[]; topic: string[]; grade: string[] };
+  }
+) {
   const { isReadme } = filenameParser(file);
   return isReadme ? insertMetaDataInTeacherGuide(ymlData) : oppgaveMal;
 }
 
 const FileContextProvider = (props: any) => {
-  const { lessonId, file } = useParams<any>();
+  const { lessonId, file } = useParams<{ lessonId: string; file: string }>();
   const { getYmlData } = useLessonContext();
   const [rawMdFileContent, setRawMdFileContent] = useState<string>("");
   const { language } = filenameParser(file);
@@ -104,7 +109,7 @@ const FileContextProvider = (props: any) => {
     // @ts-ignore
     setHeaderData(yamlHeaderLoad(data, language));
   };
-  const context: ContextProps = {
+  const context: FileContextProps = {
     headerData,
     savedFileBody,
     saveFileBody,
@@ -115,6 +120,6 @@ const FileContextProvider = (props: any) => {
   };
   return <FileContext.Provider value={context}>{props.children}</FileContext.Provider>;
 };
-const useFileContext = (): Partial<ContextProps> => useContext(FileContext);
+const useFileContext = (): Partial<FileContextProps> => useContext(FileContext);
 
 export { useFileContext, FileContextProvider };
