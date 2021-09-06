@@ -71,7 +71,6 @@ const FileContextProvider = (props: any) => {
     const newRawText = ["", fileHeader, body].join(separator);
     await saveMdText(lessonId, filename, newRawText, regenThumb);
     setRawMdFileContent(newRawText);
-    setSavedFileBody(body);
   };
 
   const saveDefaultFileBody = async (lessonId: string, filename: string) => {
@@ -82,8 +81,8 @@ const FileContextProvider = (props: any) => {
 
   useEffect(() => {
     async function fetchData() {
+      setTimeout(() => {}, 10);
       const result = await fetchMdText(lessonId, file);
-      // eslint-disable-next-line
       const [_, header, body] = result.split(separator);
       setRawMdFileContent(result);
       setSavedFileBody(body);
@@ -95,10 +94,9 @@ const FileContextProvider = (props: any) => {
     }
 
     if (lessonId && file) {
-      fetchData().then();
+      fetchData();
     }
-    // eslint-disable-next-line
-  }, [lessonId, file, language]);
+  }, [file]);
 
   const saveFileHeader = async (lessonId: string, filename: string, data: HeaderData) => {
     const fileBody = rawMdFileContent.split(separator)[2];

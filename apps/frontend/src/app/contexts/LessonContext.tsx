@@ -29,8 +29,8 @@ export const LessonContextProvider = (props: {
       setLessonData(rootDataObj);
     }
 
-    if (lessonId) fetchLessonData().then();
-  }, [lessonId]);
+    if (lessonId) fetchLessonData();
+  }, []);
 
   const context = {
     lessonData,

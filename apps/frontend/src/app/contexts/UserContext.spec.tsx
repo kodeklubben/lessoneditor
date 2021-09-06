@@ -3,11 +3,11 @@ import { paths } from "@lessoneditor/api-interfaces";
 import { UserContext, UserContextProvider } from "./UserContext";
 import TestRenderer from "react-test-renderer";
 
-const nanoid = function() {
+const nanoid = function () {
   return Math.random().toString(36).substring(7);
 };
-describe("UserContext", function() {
-  beforeEach(function() {
+describe("UserContext", function () {
+  beforeEach(function () {
     // import and pass your custom axios instance to this method
     moxios.install();
   });
@@ -15,20 +15,20 @@ describe("UserContext", function() {
   moxios.stubRequest(paths.USER, {
     status: 200,
     response: {
-      name: "TestName"
-    }
+      name: "TestName",
+    },
   });
   moxios.stubRequest(paths.LESSON, {
     status: 200,
     response: {
-      lessonId: nanoid()
-    }
+      lessonId: nanoid(),
+    },
   });
   const testLesson = {
     lessonId: nanoid(),
     course: "microbit",
     lesson: "one-thing",
-    title: "Hello One Thing"
+    title: "Hello One Thing",
   };
 
   moxios.stubRequest(paths.USER_LESSONS, {
@@ -39,12 +39,12 @@ describe("UserContext", function() {
         lessonId: nanoid(),
         course: "macrobit",
         lesson: "another-thing",
-        title: "Hello Another Thing"
-      }
-    ]
+        title: "Hello Another Thing",
+      },
+    ],
   });
 
-  afterEach(function() {
+  afterEach(function () {
     moxios.uninstall();
   });
   it("should mount", async () => {
@@ -56,7 +56,7 @@ describe("UserContext", function() {
           <UserContext.Consumer>
             {(value: any) => {
               contextValue = value;
-              return (<></>);
+              return <></>;
             }}
           </UserContext.Consumer>
         </UserContextProvider>
@@ -66,18 +66,12 @@ describe("UserContext", function() {
     expect(contextValue.getLesson(testLesson.lessonId)).toBe(testLesson);
     expect(contextValue.lessons.length).toBe(2);
     await act(async () => {
-      await contextValue.addLesson(
-        "nanobit",
-        "third-thing",
-        "Hello Third Thing"
-      );
+      await contextValue.addLesson("nanobit", "third-thing", "Hello Third Thing");
     });
     expect(contextValue.lessons.length).toBe(3);
-    moxios.wait(function() {
-      let request = moxios.requests.mostRecent();
-      request
-        .respondWith({ status: 200, response: [] })
-        .then((d) => console.log([]));
+    moxios.wait(function () {
+      const request = moxios.requests.mostRecent();
+      request.respondWith({ status: 200, response: [] }).then((d) => console.log([]));
     });
     await act(async () => {
       await contextValue.removeLesson(testLesson.lessonId);

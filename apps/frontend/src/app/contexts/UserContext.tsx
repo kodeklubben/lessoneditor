@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useContext, useEffect, useState, FC } from "react";
+import React, { useContext, useEffect, useState, FC } from "react";
 import axios from "axios";
 import { paths } from "@lessoneditor/api-interfaces";
 import createLesson from "../api/create-lesson";
@@ -55,11 +55,9 @@ export const UserContextProvider: FC = (props) => {
     async function fetchData() {
       const userRes = await axios.get(paths.USER);
       const userLessonsRes = await axios.get(paths.USER_LESSONS);
-      console.log({ userLessonsRes });
       setUser({ ...userRes.data });
       setLessons(userLessonsRes.data);
     }
-
     fetchData();
   }, []);
 

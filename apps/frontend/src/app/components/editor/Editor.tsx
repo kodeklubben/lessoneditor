@@ -1,4 +1,4 @@
-import { FC, useRef, useState } from "react";
+import { FC, useRef, useState, useEffect } from "react";
 import "./editor.scss";
 import ButtonPanel from "./buttonpanel/ButtonPanel";
 import ImageUpload from "./ImageUpload";
@@ -63,7 +63,7 @@ const Editor: FC = () => {
   };
 
   /*
-   * Av en eller annen grunn må denne funksjonen være async med awaitfor å fungere.
+   * Av en eller annen grunn må denne funksjonen være async med await for å fungere.
    */
   const setCursorPosition = async (positionStart: number, positionEnd: number) => {
     if (!editorRef.current) {
@@ -80,10 +80,13 @@ const Editor: FC = () => {
    * Gjør litt state greier her:
    */
 
-  if (showSpinner && savedFileBody && mdText === "") {
-    setMdText(savedFileBody);
-    setShowSpinner(false);
-  }
+  useEffect(() => {
+    if (savedFileBody) {
+      console.log(savedFileBody);
+      setMdText(savedFileBody);
+      setShowSpinner(false);
+    }
+  }, [savedFileBody]);
 
   const saveEditorText = async (regenThumb: boolean) => {
     if (saveFileBody) {
