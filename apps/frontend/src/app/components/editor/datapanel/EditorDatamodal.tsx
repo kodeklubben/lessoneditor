@@ -146,6 +146,7 @@ const EditorDatamodal: FC<EditorDatamodalProps> = ({
             inputValue={headerData?.translator}
             name="translator"
             placeholder={FORM_TEXT.TRANSLATOR.placeholder}
+            required=""
             title={FORM_TEXT.TRANSLATOR.heading}
           />
         </Modal.Content>

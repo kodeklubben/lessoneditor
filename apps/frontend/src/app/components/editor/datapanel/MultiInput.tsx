@@ -57,11 +57,11 @@ const MultiInput: FC<MultiInputProps> = ({
   };
 
   const removeClickHandler = (name: string, value: any) => {
-    let i = name + "List";
-    let tempArray = inputArray;
-    let index = inputArray.indexOf(value);
+    const i = name + "List";
+    const tempArray = inputArray;
+    const index = inputArray.indexOf(value);
     tempArray.splice(index, 1);
-    let temp = { [i]: tempArray };
+    const temp = { [i]: tempArray };
     multiInputHandler(temp, name);
 
     inputOrder -= 1;

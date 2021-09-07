@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
+import React, { Dispatch, FC, SetStateAction, useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import saveMdText from "../api/save-md-text";
 import fetchMdText from "../api/fetch-md-text";
@@ -11,6 +11,7 @@ import { filenameParser } from "../utils/filename-parser";
 
 interface FileContextProps {
   headerData: HeaderData;
+  saveFileHeader: (lessonId: string, filename: string, data: HeaderData) => Promise<void>;
   savedFileBody: string;
   saveFileBody: (
     lessonId: string,
@@ -18,9 +19,6 @@ interface FileContextProps {
     headerData: string,
     regenThumb: boolean
   ) => Promise<void>;
-  saveFileHeader: (lessonId: string, filename: string, headerData: HeaderData) => Promise<void>;
-  rawMdFileContent: string;
-  fetchMdText: (lessonId: string, filename: string) => Promise<string>;
   setHeaderData: Dispatch<SetStateAction<HeaderData>>;
 }
 
@@ -28,12 +26,31 @@ export interface HeaderData {
   title: string;
   authorList: string[];
   translatorList: string[];
-  translator: boolean;
+  translator: string;
   language: string;
-  author: boolean;
+  author: string;
 }
 
-const FileContext = React.createContext<Partial<FileContextProps>>({});
+const FileContext = React.createContext<FileContextProps>({
+  headerData: {
+    title: "",
+    authorList: [],
+    translatorList: [],
+    translator: "",
+    language: "",
+    author: "",
+  },
+  saveFileHeader: async () => {
+    return;
+  },
+  savedFileBody: "",
+  saveFileBody: async () => {
+    return;
+  },
+  setHeaderData: () => {
+    return;
+  },
+});
 
 function createDefaultFileBody(
   file: string,
@@ -45,9 +62,9 @@ function createDefaultFileBody(
   return isReadme ? insertMetaDataInTeacherGuide(ymlData) : oppgaveMal;
 }
 
-const FileContextProvider = (props: any) => {
+const FileContextProvider: FC = (props) => {
   const { lessonId, file } = useParams<{ lessonId: string; file: string }>();
-  const { getYmlData } = useLessonContext();
+  const { fetchYmlData } = useLessonContext();
   const [rawMdFileContent, setRawMdFileContent] = useState<string>("");
   const { language } = filenameParser(file);
   const [headerData, setHeaderData] = useState<HeaderData>({
@@ -55,8 +72,8 @@ const FileContextProvider = (props: any) => {
     authorList: [],
     translatorList: [],
     language,
-    author: false,
-    translator: false,
+    author: "",
+    translator: "",
   });
   const [savedFileBody, setSavedFileBody] = useState<string>("");
   const separator = "---\n";
@@ -74,14 +91,13 @@ const FileContextProvider = (props: any) => {
   };
 
   const saveDefaultFileBody = async (lessonId: string, filename: string) => {
-    const ymlData = await getYmlData();
+    const ymlData = await fetchYmlData();
     const defaultFileBody = createDefaultFileBody(filename, ymlData);
     await saveFileBody(lessonId, filename, defaultFileBody, true);
   };
 
   useEffect(() => {
     async function fetchData() {
-      setTimeout(() => {}, 10);
       const result = await fetchMdText(lessonId, file);
       const [_, header, body] = result.split(separator);
       setRawMdFileContent(result);
@@ -99,25 +115,23 @@ const FileContextProvider = (props: any) => {
   }, [file]);
 
   const saveFileHeader = async (lessonId: string, filename: string, data: HeaderData) => {
+    console.log(data);
     const fileBody = rawMdFileContent.split(separator)[2];
     const header = yamlHeaderDump(data);
     const newRawText = ["", header, fileBody].join(separator);
     await saveMdText(lessonId, filename, newRawText);
     setRawMdFileContent(newRawText);
-    // @ts-ignore
-    setHeaderData(yamlHeaderLoad(data, language));
+    // setHeaderData(yamlHeaderLoad(data, language));
   };
   const context: FileContextProps = {
     headerData,
+    saveFileHeader,
     savedFileBody,
     saveFileBody,
-    saveFileHeader,
-    rawMdFileContent,
     setHeaderData,
-    fetchMdText,
   };
   return <FileContext.Provider value={context}>{props.children}</FileContext.Provider>;
 };
-const useFileContext = (): Partial<FileContextProps> => useContext(FileContext);
+const useFileContext = () => useContext(FileContext);
 
 export { useFileContext, FileContextProvider };

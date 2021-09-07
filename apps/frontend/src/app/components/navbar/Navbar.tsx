@@ -26,11 +26,11 @@ const Navbar: FC = () => {
           <div className="navbar_course_title">
             <h1>
               <span style={{ color: "gray" }}>Prosjekttittel: </span>
-              {lessonData.lessonTitle ? lessonData.lessonTitle : lessonData.lesson}
+              {lessonData?.lessonTitle ? lessonData?.lessonTitle : lessonData?.lesson}
             </h1>
             <h1>
               <span style={{ color: "gray" }}>Kurs: </span>
-              {lessonData.courseTitle ? lessonData.courseTitle : lessonData.course}
+              {lessonData?.courseTitle ? lessonData?.courseTitle : lessonData?.course}
             </h1>
           </div>
         ) : (

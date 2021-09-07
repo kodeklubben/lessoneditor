@@ -82,7 +82,6 @@ const Editor: FC = () => {
 
   useEffect(() => {
     if (savedFileBody) {
-      console.log(savedFileBody);
       setMdText(savedFileBody);
       setShowSpinner(false);
     }
@@ -110,12 +109,12 @@ const Editor: FC = () => {
       <Navbar />
       <ButtonPanel
         buttonValues={buttonValues}
-        course={lessonData.course}
-        courseTitle={lessonData.courseTitle}
+        course={lessonData?.course}
+        courseTitle={lessonData?.courseTitle}
         cursorPositionStart={cursorPositionStart}
         cursorPositionEnd={cursorPositionEnd}
         editorRef={editorRef}
-        lessonTitle={lessonData.lessonTitle}
+        lessonTitle={lessonData?.lessonTitle}
         mdText={mdText}
         pushRedoValue={pushRedoValue}
         pushUndoValue={pushUndoValue}
@@ -144,9 +143,9 @@ const Editor: FC = () => {
           setCursor={setCursor}
           pushUndoValue={pushUndoValue}
           resetButtons={resetButtons}
-          course={lessonData.course}
+          course={lessonData?.course}
         />
-        <MDPreview mdText={mdText} course={lessonData.course} language={language} />
+        <MDPreview mdText={mdText} course={lessonData?.course} language={language} />
       </div>
     </>
   );

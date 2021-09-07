@@ -34,10 +34,10 @@ interface UserContextProps {
 export const UserContext = React.createContext<UserContextProps>({
   user: { email: "", name: "", username: "", photo: "" },
   lessons: [],
-  addLesson: async (course: string, courseTitle: string, lesson: string, lessonTitle: string) => {
+  addLesson: async () => {
     return "";
   },
-  removeLesson: async (lessonId: string) => {
+  removeLesson: async () => {
     return;
   },
 });
