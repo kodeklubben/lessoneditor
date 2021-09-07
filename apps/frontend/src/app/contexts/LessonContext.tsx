@@ -115,7 +115,6 @@ export const LessonContextProvider: FC = (props) => {
     console.log({ data });
     if (lessonId) {
       await axios.post(lessonYamlPath, data);
-      setYmlData(data);
     } else {
       console.error("No lessonId set in context aborting");
     }

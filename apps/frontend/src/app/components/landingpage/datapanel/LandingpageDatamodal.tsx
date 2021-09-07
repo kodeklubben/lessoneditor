@@ -28,7 +28,7 @@ const LandingpageDatamodal = () => {
     }
     const mapYamlTags = () => {
       let obj: Record<string, boolean> = {};
-      console.log(ymlData.tags.topic);
+
       obj = ymlData.tags.topic.reduce(
         (accumulator: { [x: string]: boolean }, currentValue: string) => {
           accumulator[currentValue] = true;
