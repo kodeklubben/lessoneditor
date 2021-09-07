@@ -1,7 +1,12 @@
 import { Grid, Header, Segment } from "semantic-ui-react";
-import { FC } from "react";
+import { FC, ReactChild } from "react";
 
-const CheckboxField: FC<any> = ({ labelTitle, content }) => {
+interface CheckboxFieldProps {
+  labelTitle: string;
+  content: ReactChild;
+}
+
+const CheckboxField: FC<CheckboxFieldProps> = ({ labelTitle, content }) => {
   return (
     <>
       <Header as="h3">{labelTitle}</Header>
