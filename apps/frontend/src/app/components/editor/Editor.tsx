@@ -39,6 +39,13 @@ const Editor: FC = () => {
 
   const { language } = filenameParser(file);
 
+  useEffect(() => {
+    if (savedFileBody) {
+      setMdText(savedFileBody);
+      setShowSpinner(false);
+    }
+  }, [savedFileBody]);
+
   const pushUndoValue = (mdText: string, cursorPositionStart: number) => {
     if (undo[undo.length - 1] !== mdText) {
       setUndo((undo) => [...undo, mdText]);
@@ -76,17 +83,6 @@ const Editor: FC = () => {
     setButtonValues({});
   };
 
-  /**
-   * Gjør litt state greier her:
-   */
-
-  useEffect(() => {
-    if (savedFileBody) {
-      setMdText(savedFileBody);
-      setShowSpinner(false);
-    }
-  }, [savedFileBody]);
-
   const saveEditorText = async (regenThumb: boolean) => {
     if (saveFileBody) {
       await saveFileBody(lessonId, file, mdText, regenThumb);
@@ -109,12 +105,12 @@ const Editor: FC = () => {
       <Navbar />
       <ButtonPanel
         buttonValues={buttonValues}
-        course={lessonData?.course}
-        courseTitle={lessonData?.courseTitle}
+        course={lessonData.course}
+        courseTitle={lessonData.courseTitle}
         cursorPositionStart={cursorPositionStart}
         cursorPositionEnd={cursorPositionEnd}
         editorRef={editorRef}
-        lessonTitle={lessonData?.lessonTitle}
+        lessonTitle={lessonData.lessonTitle}
         mdText={mdText}
         pushRedoValue={pushRedoValue}
         pushUndoValue={pushUndoValue}
@@ -143,9 +139,9 @@ const Editor: FC = () => {
           setCursor={setCursor}
           pushUndoValue={pushUndoValue}
           resetButtons={resetButtons}
-          course={lessonData?.course}
+          course={lessonData.course}
         />
-        <MDPreview mdText={mdText} course={lessonData?.course} language={language} />
+        <MDPreview mdText={mdText} course={lessonData.course} language={language} />
       </div>
     </>
   );

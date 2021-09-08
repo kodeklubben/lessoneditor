@@ -52,13 +52,19 @@ export const UserContextProvider: FC = (props) => {
   const [lessons, setLessons] = useState<Lesson[]>([]);
 
   useEffect(() => {
+    let isSubscribed = true;
     async function fetchData() {
       const userRes = await axios.get(paths.USER);
       const userLessonsRes = await axios.get(paths.USER_LESSONS);
-      setUser({ ...userRes.data });
-      setLessons(userLessonsRes.data);
+      if (isSubscribed) {
+        setUser({ ...userRes.data });
+        setLessons(userLessonsRes.data);
+      }
     }
     fetchData();
+    return () => {
+      isSubscribed = false;
+    };
   }, []);
 
   const getLesson = (lessonId: string) => {

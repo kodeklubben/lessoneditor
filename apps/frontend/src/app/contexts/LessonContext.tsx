@@ -112,7 +112,6 @@ export const LessonContextProvider: FC = (props) => {
   };
 
   const saveYmlData = async (data: YmlData) => {
-    console.log({ data });
     if (lessonId) {
       await axios.post(lessonYamlPath, data);
     } else {

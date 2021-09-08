@@ -115,17 +115,6 @@ const Sections: FC<SectionsProps> = ({
         config.check.cancelInt
       );
     },
-    tip: () => {
-      const buttonTitle = config.tip.buttonTitle;
-      setButton(buttonTitle);
-      setSection(
-        buttonTitle,
-        config.tip.cursorIntON,
-        config.tip.cursorIntOFF,
-        config.tip.output,
-        config.tip.cancelInt
-      );
-    },
     protip: () => {
       const buttonTitle = config.protip.buttonTitle;
       setButton(buttonTitle);
@@ -184,7 +173,7 @@ const Sections: FC<SectionsProps> = ({
   };
 
   useHotkeys(
-    `${KEY.activity}, ${KEY.intro}, ${KEY.check}, ${KEY.tip}, ` +
+    `${KEY.activity}, ${KEY.intro}, ${KEY.check}, ` +
       `${KEY.protip}, ${KEY.challenge}, ${KEY.flag}, ${KEY.try}, ${KEY.save}`,
     (event, handler) => {
       event.preventDefault();
@@ -197,9 +186,6 @@ const Sections: FC<SectionsProps> = ({
           break;
         case KEY.check:
           set.check();
-          break;
-        case KEY.tip:
-          set.tip();
           break;
         case KEY.protip:
           set.protip();
@@ -236,9 +222,6 @@ const Sections: FC<SectionsProps> = ({
         break;
       case config.check.buttonTitle:
         set.check();
-        break;
-      case config.tip.buttonTitle:
-        set.tip();
         break;
       case config.protip.buttonTitle:
         set.protip();

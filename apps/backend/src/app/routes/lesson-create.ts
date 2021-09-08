@@ -10,11 +10,6 @@ const lessonCreate = (app: Application) => {
     const data = await createLessonData(req.body, req.user.username);
     const { lessonId, lesson } = data;
     console.debug("New lesson created", { lessonId, lesson });
-    try {
-      await thumbRefresh(baseUrl(req), lessonId, lesson);
-    } catch (e) {
-      console.error(e.message);
-    }
     res.send(data);
   });
 };

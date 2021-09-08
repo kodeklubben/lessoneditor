@@ -26,7 +26,7 @@ const Levels: FC<LevelsProps> = ({ changeHandler, data }) => {
       <Dropdown
         placeholder="Velg Nivå"
         name="level"
-        defaultValue={levelOptions[0].value}
+        //defaultValue={levelOptions[0].value}
         value={data["level"]}
         fluid
         selection

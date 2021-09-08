@@ -93,25 +93,32 @@ const FileContextProvider: FC = (props) => {
   const saveDefaultFileBody = async (lessonId: string, filename: string) => {
     const ymlData = await fetchYmlData();
     const defaultFileBody = createDefaultFileBody(filename, ymlData);
-    await saveFileBody(lessonId, filename, defaultFileBody, true);
+    setSavedFileBody(defaultFileBody);
+    await saveFileBody(lessonId, filename, defaultFileBody, false);
   };
 
   useEffect(() => {
+    let isSubscribed = true;
     async function fetchData() {
       const result = await fetchMdText(lessonId, file);
       const [_, header, body] = result.split(separator);
-      setRawMdFileContent(result);
-      setSavedFileBody(body);
-      setHeaderData(yamlHeaderLoad(header, language));
-      console.log("FileContext done loading...");
-      if (!body || body.trim().length === 0) {
-        await saveDefaultFileBody(lessonId, file);
+      if (isSubscribed) {
+        setRawMdFileContent(result);
+        setSavedFileBody(body);
+        setHeaderData(yamlHeaderLoad(header, language));
+        console.log("FileContext done loading...");
+        if (!body || body.trim().length === 0) {
+          await saveDefaultFileBody(lessonId, file);
+        }
       }
     }
 
     if (lessonId && file) {
       fetchData();
     }
+    return () => {
+      isSubscribed = false;
+    };
   }, [file]);
 
   const saveFileHeader = async (lessonId: string, filename: string, data: HeaderData) => {
