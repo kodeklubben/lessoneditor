@@ -15,7 +15,7 @@ describe("UserContext", function () {
   moxios.stubRequest(paths.USER, {
     status: 200,
     response: {
-      name: "TestName",
+      username: "TestName",
     },
   });
   moxios.stubRequest(paths.LESSON, {
@@ -28,7 +28,7 @@ describe("UserContext", function () {
     lessonId: nanoid(),
     course: "microbit",
     lesson: "one-thing",
-    title: "Hello One Thing",
+    lessonTitle: "Hello One Thing",
   };
 
   moxios.stubRequest(paths.USER_LESSONS, {
@@ -39,7 +39,7 @@ describe("UserContext", function () {
         lessonId: nanoid(),
         course: "macrobit",
         lesson: "another-thing",
-        title: "Hello Another Thing",
+        lessonTitle: "Hello Another Thing",
       },
     ],
   });
@@ -63,7 +63,6 @@ describe("UserContext", function () {
       );
     });
     expect(contextValue.user.username).toBe("TestName");
-    expect(contextValue.getLesson(testLesson.lessonId)).toBe(testLesson);
     expect(contextValue.lessons.length).toBe(2);
     await act(async () => {
       await contextValue.addLesson("nanobit", "third-thing", "Hello Third Thing");
@@ -77,6 +76,5 @@ describe("UserContext", function () {
       await contextValue.removeLesson(testLesson.lessonId);
     });
     expect(contextValue.lessons.length).toBe(2);
-    expect(contextValue.getLesson(testLesson.lessonId)).toBe(undefined);
   });
 });
