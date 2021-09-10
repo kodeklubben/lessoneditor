@@ -7,7 +7,7 @@ import UndoRedo from "./UndoRedo";
 import Hyperlink from "./Hyperlink";
 import Image from "./Image";
 import Video from "./Video";
-import Languages from "./Languages";
+// import Languages from "./Languages";
 import Lists from "./Lists";
 import Sections from "./Sections";
 import CodeButtons from "./CodeButtons";
@@ -140,7 +140,7 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
             />
           </div>
           <div className="settingspanel">
-            <Languages saveEditorText={saveEditorText} setShowSpinner={setShowSpinner} />
+            {/* <Languages saveEditorText={saveEditorText} setShowSpinner={setShowSpinner} /> */}
             <EditorDatamodal
               courseTitle={courseTitle}
               lessonTitle={lessonTitle}

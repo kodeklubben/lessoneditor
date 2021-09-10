@@ -42,7 +42,7 @@ const SubmitButton: FC<SubmitButtonProps> = ({ mdText, setShowSpinner, saveEdito
             disabled={!mdText || mdText.length === 0}
             size="big"
             onClick={onSubmit}
-            icon="arrow right"
+            icon="home"
           />
         }
       />

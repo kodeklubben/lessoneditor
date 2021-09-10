@@ -1,8 +1,10 @@
+import "./filelist.scss";
 import { useLessonContext } from "../../contexts/LessonContext";
 import fetchMdText from "../../api/fetch-md-text";
-import { Button, Container, Icon, Image, Item, Card, Modal } from "semantic-ui-react";
+import { Button, Container, Icon, Image, Item } from "semantic-ui-react";
 import { useState, useEffect } from "react";
-import MDPreview from "../editor/MDPreview";
+import { MdPreviewModal, ImageModal } from "./Modals";
+
 import { filenameParser } from "../../utils/filename-parser";
 import { useParams } from "react-router";
 import { useHistory } from "react-router-dom";
@@ -11,13 +13,15 @@ const FileList = () => {
   const history = useHistory();
   const { lessonId } = useParams<{ lessonId: string }>();
   const { lessonFiles, lessonData } = useLessonContext();
-  const [open, setOpen] = useState<Record<string, boolean>>({});
+
   const [mdTexts, setMdTexts] = useState<Record<string, string>>({});
+
+  const previewUrl = lessonFiles.filter((items) => items.filename === "preview.png")[0].url;
 
   useEffect(() => {
     async function fetchMd() {
       lessonFiles
-        .filter((item) => item.filename.slice(-3) === ".md")
+        .filter((item) => item.filename.split(".").pop()?.toLowerCase() === "md")
         .forEach(async (item) => {
           const file = item.filename.slice(0, item.filename.length - 3);
           const { language } = filenameParser(file);
@@ -29,6 +33,8 @@ const FileList = () => {
     }
     fetchMd();
   }, []);
+
+  const mediaExtensions = ["gif", "png", "jpg", "jpeg", "md"];
 
   const filteredLessonFiles = lessonFiles.filter(
     (items) =>
@@ -42,73 +48,66 @@ const FileList = () => {
     history.push(target);
   };
 
-  const [imageUrl] = lessonFiles.filter((items) => items.filename === "preview.png");
-
   return (
     <>
       <Container style={{ marginTop: "1em" }}>
-        <Card.Group divided>
+        <Item.Group divided>
           {filteredLessonFiles.map((item) => {
             const mdFile = item.filename.slice(0, item.filename.length - 3);
             const { language } = filenameParser(mdFile);
-
             return (
-              <Card key={item.filename}>
-                {item.filename.slice(-3) === ".md" ? (
-                  <Image src={`${imageUrl.url}?${performance.now()}`} />
-                ) : (
-                  ""
-                )}
-                <Card.Content>
-                  <Card.Description>{item.filename}</Card.Description>
-                  <Card.Meta>{`${Math.round(item.size / 1000)} kb`}</Card.Meta>
-                  <div style={{ marginTop: "3em" }} />
-                  <Button.Group>
-                    {item.filename.slice(-3) === ".md" ? (
-                      <>
-                        <Button
-                          onClick={() => {
-                            navigateToEditor(item.filename.slice(0, item.filename.length - 3));
-                          }}
-                          color="green"
-                          icon
-                          labelPosition="left"
-                        >
-                          {" Redigere "}
-                          <Icon name="pencil" />
-                        </Button>
-                        <Modal
-                          onClose={() => setOpen({ [mdFile]: false })}
-                          onOpen={() => setOpen({ [mdFile]: true })}
-                          open={open[mdFile]}
-                          dimmer="inverted"
-                          trigger={
-                            <Button color="black" icon labelPosition="left">
-                              {"Åpne "}
-                              <Icon name="folder open" />
-                            </Button>
-                          }
-                        >
-                          <MDPreview
-                            mdText={mdTexts[language]}
-                            course={lessonData.course}
-                            language={language}
-                          />
-                        </Modal>
-                      </>
-                    ) : (
-                      ""
-                    )}
-                  </Button.Group>
-                  <Button style={{ background: "none" }} icon floated="right">
-                    <Icon name="delete" />
-                    Slett
-                  </Button>
-                </Card.Content>
-              </Card>
+              <Item key={item.filename}>
+                {mediaExtensions.includes(item.filename.split(".").pop()?.toLowerCase() || "")
+                  ? item.filename.split(".").pop()?.toLowerCase() === "md"
+                    ? MdPreviewModal(
+                        language,
+                        lessonData.course,
+                        mdTexts[language],
+                        <Item.Image
+                          className="filelist-modalimage"
+                          size="tiny"
+                          src={`${previewUrl}?${performance.now()}`}
+                        />
+                      )
+                    : ImageModal(
+                        item.url,
+                        <Item.Image className="filelist-modalimage" size="tiny" src={item.url} />
+                      )
+                  : ""}
+
+                <Item.Content verticalAlign="middle">
+                  <Item.Header>{item.filename}</Item.Header>
+                  <Item.Meta>{`${Math.round(item.size / 1000)} kb`}</Item.Meta>
+                  <Item.Extra>
+                    <Button.Group floated="right">
+                      {item.filename.slice(-3) === ".md" ? (
+                        <>
+                          <Button
+                            onClick={() => {
+                              navigateToEditor(item.filename.slice(0, item.filename.length - 3));
+                            }}
+                            color="green"
+                            icon
+                            labelPosition="left"
+                          >
+                            {" Redigere "}
+                            <Icon name="pencil" />
+                          </Button>
+                        </>
+                      ) : (
+                        ""
+                      )}
+                      <Button style={{ background: "none" }} icon floated="right">
+                        <Icon name="delete" />
+                        Slett
+                      </Button>
+                    </Button.Group>
+                  </Item.Extra>
+                </Item.Content>
+              </Item>
             );
           })}
-        </Card.Group>
+        </Item.Group>
       </Container>
     </>
   );

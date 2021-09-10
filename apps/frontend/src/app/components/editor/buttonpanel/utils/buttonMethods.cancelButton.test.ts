@@ -2,8 +2,8 @@ import { buttonAction, cancelButton } from "./buttonMethods";
 import { emphasis, lists, sections } from "../settings/buttonConfig";
 import { SECTION_TEXT } from "../../settingsFiles/languages/editor_NO";
 
-describe("cancelButton", () => {
-  it("should remove bold string caused by buttonpress AKA cancel buttonpress", () => {
+describe("cancelButton - toggle button", () => {
+  it("should remove bold string on buttonpress ", () => {
     const results = buttonAction(
       false,
       "dette er en test",

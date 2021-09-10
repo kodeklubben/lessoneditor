@@ -83,7 +83,9 @@ const EditorDatamodal: FC<EditorDatamodalProps> = ({
         onOpen={() => setOpen(true)}
         open={open}
         size="large"
-        dimmer="inverted"
+        closeIcon={
+          !(!headerData?.title || (!headerData?.author && headerData.authorList.length === 0))
+        }
         className="editor_modal"
       >
         <Modal.Header className="editor_modal">

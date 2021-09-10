@@ -126,22 +126,24 @@ const Editor: FC = () => {
         undoCursorPosition={undoCursorPosition}
         uploadImageRef={uploadImageRef}
       />
-      <div className="textEditorContainer">
-        <MDTextArea
-          editorRef={editorRef}
-          mdText={mdText}
-          buttonValues={buttonValues}
-          listButtonValues={listButtonValues}
-          cursorPositionStart={cursorPositionStart}
-          setCursorPosition={setCursorPosition}
-          setMdText={setMdText}
-          setButtonValues={setButtonValues}
-          setCursor={setCursor}
-          pushUndoValue={pushUndoValue}
-          resetButtons={resetButtons}
-          course={lessonData.course}
-        />
-        <MDPreview mdText={mdText} course={lessonData.course} language={language} />
+      <div className="text-editor-container">
+        <div className="editor-windows">
+          <MDTextArea
+            editorRef={editorRef}
+            mdText={mdText}
+            buttonValues={buttonValues}
+            listButtonValues={listButtonValues}
+            cursorPositionStart={cursorPositionStart}
+            setCursorPosition={setCursorPosition}
+            setMdText={setMdText}
+            setButtonValues={setButtonValues}
+            setCursor={setCursor}
+            pushUndoValue={pushUndoValue}
+            resetButtons={resetButtons}
+            course={lessonData.course}
+          />
+          <MDPreview mdText={mdText} course={lessonData.course} language={language} />
+        </div>
       </div>
     </>
   );

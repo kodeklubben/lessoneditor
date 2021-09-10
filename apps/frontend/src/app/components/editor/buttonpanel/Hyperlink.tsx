@@ -117,9 +117,9 @@ const Hyperlink: FC<HyperlinkProps> = ({
       />
 
       <Modal
-        dimmer="inverted"
         onClose={() => setIsOpen(false)}
         onOpen={() => setIsOpen(true)}
+        closeIcon
         open={isOpen}
         size="small"
         className="hyperlink_modal"

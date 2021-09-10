@@ -21,9 +21,9 @@ const MDPreview: FC<MDPreviewProps> = ({ mdText, course, language }) => {
 
   if (course === "scratch" && parseMD) {
     const lessonContent = renderScratchBlocks(parseMD);
-    return <div className="PreviewArea" dangerouslySetInnerHTML={{ __html: lessonContent }} />;
+    return <div className="preview-area" dangerouslySetInnerHTML={{ __html: lessonContent }} />;
   } else {
-    return <div className="PreviewArea" dangerouslySetInnerHTML={{ __html: parseMD }} />;
+    return <div className="preview-area" dangerouslySetInnerHTML={{ __html: parseMD }} />;
   }
 };
 

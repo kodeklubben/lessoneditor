@@ -1,4 +1,4 @@
-import { Button, Card, Image } from "semantic-ui-react";
+import { Button, Card, Image, Icon } from "semantic-ui-react";
 import { FC } from "react";
 
 interface Lesson {
@@ -57,16 +57,24 @@ const ItemList: FC<ItemListProps> = ({ items, removeLesson, navigateToHome }) =>
               </Card.Content>
 
               <Card.Content extra>
-                <Button onClick={() => navigateToHome(listitem.lessonId)} positive>
+                <Button
+                  icon
+                  labelPosition="left"
+                  onClick={() => navigateToHome(listitem.lessonId)}
+                  positive
+                >
+                  <Icon name="folder open" />
                   Åpne
                 </Button>
                 <Button
-                  color="black"
+                  style={{ background: "none" }}
+                  icon
                   onClick={() => {
                     removeLesson(listitem.lessonId);
                   }}
                 >
-                  Fjerne
+                  <Icon name="delete" />
+                  Slett
                 </Button>
               </Card.Content>
             </Card>

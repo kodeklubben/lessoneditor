@@ -227,7 +227,7 @@ const MDTextArea: FC<MDTextAreaProps> = ({
     <textarea
       autoFocus
       ref={editorRef}
-      className="TextArea"
+      className="text-area"
       value={mdText}
       onChange={handleChange}
       onKeyDown={onTextareaKeyDown}

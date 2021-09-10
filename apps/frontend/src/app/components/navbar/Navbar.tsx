@@ -16,9 +16,20 @@ const Navbar: FC = () => {
 
   return (
     <>
-      <Menu pointing secondary>
-        <Menu.Item header>
-          <Image src={logo} size="small" onClick={navigateToFrontpage} />
+      <Menu
+        style={{
+          borderStyle: "none none solid none",
+          borderWidth: "2px",
+          borderColor: "silver",
+        }}
+        size="small"
+        secondary
+      >
+        <Menu.Item>
+          <div className="navbar_logo" onClick={navigateToFrontpage}>
+            <Image src={logo} size="small" />
+            <p>lessoneditor.kidsakoder.no</p>
+          </div>
         </Menu.Item>
         <Menu.Item position="right">
           <ProfileMenu name={user ? user.name : ""} photo={user ? user.photo : ""} />

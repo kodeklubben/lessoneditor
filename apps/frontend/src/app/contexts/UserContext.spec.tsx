@@ -62,7 +62,7 @@ describe("UserContext", function () {
         </UserContextProvider>
       );
     });
-    expect(contextValue.user.name).toBe("TestName");
+    expect(contextValue.user.username).toBe("TestName");
     expect(contextValue.getLesson(testLesson.lessonId)).toBe(testLesson);
     expect(contextValue.lessons.length).toBe(2);
     await act(async () => {

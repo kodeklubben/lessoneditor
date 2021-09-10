@@ -9,6 +9,8 @@ import oppgaveMal from "../components/editor/settingsFiles/oppgaveMal";
 import { useLessonContext } from "./LessonContext";
 import { filenameParser } from "../utils/filename-parser";
 
+const SEPERATOR = "---\n";
+
 interface FileContextProps {
   headerData: HeaderData;
   saveFileHeader: (lessonId: string, filename: string, data: HeaderData) => Promise<void>;
@@ -76,7 +78,6 @@ const FileContextProvider: FC = (props) => {
     translator: "",
   });
   const [savedFileBody, setSavedFileBody] = useState<string>("");
-  const separator = "---\n";
 
   const saveFileBody = async (
     lessonId: string,
@@ -84,8 +85,8 @@ const FileContextProvider: FC = (props) => {
     body: string,
     regenThumb: boolean
   ) => {
-    const fileHeader = rawMdFileContent.split(separator)[1];
-    const newRawText = ["", fileHeader, body].join(separator);
+    const fileHeader = rawMdFileContent.split(SEPERATOR)[1];
+    const newRawText = ["", fileHeader, body].join(SEPERATOR);
     await saveMdText(lessonId, filename, newRawText, regenThumb);
     setRawMdFileContent(newRawText);
   };
@@ -101,7 +102,7 @@ const FileContextProvider: FC = (props) => {
     let isSubscribed = true;
     async function fetchData() {
       const result = await fetchMdText(lessonId, file);
-      const [_, header, body] = result.split(separator);
+      const [_, header, body] = result.split(SEPERATOR);
       if (isSubscribed) {
         setRawMdFileContent(result);
         setSavedFileBody(body);
@@ -123,9 +124,9 @@ const FileContextProvider: FC = (props) => {
 
   const saveFileHeader = async (lessonId: string, filename: string, data: HeaderData) => {
     console.log(data);
-    const fileBody = rawMdFileContent.split(separator)[2];
+    const fileBody = rawMdFileContent.split(SEPERATOR)[2];
     const header = yamlHeaderDump(data);
-    const newRawText = ["", header, fileBody].join(separator);
+    const newRawText = ["", header, fileBody].join(SEPERATOR);
     await saveMdText(lessonId, filename, newRawText);
     setRawMdFileContent(newRawText);
     // setHeaderData(yamlHeaderLoad(data, language));

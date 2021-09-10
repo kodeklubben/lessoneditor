@@ -80,7 +80,14 @@ const Landingpage = () => {
   return (
     <>
       <Navbar />
-      <div style={{ maxWidth: "1600px" }}>
+      <div
+        style={{
+          maxWidth: "1980px",
+          margin: "auto",
+          padding: "1em",
+          height: "64em",
+        }}
+      >
         <Grid>
           <Grid.Column width={3}>
             <Menu icon="labeled" vertical>

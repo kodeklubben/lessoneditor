@@ -101,9 +101,9 @@ const Video: FC<VideoProps> = ({
       />
 
       <Modal
-        dimmer="inverted"
         onClose={() => clickCancelHandler()}
         onOpen={() => setIsOpen(true)}
+        closeIcon
         open={isOpen}
         size="small"
         className="hyperlink_modal"
