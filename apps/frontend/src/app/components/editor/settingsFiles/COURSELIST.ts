@@ -1,9 +1,7 @@
 // import Axios from "axios";
 // import yaml from "js-yaml";
 
-import { Course } from "@lessoneditor/api-interfaces";
-
-const COURSESLIST: Course[] = [
+const COURSESLIST = [
   { courseTitle: "App Inventor", slug: "appinventor" },
   { courseTitle: "Arduino", slug: "arduino" },
   { courseTitle: "Code Studio", slug: "codestudio" },

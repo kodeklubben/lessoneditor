@@ -10,13 +10,15 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "esnext",
-    "lib": ["es2017", "dom"],
+    "lib": ["es2017", "dom", "ES6"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
       "@lessoneditor/api-interfaces": ["libs/api-interfaces/src/index.ts"],
-      "@lessoneditor/data": ["libs/data/src/index.ts"]
+      "@lessoneditor/lesson": ["libs/lesson/src/index.ts"],
+      "@lessoneditor/session": ["libs/session/src/index.ts"],
+      "@lessoneditor/user": ["libs/user/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

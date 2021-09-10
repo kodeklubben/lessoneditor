@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "commonjs",
+    "outDir": "../../dist/out-tsc",
+    "declaration": true,
+    "types": ["node"],
+    "target": "es6"
+  },
+  "exclude": [
+    "**/*.spec.ts",
+    "../../../domain/src/lib/lesson.dto",
+    "../../../domain/src/lib/lesson.entity",
+    "../../../domain/src/lib/user.entity"
+  ],
+  "include": ["**/*.ts"]
+}

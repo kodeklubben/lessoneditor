@@ -74,27 +74,6 @@
         }
       }
     },
-    "data": {
-      "root": "libs/data",
-      "sourceRoot": "libs/data/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/data/**/*.{ts,tsx,js,jsx}"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/data"],
-          "options": {
-            "jestConfig": "libs/data/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
     "frontend": {
       "root": "apps/frontend",
       "sourceRoot": "apps/frontend/src",
@@ -169,6 +148,27 @@
         }
       }
     },
+    "lesson": {
+      "root": "libs/lesson",
+      "sourceRoot": "libs/lesson/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/lesson/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/lesson"],
+          "options": {
+            "jestConfig": "libs/lesson/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "nestbackend": {
       "root": "apps/nestbackend",
       "sourceRoot": "apps/nestbackend/src",
@@ -214,6 +214,38 @@
           "outputs": ["coverage/apps/nestbackend"],
           "options": {
             "jestConfig": "apps/nestbackend/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "session": {
+      "root": "libs/session",
+      "sourceRoot": "libs/session/src",
+      "projectType": "library",
+      "targets": {
+        "build": {
+          "executor": "@nrwl/node:package",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/libs/session",
+            "tsConfig": "libs/session/tsconfig.lib.json",
+            "packageJson": "libs/session/package.json",
+            "main": "libs/session/src/index.ts",
+            "assets": ["libs/session/*.md"]
+          }
+        },
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/session/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/session"],
+          "options": {
+            "jestConfig": "libs/session/jest.config.js",
             "passWithNoTests": true
           }
         }
@@ -286,6 +318,27 @@
           "outputs": ["coverage/apps/thumbnailer"],
           "options": {
             "jestConfig": "apps/thumbnailer/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "user": {
+      "root": "libs/user",
+      "sourceRoot": "libs/user/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/user/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/user"],
+          "options": {
+            "jestConfig": "libs/user/jest.config.js",
             "passWithNoTests": true
           }
         }

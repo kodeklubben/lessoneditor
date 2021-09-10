@@ -25,16 +25,22 @@
     "backend": {
       "tags": []
     },
-    "data": {
+    "frontend": {
       "tags": []
     },
-    "frontend": {
+    "lesson": {
       "tags": []
     },
     "nestbackend": {
       "tags": []
     },
+    "session": {
+      "tags": []
+    },
     "thumbnailer": {
+      "tags": []
+    },
+    "user": {
       "tags": []
     }
   }

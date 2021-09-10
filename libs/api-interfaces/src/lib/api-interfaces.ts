@@ -21,7 +21,7 @@ export const paths = {
 export interface Lesson
 {
   lessonId: string
-  course: Course
+  course: string
   courseTitle: string
   lesson: string
   lessonTitle?: string
@@ -37,12 +37,5 @@ export interface User
   email: string
   username: string
   photo: string
-
-}
-
-export interface Course
-{
-  courseTitle: string
-  slug: string
 
 }

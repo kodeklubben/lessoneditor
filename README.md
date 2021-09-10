@@ -39,6 +39,13 @@ GITHUB_LESSON_REPO= your lesson_repo name
 BUCKET=lessoneditor
 THUMB_SERVICE_URL= your thumbnailer url. ex: http://localhost:3012
 ´´´
+#### Database
+- install docker
+- create folder for db files, ex Windows: mkdir %userprofile%\data\pg-node-orms
+- start postgres docker container "docker run --name pg-node-orms -p 5432:5432 -e POSTGRES_PASSWORD=testing -e POSTGRES_USER=orm-user -e POSTGRES_DB=lesson-editor -v %userprofile%\data\pg-node-orms:/var/lib/postgresql/data -d postgres"
+
+- to generate migration file from schema changes run ex: "ts-node -P tsconfig.node.json ./node_modules/typeorm/cli.js migration:generate -n CreateModels"
+- to run the migration run ex: "ts-node -P tsconfig.node.json ./node_modules/typeorm/cli.js migration:run"
 
 ## Project structure
 

@@ -1,4 +1,4 @@
-import {paths} from "@lessoneditor/api-interfaces";
+import {paths, User} from "@lessoneditor/api-interfaces";
 import {Application} from "express";
 
 

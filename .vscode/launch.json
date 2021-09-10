@@ -4,12 +4,33 @@
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
+    // {
+    //   "type": "pwa-chrome",
+    //   "request": "launch",
+    //   "name": "Launch Chrome against localhost",
+    //   "url": "http://localhost:3000",
+    //   "webRoot": "${workspaceFolder}"
+    // },
+    // {
+    //   "name": "Attach to Process",
+    //   "type": "node",
+    //   "request": "attach",
+    //   "port": 9229,
+    //   "outFiles": ["${workspaceFolder}/dist/apps/nestbackend/**"]
+    // },
     {
-      "type": "pwa-chrome",
+      "name": "Debg nestbackend",
+      "type": "node",
       "request": "launch",
-      "name": "Launch Chrome against localhost",
-      "url": "http://localhost:3000",
-      "webRoot": "${workspaceFolder}"
-    }
+      "args": ["${workspaceRoot}/apps/nestbackend/src/main.ts"],
+      "runtimeArgs": ["--require", "ts-node/register"],
+      "sourceMaps": true,
+      "cwd": "${workspaceRoot}",
+      "protocol": "inspector",
+      "env": {
+        "TS_NODE_PROJECT": "${workspaceRoot}/apps/nestbackend/tsconfig.app.json", // Specify the tsconfig to use. See content of it below.
+        "IS_DEBUG_MODE": "true" 
+    },
+  }
   ]
 }

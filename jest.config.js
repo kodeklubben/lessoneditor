@@ -4,6 +4,9 @@ module.exports = {
     "<rootDir>/apps/backend",
     "<rootDir>/apps/thumbnailer",
     "<rootDir>/apps/nestbackend",
-    "<rootDir>/libs/data",
+    "<rootDir>/libs/user",
+    "<rootDir>/libs/lessn",
+    "<rootDir>/libs/lesson",
+    "<rootDir>/libs/session",
   ],
 };

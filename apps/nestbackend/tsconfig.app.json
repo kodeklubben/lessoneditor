@@ -8,5 +8,5 @@
     "target": "es2015"
   },
   "exclude": ["**/*.spec.ts"],
-  "include": ["**/*.ts"]
+  "include": ["**/*.ts", "../../libs/lesson/src/lib/lesson.dto.ts", "../../libs/lesson/src/lib/lesson.entity.ts", "../../libs/user/src/lib/user.entity.ts"]
 }

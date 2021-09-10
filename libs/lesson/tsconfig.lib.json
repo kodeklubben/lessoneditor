@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "commonjs",
+    "outDir": "../../dist/out-tsc",
+    "declaration": true,
+    "types": ["node"],
+    "target": "es6"
+  },
+  "exclude": ["**/*.spec.ts"],
+  "include": ["**/*.ts", "src/lib/lesson.controller.spec.ts", "../../apps/nestbackend/src/models/lesson.dto.ts", "src/lib/lesson.entity.ts"]
+}
