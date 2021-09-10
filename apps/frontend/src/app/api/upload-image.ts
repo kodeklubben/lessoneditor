@@ -6,8 +6,8 @@ const uploadImage = async (lessonId: string, file: any) => {
   formData.append("file", file);
   const config = {
     headers: {
-      "content-type": "multipart/form-data"
-    }
+      "content-type": "multipart/form-data",
+    },
   };
   const uploadUrl = resolveUrlTemplate(paths.LESSON_UPLOADS, { lessonId });
   const result = await axios.post(uploadUrl, formData, config);

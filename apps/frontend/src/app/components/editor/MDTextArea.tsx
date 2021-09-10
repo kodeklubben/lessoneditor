@@ -1,4 +1,4 @@
-import { FC, Ref } from "react";
+import { Dispatch, SetStateAction, ChangeEvent, MouseEvent, KeyboardEvent, FC, Ref } from "react";
 
 let orderedListIndex = 2;
 const tabSize = 2;
@@ -14,8 +14,8 @@ interface MDTextAreaProps {
   };
   cursorPositionStart: number;
   setCursorPosition: (positionStart: number, positionEnd: number) => void;
-  setMdText: React.Dispatch<React.SetStateAction<string>>;
-  setButtonValues: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
+  setMdText: Dispatch<SetStateAction<string>>;
+  setButtonValues: Dispatch<SetStateAction<Record<string, boolean>>>;
   setCursor: (pos1: number, pos2: number) => void;
   pushUndoValue: (mdText: string, cursorPositionStart: number) => void;
   resetButtons: () => void;
@@ -36,20 +36,21 @@ const MDTextArea: FC<MDTextAreaProps> = ({
   resetButtons,
   course,
 }) => {
-  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setCursor(event.target.selectionStart, event.target.selectionEnd);
     const inputText = event.target.value;
+
     if (inputText[cursorPositionStart] === " " || inputText[cursorPositionStart] === "\n") {
       pushUndoValue(inputText, cursorPositionStart);
     }
     setMdText(inputText);
   };
 
-  const onTextareaKeyUp = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    setCursor(event.location, event.location);
+  const onTextareaKeyUp = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+    //setCursor(event.location, event.location);
   };
 
-  const onTextareaSelect = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const onTextareaSelect = (event: ChangeEvent<HTMLTextAreaElement>) => {
     let start = event.target.selectionStart;
     let end = event.target.selectionEnd;
 
@@ -123,12 +124,12 @@ const MDTextArea: FC<MDTextAreaProps> = ({
     }
   };
 
-  const onTextareaMouseDown = (event: React.MouseEvent<HTMLTextAreaElement>) => {
+  const onTextareaMouseDown = (event: MouseEvent<HTMLTextAreaElement>) => {
     resetButtons();
   };
 
-  const onTextareaKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    setCursor(event.location, event.location);
+  const onTextareaKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
+    //setCursor(event.location, event.location);
     if (event.key === "Enter") {
       if (buttonValues[listButtonValues["bTitle"]]) {
         event.preventDefault();
@@ -226,7 +227,7 @@ const MDTextArea: FC<MDTextAreaProps> = ({
     <textarea
       autoFocus
       ref={editorRef}
-      className="TextArea"
+      className="text-area"
       value={mdText}
       onChange={handleChange}
       onKeyDown={onTextareaKeyDown}

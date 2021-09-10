@@ -1,10 +1,14 @@
-import { Loader, Modal } from "semantic-ui-react";
+import { Loader, Dimmer } from "semantic-ui-react";
+
+const languages = {
+  nb: "Vennligst vent",
+};
 
 const ShowSpinner = () => {
   return (
-    <Modal defaultOpen dimmer="inverted">
-      <Loader />
-    </Modal>
+    <Dimmer active inverted page>
+      <Loader>{languages.nb}</Loader>
+    </Dimmer>
   );
 };
 

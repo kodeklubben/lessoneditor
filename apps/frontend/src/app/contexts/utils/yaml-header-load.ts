@@ -15,8 +15,8 @@ function yamlHeaderLoad(yamlHeader: string, language: string): HeaderData {
     authorList,
     translatorList,
     language,
-    author: authorList.length > 0,
-    translator: translatorList.length > 0
+    author,
+    translator,
   };
 }
 

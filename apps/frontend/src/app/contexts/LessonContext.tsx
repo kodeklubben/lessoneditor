@@ -1,71 +1,138 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { Dispatch, FC, SetStateAction, useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import axios from "axios";
 import { getLessonPaths } from "./utils/get-lesson-paths";
 
-interface LessonContextProps {}
+const emptyLessonData = {
+  course: "",
+  courseTitle: "",
+  created: "",
+  createdBy: "",
+  lesson: "",
+  lessonId: "",
+  lessonTitle: "",
+  updated: "",
+};
 
-const LessonContext = React.createContext<Partial<LessonContextProps>>({});
+const emptyYmlData = { level: 0, license: "", tags: { grade: [], subject: [], topic: [] } };
 
-export const LessonContextProvider = (props: any) => {
-  const { lessonId } = useParams<any>();
-  const defaultYml = {
-    level: 1,
-    license: "CC BY-SA 4.0",
-    tags: { topic: [], subject: [], grade: [] },
-  };
+interface Subtag {
+  grade: string[];
+  subject: string[];
+  topic: string[];
+}
+
+interface YmlData {
+  level: number;
+  license: string;
+  tags: Subtag;
+}
+
+interface LessonFile {
+  created: string;
+  filename: string;
+  size: number;
+  updated: string;
+  url: string;
+}
+
+interface LessonData {
+  course: string;
+  courseTitle: string;
+  created: string;
+  createdBy: string;
+  lesson: string;
+  lessonId: string;
+  lessonTitle: string;
+  updated: string;
+}
+
+interface LessonContextProps {
+  lessonData: LessonData;
+  lessonFiles: LessonFile[];
+  ymlData: YmlData;
+  setYmlData: Dispatch<SetStateAction<YmlData>>;
+  setLessonData: Dispatch<SetStateAction<LessonData>>;
+  saveLessonData: (data: LessonData) => Promise<void>;
+  saveYmlData: (data: YmlData) => Promise<void>;
+  fetchYmlData: () => Promise<YmlData>;
+}
+
+const LessonContext = React.createContext<LessonContextProps>({
+  lessonData: emptyLessonData,
+  lessonFiles: [],
+  ymlData: emptyYmlData,
+  setYmlData: () => {
+    return;
+  },
+  setLessonData: () => {
+    return;
+  },
+  saveLessonData: async () => {
+    return;
+  },
+  saveYmlData: async () => {
+    return;
+  },
+  fetchYmlData: async () => {
+    return emptyYmlData;
+  },
+});
+
+export const LessonContextProvider: FC = (props) => {
+  const { lessonId } = useParams<{ lessonId: string }>();
+
   const { lessonDataPath, lessonYamlPath, lessonFilesPath } = getLessonPaths(lessonId);
-  const [lessonData, setLessonData] = useState({
-    files: {},
-    yml: defaultYml,
-  });
+
+  const [lessonData, setLessonData] = useState<LessonData>(emptyLessonData);
+  const [lessonFiles, setLessonFiles] = useState<LessonFile[]>([]);
+  const [ymlData, setYmlData] = useState<YmlData>(emptyYmlData);
 
   useEffect(() => {
     async function fetchLessonData() {
       const lessonDataRes = await axios.get(lessonDataPath);
-      const lessonListRes = await axios.get(lessonFilesPath);
+      const lessonFilelistRes = await axios.get(lessonFilesPath);
       const lessonYMLDataRes = await axios.get(lessonYamlPath);
-      const rootDataObj = lessonDataRes.data;
-      rootDataObj.files = lessonListRes.data;
-      rootDataObj.yml =
-        JSON.stringify(lessonYMLDataRes.data) !== JSON.stringify({})
-          ? lessonYMLDataRes.data
-          : defaultYml;
-      setLessonData(rootDataObj);
+
+      setLessonData(lessonDataRes.data);
+      setLessonFiles(lessonFilelistRes.data);
+      setYmlData(lessonYMLDataRes.data);
     }
+    if (lessonId) {
+      fetchLessonData();
+    }
+  }, []);
 
-    if (lessonId) fetchLessonData().then();
-  }, [lessonId]);
+  const saveLessonData = async (data: LessonData) => {
+    if (lessonId) {
+      await axios.post(lessonDataPath, data);
+    } else {
+      console.error("No lessonId set in context aborting");
+    }
+  };
 
-  const context = {
+  const saveYmlData = async (data: YmlData) => {
+    if (lessonId) {
+      await axios.post(lessonYamlPath, data);
+    } else {
+      console.error("No lessonId set in context aborting");
+    }
+  };
+
+  const fetchYmlData = async () => {
+    const lessonYMLDataRes = await axios.get(lessonYamlPath);
+    return lessonYMLDataRes.data;
+  };
+
+  const context: LessonContextProps = {
     lessonData,
+    lessonFiles,
+    ymlData,
+    setYmlData,
     setLessonData,
-    saveLesson: async (data: any) => {
-      if (lessonId) {
-        await axios.post(lessonDataPath, data);
-        data.files = lessonData.files;
-        data.yml = lessonData.yml;
-        setLessonData(data);
-      } else {
-        console.error("No lessonId set in context aborting");
-      }
-    },
-    saveYml: async (data: any) => {
-      if (lessonId) {
-        await axios.post(lessonYamlPath, data);
-        lessonData.yml = data;
-      } else {
-        console.error("No lessonId set in context aborting");
-      }
-    },
-
-    /*
-    trenger getyYmlData()-metoden til å hente oppdatert ymlData når FileContext skal generere lærerveiledning.
-    */
-    getYmlData: async () => {
-      const lessonYMLDataRes = await axios.get(lessonYamlPath);
-      return lessonYMLDataRes.data;
-    },
+    saveLessonData,
+    saveYmlData,
+    fetchYmlData,
   };
   return (
     <>
@@ -73,4 +140,4 @@ export const LessonContextProvider = (props: any) => {
     </>
   );
 };
-export const useLessonContext = (): Partial<any> => useContext(LessonContext);
+export const useLessonContext = () => useContext(LessonContext);

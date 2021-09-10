@@ -1,4 +1,4 @@
-import ButtonComponent from "./MicroScratchButtonComponent";
+import MicroScratchButtonComponent from "./MicroScratchButtonComponent";
 
 import { useHotkeys } from "react-hotkeys-hook";
 
@@ -6,49 +6,53 @@ import { buttonAction as codeAction, cancelButton } from "./utils/buttonMethods"
 
 import {
   KEY_COMBINATIONS_MICROBIT as KEY,
-  microbitbuttons as config
+  microbitbuttons as config,
 } from "../settingsFiles/microbitAndScratchButtonConfig";
-import { FC } from "react";
+import { FC, RefObject } from "react";
 
-let results;
-let cancelResults;
-let buttonTitle: string;
+interface MicrobitButtonsProps {
+  editorRef: RefObject<HTMLTextAreaElement>;
+  cursorPositionStart: number;
+  cursorPositionEnd: number;
+  mdText: string;
+  buttonValues: Record<string, boolean>;
+  setMdText: React.Dispatch<React.SetStateAction<string>>;
+  setCursorPosition: (positionStart: number, positionEnd: number) => void;
+  setCursor: (pos1: number, pos2: number) => void;
+  setButtonValues: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
+}
 
-const MicrobitButtons: FC<any> = ({
-                                    editorRef,
-                                    cursorPositionStart,
-                                    cursorPositionEnd,
-                                    mdText,
-                                    buttonValues,
-                                    setMdText,
-                                    setCursorPosition,
-                                    setCursor,
-                                    setButtonValues
-                                  }) => {
-  const setChanges = (
-    mdText: any,
-    cursorPositionStart: any,
-    cursorPositionEnd: any
-  ) => {
+const MicrobitButtons: FC<MicrobitButtonsProps> = ({
+  editorRef,
+  cursorPositionStart,
+  cursorPositionEnd,
+  mdText,
+  buttonValues,
+  setMdText,
+  setCursorPosition,
+  setCursor,
+  setButtonValues,
+}) => {
+  const setChanges = (mdText: string, cursorPositionStart: number, cursorPositionEnd: number) => {
     setCursor(cursorPositionStart, cursorPositionEnd);
     setCursorPosition(cursorPositionStart, cursorPositionEnd);
     setMdText(mdText);
   };
 
   const setButton = (value: string) => {
-    setButtonValues((prevButtonValues: any) => ({
+    setButtonValues((prevButtonValues) => ({
       ...prevButtonValues,
-      [value]: !buttonValues[value]
+      [value]: !buttonValues[value],
     }));
   };
 
   const setCode = (
-    butonTitle: string,
+    buttonTitle: string,
     cursorIntON: number,
     cursorIntOFF: number,
     output: string
   ) => {
-    cancelResults = cancelButton(
+    const cancelResults = cancelButton(
       buttonValues[buttonTitle],
       mdText,
       cursorPositionStart,
@@ -64,7 +68,7 @@ const MicrobitButtons: FC<any> = ({
       );
       return;
     }
-    results = codeAction(
+    const results = codeAction(
       buttonValues[buttonTitle],
       mdText,
       cursorPositionStart,
@@ -74,16 +78,12 @@ const MicrobitButtons: FC<any> = ({
       output
     );
 
-    setChanges(
-      results?.mdText,
-      results?.cursorPositionStart,
-      results?.cursorPositionEnd
-    );
+    setChanges(results.mdText, results.cursorPositionStart, results.cursorPositionEnd);
   };
 
   const set = {
     basic: () => {
-      buttonTitle = config.basic.buttonTitle;
+      const buttonTitle = config.basic.buttonTitle;
       setButton(buttonTitle);
       setCode(
         buttonTitle,
@@ -93,7 +93,7 @@ const MicrobitButtons: FC<any> = ({
       );
     },
     input: () => {
-      buttonTitle = config.input.buttonTitle;
+      const buttonTitle = config.input.buttonTitle;
       setButton(buttonTitle);
       setCode(
         buttonTitle,
@@ -103,7 +103,7 @@ const MicrobitButtons: FC<any> = ({
       );
     },
     music: () => {
-      buttonTitle = config.music.buttonTitle;
+      const buttonTitle = config.music.buttonTitle;
       setButton(buttonTitle);
       setCode(
         buttonTitle,
@@ -113,17 +113,12 @@ const MicrobitButtons: FC<any> = ({
       );
     },
     led: () => {
-      buttonTitle = config.led.buttonTitle;
+      const buttonTitle = config.led.buttonTitle;
       setButton(buttonTitle);
-      setCode(
-        buttonTitle,
-        config.led.cursorIntON,
-        config.led.cursorIntOFF,
-        config.led.output
-      );
+      setCode(buttonTitle, config.led.cursorIntON, config.led.cursorIntOFF, config.led.output);
     },
     radio: () => {
-      buttonTitle = config.radio.buttonTitle;
+      const buttonTitle = config.radio.buttonTitle;
       setButton(buttonTitle);
       setCode(
         buttonTitle,
@@ -133,7 +128,7 @@ const MicrobitButtons: FC<any> = ({
       );
     },
     loops: () => {
-      buttonTitle = config.loops.buttonTitle;
+      const buttonTitle = config.loops.buttonTitle;
       setButton(buttonTitle);
       setCode(
         buttonTitle,
@@ -143,7 +138,7 @@ const MicrobitButtons: FC<any> = ({
       );
     },
     logic: () => {
-      buttonTitle = config.logic.buttonTitle;
+      const buttonTitle = config.logic.buttonTitle;
       setButton(buttonTitle);
       setCode(
         buttonTitle,
@@ -153,7 +148,7 @@ const MicrobitButtons: FC<any> = ({
       );
     },
     variables: () => {
-      buttonTitle = config.variables.buttonTitle;
+      const buttonTitle = config.variables.buttonTitle;
       setButton(buttonTitle);
       setCode(
         buttonTitle,
@@ -163,17 +158,12 @@ const MicrobitButtons: FC<any> = ({
       );
     },
     math: () => {
-      buttonTitle = config.math.buttonTitle;
+      const buttonTitle = config.math.buttonTitle;
       setButton(buttonTitle);
-      setCode(
-        buttonTitle,
-        config.math.cursorIntON,
-        config.math.cursorIntOFF,
-        config.math.output
-      );
+      setCode(buttonTitle, config.math.cursorIntON, config.math.cursorIntOFF, config.math.output);
     },
     functions: () => {
-      buttonTitle = config.functions.buttonTitle;
+      const buttonTitle = config.functions.buttonTitle;
       setButton(buttonTitle);
       setCode(
         buttonTitle,
@@ -183,7 +173,7 @@ const MicrobitButtons: FC<any> = ({
       );
     },
     arrays: () => {
-      buttonTitle = config.arrays.buttonTitle;
+      const buttonTitle = config.arrays.buttonTitle;
       setButton(buttonTitle);
       setCode(
         buttonTitle,
@@ -193,27 +183,17 @@ const MicrobitButtons: FC<any> = ({
       );
     },
     text: () => {
-      buttonTitle = config.text.buttonTitle;
+      const buttonTitle = config.text.buttonTitle;
       setButton(buttonTitle);
-      setCode(
-        buttonTitle,
-        config.text.cursorIntON,
-        config.text.cursorIntOFF,
-        config.text.output
-      );
+      setCode(buttonTitle, config.text.cursorIntON, config.text.cursorIntOFF, config.text.output);
     },
     game: () => {
-      buttonTitle = config.game.buttonTitle;
+      const buttonTitle = config.game.buttonTitle;
       setButton(buttonTitle);
-      setCode(
-        buttonTitle,
-        config.game.cursorIntON,
-        config.game.cursorIntOFF,
-        config.game.output
-      );
+      setCode(buttonTitle, config.game.cursorIntON, config.game.cursorIntOFF, config.game.output);
     },
     images: () => {
-      buttonTitle = config.images.buttonTitle;
+      const buttonTitle = config.images.buttonTitle;
       setButton(buttonTitle);
       setCode(
         buttonTitle,
@@ -223,17 +203,12 @@ const MicrobitButtons: FC<any> = ({
       );
     },
     pins: () => {
-      buttonTitle = config.pins.buttonTitle;
+      const buttonTitle = config.pins.buttonTitle;
       setButton(buttonTitle);
-      setCode(
-        buttonTitle,
-        config.pins.cursorIntON,
-        config.pins.cursorIntOFF,
-        config.pins.output
-      );
+      setCode(buttonTitle, config.pins.cursorIntON, config.pins.cursorIntOFF, config.pins.output);
     },
     serial: () => {
-      buttonTitle = config.serial.buttonTitle;
+      const buttonTitle = config.serial.buttonTitle;
       setButton(buttonTitle);
       setCode(
         buttonTitle,
@@ -243,7 +218,7 @@ const MicrobitButtons: FC<any> = ({
       );
     },
     control: () => {
-      buttonTitle = config.control.buttonTitle;
+      const buttonTitle = config.control.buttonTitle;
       setButton(buttonTitle);
       setCode(
         buttonTitle,
@@ -251,14 +226,14 @@ const MicrobitButtons: FC<any> = ({
         config.control.cursorIntOFF,
         config.control.output
       );
-    }
+    },
   };
 
   useHotkeys(
     `${KEY.basic}, ${KEY.input}, ${KEY.music}, ${KEY.led}, ` +
-    `${KEY.radio}, ${KEY.loops}, ${KEY.logic}, ${KEY.variables}, ` +
-    `${KEY.math}, ${KEY.functions}, ${KEY.arrays}, ${KEY.text}, ` +
-    `${KEY.game}, ${KEY.images}, ${KEY.pins}, ${KEY.serial}, ${KEY.control}`,
+      `${KEY.radio}, ${KEY.loops}, ${KEY.logic}, ${KEY.variables}, ` +
+      `${KEY.math}, ${KEY.functions}, ${KEY.arrays}, ${KEY.text}, ` +
+      `${KEY.game}, ${KEY.images}, ${KEY.pins}, ${KEY.serial}, ${KEY.control}`,
     (event, handler) => {
       event.preventDefault();
       switch (handler.key) {
@@ -322,12 +297,12 @@ const MicrobitButtons: FC<any> = ({
     [setButton, setCode]
   );
 
-  const handleButtonClick = (button: string | number) => {
-    editorRef.current.focus();
-    setButtonValues((prevState: any) => ({
+  const handleButtonClick = (button: string) => {
+    editorRef.current ? editorRef.current.focus() : "";
+
+    setButtonValues((prevState) => ({
       ...prevState,
-      // @ts-ignore
-      [button]: !button[button]
+      [button]: !prevState[button],
     }));
     switch (button) {
       case config.basic.buttonTitle:
@@ -388,7 +363,7 @@ const MicrobitButtons: FC<any> = ({
   return (
     <>
       {Object.entries(config).map((element, index) => (
-        <ButtonComponent
+        <MicroScratchButtonComponent
           key={"element" + index}
           buttonValues={buttonValues}
           title={element[1].title}

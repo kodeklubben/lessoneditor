@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { FC, useRef, useState, useEffect } from "react";
 import "./editor.scss";
 import ButtonPanel from "./buttonpanel/ButtonPanel";
 import ImageUpload from "./ImageUpload";
@@ -11,22 +11,24 @@ import { useLessonContext } from "../../contexts/LessonContext";
 import Navbar from "../navbar/Navbar";
 import { filenameParser } from "../../utils/filename-parser";
 
-const Editor: React.FC = () => {
+const Editor: FC = () => {
   const { lessonId, file } = useParams<{ lessonId: string; file: string }>();
-
   const { lessonData } = useLessonContext();
   const { saveFileBody, savedFileBody } = useFileContext();
-  const [mdText, setMdText] = useState("");
-  const [showSpinner, setShowSpinner] = useState(true);
-  const [buttonValues, setButtonValues] = useState({});
-  const [cursorPositionStart, setCursorPositionStart] = useState(0);
-  const [cursorPositionEnd, setCursorPositionEnd] = useState(0);
+  const [mdText, setMdText] = useState<string>("");
+  const [showSpinner, setShowSpinner] = useState<boolean>(true);
+  const [buttonValues, setButtonValues] = useState<Record<string, boolean>>({});
+  const [cursorPositionStart, setCursorPositionStart] = useState<number>(0);
+  const [cursorPositionEnd, setCursorPositionEnd] = useState<number>(0);
   const [undo, setUndo] = useState<string[]>([]);
   const [redo, setRedo] = useState<string[]>([]);
   const [undoCursorPosition, setUndoCursorPosition] = useState<number[]>([]);
   const [redoCursorPosition, setRedoCursorPosition] = useState<number[]>([]);
-  const [renderContent, setRenderContent] = useState(false);
-  const [listButtonValues, setListButtonValues] = useState({
+  const [listButtonValues, setListButtonValues] = useState<{
+    bTitle: string;
+    output: string;
+    cursorInt: number;
+  }>({
     bTitle: "",
     output: "",
     cursorInt: 0,
@@ -36,6 +38,13 @@ const Editor: React.FC = () => {
   const uploadImageRef = useRef<HTMLInputElement>(null);
 
   const { language } = filenameParser(file);
+
+  useEffect(() => {
+    if (savedFileBody) {
+      setMdText(savedFileBody);
+      setShowSpinner(false);
+    }
+  }, [savedFileBody]);
 
   const pushUndoValue = (mdText: string, cursorPositionStart: number) => {
     if (undo[undo.length - 1] !== mdText) {
@@ -61,32 +70,22 @@ const Editor: React.FC = () => {
   };
 
   /*
-   * Av en eller annen grunn må denne funksjonen være async med awaitfor å fungere.
+   * Av en eller annen grunn må denne funksjonen være async med await for å fungere.
    */
   const setCursorPosition = async (positionStart: number, positionEnd: number) => {
     if (!editorRef.current) {
       return;
     }
-    editorRef.current.selectionStart = await positionStart;
-    editorRef.current.selectionEnd = await positionEnd;
+    editorRef.current.setSelectionRange(await positionStart, await positionEnd);
   };
 
   const resetButtons = () => {
     setButtonValues({});
   };
 
-  /**
-   * Gjør litt state greier her:
-   */
-
-  if (showSpinner && savedFileBody && mdText === "") {
-    setMdText(savedFileBody);
-    setShowSpinner(false);
-  }
-
-  const saveEditorText = async () => {
+  const saveEditorText = async (regenThumb: boolean) => {
     if (saveFileBody) {
-      await saveFileBody(lessonId, file, mdText);
+      await saveFileBody(lessonId, file, mdText, regenThumb);
     }
   };
 
@@ -108,14 +107,13 @@ const Editor: React.FC = () => {
         buttonValues={buttonValues}
         course={lessonData.course}
         courseTitle={lessonData.courseTitle}
-        cursorPositionEnd={cursorPositionEnd}
         cursorPositionStart={cursorPositionStart}
+        cursorPositionEnd={cursorPositionEnd}
         editorRef={editorRef}
         lessonTitle={lessonData.lessonTitle}
         mdText={mdText}
         pushRedoValue={pushRedoValue}
         pushUndoValue={pushUndoValue}
-        redo={redo}
         redoCursorPosition={redoCursorPosition}
         saveEditorText={saveEditorText}
         setButtonValues={setButtonValues}
@@ -125,32 +123,27 @@ const Editor: React.FC = () => {
         setMdText={setMdText}
         setRedoCursorPosition={setRedoCursorPosition}
         setUndoCursorPosition={setUndoCursorPosition}
-        setRenderContent={setRenderContent}
-        undo={undo}
         undoCursorPosition={undoCursorPosition}
         uploadImageRef={uploadImageRef}
       />
-      <div className="textEditorContainer">
-        <MDTextArea
-          editorRef={editorRef}
-          mdText={mdText}
-          buttonValues={buttonValues}
-          listButtonValues={listButtonValues}
-          cursorPositionStart={cursorPositionStart}
-          setCursorPosition={setCursorPosition}
-          setMdText={setMdText}
-          setButtonValues={setButtonValues}
-          setCursor={setCursor}
-          pushUndoValue={pushUndoValue}
-          resetButtons={resetButtons}
-          course={lessonData.course}
-        />
-        <MDPreview
-          mdText={mdText}
-          course={lessonData.course}
-          language={language}
-          renderContent={renderContent}
-        />
+      <div className="text-editor-container">
+        <div className="editor-windows">
+          <MDTextArea
+            editorRef={editorRef}
+            mdText={mdText}
+            buttonValues={buttonValues}
+            listButtonValues={listButtonValues}
+            cursorPositionStart={cursorPositionStart}
+            setCursorPosition={setCursorPosition}
+            setMdText={setMdText}
+            setButtonValues={setButtonValues}
+            setCursor={setCursor}
+            pushUndoValue={pushUndoValue}
+            resetButtons={resetButtons}
+            course={lessonData.course}
+          />
+          <MDPreview mdText={mdText} course={lessonData.course} language={language} />
+        </div>
       </div>
     </>
   );

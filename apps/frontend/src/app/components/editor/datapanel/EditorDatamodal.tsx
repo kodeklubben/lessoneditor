@@ -1,5 +1,5 @@
 import "./editordatamodal.scss";
-import { useState } from "react";
+import { Dispatch, SetStateAction, SyntheticEvent, useState, FC } from "react";
 import { useHistory, useParams } from "react-router";
 import { Button, Header, Input, Modal, Popup } from "semantic-ui-react";
 import MultiInput from "./MultiInput";
@@ -7,19 +7,26 @@ import { FORM_TEXT } from "./settings/landingpage_NO";
 import { useFileContext } from "../../../contexts/FileContext";
 import { filenameParser } from "../../../utils/filename-parser";
 
-// @ts-ignore
-const EditorDatamodal = ({ courseTitle, lessonTitle, setShowSpinner }) => {
+interface EditorDatamodalProps {
+  courseTitle: string;
+  lessonTitle: string;
+  setShowSpinner: Dispatch<SetStateAction<boolean>>;
+}
+
+const EditorDatamodal: FC<EditorDatamodalProps> = ({
+  courseTitle,
+  lessonTitle,
+  setShowSpinner,
+}) => {
   const history = useHistory();
   const { lessonId, file } = useParams<any>();
   const { headerData, saveFileHeader, setHeaderData } = useFileContext();
   const [open, setOpen] = useState<boolean>(false);
 
-
   const { language, languageName } = filenameParser(file);
 
-
-  const changeHandler = (event: { target: { name: any; value: any; }; }) => {
-    const { name, value } = event.target;
+  const changeHandler = (event: SyntheticEvent, data: Record<string, string>) => {
+    const { name, value } = data;
     if (setHeaderData) {
       setHeaderData((prevState) => ({ ...prevState, [name]: value }));
       if (headerData?.author) {
@@ -28,18 +35,6 @@ const EditorDatamodal = ({ courseTitle, lessonTitle, setShowSpinner }) => {
       if (headerData?.title) {
         setHeaderData((prevState) => ({ ...prevState, err: "" }));
       }
-    }
-  };
-
-  const multiInputHandler = (
-    object: { [s: string]: unknown } | ArrayLike<unknown>,
-    name: any
-  ) => {
-    const key = Object.keys(object)[0];
-    const value = Object.values(object)[0];
-    if (setHeaderData) {
-      setHeaderData((prevState) => ({ ...prevState, [key]: value }));
-      setHeaderData((prevState) => ({ ...prevState, [name]: "" }));
     }
   };
 
@@ -82,28 +77,26 @@ const EditorDatamodal = ({ courseTitle, lessonTitle, setShowSpinner }) => {
       />
       <Modal
         closeOnDimmerClick={
-          !(!headerData?.title ||
-            (!headerData?.author && headerData.authorList.length === 0))
+          !(!headerData?.title || (!headerData?.author && headerData.authorList.length === 0))
         }
         onClose={() => setOpen(false)}
         onOpen={() => setOpen(true)}
         open={open}
         size="large"
-        dimmer="inverted"
+        closeIcon={
+          !(!headerData?.title || (!headerData?.author && headerData.authorList.length === 0))
+        }
         className="editor_modal"
       >
         <Modal.Header className="editor_modal">
           <Header as="h1">
-            <span
-              style={{ color: "grey", marginRight: "1ch" }}
-            >{`Prosjekttittel: `}</span>
+            <span style={{ color: "grey", marginRight: "1ch" }}>{`Prosjekttittel: `}</span>
             {lessonTitle}
             <Header.Subheader>{`Kurs: ${courseTitle}`}</Header.Subheader>
           </Header>
         </Modal.Header>
         <Modal.Content className="editor_modal">
           <Header as="h3" className="formLabel">
-            { /* @ts-ignore */}
             {`${FORM_TEXT.TITLE.heading} på ${languageName}`}
             <span className="labelTextSpan">(obligatorisk)</span>
           </Header>
@@ -129,9 +122,10 @@ const EditorDatamodal = ({ courseTitle, lessonTitle, setShowSpinner }) => {
         <Modal.Content className="editor_modal">
           <MultiInput
             changeHandler={changeHandler}
-            inputArray={headerData?.authorList}
-            inputValue={headerData?.author}
-            multiInputHandler={multiInputHandler}
+            //@ts-ignore
+            inputArray={headerData!.authorList}
+            //@ts-ignore
+            inputValue={headerData.author}
             name="author"
             placeholder={FORM_TEXT.AUTHOR.placeholder}
             required="(obligatorisk)"
@@ -148,11 +142,13 @@ const EditorDatamodal = ({ courseTitle, lessonTitle, setShowSpinner }) => {
         <Modal.Content className="editor_modal">
           <MultiInput
             changeHandler={changeHandler}
+            //@ts-ignore
             inputArray={headerData?.translatorList}
+            //@ts-ignore
             inputValue={headerData?.translator}
-            multiInputHandler={multiInputHandler}
             name="translator"
             placeholder={FORM_TEXT.TRANSLATOR.placeholder}
+            required=""
             title={FORM_TEXT.TRANSLATOR.heading}
           />
         </Modal.Content>
@@ -160,12 +156,10 @@ const EditorDatamodal = ({ courseTitle, lessonTitle, setShowSpinner }) => {
         <Modal.Actions className="editor_modal">
           <Button
             disabled={
-              !headerData?.title ||
-              (!headerData.author && headerData.authorList.length === 0)
+              !headerData?.title || (!headerData.author && headerData.authorList.length === 0)
             }
             color={
-              headerData?.title &&
-              (headerData.author || headerData.authorList.length > 0)
+              headerData?.title && (headerData.author || headerData.authorList.length > 0)
                 ? "black"
                 : "grey"
             }

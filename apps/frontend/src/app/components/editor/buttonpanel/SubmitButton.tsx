@@ -3,22 +3,26 @@ import { useHistory } from "react-router-dom";
 import { useParams } from "react-router";
 import { FC } from "react";
 
-const SubmitButton: FC<any> = ({ mdText, setShowSpinner, saveEditorText }) => {
-  const history = useHistory();
-  const { lessonId, file } = useParams<any>();
+interface SubmitButtonProps {
+  mdText: string;
+  setShowSpinner: React.Dispatch<React.SetStateAction<boolean>>;
+  saveEditorText: (regenThumb: boolean) => void;
+}
 
-  const onSubmit = async () => {
+const SubmitButton: FC<SubmitButtonProps> = ({ mdText, setShowSpinner, saveEditorText }) => {
+  const history = useHistory();
+  const { lessonId } = useParams<{ lessonId: string }>();
+
+  const onSubmit = () => {
     setShowSpinner(true);
-    await navigateToHome();
+    navigateToHome();
     setShowSpinner(false);
   };
 
-  const navigateToHome = async () => {
-    await saveEditorText();
-    const slug =
-      file.slice(0, 6) === "README" ? "teacherguides" : "lessontexts";
-    const target = ["/landingpage", lessonId, slug].join("/");
-    history.push({ pathname: target });
+  const navigateToHome = () => {
+    saveEditorText(true);
+    const target = ["/landingpage", lessonId].join("/");
+    history.push(target);
   };
 
   return (
@@ -32,13 +36,13 @@ const SubmitButton: FC<any> = ({ mdText, setShowSpinner, saveEditorText }) => {
             style={{
               height: "2em",
               marginRight: "-0.5em",
-              padding: "0 1em 0 1em"
+              padding: "0 1em 0 1em",
             }}
             basic
             disabled={!mdText || mdText.length === 0}
             size="big"
             onClick={onSubmit}
-            icon="arrow right"
+            icon="home"
           />
         }
       />

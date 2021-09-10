@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
+import React, { Dispatch, FC, SetStateAction, useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import saveMdText from "../api/save-md-text";
 import fetchMdText from "../api/fetch-md-text";
@@ -9,43 +9,64 @@ import oppgaveMal from "../components/editor/settingsFiles/oppgaveMal";
 import { useLessonContext } from "./LessonContext";
 import { filenameParser } from "../utils/filename-parser";
 
-interface ContextProps {
+const SEPERATOR = "---\n";
+
+interface FileContextProps {
   headerData: HeaderData;
+  saveFileHeader: (lessonId: string, filename: string, data: HeaderData) => Promise<void>;
   savedFileBody: string;
   saveFileBody: (
     lessonId: string,
     filename: string,
-    headerData: string) => Promise<void>;
-  saveFileHeader: (
-    lessonId: string,
-    filename: string,
-    headerData: HeaderData) => Promise<void>;
-  rawMdFileContent: String;
-  fetchMdText: (
-    lessonId: string,
-    filename: string) => {};
-  setHeaderData: Dispatch<SetStateAction<HeaderData>>
+    headerData: string,
+    regenThumb: boolean
+  ) => Promise<void>;
+  setHeaderData: Dispatch<SetStateAction<HeaderData>>;
 }
 
 export interface HeaderData {
   title: string;
   authorList: string[];
   translatorList: string[];
-  translator: boolean;
+  translator: string;
   language: string;
-  author: boolean;
+  author: string;
 }
 
-const FileContext = React.createContext<Partial<ContextProps>>({});
+const FileContext = React.createContext<FileContextProps>({
+  headerData: {
+    title: "",
+    authorList: [],
+    translatorList: [],
+    translator: "",
+    language: "",
+    author: "",
+  },
+  saveFileHeader: async () => {
+    return;
+  },
+  savedFileBody: "",
+  saveFileBody: async () => {
+    return;
+  },
+  setHeaderData: () => {
+    return;
+  },
+});
 
-function createDefaultFileBody(file: string, ymlData: any) {
+function createDefaultFileBody(
+  file: string,
+  ymlData: {
+    tags: { subject: string[]; topic: string[]; grade: string[] };
+  }
+) {
   const { isReadme } = filenameParser(file);
   return isReadme ? insertMetaDataInTeacherGuide(ymlData) : oppgaveMal;
 }
 
-const FileContextProvider = (props: any) => {
-  const { lessonId, file } = useParams<any>();
-  const { getYmlData } = useLessonContext();
+const FileContextProvider: FC = (props) => {
+  const { lessonId, file } = useParams<{ lessonId: string; file: string }>();
+  const { fetchYmlData } = useLessonContext();
   const [rawMdFileContent, setRawMdFileContent] = useState<string>("");
   const { language } = filenameParser(file);
   const [headerData, setHeaderData] = useState<HeaderData>({
@@ -53,77 +74,72 @@ const FileContextProvider = (props: any) => {
     authorList: [],
     translatorList: [],
     language,
-    author: false,
-    translator: false
+    author: "",
+    translator: "",
   });
   const [savedFileBody, setSavedFileBody] = useState<string>("");
-  const separator = "---\n";
 
   const saveFileBody = async (
     lessonId: string,
     filename: string,
-    body: string
+    body: string,
+    regenThumb: boolean
   ) => {
-    const fileHeader = rawMdFileContent.split(separator)[1];
-    const newRawText = ["", fileHeader, body].join(separator);
-    await saveMdText(lessonId, filename, newRawText, true);
+    const fileHeader = rawMdFileContent.split(SEPERATOR)[1];
+    const newRawText = ["", fileHeader, body].join(SEPERATOR);
+    await saveMdText(lessonId, filename, newRawText, regenThumb);
     setRawMdFileContent(newRawText);
-    setSavedFileBody(body);
   };
+
   const saveDefaultFileBody = async (lessonId: string, filename: string) => {
-    const ymlData = await getYmlData();
+    const ymlData = await fetchYmlData();
     const defaultFileBody = createDefaultFileBody(filename, ymlData);
-    await saveFileBody(lessonId, filename, defaultFileBody);
+    setSavedFileBody(defaultFileBody);
+    await saveFileBody(lessonId, filename, defaultFileBody, false);
   };
 
   useEffect(() => {
+    let isSubscribed = true;
     async function fetchData() {
       const result = await fetchMdText(lessonId, file);
-      // eslint-disable-next-line
-      const [_, header, body] = result.split(separator);
-      setRawMdFileContent(result);
-      setSavedFileBody(body);
-      setHeaderData(yamlHeaderLoad(header, language));
-      console.log("FileContext done loading...");
-      if (!body || body.trim().length === 0) {
-        await saveDefaultFileBody(lessonId, file);
+      const [_, header, body] = result.split(SEPERATOR);
+      if (isSubscribed) {
+        setRawMdFileContent(result);
+        setSavedFileBody(body);
+        setHeaderData(yamlHeaderLoad(header, language));
+        console.log("FileContext done loading...");
+        if (!body || body.trim().length === 0) {
+          await saveDefaultFileBody(lessonId, file);
+        }
       }
     }
 
     if (lessonId && file) {
-      fetchData().then();
+      fetchData();
     }
-    // eslint-disable-next-line
-  }, [lessonId, file, language]);
+    return () => {
+      isSubscribed = false;
+    };
+  }, [file]);
 
-  const saveFileHeader = async (
-    lessonId: string,
-    filename: string,
-    data: HeaderData
-  ) => {
-    const fileBody = rawMdFileContent.split(separator)[2];
+  const saveFileHeader = async (lessonId: string, filename: string, data: HeaderData) => {
+    console.log(data);
+    const fileBody = rawMdFileContent.split(SEPERATOR)[2];
     const header = yamlHeaderDump(data);
-    const newRawText = ["", header, fileBody].join(separator);
+    const newRawText = ["", header, fileBody].join(SEPERATOR);
     await saveMdText(lessonId, filename, newRawText);
     setRawMdFileContent(newRawText);
-    // @ts-ignore
-    setHeaderData(yamlHeaderLoad(data, language));
+    // setHeaderData(yamlHeaderLoad(data, language));
   };
-  const context: ContextProps = {
+  const context: FileContextProps = {
     headerData,
+    saveFileHeader,
     savedFileBody,
     saveFileBody,
-    saveFileHeader,
-    rawMdFileContent,
     setHeaderData,
-    fetchMdText
   };
-  return (
-    <FileContext.Provider value={context}>
-      {props.children}
-    </FileContext.Provider>
-  );
+  return <FileContext.Provider value={context}>{props.children}</FileContext.Provider>;
 };
-const useFileContext = (): Partial<ContextProps> => useContext(FileContext);
+const useFileContext = () => useContext(FileContext);
 
 export { useFileContext, FileContextProvider };

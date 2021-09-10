@@ -1,6 +1,5 @@
-import "./ladingpagedatamodal.scss";
 import { SyntheticEvent, useEffect, useState } from "react";
-import { Button, Grid, Modal, Popup } from "semantic-ui-react";
+import { Container, Grid } from "semantic-ui-react";
 import { TagsGrade, TagsSubject, TagsTopic } from "./Tags";
 import CheckboxField from "./CheckboxField";
 import Levels from "./Levels";
@@ -18,14 +17,8 @@ const LandingpageDatamodal = () => {
   const lessonContext = useLessonContext();
   const { ymlData, setYmlData, saveYmlData } = lessonContext;
   const [checkBoxState, setCheckBoxState] = useState({});
-  const [open, setOpen] = useState(false);
-
-  const isEmptyDatapanel = false;
 
   useEffect(() => {
-    if (isEmptyDatapanel) {
-      setOpen(true);
-    }
     const mapYamlTags = () => {
       let obj: Record<string, boolean> = {};
 
@@ -57,10 +50,11 @@ const LandingpageDatamodal = () => {
     }
   }, [ymlData]);
 
-  const onSubmit = async () => {
-    await saveYmlData(ymlData);
-    setOpen(false);
-  };
+  useEffect(() => {
+    return () => {
+      saveYmlData(ymlData);
+    };
+  });
 
   const dropdownHandler = (event: SyntheticEvent, data: Record<string, string>) => {
     setYmlData((prevState: YmlData) => ({
@@ -111,88 +105,39 @@ const LandingpageDatamodal = () => {
   };
 
   return (
-    <>
-      <Popup
-        content={"Endre prosjektdata"}
-        mouseEnterDelay={250}
-        mouseLeaveDelay={250}
-        trigger={
-          <Button
-            basic
-            onClick={() => setOpen(true)}
-            content="Oppgavedata"
-            id="tagButton"
-            size="medium"
-            icon="tags"
-          />
-        }
-      />
-      <Modal
-        closeOnDimmerClick={isEmptyDatapanel ? false : true}
-        onClose={() => setOpen(false)}
-        onOpen={() => setOpen(true)}
-        open={open}
-        size="large"
-        dimmer="inverted"
-        className="landingpage_modal"
-      >
-        <Modal.Header className="landingpage_modal">Oppgavedata</Modal.Header>
-        <Modal.Content className="landingpage_modal">
-          <Grid divided="vertically">
-            <Grid.Row columns={2}>
-              <Grid.Column>
-                <CheckboxField
-                  labelTitle={YML_TEXT.topic}
-                  content={<TagsTopic data={checkBoxState} changeHandler={checboxHandler} />}
-                />
-              </Grid.Column>
-              <Grid.Column>
-                <CheckboxField
-                  labelTitle={YML_TEXT.subject}
-                  content={<TagsSubject data={checkBoxState} changeHandler={checboxHandler} />}
-                />
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-          <Grid divided="vertically">
-            <Grid.Row columns={2}>
-              <Grid.Column>
-                <CheckboxField
-                  labelTitle={YML_TEXT.grade}
-                  content={<TagsGrade data={checkBoxState} changeHandler={checboxHandler} />}
-                />
-              </Grid.Column>
-              <Grid.Column>
-                <Levels changeHandler={dropdownHandler} data={ymlData} />
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
+    <Container style={{ marginTop: "1em" }}>
+      <Grid divided="vertically">
+        <Grid.Row columns={2}>
+          <Grid.Column>
+            <CheckboxField
+              labelTitle={YML_TEXT.topic}
+              content={<TagsTopic data={checkBoxState} changeHandler={checboxHandler} />}
+            />
+          </Grid.Column>
+          <Grid.Column>
+            <CheckboxField
+              labelTitle={YML_TEXT.subject}
+              content={<TagsSubject data={checkBoxState} changeHandler={checboxHandler} />}
+            />
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
+      <Grid divided="vertically">
+        <Grid.Row columns={2}>
+          <Grid.Column>
+            <CheckboxField
+              labelTitle={YML_TEXT.grade}
+              content={<TagsGrade data={checkBoxState} changeHandler={checboxHandler} />}
+            />
+          </Grid.Column>
+          <Grid.Column>
+            <Levels changeHandler={dropdownHandler} data={ymlData} />
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
 
-          <License changeHandler={changeHandler} data={ymlData} />
-        </Modal.Content>
-
-        <Modal.Actions className="landingpage_modal">
-          {isEmptyDatapanel ? (
-            <p>
-              <i style={{ color: "red" }}>
-                Må inneholde minst ett valg i kategoriene Tema, Fag, eller Klassetrinn
-              </i>
-            </p>
-          ) : (
-            <p style={{ height: "1.3em" }} />
-          )}
-
-          <Button
-            disabled={false}
-            onClick={onSubmit}
-            content="OK"
-            labelPosition="right"
-            icon="checkmark"
-            positive
-          />
-        </Modal.Actions>
-      </Modal>
-    </>
+      <License changeHandler={changeHandler} data={ymlData} />
+    </Container>
   );
 };
 
