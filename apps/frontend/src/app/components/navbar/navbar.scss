@@ -7,8 +7,24 @@
   justify-content: space-between;
 }
 
-.navbar_logo {
-  height: 7vh;
+.navbar_logo:hover {
+  cursor: pointer;
+}
+
+.linkto_kidsakoderno {
+  margin: 1em 1em 0 1em;
+}
+
+.linkto_kidsakoderno i {
+  color: black;
+}
+
+.linkto_kidsakoderno a:hover {
+  cursor: pointer;
+}
+
+.navbar_logo p {
+  color: gray;
 }
 
 .navbar_course_title {

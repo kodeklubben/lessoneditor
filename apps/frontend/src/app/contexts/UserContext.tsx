@@ -1,85 +1,123 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, FC } from "react";
 import axios from "axios";
 import { paths } from "@lessoneditor/api-interfaces";
 import createLesson from "../api/create-lesson";
 
-export const UserContext = React.createContext({});
+interface User {
+  email: string;
+  name: string;
+  username: string;
+  photo: string;
+}
 
-export const UserContextProvider = (props: any) => {
-  const [user, setUser] = useState({
-    name: "",
+interface Lesson {
+  course: string;
+  courseTitle: string;
+  lesson: string;
+  lessonId: string;
+  lessonTitle: string;
+  thumb?: string;
+}
+
+interface UserContextProps {
+  user: User;
+  lessons: Lesson[];
+  addLesson: (
+    course: string,
+    courseTitle: string,
+    lesson: string,
+    lessonTitle: string
+  ) => Promise<string>;
+  removeLesson: (lessonId: string) => Promise<void>;
+}
+
+export const UserContext = React.createContext<UserContextProps>({
+  user: { email: "", name: "", username: "", photo: "" },
+  lessons: [],
+  addLesson: async () => {
+    return "";
+  },
+  removeLesson: async () => {
+    return;
+  },
+});
+
+export const UserContextProvider: FC = (props) => {
+  const [user, setUser] = useState<User>({
     email: "",
+    name: "",
+    username: "",
     photo: "",
   });
-  const [lessons, setLessons] = useState<any>([]);
+  const [lessons, setLessons] = useState<Lesson[]>([]);
+
   useEffect(() => {
+    let isSubscribed = true;
     async function fetchData() {
       const userRes = await axios.get(paths.USER);
       const userLessonsRes = await axios.get(paths.USER_LESSONS);
-      setUser({ ...userRes.data });
-      setLessons(userLessonsRes.data);
+      if (isSubscribed) {
+        setUser({ ...userRes.data });
+        setLessons(userLessonsRes.data);
+      }
     }
-
-    fetchData().then();
+    fetchData();
+    return () => {
+      isSubscribed = false;
+    };
   }, []);
 
   const getLesson = (lessonId: string) => {
-    return lessons.find((item: any) => item.lessonId === lessonId);
+    const lesson = lessons.find((item: Lesson) => item.lessonId === lessonId);
+    return lesson;
   };
 
-  const getLessonByCourseAndLesson = (course: string, lesson: string) => {
-    return lessons.find((item: any) => item.course === course && item.lesson === lesson);
-  };
-
-  const saveLessons = async (updatedLessons: any) => {
-    await axios.post(paths.USER_LESSONS, updatedLessons);
-    setLessons(updatedLessons);
-  };
-  const context = {
-    user,
-    setUser,
-    lessons,
-    setLessons,
-    getLesson,
-    addLesson: async (
-      course: string,
-      courseTitle: string,
-      lesson: string,
-      lessonTitle?: string
-    ) => {
-      let lessonId;
-      const existing = getLessonByCourseAndLesson(course, lesson);
-      if (existing) {
-        lessonId = existing.lessonId;
-      } else {
-        lessonId = await createLesson({
+  const addLesson = async (
+    course: string,
+    courseTitle: string,
+    lesson: string,
+    lessonTitle: string
+  ) => {
+    const existing = getLessonByCourseAndLesson(course, lesson);
+    const lessonId: string = existing
+      ? existing.lessonId
+      : await createLesson({
           course,
           courseTitle,
           lesson,
           lessonTitle,
         });
+    setLessons((oldLessons) => [
+      ...oldLessons,
+      { course, courseTitle, lesson, lessonId, lessonTitle },
+    ]);
+    await saveLessons([...lessons, { course, courseTitle, lesson, lessonId, lessonTitle }]);
+    return lessonId;
+  };
 
-        lessons.push({ lessonId, course, courseTitle, lesson, lessonTitle });
-      }
-      await saveLessons(lessons);
-      return lessonId;
-    },
-    removeLesson: async (lessonId: string) => {
-      const existing = getLesson(lessonId);
-      if (existing) {
-        await saveLessons(lessons.filter((lesson: any) => lesson.lessonId !== lessonId));
-      } else {
-        console.error("Trying to remove a lesson that doesn't exists.", lessonId);
-      }
-    },
-    getUserData: async () => {
-      async function fetchData() {
-        return await axios.get(paths.USER);
-      }
+  const removeLesson = async (lessonId: string) => {
+    const existing = getLesson(lessonId);
+    if (existing) {
+      await saveLessons(lessons.filter((lesson: Lesson) => lesson.lessonId !== lessonId));
+    } else {
+      console.error("Trying to remove a lesson that doesn't exists.", lessonId);
+    }
+  };
 
-      return await fetchData();
-    },
+  const getLessonByCourseAndLesson = (course: string, lesson: string) => {
+    return lessons.find((item: Lesson) => item.course === course && item.lesson === lesson);
+  };
+
+  const saveLessons = async (updatedLessons: Lesson[]) => {
+    await axios.post(paths.USER_LESSONS, updatedLessons);
+    setLessons(updatedLessons);
+  };
+  const context: UserContextProps = {
+    user,
+    lessons,
+    addLesson,
+    removeLesson,
   };
   return <UserContext.Provider value={context}>{props.children}</UserContext.Provider>;
 };
-export const useUserContext = (): Partial<any> => useContext(UserContext);
+export const useUserContext = () => useContext(UserContext);

@@ -4,30 +4,22 @@ let language: any;
 
 const microbitIframeId = "makecoderenderer";
 const getMicrobitSnippets = (): HTMLDivElement[] => {
-  return Array.from(document.getElementsByClassName("microbit")).map(
-    (element) => {
-      return element as HTMLDivElement;
-    }
-  );
+  return Array.from(document.getElementsByClassName("microbit")).map((element) => {
+    return element as HTMLDivElement;
+  });
 };
 
 const renderSpinner = () => {
   getMicrobitSnippets().forEach((codeBlock) => {
     codeBlock.style.borderStyle = "none";
     codeBlock.style.color = "#f5f5f5";
-    const preSize = codeBlock.getBoundingClientRect();
-    let img = document.createElement("img");
+    const img = document.createElement("img");
     img.className = "spinner";
-    img.src = "/spinner.gif";
+    img.src = "../../assets/public/spinner.gif";
     img.alt = "Spinner";
-    img.width = 50;
-    img.height = 50;
-    img.style.maxWidth = "100%";
-    img.style.display = "block";
-    img.style.margin = "0 auto 15px";
-    img.style.position = "absolute";
-    img.style.top = preSize.height / 2 + "px";
-    img.style.left = preSize.width / 2 + "px";
+    img.width = 100;
+    img.height = 100;
+
     // @ts-ignore
     codeBlock.parentElement.insertBefore(img, codeBlock);
   });
@@ -54,7 +46,7 @@ const createIframe = (language: string) => {
     nb: "nb", // Norwegian
     nn: "nn-NO", // Norwegian
     sv: "sv-SE", // Swedish
-    tr: "tr" // Turkish
+    tr: "tr", // Turkish
   };
   const f = document.createElement("iframe");
   f.addEventListener("load", (e) => {
@@ -79,6 +71,7 @@ const createIframe = (language: string) => {
 };
 
 const msgCache = {};
+
 // Taken from https://makecode.microbit.org/blocks-embed
 const renderSnippets = () => {
   const iframe = document.getElementById(microbitIframeId);
@@ -94,7 +87,7 @@ const renderSnippets = () => {
         {
           type: "renderblocks",
           id: checksum,
-          code: codeBlock.innerText
+          code: codeBlock.innerText,
         },
         "https://makecode.microbit.org/"
       );
@@ -103,11 +96,9 @@ const renderSnippets = () => {
   cleanUpCache();
 };
 const cleanUpCache = () => {
-  const activeImages = Array.from(document.getElementsByTagName("img")).map(
-    (tag) => {
-      return tag.src;
-    }
-  );
+  const activeImages = Array.from(document.getElementsByTagName("img")).map((tag) => {
+    return tag.src;
+  });
   for (const msgId in msgCache) {
     // @ts-ignore
     const msgSrc = msgCache[msgId].src;
@@ -122,13 +113,8 @@ const cleanUpCache = () => {
  * Creates an image from the rendered microbit code
  * @param {object} msg
  */
-const createImage = (msg: {
-  src: string;
-  width: number;
-  height: number;
-  id: string;
-}) => {
-  let img = document.createElement("img");
+const createImage = (msg: { src: string; width: number; height: number; id: string }) => {
+  const img = document.createElement("img");
   img.src = msg.src;
   img.width = msg.width;
   img.height = msg.height;
@@ -161,7 +147,7 @@ const removeIframe = () => {
 };
 
 const processIframeMessage = (e: { data: any }) => {
-  let msg = e.data;
+  const msg = e.data;
   if (msg.source === "makecode") {
     if (msg.type === "renderready") {
       renderSnippets();
@@ -171,9 +157,7 @@ const processIframeMessage = (e: { data: any }) => {
         id: msg.id,
         width: msg.width,
         height: msg.height,
-        src: URL.createObjectURL(
-          new Blob([msg.svg], { type: "image/svg+xml" })
-        )
+        src: URL.createObjectURL(new Blob([msg.svg], { type: "image/svg+xml" })),
       };
       // @ts-ignore
       createImage(msgCache[msg.id]);

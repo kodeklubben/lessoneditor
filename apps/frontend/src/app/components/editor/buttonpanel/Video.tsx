@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useState, RefObject } from "react";
 import ButtonComponent from "./ButtonComponent";
 import { useHotkeys } from "react-hotkeys-hook";
 import { KEY_COMBINATIONS as KEY, video as config } from "./settings/buttonConfig";
@@ -10,31 +10,37 @@ const languageNO = {
   insertLink: "Sett inn URL til din video",
   ok: "OK",
   cancel: "Avbryt",
-  mandatoryText: "Må være gyldig lenke til youtube eller vimeo"
+  mandatoryText: "Må være gyldig lenke til youtube eller vimeo",
 };
 
-const Hyperlink: FC<any> = ({
-                              editorRef,
-                              mdText,
-                              cursorPositionStart,
-                              cursorPositionEnd,
-                              setMdText,
-                              setCursorPosition,
-                              setCursor
-                            }) => {
+interface VideoProps {
+  editorRef: RefObject<HTMLTextAreaElement>;
+  mdText: string;
+  cursorPositionStart: number;
+  cursorPositionEnd: number;
+  setMdText: React.Dispatch<React.SetStateAction<string>>;
+  setCursorPosition: (positionStart: number, positionEnd: number) => void;
+  setCursor: (pos1: number, pos2: number) => void;
+}
+
+const Video: FC<VideoProps> = ({
+  editorRef,
+  mdText,
+  cursorPositionStart,
+  cursorPositionEnd,
+  setMdText,
+  setCursorPosition,
+  setCursor,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [url, setUrl] = useState("");
   const [validateUrl, setValidateUrl] = useState("");
 
   const isEmptyField = url === "";
 
-  const isYoutube = url.match(
-    /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=|\?v=)([^#&?]*).*/
-  );
+  const isYoutube = url.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=|\?v=)([^#&?]*).*/);
 
-  const isVimeo = url.match(
-    /^(http:\/\/|https:\/\/)?(www\.)?(vimeo\.com\/)([0-9]+)$/
-  );
+  const isVimeo = url.match(/^(http:\/\/|https:\/\/)?(www\.)?(vimeo\.com\/)([0-9]+)$/);
 
   useHotkeys(
     `${KEY.hyperlink}`,
@@ -60,16 +66,16 @@ const Hyperlink: FC<any> = ({
 
     setMdText(
       mdText.slice(0, cursorPositionStart) +
-      `:::${"video"}[${url}]
+        `:::${"video"}[${url}]
 :::
 ` +
-      mdText.slice(cursorPositionStart)
+        mdText.slice(cursorPositionStart)
     );
 
     setIsOpen(false);
     setUrl("");
     setValidateUrl("");
-    editorRef.current.focus();
+    editorRef.current ? editorRef.current.focus() : "";
     setCursor(end, end);
     setCursorPosition(end, end);
   };
@@ -78,24 +84,26 @@ const Hyperlink: FC<any> = ({
     setIsOpen(false);
     setUrl("");
     setValidateUrl("");
-    editorRef.current.focus();
+    editorRef.current ? editorRef.current.focus() : "";
   };
 
   return (
     <div>
       <ButtonComponent
-        buttonValues={""}
+        buttonValues={{}}
         icon={config.video.icon}
         title={config.video.title}
         onButtonClick={handleButtonClick}
         buttonTitle={config.video.buttonTitle}
         shortcutKey={config.video.shortcut}
+        style={{}}
+        imageurl=""
       />
 
       <Modal
-        dimmer="inverted"
-        onClose={() => setIsOpen(false)}
+        onClose={() => clickCancelHandler()}
         onOpen={() => setIsOpen(true)}
+        closeIcon
         open={isOpen}
         size="small"
         className="hyperlink_modal"
@@ -110,13 +118,7 @@ const Hyperlink: FC<any> = ({
           <Input
             fluid
             icon={isYoutube ? "youtube" : isVimeo ? "vimeo" : "video"}
-            style={
-              isYoutube
-                ? { color: "red" }
-                : isVimeo
-                ? { color: "blue" }
-                : { color: "grey" }
-            }
+            style={isYoutube ? { color: "red" } : isVimeo ? { color: "blue" } : { color: "grey" }}
             autoFocus
             type="text"
             name="videoUrl"
@@ -132,13 +134,26 @@ const Hyperlink: FC<any> = ({
         <Modal.Content className="hyperlink_modal"></Modal.Content>
 
         <Modal.Actions className="hyperlink_modal">
+          <Button onClick={clickCancelHandler} content={languageNO.cancel} color="black" />
+          <div
+            style={{
+              display: !(isYoutube || isVimeo) ? "hidden" : "none",
+              position: "absolute",
+              top: "84%",
+              left: "83.5%",
+              zIndex: 9999,
+              width: "7.2em",
+              height: "2.7em",
+            }}
+            onClick={() => {
+              if (!(isYoutube || isVimeo)) {
+                setValidateUrl(languageNO.mandatoryText);
+                return;
+              }
+            }}
+          ></div>
           <Button
-            onClick={clickCancelHandler}
-            content={languageNO.cancel}
-            color="black"
-          />
-          <Button
-            disabled={isEmptyField}
+            disabled={isEmptyField || !(isYoutube || isVimeo)}
             onClick={clickOKHandler}
             content={languageNO.ok}
             positive
@@ -151,4 +166,4 @@ const Hyperlink: FC<any> = ({
   );
 };
 
-export default Hyperlink;
+export default Video;

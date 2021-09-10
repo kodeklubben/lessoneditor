@@ -1,5 +1,5 @@
 import ButtonComponent from "./ButtonComponent";
-
+import { RefObject } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 
 import { cancelButton, insertSection } from "./utils/buttonMethods";
@@ -7,46 +7,50 @@ import { KEY_COMBINATIONS as KEY, sections as config } from "./settings/buttonCo
 import { SECTION_TEXT } from "../settingsFiles/languages/editor_NO";
 import { FC } from "react";
 
-let results;
-let cancelResults;
-let buttonTitle;
+interface SectionsProps {
+  editorRef: RefObject<HTMLTextAreaElement>;
+  cursorPositionStart: number;
+  cursorPositionEnd: number;
+  mdText: string;
+  buttonValues: Record<string, boolean>;
+  setMdText: React.Dispatch<React.SetStateAction<string>>;
+  setCursorPosition: (positionStart: number, positionEnd: number) => void;
+  setCursor: (pos1: number, pos2: number) => void;
+  setButtonValues: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
+}
 
-const Sections: FC<any> = ({
-                             editorRef,
-                             cursorPositionStart,
-                             cursorPositionEnd,
-                             mdText,
-                             buttonValues,
-                             setMdText,
-                             setCursorPosition,
-                             setCursor,
-                             setButtonValues
-                           }) => {
-  const setChanges = (
-    mdText: any,
-    cursorPositionStart: any,
-    cursorPositionEnd: any
-  ) => {
+const Sections: FC<SectionsProps> = ({
+  editorRef,
+  cursorPositionStart,
+  cursorPositionEnd,
+  mdText,
+  buttonValues,
+  setMdText,
+  setCursorPosition,
+  setCursor,
+  setButtonValues,
+}) => {
+  const setChanges = (mdText: string, cursorPositionStart: number, cursorPositionEnd: number) => {
     setCursor(cursorPositionStart, cursorPositionEnd);
     setCursorPosition(cursorPositionStart, cursorPositionEnd);
     setMdText(mdText);
   };
 
-  const setButton = (value: any) => {
-    setButtonValues((prevButtonValues: any) => ({
+  const setButton = (value: string) => {
+    setButtonValues((prevButtonValues: Record<string, boolean>) => ({
       ...prevButtonValues,
-      [value]: !buttonValues[value]
+      [value]: !buttonValues[value],
     }));
   };
 
   const setSection = (
-    button: any,
-    cursorIntON: any,
-    cursorIntOFF: any,
-    output: any,
-    cancelInt: any
+    button: string,
+    cursorIntON: number,
+    cursorIntOFF: number,
+    output: string,
+    cancelInt: number
   ) => {
-    cancelResults = cancelButton(
+    const cancelResults = cancelButton(
       buttonValues[button],
       mdText,
       cursorPositionStart,
@@ -62,7 +66,7 @@ const Sections: FC<any> = ({
       );
       return;
     }
-    results = insertSection(
+    const results = insertSection(
       buttonValues[button],
       button,
       mdText,
@@ -74,16 +78,12 @@ const Sections: FC<any> = ({
       SECTION_TEXT
     );
 
-    setChanges(
-      results?.mdText,
-      results?.cursorPositionStart,
-      results?.cursorPositionEnd
-    );
+    setChanges(results.mdText, results.cursorPositionStart, results.cursorPositionEnd);
   };
 
   const set = {
     activity: () => {
-      buttonTitle = config.activity.buttonTitle;
+      const buttonTitle = config.activity.buttonTitle;
       setButton(buttonTitle);
       setSection(
         buttonTitle,
@@ -94,7 +94,7 @@ const Sections: FC<any> = ({
       );
     },
     intro: () => {
-      buttonTitle = config.intro.buttonTitle;
+      const buttonTitle = config.intro.buttonTitle;
       setButton(buttonTitle);
       setSection(
         buttonTitle,
@@ -105,7 +105,7 @@ const Sections: FC<any> = ({
       );
     },
     check: () => {
-      buttonTitle = config.check.buttonTitle;
+      const buttonTitle = config.check.buttonTitle;
       setButton(buttonTitle);
       setSection(
         buttonTitle,
@@ -115,19 +115,8 @@ const Sections: FC<any> = ({
         config.check.cancelInt
       );
     },
-    tip: () => {
-      buttonTitle = config.tip.buttonTitle;
-      setButton(buttonTitle);
-      setSection(
-        buttonTitle,
-        config.tip.cursorIntON,
-        config.tip.cursorIntOFF,
-        config.tip.output,
-        config.tip.cancelInt
-      );
-    },
     protip: () => {
-      buttonTitle = config.protip.buttonTitle;
+      const buttonTitle = config.protip.buttonTitle;
       setButton(buttonTitle);
       setSection(
         buttonTitle,
@@ -138,7 +127,7 @@ const Sections: FC<any> = ({
       );
     },
     challenge: () => {
-      buttonTitle = config.challenge.buttonTitle;
+      const buttonTitle = config.challenge.buttonTitle;
       setButton(buttonTitle);
       setSection(
         buttonTitle,
@@ -149,7 +138,7 @@ const Sections: FC<any> = ({
       );
     },
     flag: () => {
-      buttonTitle = config.flag.buttonTitle;
+      const buttonTitle = config.flag.buttonTitle;
       setButton(buttonTitle);
       setSection(
         buttonTitle,
@@ -160,7 +149,7 @@ const Sections: FC<any> = ({
       );
     },
     try: () => {
-      buttonTitle = config.try.buttonTitle;
+      const buttonTitle = config.try.buttonTitle;
       setButton(buttonTitle);
       setSection(
         buttonTitle,
@@ -171,7 +160,7 @@ const Sections: FC<any> = ({
       );
     },
     save: () => {
-      buttonTitle = config.save.buttonTitle;
+      const buttonTitle = config.save.buttonTitle;
       setButton(buttonTitle);
       setSection(
         buttonTitle,
@@ -180,12 +169,12 @@ const Sections: FC<any> = ({
         config.save.output,
         config.save.cancelInt
       );
-    }
+    },
   };
 
   useHotkeys(
-    `${KEY.activity}, ${KEY.intro}, ${KEY.check}, ${KEY.tip}, ` +
-    `${KEY.protip}, ${KEY.challenge}, ${KEY.flag}, ${KEY.try}, ${KEY.save}`,
+    `${KEY.activity}, ${KEY.intro}, ${KEY.check}, ` +
+      `${KEY.protip}, ${KEY.challenge}, ${KEY.flag}, ${KEY.try}, ${KEY.save}`,
     (event, handler) => {
       event.preventDefault();
       switch (handler.key) {
@@ -197,9 +186,6 @@ const Sections: FC<any> = ({
           break;
         case KEY.check:
           set.check();
-          break;
-        case KEY.tip:
-          set.tip();
           break;
         case KEY.protip:
           set.protip();
@@ -225,8 +211,8 @@ const Sections: FC<any> = ({
     [setButton, setSection]
   );
 
-  const handleButtonClick = (button: any) => {
-    editorRef.current.focus();
+  const handleButtonClick = (button: string) => {
+    editorRef.current ? editorRef.current.focus() : "";
     switch (button) {
       case config.activity.buttonTitle:
         set.activity();
@@ -236,9 +222,6 @@ const Sections: FC<any> = ({
         break;
       case config.check.buttonTitle:
         set.check();
-        break;
-      case config.tip.buttonTitle:
-        set.tip();
         break;
       case config.protip.buttonTitle:
         set.protip();
@@ -265,6 +248,7 @@ const Sections: FC<any> = ({
         <ButtonComponent
           key={"element" + index}
           buttonValues={buttonValues}
+          icon=""
           title={element[1].title}
           onButtonClick={handleButtonClick}
           buttonTitle={element[1].buttonTitle}

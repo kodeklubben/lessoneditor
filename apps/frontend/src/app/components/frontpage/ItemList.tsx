@@ -1,18 +1,18 @@
-import { Button, Card, Image } from "semantic-ui-react";
+import { Button, Card, Image, Icon } from "semantic-ui-react";
 import { FC } from "react";
 
-interface ItemListProps {
-  items: [
-    {
-      course: string;
-      courseTitle: string;
-      lesson: string;
-      lessonId: string;
-      lessonTitle: string;
-      thumb: string;
-    }
-  ];
-  removeLesson: (lessonId: string) => void;
+interface Lesson {
+  course: string;
+  courseTitle: string;
+  lesson: string;
+  lessonId: string;
+  lessonTitle: string;
+  thumb?: string;
+}
+
+export interface ItemListProps {
+  items: Lesson[];
+  removeLesson: (lessonId: string) => Promise<void>;
   navigateToHome: (lessonId: string) => void;
 }
 
@@ -28,7 +28,7 @@ const ItemList: FC<ItemListProps> = ({ items, removeLesson, navigateToHome }) =>
               lesson: string;
               lessonId: string;
               lessonTitle: string;
-              thumb: string;
+              thumb?: string;
             },
             index: number
           ) => (
@@ -57,16 +57,24 @@ const ItemList: FC<ItemListProps> = ({ items, removeLesson, navigateToHome }) =>
               </Card.Content>
 
               <Card.Content extra>
-                <Button onClick={() => navigateToHome(listitem.lessonId)} positive>
+                <Button
+                  icon
+                  labelPosition="left"
+                  onClick={() => navigateToHome(listitem.lessonId)}
+                  positive
+                >
+                  <Icon name="folder open" />
                   Åpne
                 </Button>
                 <Button
-                  color="black"
+                  style={{ background: "none" }}
+                  icon
                   onClick={() => {
                     removeLesson(listitem.lessonId);
                   }}
                 >
-                  Fjerne
+                  <Icon name="delete" />
+                  Slett
                 </Button>
               </Card.Content>
             </Card>

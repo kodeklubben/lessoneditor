@@ -1,48 +1,41 @@
 import "./navbar.scss";
 import { FC } from "react";
-import { useParams } from "react-router";
+import { useHistory } from "react-router-dom";
 import ProfileMenu from "./ProfileMenu";
 import { useUserContext } from "../../contexts/UserContext";
-
+import { Menu, Image } from "semantic-ui-react";
 import logo from "/assets/public/lav_logo.jpg";
-import { useLessonContext } from "../../contexts/LessonContext";
 
 const Navbar: FC = () => {
   const { user } = useUserContext();
-  const { lessonData } = useLessonContext();
+  const history = useHistory();
 
-  const { file } = useParams<{ file: string }>();
+  const navigateToFrontpage = () => {
+    history.push("/");
+  };
 
   return (
-    <div>
-      <nav className="navbar_container">
-        <div className="navbar_logo">
-          <a href={"/"}>
-            <img className="navbar_logo" alt="" src={logo} />
-          </a>
-        </div>
-
-        {file !== undefined ? (
-          <div className="navbar_course_title">
-            <h1>
-              <span style={{ color: "gray" }}>Prosjekttittel: </span>
-              {lessonData.lessonTitle ? lessonData.lessonTitle : lessonData.lesson}
-            </h1>
-            <h1>
-              <span style={{ color: "gray" }}>Kurs: </span>
-              {lessonData.courseTitle ? lessonData.courseTitle : lessonData.course}
-            </h1>
+    <>
+      <Menu
+        style={{
+          borderStyle: "none none solid none",
+          borderWidth: "2px",
+          borderColor: "silver",
+        }}
+        size="small"
+        secondary
+      >
+        <Menu.Item>
+          <div className="navbar_logo" onClick={navigateToFrontpage}>
+            <Image src={logo} size="small" />
+            <p>lessoneditor.kidsakoder.no</p>
           </div>
-        ) : (
-          ""
-        )}
-        <div className="profileMenu_container">
-          <a id="navbar_gohome" href={"/"}>
-            <ProfileMenu name={user ? user.name : ""} photo={user ? user.photo : ""} />
-          </a>
-        </div>
-      </nav>
-    </div>
+        </Menu.Item>
+        <Menu.Item position="right">
+          <ProfileMenu name={user ? user.name : ""} photo={user ? user.photo : ""} />
+        </Menu.Item>
+      </Menu>
+    </>
   );
 };
 

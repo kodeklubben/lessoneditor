@@ -25,7 +25,7 @@ const NewLessonModal: FC = () => {
     const { name, value } = e.target;
     setValues((prevValues) => ({ ...prevValues, [name]: value }));
   };
-  const navigateToLandingpage = (lessonId: string, lessonSlug: string) => {
+  const navigateToEditor = (lessonId: string, lessonSlug: string) => {
     const target = ["/editor", lessonId, lessonSlug, "nb"].join("/");
     history.push({ pathname: target });
   };
@@ -39,11 +39,9 @@ const NewLessonModal: FC = () => {
       slug: slugify(lessonTitle, { lower: true, strict: true }),
     };
     const getCourseFromSlug = COURSESLIST.find(({ slug }) => slug === values.course);
-
     const courseTitle: string = getCourseFromSlug ? getCourseFromSlug.courseTitle : "";
     const lessonId = await addLesson(course, courseTitle, lesson.slug, lesson.title);
-    navigateToLandingpage(lessonId, lesson.slug);
-
+    navigateToEditor(lessonId, lesson.slug);
     setLoading(false);
   };
 

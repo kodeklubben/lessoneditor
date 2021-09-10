@@ -12,7 +12,7 @@ const Overview: FC = () => {
   const { lessons, removeLesson } = useUserContext();
 
   const navigateToHome = (lessonId: string) => {
-    const target = ["/landingpage", lessonId, "lessontexts"].join("/");
+    const target = ["/landingpage", lessonId].join("/");
     history.push(target);
   };
 
@@ -47,8 +47,8 @@ const Overview: FC = () => {
             </Card.Content>
           </Card.Content>
         </Card>
-
         <Divider style={{ height: "2px" }} section />
+
         {lessons.length > 0 ? (
           <>
             <Header as="h2">Mine oppgaver</Header>
