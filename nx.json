@@ -22,6 +22,9 @@
     "api-interfaces": {
       "tags": []
     },
+    "auth": {
+      "tags": []
+    },
     "backend": {
       "tags": []
     },
@@ -36,6 +39,13 @@
     },
     "session": {
       "tags": []
+    },
+    "test": {
+      "tags": []
+    },
+    "test-e2e": {
+      "tags": [],
+      "implicitDependencies": ["test"]
     },
     "thumbnailer": {
       "tags": []

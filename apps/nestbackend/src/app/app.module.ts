@@ -8,7 +8,8 @@ import { AuthGuard } from '@nestjs/passport';
 import { APP_GUARD } from '@nestjs/core';
 import { UserModule } from "../../../../libs/user/src/lib/user.module"
 import { LessonModule } from "../../../../libs/lesson/src/lib/lesson.module"
-import { SessionModule } from "../../../../libs/session/src/lib/session.module"
+import { AuthModule } from "../../../../libs/auth/src/lib/auth.module"
+
 
 @Module({
    imports: [
@@ -17,13 +18,15 @@ import { SessionModule } from "../../../../libs/session/src/lib/session.module"
   ), 
   
 UserModule,
-LessonModule],
+LessonModule,
+AuthModule
+],
   controllers: [AppController],
   providers: [AppService,
-    // {
-    //   provide: APP_GUARD,
-    //   useClass: AuthGuard('github2'),
-    // }
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard('github'),
+    }
   ],
 })
 export class AppModule {}
