@@ -2,20 +2,18 @@ import { buttonAction, cancelButton } from "./buttonMethods";
 import { emphasis, lists, sections } from "../settings/buttonConfig";
 import { SECTION_TEXT } from "../../settingsFiles/languages/editor_NO";
 
-describe("cancelButton - toggle button", () => {
-  it("should remove bold string on buttonpress ", () => {
+describe("cancelButton", () => {
+  it("should remove bold on buttonpress ", () => {
     const results = buttonAction(
-      false,
       "dette er en test",
-      2,
-      2,
+      4,
+      4,
       emphasis.bold.cursorIntON,
       emphasis.bold.cursorIntOFF,
       emphasis.bold.output
     );
 
     const results2 = cancelButton(
-      true,
       results.mdText,
       results.cursorPositionStart,
       results.cursorPositionEnd,
@@ -24,23 +22,21 @@ describe("cancelButton - toggle button", () => {
     );
 
     expect(results2.mdText).toBe("dette er en test");
-    expect(results2.cursorPositionStart).toBe(2);
-    expect(results2.cursorPositionEnd).toBe(2);
+    expect(results2.cursorPositionStart).toBe(4);
+    expect(results2.cursorPositionEnd).toBe(4);
   });
 
-  it("should remove list caused by buttonpress AKA cancel buttonpress", () => {
+  it("should remove list on buttonpress", () => {
     const results = buttonAction(
-      false,
       "dette er en test",
-      2,
-      2,
+      4,
+      4,
       lists.listUl.cursorIntON,
       lists.listUl.cursorIntOFF,
       lists.listUl.output
     );
 
     const results2 = cancelButton(
-      true,
       results.mdText,
       results.cursorPositionStart,
       results.cursorPositionEnd,
@@ -49,23 +45,21 @@ describe("cancelButton - toggle button", () => {
     );
 
     expect(results2.mdText).toBe("dette er en test");
-    expect(results2.cursorPositionStart).toBe(2);
-    expect(results2.cursorPositionEnd).toBe(2);
+    expect(results2.cursorPositionStart).toBe(4);
+    expect(results2.cursorPositionEnd).toBe(4);
   });
 
-  it("shoult remove sectiontext caused by buttonpress AKA cancel buttonpress", () => {
+  it("shoult remove sectiontext on buttonpress", () => {
     const results = buttonAction(
-      false,
       "dette er en test",
-      2,
-      2,
+      4,
+      4,
       sections.activity.cursorIntON,
       sections.activity.cursorIntOFF,
       sections.activity.output
     );
 
     const results2 = cancelButton(
-      true,
       results.mdText,
       results.cursorPositionStart,
       results.cursorPositionEnd,
@@ -74,7 +68,7 @@ describe("cancelButton - toggle button", () => {
     );
 
     expect(results2.mdText).toBe("dette er en test");
-    expect(results2.cursorPositionStart).toBe(2);
-    expect(results2.cursorPositionEnd).toBe(2);
+    expect(results2.cursorPositionStart).toBe(4);
+    expect(results2.cursorPositionEnd).toBe(4);
   });
 });

@@ -1,5 +1,5 @@
 import { FC, useState, RefObject } from "react";
-import ButtonComponent from "./ButtonComponent";
+import { TestButtonComponent } from "./ButtonComponent";
 import { useHotkeys } from "react-hotkeys-hook";
 import { hyperlink as config, KEY_COMBINATIONS as KEY } from "./settings/buttonConfig";
 
@@ -105,7 +105,7 @@ const Hyperlink: FC<HyperlinkProps> = ({
 
   return (
     <div>
-      <ButtonComponent
+      <TestButtonComponent
         buttonValues={{}}
         icon={config.hyperlink.icon}
         title={config.hyperlink.title}

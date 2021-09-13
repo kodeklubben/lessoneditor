@@ -1,4 +1,4 @@
-import ButtonComponent from "./ButtonComponent";
+import { TestButtonComponent } from "./ButtonComponent";
 
 import { useHotkeys } from "react-hotkeys-hook";
 
@@ -53,14 +53,14 @@ const UndoRedo: FC<UndoRedoProps> = ({
     },
   };
   useHotkeys(
-    `${KEY.undo}, ${KEY.redo}`,
+    `${KEY.undoRedo.undo}, ${KEY.undoRedo.redo}`,
     (event, handler) => {
       event.preventDefault();
       switch (handler.key) {
-        case KEY.undo:
+        case KEY.undoRedo.undo:
           set.undo();
           break;
-        case KEY.redo:
+        case KEY.undoRedo.redo:
           set.redo();
           break;
         default:
@@ -88,7 +88,7 @@ const UndoRedo: FC<UndoRedoProps> = ({
   return (
     <div>
       {Object.entries(config).map((element, index) => (
-        <ButtonComponent
+        <TestButtonComponent
           key={"element" + index}
           buttonValues={{}}
           icon={element[1].icon}

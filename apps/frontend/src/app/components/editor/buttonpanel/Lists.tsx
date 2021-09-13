@@ -1,8 +1,8 @@
-import ButtonComponent from "./ButtonComponent";
+import { TestButtonComponent } from "./ButtonComponent";
 
 import { useHotkeys } from "react-hotkeys-hook";
 
-import { buttonAction as listsAction, cancelButton } from "./utils/buttonMethods";
+import { onButtonClick } from "./utils/buttonMethods";
 
 import { KEY_COMBINATIONS as KEY, lists as config } from "./settings/buttonConfig";
 import { FC, RefObject } from "react";
@@ -48,31 +48,14 @@ const Lists: FC<ListsProps> = ({
   };
 
   const setList = (button: string, cursorIntON: number, cursorIntOFF: number, output: string) => {
-    const cancelResults = cancelButton(
+    const results = onButtonClick(
       buttonValues[button],
-      mdText,
-      cursorPositionStart,
-      cursorPositionEnd,
-      cursorIntON,
-      output
-    );
-    if (cancelResults.cancel) {
-      setChanges(
-        cancelResults.mdText,
-        cancelResults.cursorPositionStart,
-        cancelResults.cursorPositionEnd
-      );
-      return;
-    }
-
-    const results = listsAction(
-      buttonValues[button],
-      mdText,
-      cursorPositionStart,
-      cursorPositionEnd,
       cursorIntON,
       cursorIntOFF,
-      output
+      output,
+      mdText,
+      cursorPositionStart,
+      cursorPositionEnd
     );
 
     setChanges(results?.mdText, results?.cursorPositionStart, results?.cursorPositionEnd);
@@ -127,17 +110,17 @@ const Lists: FC<ListsProps> = ({
   };
 
   useHotkeys(
-    `${KEY.listul}, ${KEY.listol}, ${KEY.listcheck}`,
+    `${KEY.lists.listul}, ${KEY.lists.listol}, ${KEY.lists.listcheck}`,
     (event, handler) => {
       event.preventDefault();
       switch (handler.key) {
-        case KEY.listul:
+        case KEY.lists.listul:
           set.listUl();
           break;
-        case KEY.listol:
+        case KEY.lists.listol:
           set.listOl();
           break;
-        case KEY.listcheck:
+        case KEY.lists.listcheck:
           set.listCheck();
           break;
         default:
@@ -172,7 +155,7 @@ const Lists: FC<ListsProps> = ({
   return (
     <div>
       {Object.entries(config).map((element, index) => (
-        <ButtonComponent
+        <TestButtonComponent
           key={"element" + index}
           buttonValues={buttonValues}
           icon={element[1].icon}

@@ -196,7 +196,6 @@ const MDTextArea: FC<MDTextAreaProps> = ({
           i++;
         }
         setCursorPosition(i, i);
-        resetButtons();
       }
     }
 

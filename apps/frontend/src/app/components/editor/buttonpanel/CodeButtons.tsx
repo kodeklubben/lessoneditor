@@ -1,7 +1,7 @@
-import CodeButtonComponent from "./CodeButtonComponent";
+import { CodeButtonComponent } from "./ButtonComponent";
 import { useHotkeys } from "react-hotkeys-hook";
-import { buttonAction as codeAction, cancelButton } from "./utils/buttonMethods";
-import { codebutton as config, KEY_COMBINATIONS as KEY } from "./settings/buttonConfig";
+import { onButtonClick } from "./utils/buttonMethods";
+import { codebuttons as config, KEY_COMBINATIONS as KEY } from "./settings/buttonConfig";
 import { FC, RefObject } from "react";
 
 export interface CodeButtonsProps {
@@ -50,31 +50,14 @@ const CodeButtons: FC<CodeButtonsProps> = ({
   };
 
   const setCode = (button: string, cursorIntON: number, cursorIntOFF: number, output: string) => {
-    const cancelResults = cancelButton(
+    const results = onButtonClick(
       buttonValues[button],
-      mdText,
-      cursorPositionStart,
-      cursorPositionEnd,
-      cursorIntON,
-      output
-    );
-    if (cancelResults.cancel) {
-      setChanges(
-        cancelResults.mdText,
-        cancelResults.cursorPositionStart,
-        cancelResults.cursorPositionEnd
-      );
-      return;
-    }
-
-    const results = codeAction(
-      buttonValues[button],
-      mdText,
-      cursorPositionStart,
-      cursorPositionEnd,
       cursorIntON,
       cursorIntOFF,
-      output
+      output,
+      mdText,
+      cursorPositionStart,
+      cursorPositionEnd
     );
 
     setChanges(results.mdText, results.cursorPositionStart, results.cursorPositionEnd);
@@ -104,14 +87,14 @@ const CodeButtons: FC<CodeButtonsProps> = ({
   };
 
   useHotkeys(
-    `${KEY.inline}, ${KEY.codeblock}`,
+    `${KEY.codebuttons.inline}, ${KEY.codebuttons.codeblock}`,
     (event, handler) => {
       event.preventDefault();
       switch (handler.key) {
-        case KEY.inline:
+        case KEY.codebuttons.inline:
           set.inline();
           break;
-        case KEY.codeblock:
+        case KEY.codebuttons.codeblock:
           set.codeblock();
           break;
         default:
@@ -145,9 +128,9 @@ const CodeButtons: FC<CodeButtonsProps> = ({
       {Object.entries(config).map((element, index) => (
         <CodeButtonComponent
           key={"element" + index}
-          buttonValues={buttonValues}
+          isON={buttonValues[element[1].buttonTitle]}
           title={element[1].title}
-          onButtonClick={handleButtonClick}
+          handleClick={handleButtonClick}
           buttonTitle={element[1].buttonTitle}
           shortcutKey={element[1].shortcut}
           courseTitle={courseTitle}

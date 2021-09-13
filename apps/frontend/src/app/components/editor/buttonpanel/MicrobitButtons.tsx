@@ -1,8 +1,8 @@
-import MicroScratchButtonComponent from "./MicroScratchButtonComponent";
+import { MicroScratchButtonComponent } from "./ButtonComponent";
 
 import { useHotkeys } from "react-hotkeys-hook";
 
-import { buttonAction as codeAction, cancelButton } from "./utils/buttonMethods";
+import { onButtonClick } from "./utils/buttonMethods";
 
 import {
   KEY_COMBINATIONS_MICROBIT as KEY,
@@ -52,30 +52,14 @@ const MicrobitButtons: FC<MicrobitButtonsProps> = ({
     cursorIntOFF: number,
     output: string
   ) => {
-    const cancelResults = cancelButton(
+    const results = onButtonClick(
       buttonValues[buttonTitle],
-      mdText,
-      cursorPositionStart,
-      cursorPositionEnd,
-      cursorIntON,
-      output
-    );
-    if (cancelResults.cancel) {
-      setChanges(
-        cancelResults.mdText,
-        cancelResults.cursorPositionStart,
-        cancelResults.cursorPositionEnd
-      );
-      return;
-    }
-    const results = codeAction(
-      buttonValues[buttonTitle],
-      mdText,
-      cursorPositionStart,
-      cursorPositionEnd,
       cursorIntON,
       cursorIntOFF,
-      output
+      output,
+      mdText,
+      cursorPositionStart,
+      cursorPositionEnd
     );
 
     setChanges(results.mdText, results.cursorPositionStart, results.cursorPositionEnd);
@@ -365,9 +349,9 @@ const MicrobitButtons: FC<MicrobitButtonsProps> = ({
       {Object.entries(config).map((element, index) => (
         <MicroScratchButtonComponent
           key={"element" + index}
-          buttonValues={buttonValues}
+          isON={buttonValues[element[1].buttonTitle]}
           title={element[1].title}
-          onButtonClick={handleButtonClick}
+          handleClick={handleButtonClick}
           buttonTitle={element[1].buttonTitle}
           shortcutKey={element[1].shortcut}
           color={element[1].color}

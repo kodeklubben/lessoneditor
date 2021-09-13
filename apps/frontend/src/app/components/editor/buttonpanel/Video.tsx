@@ -1,7 +1,7 @@
 import { FC, useState, RefObject } from "react";
-import ButtonComponent from "./ButtonComponent";
+import { TestButtonComponent } from "./ButtonComponent";
 import { useHotkeys } from "react-hotkeys-hook";
-import { KEY_COMBINATIONS as KEY, video as config } from "./settings/buttonConfig";
+import { KEY_COMBINATIONS as KEY, media as config } from "./settings/buttonConfig";
 
 import { Button, Header, Input, Modal } from "semantic-ui-react";
 
@@ -43,7 +43,7 @@ const Video: FC<VideoProps> = ({
   const isVimeo = url.match(/^(http:\/\/|https:\/\/)?(www\.)?(vimeo\.com\/)([0-9]+)$/);
 
   useHotkeys(
-    `${KEY.hyperlink}`,
+    `${KEY.media.video}`,
     (event) => {
       event.preventDefault();
       handleButtonClick();
@@ -89,7 +89,7 @@ const Video: FC<VideoProps> = ({
 
   return (
     <div>
-      <ButtonComponent
+      <TestButtonComponent
         buttonValues={{}}
         icon={config.video.icon}
         title={config.video.title}

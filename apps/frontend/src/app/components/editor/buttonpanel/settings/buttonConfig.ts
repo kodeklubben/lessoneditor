@@ -1,3 +1,4 @@
+import { type } from "os";
 import { BUTTON_TITLE, SECTION_TEXT } from "../../settingsFiles/languages/editor_NO";
 
 const temp = "```";
@@ -38,29 +39,41 @@ const chars = {
 
 // SHORTCUTKEYS config
 const KEY_COMBINATIONS = {
-  bold: [SHORTCUTKEY, plus, chars.b].join(""),
-  italic: [SHORTCUTKEY, plus, chars.i].join(""),
-  heading: [SHORTCUTKEY, plus, chars.h].join(""),
-  strikethrough: [SHORTCUTKEY, plus, chars.s].join(""),
-  undo: [SHORTCUTKEY, plus, chars.z].join(""),
-  redo: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.z].join(""),
-  hyperlink: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.h].join(""),
-  image: [SHORTCUTKEY, plus, chars.p].join(""),
-  video: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.u].join(""),
-  listul: [SHORTCUTKEY, plus, chars.u].join(""),
-  listol: [SHORTCUTKEY, plus, chars.o].join(""),
-  listcheck: [SHORTCUTKEY, plus, chars.r].join(""),
-  activity: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.a].join(""),
-  intro: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.i].join(""),
-  check: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.c].join(""),
-  protip: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.p].join(""),
-  challenge: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.g].join(""),
-  flag: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.f].join(""),
-  try: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.t].join(""),
-  save: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.s].join(""),
-  inline: [SHORTCUTKEY, plus, chars.e].join(""),
-  codeblock: [SHORTCUTKEY, plus, chars.k].join(""),
-  preview: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.y].join(""),
+  emphasis: {
+    bold: [SHORTCUTKEY, plus, chars.b].join(""),
+    italic: [SHORTCUTKEY, plus, chars.i].join(""),
+    heading: [SHORTCUTKEY, plus, chars.h].join(""),
+    strikethrough: [SHORTCUTKEY, plus, chars.s].join(""),
+  },
+  undoRedo: {
+    undo: [SHORTCUTKEY, plus, chars.z].join(""),
+    redo: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.z].join(""),
+  },
+  hyperlink: { hyperlink: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.h].join("") },
+  media: {
+    image: [SHORTCUTKEY, plus, chars.p].join(""),
+    video: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.u].join(""),
+  },
+  lists: {
+    listul: [SHORTCUTKEY, plus, chars.u].join(""),
+    listol: [SHORTCUTKEY, plus, chars.o].join(""),
+    listcheck: [SHORTCUTKEY, plus, chars.r].join(""),
+  },
+  sections: {
+    activity: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.a].join(""),
+    intro: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.i].join(""),
+    check: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.c].join(""),
+    protip: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.p].join(""),
+    challenge: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.g].join(""),
+    flag: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.f].join(""),
+    try: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.t].join(""),
+    save: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.s].join(""),
+  },
+  codebuttons: {
+    inline: [SHORTCUTKEY, plus, chars.e].join(""),
+    codeblock: [SHORTCUTKEY, plus, chars.k].join(""),
+    preview: [SHORTCUTKEY, plus, SHORTCUTKEY2, plus, chars.y].join(""),
+  },
 };
 
 const emphasis = {
@@ -71,7 +84,7 @@ const emphasis = {
     title: BUTTON_TITLE.bold,
     cursorIntON: 2,
     cursorIntOFF: 2,
-    shortcut: KEY_COMBINATIONS.bold,
+    shortcut: KEY_COMBINATIONS.emphasis.bold,
   },
   italic: {
     buttonTitle: "italic",
@@ -80,7 +93,7 @@ const emphasis = {
     title: BUTTON_TITLE.italic,
     cursorIntON: 1,
     cursorIntOFF: 1,
-    shortcut: KEY_COMBINATIONS.italic,
+    shortcut: KEY_COMBINATIONS.emphasis.italic,
   },
   heading: {
     buttonTitle: "heading",
@@ -89,7 +102,7 @@ const emphasis = {
     title: BUTTON_TITLE.heading,
     cursorIntON: 0,
     cursorIntOFF: 0,
-    shortcut: KEY_COMBINATIONS.heading,
+    shortcut: KEY_COMBINATIONS.emphasis.heading,
   },
   strikethrough: {
     buttonTitle: "strikethrough",
@@ -98,7 +111,7 @@ const emphasis = {
     title: BUTTON_TITLE.strikethrough,
     cursorIntON: 2,
     cursorIntOFF: 2,
-    shortcut: KEY_COMBINATIONS.strikethrough,
+    shortcut: KEY_COMBINATIONS.emphasis.strikethrough,
   },
 };
 
@@ -106,20 +119,14 @@ const undoRedo = {
   undo: {
     buttonTitle: "undo",
     icon: "undo",
-    output: "",
     title: BUTTON_TITLE.undo,
-    cursorIntON: 0,
-    cursorIntOFF: 0,
-    shortcut: KEY_COMBINATIONS.undo,
+    shortcut: KEY_COMBINATIONS.undoRedo.undo,
   },
   redo: {
     buttonTitle: "redo",
     icon: "redo",
-    output: "",
     title: BUTTON_TITLE.redo,
-    cursorIntON: 0,
-    cursorIntOFF: 0,
-    shortcut: KEY_COMBINATIONS.redo,
+    shortcut: KEY_COMBINATIONS.undoRedo.redo,
   },
 };
 
@@ -127,15 +134,12 @@ const hyperlink = {
   hyperlink: {
     buttonTitle: "hyperlink",
     icon: "linkify",
-    output: "",
     title: BUTTON_TITLE.hyperlink,
-    cursorIntON: 0,
-    cursorIntOFF: 0,
-    shortcut: KEY_COMBINATIONS.hyperlink,
+    shortcut: KEY_COMBINATIONS.hyperlink.hyperlink,
   },
 };
 
-const image = {
+const media = {
   image: {
     buttonTitle: "image",
     icon: "file image",
@@ -143,11 +147,8 @@ const image = {
     title: BUTTON_TITLE.image,
     cursorIntON: 0,
     cursorIntOFF: 0,
-    shortcut: KEY_COMBINATIONS.image,
+    shortcut: KEY_COMBINATIONS.media.image,
   },
-};
-
-const video = {
   video: {
     buttonTitle: "video",
     icon: "file video",
@@ -155,21 +156,21 @@ const video = {
     title: BUTTON_TITLE.video,
     cursorIntON: 0,
     cursorIntOFF: 0,
-    shortcut: KEY_COMBINATIONS.video,
+    shortcut: KEY_COMBINATIONS.media.video,
   },
 };
 
-const preview = {
-  preview: {
-    buttonTitle: "preview",
-    icon: "eye",
-    output: "",
-    title: BUTTON_TITLE.preview,
-    cursorIntON: 0,
-    cursorIntOFF: 0,
-    shortcut: KEY_COMBINATIONS.preview,
-  },
-};
+// const preview = {
+//   preview: {
+//     buttonTitle: "preview",
+//     icon: "eye",
+//     output: "",
+//     title: BUTTON_TITLE.preview,
+//     cursorIntON: 0,
+//     cursorIntOFF: 0,
+//     shortcut: KEY_COMBINATIONS.preview,
+//   },
+// };
 
 const lists = {
   listUl: {
@@ -180,7 +181,7 @@ const lists = {
     title: BUTTON_TITLE.listUl,
     cursorIntON: 2,
     cursorIntOFF: 0,
-    shortcut: KEY_COMBINATIONS.listul,
+    shortcut: KEY_COMBINATIONS.lists.listul,
   },
   listOl: {
     buttonTitle: "listOl",
@@ -190,7 +191,7 @@ const lists = {
     title: BUTTON_TITLE.listOl,
     cursorIntON: 3,
     cursorIntOFF: 0,
-    shortcut: KEY_COMBINATIONS.listol,
+    shortcut: KEY_COMBINATIONS.lists.listol,
   },
   listCheck: {
     buttonTitle: "listCheck",
@@ -200,7 +201,7 @@ const lists = {
     title: BUTTON_TITLE.listCheck,
     cursorIntON: 6,
     cursorIntOFF: 0,
-    shortcut: KEY_COMBINATIONS.listcheck,
+    shortcut: KEY_COMBINATIONS.lists.listcheck,
   },
 };
 
@@ -212,7 +213,7 @@ const sections = {
     cursorIntON: 2,
     cursorIntOFF: 10,
     cancelInt: 2,
-    shortcut: KEY_COMBINATIONS.intro,
+    shortcut: KEY_COMBINATIONS.sections.intro,
     style: {
       boxSizing: "border-box",
       height: "2em",
@@ -226,12 +227,12 @@ const sections = {
   },
   activity: {
     buttonTitle: "sec_activity",
-    output: "# " + SECTION_TEXT + " {.activity}\n#\n",
+    output: "# " + SECTION_TEXT + " {.activity}\n#",
     title: BUTTON_TITLE.activity,
     cursorIntON: 2,
     cursorIntOFF: 14,
     cancelInt: 2,
-    shortcut: KEY_COMBINATIONS.activity,
+    shortcut: KEY_COMBINATIONS.sections.activity,
     style: {
       boxSizing: "border-box",
       height: "2em",
@@ -249,7 +250,7 @@ const sections = {
     cursorIntON: 3,
     cursorIntOFF: 10,
     cancelInt: 3,
-    shortcut: KEY_COMBINATIONS.check,
+    shortcut: KEY_COMBINATIONS.sections.check,
     style: {
       boxSizing: "border-box",
       background: "white",
@@ -267,7 +268,7 @@ const sections = {
     cursorIntON: 3,
     cursorIntOFF: 11,
     cancelInt: 3,
-    shortcut: KEY_COMBINATIONS.protip,
+    shortcut: KEY_COMBINATIONS.sections.protip,
     style: {
       boxSizing: "border-box",
       height: "2em",
@@ -286,7 +287,7 @@ const sections = {
     cursorIntON: 3,
     cursorIntOFF: 14,
     cancelInt: 3,
-    shortcut: KEY_COMBINATIONS.challenge,
+    shortcut: KEY_COMBINATIONS.sections.challenge,
     style: {
       boxSizing: "border-box",
       height: "2em",
@@ -304,7 +305,7 @@ const sections = {
     cursorIntON: 3,
     cursorIntOFF: 9,
     cancelInt: 3,
-    shortcut: KEY_COMBINATIONS.flag,
+    shortcut: KEY_COMBINATIONS.sections.flag,
     style: {
       boxSizing: "border-box",
       height: "2em",
@@ -323,7 +324,7 @@ const sections = {
     cursorIntON: 2,
     cursorIntOFF: 8,
     cancelInt: 2,
-    shortcut: KEY_COMBINATIONS.try,
+    shortcut: KEY_COMBINATIONS.sections.try,
     style: {
       boxSizing: "border-box",
       height: "2em",
@@ -340,7 +341,7 @@ const sections = {
     cursorIntON: 3,
     cursorIntOFF: 8,
     cancelInt: 3,
-    shortcut: KEY_COMBINATIONS.save,
+    shortcut: KEY_COMBINATIONS.sections.save,
     style: {
       boxSizing: "border-box",
       height: "2em",
@@ -354,14 +355,14 @@ const sections = {
   },
 };
 
-const codebutton = {
+const codebuttons = {
   inline: {
     buttonTitle: "inline",
     output: "`" + SECTION_TEXT + "`",
     title: BUTTON_TITLE.inline,
     cursorIntON: 1,
     cursorIntOFF: 1,
-    shortcut: KEY_COMBINATIONS.inline,
+    shortcut: KEY_COMBINATIONS.codebuttons.inline,
     style: {
       boxSizing: "border-box",
       height: "2em",
@@ -379,7 +380,7 @@ const codebutton = {
     title: BUTTON_TITLE.codeblock,
     cursorIntON: 4,
     cursorIntOFF: 5,
-    shortcut: KEY_COMBINATIONS.codeblock,
+    shortcut: KEY_COMBINATIONS.codebuttons.codeblock,
     style: {
       boxSizing: "border-box",
       height: "2em",
@@ -397,13 +398,12 @@ export {
   emphasis,
   undoRedo,
   hyperlink,
-  image,
-  video,
+  media,
   lists,
-  preview,
   sections,
-  codebutton,
+  codebuttons,
   KEY_COMBINATIONS,
   SHORTCUTKEY,
   SHORTCUTKEY2,
+  SECTION_TEXT,
 };

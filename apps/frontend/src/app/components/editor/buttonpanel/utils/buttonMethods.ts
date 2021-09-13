@@ -1,21 +1,65 @@
-import { lists } from "../settings/buttonConfig";
-import { SECTION_TEXT } from "../../settingsFiles/languages/editor_NO";
+import { emphasis, lists, sections, SECTION_TEXT } from "../settings/buttonConfig";
 
 const ifNewLine = (mdText: string, cursorPositionStart: number) => {
+  return mdText[cursorPositionStart - 1] === "\n" || cursorPositionStart === 0;
+};
+
+const isEmphasis = (output: string) => {
   return (
-    mdText[cursorPositionStart - 1] === "\n" ||
-    mdText === "" ||
-    cursorPositionStart === 0 ||
-    mdText.slice(cursorPositionStart - 3, cursorPositionStart) === "## " ||
-    mdText.slice(cursorPositionStart - 2, cursorPositionStart) === "# " ||
-    mdText.slice(cursorPositionStart - 2, cursorPositionStart) === "- " ||
-    mdText.slice(cursorPositionStart - 3, cursorPositionStart) === "1. " ||
-    mdText.slice(cursorPositionStart - 6, cursorPositionStart) === `- [ ] `
+    output === emphasis.bold.output ||
+    output === emphasis.italic.output ||
+    output === emphasis.strikethrough.output
   );
 };
 
+const isListOrSection = (output: string) => {
+  return (
+    output === lists.listCheck.output ||
+    output === lists.listOl.output ||
+    output === lists.listUl.output ||
+    output == sections.activity.output ||
+    output == sections.intro.output ||
+    output == sections.check.output ||
+    output == sections.challenge.output ||
+    output == sections.protip.output ||
+    output == sections.flag.output ||
+    output == sections.try.output ||
+    output == sections.save.output
+  );
+};
+
+const trimTextAndUpdatePosition = (
+  mdText: string,
+  cursorPositionStart: number,
+  cursorPositionEnd: number,
+  output: string,
+  cursorIntON: number
+) => {
+  let i = mdText.slice(cursorPositionStart, cursorPositionEnd);
+  while (i[0] === " " || i[i.length - 1] === " " || i[0] === "\n" || i[i.length - 1] === "\n") {
+    if (i[0] === " " || i[0] === "\n") {
+      i = i.slice(1);
+      cursorPositionStart += 1;
+    }
+    if (i[i.length - 1] === " " || i[i.length - 1] === "\n") {
+      i = i.slice(0, i.length - 1);
+      cursorPositionEnd -= 1;
+    }
+  }
+  mdText =
+    mdText.slice(0, cursorPositionStart) +
+    output.slice(0, cursorIntON) +
+    i +
+    output.slice(cursorIntON + SECTION_TEXT.length) +
+    mdText.slice(cursorPositionEnd);
+
+  cursorPositionStart += cursorIntON;
+  cursorPositionEnd = cursorPositionStart + i.length;
+
+  return { mdText, cursorPositionStart, cursorPositionEnd };
+};
+
 export const buttonAction = (
-  isOn: boolean,
   mdText: string,
   cursorPositionStart: number,
   cursorPositionEnd: number,
@@ -23,49 +67,21 @@ export const buttonAction = (
   cursorIntOFF: number,
   output: string
 ) => {
-  if (
-    (output === lists.listUl.output ||
-      output === lists.listOl.output ||
-      output === lists.listCheck.output) &&
-    !ifNewLine(mdText, cursorPositionStart)
-  ) {
+  if (!ifNewLine(mdText, cursorPositionStart) && !isEmphasis(output)) {
     mdText = mdText.slice(0, cursorPositionStart) + "\n\n" + mdText.slice(cursorPositionStart);
     cursorPositionStart += 1;
     cursorPositionEnd += 1;
 
-    buttonAction(
-      isOn,
+    buttonAction(mdText, cursorPositionStart, cursorPositionEnd, cursorIntON, cursorIntOFF, output);
+  }
+  if (cursorPositionStart !== cursorPositionEnd) {
+    return trimTextAndUpdatePosition(
       mdText,
       cursorPositionStart,
       cursorPositionEnd,
-      cursorIntON,
-      cursorIntOFF,
-      output
+      output,
+      cursorIntON
     );
-  }
-  if (cursorPositionStart !== cursorPositionEnd) {
-    let i = mdText.slice(cursorPositionStart, cursorPositionEnd);
-    while (i[0] === " " || i[i.length - 1] === " " || i[0] === "\n" || i[i.length - 1] === "\n") {
-      if (i[0] === " " || i[0] === "\n") {
-        i = i.slice(1);
-        cursorPositionStart += 1;
-      }
-      if (i[i.length - 1] === " " || i[i.length - 1] === "\n") {
-        i = i.slice(0, i.length - 1);
-        cursorPositionEnd -= 1;
-      }
-    }
-    mdText =
-      mdText.slice(0, cursorPositionStart) +
-      output.slice(0, cursorIntON) +
-      i +
-      output.slice(cursorIntON + SECTION_TEXT.length) +
-      mdText.slice(cursorPositionEnd);
-
-    cursorPositionStart += cursorIntON;
-    cursorPositionEnd = cursorPositionStart + i.length;
-
-    return { mdText, cursorPositionStart, cursorPositionEnd };
   }
 
   mdText = mdText.slice(0, cursorPositionStart) + output + mdText.slice(cursorPositionStart);
@@ -79,43 +95,68 @@ export const buttonAction = (
   };
 };
 
+export const onButtonClick = (
+  isON: boolean,
+  cursorIntON: number,
+  cursorIntOFF: number,
+  output: string,
+  mdText: string,
+  cursorPositionStart: number,
+  cursorPositionEnd: number
+) => {
+  if (output === emphasis.heading.output) {
+    const headingResults = heading(isON, mdText, cursorPositionStart, output);
+    return { ...headingResults, cursorPositionEnd };
+  }
+  if (isON) {
+    return cancelButton(mdText, cursorPositionStart, cursorPositionEnd, cursorIntON, output);
+  } else {
+    return buttonAction(
+      mdText,
+      cursorPositionStart,
+      cursorPositionEnd,
+      cursorIntON,
+      cursorIntOFF,
+      output
+    );
+  }
+};
+
 export const cancelButton = (
-  isOn: boolean,
   mdText: string,
   cursorPositionStart: number,
   cursorPositionEnd: number,
   cursorIntON: number,
   output: string
 ) => {
-  const getPureMDFromOutput = output.replace(SECTION_TEXT, "");
-  const isListInMD = mdText
-    .slice(cursorPositionStart - cursorIntON, cursorPositionEnd)
-    .includes(getPureMDFromOutput);
+  const selection = mdText.slice(cursorPositionStart, cursorPositionEnd);
 
-  const words = mdText.slice(cursorPositionStart, cursorPositionEnd);
-  console.log(words);
-  if (isOn) {
+  if (selection && selection !== SECTION_TEXT) {
     mdText =
       mdText.slice(0, cursorPositionStart - cursorIntON) +
-      words +
-      mdText.slice(cursorPositionEnd + (isListInMD ? 0 : cursorIntON));
+      selection +
+      mdText.slice(cursorPositionEnd + cursorIntON);
     cursorPositionStart -= cursorIntON;
-    words === "" ? (cursorPositionEnd = cursorPositionStart) : (cursorPositionEnd -= cursorIntON);
-
-    return {
-      cancel: true,
-      mdText,
-      cursorPositionStart,
-      cursorPositionEnd,
-    };
+    cursorPositionEnd -= cursorIntON;
+  } else if (isListOrSection(output)) {
+    mdText =
+      mdText.slice(0, cursorPositionStart - (cursorIntON + 1)) +
+      mdText.slice(cursorPositionStart - cursorIntON + (output.length + 1));
+    cursorPositionStart -= cursorIntON + 1;
+    cursorPositionEnd = cursorPositionStart;
   } else {
-    return {
-      cancel: false,
-      mdText,
-      cursorPositionStart,
-      cursorPositionEnd,
-    };
+    mdText =
+      mdText.slice(0, cursorPositionStart - cursorIntON) +
+      mdText.slice(cursorPositionStart - cursorIntON + output.length);
+    cursorPositionStart -= cursorIntON;
+    cursorPositionEnd = cursorPositionStart;
   }
+
+  return {
+    mdText,
+    cursorPositionStart,
+    cursorPositionEnd,
+  };
 };
 
 export const heading = (
@@ -124,7 +165,13 @@ export const heading = (
   cursorPositionStart: number,
   output: string
 ) => {
-  if (!ifNewLine(mdText, cursorPositionStart)) {
+  if (
+    !ifNewLine(mdText, cursorPositionStart) &&
+    !(
+      mdText.slice(cursorPositionStart - 3, cursorPositionStart) === "## " ||
+      mdText.slice(cursorPositionStart - 2, cursorPositionStart) === "# "
+    )
+  ) {
     mdText = mdText.slice(0, cursorPositionStart) + "\n\n" + mdText.slice(cursorPositionStart);
     cursorPositionStart += 1;
     heading(isOn, mdText, cursorPositionStart, output);
@@ -155,89 +202,4 @@ export const heading = (
   } else {
     return { isOn, mdText, cursorPositionStart };
   }
-};
-
-export const insertSection = (
-  isOn: boolean,
-  button: string,
-  mdText: string,
-  output: string,
-  cursorPositionStart: number,
-  cursorPositionEnd: number,
-  cursorIntON: number,
-  cursorIntOFF: number,
-  sectionText: string
-) => {
-  if (!ifNewLine(mdText, cursorPositionStart) && !isOn) {
-    mdText = mdText.slice(0, cursorPositionStart) + "\n" + mdText.slice(cursorPositionStart);
-    cursorPositionStart += 1;
-    cursorPositionEnd += 1;
-    insertSection(
-      isOn,
-      button,
-      mdText,
-      output,
-      cursorPositionStart,
-      cursorPositionEnd,
-      cursorIntON,
-      cursorIntOFF,
-      sectionText
-    );
-  }
-  if (!isOn) {
-    if (cursorPositionStart !== cursorPositionEnd) {
-      let i = mdText.slice(cursorPositionStart, cursorPositionEnd);
-      while (i[0] === " " || i[i.length - 1] === " " || i[0] === "\n" || i[i.length - 1] === "\n") {
-        if (i[0] === " " || i[0] === "\n") {
-          i = i.slice(1);
-          cursorPositionStart += 1;
-        }
-        if (i[i.length - 1] === " " || i[i.length - 1] === "\n") {
-          i = i.slice(0, i.length - 1);
-          cursorPositionEnd -= 1;
-        }
-      }
-      mdText =
-        mdText.slice(0, cursorPositionStart) +
-        output.slice(0, cursorIntON) +
-        i +
-        output.slice(cursorIntON + SECTION_TEXT.length) +
-        mdText.slice(cursorPositionEnd);
-
-      cursorPositionStart += cursorIntON;
-      cursorPositionEnd = cursorPositionStart + i.length;
-
-      return { mdText, cursorPositionStart, cursorPositionEnd };
-    }
-    mdText = mdText.slice(0, cursorPositionStart) + output + mdText.slice(cursorPositionStart);
-    if (output.slice(0, 2) === "##" && button !== "sec_tip") {
-      cursorPositionStart += 3;
-      cursorPositionEnd += sectionText.length + 3;
-    } else if (button === "sec_tip") {
-      cursorPositionStart += cursorIntON;
-      cursorPositionEnd += cursorIntOFF + sectionText.length;
-    } else {
-      cursorPositionStart += 2;
-      cursorPositionEnd += sectionText.length + 2;
-    }
-    return { mdText, cursorPositionStart, cursorPositionEnd };
-  } else if (isOn) {
-    if (cursorPositionStart !== cursorPositionEnd) {
-      mdText =
-        mdText.slice(0, cursorPositionStart - cursorIntON) +
-        mdText.slice(cursorPositionStart, cursorPositionEnd) +
-        mdText.slice(cursorPositionEnd + cursorIntOFF);
-
-      cursorPositionStart -= cursorIntON;
-      cursorPositionEnd -= cursorIntON;
-
-      return { mdText, cursorPositionStart, cursorPositionEnd };
-    }
-    cursorPositionStart += cursorIntOFF;
-    cursorPositionEnd += cursorIntOFF;
-
-    return { mdText, cursorPositionStart, cursorPositionEnd };
-  }
-
-  return { mdText, cursorPositionStart, cursorPositionEnd };
 };

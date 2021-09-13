@@ -15,11 +15,9 @@ const getListResults = (
   Output: string,
   mdText = testListInput.mdText,
   cursorPositionStart = testListInput.cursorPositionStart,
-  cursorPositionEnd = testListInput.cursorPositionEnd,
-  isOn = testListInput.isOn
+  cursorPositionEnd = testListInput.cursorPositionEnd
 ) => {
   return buttonAction(
-    isOn,
     mdText,
     cursorPositionStart,
     cursorPositionEnd,
@@ -38,8 +36,7 @@ describe("buttonAction", () => {
       emphasis.bold.output,
       testInput.mdText,
       0,
-      28,
-      false
+      28
     );
 
     expect(results.mdText).toBe(

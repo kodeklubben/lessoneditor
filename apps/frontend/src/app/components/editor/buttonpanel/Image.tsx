@@ -1,8 +1,8 @@
-import ButtonComponent from "./ButtonComponent";
+import { TestButtonComponent } from "./ButtonComponent";
 
 import { useHotkeys } from "react-hotkeys-hook";
 
-import { image as config, KEY_COMBINATIONS as KEY } from "./settings/buttonConfig";
+import { media as config, KEY_COMBINATIONS as KEY } from "./settings/buttonConfig";
 import { FC, RefObject } from "react";
 
 interface ImageProps {
@@ -12,7 +12,7 @@ interface ImageProps {
 
 const Image: FC<ImageProps> = ({ editorRef, uploadImageRef }) => {
   useHotkeys(
-    `${KEY.image}`,
+    `${KEY.media.image}`,
     (event) => {
       event.preventDefault();
 
@@ -29,7 +29,7 @@ const Image: FC<ImageProps> = ({ editorRef, uploadImageRef }) => {
   };
   return (
     <div>
-      <ButtonComponent
+      <TestButtonComponent
         buttonValues={{}}
         icon={config.image.icon}
         title={config.image.title}
