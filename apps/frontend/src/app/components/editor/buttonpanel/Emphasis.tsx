@@ -1,4 +1,4 @@
-import { ButtonComponent, RenderButton } from "./ButtonComponent";
+import { ButtonController } from "./buttoncontroller/ButtonController";
 import { emphasis as config } from "./settings/buttonConfig";
 import { FC, RefObject } from "react";
 
@@ -29,7 +29,7 @@ const Emphasis: FC<EmphasisProps> = ({
     <div>
       {Object.entries(config).map((element, index) => {
         return (
-          <ButtonComponent
+          <ButtonController
             key={"element" + index}
             editorRef={editorRef}
             isON={buttonValues[element[1].buttonTitle]}

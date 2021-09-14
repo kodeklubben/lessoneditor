@@ -1,5 +1,5 @@
 import { FC, useState, RefObject } from "react";
-import { RenderButton } from "./ButtonComponent";
+import { RenderButtons } from "./buttoncontroller/views/RenderButtons";
 import { useHotkeys } from "react-hotkeys-hook";
 import { hyperlink as config, KEY_COMBINATIONS as KEY } from "./settings/buttonConfig";
 
@@ -104,7 +104,7 @@ const Hyperlink: FC<HyperlinkProps> = ({
 
   return (
     <div>
-      <RenderButton
+      <RenderButtons
         isON={false}
         icon={config.hyperlink.icon}
         title={config.hyperlink.title}

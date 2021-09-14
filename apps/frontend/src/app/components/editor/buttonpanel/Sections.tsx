@@ -1,4 +1,4 @@
-import { ButtonComponent } from "./ButtonComponent";
+import { ButtonController } from "./buttoncontroller/ButtonController";
 import { RefObject } from "react";
 import { sections as config } from "./settings/buttonConfig";
 import { FC } from "react";
@@ -29,7 +29,7 @@ const Sections: FC<SectionsProps> = ({
   return (
     <>
       {Object.entries(config).map((element, index) => (
-        <ButtonComponent
+        <ButtonController
           key={"element" + index}
           editorRef={editorRef}
           isON={buttonValues[element[1].buttonTitle]}

@@ -1,4 +1,4 @@
-import { ButtonComponent } from "./ButtonComponent";
+import { ButtonController } from "./buttoncontroller/ButtonController";
 import { codebuttons as config, KEY_COMBINATIONS as KEY } from "./settings/buttonConfig";
 import { FC, RefObject } from "react";
 
@@ -32,7 +32,7 @@ const CodeButtons: FC<CodeButtonsProps> = ({
   return (
     <>
       {Object.entries(config).map((element, index) => (
-        <ButtonComponent
+        <ButtonController
           key={"element" + index}
           editorRef={editorRef}
           isON={buttonValues[element[1].buttonTitle]}

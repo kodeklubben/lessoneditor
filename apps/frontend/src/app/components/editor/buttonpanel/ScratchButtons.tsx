@@ -1,8 +1,4 @@
-import { ButtonComponent } from "./ButtonComponent";
-
-import { useHotkeys } from "react-hotkeys-hook";
-
-import { onButtonClick } from "./utils/buttonMethods";
+import { ButtonController } from "./buttoncontroller/ButtonController";
 
 import {
   KEY_COMBINATIONS_SCRATCH as KEY,
@@ -36,7 +32,7 @@ const ScratchButtons: FC<ScratchButtonsProps> = ({
   return (
     <>
       {Object.entries(config).map((element, index) => (
-        <ButtonComponent
+        <ButtonController
           key={"element" + index}
           editorRef={editorRef}
           isON={buttonValues[element[1].buttonTitle]}

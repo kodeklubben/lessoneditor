@@ -1,6 +1,5 @@
-import { RenderButton } from "./ButtonComponent";
-import { useHotkeys } from "react-hotkeys-hook";
-import { KEY_COMBINATIONS as KEY, undoRedo as config } from "./settings/buttonConfig";
+import { ButtonController } from "./buttoncontroller/ButtonController";
+import { undoRedo as config } from "./settings/buttonConfig";
 import { FC, RefObject } from "react";
 
 interface UndoRedoProps {
@@ -28,64 +27,30 @@ const UndoRedo: FC<UndoRedoProps> = ({
   pushRedoValue,
   setCursorPosition,
 }) => {
-  const shortcuts = Object.entries(config).map((item) => item[1].shortcut);
-
-  const set = {
-    undo: () => {
-      if (undoCursorPosition.length > 0) {
-        const position = undoCursorPosition[undoCursorPosition.length - 1];
-        setUndoCursorPosition(undoCursorPosition.slice(0, undoCursorPosition.length - 1));
-        pushRedoValue(mdText, cursorPositionStart);
-        setCursorPosition(position, position);
-      } else {
-        return;
-      }
-    },
-    redo: () => {
-      if (redoCursorPosition.length > 0) {
-        const position = redoCursorPosition[redoCursorPosition.length - 1];
-        setRedoCursorPosition(redoCursorPosition.slice(0, redoCursorPosition.length - 1));
-        pushUndoValue(mdText, cursorPositionStart);
-        setCursorPosition(position, position);
-      } else {
-        return;
-      }
-    },
-  };
-
-  useHotkeys(
-    shortcuts.join(),
-    (event, handler) => {
-      event.preventDefault();
-      const [key] = Object.keys(KEY.undoRedo).filter(
-        //@ts-ignore
-        (item: string) => KEY.undoRedo[item] === handler.key
-      );
-      //@ts-ignore
-      set[key]();
-
-      return false;
-    },
-    { enableOnTags: ["TEXTAREA"], keydown: true },
-    [pushUndoValue, pushRedoValue]
-  );
-
-  const handleButtonClick = (button: string) => {
-    editorRef.current ? editorRef.current.focus() : "";
-    //@ts-ignore
-    set[button]();
-  };
   return (
     <div>
       {Object.entries(config).map((element, index) => (
-        <RenderButton
+        <ButtonController
           key={"element" + index}
+          editorRef={editorRef}
           isON={false}
-          icon={element[1].icon}
           title={element[1].title}
-          handleButtonClick={handleButtonClick}
           buttonTitle={element[1].buttonTitle}
           shortcutKey={element[1].shortcut}
+          icon={element[1].icon}
+          cursorIntON={0}
+          cursorIntOFF={0}
+          output={"element[1].output"}
+          mdText={mdText}
+          setCursorPosition={setCursorPosition}
+          cursorPositionStart={cursorPositionStart}
+          cursorPositionEnd={0}
+          undoCursorPosition={undoCursorPosition}
+          redoCursorPosition={redoCursorPosition}
+          setUndoCursorPosition={setUndoCursorPosition}
+          setRedoCursorPosition={setRedoCursorPosition}
+          pushUndoValue={pushUndoValue}
+          pushRedoValue={pushRedoValue}
         />
       ))}
     </div>

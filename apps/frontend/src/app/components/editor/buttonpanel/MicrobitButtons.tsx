@@ -1,13 +1,6 @@
-import { RenderMicroScratchButtons, ButtonComponent } from "./ButtonComponent";
+import { ButtonController } from "./buttoncontroller/ButtonController";
 
-import { useHotkeys } from "react-hotkeys-hook";
-
-import { onButtonClick } from "./utils/buttonMethods";
-
-import {
-  KEY_COMBINATIONS_MICROBIT as KEY,
-  microbitbuttons as config,
-} from "./settings/microbitAndScratchButtonConfig";
+import { microbitbuttons as config } from "./settings/microbitAndScratchButtonConfig";
 import { FC, RefObject } from "react";
 
 interface MicrobitButtonsProps {
@@ -36,7 +29,7 @@ const MicrobitButtons: FC<MicrobitButtonsProps> = ({
   return (
     <>
       {Object.entries(config).map((element, index) => (
-        <ButtonComponent
+        <ButtonController
           key={"element" + index}
           editorRef={editorRef}
           isON={buttonValues[element[1].buttonTitle]}

@@ -1,5 +1,5 @@
 import { FC, useState, RefObject } from "react";
-import { RenderButton } from "./ButtonComponent";
+import { RenderButtons } from "./buttoncontroller/views/RenderButtons";
 import { useHotkeys } from "react-hotkeys-hook";
 import { KEY_COMBINATIONS as KEY, media as config } from "./settings/buttonConfig";
 
@@ -89,7 +89,7 @@ const Video: FC<VideoProps> = ({
 
   return (
     <div>
-      <RenderButton
+      <RenderButtons
         isON={false}
         icon={config.video.icon}
         title={config.video.title}
