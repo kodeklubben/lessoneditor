@@ -12,13 +12,11 @@ interface ImageProps {
 
 const Image: FC<ImageProps> = ({ editorRef, uploadImageRef }) => {
   useHotkeys(
-    `${KEY.media.image}`,
+    KEY.media.image,
     (event) => {
       event.preventDefault();
 
       handleButtonClick();
-
-      return false;
     },
     { enableOnTags: ["TEXTAREA"], keydown: true }
   );

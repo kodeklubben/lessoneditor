@@ -7,7 +7,7 @@ const ifNewLine = (mdText: string, cursorPositionStart: number) => {
 const inlineOutput = (output: string) => {
   return (
     Object.entries(emphasis).filter((item) => item[1].output === output).length > 0 ||
-    codebuttons.inline.output
+    output === codebuttons.inline.output
   );
 };
 

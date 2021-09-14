@@ -2,6 +2,8 @@ import { FC, RefObject, Dispatch, SetStateAction } from "react";
 import { Button, Popup } from "semantic-ui-react";
 import { useHotkeys } from "react-hotkeys-hook";
 import { onButtonClick, heading as h } from "./utils/buttonMethods";
+import { codebuttons } from "./settings/buttonConfig";
+import { microbitbuttons, scratchbuttons } from "./settings/microbitAndScratchButtonConfig";
 
 interface ButtonComponentProps {
   editorRef: RefObject<HTMLTextAreaElement>;
@@ -13,6 +15,9 @@ interface ButtonComponentProps {
   imageurl?: string;
   icon?: string;
   setButtonValues: Dispatch<SetStateAction<Record<string, boolean>>>;
+  setListButtonValues?: React.Dispatch<
+    React.SetStateAction<{ bTitle: string; output: string; cursorInt: number }>
+  >;
   setCursor: (pos1: number, pos2: number) => void;
   setCursorPosition: (positionStart: number, positionEnd: number) => void;
   setMdText: Dispatch<SetStateAction<string>>;
@@ -24,6 +29,8 @@ interface ButtonComponentProps {
   cursorPositionEnd: number;
   course?: string;
   courseTitle?: string;
+  outputOnEnter?: string;
+  color?: string;
 }
 
 export const ButtonComponent: FC<ButtonComponentProps> = ({
@@ -36,6 +43,7 @@ export const ButtonComponent: FC<ButtonComponentProps> = ({
   imageurl,
   icon,
   setButtonValues,
+  setListButtonValues,
   setCursor,
   setCursorPosition,
   setMdText,
@@ -47,6 +55,8 @@ export const ButtonComponent: FC<ButtonComponentProps> = ({
   cursorPositionEnd,
   course,
   courseTitle,
+  outputOnEnter,
+  color,
 }) => {
   const setChanges = (mdText: string, cursorPositionStart: number, cursorPositionEnd: number) => {
     setCursor(cursorPositionStart, cursorPositionEnd);
@@ -63,7 +73,15 @@ export const ButtonComponent: FC<ButtonComponentProps> = ({
     }
   };
 
-  const setButton = (isON: boolean, cursorIntON: number, cursorIntOFF: number, output: string) => {
+  const setButton = (
+    isON: boolean,
+    cursorIntON: number,
+    cursorIntOFF: number,
+    output: string,
+    mdText: string,
+    cursorPositionStart: number,
+    cursorPositionEnd: number
+  ) => {
     const results = onButtonClick(
       isON,
       cursorIntON,
@@ -82,34 +100,60 @@ export const ButtonComponent: FC<ButtonComponentProps> = ({
   };
 
   const set = (button: string) => {
-    switch (button) {
-      case "codeblock":
-        toggleButton(button);
-        setButton(
-          isON,
-          cursorIntON + (course === "scratch" ? 6 : course?.length || 0),
-          cursorIntOFF,
-          output.slice(0, 3) + (course === "scratch" ? "blocks" : course) + output.slice(3)
-        );
-        break;
-      case "heading":
-        const results: { isON: boolean; mdText: string; cursorPositionStart: number } = h(
-          isON,
-          mdText,
-          cursorPositionStart,
-          output
-        );
+    if (button === "codeblock") {
+      toggleButton(button);
+      setButton(
+        isON,
+        cursorIntON + (course === "scratch" ? 6 : course?.length || 0),
+        cursorIntOFF,
+        output.slice(0, 3) + (course === "scratch" ? "blocks" : course) + output.slice(3),
+        mdText,
+        cursorPositionStart,
+        cursorPositionEnd
+      );
+    } else if (button === "heading") {
+      const results: { isON: boolean; mdText: string; cursorPositionStart: number } = h(
+        isON,
+        mdText,
+        cursorPositionStart,
+        output
+      );
 
-        setButtonValues((prevButtonValues) => ({
-          ...prevButtonValues,
-          [buttonTitle]: results?.isON,
-        }));
-        setChanges(results?.mdText, results?.cursorPositionStart, results?.cursorPositionStart);
-        break;
-      default:
-        toggleButton(buttonTitle);
-        setButton(isON, cursorIntON, cursorIntOFF, output);
-        break;
+      setButtonValues((prevButtonValues) => ({
+        ...prevButtonValues,
+        [buttonTitle]: results?.isON,
+      }));
+      setChanges(results?.mdText, results?.cursorPositionStart, results?.cursorPositionStart);
+    } else if (button === "listUl" || button === "listOl" || button === "listCheck") {
+      toggleButton(buttonTitle);
+      if (setListButtonValues) {
+        alert("buttonList");
+        setListButtonValues({
+          bTitle: buttonTitle,
+          output: outputOnEnter || "",
+          cursorInt: cursorIntON,
+        });
+      }
+      setButton(
+        isON,
+        cursorIntON,
+        cursorIntOFF,
+        output,
+        mdText,
+        cursorPositionStart,
+        cursorPositionEnd
+      );
+    } else {
+      toggleButton(buttonTitle);
+      setButton(
+        isON,
+        cursorIntON,
+        cursorIntOFF,
+        output,
+        mdText,
+        cursorPositionStart,
+        cursorPositionEnd
+      );
     }
   };
 
@@ -118,7 +162,6 @@ export const ButtonComponent: FC<ButtonComponentProps> = ({
     (event) => {
       event.preventDefault();
       set(buttonTitle);
-      // return false;
     },
     { enableOnTags: ["TEXTAREA"], keydown: true },
     [toggleButton, setButton]
@@ -132,92 +175,87 @@ export const ButtonComponent: FC<ButtonComponentProps> = ({
   };
 
   const returnType = (buttonTitle: string) => {
-    switch (buttonTitle) {
-      case "inline":
-        return (
-          <RenderCodeButton
-            isON={isON}
-            title={title}
-            handleButtonClick={handleButtonClick}
-            buttonTitle={buttonTitle}
-            shortcutKey={shortcutKey}
-            style={style || {}}
-            courseTitle={courseTitle || ""}
-          />
-        );
-
-      case "codeblock":
-        return (
-          <RenderCodeButton
-            isON={isON}
-            title={title}
-            handleButtonClick={handleButtonClick}
-            buttonTitle={buttonTitle}
-            shortcutKey={shortcutKey}
-            style={style || {}}
-            courseTitle={courseTitle || ""}
-          />
-        );
-
-      default:
-        return (
-          <RenderButton
-            isON={isON}
-            icon={icon || ""}
-            title={title}
-            handleButtonClick={handleButtonClick}
-            buttonTitle={buttonTitle}
-            shortcutKey={shortcutKey}
-            style={style || {}}
-            imageurl={imageurl || ""}
-          />
-        );
+    if (Object.keys(codebuttons).filter((item) => item === buttonTitle).length > 0) {
+      return (
+        <RenderCodeButton
+          isON={isON}
+          title={title}
+          handleButtonClick={handleButtonClick}
+          buttonTitle={buttonTitle}
+          shortcutKey={shortcutKey}
+          style={style || {}}
+          courseTitle={courseTitle || ""}
+        />
+      );
+    } else if (
+      Object.keys(scratchbuttons).filter((item) => item === buttonTitle).length > 0 ||
+      Object.keys(microbitbuttons).filter((item) => item === buttonTitle).length > 0
+    ) {
+      return (
+        <RenderMicroScratchButtons
+          isON={isON}
+          title={title}
+          handleButtonClick={handleButtonClick}
+          buttonTitle={buttonTitle}
+          shortcutKey={shortcutKey}
+          color={color || ""}
+        />
+      );
+    } else {
+      return (
+        <RenderButton
+          isON={isON}
+          icon={icon || ""}
+          title={title}
+          handleButtonClick={handleButtonClick}
+          buttonTitle={buttonTitle}
+          shortcutKey={shortcutKey}
+          style={style || {}}
+          imageurl={imageurl || ""}
+        />
+      );
     }
   };
 
   return returnType(buttonTitle);
 };
 
-interface MicroScratchButtonComponentProps {
+interface RenderMicroScratchButtonsProps {
   isON: boolean;
   title: string;
-  handleClick: (x: string) => void;
+  handleButtonClick: (button: string) => void;
   buttonTitle: string;
   shortcutKey: string;
   color: string;
 }
 
-export const MicroScratchButtonComponent: FC<MicroScratchButtonComponentProps> = ({
+export const RenderMicroScratchButtons: FC<RenderMicroScratchButtonsProps> = ({
   isON,
   title,
-  handleClick,
+  handleButtonClick,
   buttonTitle,
   shortcutKey,
   color,
 }) => {
-  const responsiveCP = () => {
-    return (
-      <>
-        <Popup
-          content={title + " (" + shortcutKey + ")"}
-          mouseEnterDelay={250}
-          mouseLeaveDelay={250}
-          trigger={
-            <Button
-              style={isON ? { backgroundColor: "#AAA" } : { backgroundColor: color }}
-              className="MBButton"
-              size="tiny"
-              onClick={() => handleClick(buttonTitle)}
-            >
-              {title}
-            </Button>
-          }
-        />
-      </>
-    );
-  };
-
-  return responsiveCP();
+  return (
+    <>
+      <Popup
+        content={title + " (" + shortcutKey + ")"}
+        mouseEnterDelay={250}
+        mouseLeaveDelay={250}
+        trigger={
+          <Button
+            style={isON ? { backgroundColor: "#AAA" } : { backgroundColor: color }}
+            className="MBButton"
+            size="tiny"
+            onClick={() => handleButtonClick(buttonTitle)}
+          >
+            {title}
+          </Button>
+        }
+      />
+    </>
+  );
 };
 
 interface RenderCodeButtonProps {

@@ -45,7 +45,6 @@ const Hyperlink: FC<HyperlinkProps> = ({
     (event) => {
       event.preventDefault();
       handleButtonClick();
-      return false;
     },
     { enableOnTags: ["TEXTAREA"], keydown: true }
   );
@@ -78,7 +77,7 @@ const Hyperlink: FC<HyperlinkProps> = ({
       openNewWindow
         ? setMdText(
             mdText.slice(0, cursorPositionStart) +
-              `[${mdText.slice(cursorPositionStart, cursorPositionEnd)}](${url}){target=_blank}` +
+              `[${mdText.slice(cursorPositionStart, cursorPositionEnd)}](${url}){:target=_blank}` +
               mdText.slice(cursorPositionEnd)
           )
         : setMdText(
