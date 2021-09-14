@@ -112,8 +112,6 @@ const Hyperlink: FC<HyperlinkProps> = ({
         handleButtonClick={handleButtonClick}
         buttonTitle={config.hyperlink.buttonTitle}
         shortcutKey={config.hyperlink.shortcut}
-        style={{}}
-        imageurl=""
       />
 
       <Modal

@@ -96,8 +96,6 @@ const Video: FC<VideoProps> = ({
         handleButtonClick={handleButtonClick}
         buttonTitle={config.video.buttonTitle}
         shortcutKey={config.video.shortcut}
-        style={{}}
-        imageurl=""
       />
 
       <Modal

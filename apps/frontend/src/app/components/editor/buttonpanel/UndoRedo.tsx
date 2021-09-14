@@ -86,8 +86,6 @@ const UndoRedo: FC<UndoRedoProps> = ({
           handleButtonClick={handleButtonClick}
           buttonTitle={element[1].buttonTitle}
           shortcutKey={element[1].shortcut}
-          style={{}}
-          imageurl=""
         />
       ))}
     </div>

@@ -1,7 +1,7 @@
 import { FC, RefObject, Dispatch, SetStateAction } from "react";
 import { Button, Popup } from "semantic-ui-react";
 import { useHotkeys } from "react-hotkeys-hook";
-import { onButtonClick } from "./utils/buttonMethods";
+import { onButtonClick, heading as h } from "./utils/buttonMethods";
 
 interface ButtonComponentProps {
   editorRef: RefObject<HTMLTextAreaElement>;
@@ -9,9 +9,9 @@ interface ButtonComponentProps {
   title: string;
   buttonTitle: string;
   shortcutKey: string;
-  style: Record<string, string>;
-  imageurl: string;
-  icon: string;
+  style?: Record<string, string>;
+  imageurl?: string;
+  icon?: string;
   setButtonValues: Dispatch<SetStateAction<Record<string, boolean>>>;
   setCursor: (pos1: number, pos2: number) => void;
   setCursorPosition: (positionStart: number, positionEnd: number) => void;
@@ -23,6 +23,7 @@ interface ButtonComponentProps {
   cursorPositionStart: number;
   cursorPositionEnd: number;
   course?: string;
+  courseTitle?: string;
 }
 
 export const ButtonComponent: FC<ButtonComponentProps> = ({
@@ -34,171 +35,6 @@ export const ButtonComponent: FC<ButtonComponentProps> = ({
   style,
   imageurl,
   icon,
-  setButtonValues,
-  setCursor,
-  setCursorPosition,
-  setMdText,
-  cursorIntON,
-  cursorIntOFF,
-  output,
-  mdText,
-  cursorPositionStart,
-  cursorPositionEnd,
-  course,
-}) => {
-  const setChanges = (mdText: string, cursorPositionStart: number, cursorPositionEnd: number) => {
-    setCursor(cursorPositionStart, cursorPositionEnd);
-    setCursorPosition(cursorPositionStart, cursorPositionEnd);
-    setMdText(mdText);
-  };
-
-  const toggleButton = (value: string) => {
-    if (setButtonValues) {
-      setButtonValues((prevButtonValues: Record<string, boolean>) => ({
-        ...prevButtonValues,
-        [value]: !isON,
-      }));
-    }
-  };
-
-  const setButton = (isON: boolean, cursorIntON: number, cursorIntOFF: number, output: string) => {
-    const results = onButtonClick(
-      isON,
-      cursorIntON,
-      cursorIntOFF,
-      output,
-      mdText,
-      cursorPositionStart,
-      cursorPositionEnd
-    );
-
-    setChanges(
-      results.data.mdText,
-      results.data.cursorPositionStart,
-      results.data.cursorPositionEnd
-    );
-  };
-
-  const set = (button: string) => {
-    switch (button) {
-      case "codeblock":
-        toggleButton(button);
-        setButton(
-          isON,
-          cursorIntON + (course === "scratch" ? 6 : course?.length || 0),
-          cursorIntOFF,
-          output.slice(0, 3) + (course === "scratch" ? "blocks" : course) + output.slice(3)
-        );
-        break;
-      default:
-        toggleButton(buttonTitle);
-        setButton(isON, cursorIntON, cursorIntOFF, output);
-        break;
-    }
-  };
-
-  useHotkeys(
-    shortcutKey,
-    (event, handler) => {
-      event.preventDefault();
-      console.log({ event });
-      console.log({ handler });
-      return false;
-    },
-    { enableOnTags: ["TEXTAREA"], keydown: true },
-    [toggleButton, setButton]
-  );
-
-  const handleButtonClick = (button: string) => {
-    if (editorRef) {
-      editorRef.current ? editorRef.current.focus() : "";
-    }
-    set(button);
-  };
-  return (
-    <RenderButton
-      isON={isON}
-      icon={icon}
-      title={title}
-      handleButtonClick={handleButtonClick}
-      buttonTitle={buttonTitle}
-      shortcutKey={shortcutKey}
-      style={style}
-      imageurl={imageurl}
-    />
-  );
-};
-
-interface MicroScratchButtonComponentProps {
-  isON: boolean;
-  title: string;
-  handleClick: (x: string) => void;
-  buttonTitle: string;
-  shortcutKey: string;
-  color: string;
-}
-
-export const MicroScratchButtonComponent: FC<MicroScratchButtonComponentProps> = ({
-  isON,
-  title,
-  handleClick,
-  buttonTitle,
-  shortcutKey,
-  color,
-}) => {
-  const responsiveCP = () => {
-    return (
-      <>
-        <Popup
-          content={title + " (" + shortcutKey + ")"}
-          mouseEnterDelay={250}
-          mouseLeaveDelay={250}
-          trigger={
-            <Button
-              style={isON ? { backgroundColor: "#AAA" } : { backgroundColor: color }}
-              className="MBButton"
-              size="tiny"
-              onClick={() => handleClick(buttonTitle)}
-            >
-              {title}
-            </Button>
-          }
-        />
-      </>
-    );
-  };
-
-  return responsiveCP();
-};
-
-interface CodeButtonComponentProps {
-  editorRef: RefObject<HTMLTextAreaElement>;
-  isON: boolean;
-  title: string;
-  buttonTitle: string;
-  shortcutKey: string;
-  style: Record<string, string>;
-  setButtonValues: Dispatch<SetStateAction<Record<string, boolean>>>;
-  setCursor: (pos1: number, pos2: number) => void;
-  setCursorPosition: (positionStart: number, positionEnd: number) => void;
-  setMdText: Dispatch<SetStateAction<string>>;
-  cursorIntON: number;
-  cursorIntOFF: number;
-  output: string;
-  mdText: string;
-  cursorPositionStart: number;
-  cursorPositionEnd: number;
-  course: string;
-  courseTitle: string;
-}
-
-export const CodeButtonComponent: FC<CodeButtonComponentProps> = ({
-  editorRef,
-  isON,
-  title,
-  buttonTitle,
-  shortcutKey,
-  style,
   setButtonValues,
   setCursor,
   setCursorPosition,
@@ -245,58 +81,152 @@ export const CodeButtonComponent: FC<CodeButtonComponentProps> = ({
     );
   };
 
-  const set = () => {
-    console.log(buttonTitle);
-    toggleButton(buttonTitle);
-    setButton(isON, cursorIntON + (course === "scratch" ? 6 : course.length), cursorIntOFF, output);
+  const set = (button: string) => {
+    switch (button) {
+      case "codeblock":
+        toggleButton(button);
+        setButton(
+          isON,
+          cursorIntON + (course === "scratch" ? 6 : course?.length || 0),
+          cursorIntOFF,
+          output.slice(0, 3) + (course === "scratch" ? "blocks" : course) + output.slice(3)
+        );
+        break;
+      case "heading":
+        const results: { isON: boolean; mdText: string; cursorPositionStart: number } = h(
+          isON,
+          mdText,
+          cursorPositionStart,
+          output
+        );
+
+        setButtonValues((prevButtonValues) => ({
+          ...prevButtonValues,
+          [buttonTitle]: results?.isON,
+        }));
+        setChanges(results?.mdText, results?.cursorPositionStart, results?.cursorPositionStart);
+        break;
+      default:
+        toggleButton(buttonTitle);
+        setButton(isON, cursorIntON, cursorIntOFF, output);
+        break;
+    }
   };
 
-  const handleButtonClick = (button: string) => {
-    editorRef.current ? editorRef.current.focus() : "";
-    set();
-  };
-  return (
-    <>
-      <Popup
-        content={title + " (" + shortcutKey + ")"}
-        mouseEnterDelay={250}
-        mouseLeaveDelay={250}
-        trigger={
-          buttonTitle === "codeblock" ? (
-            <Button
-              style={isON ? { ...style, backgroundColor: "#bbb" } : style}
-              className="CPButton"
-              size="tiny"
-              onClick={() => handleButtonClick(buttonTitle)}
-            >
-              <div style={{ position: "relative", top: "-5px" }}>
-                {"```Kodeblokk"}
-                <span style={{ color: "#008000" }}>{'("' + courseTitle + '")'}</span>
-              </div>
-            </Button>
-          ) : (
-            <Button
-              style={isON ? { ...style, backgroundColor: "#bbb" } : style}
-              className="CPButton"
-              size="tiny"
-              onClick={() => handleButtonClick(buttonTitle)}
-            >
-              <div style={{ position: "relative", top: "-5px" }}>{"`Inline-kode"}</div>
-            </Button>
-          )
-        }
-      />
-    </>
+  useHotkeys(
+    shortcutKey,
+    (event) => {
+      event.preventDefault();
+      set(buttonTitle);
+      // return false;
+    },
+    { enableOnTags: ["TEXTAREA"], keydown: true },
+    [toggleButton, setButton]
   );
+
+  const handleButtonClick = (button: string) => {
+    if (editorRef) {
+      editorRef.current ? editorRef.current.focus() : "";
+    }
+    set(button);
+  };
+
+  const returnType = (buttonTitle: string) => {
+    switch (buttonTitle) {
+      case "inline":
+        return (
+          <RenderCodeButton
+            isON={isON}
+            title={title}
+            handleButtonClick={handleButtonClick}
+            buttonTitle={buttonTitle}
+            shortcutKey={shortcutKey}
+            style={style || {}}
+            courseTitle={courseTitle || ""}
+          />
+        );
+
+      case "codeblock":
+        return (
+          <RenderCodeButton
+            isON={isON}
+            title={title}
+            handleButtonClick={handleButtonClick}
+            buttonTitle={buttonTitle}
+            shortcutKey={shortcutKey}
+            style={style || {}}
+            courseTitle={courseTitle || ""}
+          />
+        );
+
+      default:
+        return (
+          <RenderButton
+            isON={isON}
+            icon={icon || ""}
+            title={title}
+            handleButtonClick={handleButtonClick}
+            buttonTitle={buttonTitle}
+            shortcutKey={shortcutKey}
+            style={style || {}}
+            imageurl={imageurl || ""}
+          />
+        );
+    }
+  };
+
+  return returnType(buttonTitle);
+};
+
+interface MicroScratchButtonComponentProps {
+  isON: boolean;
+  title: string;
+  handleClick: (x: string) => void;
+  buttonTitle: string;
+  shortcutKey: string;
+  color: string;
+}
+
+export const MicroScratchButtonComponent: FC<MicroScratchButtonComponentProps> = ({
+  isON,
+  title,
+  handleClick,
+  buttonTitle,
+  shortcutKey,
+  color,
+}) => {
+  const responsiveCP = () => {
+    return (
+      <>
+        <Popup
+          content={title + " (" + shortcutKey + ")"}
+          mouseEnterDelay={250}
+          mouseLeaveDelay={250}
+          trigger={
+            <Button
+              style={isON ? { backgroundColor: "#AAA" } : { backgroundColor: color }}
+              className="MBButton"
+              size="tiny"
+              onClick={() => handleClick(buttonTitle)}
+            >
+              {title}
+            </Button>
+          }
+        />
+      </>
+    );
+  };
+
+  return responsiveCP();
 };
 
 interface RenderCodeButtonProps {
-  title: string;
-  shortcutKey: string;
-  buttonTitle: string;
   isON: boolean;
-  style: Record<string, string>;
+  title: string;
   handleButtonClick: (button: string) => void;
+  buttonTitle: string;
+  shortcutKey: string;
+  style: Record<string, string>;
   courseTitle: string;
 }
 
@@ -351,8 +281,8 @@ interface RenderButtonProps {
   handleButtonClick: (button: string) => void;
   buttonTitle: string;
   shortcutKey: string;
-  style: Record<string, string>;
-  imageurl: string;
+  style?: Record<string, string>;
+  imageurl?: string;
 }
 
 export const RenderButton: FC<RenderButtonProps> = ({

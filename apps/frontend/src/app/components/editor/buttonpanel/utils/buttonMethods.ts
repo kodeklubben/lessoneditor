@@ -161,7 +161,7 @@ export const cancelButton = (
 };
 
 export const heading = (
-  isOn: boolean,
+  isON: boolean,
   mdText: string,
   cursorPositionStart: number,
   output: string
@@ -175,25 +175,24 @@ export const heading = (
   ) {
     mdText = mdText.slice(0, cursorPositionStart) + "\n\n" + mdText.slice(cursorPositionStart);
     cursorPositionStart += 1;
-    heading(isOn, mdText, cursorPositionStart, output);
+    heading(isON, mdText, cursorPositionStart, output);
   }
 
-  if (isOn) {
+  if (isON) {
     if (mdText.slice(cursorPositionStart - 3, cursorPositionStart) === output) {
-      isOn = !isOn;
       mdText = mdText.slice(0, cursorPositionStart - 3) + "# " + mdText.slice(cursorPositionStart);
       cursorPositionStart -= 1;
-      return { isOn, mdText, cursorPositionStart };
+      return { isON, mdText, cursorPositionStart };
     } else {
       mdText = mdText.slice(0, cursorPositionStart - 2) + mdText.slice(cursorPositionStart);
       cursorPositionStart -= 2;
-      isOn = !isOn;
-      return { isOn, mdText, cursorPositionStart };
+      isON = !isON;
+      return { isON, mdText, cursorPositionStart };
     }
   } else {
-    isOn = !isOn;
+    isON = !isON;
     mdText = mdText.slice(0, cursorPositionStart) + output + mdText.slice(cursorPositionStart);
     cursorPositionStart += output.length;
-    return { isOn, mdText, cursorPositionStart };
+    return { isON, mdText, cursorPositionStart };
   }
 };

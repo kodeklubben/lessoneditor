@@ -40,8 +40,6 @@ const CodeButtons: FC<CodeButtonsProps> = ({
           buttonTitle={element[1].buttonTitle}
           shortcutKey={element[1].shortcut}
           style={element[1].style}
-          imageurl={""}
-          icon={""}
           setButtonValues={setButtonValues}
           setCursor={setCursor}
           setCursorPosition={setCursorPosition}
@@ -53,6 +51,7 @@ const CodeButtons: FC<CodeButtonsProps> = ({
           cursorPositionStart={cursorPositionStart}
           cursorPositionEnd={cursorPositionEnd}
           course={course}
+          courseTitle={courseTitle}
         />
       ))}
     </>

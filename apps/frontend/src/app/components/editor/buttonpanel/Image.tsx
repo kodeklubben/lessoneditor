@@ -36,8 +36,6 @@ const Image: FC<ImageProps> = ({ editorRef, uploadImageRef }) => {
         handleButtonClick={handleButtonClick}
         buttonTitle={config.image.buttonTitle}
         shortcutKey={config.image.shortcut}
-        style={{}}
-        imageurl=""
       />
     </div>
   );

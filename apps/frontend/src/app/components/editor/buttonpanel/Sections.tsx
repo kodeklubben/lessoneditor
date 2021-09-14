@@ -1,9 +1,6 @@
 import { ButtonComponent } from "./ButtonComponent";
 import { RefObject } from "react";
-import { useHotkeys } from "react-hotkeys-hook";
-
-import { onButtonClick } from "./utils/buttonMethods";
-import { KEY_COMBINATIONS as KEY, sections as config } from "./settings/buttonConfig";
+import { sections as config } from "./settings/buttonConfig";
 import { FC } from "react";
 
 interface SectionsProps {
@@ -41,7 +38,6 @@ const Sections: FC<SectionsProps> = ({
           shortcutKey={element[1].shortcut}
           style={element[1].style}
           imageurl={element[1].imageurl ? element[1].imageurl : ""}
-          icon=""
           setButtonValues={setButtonValues}
           setCursor={setCursor}
           setCursorPosition={setCursorPosition}
