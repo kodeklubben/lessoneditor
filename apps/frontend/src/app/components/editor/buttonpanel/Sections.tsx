@@ -52,9 +52,6 @@ const Sections: FC<SectionsProps> = ({
           mdText={mdText}
           cursorPositionStart={cursorPositionStart}
           cursorPositionEnd={cursorPositionEnd}
-          handleClick={() => {
-            console.log("e");
-          }}
         />
       ))}
     </>

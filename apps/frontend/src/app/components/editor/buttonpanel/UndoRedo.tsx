@@ -1,7 +1,5 @@
 import { TestButtonComponent } from "./ButtonComponent";
-
 import { useHotkeys } from "react-hotkeys-hook";
-
 import { KEY_COMBINATIONS as KEY, undoRedo as config } from "./settings/buttonConfig";
 import { FC, RefObject } from "react";
 
@@ -30,6 +28,8 @@ const UndoRedo: FC<UndoRedoProps> = ({
   pushRedoValue,
   setCursorPosition,
 }) => {
+  const shortcuts = Object.entries(config).map((item) => item[1].shortcut);
+
   const set = {
     undo: () => {
       if (undoCursorPosition.length > 0) {
@@ -52,20 +52,18 @@ const UndoRedo: FC<UndoRedoProps> = ({
       }
     },
   };
+
   useHotkeys(
-    `${KEY.undoRedo.undo}, ${KEY.undoRedo.redo}`,
+    shortcuts.join(),
     (event, handler) => {
       event.preventDefault();
-      switch (handler.key) {
-        case KEY.undoRedo.undo:
-          set.undo();
-          break;
-        case KEY.undoRedo.redo:
-          set.redo();
-          break;
-        default:
-          break;
-      }
+      const [key] = Object.keys(KEY.undoRedo).filter(
+        //@ts-ignore
+        (item: string) => KEY.undoRedo[item] === handler.key
+      );
+      //@ts-ignore
+      set[key]();
+
       return false;
     },
     { enableOnTags: ["TEXTAREA"], keydown: true },
@@ -74,23 +72,15 @@ const UndoRedo: FC<UndoRedoProps> = ({
 
   const handleButtonClick = (button: string) => {
     editorRef.current ? editorRef.current.focus() : "";
-    switch (button) {
-      case config.undo.buttonTitle:
-        set.undo();
-        break;
-      case config.redo.buttonTitle:
-        set.redo();
-        break;
-      default:
-        break;
-    }
+    //@ts-ignore
+    set[button]();
   };
   return (
     <div>
       {Object.entries(config).map((element, index) => (
         <TestButtonComponent
           key={"element" + index}
-          buttonValues={{}}
+          isON={false}
           icon={element[1].icon}
           title={element[1].title}
           onButtonClick={handleButtonClick}

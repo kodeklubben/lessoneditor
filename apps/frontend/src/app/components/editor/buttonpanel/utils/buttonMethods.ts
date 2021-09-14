@@ -5,26 +5,13 @@ const ifNewLine = (mdText: string, cursorPositionStart: number) => {
 };
 
 const isEmphasis = (output: string) => {
-  return (
-    output === emphasis.bold.output ||
-    output === emphasis.italic.output ||
-    output === emphasis.strikethrough.output
-  );
+  return Object.entries(emphasis).filter((item) => item[1].output === output).length > 0;
 };
 
 const isListOrSection = (output: string) => {
   return (
-    output === lists.listCheck.output ||
-    output === lists.listOl.output ||
-    output === lists.listUl.output ||
-    output == sections.activity.output ||
-    output == sections.intro.output ||
-    output == sections.check.output ||
-    output == sections.challenge.output ||
-    output == sections.protip.output ||
-    output == sections.flag.output ||
-    output == sections.try.output ||
-    output == sections.save.output
+    Object.entries(lists).filter((item) => item[1].output === output).length > 0 ||
+    Object.entries(sections).filter((item) => item[1].output === output).length > 0
   );
 };
 
@@ -94,7 +81,6 @@ export const buttonAction = (
     cursorPositionEnd,
   };
 };
-
 export const onButtonClick = (
   isON: boolean,
   cursorIntON: number,
@@ -105,20 +91,32 @@ export const onButtonClick = (
   cursorPositionEnd: number
 ) => {
   if (output === emphasis.heading.output) {
+    console.log("heading1");
     const headingResults = heading(isON, mdText, cursorPositionStart, output);
-    return { ...headingResults, cursorPositionEnd };
+
+    return {
+      data: { ...headingResults, cursorPositionEnd: headingResults.cursorPositionStart },
+      prevData: {},
+    };
   }
   if (isON) {
-    return cancelButton(mdText, cursorPositionStart, cursorPositionEnd, cursorIntON, output);
+    return {
+      data: cancelButton(mdText, cursorPositionStart, cursorPositionEnd, cursorIntON, output),
+      prevData: {},
+    };
   } else {
-    return buttonAction(
-      mdText,
-      cursorPositionStart,
-      cursorPositionEnd,
-      cursorIntON,
-      cursorIntOFF,
-      output
-    );
+    const prevData = { mdText, cursorPositionStart, cursorPositionEnd };
+    return {
+      data: buttonAction(
+        mdText,
+        cursorPositionStart,
+        cursorPositionEnd,
+        cursorIntON,
+        cursorIntOFF,
+        output
+      ),
+      prevData,
+    };
   }
 };
 
@@ -172,30 +170,33 @@ export const heading = (
       mdText.slice(cursorPositionStart - 2, cursorPositionStart) === "# "
     )
   ) {
+    console.log("heading is NOT new line");
     mdText = mdText.slice(0, cursorPositionStart) + "\n\n" + mdText.slice(cursorPositionStart);
     cursorPositionStart += 1;
     heading(isOn, mdText, cursorPositionStart, output);
   }
-  if (
-    output === "## " &&
-    mdText.slice(cursorPositionStart - 3, cursorPositionStart) === output &&
-    isOn
-  ) {
+  if (mdText.slice(cursorPositionStart - 3, cursorPositionStart) === output && isOn) {
+    console.log("change heading");
+    isOn = !isOn;
     mdText = mdText.slice(0, cursorPositionStart - 3) + "# " + mdText.slice(cursorPositionStart);
     cursorPositionStart -= 1;
     return { isOn, mdText, cursorPositionStart };
-  } else if (output === "## " && !isOn) {
+  } else if (!isOn) {
+    console.log("her?");
     isOn = !isOn;
     mdText = mdText.slice(0, cursorPositionStart) + output + mdText.slice(cursorPositionStart);
     cursorPositionStart += output.length;
     return { isOn, mdText, cursorPositionStart };
-  } else if (output === "## " && isOn) {
+  } else if (isOn) {
+    console.log("eller her?");
     if (mdText.slice(cursorPositionStart - 2, cursorPositionStart) === "# ") {
+      console.log("forvirrende");
       mdText = mdText.slice(0, cursorPositionStart - 2) + mdText.slice(cursorPositionStart);
       cursorPositionStart -= 2;
       isOn = !isOn;
       return { isOn, mdText, cursorPositionStart };
     } else {
+      console.log("indeed");
       isOn = !isOn;
       return { isOn, mdText, cursorPositionStart };
     }

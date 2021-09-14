@@ -22,7 +22,6 @@ interface ButtonComponentProps {
   mdText: string;
   cursorPositionStart: number;
   cursorPositionEnd: number;
-  handleClick: (x: string) => void;
 }
 
 export const ButtonComponent: FC<ButtonComponentProps> = ({
@@ -44,7 +43,6 @@ export const ButtonComponent: FC<ButtonComponentProps> = ({
   mdText,
   cursorPositionStart,
   cursorPositionEnd,
-  handleClick,
 }) => {
   const setChanges = (mdText: string, cursorPositionStart: number, cursorPositionEnd: number) => {
     setCursor(cursorPositionStart, cursorPositionEnd);
@@ -72,19 +70,25 @@ export const ButtonComponent: FC<ButtonComponentProps> = ({
       cursorPositionEnd
     );
 
-    setChanges(results.mdText, results.cursorPositionStart, results.cursorPositionEnd);
+    setChanges(
+      results.data.mdText,
+      results.data.cursorPositionStart,
+      results.data.cursorPositionEnd
+    );
   };
 
-  const set = () => {
-    toggleButton(buttonTitle);
-    setButton(isON, cursorIntON, cursorIntOFF, output);
+  const set = {
+    defaultAction: () => {
+      toggleButton(buttonTitle);
+      setButton(isON, cursorIntON, cursorIntOFF, output);
+    },
   };
 
   useHotkeys(
     shortcutKey,
     (event) => {
       event.preventDefault();
-      set();
+      set["defaultAction"]();
       return false;
     },
     { enableOnTags: ["TEXTAREA"], keydown: true },
@@ -95,79 +99,18 @@ export const ButtonComponent: FC<ButtonComponentProps> = ({
     if (editorRef) {
       editorRef.current ? editorRef.current.focus() : "";
     }
-    //@ts-ignore
-    set();
+    set["defaultAction"]();
   };
 
-  return (
-    <>
-      <Popup
-        content={title + " (" + shortcutKey + ")"}
-        mouseEnterDelay={250}
-        mouseLeaveDelay={250}
-        trigger={
-          icon ? (
-            <Button
-              style={
-                isON
-                  ? {
-                      marginTop: "0.3em",
-                      paddingTop: "0.25em",
-                      paddingBottom: "0.25em",
-                      borderRadius: "10px",
-                      backgroundColor: "#bbb",
-                    }
-                  : {
-                      marginTop: "0.3em",
-                      paddingTop: "0.25em",
-                      paddingBottom: "0.75em",
-                      borderRadius: "10px",
-                      backgroundColor: "rgba(0, 0, 0, 0)",
-                    }
-              }
-              className="CPButton"
-              size="huge"
-              icon={icon}
-              onClick={() => handleButtonClick(buttonTitle)}
-            />
-          ) : (
-            <Button
-              style={isON ? { ...style, background: "#bbb" } : style}
-              className="CPButton"
-              size="tiny"
-              onClick={() => handleButtonClick(buttonTitle)}
-            >
-              {imageurl ? (
-                <span>
-                  <img
-                    style={{
-                      position: "relative",
-                      top: "-3px",
-                      height: "1.5em",
-                      margin: "-4px",
-                    }}
-                    src={imageurl}
-                    alt="test"
-                  />
-                  <div
-                    style={{
-                      position: "relative",
-                      top: "-5px",
-                      margin: "0.5em",
-                      display: "inline",
-                    }}
-                  >
-                    {title}
-                  </div>
-                </span>
-              ) : (
-                <div style={{ position: "relative", top: "-5px" }}>{title}</div>
-              )}
-            </Button>
-          )
-        }
-      />
-    </>
+  return RenderButton(
+    title,
+    shortcutKey,
+    icon,
+    isON,
+    handleButtonClick,
+    buttonTitle,
+    imageurl,
+    style
   );
 };
 
@@ -268,7 +211,7 @@ export const CodeButtonComponent: FC<CodeButtonComponentProps> = ({
 };
 
 interface TestButtonComponentProps {
-  buttonValues: Record<string, boolean>;
+  isON: boolean;
   icon: string;
   title: string;
   onButtonClick: (button: string) => void;
@@ -279,7 +222,7 @@ interface TestButtonComponentProps {
 }
 
 export const TestButtonComponent: FC<TestButtonComponentProps> = ({
-  buttonValues,
+  isON,
   icon,
   title,
   onButtonClick,
@@ -288,6 +231,19 @@ export const TestButtonComponent: FC<TestButtonComponentProps> = ({
   style,
   imageurl,
 }) => {
+  return RenderButton(title, shortcutKey, icon, isON, onButtonClick, buttonTitle, imageurl, style);
+};
+
+const RenderButton = (
+  title: string,
+  shortcutKey: string,
+  icon: string,
+  isON: boolean,
+  onButtonClick: (buttonTitle: string) => void,
+  buttonTitle: string,
+  imageurl: string,
+  style: Record<string, string>
+) => {
   return (
     <>
       <Popup
@@ -298,7 +254,7 @@ export const TestButtonComponent: FC<TestButtonComponentProps> = ({
           icon ? (
             <Button
               style={
-                buttonValues[buttonTitle]
+                isON
                   ? {
                       marginTop: "0.3em",
                       paddingTop: "0.25em",
@@ -321,7 +277,7 @@ export const TestButtonComponent: FC<TestButtonComponentProps> = ({
             />
           ) : (
             <Button
-              style={buttonValues[buttonTitle] ? { ...style, background: "#bbb" } : style}
+              style={isON ? { ...style, background: "#bbb" } : style}
               className="CPButton"
               size="tiny"
               onClick={() => onButtonClick(buttonTitle)}

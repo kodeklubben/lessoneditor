@@ -90,7 +90,7 @@ const Video: FC<VideoProps> = ({
   return (
     <div>
       <TestButtonComponent
-        buttonValues={{}}
+        isON={false}
         icon={config.video.icon}
         title={config.video.title}
         onButtonClick={handleButtonClick}

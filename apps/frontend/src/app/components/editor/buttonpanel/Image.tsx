@@ -30,7 +30,7 @@ const Image: FC<ImageProps> = ({ editorRef, uploadImageRef }) => {
   return (
     <div>
       <TestButtonComponent
-        buttonValues={{}}
+        isON={false}
         icon={config.image.icon}
         title={config.image.title}
         onButtonClick={handleButtonClick}

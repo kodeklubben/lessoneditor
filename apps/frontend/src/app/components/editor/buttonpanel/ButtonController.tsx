@@ -63,7 +63,7 @@ const ButtonController: FC<ButtonControllerProps> = ({
       cursorPositionStart,
       cursorPositionEnd
     );
-    setChanges(results);
+    setChanges(results.data);
   };
 
   const set = Object.keys(config).reduce(

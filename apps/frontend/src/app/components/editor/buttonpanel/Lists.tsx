@@ -58,7 +58,11 @@ const Lists: FC<ListsProps> = ({
       cursorPositionEnd
     );
 
-    setChanges(results?.mdText, results?.cursorPositionStart, results?.cursorPositionEnd);
+    setChanges(
+      results.data.mdText,
+      results.data.cursorPositionStart,
+      results.data.cursorPositionEnd
+    );
   };
 
   const set = {
@@ -132,7 +136,7 @@ const Lists: FC<ListsProps> = ({
     [setButton, setListButtonValues, setList]
   );
 
-  const handleButtonClick = (button: string | number) => {
+  const handleButtonClick = (button: string) => {
     editorRef.current ? editorRef.current.focus() : "";
     setButtonValues((prevState) => ({
       ...prevState,
@@ -157,7 +161,7 @@ const Lists: FC<ListsProps> = ({
       {Object.entries(config).map((element, index) => (
         <TestButtonComponent
           key={"element" + index}
-          buttonValues={buttonValues}
+          isON={buttonValues[element[1].buttonTitle]}
           icon={element[1].icon}
           title={element[1].title}
           onButtonClick={handleButtonClick}

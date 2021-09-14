@@ -1,7 +1,5 @@
 import { ButtonComponent } from "./ButtonComponent";
-import { useHotkeys } from "react-hotkeys-hook";
-import { onButtonClick } from "./utils/buttonMethods";
-import { emphasis as config, KEY_COMBINATIONS as KEY } from "./settings/buttonConfig";
+import { emphasis as config } from "./settings/buttonConfig";
 import { FC, RefObject } from "react";
 
 interface EmphasisProps {
@@ -51,9 +49,6 @@ const Emphasis: FC<EmphasisProps> = ({
             mdText={mdText}
             cursorPositionStart={cursorPositionStart}
             cursorPositionEnd={cursorPositionEnd}
-            handleClick={() => {
-              console.log("e");
-            }}
           />
         );
       })}

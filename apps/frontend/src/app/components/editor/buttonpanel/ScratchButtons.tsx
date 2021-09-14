@@ -62,7 +62,11 @@ const ScratchButtons: FC<ScratchButtonsProps> = ({
       cursorPositionEnd
     );
 
-    setChanges(results.mdText, results.cursorPositionStart, results.cursorPositionEnd);
+    setChanges(
+      results.data.mdText,
+      results.data.cursorPositionStart,
+      results.data.cursorPositionEnd
+    );
   };
 
   const set = {

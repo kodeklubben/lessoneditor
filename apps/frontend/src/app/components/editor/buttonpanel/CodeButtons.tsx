@@ -2,7 +2,7 @@ import { CodeButtonComponent } from "./ButtonComponent";
 import { useHotkeys } from "react-hotkeys-hook";
 import { onButtonClick } from "./utils/buttonMethods";
 import { codebuttons as config, KEY_COMBINATIONS as KEY } from "./settings/buttonConfig";
-import { FC, RefObject } from "react";
+import { FC, RefObject, useState } from "react";
 
 export interface CodeButtonsProps {
   editorRef: RefObject<HTMLTextAreaElement>;
@@ -31,6 +31,7 @@ const CodeButtons: FC<CodeButtonsProps> = ({
   course,
   courseTitle,
 }) => {
+  const [state, setState] = useState<any>({});
   const outputCodeBlock =
     config.codeblock.output.slice(0, 3) +
     (course === "scratch" ? "blocks" : course) +
@@ -49,18 +50,38 @@ const CodeButtons: FC<CodeButtonsProps> = ({
     }));
   };
 
-  const setCode = (button: string, cursorIntON: number, cursorIntOFF: number, output: string) => {
-    const results = onButtonClick(
-      buttonValues[button],
-      cursorIntON,
-      cursorIntOFF,
-      output,
-      mdText,
-      cursorPositionStart,
-      cursorPositionEnd
-    );
-
-    setChanges(results.mdText, results.cursorPositionStart, results.cursorPositionEnd);
+  const setCode = (
+    buttonTitle: string,
+    cursorIntON: number,
+    cursorIntOFF: number,
+    output: string
+  ) => {
+    if (buttonValues[buttonTitle]) {
+      setChanges(
+        //@ts-ignore
+        state[buttonTitle].mdText,
+        //@ts-ignore.mdText,
+        state[buttonTitle].cursorPositionStart,
+        //@ts-ignore.cursorPositionStart,
+        state[buttonTitle].cursorPositionEnd
+      );
+    } else {
+      const results = onButtonClick(
+        buttonValues[buttonTitle],
+        cursorIntON,
+        cursorIntOFF,
+        output,
+        mdText,
+        cursorPositionStart,
+        cursorPositionEnd
+      );
+      setState({ [buttonTitle]: results.prevData });
+      setChanges(
+        results.data.mdText,
+        results.data.cursorPositionStart,
+        results.data.cursorPositionEnd
+      );
+    }
   };
 
   const set = {

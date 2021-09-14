@@ -41,7 +41,7 @@ const Hyperlink: FC<HyperlinkProps> = ({
   const isEmptyField = url === "https://" || url === "";
 
   useHotkeys(
-    `${KEY.hyperlink}`,
+    KEY.hyperlink.hyperlink,
     (event) => {
       event.preventDefault();
       handleButtonClick();
@@ -106,7 +106,7 @@ const Hyperlink: FC<HyperlinkProps> = ({
   return (
     <div>
       <TestButtonComponent
-        buttonValues={{}}
+        isON={false}
         icon={config.hyperlink.icon}
         title={config.hyperlink.title}
         onButtonClick={handleButtonClick}
