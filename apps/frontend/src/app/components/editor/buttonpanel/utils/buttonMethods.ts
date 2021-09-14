@@ -1,11 +1,14 @@
-import { emphasis, lists, sections, SECTION_TEXT } from "../settings/buttonConfig";
+import { emphasis, lists, sections, codebuttons, SECTION_TEXT } from "../settings/buttonConfig";
 
 const ifNewLine = (mdText: string, cursorPositionStart: number) => {
   return mdText[cursorPositionStart - 1] === "\n" || cursorPositionStart === 0;
 };
 
-const isEmphasis = (output: string) => {
-  return Object.entries(emphasis).filter((item) => item[1].output === output).length > 0;
+const inlineOutput = (output: string) => {
+  return (
+    Object.entries(emphasis).filter((item) => item[1].output === output).length > 0 ||
+    codebuttons.inline.output
+  );
 };
 
 const isListOrSection = (output: string) => {
@@ -54,7 +57,7 @@ export const buttonAction = (
   cursorIntOFF: number,
   output: string
 ) => {
-  if (!ifNewLine(mdText, cursorPositionStart) && !isEmphasis(output)) {
+  if (!ifNewLine(mdText, cursorPositionStart) && !inlineOutput(output)) {
     mdText = mdText.slice(0, cursorPositionStart) + "\n\n" + mdText.slice(cursorPositionStart);
     cursorPositionStart += 1;
     cursorPositionEnd += 1;

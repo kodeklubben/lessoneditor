@@ -1,4 +1,4 @@
-import { TestButtonComponent } from "./ButtonComponent";
+import { RenderButton } from "./ButtonComponent";
 
 import { useHotkeys } from "react-hotkeys-hook";
 
@@ -159,12 +159,12 @@ const Lists: FC<ListsProps> = ({
   return (
     <div>
       {Object.entries(config).map((element, index) => (
-        <TestButtonComponent
+        <RenderButton
           key={"element" + index}
           isON={buttonValues[element[1].buttonTitle]}
           icon={element[1].icon}
           title={element[1].title}
-          onButtonClick={handleButtonClick}
+          handleButtonClick={handleButtonClick}
           buttonTitle={element[1].buttonTitle}
           shortcutKey={element[1].shortcut}
           style={{}}

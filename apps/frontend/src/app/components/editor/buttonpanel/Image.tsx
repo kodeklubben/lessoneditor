@@ -1,4 +1,4 @@
-import { TestButtonComponent } from "./ButtonComponent";
+import { RenderButton } from "./ButtonComponent";
 
 import { useHotkeys } from "react-hotkeys-hook";
 
@@ -29,11 +29,11 @@ const Image: FC<ImageProps> = ({ editorRef, uploadImageRef }) => {
   };
   return (
     <div>
-      <TestButtonComponent
+      <RenderButton
         isON={false}
         icon={config.image.icon}
         title={config.image.title}
-        onButtonClick={handleButtonClick}
+        handleButtonClick={handleButtonClick}
         buttonTitle={config.image.buttonTitle}
         shortcutKey={config.image.shortcut}
         style={{}}

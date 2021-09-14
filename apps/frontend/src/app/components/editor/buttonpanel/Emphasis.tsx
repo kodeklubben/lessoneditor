@@ -1,4 +1,4 @@
-import { ButtonComponent } from "./ButtonComponent";
+import { ButtonComponent, RenderButton } from "./ButtonComponent";
 import { emphasis as config } from "./settings/buttonConfig";
 import { FC, RefObject } from "react";
 

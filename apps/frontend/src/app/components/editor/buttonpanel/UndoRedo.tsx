@@ -1,4 +1,4 @@
-import { TestButtonComponent } from "./ButtonComponent";
+import { RenderButton } from "./ButtonComponent";
 import { useHotkeys } from "react-hotkeys-hook";
 import { KEY_COMBINATIONS as KEY, undoRedo as config } from "./settings/buttonConfig";
 import { FC, RefObject } from "react";
@@ -78,12 +78,12 @@ const UndoRedo: FC<UndoRedoProps> = ({
   return (
     <div>
       {Object.entries(config).map((element, index) => (
-        <TestButtonComponent
+        <RenderButton
           key={"element" + index}
           isON={false}
           icon={element[1].icon}
           title={element[1].title}
-          onButtonClick={handleButtonClick}
+          handleButtonClick={handleButtonClick}
           buttonTitle={element[1].buttonTitle}
           shortcutKey={element[1].shortcut}
           style={{}}

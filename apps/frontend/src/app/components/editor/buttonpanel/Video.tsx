@@ -1,5 +1,5 @@
 import { FC, useState, RefObject } from "react";
-import { TestButtonComponent } from "./ButtonComponent";
+import { RenderButton } from "./ButtonComponent";
 import { useHotkeys } from "react-hotkeys-hook";
 import { KEY_COMBINATIONS as KEY, media as config } from "./settings/buttonConfig";
 
@@ -89,11 +89,11 @@ const Video: FC<VideoProps> = ({
 
   return (
     <div>
-      <TestButtonComponent
+      <RenderButton
         isON={false}
         icon={config.video.icon}
         title={config.video.title}
-        onButtonClick={handleButtonClick}
+        handleButtonClick={handleButtonClick}
         buttonTitle={config.video.buttonTitle}
         shortcutKey={config.video.shortcut}
         style={{}}

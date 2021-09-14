@@ -1,8 +1,6 @@
-import { CodeButtonComponent } from "./ButtonComponent";
-import { useHotkeys } from "react-hotkeys-hook";
-import { onButtonClick } from "./utils/buttonMethods";
+import { ButtonComponent } from "./ButtonComponent";
 import { codebuttons as config, KEY_COMBINATIONS as KEY } from "./settings/buttonConfig";
-import { FC, RefObject, useState } from "react";
+import { FC, RefObject } from "react";
 
 export interface CodeButtonsProps {
   editorRef: RefObject<HTMLTextAreaElement>;
@@ -34,14 +32,16 @@ const CodeButtons: FC<CodeButtonsProps> = ({
   return (
     <>
       {Object.entries(config).map((element, index) => (
-        <CodeButtonComponent
+        <ButtonComponent
           key={"element" + index}
           editorRef={editorRef}
           isON={buttonValues[element[1].buttonTitle]}
           title={element[1].title}
           buttonTitle={element[1].buttonTitle}
           shortcutKey={element[1].shortcut}
-          style={{}}
+          style={element[1].style}
+          imageurl={""}
+          icon={""}
           setButtonValues={setButtonValues}
           setCursor={setCursor}
           setCursorPosition={setCursorPosition}
@@ -53,7 +53,6 @@ const CodeButtons: FC<CodeButtonsProps> = ({
           cursorPositionStart={cursorPositionStart}
           cursorPositionEnd={cursorPositionEnd}
           course={course}
-          courseTitle={courseTitle}
         />
       ))}
     </>
