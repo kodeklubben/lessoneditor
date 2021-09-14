@@ -81,6 +81,7 @@ export const buttonAction = (
     cursorPositionEnd,
   };
 };
+
 export const onButtonClick = (
   isON: boolean,
   cursorIntON: number,
@@ -91,7 +92,6 @@ export const onButtonClick = (
   cursorPositionEnd: number
 ) => {
   if (output === emphasis.heading.output) {
-    console.log("heading1");
     const headingResults = heading(isON, mdText, cursorPositionStart, output);
 
     return {
@@ -170,37 +170,27 @@ export const heading = (
       mdText.slice(cursorPositionStart - 2, cursorPositionStart) === "# "
     )
   ) {
-    console.log("heading is NOT new line");
     mdText = mdText.slice(0, cursorPositionStart) + "\n\n" + mdText.slice(cursorPositionStart);
     cursorPositionStart += 1;
     heading(isOn, mdText, cursorPositionStart, output);
   }
-  if (mdText.slice(cursorPositionStart - 3, cursorPositionStart) === output && isOn) {
-    console.log("change heading");
-    isOn = !isOn;
-    mdText = mdText.slice(0, cursorPositionStart - 3) + "# " + mdText.slice(cursorPositionStart);
-    cursorPositionStart -= 1;
-    return { isOn, mdText, cursorPositionStart };
-  } else if (!isOn) {
-    console.log("her?");
-    isOn = !isOn;
-    mdText = mdText.slice(0, cursorPositionStart) + output + mdText.slice(cursorPositionStart);
-    cursorPositionStart += output.length;
-    return { isOn, mdText, cursorPositionStart };
-  } else if (isOn) {
-    console.log("eller her?");
-    if (mdText.slice(cursorPositionStart - 2, cursorPositionStart) === "# ") {
-      console.log("forvirrende");
+
+  if (isOn) {
+    if (mdText.slice(cursorPositionStart - 3, cursorPositionStart) === output) {
+      isOn = !isOn;
+      mdText = mdText.slice(0, cursorPositionStart - 3) + "# " + mdText.slice(cursorPositionStart);
+      cursorPositionStart -= 1;
+      return { isOn, mdText, cursorPositionStart };
+    } else {
       mdText = mdText.slice(0, cursorPositionStart - 2) + mdText.slice(cursorPositionStart);
       cursorPositionStart -= 2;
       isOn = !isOn;
       return { isOn, mdText, cursorPositionStart };
-    } else {
-      console.log("indeed");
-      isOn = !isOn;
-      return { isOn, mdText, cursorPositionStart };
     }
   } else {
+    isOn = !isOn;
+    mdText = mdText.slice(0, cursorPositionStart) + output + mdText.slice(cursorPositionStart);
+    cursorPositionStart += output.length;
     return { isOn, mdText, cursorPositionStart };
   }
 };

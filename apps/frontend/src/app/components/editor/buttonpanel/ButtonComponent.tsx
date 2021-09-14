@@ -157,24 +157,94 @@ export const MicroScratchButtonComponent: FC<MicroScratchButtonComponentProps> =
 };
 
 interface CodeButtonComponentProps {
+  editorRef: RefObject<HTMLTextAreaElement>;
   isON: boolean;
   title: string;
-  handleClick: (x: string) => void;
   buttonTitle: string;
   shortcutKey: string;
+  setButtonValues: Dispatch<SetStateAction<Record<string, boolean>>>;
+  setCursor: (pos1: number, pos2: number) => void;
+  setCursorPosition: (positionStart: number, positionEnd: number) => void;
+  setMdText: Dispatch<SetStateAction<string>>;
+  cursorIntON: number;
+  cursorIntOFF: number;
+  output: string;
+  mdText: string;
+  cursorPositionStart: number;
+  cursorPositionEnd: number;
+  course: string;
   courseTitle: string;
-  style: Record<string, string>;
 }
 
 export const CodeButtonComponent: FC<CodeButtonComponentProps> = ({
+  editorRef,
   isON,
   title,
-  handleClick,
   buttonTitle,
   shortcutKey,
+  setButtonValues,
+  setCursor,
+  setCursorPosition,
+  setMdText,
+  cursorIntON,
+  cursorIntOFF,
+  output,
+  mdText,
+  cursorPositionStart,
+  cursorPositionEnd,
+  course,
   courseTitle,
-  style,
 }) => {
+  const outputCodeBlock =
+    output.slice(0, 3) + (course === "scratch" ? "blocks" : course) + output.slice(3);
+
+  const setChanges = (mdText: string, cursorPositionStart: number, cursorPositionEnd: number) => {
+    setCursor(cursorPositionStart, cursorPositionEnd);
+    setCursorPosition(cursorPositionStart, cursorPositionEnd);
+    setMdText(mdText);
+  };
+
+  const toggleButton = (value: string) => {
+    if (setButtonValues) {
+      setButtonValues((prevButtonValues: Record<string, boolean>) => ({
+        ...prevButtonValues,
+        [value]: !isON,
+      }));
+    }
+  };
+
+  const setButton = (isON: boolean, cursorIntON: number, cursorIntOFF: number, output: string) => {
+    const results = onButtonClick(
+      isON,
+      cursorIntON,
+      cursorIntOFF,
+      output,
+      mdText,
+      cursorPositionStart,
+      cursorPositionEnd
+    );
+
+    setChanges(
+      results.data.mdText,
+      results.data.cursorPositionStart,
+      results.data.cursorPositionEnd
+    );
+  };
+
+  const set = () => {
+    toggleButton(buttonTitle);
+    setButton(
+      isON,
+      cursorIntON + (course === "scratch" ? 6 : course.length),
+      cursorIntOFF,
+      outputCodeBlock
+    );
+  };
+
+  const handleButtonClick = (button: string) => {
+    editorRef.current ? editorRef.current.focus() : "";
+    set();
+  };
   return (
     <>
       <Popup
@@ -187,7 +257,7 @@ export const CodeButtonComponent: FC<CodeButtonComponentProps> = ({
               style={isON ? { ...style, backgroundColor: "#bbb" } : style}
               className="CPButton"
               size="tiny"
-              onClick={() => handleClick(buttonTitle)}
+              onClick={() => handleButtonClick(buttonTitle)}
             >
               <div style={{ position: "relative", top: "-5px" }}>
                 {"```Kodeblokk"}
@@ -199,7 +269,7 @@ export const CodeButtonComponent: FC<CodeButtonComponentProps> = ({
               style={isON ? { ...style, backgroundColor: "#bbb" } : style}
               className="CPButton"
               size="tiny"
-              onClick={() => handleClick(buttonTitle)}
+              onClick={() => handleButtonClick(buttonTitle)}
             >
               <div style={{ position: "relative", top: "-5px" }}>{"`Inline-kode"}</div>
             </Button>
