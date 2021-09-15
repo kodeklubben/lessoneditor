@@ -1,6 +1,6 @@
 import { buttonAction } from "./buttonMethods";
 import { emphasis, lists } from "../settings/buttonConfig";
-import { SECTION_TEXT } from "../../settingsFiles/languages/editor_NO";
+import { SECTION_TEXT } from "../../../settingsFiles/languages/editor_NO";
 
 const testListInput = {
   isOn: false,

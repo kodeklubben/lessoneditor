@@ -1,5 +1,5 @@
-import { Dispatch, SetStateAction, FC, RefObject, useState } from "react";
 import "./buttonpanel.scss";
+import { Dispatch, SetStateAction, FC, RefObject, useState } from "react";
 import ShowSpinner from "../../ShowSpinner";
 import Autosave from "../Autosave";
 import Emphasis from "./Emphasis";
@@ -84,6 +84,7 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
               setCursorPosition={setCursorPosition}
               setCursor={setCursor}
               setButtonValues={setButtonValues}
+              pushUndoValue={pushUndoValue}
             />
 
             <div style={{ marginRight: "3em" }} />
@@ -110,8 +111,15 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
             setMdText={setMdText}
             setCursorPosition={setCursorPosition}
             setCursor={setCursor}
+            pushUndoValue={pushUndoValue}
           />
-          <Image editorRef={editorRef} uploadImageRef={uploadImageRef} />
+          <Image
+            editorRef={editorRef}
+            uploadImageRef={uploadImageRef}
+            pushUndoValue={pushUndoValue}
+            mdText={mdText}
+            cursorPositionStart={cursorPositionStart}
+          />
           <Video
             editorRef={editorRef}
             mdText={mdText}
@@ -120,6 +128,7 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
             setMdText={setMdText}
             setCursorPosition={setCursorPosition}
             setCursor={setCursor}
+            pushUndoValue={pushUndoValue}
           />
           <div style={{ marginRight: "3em" }} />
           <Lists
@@ -133,6 +142,7 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
             setCursor={setCursor}
             setListButtonValues={setListButtonValues}
             setButtonValues={setButtonValues}
+            pushUndoValue={pushUndoValue}
           />
         </div>
         <div className="settingspanel">
@@ -161,6 +171,7 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
             setCursorPosition={setCursorPosition}
             setCursor={setCursor}
             setButtonValues={setButtonValues}
+            pushUndoValue={pushUndoValue}
           />
 
           <span style={{ marginRight: "5em" }} />
@@ -177,6 +188,7 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
             setButtonValues={setButtonValues}
             course={course}
             courseTitle={courseTitle}
+            pushUndoValue={pushUndoValue}
           />
         </div>
         <Autosave mdText={mdText} saveEditorText={saveEditorText} />
@@ -194,6 +206,7 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
               setCursorPosition={setCursorPosition}
               setCursor={setCursor}
               setButtonValues={setButtonValues}
+              pushUndoValue={pushUndoValue}
             />
           ) : (
             ""
@@ -209,6 +222,7 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
               setCursorPosition={setCursorPosition}
               setCursor={setCursor}
               setButtonValues={setButtonValues}
+              pushUndoValue={pushUndoValue}
             />
           ) : (
             ""

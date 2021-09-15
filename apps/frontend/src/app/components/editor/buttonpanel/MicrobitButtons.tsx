@@ -1,6 +1,6 @@
 import { ButtonController } from "./buttoncontroller/ButtonController";
 
-import { microbitbuttons as config } from "./settings/microbitAndScratchButtonConfig";
+import { microbitbuttons as config } from "./buttoncontroller/settings/microbitAndScratchButtonConfig";
 import { FC, RefObject } from "react";
 
 interface MicrobitButtonsProps {
@@ -13,6 +13,7 @@ interface MicrobitButtonsProps {
   setCursorPosition: (positionStart: number, positionEnd: number) => void;
   setCursor: (pos1: number, pos2: number) => void;
   setButtonValues: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
+  pushUndoValue: (mdText: string, cursorPositionStart: number) => void;
 }
 
 const MicrobitButtons: FC<MicrobitButtonsProps> = ({
@@ -25,6 +26,7 @@ const MicrobitButtons: FC<MicrobitButtonsProps> = ({
   setCursorPosition,
   setCursor,
   setButtonValues,
+  pushUndoValue,
 }) => {
   return (
     <>
@@ -47,6 +49,7 @@ const MicrobitButtons: FC<MicrobitButtonsProps> = ({
           cursorPositionStart={cursorPositionStart}
           cursorPositionEnd={cursorPositionEnd}
           color={element[1].color}
+          pushUndoValue={pushUndoValue}
         />
       ))}
     </>

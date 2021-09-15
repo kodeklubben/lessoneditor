@@ -1,5 +1,5 @@
 import { ButtonController } from "./buttoncontroller/ButtonController";
-import { emphasis as config } from "./settings/buttonConfig";
+import { emphasis as config } from "./buttoncontroller/settings/buttonConfig";
 import { FC, RefObject } from "react";
 
 interface EmphasisProps {
@@ -12,6 +12,7 @@ interface EmphasisProps {
   setCursorPosition: (positionStart: number, positionEnd: number) => void;
   setCursor: (pos1: number, pos2: number) => void;
   setButtonValues: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
+  pushUndoValue: (mdText: string, cursorPositionStart: number) => void;
 }
 
 const Emphasis: FC<EmphasisProps> = ({
@@ -24,6 +25,7 @@ const Emphasis: FC<EmphasisProps> = ({
   setCursorPosition,
   setCursor,
   setButtonValues,
+  pushUndoValue,
 }) => {
   return (
     <div>
@@ -47,6 +49,7 @@ const Emphasis: FC<EmphasisProps> = ({
             mdText={mdText}
             cursorPositionStart={cursorPositionStart}
             cursorPositionEnd={cursorPositionEnd}
+            pushUndoValue={pushUndoValue}
           />
         );
       })}

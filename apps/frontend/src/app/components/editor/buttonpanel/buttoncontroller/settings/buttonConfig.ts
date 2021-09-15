@@ -1,4 +1,4 @@
-import { BUTTON_TITLE, SECTION_TEXT } from "../../settingsFiles/languages/editor_NO";
+import { BUTTON_TITLE, SECTION_TEXT } from "../../../settingsFiles/languages/editor_NO";
 
 const temp = "```";
 

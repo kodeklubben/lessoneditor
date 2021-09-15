@@ -3,7 +3,7 @@ import { ButtonController } from "./buttoncontroller/ButtonController";
 import {
   KEY_COMBINATIONS_SCRATCH as KEY,
   scratchbuttons as config,
-} from "./settings/microbitAndScratchButtonConfig";
+} from "./buttoncontroller/settings/microbitAndScratchButtonConfig";
 import { FC, RefObject } from "react";
 
 interface ScratchButtonsProps {
@@ -16,6 +16,7 @@ interface ScratchButtonsProps {
   setCursorPosition: (positionStart: number, positionEnd: number) => void;
   setCursor: (pos1: number, pos2: number) => void;
   setButtonValues: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
+  pushUndoValue: (mdText: string, cursorPositionStart: number) => void;
 }
 
 const ScratchButtons: FC<ScratchButtonsProps> = ({
@@ -28,6 +29,7 @@ const ScratchButtons: FC<ScratchButtonsProps> = ({
   setCursorPosition,
   setCursor,
   setButtonValues,
+  pushUndoValue,
 }) => {
   return (
     <>
@@ -50,6 +52,7 @@ const ScratchButtons: FC<ScratchButtonsProps> = ({
           cursorPositionStart={cursorPositionStart}
           cursorPositionEnd={cursorPositionEnd}
           color={element[1].color}
+          pushUndoValue={pushUndoValue}
         />
       ))}
     </>

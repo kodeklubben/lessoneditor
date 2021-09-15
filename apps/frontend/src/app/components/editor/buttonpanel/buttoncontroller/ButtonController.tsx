@@ -1,8 +1,8 @@
-import { FC, RefObject, Dispatch, SetStateAction } from "react";
+import { FC, RefObject, Dispatch, SetStateAction, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
-import { onButtonClick, heading as h } from "../utils/buttonMethods";
-import { codebuttons } from "../settings/buttonConfig";
-import { microbitbuttons, scratchbuttons } from "../settings/microbitAndScratchButtonConfig";
+import { buttonAction, heading } from "./utils/buttonMethods";
+import { codebuttons } from "./settings/buttonConfig";
+import { microbitbuttons, scratchbuttons } from "./settings/microbitAndScratchButtonConfig";
 import { RenderButtons } from "./views/RenderButtons";
 import { RenderMicroScratchButtons } from "./views/RenderMicroScratchButtons";
 import { RenderCodeButtons } from "./views/RenderCodeButtons";
@@ -20,7 +20,7 @@ interface ButtonControllerProps {
   redoCursorPosition?: number[];
   setUndoCursorPosition?: React.Dispatch<React.SetStateAction<number[]>>;
   setRedoCursorPosition?: React.Dispatch<React.SetStateAction<number[]>>;
-  pushUndoValue?: (mdText: string, cursorPositionStart: number) => void;
+  pushUndoValue: (mdText: string, cursorPositionStart: number) => void;
   pushRedoValue?: (mdText: string, cursorPositionStart: number) => void;
   setButtonValues?: Dispatch<SetStateAction<Record<string, boolean>>>;
   setListButtonValues?: React.Dispatch<
@@ -72,6 +72,12 @@ export const ButtonController: FC<ButtonControllerProps> = ({
   outputOnEnter,
   color,
 }) => {
+  const [prevTextData, setPrevTextData] = useState<{
+    mdText: string;
+    cursorPositionStart: number;
+    cursorPositionEnd: number;
+  }>({ mdText: "", cursorPositionStart: -1, cursorPositionEnd: -1 });
+
   const setChanges = (mdText: string, cursorPositionStart: number, cursorPositionEnd: number) => {
     if (setCursor && setCursorPosition && setMdText) {
       setCursor(cursorPositionStart, cursorPositionEnd);
@@ -82,10 +88,9 @@ export const ButtonController: FC<ButtonControllerProps> = ({
 
   const toggleButton = (value: string) => {
     if (setButtonValues) {
-      setButtonValues((prevButtonValues: Record<string, boolean>) => ({
-        ...prevButtonValues,
+      setButtonValues({
         [value]: !isON,
-      }));
+      });
     }
   };
 
@@ -96,23 +101,34 @@ export const ButtonController: FC<ButtonControllerProps> = ({
     output: string,
     mdText: string,
     cursorPositionStart: number,
-    cursorPositionEnd: number
+    cursorPositionEnd: number,
+    buttonTitle: string
   ) => {
-    const results = onButtonClick(
-      isON,
-      cursorIntON,
-      cursorIntOFF,
-      output,
-      mdText,
-      cursorPositionStart,
-      cursorPositionEnd
-    );
+    if (!isON) {
+      setPrevTextData({ mdText, cursorPositionStart, cursorPositionEnd });
 
-    setChanges(
-      results.data.mdText,
-      results.data.cursorPositionStart,
-      results.data.cursorPositionEnd
-    );
+      if (pushUndoValue) {
+        pushUndoValue(mdText, cursorPositionStart);
+      }
+      const results = buttonAction(
+        mdText,
+        cursorPositionStart,
+        cursorPositionEnd,
+        cursorIntON,
+        cursorIntOFF,
+        output
+      );
+      setChanges(results.mdText, results.cursorPositionStart, results.cursorPositionEnd);
+    } else {
+      if (pushUndoValue) {
+        pushUndoValue(mdText, cursorPositionStart);
+      }
+      setChanges(
+        prevTextData.mdText,
+        prevTextData.cursorPositionStart,
+        prevTextData.cursorPositionEnd
+      );
+    }
   };
 
   const set = (button: string) => {
@@ -125,10 +141,14 @@ export const ButtonController: FC<ButtonControllerProps> = ({
         output.slice(0, 3) + (course === "scratch" ? "blocks" : course) + output.slice(3),
         mdText,
         cursorPositionStart,
-        cursorPositionEnd
+        cursorPositionEnd,
+        buttonTitle
       );
     } else if (setButtonValues && button === "heading") {
-      const results: { isON: boolean; mdText: string; cursorPositionStart: number } = h(
+      if (buttonTitle) {
+        setPrevTextData({ mdText, cursorPositionStart, cursorPositionEnd });
+      }
+      const results: { isON: boolean; mdText: string; cursorPositionStart: number } = heading(
         isON,
         mdText,
         cursorPositionStart,
@@ -137,34 +157,24 @@ export const ButtonController: FC<ButtonControllerProps> = ({
 
       setButtonValues((prevButtonValues) => ({
         ...prevButtonValues,
-        [buttonTitle]: results?.isON,
+        [buttonTitle]: results.isON,
       }));
-      setChanges(results?.mdText, results?.cursorPositionStart, results?.cursorPositionStart);
+      setChanges(results.mdText, results.cursorPositionStart, results.cursorPositionStart);
     } else if (button === "undo") {
-      if (
-        undoCursorPosition &&
-        setUndoCursorPosition &&
-        pushRedoValue &&
-        setCursorPosition &&
-        undoCursorPosition.length > 0
-      ) {
-        const position = undoCursorPosition[undoCursorPosition.length - 1];
-        setUndoCursorPosition(undoCursorPosition.slice(0, undoCursorPosition.length - 1));
+      if (undoCursorPosition && setUndoCursorPosition && pushRedoValue && setCursorPosition) {
+        const position = undoCursorPosition[undoCursorPosition.length - 1] || -1;
+        setUndoCursorPosition((prevData) => prevData.slice(0, prevData.length - 1));
+        // setUndoCursorPosition(undoCursorPosition.slice(0, undoCursorPosition.length - 1));
         pushRedoValue(mdText, cursorPositionStart);
         setCursorPosition(position, position);
       } else {
         return;
       }
     } else if (button === "redo") {
-      if (
-        redoCursorPosition &&
-        setRedoCursorPosition &&
-        pushUndoValue &&
-        setCursorPosition &&
-        redoCursorPosition.length > 0
-      ) {
-        const position = redoCursorPosition[redoCursorPosition.length - 1];
-        setRedoCursorPosition(redoCursorPosition.slice(0, redoCursorPosition.length - 1));
+      if (redoCursorPosition && setRedoCursorPosition && pushUndoValue && setCursorPosition) {
+        const position = redoCursorPosition[redoCursorPosition.length - 1] || -1;
+        setRedoCursorPosition((prevData) => prevData.slice(0, prevData.length - 1));
+        // setRedoCursorPosition(redoCursorPosition.slice(0, redoCursorPosition.length - 1));
         pushUndoValue(mdText, cursorPositionStart);
         setCursorPosition(position, position);
       } else {
@@ -173,7 +183,6 @@ export const ButtonController: FC<ButtonControllerProps> = ({
     } else if (button === "listUl" || button === "listOl" || button === "listCheck") {
       toggleButton(buttonTitle);
       if (setListButtonValues) {
-        alert("buttonList");
         setListButtonValues({
           bTitle: buttonTitle,
           output: outputOnEnter || "",
@@ -187,7 +196,8 @@ export const ButtonController: FC<ButtonControllerProps> = ({
         output,
         mdText,
         cursorPositionStart,
-        cursorPositionEnd
+        cursorPositionEnd,
+        buttonTitle
       );
     } else {
       toggleButton(buttonTitle);
@@ -198,7 +208,8 @@ export const ButtonController: FC<ButtonControllerProps> = ({
         output,
         mdText,
         cursorPositionStart,
-        cursorPositionEnd
+        cursorPositionEnd,
+        buttonTitle
       );
     }
   };

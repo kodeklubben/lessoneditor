@@ -1,7 +1,7 @@
 import { FC, useState, RefObject } from "react";
 import { RenderButtons } from "./buttoncontroller/views/RenderButtons";
 import { useHotkeys } from "react-hotkeys-hook";
-import { KEY_COMBINATIONS as KEY, media as config } from "./settings/buttonConfig";
+import { KEY_COMBINATIONS as KEY, media as config } from "./buttoncontroller/settings/buttonConfig";
 
 import { Button, Header, Input, Modal } from "semantic-ui-react";
 
@@ -21,6 +21,7 @@ interface VideoProps {
   setMdText: React.Dispatch<React.SetStateAction<string>>;
   setCursorPosition: (positionStart: number, positionEnd: number) => void;
   setCursor: (pos1: number, pos2: number) => void;
+  pushUndoValue: (mdText: string, cursorPositionStart: number) => void;
 }
 
 const Video: FC<VideoProps> = ({
@@ -31,6 +32,7 @@ const Video: FC<VideoProps> = ({
   setMdText,
   setCursorPosition,
   setCursor,
+  pushUndoValue,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [url, setUrl] = useState("");
@@ -53,6 +55,7 @@ const Video: FC<VideoProps> = ({
   );
 
   const handleButtonClick = () => {
+    pushUndoValue(mdText, cursorPositionStart);
     setIsOpen(!isOpen);
     return;
   };

@@ -42,24 +42,30 @@ const Editor: FC = () => {
   useEffect(() => {
     if (savedFileBody) {
       setMdText(savedFileBody);
+      setUndo([savedFileBody]);
       setShowSpinner(false);
     }
   }, [savedFileBody]);
 
   const pushUndoValue = (mdText: string, cursorPositionStart: number) => {
-    if (undo[undo.length - 1] !== mdText) {
+    if (cursorPositionStart && undo[undo.length - 1] !== mdText) {
       setUndo((undo) => [...undo, mdText]);
       setUndoCursorPosition((undoCursorPosition) => [...undoCursorPosition, cursorPositionStart]);
-      setRedo(redo.slice(0, redo.length - 1));
+      setRedo((prevRedo) => {
+        console.log({ prevRedo });
+        return prevRedo.slice(0, prevRedo.length - 1);
+      });
+      // setRedo(redo.slice(0, redo.length - 1));
       setMdText(redo[redo.length - 1]);
     }
   };
 
   const pushRedoValue = (mdText: string, cursorPositionStart: number) => {
-    if (redo[redo.length] !== mdText) {
+    resetButtons();
+    if (cursorPositionStart && redo[redo.length] !== mdText) {
       setRedo((redo) => [...redo, mdText]);
       setRedoCursorPosition((redoCursorPosition) => [...redoCursorPosition, cursorPositionStart]);
-      setUndo(undo.slice(0, undo.length - 1));
+      setUndo((prevUndo) => prevUndo.slice(0, prevUndo.length - 1));
       setMdText(undo[undo.length - 1]);
     }
   };
@@ -140,7 +146,6 @@ const Editor: FC = () => {
             setCursor={setCursor}
             pushUndoValue={pushUndoValue}
             resetButtons={resetButtons}
-            course={lessonData.course}
           />
           <MDPreview mdText={mdText} course={lessonData.course} language={language} />
         </div>

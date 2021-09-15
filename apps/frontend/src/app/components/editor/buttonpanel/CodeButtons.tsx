@@ -1,5 +1,8 @@
 import { ButtonController } from "./buttoncontroller/ButtonController";
-import { codebuttons as config, KEY_COMBINATIONS as KEY } from "./settings/buttonConfig";
+import {
+  codebuttons as config,
+  KEY_COMBINATIONS as KEY,
+} from "./buttoncontroller/settings/buttonConfig";
 import { FC, RefObject } from "react";
 
 export interface CodeButtonsProps {
@@ -12,6 +15,7 @@ export interface CodeButtonsProps {
   setCursorPosition: (positionStart: number, positionEnd: number) => void;
   setCursor: (pos1: number, pos2: number) => void;
   setButtonValues: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
+  pushUndoValue: (mdText: string, cursorPositionStart: number) => void;
   course: string;
   courseTitle: string;
 }
@@ -26,6 +30,7 @@ const CodeButtons: FC<CodeButtonsProps> = ({
   setCursorPosition,
   setCursor,
   setButtonValues,
+  pushUndoValue,
   course,
   courseTitle,
 }) => {
@@ -52,6 +57,7 @@ const CodeButtons: FC<CodeButtonsProps> = ({
           cursorPositionEnd={cursorPositionEnd}
           course={course}
           courseTitle={courseTitle}
+          pushUndoValue={pushUndoValue}
         />
       ))}
     </>

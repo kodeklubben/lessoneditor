@@ -1,7 +1,10 @@
 import { FC, useState, RefObject } from "react";
 import { RenderButtons } from "./buttoncontroller/views/RenderButtons";
 import { useHotkeys } from "react-hotkeys-hook";
-import { hyperlink as config, KEY_COMBINATIONS as KEY } from "./settings/buttonConfig";
+import {
+  hyperlink as config,
+  KEY_COMBINATIONS as KEY,
+} from "./buttoncontroller/settings/buttonConfig";
 
 import { Button, Checkbox, Header, Input, Modal } from "semantic-ui-react";
 
@@ -23,6 +26,7 @@ interface HyperlinkProps {
   setMdText: React.Dispatch<React.SetStateAction<string>>;
   setCursorPosition: (positionStart: number, positionEnd: number) => void;
   setCursor: (pos1: number, pos2: number) => void;
+  pushUndoValue: (mdText: string, cursorPositionStart: number) => void;
 }
 
 const Hyperlink: FC<HyperlinkProps> = ({
@@ -33,6 +37,7 @@ const Hyperlink: FC<HyperlinkProps> = ({
   setMdText,
   setCursorPosition,
   setCursor,
+  pushUndoValue,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [url, setUrl] = useState("https://");
@@ -50,6 +55,7 @@ const Hyperlink: FC<HyperlinkProps> = ({
   );
 
   const handleButtonClick = () => {
+    pushUndoValue(mdText, cursorPositionStart);
     setIsOpen(!isOpen);
     return;
   };

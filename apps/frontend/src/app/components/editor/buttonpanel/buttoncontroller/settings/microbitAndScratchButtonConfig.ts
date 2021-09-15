@@ -1,4 +1,4 @@
-import { SECTION_TEXT } from "../../settingsFiles/languages/editor_NO";
+import { SECTION_TEXT } from "../../../settingsFiles/languages/editor_NO";
 
 // SHORTCUTKEY options: "ctrl", "shift", "alt", "option", "command"
 const SHORTCUTKEY = "ctrl";

@@ -1,5 +1,5 @@
 import { ButtonController } from "./buttoncontroller/ButtonController";
-import { undoRedo as config } from "./settings/buttonConfig";
+import { undoRedo as config } from "./buttoncontroller/settings/buttonConfig";
 import { FC, RefObject } from "react";
 
 interface UndoRedoProps {

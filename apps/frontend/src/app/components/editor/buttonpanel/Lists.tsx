@@ -1,10 +1,5 @@
 import { ButtonController } from "./buttoncontroller/ButtonController";
-
-import { useHotkeys } from "react-hotkeys-hook";
-
-import { onButtonClick } from "./utils/buttonMethods";
-
-import { KEY_COMBINATIONS as KEY, lists as config } from "./settings/buttonConfig";
+import { lists as config } from "./buttoncontroller/settings/buttonConfig";
 import { FC, RefObject } from "react";
 
 interface ListsProps {
@@ -20,6 +15,7 @@ interface ListsProps {
     React.SetStateAction<{ bTitle: string; output: string; cursorInt: number }>
   >;
   setButtonValues: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
+  pushUndoValue: (mdText: string, cursorPositionStart: number) => void;
 }
 
 const Lists: FC<ListsProps> = ({
@@ -33,6 +29,7 @@ const Lists: FC<ListsProps> = ({
   setCursor,
   setListButtonValues,
   setButtonValues,
+  pushUndoValue,
 }) => {
   return (
     <div>
@@ -57,6 +54,7 @@ const Lists: FC<ListsProps> = ({
           cursorPositionStart={cursorPositionStart}
           cursorPositionEnd={cursorPositionEnd}
           outputOnEnter={element[1].outputOnEnter}
+          pushUndoValue={pushUndoValue}
         />
       ))}
     </div>

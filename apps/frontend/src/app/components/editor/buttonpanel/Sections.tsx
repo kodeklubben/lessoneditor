@@ -1,6 +1,6 @@
 import { ButtonController } from "./buttoncontroller/ButtonController";
 import { RefObject } from "react";
-import { sections as config } from "./settings/buttonConfig";
+import { sections as config } from "./buttoncontroller/settings/buttonConfig";
 import { FC } from "react";
 
 interface SectionsProps {
@@ -13,6 +13,7 @@ interface SectionsProps {
   setCursorPosition: (positionStart: number, positionEnd: number) => void;
   setCursor: (pos1: number, pos2: number) => void;
   setButtonValues: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
+  pushUndoValue: (mdText: string, cursorPositionStart: number) => void;
 }
 
 const Sections: FC<SectionsProps> = ({
@@ -25,6 +26,7 @@ const Sections: FC<SectionsProps> = ({
   setCursorPosition,
   setCursor,
   setButtonValues,
+  pushUndoValue,
 }) => {
   return (
     <>
@@ -48,6 +50,7 @@ const Sections: FC<SectionsProps> = ({
           mdText={mdText}
           cursorPositionStart={cursorPositionStart}
           cursorPositionEnd={cursorPositionEnd}
+          pushUndoValue={pushUndoValue}
         />
       ))}
     </>
