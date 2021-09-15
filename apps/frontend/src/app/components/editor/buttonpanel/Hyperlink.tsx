@@ -26,7 +26,7 @@ interface HyperlinkProps {
   setMdText: React.Dispatch<React.SetStateAction<string>>;
   setCursorPosition: (positionStart: number, positionEnd: number) => void;
   setCursor: (pos1: number, pos2: number) => void;
-  pushUndoValue: (mdText: string, cursorPositionStart: number) => void;
+  setUndoAndCursorPosition: (mdText: string, position: number) => void;
 }
 
 const Hyperlink: FC<HyperlinkProps> = ({
@@ -37,7 +37,7 @@ const Hyperlink: FC<HyperlinkProps> = ({
   setMdText,
   setCursorPosition,
   setCursor,
-  pushUndoValue,
+  setUndoAndCursorPosition,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [url, setUrl] = useState("https://");
@@ -55,7 +55,7 @@ const Hyperlink: FC<HyperlinkProps> = ({
   );
 
   const handleButtonClick = () => {
-    pushUndoValue(mdText, cursorPositionStart);
+    setUndoAndCursorPosition(mdText, cursorPositionStart);
     setIsOpen(!isOpen);
     return;
   };

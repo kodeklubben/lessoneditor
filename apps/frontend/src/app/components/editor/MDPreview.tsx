@@ -8,9 +8,12 @@ interface MDPreviewProps {
   mdText: string;
   course: string;
   language: string;
+  cursorPositionStart?: number;
 }
 
-const MDPreview: FC<MDPreviewProps> = ({ mdText, course, language }) => {
+const MDPreview: FC<MDPreviewProps> = ({ mdText, course, language, cursorPositionStart }) => {
+  let test;
+
   const parseMD = mdParser(mdText);
 
   useEffect(() => {

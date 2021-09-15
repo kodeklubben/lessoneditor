@@ -22,8 +22,8 @@ const Editor: FC = () => {
   const [cursorPositionEnd, setCursorPositionEnd] = useState<number>(0);
   const [undo, setUndo] = useState<string[]>([]);
   const [redo, setRedo] = useState<string[]>([]);
-  const [undoCursorPosition, setUndoCursorPosition] = useState<number[]>([]);
-  const [redoCursorPosition, setRedoCursorPosition] = useState<number[]>([]);
+  const [undoCursorPosition, setUndoCursorPosition] = useState<number[]>([0]);
+  const [redoCursorPosition, setRedoCursorPosition] = useState<number[]>([0]);
   const [listButtonValues, setListButtonValues] = useState<{
     bTitle: string;
     output: string;
@@ -41,32 +41,50 @@ const Editor: FC = () => {
 
   useEffect(() => {
     if (savedFileBody) {
+      setCursor(savedFileBody.length, savedFileBody.length);
       setMdText(savedFileBody);
       setUndo([savedFileBody]);
+      setUndoCursorPosition([savedFileBody.length]);
       setShowSpinner(false);
     }
   }, [savedFileBody]);
 
+  const removeLastUndoAndPosition = () => {
+    setUndo((prevUndo) => prevUndo.slice(0, prevUndo.length - 1));
+    setUndoCursorPosition((prevPosition) => prevPosition.slice(0, prevPosition.length - 1));
+  };
+  const removeLastRedoAndPosition = () => {
+    setRedo((prevRedo) => prevRedo.slice(0, prevRedo.length - 1));
+    setRedoCursorPosition((prevPosition) => prevPosition.slice(0, prevPosition.length - 1));
+  };
+
+  const setUndoAndUndoPosition = (mdText: string, position: number) => {
+    setUndo((prevUndo) => [...prevUndo, mdText]);
+    setUndoCursorPosition((prevPosition) => [...prevPosition, position]);
+    console.log(undoCursorPosition);
+  };
+
   const pushUndoValue = (mdText: string, cursorPositionStart: number) => {
-    if (cursorPositionStart && undo[undo.length - 1] !== mdText) {
-      setUndo((undo) => [...undo, mdText]);
-      setUndoCursorPosition((undoCursorPosition) => [...undoCursorPosition, cursorPositionStart]);
-      setRedo((prevRedo) => {
-        console.log({ prevRedo });
-        return prevRedo.slice(0, prevRedo.length - 1);
-      });
-      // setRedo(redo.slice(0, redo.length - 1));
-      setMdText(redo[redo.length - 1]);
+    if (undo.length > 0) {
+      const text = undo[undo.length - 1];
+      const position = undoCursorPosition[undoCursorPosition.length - 1];
+      setRedo((prevRedo) => [...prevRedo, mdText]);
+      setRedoCursorPosition((prevPosition) => [...prevPosition, cursorPositionStart]);
+      removeLastUndoAndPosition();
+      setMdText(text);
+      setCursorPosition(position, position);
     }
   };
 
-  const pushRedoValue = (mdText: string, cursorPositionStart: number) => {
+  const pushRedoValue = (mdText: string, position: number) => {
     resetButtons();
-    if (cursorPositionStart && redo[redo.length] !== mdText) {
-      setRedo((redo) => [...redo, mdText]);
-      setRedoCursorPosition((redoCursorPosition) => [...redoCursorPosition, cursorPositionStart]);
-      setUndo((prevUndo) => prevUndo.slice(0, prevUndo.length - 1));
-      setMdText(undo[undo.length - 1]);
+    if (redo.length > 0) {
+      const text = redo[redo.length - 1];
+      const position = redoCursorPosition[redoCursorPosition.length - 1];
+      setUndoAndUndoPosition(mdText, position);
+      removeLastRedoAndPosition();
+      setMdText(text);
+      setCursor(position, position);
     }
   };
 
@@ -131,6 +149,7 @@ const Editor: FC = () => {
         setUndoCursorPosition={setUndoCursorPosition}
         undoCursorPosition={undoCursorPosition}
         uploadImageRef={uploadImageRef}
+        setUndoAndCursorPosition={setUndoAndUndoPosition}
       />
       <div className="text-editor-container">
         <div className="editor-windows">
@@ -144,10 +163,15 @@ const Editor: FC = () => {
             setMdText={setMdText}
             setButtonValues={setButtonValues}
             setCursor={setCursor}
-            pushUndoValue={pushUndoValue}
+            setUndoAndCursorPosition={setUndoAndUndoPosition}
             resetButtons={resetButtons}
           />
-          <MDPreview mdText={mdText} course={lessonData.course} language={language} />
+          <MDPreview
+            mdText={mdText}
+            course={lessonData.course}
+            language={language}
+            cursorPositionStart={cursorPositionStart}
+          />
         </div>
       </div>
     </>

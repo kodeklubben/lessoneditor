@@ -77,14 +77,14 @@ export const textSelectController = (
 };
 
 export const TABcontroller = (
-  pushUndoValue: (mdText: string, cursorPositionStart: number) => void,
+  setUndoAndCursorPosition: (mdText: string, position: number) => void,
   mdText: string,
   cursorPositionStart: number,
   setMdText: Dispatch<SetStateAction<string>>,
   setCursorPosition: (positionStart: number, positionEnd: number) => void
 ) => {
   const tabSize = 2;
-  pushUndoValue(mdText, cursorPositionStart);
+  setUndoAndCursorPosition(mdText, cursorPositionStart);
   const outputText =
     mdText.slice(0, cursorPositionStart) + " ".repeat(tabSize) + mdText.slice(cursorPositionStart);
   setMdText(outputText);

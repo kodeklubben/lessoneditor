@@ -40,6 +40,7 @@ interface ButtonPanelProps {
   setRedoCursorPosition: Dispatch<SetStateAction<number[]>>;
   setUndoCursorPosition: Dispatch<SetStateAction<number[]>>;
   uploadImageRef: RefObject<HTMLInputElement>;
+  setUndoAndCursorPosition: (mdText: string, position: number) => void;
 }
 
 const ButtonPanel: FC<ButtonPanelProps> = ({
@@ -63,8 +64,8 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
   setMdText,
   setRedoCursorPosition,
   setUndoCursorPosition,
-
   uploadImageRef,
+  setUndoAndCursorPosition,
 }) => {
   const [showSpinner, setShowSpinner] = useState(false);
 
@@ -84,7 +85,7 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
               setCursorPosition={setCursorPosition}
               setCursor={setCursor}
               setButtonValues={setButtonValues}
-              pushUndoValue={pushUndoValue}
+              setUndoAndCursorPosition={setUndoAndCursorPosition}
             />
 
             <div style={{ marginRight: "3em" }} />
@@ -111,12 +112,12 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
             setMdText={setMdText}
             setCursorPosition={setCursorPosition}
             setCursor={setCursor}
-            pushUndoValue={pushUndoValue}
+            setUndoAndCursorPosition={setUndoAndCursorPosition}
           />
           <Image
             editorRef={editorRef}
             uploadImageRef={uploadImageRef}
-            pushUndoValue={pushUndoValue}
+            setUndoAndCursorPosition={setUndoAndCursorPosition}
             mdText={mdText}
             cursorPositionStart={cursorPositionStart}
           />
@@ -128,7 +129,7 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
             setMdText={setMdText}
             setCursorPosition={setCursorPosition}
             setCursor={setCursor}
-            pushUndoValue={pushUndoValue}
+            setUndoAndCursorPosition={setUndoAndCursorPosition}
           />
           <div style={{ marginRight: "3em" }} />
           <Lists
@@ -142,7 +143,7 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
             setCursor={setCursor}
             setListButtonValues={setListButtonValues}
             setButtonValues={setButtonValues}
-            pushUndoValue={pushUndoValue}
+            setUndoAndCursorPosition={setUndoAndCursorPosition}
           />
         </div>
         <div className="settingspanel">
@@ -171,7 +172,7 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
             setCursorPosition={setCursorPosition}
             setCursor={setCursor}
             setButtonValues={setButtonValues}
-            pushUndoValue={pushUndoValue}
+            setUndoAndCursorPosition={setUndoAndCursorPosition}
           />
 
           <span style={{ marginRight: "5em" }} />
@@ -188,7 +189,7 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
             setButtonValues={setButtonValues}
             course={course}
             courseTitle={courseTitle}
-            pushUndoValue={pushUndoValue}
+            setUndoAndCursorPosition={setUndoAndCursorPosition}
           />
         </div>
         <Autosave mdText={mdText} saveEditorText={saveEditorText} />
@@ -206,7 +207,7 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
               setCursorPosition={setCursorPosition}
               setCursor={setCursor}
               setButtonValues={setButtonValues}
-              pushUndoValue={pushUndoValue}
+              setUndoAndCursorPosition={setUndoAndCursorPosition}
             />
           ) : (
             ""
@@ -222,7 +223,7 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
               setCursorPosition={setCursorPosition}
               setCursor={setCursor}
               setButtonValues={setButtonValues}
-              pushUndoValue={pushUndoValue}
+              setUndoAndCursorPosition={setUndoAndCursorPosition}
             />
           ) : (
             ""

@@ -13,7 +13,7 @@ interface MicrobitButtonsProps {
   setCursorPosition: (positionStart: number, positionEnd: number) => void;
   setCursor: (pos1: number, pos2: number) => void;
   setButtonValues: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
-  pushUndoValue: (mdText: string, cursorPositionStart: number) => void;
+  setUndoAndCursorPosition: (mdText: string, position: number) => void;
 }
 
 const MicrobitButtons: FC<MicrobitButtonsProps> = ({
@@ -26,7 +26,7 @@ const MicrobitButtons: FC<MicrobitButtonsProps> = ({
   setCursorPosition,
   setCursor,
   setButtonValues,
-  pushUndoValue,
+  setUndoAndCursorPosition,
 }) => {
   return (
     <>
@@ -49,7 +49,7 @@ const MicrobitButtons: FC<MicrobitButtonsProps> = ({
           cursorPositionStart={cursorPositionStart}
           cursorPositionEnd={cursorPositionEnd}
           color={element[1].color}
-          pushUndoValue={pushUndoValue}
+          setUndoAndCursorPosition={setUndoAndCursorPosition}
         />
       ))}
     </>

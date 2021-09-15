@@ -15,7 +15,7 @@ interface MDTextAreaProps {
   setMdText: Dispatch<SetStateAction<string>>;
   setButtonValues: Dispatch<SetStateAction<Record<string, boolean>>>;
   setCursor: (pos1: number, pos2: number) => void;
-  pushUndoValue: (mdText: string, cursorPositionStart: number) => void;
+  setUndoAndCursorPosition: (mdText: string, position: number) => void;
   resetButtons: () => void;
   // course: string;
 }
@@ -30,16 +30,16 @@ const MDTextArea: FC<MDTextAreaProps> = ({
   setMdText,
   setButtonValues,
   setCursor,
-  pushUndoValue,
+  setUndoAndCursorPosition,
   resetButtons,
 }) => {
   const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setCursor(event.target.selectionStart, event.target.selectionEnd);
     const inputText = event.target.value;
 
-    setMdText((prevText) => inputText);
+    setMdText(inputText);
     if (inputText[cursorPositionStart] === " " || inputText[cursorPositionStart] === "\n") {
-      pushUndoValue(inputText, cursorPositionStart);
+      setUndoAndCursorPosition(inputText, cursorPositionStart);
     }
   };
 
@@ -82,7 +82,13 @@ const MDTextArea: FC<MDTextAreaProps> = ({
 
     if (event.key === "Tab") {
       event.preventDefault();
-      TABcontroller(pushUndoValue, mdText, cursorPositionStart, setMdText, setCursorPosition);
+      TABcontroller(
+        setUndoAndCursorPosition,
+        mdText,
+        cursorPositionStart,
+        setMdText,
+        setCursorPosition
+      );
     }
 
     if (

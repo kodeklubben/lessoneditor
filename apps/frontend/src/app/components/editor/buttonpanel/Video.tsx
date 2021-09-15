@@ -21,7 +21,7 @@ interface VideoProps {
   setMdText: React.Dispatch<React.SetStateAction<string>>;
   setCursorPosition: (positionStart: number, positionEnd: number) => void;
   setCursor: (pos1: number, pos2: number) => void;
-  pushUndoValue: (mdText: string, cursorPositionStart: number) => void;
+  setUndoAndCursorPosition: (mdText: string, position: number) => void;
 }
 
 const Video: FC<VideoProps> = ({
@@ -32,7 +32,7 @@ const Video: FC<VideoProps> = ({
   setMdText,
   setCursorPosition,
   setCursor,
-  pushUndoValue,
+  setUndoAndCursorPosition,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [url, setUrl] = useState("");
@@ -55,7 +55,7 @@ const Video: FC<VideoProps> = ({
   );
 
   const handleButtonClick = () => {
-    pushUndoValue(mdText, cursorPositionStart);
+    setUndoAndCursorPosition(mdText, cursorPositionStart);
     setIsOpen(!isOpen);
     return;
   };

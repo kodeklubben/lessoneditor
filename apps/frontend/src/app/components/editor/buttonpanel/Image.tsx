@@ -8,7 +8,7 @@ import { FC, RefObject } from "react";
 interface ImageProps {
   editorRef: RefObject<HTMLTextAreaElement>;
   uploadImageRef: RefObject<HTMLInputElement>;
-  pushUndoValue: (mdText: string, cursorPositionStart: number) => void;
+  setUndoAndCursorPosition: (mdText: string, position: number) => void;
   mdText: string;
   cursorPositionStart: number;
 }
@@ -16,7 +16,7 @@ interface ImageProps {
 const Image: FC<ImageProps> = ({
   editorRef,
   uploadImageRef,
-  pushUndoValue,
+  setUndoAndCursorPosition,
   mdText,
   cursorPositionStart,
 }) => {
@@ -30,7 +30,6 @@ const Image: FC<ImageProps> = ({
     { enableOnTags: ["TEXTAREA"], keydown: true }
   );
   const handleButtonClick = () => {
-    pushUndoValue(mdText, cursorPositionStart);
     uploadImageRef.current ? uploadImageRef.current.click() : "";
     editorRef.current ? editorRef.current.focus() : "";
     return;
