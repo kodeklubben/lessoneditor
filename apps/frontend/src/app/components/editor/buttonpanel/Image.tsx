@@ -41,7 +41,7 @@ const Image: FC<ImageProps> = ({
         icon={config.image.icon}
         title={config.image.title}
         handleButtonClick={handleButtonClick}
-        buttonTitle={config.image.buttonTitle}
+        buttonTitle={config.image.slug}
         shortcutKey={config.image.shortcut}
       />
     </div>

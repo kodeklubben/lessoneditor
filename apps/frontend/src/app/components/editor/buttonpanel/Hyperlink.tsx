@@ -115,7 +115,7 @@ const Hyperlink: FC<HyperlinkProps> = ({
         icon={config.hyperlink.icon}
         title={config.hyperlink.title}
         handleButtonClick={handleButtonClick}
-        buttonTitle={config.hyperlink.buttonTitle}
+        buttonTitle={config.hyperlink.slug}
         shortcutKey={config.hyperlink.shortcut}
       />
 

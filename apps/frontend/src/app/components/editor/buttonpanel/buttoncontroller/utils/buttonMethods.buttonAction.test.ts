@@ -1,6 +1,6 @@
 import { buttonAction } from "./buttonMethods";
 import { emphasis, lists } from "../settings/buttonConfig";
-import { SECTION_TEXT } from "../../../settingsFiles/languages/editor_NO";
+import { DEFAULT_TEXT } from "../../../settingsFiles/languages/editor_NO";
 
 const testListInput = {
   isOn: false,
@@ -18,6 +18,7 @@ const getListResults = (
   cursorPositionEnd = testListInput.cursorPositionEnd
 ) => {
   return buttonAction(
+    false,
     mdText,
     cursorPositionStart,
     cursorPositionEnd,
@@ -40,7 +41,7 @@ describe("buttonAction", () => {
     );
 
     expect(results.mdText).toBe(
-      `  \n  ${emphasis.bold.output.replace(SECTION_TEXT, "dette er en test")}   \n   `
+      `  \n  ${emphasis.bold.output.replace(DEFAULT_TEXT, "dette er en test")}   \n   `
     );
     expect(results.cursorPositionStart).toBe(7);
     expect(results.cursorPositionEnd).toBe(23);

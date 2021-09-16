@@ -97,7 +97,7 @@ const Video: FC<VideoProps> = ({
         icon={config.video.icon}
         title={config.video.title}
         handleButtonClick={handleButtonClick}
-        buttonTitle={config.video.buttonTitle}
+        buttonTitle={config.video.slug}
         shortcutKey={config.video.shortcut}
       />
 

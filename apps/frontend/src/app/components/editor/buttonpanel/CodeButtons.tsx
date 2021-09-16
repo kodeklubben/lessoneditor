@@ -40,9 +40,9 @@ const CodeButtons: FC<CodeButtonsProps> = ({
         <ButtonController
           key={"element" + index}
           editorRef={editorRef}
-          isON={buttonValues[element[1].buttonTitle]}
+          isON={buttonValues[element[1].slug]}
           title={element[1].title}
-          buttonTitle={element[1].buttonTitle}
+          buttonTitle={element[1].slug}
           shortcutKey={element[1].shortcut}
           style={element[1].style}
           setButtonValues={setButtonValues}

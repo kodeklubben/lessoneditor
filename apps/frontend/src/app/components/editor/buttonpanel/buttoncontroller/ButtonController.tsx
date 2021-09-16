@@ -1,6 +1,7 @@
 import { FC, RefObject, Dispatch, SetStateAction, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import { buttonAction, heading } from "./utils/buttonMethods";
+import { DEFAULT_TEXT } from "./settings/buttonConfig";
 import { codebuttons } from "./settings/buttonConfig";
 import { microbitbuttons, scratchbuttons } from "./settings/microbitAndScratchButtonConfig";
 import { RenderButtons } from "./views/RenderButtons";
@@ -51,10 +52,6 @@ export const ButtonController: FC<ButtonControllerProps> = ({
   style,
   imageurl,
   icon,
-  undoCursorPosition,
-  redoCursorPosition,
-  setUndoCursorPosition,
-  setRedoCursorPosition,
   pushUndoValue,
   pushRedoValue,
   setButtonValues,
@@ -105,13 +102,14 @@ export const ButtonController: FC<ButtonControllerProps> = ({
     cursorPositionStart: number,
     cursorPositionEnd: number
   ) => {
-    if (!isON) {
+    if (!isON && !prevTextData.mdText) {
       setPrevTextData({ mdText, cursorPositionStart, cursorPositionEnd });
 
       if (setUndoAndCursorPosition) {
         setUndoAndCursorPosition(mdText, cursorPositionStart);
       }
       const results = buttonAction(
+        isON,
         mdText,
         cursorPositionStart,
         cursorPositionEnd,
@@ -120,7 +118,12 @@ export const ButtonController: FC<ButtonControllerProps> = ({
         output
       );
       setChanges(results.mdText, results.cursorPositionStart, results.cursorPositionEnd);
+    } else if (isON && mdText.slice(cursorPositionStart, cursorPositionEnd) !== DEFAULT_TEXT) {
+      setPrevTextData({ mdText: "", cursorPositionStart: -1, cursorPositionEnd: -1 });
+
+      setChanges(mdText, cursorPositionStart + cursorIntOFF, cursorPositionEnd + cursorIntOFF);
     } else {
+      setPrevTextData({ mdText: "", cursorPositionStart: -1, cursorPositionEnd: -1 });
       if (setUndoAndCursorPosition) {
         setUndoAndCursorPosition(mdText, cursorPositionStart);
       }
@@ -162,14 +165,12 @@ export const ButtonController: FC<ButtonControllerProps> = ({
       setChanges(results.mdText, results.cursorPositionStart, results.cursorPositionStart);
     } else if (button === "undo") {
       if (pushUndoValue) {
-        console.log("undo");
         pushUndoValue(mdText, cursorPositionStart);
       } else {
         return;
       }
     } else if (button === "redo") {
       if (pushRedoValue) {
-        console.log("redo");
         pushRedoValue(mdText, cursorPositionStart);
       } else {
         return;

@@ -123,7 +123,6 @@ const FileContextProvider: FC = (props) => {
   }, [file]);
 
   const saveFileHeader = async (lessonId: string, filename: string, data: HeaderData) => {
-    console.log(data);
     const fileBody = rawMdFileContent.split(SEPERATOR)[2];
     const header = yamlHeaderDump(data);
     const newRawText = ["", header, fileBody].join(SEPERATOR);

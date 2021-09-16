@@ -61,10 +61,10 @@ const Editor: FC = () => {
   const setUndoAndUndoPosition = (mdText: string, position: number) => {
     setUndo((prevUndo) => [...prevUndo, mdText]);
     setUndoCursorPosition((prevPosition) => [...prevPosition, position]);
-    console.log(undoCursorPosition);
   };
 
   const pushUndoValue = (mdText: string, cursorPositionStart: number) => {
+    resetButtons();
     if (undo.length > 0) {
       const text = undo[undo.length - 1];
       const position = undoCursorPosition[undoCursorPosition.length - 1];

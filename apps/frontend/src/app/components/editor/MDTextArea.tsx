@@ -17,7 +17,6 @@ interface MDTextAreaProps {
   setCursor: (pos1: number, pos2: number) => void;
   setUndoAndCursorPosition: (mdText: string, position: number) => void;
   resetButtons: () => void;
-  // course: string;
 }
 
 const MDTextArea: FC<MDTextAreaProps> = ({
@@ -64,7 +63,6 @@ const MDTextArea: FC<MDTextAreaProps> = ({
   };
 
   const onTextareaKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
-    //setCursor(event.location, event.location);
     if (event.key === "Enter") {
       if (mdText) {
         listController(

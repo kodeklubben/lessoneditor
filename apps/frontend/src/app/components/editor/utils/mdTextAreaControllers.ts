@@ -28,7 +28,6 @@ export const textSelectController = (
     mdText.slice(start - 2, start) !== "**" &&
     !buttonValues.italic
   ) {
-    console.log("bold selecterd");
     setButtonValues((prevButtonValues: Record<string, boolean>) => ({
       ...prevButtonValues,
       italic: true,

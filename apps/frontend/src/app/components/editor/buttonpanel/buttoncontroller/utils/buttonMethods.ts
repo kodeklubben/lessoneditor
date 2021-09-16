@@ -1,4 +1,4 @@
-import { emphasis, codebuttons, SECTION_TEXT } from "../settings/buttonConfig";
+import { emphasis, codebuttons, DEFAULT_TEXT } from "../settings/buttonConfig";
 import { microbitbuttons, scratchbuttons } from "../settings/microbitAndScratchButtonConfig";
 
 const ifNewLine = (mdText: string, cursorPositionStart: number) => {
@@ -43,7 +43,7 @@ const trimTextAndUpdatePosition = (
     mdText.slice(0, cursorPositionStart) +
     output.slice(0, cursorIntON) +
     i +
-    output.slice(cursorIntON + SECTION_TEXT.length) +
+    output.slice(cursorIntON + DEFAULT_TEXT.length) +
     mdText.slice(cursorPositionEnd);
 
   cursorPositionStart += cursorIntON;
@@ -53,6 +53,7 @@ const trimTextAndUpdatePosition = (
 };
 
 export const buttonAction: (
+  isON: boolean,
   mdText: string,
   cursorPositionStart: number,
   cursorPositionEnd: number,
@@ -60,6 +61,7 @@ export const buttonAction: (
   cursorIntOFF: number,
   output: string
 ) => { mdText: string; cursorPositionStart: number; cursorPositionEnd: number } = (
+  isON,
   mdText,
   cursorPositionStart,
   cursorPositionEnd,
@@ -67,39 +69,49 @@ export const buttonAction: (
   cursorIntOFF,
   output
 ) => {
-  if (!ifNewLine(mdText, cursorPositionStart) && !noNewLineButtons(output)) {
-    mdText = mdText.slice(0, cursorPositionStart) + "\n\n" + mdText.slice(cursorPositionStart);
-    cursorPositionStart += 1;
-    cursorPositionEnd += 1;
+  if (!isON) {
+    if (!ifNewLine(mdText, cursorPositionStart) && !noNewLineButtons(output)) {
+      mdText = mdText.slice(0, cursorPositionStart) + "\n\n" + mdText.slice(cursorPositionStart);
+      cursorPositionStart += 1;
+      cursorPositionEnd += 1;
 
-    return buttonAction(
+      return buttonAction(
+        isON,
+        mdText,
+        cursorPositionStart,
+        cursorPositionEnd,
+        cursorIntON,
+        cursorIntOFF,
+        output
+      );
+    }
+    if (cursorPositionStart !== cursorPositionEnd) {
+      return trimTextAndUpdatePosition(
+        mdText,
+        cursorPositionStart,
+        cursorPositionEnd,
+        output,
+        cursorIntON
+      );
+    }
+
+    mdText = mdText.slice(0, cursorPositionStart) + output + mdText.slice(cursorPositionStart);
+
+    cursorPositionStart += cursorIntON;
+    cursorPositionEnd += cursorIntON + DEFAULT_TEXT.length;
+    return {
       mdText,
       cursorPositionStart,
       cursorPositionEnd,
-      cursorIntON,
-      cursorIntOFF,
-      output
-    );
-  }
-  if (cursorPositionStart !== cursorPositionEnd) {
-    return trimTextAndUpdatePosition(
+    };
+  } else {
+    cursorPositionStart = cursorPositionEnd += cursorIntOFF;
+    return {
       mdText,
       cursorPositionStart,
       cursorPositionEnd,
-      output,
-      cursorIntON
-    );
+    };
   }
-
-  mdText = mdText.slice(0, cursorPositionStart) + output + mdText.slice(cursorPositionStart);
-
-  cursorPositionStart += cursorIntON;
-  cursorPositionEnd += cursorIntON + SECTION_TEXT.length;
-  return {
-    mdText,
-    cursorPositionStart,
-    cursorPositionEnd,
-  };
 };
 
 // export const onButtonClick = (
@@ -134,7 +146,7 @@ export const buttonAction: (
 // ) => {
 //   const selection = mdText.slice(cursorPositionStart, cursorPositionEnd);
 
-//   if (selection && selection !== SECTION_TEXT) {
+//   if (selection && selection !== DEFAULT_TEXT) {
 //     mdText =
 //       mdText.slice(0, cursorPositionStart - cursorIntON) +
 //       selection +
