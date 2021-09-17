@@ -37,7 +37,6 @@ const ImageUpload: FC<ImageUploadProps> = ({
     "Ugyldig filnavn, sjekk om det er mellomrom eller spesialtegn i filnavnet";
 
   const imageSubmitHandler = (imageInputValue: string) => {
-    pushUndoValue(mdText, cursorPositionStart);
     if (imageInputValue === "fileNameError") {
       setMdText(
         mdText.slice(0, cursorPositionStart) +

@@ -1,8 +1,5 @@
-import ButtonComponent from "./ButtonComponent";
-
-import { useHotkeys } from "react-hotkeys-hook";
-
-import { KEY_COMBINATIONS as KEY, undoRedo as config } from "./settings/buttonConfig";
+import { ButtonController } from "./buttoncontroller/ButtonController";
+import { undoRedo as config } from "./buttoncontroller/settings/buttonConfig";
 import { FC, RefObject } from "react";
 
 interface UndoRedoProps {
@@ -30,74 +27,30 @@ const UndoRedo: FC<UndoRedoProps> = ({
   pushRedoValue,
   setCursorPosition,
 }) => {
-  const set = {
-    undo: () => {
-      if (undoCursorPosition.length > 0) {
-        const position = undoCursorPosition[undoCursorPosition.length - 1];
-        setUndoCursorPosition(undoCursorPosition.slice(0, undoCursorPosition.length - 1));
-        pushRedoValue(mdText, cursorPositionStart);
-        setCursorPosition(position, position);
-      } else {
-        return;
-      }
-    },
-    redo: () => {
-      if (redoCursorPosition.length > 0) {
-        const position = redoCursorPosition[redoCursorPosition.length - 1];
-        setRedoCursorPosition(redoCursorPosition.slice(0, redoCursorPosition.length - 1));
-        pushUndoValue(mdText, cursorPositionStart);
-        setCursorPosition(position, position);
-      } else {
-        return;
-      }
-    },
-  };
-  useHotkeys(
-    `${KEY.undo}, ${KEY.redo}`,
-    (event, handler) => {
-      event.preventDefault();
-      switch (handler.key) {
-        case KEY.undo:
-          set.undo();
-          break;
-        case KEY.redo:
-          set.redo();
-          break;
-        default:
-          break;
-      }
-      return false;
-    },
-    { enableOnTags: ["TEXTAREA"], keydown: true },
-    [pushUndoValue, pushRedoValue]
-  );
-
-  const handleButtonClick = (button: string) => {
-    editorRef.current ? editorRef.current.focus() : "";
-    switch (button) {
-      case config.undo.buttonTitle:
-        set.undo();
-        break;
-      case config.redo.buttonTitle:
-        set.redo();
-        break;
-      default:
-        break;
-    }
-  };
   return (
     <div>
       {Object.entries(config).map((element, index) => (
-        <ButtonComponent
+        <ButtonController
           key={"element" + index}
-          buttonValues={{}}
-          icon={element[1].icon}
+          editorRef={editorRef}
+          isON={false}
           title={element[1].title}
-          onButtonClick={handleButtonClick}
-          buttonTitle={element[1].buttonTitle}
+          buttonTitle={element[1].slug}
           shortcutKey={element[1].shortcut}
-          style={{}}
-          imageurl=""
+          icon={element[1].icon}
+          cursorIntON={0}
+          cursorIntOFF={0}
+          output={"element[1].output"}
+          mdText={mdText}
+          setCursorPosition={setCursorPosition}
+          cursorPositionStart={cursorPositionStart}
+          cursorPositionEnd={0}
+          undoCursorPosition={undoCursorPosition}
+          redoCursorPosition={redoCursorPosition}
+          setUndoCursorPosition={setUndoCursorPosition}
+          setRedoCursorPosition={setRedoCursorPosition}
+          pushUndoValue={pushUndoValue}
+          pushRedoValue={pushRedoValue}
         />
       ))}
     </div>

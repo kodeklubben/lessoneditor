@@ -1,22 +1,22 @@
 import { FC } from "react";
 import { Button, Popup } from "semantic-ui-react";
 
-interface ButtonComponentProps {
-  buttonValues: Record<string, boolean>;
+interface RenderButtonsProps {
+  isON: boolean;
   icon: string;
   title: string;
-  onButtonClick: (button: string) => void;
+  handleButtonClick: (button: string) => void;
   buttonTitle: string;
   shortcutKey: string;
-  style: Record<string, string>;
-  imageurl: string;
+  style?: Record<string, string>;
+  imageurl?: string;
 }
 
-const ButtonComponent: FC<ButtonComponentProps> = ({
-  buttonValues,
+export const RenderButtons: FC<RenderButtonsProps> = ({
+  isON,
   icon,
   title,
-  onButtonClick,
+  handleButtonClick,
   buttonTitle,
   shortcutKey,
   style,
@@ -32,7 +32,7 @@ const ButtonComponent: FC<ButtonComponentProps> = ({
           icon ? (
             <Button
               style={
-                buttonValues[buttonTitle]
+                isON
                   ? {
                       marginTop: "0.3em",
                       paddingTop: "0.25em",
@@ -51,14 +51,14 @@ const ButtonComponent: FC<ButtonComponentProps> = ({
               className="CPButton"
               size="huge"
               icon={icon}
-              onClick={() => onButtonClick(buttonTitle)}
+              onClick={() => handleButtonClick(buttonTitle)}
             />
           ) : (
             <Button
-              style={buttonValues[buttonTitle] ? { ...style, background: "#bbb" } : style}
+              style={isON ? { ...style, background: "#bbb" } : style}
               className="CPButton"
               size="tiny"
-              onClick={() => onButtonClick(buttonTitle)}
+              onClick={() => handleButtonClick(buttonTitle)}
             >
               {imageurl ? (
                 <span>
@@ -93,5 +93,3 @@ const ButtonComponent: FC<ButtonComponentProps> = ({
     </>
   );
 };
-
-export default ButtonComponent;

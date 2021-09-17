@@ -1,7 +1,10 @@
 import { FC, useState, RefObject } from "react";
-import ButtonComponent from "./ButtonComponent";
+import { RenderButtons } from "./buttoncontroller/views/RenderButtons";
 import { useHotkeys } from "react-hotkeys-hook";
-import { hyperlink as config, KEY_COMBINATIONS as KEY } from "./settings/buttonConfig";
+import {
+  hyperlink as config,
+  KEY_COMBINATIONS as KEY,
+} from "./buttoncontroller/settings/buttonConfig";
 
 import { Button, Checkbox, Header, Input, Modal } from "semantic-ui-react";
 
@@ -23,6 +26,7 @@ interface HyperlinkProps {
   setMdText: React.Dispatch<React.SetStateAction<string>>;
   setCursorPosition: (positionStart: number, positionEnd: number) => void;
   setCursor: (pos1: number, pos2: number) => void;
+  setUndoAndCursorPosition: (mdText: string, position: number) => void;
 }
 
 const Hyperlink: FC<HyperlinkProps> = ({
@@ -33,6 +37,7 @@ const Hyperlink: FC<HyperlinkProps> = ({
   setMdText,
   setCursorPosition,
   setCursor,
+  setUndoAndCursorPosition,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [url, setUrl] = useState("https://");
@@ -41,16 +46,16 @@ const Hyperlink: FC<HyperlinkProps> = ({
   const isEmptyField = url === "https://" || url === "";
 
   useHotkeys(
-    `${KEY.hyperlink}`,
+    KEY.hyperlink.hyperlink,
     (event) => {
       event.preventDefault();
       handleButtonClick();
-      return false;
     },
     { enableOnTags: ["TEXTAREA"], keydown: true }
   );
 
   const handleButtonClick = () => {
+    setUndoAndCursorPosition(mdText, cursorPositionStart);
     setIsOpen(!isOpen);
     return;
   };
@@ -78,7 +83,7 @@ const Hyperlink: FC<HyperlinkProps> = ({
       openNewWindow
         ? setMdText(
             mdText.slice(0, cursorPositionStart) +
-              `[${mdText.slice(cursorPositionStart, cursorPositionEnd)}](${url}){target=_blank}` +
+              `[${mdText.slice(cursorPositionStart, cursorPositionEnd)}](${url}){:target=_blank}` +
               mdText.slice(cursorPositionEnd)
           )
         : setMdText(
@@ -105,15 +110,13 @@ const Hyperlink: FC<HyperlinkProps> = ({
 
   return (
     <div>
-      <ButtonComponent
-        buttonValues={{}}
+      <RenderButtons
+        isON={false}
         icon={config.hyperlink.icon}
         title={config.hyperlink.title}
-        onButtonClick={handleButtonClick}
-        buttonTitle={config.hyperlink.buttonTitle}
+        handleButtonClick={handleButtonClick}
+        buttonTitle={config.hyperlink.slug}
         shortcutKey={config.hyperlink.shortcut}
-        style={{}}
-        imageurl=""
       />
 
       <Modal

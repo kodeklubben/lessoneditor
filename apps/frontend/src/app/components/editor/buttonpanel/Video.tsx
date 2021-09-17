@@ -1,7 +1,7 @@
 import { FC, useState, RefObject } from "react";
-import ButtonComponent from "./ButtonComponent";
+import { RenderButtons } from "./buttoncontroller/views/RenderButtons";
 import { useHotkeys } from "react-hotkeys-hook";
-import { KEY_COMBINATIONS as KEY, video as config } from "./settings/buttonConfig";
+import { KEY_COMBINATIONS as KEY, media as config } from "./buttoncontroller/settings/buttonConfig";
 
 import { Button, Header, Input, Modal } from "semantic-ui-react";
 
@@ -21,6 +21,7 @@ interface VideoProps {
   setMdText: React.Dispatch<React.SetStateAction<string>>;
   setCursorPosition: (positionStart: number, positionEnd: number) => void;
   setCursor: (pos1: number, pos2: number) => void;
+  setUndoAndCursorPosition: (mdText: string, position: number) => void;
 }
 
 const Video: FC<VideoProps> = ({
@@ -31,6 +32,7 @@ const Video: FC<VideoProps> = ({
   setMdText,
   setCursorPosition,
   setCursor,
+  setUndoAndCursorPosition,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [url, setUrl] = useState("");
@@ -43,7 +45,7 @@ const Video: FC<VideoProps> = ({
   const isVimeo = url.match(/^(http:\/\/|https:\/\/)?(www\.)?(vimeo\.com\/)([0-9]+)$/);
 
   useHotkeys(
-    `${KEY.hyperlink}`,
+    `${KEY.media.video}`,
     (event) => {
       event.preventDefault();
       handleButtonClick();
@@ -53,6 +55,7 @@ const Video: FC<VideoProps> = ({
   );
 
   const handleButtonClick = () => {
+    setUndoAndCursorPosition(mdText, cursorPositionStart);
     setIsOpen(!isOpen);
     return;
   };
@@ -89,15 +92,13 @@ const Video: FC<VideoProps> = ({
 
   return (
     <div>
-      <ButtonComponent
-        buttonValues={{}}
+      <RenderButtons
+        isON={false}
         icon={config.video.icon}
         title={config.video.title}
-        onButtonClick={handleButtonClick}
-        buttonTitle={config.video.buttonTitle}
+        handleButtonClick={handleButtonClick}
+        buttonTitle={config.video.slug}
         shortcutKey={config.video.shortcut}
-        style={{}}
-        imageurl=""
       />
 
       <Modal

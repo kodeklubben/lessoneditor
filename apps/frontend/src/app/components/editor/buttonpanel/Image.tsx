@@ -1,24 +1,31 @@
-import ButtonComponent from "./ButtonComponent";
+import { RenderButtons } from "./buttoncontroller/views/RenderButtons";
 
 import { useHotkeys } from "react-hotkeys-hook";
 
-import { image as config, KEY_COMBINATIONS as KEY } from "./settings/buttonConfig";
+import { media as config, KEY_COMBINATIONS as KEY } from "./buttoncontroller/settings/buttonConfig";
 import { FC, RefObject } from "react";
 
 interface ImageProps {
   editorRef: RefObject<HTMLTextAreaElement>;
   uploadImageRef: RefObject<HTMLInputElement>;
+  setUndoAndCursorPosition: (mdText: string, position: number) => void;
+  mdText: string;
+  cursorPositionStart: number;
 }
 
-const Image: FC<ImageProps> = ({ editorRef, uploadImageRef }) => {
+const Image: FC<ImageProps> = ({
+  editorRef,
+  uploadImageRef,
+  setUndoAndCursorPosition,
+  mdText,
+  cursorPositionStart,
+}) => {
   useHotkeys(
-    `${KEY.image}`,
+    KEY.media.image,
     (event) => {
       event.preventDefault();
 
       handleButtonClick();
-
-      return false;
     },
     { enableOnTags: ["TEXTAREA"], keydown: true }
   );
@@ -29,15 +36,13 @@ const Image: FC<ImageProps> = ({ editorRef, uploadImageRef }) => {
   };
   return (
     <div>
-      <ButtonComponent
-        buttonValues={{}}
+      <RenderButtons
+        isON={false}
         icon={config.image.icon}
         title={config.image.title}
-        onButtonClick={handleButtonClick}
-        buttonTitle={config.image.buttonTitle}
+        handleButtonClick={handleButtonClick}
+        buttonTitle={config.image.slug}
         shortcutKey={config.image.shortcut}
-        style={{}}
-        imageurl=""
       />
     </div>
   );

@@ -1,6 +1,6 @@
 import { useHistory, useParams } from "react-router";
 import { Dropdown, Popup } from "semantic-ui-react";
-import languageOptions from "./settings/LanguageOptions";
+import languageOptions from "./buttoncontroller/settings/LanguageOptions";
 import { FC, SyntheticEvent } from "react";
 import { filenameParser } from "../../../utils/filename-parser";
 

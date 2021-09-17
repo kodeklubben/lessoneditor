@@ -1,24 +1,24 @@
-import { Button, Popup } from "semantic-ui-react";
 import { FC } from "react";
+import { Button, Popup } from "semantic-ui-react";
 
-interface CodeButtonComponentProps {
-  buttonValues: Record<string, boolean>;
+interface RenderCodeButtonsProps {
+  isON: boolean;
   title: string;
-  onButtonClick: (button: string) => void;
+  handleButtonClick: (button: string) => void;
   buttonTitle: string;
   shortcutKey: string;
   style: Record<string, string>;
   courseTitle: string;
 }
 
-const CodeButtonComponent: FC<CodeButtonComponentProps> = ({
-  buttonValues,
+export const RenderCodeButtons: FC<RenderCodeButtonsProps> = ({
   title,
-  onButtonClick,
-  buttonTitle,
   shortcutKey,
-  courseTitle,
+  buttonTitle,
+  isON,
   style,
+  handleButtonClick,
+  courseTitle,
 }) => {
   return (
     <>
@@ -29,10 +29,10 @@ const CodeButtonComponent: FC<CodeButtonComponentProps> = ({
         trigger={
           buttonTitle === "codeblock" ? (
             <Button
-              style={buttonValues[buttonTitle] ? { ...style, backgroundColor: "#bbb" } : style}
+              style={isON ? { ...style, backgroundColor: "#bbb" } : style}
               className="CPButton"
               size="tiny"
-              onClick={() => onButtonClick(buttonTitle)}
+              onClick={() => handleButtonClick(buttonTitle)}
             >
               <div style={{ position: "relative", top: "-5px" }}>
                 {"```Kodeblokk"}
@@ -41,10 +41,10 @@ const CodeButtonComponent: FC<CodeButtonComponentProps> = ({
             </Button>
           ) : (
             <Button
-              style={buttonValues[buttonTitle] ? { ...style, backgroundColor: "#bbb" } : style}
+              style={isON ? { ...style, backgroundColor: "#bbb" } : style}
               className="CPButton"
               size="tiny"
-              onClick={() => onButtonClick(buttonTitle)}
+              onClick={() => handleButtonClick(buttonTitle)}
             >
               <div style={{ position: "relative", top: "-5px" }}>{"`Inline-kode"}</div>
             </Button>
@@ -54,5 +54,3 @@ const CodeButtonComponent: FC<CodeButtonComponentProps> = ({
     </>
   );
 };
-
-export default CodeButtonComponent;
