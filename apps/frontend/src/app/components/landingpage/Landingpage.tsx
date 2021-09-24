@@ -20,20 +20,19 @@ const Landingpage = () => {
   const [thankU, setThankU] = useState(false);
   const { lessonId, mode } = useParams<any>();
   const pageContent = mode;
-  const { lessonData, saveLesson } = useLessonContext();
+  const { state, updateLesson } = useLessonContext();
 
   const onSubmit = async (lessonId: string) => {
     setShowSpinner(true);
-    await saveLesson(lessonData);
     await submitLesson(lessonId);
     setShowSpinner(false);
     setAreYouSure(false);
     setThankU(true);
   };
 
-  const lessonList = lessonData.files;
-  const lessonTitle = lessonData.lessonTitle;
-  const courseTitle = lessonData.courseTitle;
+  const lessonList = state.files;
+  const lessonTitle = state.lesson?.lessonTitle
+  const courseTitle = state.lesson?.courseTitle;
 
   // @ts-ignore
   const dropdownValue = (input: string) => {
@@ -51,7 +50,7 @@ const Landingpage = () => {
     }
   };
 
-  if (showSpinner || !lessonData.lesson) {
+  if (showSpinner || !state.lesson) {
     return <ShowSpinner />;
   } else {
     return (

@@ -17,6 +17,7 @@ import {TypeormStore} from "connect-typeorm"
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
   const sessionRepsitory = app.get(Connection).getRepository(Session);
+  app.enableCors();
   app.use(bodyParser.json());
   app.use(
     ExpressSession({

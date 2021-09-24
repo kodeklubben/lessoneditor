@@ -169,6 +169,27 @@
         }
       }
     },
+    "github": {
+      "root": "libs/github",
+      "sourceRoot": "libs/github/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/github/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/github"],
+          "options": {
+            "jestConfig": "libs/github/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
     "lesson": {
       "root": "libs/lesson",
       "sourceRoot": "libs/lesson/src",
@@ -267,6 +288,27 @@
           "outputs": ["coverage/libs/session"],
           "options": {
             "jestConfig": "libs/session/jest.config.js",
+            "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "thumb": {
+      "root": "libs/thumb",
+      "sourceRoot": "libs/thumb/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/thumb/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/thumb"],
+          "options": {
+            "jestConfig": "libs/thumb/jest.config.js",
             "passWithNoTests": true
           }
         }

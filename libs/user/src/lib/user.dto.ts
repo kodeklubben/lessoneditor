@@ -1,14 +1,6 @@
-export class UserDTO
+export interface UserDTO
 {
     userId: number
-    username: string
-    name: string
-    email: string
-
-}
-
-export class NewUserDTO
-{
     username: string
     name: string
     email: string

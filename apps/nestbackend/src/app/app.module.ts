@@ -23,10 +23,10 @@ AuthModule
 ],
   controllers: [AppController],
   providers: [AppService,
-    {
-      provide: APP_GUARD,
-      useClass: AuthGuard('github'),
-    }
+    // {
+    //   provide: APP_GUARD,
+    //   useClass: AuthGuard('local'),
+    // }
   ],
 })
 export class AppModule {}

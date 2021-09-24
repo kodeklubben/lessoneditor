@@ -7,15 +7,20 @@ export const paths = {
   "AUTH_LOGIN_FAILED": "/login-failed",
   "DISPLAY_FILE": "/api/display/:lessonId/:file",
   "FILE": "/file/*",
-  "LESSON": "/api/lesson",
+  "LESSON": "/api/lesson/:lessonId",
+  "LESSON_FILENAMES": "/api/lesson/:lessonId/fileNames",
   "LESSON_DATA": "/api/lesson/:lessonId/data/:filename",
   "LESSON_FILES": "/api/lesson/:lessonId/files",
+  "LESSON_FILE": "api/lesson/:lessonId/files/:fileName",
+  "LESSON_FILE_UPDATE": "/api/lesson/:lessonId/files",
   "LESSON_PROXY": "/api/lessons-proxy/*",
   "LESSON_SUBMIT": "/api/lesson/:lessonId/submit",
   "LESSON_THUMB": "/api/lesson-thumb/:lessonId/:file",
   "LESSON_UPLOADS": "/api/lesson/:lessonId/upload",
+  "USER_LESSON_UPDATE": "/api/user/:userId/lesson/:lessonId",
+  "USER_LESSON_NEW": "/api/user/:userId/lesson",
   "USER": "/api/user",
-  "USER_LESSONS": "/api/user/lessons"
+  "USER_LESSONS": "/api/user/:userId/lesson"
 }
 
 export interface Lesson

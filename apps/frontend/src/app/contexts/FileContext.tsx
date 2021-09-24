@@ -8,6 +8,10 @@ import insertMetaDataInTeacherGuide from "../components/editor/utils/insertMetaD
 import oppgaveMal from "../components/editor/settingsFiles/oppgaveMal";
 import { useLessonContext } from "./LessonContext";
 import { filenameParser } from "../utils/filename-parser";
+import axios from "axios";
+import {paths} from "@lessoneditor/api-interfaces"
+import {FileDTO} from "../../../../../libs/lesson/src/lib/lesson.dto"
+import { YamlFields } from "./lessonContext.functions";
 
 interface ContextProps {
   headerData: HeaderData;
@@ -38,14 +42,14 @@ export interface HeaderData {
 
 const FileContext = React.createContext<Partial<ContextProps>>({});
 
-function createDefaultFileBody(file: string, ymlData: any) {
+function createDefaultFileBody(file: string, ymlData: YamlFields) {
   const { isReadme } = filenameParser(file);
   return isReadme ? insertMetaDataInTeacherGuide(ymlData) : oppgaveMal;
 }
 
 const FileContextProvider = (props: any) => {
   const { lessonId, file } = useParams<any>();
-  const { getYmlData } = useLessonContext();
+  const { state } = useLessonContext();
   const [rawMdFileContent, setRawMdFileContent] = useState<string>("");
   const { language } = filenameParser(file);
   const [headerData, setHeaderData] = useState<HeaderData>({
@@ -71,17 +75,17 @@ const FileContextProvider = (props: any) => {
     setSavedFileBody(body);
   };
   const saveDefaultFileBody = async (lessonId: string, filename: string) => {
-    const ymlData = await getYmlData();
-    const defaultFileBody = createDefaultFileBody(filename, ymlData);
+    const defaultFileBody = createDefaultFileBody(filename, state.yml);
     await saveFileBody(lessonId, filename, defaultFileBody);
   };
 
   useEffect(() => {
     async function fetchData() {
-      const result = await fetchMdText(lessonId, file);
+
+      const result = await axios.get<FileDTO>(paths.LESSON_FILE.replace(":.+d",lessonId).replace(":.+e",file))
       // eslint-disable-next-line
-      const [_, header, body] = result.split(separator);
-      setRawMdFileContent(result);
+      const [_, header, body] = result.data.content.split(separator);
+      setRawMdFileContent(result.data.content);
       setSavedFileBody(body);
       setHeaderData(yamlHeaderLoad(header, language));
       console.log("FileContext done loading...");

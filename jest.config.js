@@ -9,5 +9,7 @@ module.exports = {
     "<rootDir>/libs/lesson",
     "<rootDir>/libs/session",
     "<rootDir>/libs/auth",
+    "<rootDir>/libs/thumb",
+    "<rootDir>/libs/github",
   ],
 };

@@ -42,7 +42,11 @@ const NewLessonModal: FC = () => {
 
     const courseTitle: string = getCourseFromSlug ? getCourseFromSlug.courseTitle : "";
     const lessonId = await addLesson(course, courseTitle, lesson.slug, lesson.title);
-    navigateToLandingpage(lessonId, lesson.slug);
+    if(lessonId)
+    {
+      navigateToLandingpage(lessonId.toString(), lesson.slug);
+    }
+
 
     setLoading(false);
   };

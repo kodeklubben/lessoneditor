@@ -1,13 +1,16 @@
-import { Controller,Get, Param, Query, BadRequestException, Post, Body, Put } from "@nestjs/common";
+import { Controller,Get, Param, UseGuards, Post, Body, Put, Req } from "@nestjs/common";
 import { LessonService } from "./lesson.service";
 import { LessonDTO, FileDTO, LessonFilterDTO, ShareLessonDTO, NewFileDTO, UpdatedFileDTO } from "./lesson.dto";
 import { UserDTO} from "../../../user/src/lib/user.dto"
+import { AuthGuard } from "@nestjs/passport";
+import { fileURLToPath } from "url";
 
 @Controller("lesson")
 export class LessonController {
   constructor(private lessonService: LessonService) {
   }
 
+  @UseGuards(AuthGuard('local'))
   @Get(':lessonId')
   async GetLesson(@Param() params): Promise<LessonDTO>
   {
@@ -15,6 +18,23 @@ export class LessonController {
     return lessonDTO
   }
 
+  @UseGuards(AuthGuard('local'))
+  @Get(':lessonId/fileNames')
+  async GetLessonFileNames(@Param() params): Promise<string[]>
+  {
+    return await this.lessonService.getLessonFileNames(params.lessonId)
+
+  }
+
+  @UseGuards(AuthGuard('local'))
+  @Post(':lessonId/submit')
+  async SubmitLesson(@Req() req, @Param() params)
+  {
+    await this.lessonService.submitLesson(req.user.token,params.lessonId)
+
+  }
+
+  @UseGuards(AuthGuard('local'))
   @Get(':lessonId/users')
   async GetLessonUsers(@Param() params): Promise<UserDTO[]>
   {
@@ -27,6 +47,7 @@ export class LessonController {
 
   }
 
+  @UseGuards(AuthGuard('local'))
   @Get(':lessonId/files')
   async GetLessonFiles(@Param() params): Promise<FileDTO[]>
   {
@@ -38,6 +59,15 @@ export class LessonController {
     return filesArray
   }
 
+  @UseGuards(AuthGuard('local'))
+  @Get(':lessonId/files/:fileName')
+  async GetLessonFile(@Param('lessonId') lessonId, @Param('fileName') fileName): Promise<FileDTO>
+  {
+    const {lesson, ...fileDTO} = await this.lessonService.getLessonFile(lessonId, fileName)
+    return fileDTO
+  }
+
+  @UseGuards(AuthGuard('local'))
   @Post(':lessonId/user')
   async AddLessonUser(@Param() params, @Body() shareLesson: ShareLessonDTO)
   {
@@ -45,16 +75,19 @@ export class LessonController {
     
   }
 
-  @Post(':lessonid/file')
-  async AddUserFile(@Param() params, @Body() newFile: NewFileDTO ): Promise<number>
+  @UseGuards(AuthGuard('local'))
+  @Post(':lessonid/files')
+  async AddLessonFile(@Param() params, @Body() newFile: NewFileDTO ): Promise<number>
   {
     return await this.lessonService.addLessonFile(params.lessonId,newFile);
   }
 
-  @Put(':lessonid/file')
-  async UpdateUserFile(@Param() params, @Body() updatedFile: UpdatedFileDTO ): Promise<number>
+  @UseGuards(AuthGuard('local'))
+  @Put(':lessonid/files')
+  async UpdateLessonFile(@Param() params, @Body() updatedFile: UpdatedFileDTO ): Promise<FileDTO>
   {
-    return await this.lessonService.updateLessonFile(params.lessonId,updatedFile);
+    const {lesson, ...fileDTO} = await this.lessonService.updateLessonFile(params.lessonId,updatedFile);
+    return fileDTO
   }
 
 }

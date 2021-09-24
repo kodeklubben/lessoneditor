@@ -1,46 +1,51 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, Query } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put, Query, Req, UseGuards, ForbiddenException } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { LessonDTO, NewLessonDTO} from "../../../lesson/src/lib/lesson.dto"
-import { NewUserDTO, UserDTO } from "./user.dto";
+import { UserDTO } from "./user.dto";
+import { AuthGuard } from "@nestjs/passport";
+import { query } from "express";
+
 
 @Controller("user")
 export class UserController {
   constructor(private userService: UserService) {
   }
 
+  @UseGuards(AuthGuard('github'))
   @Get(':userId/lessons')
   async GetUserLessons(@Param() params)
   {
     return await this.userService.getUserLessons(params.userId);
   }
-
-  @Post()
-  async AddUser(@Body() newUser: NewUserDTO): Promise<UserDTO>
-  {
-    const {lessons, ...userDTO} = await this.userService.addUser(newUser);
-    return userDTO
-  }
   
+  @UseGuards(AuthGuard('github'))
   @Get()
-  async GetUser(@Query() queryParams): Promise<UserDTO>
+  async GetUser(@Req() req): Promise<UserDTO>
   {
-    const {lessons, ...userDTO} = await this.userService.getUser(queryParams.email)
-    return userDTO;
+    if(req.user == null)
+    {
+      throw new ForbiddenException();
+    }
+    return req.user
+  
   }
 
+  @UseGuards(AuthGuard('github'))
   @Post(':userId/lesson')
   async AddLesson(@Param() params, @Body() newLesson: NewLessonDTO): Promise<number>
   {
       return await this.userService.addUserLesson(params.userId,newLesson);
   }
 
-  @Put(':userId/lesson')
-  async UpdateLesson(@Param() params, @Body() updatedLesson: LessonDTO): Promise<LessonDTO>
+  @UseGuards(AuthGuard('github'))
+  @Put(':userId/lesson/:lessonId')
+  async UpdateLesson(@Param('userId') userId,@Param('lessonId') lessonId, @Query('regenThumb') regenThumb: boolean, @Body() updatedLesson: LessonDTO): Promise<LessonDTO>
   {
-    const {users, files, ...updatedLessonDTO} = await this.userService.updateUserLesson(params.userId, updatedLesson)
+    const {users, files, ...updatedLessonDTO} = await this.userService.updateUserLesson(userId, lessonId, regenThumb,updatedLesson)
     return updatedLessonDTO;
   }
 
+  @UseGuards(AuthGuard('github'))
   @Delete(':userId/lesson')
   async DeleteLesson(@Param() params, @Query() queryParams): Promise<LessonDTO>
   {

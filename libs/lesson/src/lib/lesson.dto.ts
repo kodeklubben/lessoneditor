@@ -1,5 +1,5 @@
 
-export class LessonDTO{
+export interface LessonDTO{
 
     lessonId: number;
 
@@ -21,7 +21,7 @@ export class LessonDTO{
 
 }
 
-export class ShareLessonDTO
+export interface ShareLessonDTO
 {
     invitationToUserId: string
     invitationByUserId: string
@@ -29,7 +29,7 @@ export class ShareLessonDTO
 
 }
 
-export class NewLessonDTO
+export interface NewLessonDTO
 {
     lessonSlug: string;
 
@@ -41,7 +41,7 @@ export class NewLessonDTO
 
 }
 
-export class FileDTO
+export interface FileDTO
 {
     fileId: number;
 
@@ -60,7 +60,7 @@ export class FileDTO
     updated_at: Date
 }
 
-export class NewFileDTO
+export interface NewFileDTO
 {
     filename: string;
 
@@ -71,7 +71,7 @@ export class NewFileDTO
     createdByUserId: number;
 
 }
-export class UpdatedFileDTO
+export interface UpdatedFileDTO
 {
     fileId: number;
     
@@ -80,7 +80,7 @@ export class UpdatedFileDTO
     updatedByUserId: string
 }
 
-export class LessonFilterDTO
+export interface LessonFilterDTO
 {
     userId?: number
 }

@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import {Lesson} from "./lesson.entity"
 import { UserModule } from "../../../user/src/lib/user.module"
 
+
 @Module({
   imports: [TypeOrmModule.forFeature([Lesson]), forwardRef(() => UserModule)],
   controllers: [LessonController],
