@@ -1,10 +1,12 @@
-import { Module, HttpModule } from "@nestjs/common";
+import { Module, HttpModule, forwardRef } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { AuthController } from "./auth.controller";
 import { PassportModule } from '@nestjs/passport';
 import { UserModule } from "../../../user/src/lib/user.module";
 import { JwtModule } from '@nestjs/jwt';
-import { GithubStrategy } from "./github.strategy";
+import { LocalStrategy } from "./local.strategy";
+import { LoginGuard } from "./login.guard";
+import { GithubSerializer } from "./local.serializer";
 
 @Module({
   imports: [
@@ -17,7 +19,7 @@ import { GithubStrategy } from "./github.strategy";
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, GithubStrategy],
-  exports: [AuthService],
+  providers: [AuthService, LocalStrategy, LoginGuard, GithubSerializer],
+  exports: [AuthService,LocalStrategy],
 })
 export class AuthModule {}

@@ -8,8 +8,8 @@ import logo from "/assets/public/lav_logo.jpg";
 import { useLessonContext } from "../../contexts/LessonContext";
 
 const Navbar: FC = () => {
-  const { user } = useUserContext();
-  const { lessonData } = useLessonContext();
+  const { state: userState } = useUserContext();
+  const { state: lessonState } = useLessonContext();
 
   const { file } = useParams<{ file: string }>();
 
@@ -26,11 +26,11 @@ const Navbar: FC = () => {
           <div className="navbar_course_title">
             <h1>
               <span style={{ color: "gray" }}>Prosjekttittel: </span>
-              {lessonData.lessonTitle ? lessonData.lessonTitle : lessonData.lesson}
+              {lessonState.lesson!.lessonTitle ? lessonState.lesson!.lessonTitle : lessonState.lesson!.lessonSlug}
             </h1>
             <h1>
               <span style={{ color: "gray" }}>Kurs: </span>
-              {lessonData.courseTitle ? lessonData.courseTitle : lessonData.course}
+              {lessonState.lesson!.courseTitle ? lessonState.lesson!.courseTitle : lessonState.lesson!.courseSlug}
             </h1>
           </div>
         ) : (
@@ -38,7 +38,7 @@ const Navbar: FC = () => {
         )}
         <div className="profileMenu_container">
           <a id="navbar_gohome" href={"/"}>
-            <ProfileMenu name={user ? user.name : ""} photo={user ? user.photo : ""} />
+            <ProfileMenu name={userState.user ? userState.user.name : ""} photo={userState.user ? "" : ""} />
           </a>
         </div>
       </nav>

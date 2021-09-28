@@ -12,6 +12,8 @@ import * as ExpressSession from "express-session";
 import { Session } from "../../../libs/session/src/lib/session.entity";
 import {Connection} from "typeorm"
 import {TypeormStore} from "connect-typeorm"
+import * as passport from 'passport';
+
 
 
 async function bootstrap() {
@@ -31,6 +33,8 @@ async function bootstrap() {
       secret: "keyboard cat"
     })
   )
+  app.use(passport.initialize());
+  app.use(passport.session());
   const globalPrefix = "api";
   app.setGlobalPrefix(globalPrefix);
   const port = process.env.PORT || 3333;

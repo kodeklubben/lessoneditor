@@ -6,6 +6,7 @@ import { User } from "./user.entity"
 import { LessonDTO, NewLessonDTO } from "../../../lesson/src/lib/lesson.dto";
 import {FileStore, Lesson} from "../../../lesson/src/lib/lesson.entity"
 import {ThumbService} from "../../../thumb/src/lib/thumb.service"
+import { Request } from "express";
 
 @Injectable()
 export class UserService {
@@ -58,7 +59,7 @@ export class UserService {
 
       }
 
-      async addUserLesson(userId: number, lesson: NewLessonDTO): Promise<number>
+      async addUserLesson(userId: number, lesson: NewLessonDTO, request: Request ): Promise<number>
       {
           const user = await this.userRepository.findOne(userId);
           if(!user)
@@ -91,10 +92,10 @@ export class UserService {
           const savedLesson = await this.lessonRepository.save(newLesson);
           try
           {
-            const thumbImage = await this.thumbService.getThumb(savedLesson.lessonId,lesson.lessonSlug)
+            const thumbImage = await this.thumbService.getThumb(savedLesson.lessonId,lesson.lessonSlug, request)
 
             const previewPngFile = new FileStore()
-            previewPngFile.content = Buffer.from(thumbImage).toString("hex");
+           // previewPngFile.content = Buffer.from(thumbImage).toString("hex");
             previewPngFile.ext = ".png"
             previewPngFile.filename = "preview"
             previewPngFile.updated_by = user.name
@@ -109,7 +110,7 @@ export class UserService {
 
           return savedLesson.lessonId
       }
-      async updateUserLesson(userId: number, lessonId: number, regenThumb: boolean, updatedLesson: NewLessonDTO): Promise<Lesson>
+      async updateUserLesson(userId: number, lessonId: number, regenThumb: boolean, updatedLesson: NewLessonDTO, request: Request): Promise<Lesson>
       {
         const user = await this.userRepository.findOne(userId);
         if(!user)
@@ -128,13 +129,13 @@ export class UserService {
           {
             throw new HttpException('Preview file not found', HttpStatus.NOT_FOUND)
           }
-          const thumbImage = await this.thumbService.getThumb(lessonId,lesson.lessonSlug);
+          const thumbImage = await this.thumbService.getThumb(lessonId,lesson.lessonSlug, request);
           previewFile.content = Buffer.from(thumbImage).toString("hex");
         }
-        lesson.lessonTitle = lesson.lessonTitle
-        lesson.lessonSlug = lesson.lessonSlug
-        lesson.courseSlug = lesson.courseSlug
-        lesson.lessonTitle = lesson.lessonTitle
+        lesson.lessonTitle = updatedLesson.lessonTitle
+        lesson.lessonSlug = updatedLesson.lessonSlug
+        lesson.courseSlug = updatedLesson.courseSlug
+        lesson.lessonTitle = updatedLesson.lessonTitle
         lesson.updated_by = user.name
 
         const savedUser = await this.userRepository.save(user);

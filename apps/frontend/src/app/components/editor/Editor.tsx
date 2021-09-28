@@ -14,7 +14,7 @@ import { filenameParser } from "../../utils/filename-parser";
 const Editor: React.FC = () => {
   const { lessonId, file } = useParams<{ lessonId: string; file: string }>();
 
-  const { lessonData } = useLessonContext();
+  const { state } = useLessonContext();
   const { saveFileBody, savedFileBody } = useFileContext();
   const [mdText, setMdText] = useState("");
   const [showSpinner, setShowSpinner] = useState(true);
@@ -106,12 +106,12 @@ const Editor: React.FC = () => {
       <Navbar />
       <ButtonPanel
         buttonValues={buttonValues}
-        course={lessonData.course}
-        courseTitle={lessonData.courseTitle}
+        course={state.lesson!.courseSlug}
+        courseTitle={state.lesson!.courseTitle}
         cursorPositionEnd={cursorPositionEnd}
         cursorPositionStart={cursorPositionStart}
         editorRef={editorRef}
-        lessonTitle={lessonData.lessonTitle}
+        lessonTitle={state.lesson!.lessonTitle}
         mdText={mdText}
         pushRedoValue={pushRedoValue}
         pushUndoValue={pushUndoValue}
@@ -143,11 +143,11 @@ const Editor: React.FC = () => {
           setCursor={setCursor}
           pushUndoValue={pushUndoValue}
           resetButtons={resetButtons}
-          course={lessonData.course}
+          course={state.lesson!.courseSlug}
         />
         <MDPreview
           mdText={mdText}
-          course={lessonData.course}
+          course={state.lesson!.courseSlug}
           language={language}
           renderContent={renderContent}
         />

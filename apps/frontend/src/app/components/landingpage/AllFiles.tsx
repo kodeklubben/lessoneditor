@@ -3,16 +3,16 @@ import { useLessonContext } from "../../contexts/LessonContext";
 
 
 const AllFiles = () => {
-  const { lessonList } = useLessonContext();
+  const { state } = useLessonContext();
 
   const filteredArray =
-    lessonList.length > 0
-      ? lessonList.filter(
-      (filteredItem: { filename: string; }) =>
-        filteredItem.filename !== "data.json" &&
-        filteredItem.filename !== "preview.png"
+    state.files!.length > 0
+      ? state.files!.filter(
+      (fileName: string) =>
+        fileName !== "data.json" &&
+        fileName !== "preview.png"
       )
-      : "";
+      : [""];
 
   return (
     <>

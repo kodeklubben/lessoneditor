@@ -1,75 +1,23 @@
 import { Button, Card, Image } from "semantic-ui-react";
-import { FC } from "react";
+import {LessonDTO} from "../../../../../../libs/lesson/src/lib/lesson.dto"
+import { FC, useEffect } from "react";
+import Item from "./Item"
 
 interface ItemListProps {
-  items: [
-    {
-      course: string;
-      courseTitle: string;
-      lesson: string;
-      lessonId: string;
-      lessonTitle: string;
-      thumb: string;
-    }
-  ];
-  removeLesson: (lessonId: string) => void;
+  lessons: LessonDTO[]
+  removeLesson: (lessonId: number) => void;
   navigateToHome: (lessonId: string) => void;
 }
 
-const ItemList: FC<ItemListProps> = ({ items, removeLesson, navigateToHome }) => {
+const ItemList: FC<ItemListProps> = ({ lessons, removeLesson, navigateToHome }) => {
+
+
   return (
     <Card.Group>
-      {items.length > 0 &&
-        items.map(
-          (
-            listitem: {
-              course: string;
-              courseTitle: string;
-              lesson: string;
-              lessonId: string;
-              lessonTitle: string;
-              thumb: string;
-            },
-            index: number
-          ) => (
-            <Card key={"listitem" + index}>
-              <Card.Content>
-                <Image
-                  src={`${listitem.thumb}?${performance.now()}`}
-                  size="medium"
-                  bordered
-                  rounded
-                  style={{
-                    maxHeight: "220px",
-                    overflow: "hidden",
-                    objectFit: "cover",
-                    objectPosition: "0 0",
-                  }}
-                />
-              </Card.Content>
-              <Card.Content>
-                <Card.Header>
-                  {listitem.lessonTitle ? listitem.lessonTitle : listitem.lesson}
-                </Card.Header>
-                <Card.Meta>
-                  {listitem.courseTitle ? listitem.courseTitle : listitem.course}
-                </Card.Meta>
-              </Card.Content>
-
-              <Card.Content extra>
-                <Button onClick={() => navigateToHome(listitem.lessonId)} positive>
-                  Åpne
-                </Button>
-                <Button
-                  color="black"
-                  onClick={() => {
-                    removeLesson(listitem.lessonId);
-                  }}
-                >
-                  Fjerne
-                </Button>
-              </Card.Content>
-            </Card>
+      {lessons.length > 0 &&
+        lessons.map(
+          (lesson: LessonDTO) => (
+            <Item lesson={lesson} removeLesson={removeLesson} navigateToHome={navigateToHome} ></Item>  
           )
         )}
     </Card.Group>

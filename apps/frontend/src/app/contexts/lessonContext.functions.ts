@@ -16,6 +16,7 @@ export interface YamlFields{
 export interface LessonContextModel
 {
     state: LessonContextState,
+    setLessonContextState: React.Dispatch<React.SetStateAction<LessonContextState>>
     updateLesson: (lessonId: number, data: NewLessonDTO) => void
     updateYaml: (lessonId: number, data: YamlFields) => void
 }

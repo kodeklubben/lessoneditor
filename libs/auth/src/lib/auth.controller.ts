@@ -1,13 +1,14 @@
 import { Controller, Request, UseGuards, Get, Res, Req } from "@nestjs/common";
 import { LockNotSupportedOnGivenDriverError } from "typeorm";
-import { AuthService } from "..";
+import { AuthService } from "./auth.service";
 import { AuthGuard } from "@nestjs/passport";
+import { LoginGuard } from "./login.guard";
 
 @Controller("auth")
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @UseGuards(AuthGuard('local'))
+  @UseGuards(LoginGuard)
   @Get("login")
   async login(@Res() res) {
 
@@ -22,8 +23,8 @@ export class AuthController {
     // return res.redirect(authorizationURL);
   }
 
+  @UseGuards(LoginGuard)
   @Get('callback')
-  @UseGuards(AuthGuard('local'))
   authCallback(@Req() req, @Res() res) {
     res.redirect("/")
   }

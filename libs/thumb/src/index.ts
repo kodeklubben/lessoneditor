@@ -1,2 +1,2 @@
-export * from "./lib/thumb.controller";
+export * from "./lib/thumb.service";
 export * from "./lib/thumb.module";

@@ -1,19 +1,21 @@
-import { Injectable, Scope,Inject, HttpException, HttpStatus, Req } from "@nestjs/common";
+import { Injectable, Scope,Inject, HttpException, HttpStatus,  } from "@nestjs/common";
+import { REQUEST } from '@nestjs/core';
 import { HttpService } from "@nestjs/common";
 import { AxiosResponse } from "axios";
 import * as jwt from "jsonwebtoken"
 import { lastValueFrom } from "rxjs";
+import { Request } from "express";
 
 
 @Injectable()
 export class ThumbService {
 
-    constructor(private http: HttpService, @Inject(Scope.REQUEST) private request: Request)
+    constructor(private http: HttpService)
     {}
 
-    async getThumb(lessonId: number, filename: string): Promise<ArrayBuffer>
+    async getThumb(lessonId: number, filename: string, request: Request): Promise<ArrayBuffer>
     {
-        const baseUrl = this.baseUrl(this.request)
+        const baseUrl = this.baseUrl(request)
         const previewurl = [baseUrl, "preview", lessonId, filename].join("/");
         const url = this.thumbUrl(previewurl)
         const response$ = this.http.get<ArrayBuffer>(url)

@@ -85,6 +85,7 @@ const updatelesson = async (lessonId: number, data: NewLessonDTO) => {
   } 
   const context: LessonContextModel = {
     state: lessonContextState,
+    setLessonContextState: setLessonContextState,
     updateLesson: updatelesson,
     updateYaml: updateYaml
   }

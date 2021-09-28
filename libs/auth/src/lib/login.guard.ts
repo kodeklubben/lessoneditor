@@ -4,9 +4,8 @@ import { Express, Request } from 'express';
 import {verify} from "jsonwebtoken";
 
 @Injectable()
-export class LoginGuard extends AuthGuard('local') {
+export class LoginGuard extends AuthGuard('github') {
   async canActivate(context: ExecutionContext) {
-    const result = (await super.canActivate(context)) as boolean;
     const request = context.switchToHttp().getRequest<Request>();
     if(request.headers.authorization)
     {
@@ -22,7 +21,8 @@ export class LoginGuard extends AuthGuard('local') {
         }
     }
     else
-    {     
+    {    
+        const result = (await super.canActivate(context)) as boolean; 
         await super.logIn(request);
         return result;
     }

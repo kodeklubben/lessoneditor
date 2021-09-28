@@ -7,16 +7,17 @@ import Levels from "./Levels";
 import License from "./License";
 import { useLessonContext } from "../../../contexts/LessonContext";
 import { YML_TEXT } from "../settingsFiles/languages/landingpage_NO";
+import { LessonContextState } from "../../../contexts/lessonContext.functions";
 
 // TODO: FIKSE AVBRYTKNAPP
 
 const LandingpageDatamodal = () => {
   const context = useLessonContext();
-  const { lessonData, setLessonData, saveYml } = context;
+  const { state, setLessonContextState, updateYaml } = context;
   const [checkBoxState, setCheckBoxState] = useState({});
   const [open, setOpen] = useState(false);
 
-  const ymlData = lessonData.yml;
+  const ymlData = state.yml;
 
   const isEmptyDatapanel =
     JSON.stringify(ymlData.tags) === JSON.stringify({ topic: [], subject: [], grade: [] });
@@ -60,16 +61,21 @@ const LandingpageDatamodal = () => {
   }, [ymlData.tags, isEmptyDatapanel]);
 
   const onSubmit = async () => {
-    saveYml(ymlData).then(() => {
-      setOpen(false);
-    });
+    updateYaml(state.lesson!.lessonId ,ymlData)
+    setOpen(false);
   };
 
   const dropdownHandler = (event: any, { name, value }: any) => {
-    setLessonData((prevState: { yml: any }) => ({
-      ...prevState,
-      yml: { ...prevState.yml, [name]: value },
-    }));
+    setLessonContextState((s) =>
+    {
+      return{
+        ...s,
+        yml: {
+          ...s.yml,
+          level: value
+        }
+      }
+    })
   };
 
   const checboxHandler = (event: {
@@ -85,27 +91,33 @@ const LandingpageDatamodal = () => {
     }));
 
     if (!ymlData.tags[subtag].includes(name)) {
-      setLessonData((prevState: { yml: { tags: { [x: string]: any } } }) => ({
-        ...prevState,
-        yml: {
-          ...prevState.yml,
-          tags: {
-            ...prevState.yml.tags,
-            [subtag]: [...prevState.yml.tags[subtag], name],
-          },
-        },
-      }));
+      setLessonContextState((s) =>
+      {
+        return{
+          ...s,
+          yml: {
+            ...s.yml,
+            tags: {
+              ...s.yml.tags,
+              [subtag]: [...s.yml.tags[subtag], name]
+            }
+          }
+        }
+      })
     } else {
-      setLessonData((prevState: { yml: { tags: { [x: string]: any[] } } }) => ({
-        ...prevState,
-        yml: {
-          ...prevState.yml,
-          tags: {
-            ...prevState.yml.tags,
-            [subtag]: prevState.yml.tags[subtag].filter((e: any) => e !== name),
-          },
-        },
-      }));
+      setLessonContextState((s) =>
+      {
+        return{
+          ...s,
+          yml: {
+            ...s.yml,
+            tags: {
+              ...s.yml.tags,
+              [subtag]: s.yml.tags[subtag].filter((e: any) => e !== name)
+            }
+          }
+        }
+      })
     }
   };
 
@@ -113,10 +125,17 @@ const LandingpageDatamodal = () => {
     const name = event.target.name;
     const value = event.target.value;
 
-    setLessonData((prevState: { yml: any }) => ({
-      ...prevState,
-      yml: { ...prevState.yml, [name]: value },
-    }));
+    setLessonContextState((s) =>
+    {
+      return {
+        ...s,
+        yml: {
+          ...s.yml,
+          license: value
+
+        }
+      }
+    })
   };
 
   return (

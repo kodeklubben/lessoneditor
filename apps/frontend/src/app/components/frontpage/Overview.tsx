@@ -9,7 +9,7 @@ import { Card, Divider, Header, Icon, Message } from "semantic-ui-react";
 
 const Overview: FC = () => {
   const history = useHistory();
-  const { lessons, removeLesson } = useUserContext();
+  const { state, removeLesson } = useUserContext();
 
   const navigateToHome = (lessonId: string) => {
     const target = ["/landingpage", lessonId, "lessontexts"].join("/");
@@ -49,10 +49,10 @@ const Overview: FC = () => {
         </Card>
 
         <Divider style={{ height: "2px" }} section />
-        {lessons.length > 0 ? (
+        {state.lessons.length > 0 ? (
           <>
             <Header as="h2">Mine oppgaver</Header>
-            <ItemList items={lessons} removeLesson={removeLesson} navigateToHome={navigateToHome} />
+            <ItemList lessons={state.lessons} removeLesson={removeLesson} navigateToHome={navigateToHome} />
           </>
         ) : (
           <Message>
