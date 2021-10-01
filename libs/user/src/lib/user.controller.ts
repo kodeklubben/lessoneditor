@@ -11,9 +11,10 @@ export class UserController {
   }
 
   @Get(':userId/lessons')
-  async GetUserLessons(@Param() params)
+  async GetUserLessons(@Param() params):Promise<LessonDTO[]>
   {
-    return await this.userService.getUserLessons(params.userId);
+    const {lessons, ...userDTO} = await this.userService.getUserLessons(params.userId);
+    return lessons
   }
   
   @Get()
@@ -40,10 +41,10 @@ export class UserController {
     return updatedLessonDTO;
   }
 
-  @Delete(':userId/lesson')
-  async DeleteLesson(@Param() params, @Query() queryParams): Promise<LessonDTO>
+  @Delete(':userId/lesson/:lessonId')
+  async DeleteLesson(@Param('userId') userId,@Param('lessonId') lessonId, @Query() queryParams): Promise<LessonDTO>
   {
-    const {users, files, ...deletedLessonDTO} = await this.userService.deleteUserLesson(params.userId, queryParams.lessonId)
+    const {users, files, ...deletedLessonDTO} = await this.userService.deleteUserLesson(userId, lessonId)
     return deletedLessonDTO
   }
 

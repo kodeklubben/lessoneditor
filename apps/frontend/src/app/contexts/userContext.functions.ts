@@ -5,6 +5,7 @@ export interface UserContextState
 {
     user: UserDTO | undefined,
     lessons: LessonDTO[] 
+    loggedIn: boolean
 
 }
 
@@ -18,6 +19,7 @@ export interface UserContextModel
 
 export const initialUserContextState: UserContextState = {
     user: undefined,
-    lessons: []
+    lessons: [],
+    loggedIn: false
 
 }

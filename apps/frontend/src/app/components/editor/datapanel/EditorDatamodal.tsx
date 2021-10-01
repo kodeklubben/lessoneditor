@@ -6,12 +6,13 @@ import MultiInput from "./MultiInput";
 import { FORM_TEXT } from "./settings/landingpage_NO";
 import { useFileContext } from "../../../contexts/FileContext";
 import { filenameParser } from "../../../utils/filename-parser";
+import { stat } from "fs/promises";
 
 // @ts-ignore
 const EditorDatamodal = ({ courseTitle, lessonTitle, setShowSpinner }) => {
   const history = useHistory();
   const { lessonId, file } = useParams<any>();
-  const { headerData, saveFileHeader, setHeaderData } = useFileContext();
+  const { state, saveFileHeader, setFileContextState } = useFileContext();
   const [open, setOpen] = useState<boolean>(false);
 
 
@@ -20,14 +21,24 @@ const EditorDatamodal = ({ courseTitle, lessonTitle, setShowSpinner }) => {
 
   const changeHandler = (event: { target: { name: any; value: any; }; }) => {
     const { name, value } = event.target;
-    if (setHeaderData) {
-      setHeaderData((prevState) => ({ ...prevState, [name]: value }));
-      if (headerData?.author) {
-        setHeaderData((prevState) => ({ ...prevState, err: "" }));
-      }
-      if (headerData?.title) {
-        setHeaderData((prevState) => ({ ...prevState, err: "" }));
-      }
+    if (setFileContextState) {
+      setFileContextState((s) => {
+        return {
+          ...s,
+          headerData: {
+            ...s.headerData,
+            [name]: value
+          }
+
+        }
+      })
+      // setHeaderData((prevState) => ({ ...prevState, [name]: value }));
+      // if (headerData?.author) {
+      //   setHeaderData((prevState) => ({ ...prevState, err: "" }));
+      // }
+      // if (headerData?.title) {
+      //   setHeaderData((prevState) => ({ ...prevState, err: "" }));
+      // }
     }
   };
 
@@ -37,17 +48,25 @@ const EditorDatamodal = ({ courseTitle, lessonTitle, setShowSpinner }) => {
   ) => {
     const key = Object.keys(object)[0];
     const value = Object.values(object)[0];
-    if (setHeaderData) {
-      setHeaderData((prevState) => ({ ...prevState, [key]: value }));
-      setHeaderData((prevState) => ({ ...prevState, [name]: "" }));
+    if (setFileContextState) {
+      setFileContextState((s) => {
+        return {
+          ...s,
+          headerData: {
+            ...s.headerData,
+            [key]:value
+
+          }
+        }
+      })
     }
   };
 
   const onSubmit = async () => {
     if (saveFileHeader) {
-      const newHeaderData = Object.assign({ language }, headerData);
+      const newHeaderData = Object.assign({ language }, state.headerData);
       setShowSpinner(true);
-      await saveFileHeader(lessonId, file, newHeaderData);
+      await saveFileHeader(newHeaderData);
       setShowSpinner(false);
       setOpen(false);
       history.push("/");
@@ -56,8 +75,13 @@ const EditorDatamodal = ({ courseTitle, lessonTitle, setShowSpinner }) => {
   };
 
   const onCancel = async () => {
-    if (setHeaderData && headerData) {
-      setHeaderData(headerData);
+    if (setFileContextState && state.headerData) {
+      setFileContextState((s) => {
+        return {
+          ...s,
+          headerData: state.headerData
+        }
+      })
       setOpen(false);
     }
   };
@@ -82,8 +106,8 @@ const EditorDatamodal = ({ courseTitle, lessonTitle, setShowSpinner }) => {
       />
       <Modal
         closeOnDimmerClick={
-          !(!headerData?.title ||
-            (!headerData?.author && headerData.authorList.length === 0))
+          !(!state.headerData?.title ||
+            (!state.headerData?.author && state.headerData.authorList.length === 0))
         }
         onClose={() => setOpen(false)}
         onOpen={() => setOpen(true)}
@@ -114,11 +138,11 @@ const EditorDatamodal = ({ courseTitle, lessonTitle, setShowSpinner }) => {
             type="text"
             name="title"
             placeholder={FORM_TEXT.TITLE.placeholder}
-            value={headerData?.title}
+            value={state.headerData?.title}
             onChange={changeHandler}
             fluid
           />
-          {!headerData?.title ? (
+          {!state.headerData?.title ? (
             <p style={{ color: "red" }}>
               <i>Må ha tittel</i>
             </p>
@@ -129,15 +153,15 @@ const EditorDatamodal = ({ courseTitle, lessonTitle, setShowSpinner }) => {
         <Modal.Content className="editor_modal">
           <MultiInput
             changeHandler={changeHandler}
-            inputArray={headerData?.authorList}
-            inputValue={headerData?.author}
+            inputArray={state.headerData?.authorList}
+            inputValue={state.headerData?.author}
             multiInputHandler={multiInputHandler}
             name="author"
             placeholder={FORM_TEXT.AUTHOR.placeholder}
             required="(obligatorisk)"
             title={FORM_TEXT.AUTHOR.heading}
           />
-          {headerData?.authorList.length === 0 && !headerData?.author ? (
+          {state.headerData?.authorList.length === 0 && !state.headerData?.author ? (
             <p>
               <i style={{ color: "red" }}>Må ha forfatter</i>
             </p>
@@ -148,8 +172,8 @@ const EditorDatamodal = ({ courseTitle, lessonTitle, setShowSpinner }) => {
         <Modal.Content className="editor_modal">
           <MultiInput
             changeHandler={changeHandler}
-            inputArray={headerData?.translatorList}
-            inputValue={headerData?.translator}
+            inputArray={state.headerData?.translatorList}
+            inputValue={state.headerData?.translator}
             multiInputHandler={multiInputHandler}
             name="translator"
             placeholder={FORM_TEXT.TRANSLATOR.placeholder}
@@ -160,12 +184,12 @@ const EditorDatamodal = ({ courseTitle, lessonTitle, setShowSpinner }) => {
         <Modal.Actions className="editor_modal">
           <Button
             disabled={
-              !headerData?.title ||
-              (!headerData.author && headerData.authorList.length === 0)
+              !state.headerData?.title ||
+              (!state.headerData.author && state.headerData.authorList.length === 0)
             }
             color={
-              headerData?.title &&
-              (headerData.author || headerData.authorList.length > 0)
+              state.headerData?.title &&
+              (state.headerData.author || state.headerData.authorList.length > 0)
                 ? "black"
                 : "grey"
             }
@@ -174,7 +198,7 @@ const EditorDatamodal = ({ courseTitle, lessonTitle, setShowSpinner }) => {
           />
           <Button
             disabled={
-              !headerData?.title || (!headerData.author && headerData.authorList.length === 0)
+              !state.headerData?.title || (!state.headerData.author && state.headerData.authorList.length === 0)
             }
             onClick={onSubmit}
             content="OK"

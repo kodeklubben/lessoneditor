@@ -14,6 +14,7 @@ export const UserContextProvider = (props: any) => {
 
   const [userContexState, setUserContextState] = useState<UserContextState>(initialUserContextState)
   const [error, setError] = useState({})
+  
   useEffect(() => {
     async function fetchData() {
       try
@@ -25,7 +26,8 @@ export const UserContextProvider = (props: any) => {
           return{
             ...s,
             user: userRes.data,
-            lessons: userLessonsRes.data
+            lessons: userLessonsRes.data,
+            loggedIn: true
           }
         })
       }
@@ -109,7 +111,15 @@ export const UserContextProvider = (props: any) => {
     removeLesson,
   };
 
-  if(error) return <NotLoggedInPage></NotLoggedInPage>
-  return <UserContext.Provider value={context}>{props.children}</UserContext.Provider>;
+  if(userContexState.loggedIn)
+  {
+    return <UserContext.Provider value={context}>{props.children}</UserContext.Provider>;
+  }
+  else
+  {
+    return <NotLoggedInPage></NotLoggedInPage>
+  }
+
+
 };
 export const useUserContext = (): UserContextModel => useContext<UserContextModel>(UserContext);

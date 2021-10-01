@@ -20,7 +20,7 @@ export class LessonService {
 
     async submitLesson(token: string, lessonId:number)
     {
-      const lesson = await this.lessonRepository.findOne(lessonId);
+      const lesson = await this.getLesson(lessonId)
       if(lesson == null)
       {
         throw new HttpException('Lesson does not exist', HttpStatus.NOT_FOUND);
@@ -29,7 +29,7 @@ export class LessonService {
     }
 
     async getLesson(lessonId: number): Promise<Lesson> {
-        const lesson = await this.lessonRepository.findOne(lessonId);
+        const lesson = await this.lessonRepository.findOne(lessonId, { relations: ["files"] });
         if(lesson == null)
         {
           throw new HttpException('Lesson does not exist', HttpStatus.NOT_FOUND);
@@ -52,7 +52,7 @@ export class LessonService {
         {
           throw new HttpException('User does not exist', HttpStatus.NOT_FOUND);
         }
-        const invitedToUser = await this.userRepository.findOne(shareLesson.invitationToUserId);
+        const invitedToUser = await this.userRepository.findOne(shareLesson.invitationToUserId, { relations: ["lessons"] });
         if(!invitedToUser)
         {
           throw new HttpException('User does not exist', HttpStatus.NOT_FOUND);
@@ -73,15 +73,19 @@ export class LessonService {
 
     async getLessonFile(lessonId: number, filename: string)
     {
-      const lesson = await this.lessonRepository.findOne(lessonId);
-      if(!lesson)
-      {
-        throw new HttpException('Lesson does not exist', HttpStatus.NOT_FOUND);
-      }
+      const lesson = await this.getLesson(lessonId)
       const file = lesson.files.find(file => file.filename == filename);
       if(!file)
       {
         throw new HttpException('File does not exist', HttpStatus.NOT_FOUND);
+      }
+      if(file.filename == "lesson")
+      {
+        file.content = JSON.parse(file.content);
+      }
+      if(file.ext == ".md")
+      {
+        file.content = file.content.toString()
       }
       return file
 
@@ -89,11 +93,7 @@ export class LessonService {
 
     async addLessonFile(lessonId:number, newFile: NewFileDTO): Promise<number>
     {
-        const lesson = await this.lessonRepository.findOne(lessonId);
-        if(!lesson)
-        {
-          throw new HttpException('Lesson does not exist', HttpStatus.NOT_FOUND);
-        }
+        const lesson = await this.getLesson(lessonId)
         const file = new FileStore()
         file.filename= newFile.filename
         file.ext = newFile.ext
@@ -105,14 +105,10 @@ export class LessonService {
         return savedLesson.files[savedLesson.files.length-1].fileId
     }
 
-    async updateLessonFile(lessonId: number, updatedFile: UpdatedFileDTO): Promise<FileStore>
+    async updateLessonFile(lessonId: number, fileId: number, updatedFile: UpdatedFileDTO): Promise<FileStore>
     {
-        const lesson = await this.lessonRepository.findOne(lessonId);
-        if(!lesson)
-        {
-          throw new HttpException('Lesson does not exist', HttpStatus.NOT_FOUND);
-        }
-        const file = lesson.files.find(file => file.fileId == updatedFile.fileId);
+        const lesson = await this.getLesson(lessonId)
+        const file = lesson.files.find(file => file.fileId == fileId);
         if(!file)
         {
           throw new HttpException('File does not exist', HttpStatus.NOT_FOUND);

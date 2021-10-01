@@ -12,7 +12,7 @@ export const paths = {
   "LESSON_DATA": "/api/lesson/:lessonId/data/:filename",
   "LESSON_FILES": "/api/lesson/:lessonId/files",
   "LESSON_FILE": "api/lesson/:lessonId/files/:fileName",
-  "LESSON_FILE_UPDATE": "/api/lesson/:lessonId/files",
+  "LESSON_FILE_UPDATE": "/api/lesson/:lessonId/files/:fileId",
   "LESSON_PROXY": "/api/lessons-proxy/*",
   "LESSON_SUBMIT": "/api/lesson/:lessonId/submit",
   "LESSON_THUMB": "/api/lesson-thumb/:lessonId/:file",
@@ -20,7 +20,7 @@ export const paths = {
   "USER_LESSON_UPDATE": "/api/user/:userId/lesson/:lessonId",
   "USER_LESSON_NEW": "/api/user/:userId/lesson",
   "USER": "/api/user",
-  "USER_LESSONS": "/api/user/:userId/lesson"
+  "USER_LESSONS": "/api/user/:userId/lessons"
 }
 
 export interface Lesson

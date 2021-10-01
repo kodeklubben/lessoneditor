@@ -10,12 +10,13 @@ import { useParams } from "react-router";
 import { useLessonContext } from "../../contexts/LessonContext";
 import Navbar from "../navbar/Navbar";
 import { filenameParser } from "../../utils/filename-parser";
+import { stat } from "fs/promises";
 
 const Editor: React.FC = () => {
   const { lessonId, file } = useParams<{ lessonId: string; file: string }>();
 
   const { state } = useLessonContext();
-  const { saveFileBody, savedFileBody } = useFileContext();
+  const { saveFileBody, state: fileState } = useFileContext();
   const [mdText, setMdText] = useState("");
   const [showSpinner, setShowSpinner] = useState(true);
   const [buttonValues, setButtonValues] = useState({});
@@ -79,21 +80,24 @@ const Editor: React.FC = () => {
    * Gjør litt state greier her:
    */
 
-  if (showSpinner && savedFileBody && mdText === "") {
-    setMdText(savedFileBody);
+  if (showSpinner && fileState.savedFileBody && mdText === "") {
+    setMdText(fileState.savedFileBody);
     setShowSpinner(false);
   }
 
   const saveEditorText = async () => {
     if (saveFileBody) {
-      await saveFileBody(lessonId, file, mdText);
+      await saveFileBody(mdText);
     }
   };
 
   return (
     <>
       {showSpinner ? <ShowSpinner /> : ""}
-      <ImageUpload
+      {state.lesson && 
+      (
+        <>
+        <ImageUpload
         uploadImageRef={uploadImageRef}
         mdText={mdText}
         pushUndoValue={pushUndoValue}
@@ -106,12 +110,12 @@ const Editor: React.FC = () => {
       <Navbar />
       <ButtonPanel
         buttonValues={buttonValues}
-        course={state.lesson!.courseSlug}
-        courseTitle={state.lesson!.courseTitle}
+        course={state.lesson?.courseSlug}
+        courseTitle={state.lesson?.courseTitle}
         cursorPositionEnd={cursorPositionEnd}
         cursorPositionStart={cursorPositionStart}
         editorRef={editorRef}
-        lessonTitle={state.lesson!.lessonTitle}
+        lessonTitle={state.lesson?.lessonTitle}
         mdText={mdText}
         pushRedoValue={pushRedoValue}
         pushUndoValue={pushUndoValue}
@@ -143,15 +147,19 @@ const Editor: React.FC = () => {
           setCursor={setCursor}
           pushUndoValue={pushUndoValue}
           resetButtons={resetButtons}
-          course={state.lesson!.courseSlug}
+          course={state.lesson?.courseSlug}
         />
         <MDPreview
           mdText={mdText}
-          course={state.lesson!.courseSlug}
+          course={state.lesson?.courseSlug}
           language={language}
           renderContent={renderContent}
         />
       </div>
+      </>
+      )
+      }
+  
     </>
   );
 };

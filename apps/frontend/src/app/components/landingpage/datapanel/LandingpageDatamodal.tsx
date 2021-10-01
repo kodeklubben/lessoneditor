@@ -17,10 +17,10 @@ const LandingpageDatamodal = () => {
   const [checkBoxState, setCheckBoxState] = useState({});
   const [open, setOpen] = useState(false);
 
-  const ymlData = state.yml;
+  const ymlData = state.yml?.content
 
   const isEmptyDatapanel =
-    JSON.stringify(ymlData.tags) === JSON.stringify({ topic: [], subject: [], grade: [] });
+    JSON.stringify(ymlData?.tags) === JSON.stringify({ topic: [], subject: [], grade: [] });
 
   /*
    * Det ser ut som vi trenger denne useEffecten for å forhindre inifite loop
@@ -31,7 +31,7 @@ const LandingpageDatamodal = () => {
     }
     const mapYamlTags = () => {
       let obj: {};
-      obj = ymlData.tags.topic.reduce(
+      obj = ymlData?.tags.topic.reduce(
         (accumulator: { [x: string]: boolean }, currentValue: string | number) => {
           accumulator[currentValue] = true;
           return accumulator;
@@ -39,14 +39,14 @@ const LandingpageDatamodal = () => {
         // @ts-ignore
         { ...obj }
       );
-      obj = ymlData.tags.subject.reduce(
+      obj = ymlData?.tags.subject.reduce(
         (accumulator: { [x: string]: boolean }, currentValue: string | number) => {
           accumulator[currentValue] = true;
           return accumulator;
         },
         { ...obj }
       );
-      obj = ymlData.tags.grade.reduce(
+      obj = ymlData?.tags.grade.reduce(
         (accumulator: { [x: string]: boolean }, currentValue: string | number) => {
           accumulator[currentValue] = true;
           return accumulator;
@@ -55,13 +55,13 @@ const LandingpageDatamodal = () => {
       );
       setCheckBoxState((prevState) => ({ ...prevState, ...obj }));
     };
-    if (ymlData.tags) {
+    if (ymlData?.tags) {
       mapYamlTags();
     }
-  }, [ymlData.tags, isEmptyDatapanel]);
+  }, [ymlData?.tags, isEmptyDatapanel]);
 
   const onSubmit = async () => {
-    updateYaml(state.lesson!.lessonId ,ymlData)
+    updateYaml(state.lesson!.lessonId ,ymlData!)
     setOpen(false);
   };
 
@@ -71,8 +71,13 @@ const LandingpageDatamodal = () => {
       return{
         ...s,
         yml: {
-          ...s.yml,
-          level: value
+          fileId: s.yml!.fileId,
+          filename: s.yml!.filename,
+          ext: s.yml!.ext,
+          content: {
+            ...s.yml!.content,
+            level: value
+          }
         }
       }
     })
@@ -90,16 +95,21 @@ const LandingpageDatamodal = () => {
       [name]: value,
     }));
 
-    if (!ymlData.tags[subtag].includes(name)) {
+    if (!ymlData?.tags[subtag].includes(name)) {
       setLessonContextState((s) =>
       {
         return{
           ...s,
           yml: {
-            ...s.yml,
-            tags: {
-              ...s.yml.tags,
-              [subtag]: [...s.yml.tags[subtag], name]
+            fileId: s.yml!.fileId,
+            filename: s.yml!.filename,
+            ext: s.yml!.ext,
+            content: {
+              ...s.yml!.content,
+              tags: {
+                ...s.yml!.content.tags,
+                [subtag]: [...s.yml!.content.tags[subtag], name]
+              }
             }
           }
         }
@@ -110,10 +120,15 @@ const LandingpageDatamodal = () => {
         return{
           ...s,
           yml: {
-            ...s.yml,
-            tags: {
-              ...s.yml.tags,
-              [subtag]: s.yml.tags[subtag].filter((e: any) => e !== name)
+            fileId: s.yml!.fileId,
+            filename: s.yml!.filename,
+            ext: s.yml!.ext,
+            content: {
+              ...s.yml!.content,
+              tags: {
+                ...s.yml!.content.tags,
+                [subtag]: s.yml!.content.tags[subtag].filter((e: any) => e !== name)
+              }
             }
           }
         }
@@ -130,9 +145,13 @@ const LandingpageDatamodal = () => {
       return {
         ...s,
         yml: {
-          ...s.yml,
-          license: value
-
+          fileId: s.yml!.fileId,
+          filename: s.yml!.filename,
+          ext: s.yml!.ext,
+          content: {
+            ...s.yml!.content,
+            license: value
+          },
         }
       }
     })

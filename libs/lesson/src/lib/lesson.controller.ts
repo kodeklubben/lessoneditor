@@ -44,10 +44,10 @@ export class LessonController {
   }
 
   @Get(':lessonId/files')
-  async GetLessonFiles(@Param() params): Promise<FileDTO[]>
+  async GetLessonFiles(@Param() params): Promise<FileDTO<string>[]>
   {
     const {users, files, ...lessonDTO} = await this.lessonService.getLesson(params.lessonId)
-    const filesArray: FileDTO[] = files.map(function(file){
+    const filesArray: FileDTO<string>[] = files.map(function(file){
       const {lesson, ...fileDTO} = file
       return fileDTO
     })
@@ -55,7 +55,7 @@ export class LessonController {
   }
 
   @Get(':lessonId/files/:fileName')
-  async GetLessonFile(@Param('lessonId') lessonId, @Param('fileName') fileName): Promise<FileDTO>
+  async GetLessonFile(@Param('lessonId') lessonId, @Param('fileName') fileName): Promise<FileDTO<string>>
   {
     const {lesson, ...fileDTO} = await this.lessonService.getLessonFile(lessonId, fileName)
     return fileDTO
@@ -68,16 +68,16 @@ export class LessonController {
     
   }
 
-  @Post(':lessonid/files')
+  @Post(':lessonId/files')
   async AddLessonFile(@Param() params, @Body() newFile: NewFileDTO ): Promise<number>
   {
     return await this.lessonService.addLessonFile(params.lessonId,newFile);
   }
 
-  @Put(':lessonid/files')
-  async UpdateLessonFile(@Param() params, @Body() updatedFile: UpdatedFileDTO ): Promise<FileDTO>
+  @Put(':lessonId/files/:fileId')
+  async UpdateLessonFile(@Param('lessonId') lessonId,@Param('fileId') fileId, @Body() updatedFile: UpdatedFileDTO ): Promise<FileDTO<string>>
   {
-    const {lesson, ...fileDTO} = await this.lessonService.updateLessonFile(params.lessonId,updatedFile);
+    const {lesson, ...fileDTO} = await this.lessonService.updateLessonFile(lessonId,fileId,updatedFile);
     return fileDTO
   }
 

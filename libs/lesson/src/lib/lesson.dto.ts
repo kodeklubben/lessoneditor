@@ -41,7 +41,13 @@ export interface NewLessonDTO
 
 }
 
-export interface FileDTO
+export interface YamlContent{
+    level?: number,
+    license?: string,
+    tags: any
+  }
+
+export interface FileDTO<T>
 {
     fileId: number;
 
@@ -49,15 +55,15 @@ export interface FileDTO
 
     ext: string;
 
-    content: string;
+    content: T;
 
-    created_by: string;
+    created_by?: string;
 
-    updated_by: string;
+    updated_by?: string;
 
-    created_at: Date;
+    created_at?: Date;
 
-    updated_at: Date
+    updated_at?: Date
 }
 
 export interface NewFileDTO

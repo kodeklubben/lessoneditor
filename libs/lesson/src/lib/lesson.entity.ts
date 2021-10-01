@@ -70,7 +70,7 @@ export class FileStore {
     @UpdateDateColumn()
     updated_at: Date
 
-    @ManyToOne(type => Lesson, lesson => lesson.files)
+    @ManyToOne(type => Lesson, lesson => lesson.files, {onDelete: 'CASCADE'})
     lesson: Lesson;
 
 }

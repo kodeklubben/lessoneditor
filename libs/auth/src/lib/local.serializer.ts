@@ -16,7 +16,7 @@ export class GithubSerializer extends PassportSerializer {
   }
  
   async deserializeUser(userId: number, done: CallableFunction) {
-    const user = this.userService.getUser(userId)
+    const user = await this.userService.getUser(userId)
     done(null, user);
   }
 }

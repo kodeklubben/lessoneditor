@@ -2,8 +2,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import axios from "axios";
 import { getLessonPaths } from "./utils/get-lesson-paths";
-import {NewLessonDTO,LessonDTO,FileDTO} from "../../../../../libs/lesson/src/lib/lesson.dto"
-import {LessonContextState, initalLessonContextState, YamlFields, LessonContextModel} from "./lessonContext.functions"
+import {NewLessonDTO,LessonDTO,FileDTO, YamlContent} from "../../../../../libs/lesson/src/lib/lesson.dto"
+import {LessonContextState, initalLessonContextState,LessonContextModel} from "./lessonContext.functions"
 import {paths} from "../../../../../libs/api-interfaces/src/lib/api-interfaces"
 import {useUserContext} from "./UserContext"
 
@@ -26,20 +26,14 @@ export const LessonContextProvider = (props: any) => {
       {
         const lesson = await axios.get<LessonDTO>(paths.LESSON.replace(":lessonId",lessonId))
         const fileNames = await axios.get<string[]>(paths.LESSON_FILENAMES.replace(":lessonId",lessonId))
-        const yamlFile = await axios.get<FileDTO>(paths.LESSON_FILE.replace(":lessonId",lessonId).replace(":.+e","lesson"))
-        let yamlContent: YamlFields
-        if(JSON.stringify(yamlFile.data.content) == JSON.stringify({}))
-        {
-          yamlContent = initalLessonContextState.yml
-        }
-
+        const yamlFile = await axios.get<FileDTO<YamlContent>>(paths.LESSON_FILE.replace(":lessonId",lessonId).replace(":fileName","lesson"))
         setLessonContextState((s) => 
         {
           return {
             ...s,
             lesson: lesson.data,
             files: fileNames.data,
-            yaml: yamlContent
+            yaml: yamlFile.data
           }
         })
       }
@@ -52,17 +46,16 @@ export const LessonContextProvider = (props: any) => {
     if (lessonId) fetchLessonData().then();
   }, [lessonId]);
 
-const updateYaml = async (lessonId: number, data: YamlFields) => {
+const updateYaml = async (lessonId: number, data: YamlContent) => {
     try
     {
-      const updatedFile = await axios.put<FileDTO>(paths.LESSON_FILE_UPDATE
-        .replace(":lessonId", lessonId.toString()),data)
-      const jsonData: YamlFields = JSON.parse(updatedFile.data.content);
+      const updatedFile = await axios.put<FileDTO<YamlContent>>(paths.LESSON_FILE_UPDATE
+        .replace(":lessonId", lessonId.toString()).replace(":fileId",lessonContextState.yml!.fileId.toString()),data)
       setLessonContextState((s) => 
         {
           return {
             ...s,
-            yml: jsonData 
+            yml: updatedFile.data 
           }
         })
     }

@@ -1,24 +1,19 @@
-import {LessonDTO, NewLessonDTO} from "../../../../../libs/lesson/src/lib/lesson.dto"
+import {LessonDTO, NewLessonDTO, FileDTO, YamlContent} from "../../../../../libs/lesson/src/lib/lesson.dto"
 
 export interface LessonContextState
 {
   lesson: LessonDTO | undefined,
   files: string[] | undefined
-  yml: YamlFields
+  yml: FileDTO<YamlContent> | undefined
 }
 
-export interface YamlFields{
-  level: number,
-  license: string,
-  tags: any
-}
 
 export interface LessonContextModel
 {
     state: LessonContextState,
     setLessonContextState: React.Dispatch<React.SetStateAction<LessonContextState>>
     updateLesson: (lessonId: number, data: NewLessonDTO) => void
-    updateYaml: (lessonId: number, data: YamlFields) => void
+    updateYaml: (lessonId: number, data: YamlContent) => void
 }
 
 
@@ -26,10 +21,6 @@ export interface LessonContextModel
 export const initalLessonContextState: LessonContextState = {
     lesson: undefined,
     files: undefined,
-    yml: {
-        level: 1,
-        license: "CC BY-SA 4.0",
-        tags: { topic: [], subject: [], grade: [] },
-    }
+    yml: undefined
 }
 

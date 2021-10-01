@@ -14,7 +14,7 @@ interface Props
 const Item: React.FC<Props> = (props: Props) => 
 {
     const {lesson, removeLesson, navigateToHome} = props
-    const [image, setImage] = useState<FileDTO>()
+    const [image, setImage] = useState<FileDTO<string>>()
 
     useEffect(() => 
     {
@@ -22,7 +22,7 @@ const Item: React.FC<Props> = (props: Props) =>
         {
             try
             {
-                const file = await axios.get<FileDTO>(paths.LESSON_FILE.replace(":lessonId",lesson.lessonId.toString()).replace(":fileName","preview"))
+                const file = await axios.get<FileDTO<string>>(paths.LESSON_FILE.replace(":lessonId",lesson.lessonId.toString()).replace(":fileName","preview"))
                 setImage(file.data)
             }
             catch(error)

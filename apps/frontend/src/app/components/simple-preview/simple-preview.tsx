@@ -4,12 +4,12 @@ import { useFileContext } from "../../contexts/FileContext";
 import ShowSpinner from "../ShowSpinner";
 
 const SimplePreview = () => {
-  const { savedFileBody } = useFileContext();
+  const { state } = useFileContext();
 
   return (
     <div className={"simple-preview"}>
-      {typeof savedFileBody === "string" && savedFileBody !== "" ? (
-        <MDPreview mdText={savedFileBody} course={"python"} language={"nb"} renderContent={true} />
+      {typeof state.savedFileBody === "string" && state.savedFileBody !== "" ? (
+        <MDPreview mdText={state.savedFileBody} course={"python"} language={"nb"} renderContent={true} />
       ) : (
         <ShowSpinner />
       )}
