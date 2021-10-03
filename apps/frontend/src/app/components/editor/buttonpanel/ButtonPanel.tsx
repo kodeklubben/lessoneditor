@@ -17,31 +17,31 @@ import EditorDatamodal from "../datapanel/EditorDatamodal";
 import SubmitButton from "./SubmitButton";
 
 const ButtonPanel: FC<any> = ({
-                                buttonValues,
-                                course,
-                                courseTitle,
-                                cursorPositionEnd,
-                                cursorPositionStart,
-                                editorRef,
-                                lessonTitle,
-                                mdText,
-                                pushRedoValue,
-                                pushUndoValue,
-                                redo,
-                                redoCursorPosition,
-                                saveEditorText,
-                                setButtonValues,
-                                setCursor,
-                                setCursorPosition,
-                                setListButtonValues,
-                                setMdText,
-                                setRedoCursorPosition,
-                                setUndoCursorPosition,
-                                setRenderContent,
-                                undo,
-                                undoCursorPosition,
-                                uploadImageRef
-                              }) => {
+  buttonValues,
+  course,
+  courseTitle,
+  cursorPositionEnd,
+  cursorPositionStart,
+  editorRef,
+  lessonTitle,
+  mdText,
+  pushRedoValue,
+  pushUndoValue,
+  redo,
+  redoCursorPosition,
+  saveEditorText,
+  setButtonValues,
+  setCursor,
+  setCursorPosition,
+  setListButtonValues,
+  setMdText,
+  setRedoCursorPosition,
+  setUndoCursorPosition,
+  setRenderContent,
+  undo,
+  undoCursorPosition,
+  uploadImageRef,
+}) => {
   const [showSpinner, setShowSpinner] = useState(false);
 
   return (
@@ -118,10 +118,7 @@ const ButtonPanel: FC<any> = ({
             />
           </div>
           <div className="settingspanel">
-            <Languages
-              saveEditorText={saveEditorText}
-              setShowSpinner={setShowSpinner}
-            />
+            <Languages saveEditorText={saveEditorText} setShowSpinner={setShowSpinner} />
             <EditorDatamodal
               courseTitle={courseTitle}
               lessonTitle={lessonTitle}
@@ -164,11 +161,7 @@ const ButtonPanel: FC<any> = ({
               courseTitle={courseTitle}
             />
           </div>
-          <Autosave
-            mdText={mdText}
-            saveEditorText={saveEditorText}
-            setRenderContent={setRenderContent}
-          />
+          <Autosave mdText={mdText} saveEditorText={saveEditorText} />
         </div>
 
         <div>

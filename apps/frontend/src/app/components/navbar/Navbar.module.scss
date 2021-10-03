@@ -1,0 +1,39 @@
+.container {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: space-between;
+}
+
+.image_container {
+  flex-basis: 33%;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+
+.logo {
+  margin: 0;
+  padding: 0;
+  height: 80px;
+  width: 240px;
+}
+
+.logo:hover {
+  cursor: pointer;
+}
+
+.children_container {
+  flex-basis: 33%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.profileMenu_container {
+  margin-right: 1rem;
+  flex-basis: 33%;
+  display: flex;
+  justify-content: right;
+  align-items: center;
+}

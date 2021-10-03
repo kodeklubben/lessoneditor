@@ -25,7 +25,7 @@ const NewLessonModal: FC = () => {
     const { name, value } = e.target;
     setValues((prevValues) => ({ ...prevValues, [name]: value }));
   };
-  const navigateToLandingpage = (lessonId: string, lessonSlug: string) => {
+  const navigateToEditor = (lessonId: number, lessonSlug: string) => {
     const target = ["/editor", lessonId, lessonSlug, "nb"].join("/");
     history.push({ pathname: target });
   };
@@ -42,11 +42,9 @@ const NewLessonModal: FC = () => {
 
     const courseTitle: string = getCourseFromSlug ? getCourseFromSlug.courseTitle : "";
     const lessonId = await addLesson(course, courseTitle, lesson.slug, lesson.title);
-    if(lessonId)
-    {
-      navigateToLandingpage(lessonId.toString(), lesson.slug);
+    if (lessonId) {
+      navigateToEditor(lessonId, lesson.slug);
     }
-
 
     setLoading(false);
   };

@@ -31,7 +31,7 @@ const Landingpage = () => {
   };
 
   const lessonList = state.files;
-  const lessonTitle = state.lesson?.lessonTitle
+  const lessonTitle = state.lesson?.lessonTitle;
   const courseTitle = state.lesson?.courseTitle;
 
   // @ts-ignore
