@@ -1,16 +1,14 @@
 import { useHistory } from "react-router";
 import { Button, Card, Image } from "semantic-ui-react";
-import { FC, useEffect, useState } from "react";
+import { FC, Key } from "react";
 import nbFlag from "/assets/public/languagesFlag/flag_nb.svg";
 import nnFlag from "/assets/public/languagesFlag/flag_nn.svg";
 import enFlag from "/assets/public/languagesFlag/flag_en.svg";
 import isFlag from "/assets/public/languagesFlag/flag_is.svg";
 import noLessonPreviewImage from "/assets/public/landingPage/image.png";
-import { FileDTO } from "@libs/lesson/src/lib/lesson.dto";
-import { paths } from "@lessoneditor/api-interfaces";
-import axios from "axios";
+import { useLessonContext } from "../../contexts/LessonContext";
 
-const languageOptions = {
+const languageOptions: Record<string, any> = {
   nb: {
     text: "Bokmål",
     value: "nb",
@@ -34,32 +32,8 @@ const languageOptions = {
 };
 
 const LessonCard: FC<any> = ({ title, lessonId, language, hasContent, lessonTitle }) => {
-  const [image, setImage] = useState<FileDTO<string>>();
-  useEffect(() => {
-    async function getImage() {
-      try {
-        const file = await axios.get<FileDTO<string>>(
-          paths.LESSON_FILE.replace(":lessonId", lessonId.toString()).replace(
-            ":fileName",
-            "preview"
-          )
-        );
-        setImage(file.data);
-      } catch (error) {
-        console.error(error);
-        const file: FileDTO<string> = {
-          fileId: 0,
-          filename: "",
-          ext: ".png",
-          content: "",
-        };
-
-        setImage(file);
-      }
-    }
-    getImage();
-  });
   const history = useHistory();
+  const { state } = useLessonContext();
 
   const navigateToEditor = (lessonId: any, lessonTitle: any, language: string) => {
     const target = [
@@ -69,11 +43,9 @@ const LessonCard: FC<any> = ({ title, lessonId, language, hasContent, lessonTitl
     ].join("/");
     history.push({ pathname: target });
   };
-  const imgSrc = `/api/display/${lessonId}/preview.png?${performance.now()}`;
+  const imgSrc = `${state.lesson?.thumbUrl}${performance.now()}`;
 
-  // @ts-ignore
   const languageText = languageOptions[language].text;
-  // @ts-ignore
   const languageImage = languageOptions[language].image.src;
   return (
     <>
@@ -82,7 +54,7 @@ const LessonCard: FC<any> = ({ title, lessonId, language, hasContent, lessonTitl
           <>
             <Card.Content>
               <Image
-                src={image?.content}
+                src={imgSrc}
                 size="medium"
                 alt="thumbUrl"
                 rounded

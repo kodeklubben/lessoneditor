@@ -22,10 +22,12 @@ export interface HeaderData {
   title: string;
   authorList: string[];
   translatorList: string[];
-  translator: boolean;
+  translator: string;
   language: string;
-  author: boolean;
+  author: string;
 }
+
+const separator = "---\n";
 
 const FileContext = React.createContext<FileContextModel>({} as FileContextModel);
 
@@ -41,12 +43,11 @@ const FileContextProvider = (props: any) => {
   const { state } = useLessonContext();
   const { language } = filenameParser(file);
 
-  const separator = "---\n";
-
   const saveFileBody = async (body: string) => {
-    const fileHeader = fileContextState.rawMdFileContent?.split(separator)[1];
+    const fileHeader = fileContextState.rawMdFileContent?.split(separator)[1] || "";
     const newRawText = ["", fileHeader, body].join(separator);
     try {
+      console.log(fileContextState);
       const file = await axios.post<FileDTO<string>>(
         paths.LESSON_FILE_UPDATE.replace(":lessonId", lessonId.toString()).replace(
           ":fileId",
@@ -72,7 +73,6 @@ const FileContextProvider = (props: any) => {
         const result = await axios.get<FileDTO<string>>(
           paths.LESSON_FILE.replace(":lessonId", lessonId).replace(":fileName", file)
         );
-        // eslint-disable-next-line
         const [_, header, body] = result.data.content.split(separator);
         setFileContextState((s) => {
           return {
@@ -90,7 +90,6 @@ const FileContextProvider = (props: any) => {
     if (lessonId && file && state.yml) {
       fetchData().then();
     }
-    // eslint-disable-next-line
   }, [lessonId, file, language, state.yml]);
 
   const saveFileHeader = async (data: HeaderData) => {

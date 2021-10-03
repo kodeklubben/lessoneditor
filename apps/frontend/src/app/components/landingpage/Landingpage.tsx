@@ -34,7 +34,6 @@ const Landingpage = () => {
   const lessonTitle = state.lesson?.lessonTitle;
   const courseTitle = state.lesson?.courseTitle;
 
-  // @ts-ignore
   const dropdownValue = (input: string) => {
     switch (input) {
       case "lessontexts":
@@ -46,7 +45,7 @@ const Landingpage = () => {
       case "allfiles":
         return <AllFiles />;
       default:
-        break;
+        return;
     }
   };
 
@@ -55,26 +54,22 @@ const Landingpage = () => {
   } else {
     return (
       <>
+        {areYouSure && (
+          <Areyousure
+            onSubmit={onSubmit}
+            setAreYouSure={setAreYouSure}
+            showSpinner={showSpinner}
+            lessonId={lessonId}
+          />
+        )}
+
+        {thankU && <ThankU setThankU={setThankU} />}
+
         <Navbar />
         <div className="landingpage_container">
           <LandingageNavbar lessonTitle={lessonTitle} courseTitle={courseTitle} />
 
-          <div className="card_container">
-            {dropdownValue(pageContent)}
-
-            {areYouSure ? (
-              <Areyousure
-                onSubmit={onSubmit}
-                setAreYouSure={setAreYouSure}
-                showSpinner={showSpinner}
-                lessonId={lessonId}
-              />
-            ) : (
-              ""
-            )}
-
-            {thankU ? <ThankU setThankU={setThankU} /> : ""}
-          </div>
+          <div className="card_container">{dropdownValue(pageContent)}</div>
           <div id="landingpageButtonContainer">
             <a href={"/"}>
               <Button content="Tilbake" color="black" />

@@ -3,15 +3,15 @@ import { SAVED, SAVING } from "./settingsFiles/languages/editor_NO";
 
 interface AutosaveProps {
   mdText: string;
-  saveEditorText: (regenThumb: boolean) => Promise<void>;
+  saveEditorText: () => void;
 }
 
 const Autosave: FC<AutosaveProps> = ({ mdText, saveEditorText }) => {
   const [autoSaveMessage, setAutoSaveMessage] = useState("");
 
   useEffect(() => {
-    const timeoutHandler = setTimeout(async () => {
-      await saveEditorText(true);
+    const timeoutHandler = setTimeout(() => {
+      saveEditorText();
       setAutoSaveMessage(SAVED);
       setTimeout(() => {
         setAutoSaveMessage("");

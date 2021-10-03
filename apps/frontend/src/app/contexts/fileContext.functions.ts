@@ -1,4 +1,4 @@
-import { FileDTO } from "libs/lesson/src/lib/lesson.dto";
+import { FileDTO } from "@libs/lesson/src/lib/lesson.dto";
 import { HeaderData } from "./FileContext";
 
 export interface FileContextState {
@@ -24,8 +24,8 @@ export const initialFileContextState: FileContextState = {
     authorList: [],
     translatorList: [],
     language: "nb",
-    author: false,
-    translator: false,
+    author: "",
+    translator: "",
     isInitData: true,
   },
 };

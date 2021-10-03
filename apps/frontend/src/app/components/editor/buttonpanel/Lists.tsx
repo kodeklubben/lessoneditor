@@ -1,190 +1,63 @@
-import ButtonComponent from "./ButtonComponent";
+import { ButtonController } from "./buttoncontroller/ButtonController";
+import { lists as config } from "./buttoncontroller/settings/buttonConfig";
+import { FC, RefObject } from "react";
 
-import { useHotkeys } from "react-hotkeys-hook";
+interface ListsProps {
+  editorRef: RefObject<HTMLTextAreaElement>;
+  cursorPositionStart: number;
+  cursorPositionEnd: number;
+  mdText: string;
+  buttonValues: Record<string, boolean>;
+  setMdText: React.Dispatch<React.SetStateAction<string>>;
+  setCursorPosition: (positionStart: number, positionEnd: number) => void;
+  setCursor: (pos1: number, pos2: number) => void;
+  setListButtonValues: React.Dispatch<
+    React.SetStateAction<{ bTitle: string; output: string; cursorInt: number }>
+  >;
+  setButtonValues: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
+  setUndoAndCursorPosition: (mdText: string, position: number) => void;
+}
 
-import { buttonAction as listsAction, cancelButton } from "./utils/buttonMethods";
-
-import { KEY_COMBINATIONS as KEY, lists as config } from "./settings/buttonConfig";
-import { FC } from "react";
-
-let cancelResults;
-let results;
-let buttonTitle;
-
-const Lists: FC<any> = ({
-                          editorRef,
-                          cursorPositionStart,
-                          cursorPositionEnd,
-                          mdText,
-                          buttonValues,
-                          setMdText,
-                          setCursorPosition,
-                          setCursor,
-                          setListButtonValues,
-                          setButtonValues
-                        }) => {
-  const setChanges = (
-    mdText: any,
-    cursorPositionStart: any,
-    cursorPositionEnd: any
-  ) => {
-    setCursor(cursorPositionStart, cursorPositionEnd);
-    setCursorPosition(cursorPositionStart, cursorPositionEnd);
-    setMdText(mdText);
-  };
-
-  const setButton = (value: string) => {
-    setButtonValues((prevButtonValues: any) => ({
-      ...prevButtonValues,
-      [value]: !buttonValues[value]
-    }));
-  };
-
-  const setList = (
-    button: string,
-    cursorIntON: number,
-    cursorIntOFF: number,
-    output: string
-  ) => {
-    cancelResults = cancelButton(
-      buttonValues[button],
-      mdText,
-      cursorPositionStart,
-      cursorPositionEnd,
-      cursorIntON,
-      output
-    );
-    if (cancelResults.cancel) {
-      setChanges(
-        cancelResults.mdText,
-        cancelResults.cursorPositionStart,
-        cancelResults.cursorPositionEnd
-      );
-      return;
-    }
-
-    results = listsAction(
-      buttonValues[button],
-      mdText,
-      cursorPositionStart,
-      cursorPositionEnd,
-      cursorIntON,
-      cursorIntOFF,
-      output
-    );
-
-    setChanges(
-      results?.mdText,
-      results?.cursorPositionStart,
-      results?.cursorPositionEnd
-    );
-  };
-
-  const set = {
-    listUl: () => {
-      buttonTitle = config.listUl.buttonTitle;
-      setButton(buttonTitle);
-      setListButtonValues({
-        bTitle: buttonTitle,
-        output: config.listUl.outputOnEnter,
-        cursorInt: config.listUl.cursorIntON
-      });
-      setList(
-        buttonTitle,
-        config.listUl.cursorIntON,
-        config.listUl.cursorIntOFF,
-        config.listUl.output
-      );
-    },
-    listOl: () => {
-      buttonTitle = config.listOl.buttonTitle;
-      setButton(buttonTitle);
-      setListButtonValues({
-        bTitle: buttonTitle,
-        output: config.listOl.outputOnEnter,
-        cursorInt: config.listOl.cursorIntON
-      });
-      setList(
-        buttonTitle,
-        config.listOl.cursorIntON,
-        config.listOl.cursorIntOFF,
-        config.listOl.output
-      );
-    },
-    listCheck: () => {
-      buttonTitle = config.listCheck.buttonTitle;
-      setButton(buttonTitle);
-      setListButtonValues({
-        bTitle: buttonTitle,
-        output: config.listCheck.outputOnEnter,
-        cursorInt: config.listCheck.cursorIntON
-      });
-      setList(
-        buttonTitle,
-        config.listCheck.cursorIntON,
-        config.listCheck.cursorIntOFF,
-        config.listCheck.output
-      );
-    }
-  };
-
-  useHotkeys(
-    `${KEY.listul}, ${KEY.listol}, ${KEY.listcheck}`,
-    (event, handler) => {
-      event.preventDefault();
-      switch (handler.key) {
-        case KEY.listul:
-          set.listUl();
-          break;
-        case KEY.listol:
-          set.listOl();
-          break;
-        case KEY.listcheck:
-          set.listCheck();
-          break;
-        default:
-          break;
-      }
-      return false;
-    },
-    { enableOnTags: ["TEXTAREA"], keydown: true },
-    [setButton, setListButtonValues, setList]
-  );
-
-  const handleButtonClick = (button: string | number) => {
-    editorRef.current.focus();
-    setButtonValues((prevState: any) => ({
-      ...prevState,
-      [button]: !buttonValues[button]
-    }));
-    switch (button) {
-      case config.listUl.buttonTitle:
-        set.listUl();
-        break;
-      case config.listOl.buttonTitle:
-        set.listOl();
-        break;
-      case config.listCheck.buttonTitle:
-        set.listCheck();
-        break;
-      default:
-        break;
-    }
-  };
+const Lists: FC<ListsProps> = ({
+  editorRef,
+  cursorPositionStart,
+  cursorPositionEnd,
+  mdText,
+  buttonValues,
+  setMdText,
+  setCursorPosition,
+  setCursor,
+  setListButtonValues,
+  setButtonValues,
+  setUndoAndCursorPosition,
+}) => {
   return (
-    <div>
-      {Object.entries(config).map((element, index) => (
-        <ButtonComponent
-          key={"element" + index}
-          buttonValues={buttonValues}
-          icon={element[1].icon}
+    <>
+      {Object.entries(config).map((element) => (
+        <ButtonController
+          key={element[1].slug}
+          editorRef={editorRef}
+          isON={buttonValues[element[1].slug]}
           title={element[1].title}
-          onButtonClick={handleButtonClick}
-          buttonTitle={element[1].buttonTitle}
+          buttonSlug={element[1].slug}
           shortcutKey={element[1].shortcut}
+          icon={element[1].icon}
+          setButtonValues={setButtonValues}
+          setListButtonValues={setListButtonValues}
+          setCursor={setCursor}
+          setCursorPosition={setCursorPosition}
+          setMdText={setMdText}
+          cursorIntON={element[1].cursorIntON}
+          cursorIntOFF={element[1].cursorIntOFF}
+          output={element[1].output}
+          mdText={mdText}
+          cursorPositionStart={cursorPositionStart}
+          cursorPositionEnd={cursorPositionEnd}
+          outputOnEnter={element[1].outputOnEnter}
+          setUndoAndCursorPosition={setUndoAndCursorPosition}
         />
       ))}
-    </div>
+    </>
   );
 };
 

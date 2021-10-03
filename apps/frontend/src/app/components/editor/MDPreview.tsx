@@ -1,9 +1,8 @@
 import "./mdpreview.scss";
-import { FC, useEffect } from "react";
+import { FC, useEffect, useState } from "react";
 import { renderMicrobit } from "../../utils/renderMicrobit";
 import { renderScratchBlocks } from "../../utils/renderScratchblocks";
 import { mdParser } from "../../utils/mdParser";
-import { renderToggleButtons } from "../../utils/renderToggleButton";
 
 interface MDPreviewProps {
   mdText: string;
@@ -15,17 +14,16 @@ const MDPreview: FC<MDPreviewProps> = ({ mdText, course, language }) => {
   const parseMD = mdParser(mdText);
 
   useEffect(() => {
-    renderToggleButtons();
     if (course === "microbit") {
       renderMicrobit(language);
     }
-  }, [course, parseMD, language]);
+  }, [parseMD]);
 
-  if (course === "scratch") {
+  if (course === "scratch" && parseMD) {
     const lessonContent = renderScratchBlocks(parseMD);
-    return <div className="PreviewArea" dangerouslySetInnerHTML={{ __html: lessonContent }} />;
+    return <div className="preview-area" dangerouslySetInnerHTML={{ __html: lessonContent }} />;
   } else {
-    return <div className="PreviewArea" dangerouslySetInnerHTML={{ __html: parseMD }} />;
+    return <div className="preview-area" dangerouslySetInnerHTML={{ __html: parseMD }} />;
   }
 };
 

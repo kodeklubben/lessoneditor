@@ -1,32 +1,38 @@
 import { ButtonController } from "./buttoncontroller/ButtonController";
-
-import { microbitbuttons as config } from "./buttoncontroller/settings/microbitAndScratchButtonConfig";
+import {
+  codebuttons as config,
+  KEY_COMBINATIONS as KEY,
+} from "./buttoncontroller/settings/buttonConfig";
 import { FC, RefObject } from "react";
 
-interface MicrobitButtonsProps {
+export interface CodeButtonsProps {
   editorRef: RefObject<HTMLTextAreaElement>;
+  mdText: string;
   cursorPositionStart: number;
   cursorPositionEnd: number;
-  mdText: string;
   buttonValues: Record<string, boolean>;
   setMdText: React.Dispatch<React.SetStateAction<string>>;
   setCursorPosition: (positionStart: number, positionEnd: number) => void;
   setCursor: (pos1: number, pos2: number) => void;
   setButtonValues: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
+  course: string;
+  courseTitle: string;
   setUndoAndCursorPosition: (mdText: string, position: number) => void;
 }
 
-const MicrobitButtons: FC<MicrobitButtonsProps> = ({
+const CodeButtons: FC<CodeButtonsProps> = ({
   editorRef,
+  mdText,
   cursorPositionStart,
   cursorPositionEnd,
-  mdText,
   buttonValues,
   setMdText,
   setCursorPosition,
   setCursor,
   setButtonValues,
   setUndoAndCursorPosition,
+  course,
+  courseTitle,
 }) => {
   return (
     <>
@@ -38,6 +44,7 @@ const MicrobitButtons: FC<MicrobitButtonsProps> = ({
           title={element[1].title}
           buttonSlug={element[1].slug}
           shortcutKey={element[1].shortcut}
+          style={element[1].style}
           setButtonValues={setButtonValues}
           setCursor={setCursor}
           setCursorPosition={setCursorPosition}
@@ -48,7 +55,8 @@ const MicrobitButtons: FC<MicrobitButtonsProps> = ({
           mdText={mdText}
           cursorPositionStart={cursorPositionStart}
           cursorPositionEnd={cursorPositionEnd}
-          color={element[1].color}
+          course={course}
+          courseTitle={courseTitle}
           setUndoAndCursorPosition={setUndoAndCursorPosition}
         />
       ))}
@@ -56,4 +64,4 @@ const MicrobitButtons: FC<MicrobitButtonsProps> = ({
   );
 };
 
-export default MicrobitButtons;
+export default CodeButtons;

@@ -15,7 +15,7 @@ import oppgaveMal from "./settingsFiles/oppgaveMal";
 import laererveiledningMal from "./settingsFiles/LaererveiledningMal";
 
 const Editor: React.FC = () => {
-  const { lessonId, file } = useParams<{ lessonId: string; file: string }>();
+  const { file } = useParams<{ lessonId: string; file: string }>();
 
   const { state } = useLessonContext();
 
@@ -90,7 +90,7 @@ const Editor: React.FC = () => {
     }
   };
 
-  const pushRedoValue = (mdText: string, position: number) => {
+  const pushRedoValue = (mdText: string) => {
     resetButtons();
     if (redo.length > 0) {
       const text = redo[redo.length - 1];
@@ -121,9 +121,9 @@ const Editor: React.FC = () => {
     setButtonValues({});
   };
 
-  const saveEditorText = async () => {
+  const saveEditorText = () => {
     if (saveFileBody) {
-      await saveFileBody(mdText);
+      saveFileBody(mdText);
     }
   };
 
@@ -141,19 +141,21 @@ const Editor: React.FC = () => {
             setCursor={setCursor}
             setCursorPosition={setCursorPosition}
           />
-          <Navbar />
+          <Navbar>
+            <h1 style={{ display: "inline" }}>{state.lesson.lessonTitle}</h1>
+            <h3 style={{ color: "silver", display: "inline" }}>{state.lesson.courseTitle}</h3>
+          </Navbar>
           <ButtonPanel
             buttonValues={buttonValues}
-            course={state.lesson?.courseSlug}
-            courseTitle={state.lesson?.courseTitle}
-            cursorPositionEnd={cursorPositionEnd}
+            course={state.lesson.courseSlug}
+            courseTitle={state.lesson.courseTitle}
             cursorPositionStart={cursorPositionStart}
+            cursorPositionEnd={cursorPositionEnd}
             editorRef={editorRef}
-            lessonTitle={state.lesson?.lessonTitle}
+            lessonTitle={state.lesson.lessonTitle}
             mdText={mdText}
             pushRedoValue={pushRedoValue}
             pushUndoValue={pushUndoValue}
-            redo={redo}
             redoCursorPosition={redoCursorPosition}
             saveEditorText={saveEditorText}
             setButtonValues={setButtonValues}
@@ -163,26 +165,29 @@ const Editor: React.FC = () => {
             setMdText={setMdText}
             setRedoCursorPosition={setRedoCursorPosition}
             setUndoCursorPosition={setUndoCursorPosition}
-            undo={undo}
             undoCursorPosition={undoCursorPosition}
             uploadImageRef={uploadImageRef}
+            setUndoAndCursorPosition={setUndoAndUndoPosition}
+            openSettings={openSettings}
+            setOpenSettings={setOpenSettings}
           />
-          <div className="textEditorContainer">
-            <MDTextArea
-              editorRef={editorRef}
-              mdText={mdText}
-              buttonValues={buttonValues}
-              listButtonValues={listButtonValues}
-              cursorPositionStart={cursorPositionStart}
-              setCursorPosition={setCursorPosition}
-              setMdText={setMdText}
-              setButtonValues={setButtonValues}
-              setCursor={setCursor}
-              pushUndoValue={pushUndoValue}
-              resetButtons={resetButtons}
-              course={state.lesson?.courseSlug}
-            />
-            <MDPreview mdText={mdText} course={state.lesson?.courseSlug} language={language} />
+          <div className="text-editor-container">
+            <div className="editor-windows">
+              <MDTextArea
+                editorRef={editorRef}
+                mdText={mdText}
+                buttonValues={buttonValues}
+                listButtonValues={listButtonValues}
+                cursorPositionStart={cursorPositionStart}
+                setCursorPosition={setCursorPosition}
+                setMdText={setMdText}
+                setButtonValues={setButtonValues}
+                setCursor={setCursor}
+                setUndoAndCursorPosition={setUndoAndUndoPosition}
+                resetButtons={resetButtons}
+              />
+              <MDPreview mdText={mdText} course={state.lesson.courseSlug} language={language} />
+            </div>
           </div>
         </>
       )}
