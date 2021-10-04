@@ -3,11 +3,11 @@
   "version": "0.0.0",
   "license": "MIT",
   "main": "dist/apps/thumbnailer/main.js",
-
   "scripts": {
     "start:dev": "ts-node -P apps/nestbackend/tsconfig.app.json apps/nestbackend/src/main.ts",
     "nx": "nx",
     "start": "nx serve",
+    "start-all": "(ts-node -P apps/nestbackend/tsconfig.app.json apps/nestbackend/src/main.ts) & (nx run-many --target=serve --projects=frontend,thumbnailer --parallel=true)",
     "start-dist": "npm run build-all && node -r dotenv/config ./dist/apps/backend/main.js",
     "build": "nx build",
     "build-all": "nx run-many --target=build --all",
@@ -37,6 +37,7 @@
     "@google-cloud/datastore": "^6.4.7",
     "@google-cloud/storage": "^5.11.0",
     "@nestjs/common": "^7.0.0",
+    "@nestjs/config": "^1.0.2",
     "@nestjs/core": "^7.0.0",
     "@nestjs/jwt": "^8.0.0",
     "@nestjs/passport": "^8.0.1",
