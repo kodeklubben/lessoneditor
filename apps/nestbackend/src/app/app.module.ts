@@ -13,7 +13,7 @@ import { AuthModule } from "../../../../libs/auth/src/lib/auth.module";
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ envFilePath: ".env.local" }),
+    ConfigModule.forRoot({ envFilePath: ".local.env" }),
     TypeOrmModule.forRoot(),
     AuthModule,
     UserModule,
