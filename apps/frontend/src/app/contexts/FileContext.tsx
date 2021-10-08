@@ -19,8 +19,8 @@ import {
 
 export interface HeaderData {
   isInitData: boolean;
-  title: string;
-  authorList: string[];
+  title: string; // tittel får vi når vi oppretter oppgaven
+  authorList: string[]; //navn fra Github-konto
   translatorList: string[];
   translator: string;
   language: string;

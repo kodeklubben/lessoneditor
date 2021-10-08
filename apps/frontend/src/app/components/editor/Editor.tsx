@@ -121,6 +121,7 @@ const Editor: React.FC = () => {
     setButtonValues({});
   };
 
+  // Autosave bruker denne.
   const saveEditorText = () => {
     if (saveFileBody) {
       saveFileBody(mdText);
