@@ -1,7 +1,7 @@
 import Editor from "./editor/Editor";
 import Landingpage from "./landingpage/Landingpage";
 import Overview from "./frontpage/Overview";
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import { LessonContextProvider } from "../contexts/LessonContext";
 import { UserContextProvider } from "../contexts/UserContext";
 import { FileContextProvider } from "../contexts/FileContext";
@@ -9,8 +9,8 @@ import SimplePreview from "./simple-preview/simple-preview";
 
 const App = () => {
   return (
-    <>
-      <BrowserRouter>
+    <BrowserRouter>
+      <Switch>
         <UserContextProvider>
           <Route exact path="/" component={Overview} />
           <Route exact path="/landingpage" component={Landingpage} />
@@ -36,8 +36,8 @@ const App = () => {
         <Route path="*">
           <h1>PAGE NOT FOUND</h1>
         </Route>
-      </BrowserRouter>
-    </>
+      </Switch>
+    </BrowserRouter>
   );
 };
 
