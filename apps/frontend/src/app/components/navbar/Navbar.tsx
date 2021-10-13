@@ -11,7 +11,6 @@ const Navbar: FC = (props) => {
 
   const navigateToFrontpage = () => {
     history.push("/");
-    history.go(0);
   };
 
   return (

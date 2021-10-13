@@ -1,25 +1,34 @@
 import "./landingpage.scss";
 import LessonCard from "./LessonCard";
-
 import { Card } from "semantic-ui-react";
 import { FC } from "react";
-import { getLanguagesFromLessonlist } from "./utils/get-languages-from-lessonlist";
+import { filenameParser } from "../../utils/filename-parser";
 
-const LessonTexts: FC<any> = ({ lessonId, lessonList, lessonTitle }) => {
-  const languages = getLanguagesFromLessonlist(lessonList);
+const LessonTexts: FC<any> = ({ lessonId, lessonList, lessonSlug, lessonTitle }) => {
+  const languages: string[] = [];
+
+  lessonList.forEach((filename: string) => {
+    const { isMarkdown, isReadme, language } = filenameParser(filename);
+    if (!isMarkdown) {
+      return;
+    }
+    if (!isReadme && !languages.includes(language)) languages.push(language);
+  });
+
   const allLanguages = ["nb", "nn", "en", "is"];
 
   return (
     <>
       <Card.Group centered>
-        {allLanguages.map((element, index) => {
+        {allLanguages.map((language) => {
           return (
             <LessonCard
-              key={element + index}
-              title={"Oppgavetekst"}
-              language={element}
-              hasContent={languages.includes(element)}
+              key={language}
+              content={"Oppgavetekst"}
+              language={language}
+              hasContent={languages.includes(language)}
               lessonId={lessonId}
+              lessonSlug={lessonSlug}
               lessonTitle={lessonTitle}
             />
           );

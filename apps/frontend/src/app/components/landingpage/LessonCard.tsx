@@ -31,15 +31,15 @@ const languageOptions: Record<string, any> = {
   },
 };
 
-const LessonCard: FC<any> = ({ title, lessonId, language, hasContent, lessonTitle }) => {
+const LessonCard: FC<any> = ({ lessonId, language, hasContent, lessonTitle, lessonSlug }) => {
   const history = useHistory();
   const { state } = useLessonContext();
 
-  const navigateToEditor = (lessonId: any, lessonTitle: any, language: string) => {
+  const navigateToEditor = (lessonId: any, lessonSlug: any, language: string) => {
     const target = [
       "/editor",
       lessonId,
-      language === "nb" ? lessonTitle : `${lessonTitle}_${language}`,
+      language === "nb" ? lessonSlug : `${lessonSlug}_${language}`,
     ].join("/");
     history.push({ pathname: target });
   };
@@ -111,7 +111,7 @@ const LessonCard: FC<any> = ({ title, lessonId, language, hasContent, lessonTitl
         )}
         <div className="extra content">
           <Button
-            onClick={() => navigateToEditor(lessonId, lessonTitle, language)}
+            onClick={() => navigateToEditor(lessonId, lessonSlug, language)}
             content={hasContent ? "Åpne" : "Lag tekstfil"}
             positive={hasContent}
           />

@@ -3,8 +3,8 @@ import { HeaderData } from "./FileContext";
 
 export interface FileContextState {
   markDown: FileDTO<string> | undefined;
-  rawMdFileContent: string | undefined;
-  savedFileBody: string | undefined;
+  rawMdFileContent: string;
+  savedFileBody: string;
   headerData: HeaderData;
 }
 
@@ -17,8 +17,8 @@ export interface FileContextModel {
 
 export const initialFileContextState: FileContextState = {
   markDown: undefined,
-  rawMdFileContent: undefined,
-  savedFileBody: undefined,
+  rawMdFileContent: "",
+  savedFileBody: "",
   headerData: {
     title: "",
     authorList: [],
@@ -26,6 +26,5 @@ export const initialFileContextState: FileContextState = {
     language: "nb",
     author: "",
     translator: "",
-    isInitData: true,
   },
 };

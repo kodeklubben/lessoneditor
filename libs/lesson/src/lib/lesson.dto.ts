@@ -35,10 +35,16 @@ export interface NewLessonDTO {
   courseTitle: string;
 }
 
+interface Subtag {
+  grade: string[];
+  subject: string[];
+  topic: string[];
+}
+
 export interface YamlContent {
-  level?: number;
-  license?: string;
-  tags: any;
+  level: number;
+  license: string;
+  tags: Subtag;
 }
 
 export interface FileDTO<T> {

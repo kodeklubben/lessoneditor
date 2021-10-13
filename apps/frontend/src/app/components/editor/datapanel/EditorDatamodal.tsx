@@ -68,7 +68,7 @@ const EditorDatamodal: FC<EditorDatamodalProps> = ({
 
   const onCancel = async () => {
     if (saveFileHeader && state.headerData) {
-      await saveFileHeader({ ...state.headerData, isInitData: false });
+      await saveFileHeader({ ...state.headerData });
       setOpenSettings(false);
     }
   };
@@ -133,7 +133,7 @@ const EditorDatamodal: FC<EditorDatamodalProps> = ({
             onChange={changeHandler}
             fluid
           />
-          {state.headerData.title.length === 0 && !state.headerData.title ? (
+          {!state.headerData.title ? (
             <p style={{ color: "red" }}>
               <i>Må ha tittel</i>
             </p>

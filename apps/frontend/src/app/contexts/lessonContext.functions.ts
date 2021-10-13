@@ -1,26 +1,40 @@
-import {LessonDTO, NewLessonDTO, FileDTO, YamlContent} from "../../../../../libs/lesson/src/lib/lesson.dto"
+import { LessonDTO, NewLessonDTO, YamlContent } from "@libs/lesson/src/lib/lesson.dto";
 
-export interface LessonContextState
-{
-  lesson: LessonDTO | undefined,
-  files: string[] | undefined
-  yml: FileDTO<YamlContent> | undefined
+export interface LessonContextState {
+  lesson: LessonDTO;
+  files: string[];
+  yml: YamlContent;
 }
 
-
-export interface LessonContextModel
-{
-    state: LessonContextState,
-    setLessonContextState: React.Dispatch<React.SetStateAction<LessonContextState>>
-    updateLesson: (lessonId: number, data: NewLessonDTO) => void
-    updateYaml: (lessonId: number, data: YamlContent) => void
+export interface LessonContextModel {
+  state: LessonContextState;
+  setLessonContextState: React.Dispatch<React.SetStateAction<LessonContextState>>;
+  updateLesson: (data: NewLessonDTO) => void;
+  updateYaml: (data: YamlContent) => void;
 }
-
-
 
 export const initalLessonContextState: LessonContextState = {
-    lesson: undefined,
-    files: undefined,
-    yml: undefined
-}
+  lesson: {
+    lessonId: 0,
 
+    lessonSlug: "",
+
+    lessonTitle: "",
+
+    courseSlug: "",
+
+    courseTitle: "",
+
+    created_by: "",
+
+    updated_by: "",
+
+    created_at: new Date(),
+
+    updated_at: new Date(),
+
+    thumbUrl: "",
+  },
+  files: [],
+  yml: { level: 1, license: "CC BY-SA 4.0", tags: { grade: [], subject: [], topic: [] } },
+};

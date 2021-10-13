@@ -15,7 +15,7 @@ const LessonContext = React.createContext<LessonContextModel>({} as LessonContex
 
 export const LessonContextProvider = (props: any) => {
   const { state } = useUserContext();
-  const { lessonId } = useParams<any>();
+  const { lessonId } = useParams<{ lessonId: string }>();
   const { lessonDataPath, lessonYamlPath, lessonFilesPath } = getLessonPaths(lessonId);
   const [lessonContextState, setLessonContextState] =
     useState<LessonContextState>(initalLessonContextState);
@@ -46,27 +46,44 @@ export const LessonContextProvider = (props: any) => {
     if (lessonId) fetchLessonData().then();
   }, [lessonId]);
 
-  const updateYaml = async (lessonId: number, data: YamlContent) => {
+  const updateYaml = async (data: YamlContent) => {
     try {
-      const updatedFile = await axios.put<FileDTO<YamlContent>>(
-        paths.LESSON_FILE_UPDATE.replace(":lessonId", lessonId.toString()).replace(
-          ":fileId",
-          lessonContextState.yml!.fileId.toString()
-        ),
-        data
-      );
-      setLessonContextState((s) => {
-        return {
-          ...s,
-          yml: updatedFile.data,
-        };
-      });
+      /* 
+      Dataen her må etterhvert lagres i en "lesson.yml"-fil 
+
+      Fila ser slik ut: 
+
+      'level: data.level         //feks 1 
+       license: data.license     // feks MIT
+       tags: 
+          topic: data.tags.topic    // feks [text_based, game]
+          subject: data.tags.subject // feks [programming]
+          gramde: data.tags.grade    // feks [junior]'
+
+      
+          eksemel her: https://github.com/kodeklubben/oppgaver/blob/master/src/python/tre_pa_rad/lesson.yml
+      */
+
+      // const updatedFile = await axios.put<FileDTO<YamlContent>>(
+      //   paths.LESSON_FILE_UPDATE.replace(":lessonId", lessonId.toString()).replace(
+      //     ":fileId",
+      //     lessonContextState.yml!.fileId.toString()
+      //   ),
+      //   data
+      // );
+      // setLessonContextState((s) => {
+      //   return {
+      //     ...s,
+      //     yml: updatedFile.data,
+      //   };
+      // });
+      console.log(data);
     } catch (error) {
       console.error(error);
     }
   };
 
-  const updatelesson = async (lessonId: number, data: NewLessonDTO) => {
+  const updatelesson = async (data: NewLessonDTO) => {
     const savedLesson = await axios.put<LessonDTO>(
       paths.USER_LESSON_UPDATE.replace(":userId", state.user!.userId.toString()),
       data

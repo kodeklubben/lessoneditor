@@ -18,7 +18,6 @@ function yamlHeaderLoad(yamlHeader: string, language: string): HeaderData {
     language,
     author,
     translator,
-    isInitData,
   };
 }
 

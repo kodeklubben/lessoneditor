@@ -33,6 +33,9 @@ const App = () => {
             </FileContextProvider>
           </Route>
         </UserContextProvider>
+        <Route path="*">
+          <h1>PAGE NOT FOUND</h1>
+        </Route>
       </BrowserRouter>
     </>
   );

@@ -48,10 +48,10 @@ const Editor: React.FC = () => {
   const { language } = filenameParser(file);
 
   useEffect(() => {
-    if (fileState.headerData.isInitData && isDefaultText) {
+    if (isDefaultText) {
       setOpenSettings(true);
     }
-  }, [fileState.headerData.isInitData]);
+  }, []);
 
   useEffect(() => {
     if (fileState.savedFileBody) {

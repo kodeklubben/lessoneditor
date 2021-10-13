@@ -26,7 +26,7 @@ const NewLessonModal: FC = () => {
     setValues((prevValues) => ({ ...prevValues, [name]: value }));
   };
   const navigateToEditor = (lessonId: number, lessonSlug: string) => {
-    const target = ["/editor", lessonId, lessonSlug, "nb"].join("/");
+    const target = ["/editor", lessonId, lessonSlug].join("/");
     history.push({ pathname: target });
   };
   const onSubmit = async (e: { preventDefault: () => void }) => {

@@ -18,7 +18,6 @@ import {
 } from "./fileContext.functions";
 
 export interface HeaderData {
-  isInitData: boolean;
   title: string; // tittel får vi når vi oppretter oppgaven
   authorList: string[]; //navn fra Github-konto
   translatorList: string[];
@@ -47,7 +46,6 @@ const FileContextProvider = (props: any) => {
     const fileHeader = fileContextState.rawMdFileContent?.split(separator)[1] || "";
     const newRawText = ["", fileHeader, body].join(separator);
     try {
-      console.log(fileContextState);
       const file = await axios.post<FileDTO<string>>(
         paths.LESSON_FILE_UPDATE.replace(":lessonId", lessonId.toString()).replace(
           ":fileId",
