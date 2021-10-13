@@ -1,12 +1,14 @@
 import { useHistory } from "react-router";
 import { Button, Card, Image } from "semantic-ui-react";
-import { FC, Key } from "react";
+import { FC, useState, useEffect } from "react";
 import nbFlag from "/assets/public/languagesFlag/flag_nb.svg";
 import nnFlag from "/assets/public/languagesFlag/flag_nn.svg";
 import enFlag from "/assets/public/languagesFlag/flag_en.svg";
 import isFlag from "/assets/public/languagesFlag/flag_is.svg";
 import noLessonPreviewImage from "/assets/public/landingPage/image.png";
 import { useLessonContext } from "../../contexts/LessonContext";
+import axios from "axios";
+import { paths } from "@lessoneditor/api-interfaces";
 
 const languageOptions: Record<string, any> = {
   nb: {
@@ -34,6 +36,25 @@ const languageOptions: Record<string, any> = {
 const LessonCard: FC<any> = ({ lessonId, language, hasContent, lessonTitle, lessonSlug }) => {
   const history = useHistory();
   const { state } = useLessonContext();
+  const [image, setImage] = useState<string>();
+
+  useEffect(() => {
+    async function getImage() {
+      try {
+        const test = "";
+        const file = await axios.get(
+          paths.LESSON_FILE.replace(":lessonId", lessonSlug.lessonId.toString()).replace(
+            ":fileName",
+            "preview"
+          )
+        );
+        setImage(file.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    getImage();
+  }, [lessonSlug]);
 
   const navigateToEditor = (lessonId: any, lessonSlug: any, language: string) => {
     const target = [
@@ -43,7 +64,7 @@ const LessonCard: FC<any> = ({ lessonId, language, hasContent, lessonTitle, less
     ].join("/");
     history.push({ pathname: target });
   };
-  const imgSrc = `${state.lesson?.thumbUrl}${performance.now()}`;
+  const imgSrc = "data:image/png;base64," + image;
 
   const languageText = languageOptions[language].text;
   const languageImage = languageOptions[language].image.src;

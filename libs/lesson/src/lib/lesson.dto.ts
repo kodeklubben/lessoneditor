@@ -16,8 +16,6 @@ export interface LessonDTO {
   created_at: Date;
 
   updated_at: Date;
-
-  thumbUrl?: string;
 }
 
 export interface ShareLessonDTO {
@@ -35,16 +33,10 @@ export interface NewLessonDTO {
   courseTitle: string;
 }
 
-interface Subtag {
-  grade: string[];
-  subject: string[];
-  topic: string[];
-}
-
 export interface YamlContent {
-  level: number;
-  license: string;
-  tags: Subtag;
+  level?: number;
+  license?: string;
+  tags: any;
 }
 
 export interface FileDTO<T> {
@@ -67,21 +59,23 @@ export interface FileDTO<T> {
 
 export interface NewFileDTO {
   filename: string;
-
   ext: string;
-
   content: string;
-
-  createdByUserId: number;
 }
+
 export interface UpdatedFileDTO {
-  fileId: number;
-
   content: string;
-
-  updatedByUserId: string;
 }
 
 export interface LessonFilterDTO {
   userId?: number;
+}
+
+export interface HeaderData {
+  title: string;
+  authorList: string[];
+  translatorList: string[];
+  translator: string;
+  language: string;
+  author: string;
 }

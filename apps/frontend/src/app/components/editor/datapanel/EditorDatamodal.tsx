@@ -57,9 +57,8 @@ const EditorDatamodal: FC<EditorDatamodalProps> = ({
 
   const onSubmit = async () => {
     if (saveFileHeader) {
-      const newHeaderData = Object.assign({ language }, state.headerData);
       setShowSpinner(true);
-      await saveFileHeader(newHeaderData);
+      await saveFileHeader(state.headerData);
       setShowSpinner(false);
       setOpenSettings(false);
       history.push(["editor", lessonId, file].join("/"));

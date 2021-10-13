@@ -3,6 +3,7 @@
 .env.development.local
 .local.env
 .env.local
+.local.env
 .env.production.local
 .env.test.local
 .eslintrc.js

@@ -8,6 +8,7 @@ import AllFiles from "./AllFiles";
 import LandingageNavbar from "./landingpageNavbar/LandingpageNavbar";
 import Areyousure from "./AreyousurePopup";
 import ThankU from "./ThankU";
+
 import { Button } from "semantic-ui-react";
 import Navbar from "../navbar/Navbar";
 import { useLessonContext } from "../../contexts/LessonContext";

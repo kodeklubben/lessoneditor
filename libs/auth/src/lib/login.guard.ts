@@ -2,6 +2,7 @@ import { ExecutionContext, Injectable } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { Express, Request } from 'express';
 import {verify} from "jsonwebtoken";
+import { UserDTO } from 'libs/user/src/lib/user.dto';
 
 @Injectable()
 export class LoginGuard extends AuthGuard('github') {
@@ -12,19 +13,31 @@ export class LoginGuard extends AuthGuard('github') {
         const [type, token] = request.headers.authorization.split(" ");
         const verification = verifyJwtToken(token);
         if (verification.valid) {
-          request.user = {
-                username: verification.data.sub,
-            };
+            const newUser: UserDTO = {
+                userId: +verification.data.sub,
+                username: undefined,
+                name: undefined,
+                email: undefined
+            }
+          request.user = newUser
             return true
         } else {
             return false
         }
     }
     else
-    {    
-        const result = (await super.canActivate(context)) as boolean; 
-        await super.logIn(request);
-        return result;
+    {
+        if(request.user == null)
+        {
+            const result = (await super.canActivate(context)) as boolean; 
+            await super.logIn(request);
+            return result;
+        }
+        else
+        {
+            return true
+        }
+
     }
   }
 }

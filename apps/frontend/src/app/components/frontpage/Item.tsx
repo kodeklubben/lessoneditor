@@ -18,13 +18,32 @@ const Item: React.FC<Props> = ({ lesson }) => {
     const target = ["/landingpage", lessonId, "lessontexts"].join("/");
     history.push(target);
   };
+  const [image, setImage] = useState<string>();
+
+  useEffect(() => {
+    async function getImage() {
+      try {
+        const test = "";
+        const file = await axios.get(
+          paths.LESSON_FILE.replace(":lessonId", lesson.lessonId.toString()).replace(
+            ":fileName",
+            "preview"
+          )
+        );
+        setImage(file.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    getImage();
+  }, [lesson]);
 
   return (
     <>
       <Card>
         <Card.Content>
           <Image
-            src={`${lesson.thumbUrl}?${performance.now()}`}
+            src={"data:image/png;base64," + image}
             size="medium"
             bordered
             rounded

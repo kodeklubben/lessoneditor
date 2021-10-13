@@ -1,12 +1,12 @@
-import { useState } from "react";
 import { Button } from "semantic-ui-react";
 import { FC } from "react";
-import submitLesson from "../../api/submit-lesson";
+
+import { paths } from "@lessoneditor/api-interfaces";
+import axios from "axios";
 
 const AreyousurePopup: FC<any> = ({ setAreYouSure, setThankU, lessonId }) => {
   const onSubmit = async (lessonId: string) => {
-    await submitLesson(lessonId);
-
+    await axios.post(paths.LESSON_SUBMIT.replace(":lessonId", lessonId));
     setAreYouSure(false);
     setThankU(true);
   };

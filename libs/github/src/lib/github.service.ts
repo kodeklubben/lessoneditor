@@ -3,30 +3,40 @@ import {Cache} from "cache-manager"
 import {Octokit} from "@octokit/rest"
 import {components} from "@octokit/openapi-types"
 import {Lesson} from "../../../lesson/src/lib/lesson.entity"
+import * as jwt from "jsonwebtoken"
 
 @Injectable()
 export class GithubService {
     constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache)
     {}
 
-    async submitLesson(token, lesson: Lesson){
-        const {owner} = await this.createFork(token);
-        await this.updateLesson(token, lesson, lesson.lessonId);
-        // if (false) {
-        //     return await createPullRequest(
-        //         token,
-        //         owner,
-        //         title,
-        //         branchName,
-        //         "Pull request from lesson editor"
-        //     );
-        // } else {
-            return {
-                status: 201,
-                data: {
-                    html: "http://example.com/example-url",
-                },
-            };
+    async submitLesson(lesson: Lesson){
+        try
+        {
+            const token = jwt.sign({},process.env.GITHUB_CLIENT_SECRET)
+            const {owner} = await this.createFork(token);
+            await this.updateLesson(token, lesson, lesson.lessonId);
+            // if (false) {
+            //     return await createPullRequest(
+            //         token,
+            //         owner,
+            //         title,
+            //         branchName,
+            //         "Pull request from lesson editor"
+            //     );
+            // } else {
+                return {
+                    status: 201,
+                    data: {
+                        html: "http://example.com/example-url",
+                    },
+                };
+        }
+        catch(error)
+        {
+            console.error(error)
+        }
+     
     };
 
 

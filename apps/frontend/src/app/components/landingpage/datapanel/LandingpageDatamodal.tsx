@@ -1,5 +1,6 @@
 import "./ladingpagedatamodal.scss";
 import { SyntheticEvent, useEffect, useState } from "react";
+import { useParams } from "react-router";
 import { Button, Grid, Modal, Popup } from "semantic-ui-react";
 import { TagsGrade, TagsSubject, TagsTopic } from "./Tags";
 import CheckboxField from "./CheckboxField";
@@ -14,6 +15,7 @@ const LandingpageDatamodal = () => {
   const { state, setLessonContextState, updateYaml, updateLesson } = lessonContext;
   const [checkBoxState, setCheckBoxState] = useState({});
   const [open, setOpen] = useState(false);
+  const { lessonId } = useParams<{ lessonId: string }>();
 
   const isEmptyDatapanel = false;
 
@@ -53,7 +55,7 @@ const LandingpageDatamodal = () => {
   }, [state.yml.tags]);
 
   const onSubmit = () => {
-    updateYaml(state.yml);
+    updateYaml(lessonId, state.yml);
     setOpen(false);
   };
 

@@ -2,14 +2,20 @@ import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import axios from "axios";
 import { getLessonPaths } from "./utils/get-lesson-paths";
-import { NewLessonDTO, LessonDTO, FileDTO, YamlContent } from "@libs/lesson/src/lib/lesson.dto";
+import {
+  NewLessonDTO,
+  LessonDTO,
+  FileDTO,
+  YamlContent,
+} from "../../../../../libs/lesson/src/lib/lesson.dto";
 import {
   LessonContextState,
   initalLessonContextState,
   LessonContextModel,
 } from "./lessonContext.functions";
-import { paths } from "@lessoneditor/api-interfaces";
+import { paths } from "../../../../../libs/api-interfaces/src/lib/api-interfaces";
 import { useUserContext } from "./UserContext";
+import { stringify } from "querystring";
 
 const LessonContext = React.createContext<LessonContextModel>({} as LessonContextModel);
 
@@ -27,7 +33,7 @@ export const LessonContextProvider = (props: any) => {
         const fileNames = await axios.get<string[]>(
           paths.LESSON_FILENAMES.replace(":lessonId", lessonId)
         );
-        const yamlFile = await axios.get<FileDTO<YamlContent>>(
+        const yamlFile = await axios.get<FileDTO<string>>(
           paths.LESSON_FILE.replace(":lessonId", lessonId).replace(":fileName", "lesson")
         );
         setLessonContextState((s) => {
@@ -46,38 +52,21 @@ export const LessonContextProvider = (props: any) => {
     if (lessonId) fetchLessonData().then();
   }, [lessonId]);
 
-  const updateYaml = async (data: YamlContent) => {
+  const updateYaml = async (lessonId: string, data: YamlContent) => {
     try {
-      /* 
-      Dataen her må etterhvert lagres i en "lesson.yml"-fil 
-
-      Fila ser slik ut: 
-
-      'level: data.level         //feks 1 
-       license: data.license     // feks MIT
-       tags: 
-          topic: data.tags.topic    // feks [text_based, game]
-          subject: data.tags.subject // feks [programming]
-          gramde: data.tags.grade    // feks [junior]'
-
-      
-          eksemel her: https://github.com/kodeklubben/oppgaver/blob/master/src/python/tre_pa_rad/lesson.yml
-      */
-
-      // const updatedFile = await axios.put<FileDTO<YamlContent>>(
-      //   paths.LESSON_FILE_UPDATE.replace(":lessonId", lessonId.toString()).replace(
-      //     ":fileId",
-      //     lessonContextState.yml!.fileId.toString()
-      //   ),
-      //   data
-      // );
-      // setLessonContextState((s) => {
-      //   return {
-      //     ...s,
-      //     yml: updatedFile.data,
-      //   };
-      // });
-      console.log(data);
+      const updatedFile = await axios.put<FileDTO<YamlContent>>(
+        paths.LESSON_FILE_UPDATE.replace(":lessonId", lessonId.toString()).replace(
+          ":fileName",
+          "lesson"
+        ),
+        data
+      );
+      setLessonContextState((s: any) => {
+        return {
+          ...s,
+          yml: updatedFile.data,
+        };
+      });
     } catch (error) {
       console.error(error);
     }

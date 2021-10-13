@@ -10,7 +10,7 @@ export interface LessonContextModel {
   state: LessonContextState;
   setLessonContextState: React.Dispatch<React.SetStateAction<LessonContextState>>;
   updateLesson: (data: NewLessonDTO) => void;
-  updateYaml: (data: YamlContent) => void;
+  updateYaml: (lessonId: string, data: YamlContent) => void;
 }
 
 export const initalLessonContextState: LessonContextState = {
@@ -32,8 +32,6 @@ export const initalLessonContextState: LessonContextState = {
     created_at: new Date(),
 
     updated_at: new Date(),
-
-    thumbUrl: "",
   },
   files: [],
   yml: { level: 1, license: "CC BY-SA 4.0", tags: { grade: [], subject: [], topic: [] } },

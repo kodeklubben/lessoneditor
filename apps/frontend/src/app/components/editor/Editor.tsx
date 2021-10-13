@@ -14,7 +14,7 @@ import { filenameParser } from "../../utils/filename-parser";
 import oppgaveMal from "./settingsFiles/oppgaveMal";
 import laererveiledningMal from "./settingsFiles/LaererveiledningMal";
 
-const Editor: React.FC = () => {
+const Editor: FC = () => {
   const { file } = useParams<{ lessonId: string; file: string }>();
 
   const { state } = useLessonContext();

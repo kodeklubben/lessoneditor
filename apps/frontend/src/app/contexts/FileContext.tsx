@@ -1,30 +1,21 @@
 import React, { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import saveMdText from "../api/save-md-text";
-import yamlHeaderDump from "./utils/yaml-header-dump";
-import yamlHeaderLoad from "./utils/yaml-header-load";
 import insertMetaDataInTeacherGuide from "../components/editor/utils/insertMetaDataInTeacherGuide";
 import oppgaveMal from "../components/editor/settingsFiles/oppgaveMal";
 import { useLessonContext } from "./LessonContext";
 import { filenameParser } from "../utils/filename-parser";
 import axios from "axios";
 import { paths } from "@lessoneditor/api-interfaces";
-import { FileDTO } from "@libs/lesson/src/lib/lesson.dto";
-import { YamlContent } from "@libs/lesson/src/lib/lesson.dto";
+import { FileDTO, HeaderData, UpdatedFileDTO } from "../../../../../libs/lesson/src/lib/lesson.dto";
+import { YamlContent } from "../../../../../libs/lesson/src/lib/lesson.dto";
 import {
   FileContextModel,
   FileContextState,
   initialFileContextState,
 } from "./fileContext.functions";
-
-export interface HeaderData {
-  title: string; // tittel får vi når vi oppretter oppgaven
-  authorList: string[]; //navn fra Github-konto
-  translatorList: string[];
-  translator: string;
-  language: string;
-  author: string;
-}
+import { useUserContext } from "./UserContext";
+import * as yml from "js-yaml";
 
 const separator = "---\n";
 
@@ -39,6 +30,7 @@ const FileContextProvider = (props: any) => {
   const [fileContextState, setFileContextState] =
     useState<FileContextState>(initialFileContextState);
   const { lessonId, file } = useParams<any>();
+  const { state: userState } = useUserContext();
   const { state } = useLessonContext();
   const { language } = filenameParser(file);
 
@@ -46,18 +38,21 @@ const FileContextProvider = (props: any) => {
     const fileHeader = fileContextState.rawMdFileContent?.split(separator)[1] || "";
     const newRawText = ["", fileHeader, body].join(separator);
     try {
-      const file = await axios.post<FileDTO<string>>(
+      const updatedFile: UpdatedFileDTO = {
+        content: newRawText,
+      };
+      const uploadedFile = await axios.put<FileDTO<string>>(
         paths.LESSON_FILE_UPDATE.replace(":lessonId", lessonId.toString()).replace(
-          ":fileId",
-          fileContextState.markDown!.fileId.toString()
-        )
+          ":fileName",
+          file
+        ),
+        updatedFile
       );
-
       setFileContextState((s) => {
         return {
           ...s,
           rawMdFileContent: newRawText,
-          savedFilebody: body,
+          savedFileBody: body,
         };
       });
     } catch (error) {
@@ -72,12 +67,14 @@ const FileContextProvider = (props: any) => {
           paths.LESSON_FILE.replace(":lessonId", lessonId).replace(":fileName", file)
         );
         const [_, header, body] = result.data.content.split(separator);
+
+        const headerData = yml.load(header) as HeaderData;
         setFileContextState((s) => {
           return {
             ...s,
             rawMdFileContent: result.data.content,
-            savedFilebody: body,
-            headerData: yamlHeaderLoad(header, language),
+            savedFileBody: body,
+            headerData: headerData,
           };
         });
       } catch (error) {
@@ -85,27 +82,32 @@ const FileContextProvider = (props: any) => {
       }
     }
 
-    if (lessonId && file && state.yml) {
+    if (lessonId && file) {
       fetchData().then();
     }
-  }, [lessonId, file, language, state.yml]);
+    // eslint-disable-next-line
+  }, [lessonId, file, language]);
 
   const saveFileHeader = async (data: HeaderData) => {
     const fileBody = fileContextState?.rawMdFileContent?.split(separator)[2];
-    const header = yamlHeaderDump(data);
+    const header = yml.dump(data);
     const newRawText = ["", header, fileBody].join(separator);
     try {
-      const file = await axios.post<FileDTO<string>>(
+      const updatedFile: UpdatedFileDTO = {
+        content: newRawText,
+      };
+      const newFile = await axios.put<FileDTO<UpdatedFileDTO>>(
         paths.LESSON_FILE_UPDATE.replace(":lessonId", lessonId.toString()).replace(
-          ":fileId",
-          fileContextState.markDown!.fileId.toString()
-        )
+          ":fileName",
+          file
+        ),
+        updatedFile
       );
       setFileContextState((s) => {
         return {
           ...s,
           rawMdFileContent: newRawText,
-          headerData: yamlHeaderLoad(header, language),
+          headerData: data,
         };
       });
     } catch (error) {
