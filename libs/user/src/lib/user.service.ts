@@ -3,11 +3,13 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Connection, Repository } from 'typeorm';
 import { UserDTO } from "./user.dto";
 import { User } from "./user.entity"
-import { LessonDTO, NewLessonDTO, YamlContent } from "../../../lesson/src/lib/lesson.dto";
+import { LessonDTO, NewLessonDTO, YamlContent, HeaderData } from "../../../lesson/src/lib/lesson.dto";
 import {FileStore, Lesson} from "../../../lesson/src/lib/lesson.entity"
 import {ThumbService} from "../../../thumb/src/lib/thumb.service"
 import { Request } from "express";
 import { GRADE, SUBJECT, TOPIC, laererveiledningMal } from "./fileTemplates";
+import * as fs from 'fs';
+import * as yaml from "js-yaml"
 
 @Injectable()
 export class UserService {
@@ -83,49 +85,58 @@ export class UserService {
               license: "CC BY-SA 4.0",
               tags: { topic: [], subject: [], grade: [] },
           }
-          emptyYamlFile.content = JSON.stringify(jsonContent)
+          emptyYamlFile.content = Buffer.from(JSON.stringify(jsonContent))
           emptyYamlFile.ext = ".yml"
           emptyYamlFile.updated_by = user.name
-          emptyYamlFile.created_by = user.name  
+          emptyYamlFile.created_by = user.name
+
+          const header: HeaderData = 
+          {
+            title: lesson.lessonSlug,
+            author: user.name,
+            authorList: [user.name],
+            language: "nb",
+            translator: "",
+            translatorList: []
+          }
+          const rawREADMEBody = "---\n" + yaml.dump(header) + "---\n" + this.insertMetaData(jsonContent)
           const defaultReadMeFile = new FileStore()
           defaultReadMeFile.filename = "README"
           defaultReadMeFile.ext = ".md"
-          defaultReadMeFile.content = this.insertMetaData(jsonContent)
+          defaultReadMeFile.content = Buffer.from(rawREADMEBody)
           defaultReadMeFile.updated_by = user.name
           defaultReadMeFile.created_by = user.name
+          const rawBody = "---\n" + yaml.dump(header) + "---\n" + laererveiledningMal
           const emptyMdFile = new FileStore()
-          emptyMdFile.content = laererveiledningMal
+          emptyMdFile.content = Buffer.from(rawBody)
           emptyMdFile.ext = ".md";
           emptyMdFile.filename = lesson.lessonSlug
           emptyMdFile.updated_by = user.name
           emptyMdFile.created_by = user.name
 
-          newLesson.files ?  newLesson.files.push(emptyMdFile, emptyYamlFile) : newLesson.files = [emptyMdFile, emptyYamlFile]
+          newLesson.files ?  newLesson.files.push(defaultReadMeFile, emptyMdFile, emptyYamlFile) : newLesson.files = [defaultReadMeFile, emptyMdFile, emptyYamlFile]
           user.lessons ? user.lessons.push(newLesson) : user.lessons = [newLesson]
 
           const savedLesson = await this.lessonRepository.save(newLesson);
           const savedUser = await this.userRepository.save(user);
 
-          // try
-          // {
-          //   const thumbImage = await this.thumbService.getThumb(5,"testoppgave", request)
-
-          // //   const previewPngFile = new FileStore()
-          // //  // previewPngFile.content = Buffer.from(thumbImage).toString("hex");
-          // //   previewPngFile.ext = ".png"
-          // //   previewPngFile.filename = "preview"
-          // //   previewPngFile.updated_by = user.name
-          // //   previewPngFile.created_by = user.name
-          // //   savedLesson.files.push(previewPngFile)
-          // //   await this.lessonRepository.save(savedLesson);
-          // }
-          // catch(error)
-          // {
-          //   console.error(error.message)
-          // }
-
-          //5
-
+          try
+          {
+            const thumbImage = await this.thumbService.getThumb(savedLesson.lessonId,savedLesson.lessonSlug, request)
+            var buffer = new Int8Array(thumbImage)
+            const previewPngFile = new FileStore()
+            previewPngFile.content = Buffer.from(thumbImage)
+            previewPngFile.ext = ".png"
+            previewPngFile.filename = "preview"
+            previewPngFile.updated_by = user.name
+            previewPngFile.created_by = user.name
+            savedLesson.files.push(previewPngFile)
+            await this.lessonRepository.save(savedLesson);
+          }
+          catch(error)
+          {
+            console.error(error.message)
+          }
           return savedLesson.lessonId
       }
       async updateUserLesson(userId: number, lessonId: number, regenThumb: boolean, updatedLesson: NewLessonDTO, request: Request): Promise<Lesson>
@@ -145,7 +156,7 @@ export class UserService {
             throw new HttpException('Preview file not found', HttpStatus.NOT_FOUND)
           }
           const thumbImage = await this.thumbService.getThumb(lessonId,lesson.lessonSlug, request);
-          previewFile.content = Buffer.from(thumbImage).toString("hex");
+          previewFile.content = Buffer.from(thumbImage)
         }
         lesson.lessonTitle = updatedLesson.lessonTitle
         lesson.lessonSlug = updatedLesson.lessonSlug

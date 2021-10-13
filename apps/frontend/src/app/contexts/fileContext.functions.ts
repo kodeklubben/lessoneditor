@@ -1,9 +1,8 @@
-import { FileDTO } from "libs/lesson/src/lib/lesson.dto";
-import { HeaderData } from "./FileContext";
+import { FileDTO, HeaderData } from "libs/lesson/src/lib/lesson.dto";
+
 
 export interface FileContextState
 {
-    markDown: FileDTO<string> | undefined,
     rawMdFileContent: string | undefined,
     savedFileBody: string | undefined,
     headerData: HeaderData 
@@ -19,7 +18,6 @@ export interface FileContextModel
 }
 
 export const initialFileContextState: FileContextState = {
-    markDown: undefined,
     rawMdFileContent: undefined,
     savedFileBody: undefined,
     headerData: {
@@ -27,8 +25,8 @@ export const initialFileContextState: FileContextState = {
         authorList: [],
         translatorList: [],
         language: "nb",
-        author: false,
-        translator: false
+        author: "",
+        translator: ""
   }
 
 } 

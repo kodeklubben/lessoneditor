@@ -56,7 +56,7 @@ export class FileStore {
     ext: string;
 
     @Column("bytea")
-    content: string;
+    content: Buffer;
 
     @Column()
     created_by: string;

@@ -64,9 +64,8 @@ const EditorDatamodal = ({ courseTitle, lessonTitle, setShowSpinner }) => {
 
   const onSubmit = async () => {
     if (saveFileHeader) {
-      const newHeaderData = Object.assign({ language }, state.headerData);
       setShowSpinner(true);
-      await saveFileHeader(newHeaderData);
+      await saveFileHeader(state.headerData);
       setShowSpinner(false);
       setOpen(false);
       history.push("/");

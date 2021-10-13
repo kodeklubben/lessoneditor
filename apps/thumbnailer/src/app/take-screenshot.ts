@@ -41,13 +41,21 @@ const takeScreenshot = async (url, token, waitForSelector?) => {
         height: 1000,
         deviceScaleFactor: 1,
     });
-    await page.goto(url,{
-        waitUntil: 'networkidle0'
-    });
+    try
+    {
+        await page.goto(url,{
+            waitUntil: 'networkidle0'})
+
+
+    }
+    catch(error)
+    {
+        console.error(error)
+    }
     if (waitForSelector) {
         logger.info("Waiting for selector: " + waitForSelector)
         await page.waitForSelector(waitForSelector, {
-            timeout: 5000,
+            timeout: 10000,
         });
 
     } else {

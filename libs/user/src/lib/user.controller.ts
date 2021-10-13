@@ -3,13 +3,14 @@ import { UserService } from "./user.service";
 import { LessonDTO, NewLessonDTO} from "../../../lesson/src/lib/lesson.dto"
 import { UserDTO } from "./user.dto";
 import { query } from "express";
-
+import { LoginGuard } from "../../../../libs/auth/src/lib/login.guard";
 
 @Controller("user")
 export class UserController {
   constructor(private userService: UserService) {
   }
 
+  @UseGuards(LoginGuard)
   @Get(':userId/lessons')
   async GetUserLessons(@Param() params):Promise<LessonDTO[]>
   {
@@ -17,6 +18,7 @@ export class UserController {
     return lessons
   }
   
+  @UseGuards(LoginGuard)
   @Get()
   async GetUser(@Req() req): Promise<UserDTO>
   {
@@ -28,12 +30,14 @@ export class UserController {
   
   }
 
+  @UseGuards(LoginGuard)
   @Post(':userId/lesson')
   async AddLesson(@Req() req, @Param() params, @Body() newLesson: NewLessonDTO): Promise<number>
   {
       return await this.userService.addUserLesson(params.userId,newLesson, req);
   }
 
+  @UseGuards(LoginGuard)
   @Put(':userId/lesson/:lessonId')
   async UpdateLesson(@Req() req, @Param('userId') userId,@Param('lessonId') lessonId, @Query('regenThumb') regenThumb: boolean, @Body() updatedLesson: LessonDTO): Promise<LessonDTO>
   {
@@ -41,6 +45,7 @@ export class UserController {
     return updatedLessonDTO;
   }
 
+  @UseGuards(LoginGuard)
   @Delete(':userId/lesson/:lessonId')
   async DeleteLesson(@Param('userId') userId,@Param('lessonId') lessonId, @Query() queryParams): Promise<LessonDTO>
   {

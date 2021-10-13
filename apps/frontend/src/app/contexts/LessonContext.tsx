@@ -6,6 +6,7 @@ import {NewLessonDTO,LessonDTO,FileDTO, YamlContent} from "../../../../../libs/l
 import {LessonContextState, initalLessonContextState,LessonContextModel} from "./lessonContext.functions"
 import {paths} from "../../../../../libs/api-interfaces/src/lib/api-interfaces"
 import {useUserContext} from "./UserContext"
+import { stringify } from "querystring";
 
 interface LessonContextProps {}
 
@@ -26,7 +27,7 @@ export const LessonContextProvider = (props: any) => {
       {
         const lesson = await axios.get<LessonDTO>(paths.LESSON.replace(":lessonId",lessonId))
         const fileNames = await axios.get<string[]>(paths.LESSON_FILENAMES.replace(":lessonId",lessonId))
-        const yamlFile = await axios.get<FileDTO<YamlContent>>(paths.LESSON_FILE.replace(":lessonId",lessonId).replace(":fileName","lesson"))
+        const yamlFile = await axios.get<FileDTO<string>>(paths.LESSON_FILE.replace(":lessonId",lessonId).replace(":fileName","lesson"))
         setLessonContextState((s) => 
         {
           return {
@@ -50,12 +51,12 @@ const updateYaml = async (lessonId: number, data: YamlContent) => {
     try
     {
       const updatedFile = await axios.put<FileDTO<YamlContent>>(paths.LESSON_FILE_UPDATE
-        .replace(":lessonId", lessonId.toString()).replace(":fileId",lessonContextState.yml!.fileId.toString()),data)
+        .replace(":lessonId", lessonId.toString()).replace(":fileName","lesson"),data)
       setLessonContextState((s) => 
         {
           return {
             ...s,
-            yml: updatedFile.data 
+            yml: updatedFile.data
           }
         })
     }

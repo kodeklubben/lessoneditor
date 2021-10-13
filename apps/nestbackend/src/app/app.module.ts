@@ -9,6 +9,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { UserModule } from "../../../../libs/user/src/lib/user.module"
 import { LessonModule } from "../../../../libs/lesson/src/lib/lesson.module"
 import { AuthModule } from "../../../../libs/auth/src/lib/auth.module"
+import { LoginGuard } from "../../../../libs/auth/src/lib/login.guard";
 
 
 @Module({

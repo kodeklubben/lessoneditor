@@ -8,11 +8,13 @@ import AllFiles from "./AllFiles";
 import LandingageNavbar from "./landingpageNavbar/LandingpageNavbar";
 import Areyousure from "./AreyousurePopup";
 import ThankU from "./ThankU";
-import submitLesson from "../../api/submit-lesson";
 import ShowSpinner from "../ShowSpinner";
 import { Button } from "semantic-ui-react";
 import Navbar from "../navbar/Navbar";
 import { useLessonContext } from "../../contexts/LessonContext";
+import { paths } from "@lessoneditor/api-interfaces";
+import axios from "axios";
+
 
 const Landingpage = () => {
   const [showSpinner, setShowSpinner] = useState(false);
@@ -24,7 +26,8 @@ const Landingpage = () => {
 
   const onSubmit = async (lessonId: string) => {
     setShowSpinner(true);
-    await submitLesson(lessonId);
+    await axios.post(paths.LESSON_SUBMIT
+      .replace(":lessonId",lessonId))
     setShowSpinner(false);
     setAreYouSure(false);
     setThankU(true);

@@ -1,22 +1,33 @@
-import { Controller,Get, Param, UseGuards, Post, Body, Put, Req } from "@nestjs/common";
+import { Controller,Get, Param, UseGuards, Post, Body, Put, Req, Res, UseInterceptors, UploadedFile } from "@nestjs/common";
+import {ExpressAdapter, FileInterceptor, MulterModule} from "@nestjs/platform-express"
 import { LessonService } from "./lesson.service";
-import { LessonDTO, FileDTO, LessonFilterDTO, ShareLessonDTO, NewFileDTO, UpdatedFileDTO } from "./lesson.dto";
+import { LessonDTO, FileDTO, LessonFilterDTO, ShareLessonDTO, NewFileDTO } from "./lesson.dto";
 import { UserDTO} from "../../../user/src/lib/user.dto"
 import { AuthGuard } from "@nestjs/passport";
 import { fileURLToPath } from "url";
+import { LoginGuard } from "../../../../libs/auth/src/lib/login.guard";
+import { Express } from "express";
+import { Multer } from 'multer';
+import { Readable } from "stream";
+import * as fs from "fs"
+import { UpdatedFileDTO, YamlContent } from "..";
+
 
 @Controller("lesson")
 export class LessonController {
   constructor(private lessonService: LessonService) {
   }
 
+  @UseGuards(LoginGuard)
   @Get(':lessonId')
   async GetLesson(@Param() params): Promise<LessonDTO>
   {
+    
     const {users, files, ...lessonDTO} = await this.lessonService.getLesson(params.lessonId)
     return lessonDTO
   }
 
+  @UseGuards(LoginGuard)
   @Get(':lessonId/fileNames')
   async GetLessonFileNames(@Param() params): Promise<string[]>
   {
@@ -24,13 +35,15 @@ export class LessonController {
 
   }
 
+  @UseGuards(LoginGuard)
   @Post(':lessonId/submit')
-  async SubmitLesson(@Req() req, @Param() params)
+  async SubmitLesson(@Param() params)
   {
-    await this.lessonService.submitLesson(req.user.token,params.lessonId)
+    await this.lessonService.submitLesson(params.lessonId)
 
   }
 
+  @UseGuards(LoginGuard)
   @Get(':lessonId/users')
   async GetLessonUsers(@Param() params): Promise<UserDTO[]>
   {
@@ -43,42 +56,73 @@ export class LessonController {
 
   }
 
-  @Get(':lessonId/files')
-  async GetLessonFiles(@Param() params): Promise<FileDTO<string>[]>
-  {
-    const {users, files, ...lessonDTO} = await this.lessonService.getLesson(params.lessonId)
-    const filesArray: FileDTO<string>[] = files.map(function(file){
-      const {lesson, ...fileDTO} = file
-      return fileDTO
-    })
-    return filesArray
-  }
+  // @UseGuards(LoginGuard)
+  // @Get(':lessonId/files')
+  // async GetLessonFiles(@Param() params): Promise<FileDTO<Buffer>[]>
+  // {
+  //   const {users, files, ...lessonDTO} = await this.lessonService.getLesson(params.lessonId)
+  //   const filesArray: FileDTO<Buffer>[] = files.map(function(file){
+  //     const {content, ...fileProps} = file
+  //     return new StreamableFile(file)
+  //   })
+  //   return filesArray
+  // }
 
+  @UseGuards(LoginGuard)
   @Get(':lessonId/files/:fileName')
-  async GetLessonFile(@Param('lessonId') lessonId, @Param('fileName') fileName): Promise<FileDTO<string>>
+  async GetLessonFile(@Res() res, @Param('lessonId') lessonId, @Param('fileName') fileName)
   {
-    const {lesson, ...fileDTO} = await this.lessonService.getLessonFile(lessonId, fileName)
-    return fileDTO
+    try
+    {
+      const {lesson, content, ...fileProps} = await this.lessonService.getLessonFile(lessonId, fileName)
+      if(fileName == "preview")
+      {
+        res.end(content.toString("base64"))
+      }
+      else
+      {
+        const fileDTO: FileDTO<string> = {
+          ...fileProps, 
+          content: content.toString("utf-8")
+        }
+        res.send(fileDTO)
+      }
+    }
+    catch(error)
+    {
+      console.error(error)
+    }
+    
   }
 
+  @UseGuards(LoginGuard)
   @Post(':lessonId/user')
   async AddLessonUser(@Param() params, @Body() shareLesson: ShareLessonDTO)
   {
+    
     await this.lessonService.addLessonUser(params.lessonId, shareLesson);
     
   }
 
+  @UseGuards(LoginGuard)
   @Post(':lessonId/files')
   async AddLessonFile(@Param() params, @Body() newFile: NewFileDTO ): Promise<number>
   {
     return await this.lessonService.addLessonFile(params.lessonId,newFile);
   }
 
-  @Put(':lessonId/files/:fileId')
-  async UpdateLessonFile(@Param('lessonId') lessonId,@Param('fileId') fileId, @Body() updatedFile: UpdatedFileDTO ): Promise<FileDTO<string>>
+  @UseGuards(LoginGuard)
+  @Put(':lessonId/files/:fileName')
+  async UpdateLessonFile(@Req() req, @Param('lessonId') lessonId,@Param('fileName') fileName, @Body() updatedFile: UpdatedFileDTO): Promise<FileDTO<string>>
   {
-    const {lesson, ...fileDTO} = await this.lessonService.updateLessonFile(lessonId,fileId,updatedFile);
-    return fileDTO
+    const {lesson, content, ...fileProps} = await this.lessonService.updateLessonFile(lessonId,fileName,req.user.userId,updatedFile.content);
+    const newFile: FileDTO<string> = 
+    {
+      ...fileProps,
+      content: content.toString("utf-8")
+    }
+    return newFile
+
   }
 
 }

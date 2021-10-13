@@ -69,25 +69,26 @@ export interface FileDTO<T>
 export interface NewFileDTO
 {
     filename: string;
-
     ext: string;
-
     content: string;
-
-    createdByUserId: number;
-
 }
+
 export interface UpdatedFileDTO
 {
-    fileId: number;
-    
-    content: string
-
-    updatedByUserId: string
+    content: string;
 }
+
 
 export interface LessonFilterDTO
 {
     userId?: number
 }
 
+export interface HeaderData {
+    title: string;
+    authorList: string[];
+    translatorList: string[];
+    translator: string;
+    language: string;
+    author: string;
+  }

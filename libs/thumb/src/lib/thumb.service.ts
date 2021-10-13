@@ -5,6 +5,7 @@ import { AxiosResponse } from "axios";
 import * as jwt from "jsonwebtoken"
 import { lastValueFrom } from "rxjs";
 import { Request } from "express";
+import {UserDTO} from "../../../../libs/user/src/lib/user.dto"
 
 
 @Injectable()
@@ -17,24 +18,27 @@ export class ThumbService {
     {
         const baseUrl = this.baseUrl(request)
         const previewurl = [baseUrl, "preview", lessonId, filename].join("/");
-        const url = this.thumbUrl(previewurl)
-        const response$ = this.http.get<ArrayBuffer>(url)
+        const url = this.thumbUrl(previewurl, request.user as UserDTO)
+        const response$ = this.http.get<ArrayBuffer>(url, {
+            responseType: 'arraybuffer'
+          })
         const response: AxiosResponse<ArrayBuffer> = await lastValueFrom(response$);
         return response.data
+        request.user
     }
 
-    thumbUrl(previewUrl)
+    thumbUrl(previewUrl: string, user: UserDTO)
     {
         const url = new URL(process.env.THUMB_SERVICE_URL);
-        const token = this.createJwtToken("na", process.env.GITHUB_CLIENT_SECRET);
+        const token = this.createJwtToken(user.userId,process.env.GITHUB_CLIENT_SECRET);
         url.searchParams.append("url", previewUrl);
         url.searchParams.append("token", token);
         return url.toString();
     }
 
-    createJwtToken(username, secret)
+    createJwtToken(userId, secret)
     {
-        return jwt.sign({sub: username}, secret);
+        return jwt.sign({sub: userId}, secret);
     };
 
     baseUrl(req){

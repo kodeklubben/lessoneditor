@@ -12,7 +12,7 @@ export const paths = {
   "LESSON_DATA": "/api/lesson/:lessonId/data/:filename",
   "LESSON_FILES": "/api/lesson/:lessonId/files",
   "LESSON_FILE": "api/lesson/:lessonId/files/:fileName",
-  "LESSON_FILE_UPDATE": "/api/lesson/:lessonId/files/:fileId",
+  "LESSON_FILE_UPDATE": "/api/lesson/:lessonId/files/:fileName",
   "LESSON_PROXY": "/api/lessons-proxy/*",
   "LESSON_SUBMIT": "/api/lesson/:lessonId/submit",
   "LESSON_THUMB": "/api/lesson-thumb/:lessonId/:file",

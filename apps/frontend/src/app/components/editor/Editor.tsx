@@ -80,7 +80,7 @@ const Editor: React.FC = () => {
    * Gjør litt state greier her:
    */
 
-  if (showSpinner && fileState.savedFileBody && mdText === "") {
+  if (showSpinner && fileState.savedFileBody) {
     setMdText(fileState.savedFileBody);
     setShowSpinner(false);
   }
