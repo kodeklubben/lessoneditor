@@ -59,7 +59,6 @@ export const UserContextProvider = (props: any) => {
     lessonSlug: string,
     lessonTitle: string
   ): Promise<number | undefined> => {
-    let lessonId: number;
     try {
       const newLesson: NewLessonDTO = {
         courseSlug: courseSlug,

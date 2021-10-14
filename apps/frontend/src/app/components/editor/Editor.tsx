@@ -15,11 +15,10 @@ import oppgaveMal from "./settingsFiles/oppgaveMal";
 import laererveiledningMal from "./settingsFiles/LaererveiledningMal";
 
 const Editor: FC = () => {
-  const { file } = useParams<{ lessonId: string; file: string }>();
-
+  const { file, lessonId } = useParams<{ lessonId: string; file: string }>();
   const { state } = useLessonContext();
 
-  const { saveFileBody, state: fileState } = useFileContext();
+  const { saveFileBody, state: fileState, savedFileBody } = useFileContext();
 
   const [mdText, setMdText] = useState("");
   const [showSpinner, setShowSpinner] = useState(true);
@@ -44,24 +43,25 @@ const Editor: FC = () => {
   const editorRef = useRef<HTMLTextAreaElement>(null);
   const uploadImageRef = useRef<HTMLInputElement>(null);
 
-  const isDefaultText = [laererveiledningMal, oppgaveMal].includes(fileState.savedFileBody || "");
   const { language } = filenameParser(file);
+
+  const isDefaultText = [laererveiledningMal, oppgaveMal].includes(fileState.savedFileBody || "");
 
   useEffect(() => {
     if (isDefaultText) {
       setOpenSettings(true);
     }
-  }, []);
+  }, [isDefaultText]);
 
   useEffect(() => {
-    if (fileState.savedFileBody) {
-      setCursor(fileState.savedFileBody.length, fileState.savedFileBody.length);
-      setMdText(fileState.savedFileBody);
-      setUndo([fileState.savedFileBody]);
-      setUndoCursorPosition([fileState.savedFileBody.length]);
+    if (savedFileBody) {
+      setCursor(savedFileBody.length, savedFileBody.length);
+      setMdText(savedFileBody);
+      setUndo([savedFileBody]);
+      setUndoCursorPosition([savedFileBody.length]);
       setShowSpinner(false);
     }
-  }, [fileState.savedFileBody]);
+  }, [savedFileBody]);
 
   const removeLastUndoAndPosition = () => {
     setUndo((prevUndo) => prevUndo.slice(0, prevUndo.length - 1));

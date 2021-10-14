@@ -1,6 +1,6 @@
 import "./editordatamodal.scss";
 import { Dispatch, SetStateAction, SyntheticEvent, FC } from "react";
-import { useHistory, useParams } from "react-router";
+import { useHistory, useParams, useLocation } from "react-router";
 import { Button, Header, Input, Modal, Popup } from "semantic-ui-react";
 import MultiInput from "./MultiInput";
 import { FORM_TEXT } from "./settings/landingpage_NO";
@@ -23,6 +23,7 @@ const EditorDatamodal: FC<EditorDatamodalProps> = ({
   setOpenSettings,
 }) => {
   const history = useHistory();
+  const location = useLocation();
   const { lessonId, file } = useParams<{ lessonId: string; file: string }>();
   const { state, saveFileHeader, setFileContextState } = useFileContext();
 
@@ -61,7 +62,9 @@ const EditorDatamodal: FC<EditorDatamodalProps> = ({
       await saveFileHeader(state.headerData);
       setShowSpinner(false);
       setOpenSettings(false);
-      history.push(["editor", lessonId, file].join("/"));
+      console.log({ file });
+      console.log({ lessonId });
+      history.push(location.pathname);
     }
   };
 

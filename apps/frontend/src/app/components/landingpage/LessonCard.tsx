@@ -41,9 +41,8 @@ const LessonCard: FC<any> = ({ lessonId, language, hasContent, lessonTitle, less
   useEffect(() => {
     async function getImage() {
       try {
-        const test = "";
         const file = await axios.get(
-          paths.LESSON_FILE.replace(":lessonId", lessonSlug.lessonId.toString()).replace(
+          paths.LESSON_FILE.replace(":lessonId", lessonId.toString()).replace(
             ":fileName",
             "preview"
           )

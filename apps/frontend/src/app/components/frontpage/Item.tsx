@@ -23,7 +23,6 @@ const Item: React.FC<Props> = ({ lesson }) => {
   useEffect(() => {
     async function getImage() {
       try {
-        const test = "";
         const file = await axios.get(
           paths.LESSON_FILE.replace(":lessonId", lesson.lessonId.toString()).replace(
             ":fileName",
@@ -43,7 +42,7 @@ const Item: React.FC<Props> = ({ lesson }) => {
       <Card>
         <Card.Content>
           <Image
-            src={"data:image/png;base64," + image}
+            src={`data:image/png;base64,${image}`}
             size="medium"
             bordered
             rounded

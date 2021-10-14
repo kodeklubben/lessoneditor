@@ -34,6 +34,10 @@ const FileContextProvider = (props: any) => {
   const { state } = useLessonContext();
   const { language } = filenameParser(file);
 
+  // Må ta savedFileBody ut av FileContextState pga at jeg bruker den som en useEffect-dependency.
+  // Dette for å forhindre at useEffect kjører mer enn nødvendig.
+  const [savedFileBody, setSavedFileBody] = useState("");
+
   const saveFileBody = async (body: string) => {
     const fileHeader = fileContextState.rawMdFileContent?.split(separator)[1] || "";
     const newRawText = ["", fileHeader, body].join(separator);
@@ -69,6 +73,7 @@ const FileContextProvider = (props: any) => {
         const [_, header, body] = result.data.content.split(separator);
 
         const headerData = yml.load(header) as HeaderData;
+        console.log({ headerData });
         setFileContextState((s) => {
           return {
             ...s,
@@ -77,16 +82,16 @@ const FileContextProvider = (props: any) => {
             headerData: headerData,
           };
         });
+        setSavedFileBody(body);
       } catch (error) {
         console.error(error);
       }
     }
 
     if (lessonId && file) {
-      fetchData().then();
+      fetchData();
     }
-    // eslint-disable-next-line
-  }, [lessonId, file, language]);
+  }, [lessonId]);
 
   const saveFileHeader = async (data: HeaderData) => {
     const fileBody = fileContextState?.rawMdFileContent?.split(separator)[2];
@@ -118,6 +123,7 @@ const FileContextProvider = (props: any) => {
   const context: FileContextModel = {
     state: fileContextState,
     saveFileBody,
+    savedFileBody,
     saveFileHeader,
     setFileContextState,
   };
