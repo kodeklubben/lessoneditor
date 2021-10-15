@@ -23,7 +23,7 @@ const Item: React.FC<Props> = ({ lesson }) => {
   useEffect(() => {
     async function getImage() {
       try {
-        const file = await axios.get(
+        const file: any = await axios.get(
           paths.LESSON_FILE.replace(":lessonId", lesson.lessonId.toString()).replace(
             ":fileName",
             "preview"

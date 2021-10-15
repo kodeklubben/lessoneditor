@@ -71,7 +71,7 @@ const ImageUpload: FC<ImageUploadProps> = ({
       }
       if (imgRegex.test(event.target.files[0].name)) {
         setShowSpinner(true);
-        const fileInfo = await uploadImage(lessonId, event.target.files[0]);
+        const fileInfo: any = await uploadImage(lessonId, event.target.files[0]);
         setShowSpinner(false);
         imageSubmitHandler(await fileInfo.imageUrl);
       } else {

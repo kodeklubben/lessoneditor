@@ -1,112 +1,131 @@
-export const laererveiledningMal = `(TEKSTMAL FOR LÆRERVEILEDNING)
+export const oppgaveMal =
+  `(TEKSTMAL FOR OPPGAVER)
 
-# Om oppgaven {.activity}
+# Introduksjon {.intro}
 
-I denne oppgaven...
+Her skriver du en introduksjon til oppgaven.
 
-## Oppgaven passer til: {.check}
+![ALTERNATIV_TEKST](BILDEFIL)
 
- **Fag**: {subject}
 
-**Anbefalte trinn**: {grade}
+# Steg 1: Første steg {.activity}
 
-**Tema**: {topic}
+Her beskriver du hva som er målet med dette steget.
 
-**Tidsbruk**:
+## Sjekkliste {.check}
 
-## Kompetansemål {.challenge}
+- [ ] tekst
 
-- [ ] **Fag, årstrinn**:
+- [ ] tekst
 
-## Forslag til læringsmål {.challenge}
+` +
+  "```" +
+  "\nKODEBLOKK\n" +
+  "```" +
+  `
 
-- [ ] Elevene kan...
+- [ ] tekst
 
-## Forslag til vurderingskriterier {.challenge}
+## Test prosjektet {.flag}
 
-Det er mange ulike måter man kan vurdere et programmeringsprosjekt, og her må en
-selv vurdere hva som er den beste måten ut ifra hvilket fag man jobber i,
-hvilken aldergruppe og hviklet nivå elevene er på, hva man ønsker å teste og
-hvor mye tid man har til rådighet til å jobbe med prosjektet. I vårt
-[lærerdokument](https://github.com/kodeklubben/oppgaver/wiki/Hvordan-undervise-i-og-vurdere-programmering){target=_blank} har vi blant
-annet beskrevet ulike måter dette kan gjøres på, tillegg til en del andre
-nyttige tips til hvordan man underviser i programmering.
+**Klikk på det grønne flagget.** / **Start prosjektet for å teste koden så
+langt.**
 
-## Forutsetninger og utstyr {.challenge}
+- [ ] Du skal se at...
 
-- [ ] **Forutsetninger**:
+- [ ] Prøv å endre tallene i koden din. Kan du få til at...
 
-- [ ] **Utstyr**:
+- [ ] Forstår du hvorfor dette skjer?
 
-## Fremgangsmåte
+## Sjekkliste {.check}
 
-Her kommer tips, erfaring og utfordringer til de ulike stegene i den faktiske
-oppgaven. 
+- [ ] tekst
 
-# Steg 1:... {.activity}
+## Test prosjektet {.flag}
 
-- [ ] Her er det et vanlig problem at ...
+**Klikk på det grønne flagget.** / **Start prosjektet for å teste koden så
+langt.**
 
-# Steg 2: ... {.activity}
+- [ ] tekst
 
-- [ ] Elevene må ...
 
-**ELLER**
+# Steg 2: Andre steg {.activity}
 
-*Vi har dessverre ikke noen tips, erfaringer eller utfordringer tilknyttet denne
-oppgaven enda.*
+I dette steget skal vi...
 
-## Variasjoner {.challenge}
+## Sjekkliste {.check}
 
-- [ ]  Elevene kan lage ...
+- [ ] tekst
 
-**ELLER**
+- [ ] tekst
 
-- [ ]  *Vi har dessverre ikke noen variasjoner tilknyttet denne oppgaven enda.*
+  Du kan sette inn en kodeblokk ved å bruke` +
+  "```" +
+  `før og etter koden.
 
-## Eksterne ressurser {.challenge}
+- [ ] tekst
 
-- [ ] Introduksjonsvideo om …
+## Test prosjektet {.flag}
 
-**ELLER**
+**Klikk på det grønne flagget.** / **Start prosjektet for å teste koden så
+langt.**
 
-- [ ] Foreløpig ingen eksterne ressurser ...`;
+- [ ] Du skal se at...
+
+- [ ] Prøv å endre tallene i koden din. Kan du få til at...
+
+- [ ] Forstår du hvorfor dette skjer?
+
+## Utfordring {.challenge}
+
+Du kan prøve...
+
+## Tips {.protip}
+
+Et tips for å løse utfordringen er...
+
+## Lagre spillet {.save}
+
+Vi har laget...
+
+Husk å lagre spillet/programmet ditt. Når du er ferdig kan du klikke på "Legg
+ut"-knappen. Da vil det bli lagt ut på Scratch-hjemmesiden din slik at du enkelt
+kan dele det med familien og vennene dine.`;
 
 // Grade titles
 export const GRADE = {
-    preschool: "Barnehage",
-    primary: "1.-4. klasse",
-    secondary: "5.-7. klasse",
-    junior: "8.-10. klasse",
-    senior: "Videregående Skole"
-  };
-  
-  // Subject titles
+  preschool: "Barnehage",
+  primary: "1.-4. klasse",
+  secondary: "5.-7. klasse",
+  junior: "8.-10. klasse",
+  senior: "Videregående Skole",
+};
+
+// Subject titles
 export const SUBJECT = {
-    mathematics: "Matematikk",
-    science: "Naturfag",
-    programming: "Programmering",
-    technology: "Teknologi",
-    music: "Musikk",
-    first_language: "Norsk",
-    english: "Engelsk",
-    arts_and_crafts: "Kunst og Håndverk",
-    social_science: "Samfunnsfag"
-  };
-  
-  // Topic titles
+  mathematics: "Matematikk",
+  science: "Naturfag",
+  programming: "Programmering",
+  technology: "Teknologi",
+  music: "Musikk",
+  first_language: "Norsk",
+  english: "Engelsk",
+  arts_and_crafts: "Kunst og Håndverk",
+  social_science: "Samfunnsfag",
+};
+
+// Topic titles
 export const TOPIC = {
-    animation: "Animasjon",
-    app: "App",
-    block_based: "Blokkbasert",
-    electronics: "Elektronikk",
-    cryptography: "Kryptografi",
-    sound: "Lyd",
-    minecraft: "Minecraft",
-    web: "Nettside",
-    robot: "Robot",
-    game: "Spill",
-    step_based: "Stegbasert",
-    text_based: "Tekstbasert"
-  };
-  
+  animation: "Animasjon",
+  app: "App",
+  block_based: "Blokkbasert",
+  electronics: "Elektronikk",
+  cryptography: "Kryptografi",
+  sound: "Lyd",
+  minecraft: "Minecraft",
+  web: "Nettside",
+  robot: "Robot",
+  game: "Spill",
+  step_based: "Stegbasert",
+  text_based: "Tekstbasert",
+};
