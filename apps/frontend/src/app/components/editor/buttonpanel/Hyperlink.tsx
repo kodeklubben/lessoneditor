@@ -1,7 +1,10 @@
-import { FC, useState } from "react";
-import ButtonComponent from "./ButtonComponent";
+import { FC, useState, RefObject } from "react";
+import { RenderButtons } from "./buttoncontroller/views/RenderButtons";
 import { useHotkeys } from "react-hotkeys-hook";
-import { hyperlink as config, KEY_COMBINATIONS as KEY } from "./settings/buttonConfig";
+import {
+  hyperlink as config,
+  KEY_COMBINATIONS as KEY,
+} from "./buttoncontroller/settings/buttonConfig";
 
 import { Button, Checkbox, Header, Input, Modal } from "semantic-ui-react";
 
@@ -12,18 +15,30 @@ const languageNO = {
   ok: "OK",
   cancel: "Avbryt",
   linkText: "lenkebeskrivelse",
-  mandatoryText: "Må fylle ut URL"
+  mandatoryText: "Må fylle ut URL",
 };
 
-const Hyperlink: FC<any> = ({
-                              editorRef,
-                              mdText,
-                              cursorPositionStart,
-                              cursorPositionEnd,
-                              setMdText,
-                              setCursorPosition,
-                              setCursor
-                            }) => {
+interface HyperlinkProps {
+  editorRef: RefObject<HTMLTextAreaElement>;
+  mdText: string;
+  cursorPositionStart: number;
+  cursorPositionEnd: number;
+  setMdText: React.Dispatch<React.SetStateAction<string>>;
+  setCursorPosition: (positionStart: number, positionEnd: number) => void;
+  setCursor: (pos1: number, pos2: number) => void;
+  setUndoAndCursorPosition: (mdText: string, position: number) => void;
+}
+
+const Hyperlink: FC<HyperlinkProps> = ({
+  editorRef,
+  mdText,
+  cursorPositionStart,
+  cursorPositionEnd,
+  setMdText,
+  setCursorPosition,
+  setCursor,
+  setUndoAndCursorPosition,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [url, setUrl] = useState("https://");
   const [openNewWindow, setOpenNewWindow] = useState(false);
@@ -31,16 +46,16 @@ const Hyperlink: FC<any> = ({
   const isEmptyField = url === "https://" || url === "";
 
   useHotkeys(
-    `${KEY.hyperlink}`,
+    KEY.hyperlink.hyperlink,
     (event) => {
       event.preventDefault();
       handleButtonClick();
-      return false;
     },
     { enableOnTags: ["TEXTAREA"], keydown: true }
   );
 
   const handleButtonClick = () => {
+    setUndoAndCursorPosition(mdText, cursorPositionStart);
     setIsOpen(!isOpen);
     return;
   };
@@ -55,39 +70,33 @@ const Hyperlink: FC<any> = ({
     if (cursorPositionStart === cursorPositionEnd) {
       openNewWindow
         ? setMdText(
-        mdText.slice(0, cursorPositionStart) +
-        `[${languageNO.linkText}](${url}){target=_blank}` +
-        mdText.slice(cursorPositionStart)
-        )
+            mdText.slice(0, cursorPositionStart) +
+              `[${languageNO.linkText}](${url}){target=_blank}` +
+              mdText.slice(cursorPositionStart)
+          )
         : setMdText(
-        mdText.slice(0, cursorPositionStart) +
-        `[${languageNO.linkText}](${url})` +
-        mdText.slice(cursorPositionStart)
-        );
+            mdText.slice(0, cursorPositionStart) +
+              `[${languageNO.linkText}](${url})` +
+              mdText.slice(cursorPositionStart)
+          );
     } else {
       openNewWindow
         ? setMdText(
-        mdText.slice(0, cursorPositionStart) +
-        `[${mdText.slice(
-          cursorPositionStart,
-          cursorPositionEnd
-        )}](${url}){target=_blank}` +
-        mdText.slice(cursorPositionEnd)
-        )
+            mdText.slice(0, cursorPositionStart) +
+              `[${mdText.slice(cursorPositionStart, cursorPositionEnd)}](${url}){:target=_blank}` +
+              mdText.slice(cursorPositionEnd)
+          )
         : setMdText(
-        mdText.slice(0, cursorPositionStart) +
-        `[${mdText.slice(
-          cursorPositionStart,
-          cursorPositionEnd
-        )}](${url})` +
-        mdText.slice(cursorPositionEnd)
-        );
+            mdText.slice(0, cursorPositionStart) +
+              `[${mdText.slice(cursorPositionStart, cursorPositionEnd)}](${url})` +
+              mdText.slice(cursorPositionEnd)
+          );
     }
 
     setIsOpen(false);
     setOpenNewWindow(false);
     setUrl("https://");
-    editorRef.current.focus();
+    editorRef.current ? editorRef.current.focus() : "";
     setCursor(start, end);
     setCursorPosition(start, end);
   };
@@ -96,24 +105,24 @@ const Hyperlink: FC<any> = ({
     setIsOpen(false);
     setOpenNewWindow(false);
     setUrl("https://");
-    editorRef.current.focus();
+    editorRef.current ? editorRef.current.focus() : "";
   };
 
   return (
-    <div>
-      <ButtonComponent
-        buttonValues={""}
+    <>
+      <RenderButtons
+        isON={false}
         icon={config.hyperlink.icon}
         title={config.hyperlink.title}
-        onButtonClick={handleButtonClick}
-        buttonTitle={config.hyperlink.buttonTitle}
+        handleButtonClick={handleButtonClick}
+        buttonSlug={config.hyperlink.slug}
         shortcutKey={config.hyperlink.shortcut}
       />
 
       <Modal
-        dimmer="inverted"
         onClose={() => setIsOpen(false)}
         onOpen={() => setIsOpen(true)}
+        closeIcon
         open={isOpen}
         size="small"
         className="hyperlink_modal"
@@ -145,11 +154,7 @@ const Hyperlink: FC<any> = ({
         </Modal.Content>
 
         <Modal.Actions className="hyperlink_modal">
-          <Button
-            onClick={clickCancelHandler}
-            content={languageNO.cancel}
-            color="black"
-          />
+          <Button onClick={clickCancelHandler} content={languageNO.cancel} color="black" />
           <Button
             disabled={isEmptyField}
             onClick={clickOKHandler}
@@ -160,7 +165,7 @@ const Hyperlink: FC<any> = ({
           />
         </Modal.Actions>
       </Modal>
-    </div>
+    </>
   );
 };
 

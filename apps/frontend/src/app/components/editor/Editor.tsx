@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, FC, useEffect } from "react";
 import "./editor.scss";
 import ButtonPanel from "./buttonpanel/ButtonPanel";
 import ImageUpload from "./ImageUpload";
@@ -10,15 +10,19 @@ import { useParams } from "react-router";
 import { useLessonContext } from "../../contexts/LessonContext";
 import Navbar from "../navbar/Navbar";
 import { filenameParser } from "../../utils/filename-parser";
-import { stat } from "fs/promises";
 
-const Editor: React.FC = () => {
-  const { lessonId, file } = useParams<{ lessonId: string; file: string }>();
+import oppgaveMal from "./settingsFiles/oppgaveMal";
+import laererveiledningMal from "./settingsFiles/LaererveiledningMal";
 
+const Editor: FC = () => {
+  const { file, lessonId } = useParams<{ lessonId: string; file: string }>();
   const { state } = useLessonContext();
-  const { saveFileBody, state: fileState } = useFileContext();
+
+  const { saveFileBody, state: fileState, savedFileBody } = useFileContext();
+
   const [mdText, setMdText] = useState("");
   const [showSpinner, setShowSpinner] = useState(true);
+  const [openSettings, setOpenSettings] = useState<boolean>(false);
   const [buttonValues, setButtonValues] = useState({});
   const [cursorPositionStart, setCursorPositionStart] = useState(0);
   const [cursorPositionEnd, setCursorPositionEnd] = useState(0);
@@ -26,8 +30,11 @@ const Editor: React.FC = () => {
   const [redo, setRedo] = useState<string[]>([]);
   const [undoCursorPosition, setUndoCursorPosition] = useState<number[]>([]);
   const [redoCursorPosition, setRedoCursorPosition] = useState<number[]>([]);
-  const [renderContent, setRenderContent] = useState(false);
-  const [listButtonValues, setListButtonValues] = useState({
+  const [listButtonValues, setListButtonValues] = useState<{
+    bTitle: string;
+    output: string;
+    cursorInt: number;
+  }>({
     bTitle: "",
     output: "",
     cursorInt: 0,
@@ -38,21 +45,60 @@ const Editor: React.FC = () => {
 
   const { language } = filenameParser(file);
 
+  const isDefaultText = [laererveiledningMal, oppgaveMal].includes(fileState.savedFileBody || "");
+
+  useEffect(() => {
+    if (isDefaultText) {
+      setOpenSettings(true);
+    }
+  }, [isDefaultText]);
+
+  useEffect(() => {
+    if (savedFileBody) {
+      setCursor(savedFileBody.length, savedFileBody.length);
+      setMdText(savedFileBody);
+      setUndo([savedFileBody]);
+      setUndoCursorPosition([savedFileBody.length]);
+      setShowSpinner(false);
+    }
+  }, [savedFileBody]);
+
+  const removeLastUndoAndPosition = () => {
+    setUndo((prevUndo) => prevUndo.slice(0, prevUndo.length - 1));
+    setUndoCursorPosition((prevPosition) => prevPosition.slice(0, prevPosition.length - 1));
+  };
+  const removeLastRedoAndPosition = () => {
+    setRedo((prevRedo) => prevRedo.slice(0, prevRedo.length - 1));
+    setRedoCursorPosition((prevPosition) => prevPosition.slice(0, prevPosition.length - 1));
+  };
+
+  const setUndoAndUndoPosition = (mdText: string, position: number) => {
+    setUndo((prevUndo) => [...prevUndo, mdText]);
+    setUndoCursorPosition((prevPosition) => [...prevPosition, position]);
+  };
+
   const pushUndoValue = (mdText: string, cursorPositionStart: number) => {
-    if (undo[undo.length - 1] !== mdText) {
-      setUndo((undo) => [...undo, mdText]);
-      setUndoCursorPosition((undoCursorPosition) => [...undoCursorPosition, cursorPositionStart]);
-      setRedo(redo.slice(0, redo.length - 1));
-      setMdText(redo[redo.length - 1]);
+    resetButtons();
+    if (undo.length > 0) {
+      const text = undo[undo.length - 1];
+      const position = undoCursorPosition[undoCursorPosition.length - 1];
+      setRedo((prevRedo) => [...prevRedo, mdText]);
+      setRedoCursorPosition((prevPosition) => [...prevPosition, cursorPositionStart]);
+      removeLastUndoAndPosition();
+      setMdText(text);
+      setCursorPosition(position, position);
     }
   };
 
-  const pushRedoValue = (mdText: string, cursorPositionStart: number) => {
-    if (redo[redo.length] !== mdText) {
-      setRedo((redo) => [...redo, mdText]);
-      setRedoCursorPosition((redoCursorPosition) => [...redoCursorPosition, cursorPositionStart]);
-      setUndo(undo.slice(0, undo.length - 1));
-      setMdText(undo[undo.length - 1]);
+  const pushRedoValue = (mdText: string) => {
+    resetButtons();
+    if (redo.length > 0) {
+      const text = redo[redo.length - 1];
+      const position = redoCursorPosition[redoCursorPosition.length - 1];
+      setUndoAndUndoPosition(mdText, position);
+      removeLastRedoAndPosition();
+      setMdText(text);
+      setCursor(position, position);
     }
   };
 
@@ -68,98 +114,84 @@ const Editor: React.FC = () => {
     if (!editorRef.current) {
       return;
     }
-    editorRef.current.selectionStart = await positionStart;
-    editorRef.current.selectionEnd = await positionEnd;
+    editorRef.current.setSelectionRange(await positionStart, await positionEnd);
   };
 
   const resetButtons = () => {
     setButtonValues({});
   };
 
-  /**
-   * Gjør litt state greier her:
-   */
-
-  if (showSpinner && fileState.savedFileBody) {
-    setMdText(fileState.savedFileBody);
-    setShowSpinner(false);
-  }
-
-  const saveEditorText = async () => {
+  // Autosave bruker denne.
+  const saveEditorText = () => {
     if (saveFileBody) {
-      await saveFileBody(mdText);
+      saveFileBody(mdText);
     }
   };
 
   return (
     <>
-      {showSpinner ? <ShowSpinner /> : ""}
-      {state.lesson && 
-      (
+      {state.lesson && (
         <>
-        <ImageUpload
-        uploadImageRef={uploadImageRef}
-        mdText={mdText}
-        pushUndoValue={pushUndoValue}
-        cursorPositionStart={cursorPositionStart}
-        cursorPositionEnd={cursorPositionEnd}
-        setMdText={setMdText}
-        setCursor={setCursor}
-        setCursorPosition={setCursorPosition}
-      />
-      <Navbar />
-      <ButtonPanel
-        buttonValues={buttonValues}
-        course={state.lesson?.courseSlug}
-        courseTitle={state.lesson?.courseTitle}
-        cursorPositionEnd={cursorPositionEnd}
-        cursorPositionStart={cursorPositionStart}
-        editorRef={editorRef}
-        lessonTitle={state.lesson?.lessonTitle}
-        mdText={mdText}
-        pushRedoValue={pushRedoValue}
-        pushUndoValue={pushUndoValue}
-        redo={redo}
-        redoCursorPosition={redoCursorPosition}
-        saveEditorText={saveEditorText}
-        setButtonValues={setButtonValues}
-        setCursor={setCursor}
-        setCursorPosition={setCursorPosition}
-        setListButtonValues={setListButtonValues}
-        setMdText={setMdText}
-        setRedoCursorPosition={setRedoCursorPosition}
-        setUndoCursorPosition={setUndoCursorPosition}
-        setRenderContent={setRenderContent}
-        undo={undo}
-        undoCursorPosition={undoCursorPosition}
-        uploadImageRef={uploadImageRef}
-      />
-      <div className="textEditorContainer">
-        <MDTextArea
-          editorRef={editorRef}
-          mdText={mdText}
-          buttonValues={buttonValues}
-          listButtonValues={listButtonValues}
-          cursorPositionStart={cursorPositionStart}
-          setCursorPosition={setCursorPosition}
-          setMdText={setMdText}
-          setButtonValues={setButtonValues}
-          setCursor={setCursor}
-          pushUndoValue={pushUndoValue}
-          resetButtons={resetButtons}
-          course={state.lesson?.courseSlug}
-        />
-        <MDPreview
-          mdText={mdText}
-          course={state.lesson?.courseSlug}
-          language={language}
-          renderContent={renderContent}
-        />
-      </div>
-      </>
-      )
-      }
-  
+          <ImageUpload
+            uploadImageRef={uploadImageRef}
+            mdText={mdText}
+            pushUndoValue={pushUndoValue}
+            cursorPositionStart={cursorPositionStart}
+            cursorPositionEnd={cursorPositionEnd}
+            setMdText={setMdText}
+            setCursor={setCursor}
+            setCursorPosition={setCursorPosition}
+          />
+          <Navbar>
+            <h1 style={{ display: "inline" }}>{state.lesson.lessonTitle}</h1>
+            <h3 style={{ color: "silver", display: "inline" }}>{state.lesson.courseTitle}</h3>
+          </Navbar>
+          <ButtonPanel
+            buttonValues={buttonValues}
+            course={state.lesson.courseSlug}
+            courseTitle={state.lesson.courseTitle}
+            cursorPositionStart={cursorPositionStart}
+            cursorPositionEnd={cursorPositionEnd}
+            editorRef={editorRef}
+            lessonTitle={state.lesson.lessonTitle}
+            mdText={mdText}
+            pushRedoValue={pushRedoValue}
+            pushUndoValue={pushUndoValue}
+            redoCursorPosition={redoCursorPosition}
+            saveEditorText={saveEditorText}
+            setButtonValues={setButtonValues}
+            setCursor={setCursor}
+            setCursorPosition={setCursorPosition}
+            setListButtonValues={setListButtonValues}
+            setMdText={setMdText}
+            setRedoCursorPosition={setRedoCursorPosition}
+            setUndoCursorPosition={setUndoCursorPosition}
+            undoCursorPosition={undoCursorPosition}
+            uploadImageRef={uploadImageRef}
+            setUndoAndCursorPosition={setUndoAndUndoPosition}
+            openSettings={openSettings}
+            setOpenSettings={setOpenSettings}
+          />
+          <div className="text-editor-container">
+            <div className="editor-windows">
+              <MDTextArea
+                editorRef={editorRef}
+                mdText={mdText}
+                buttonValues={buttonValues}
+                listButtonValues={listButtonValues}
+                cursorPositionStart={cursorPositionStart}
+                setCursorPosition={setCursorPosition}
+                setMdText={setMdText}
+                setButtonValues={setButtonValues}
+                setCursor={setCursor}
+                setUndoAndCursorPosition={setUndoAndUndoPosition}
+                resetButtons={resetButtons}
+              />
+              <MDPreview mdText={mdText} course={state.lesson.courseSlug} language={language} />
+            </div>
+          </div>
+        </>
+      )}
     </>
   );
 };

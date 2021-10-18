@@ -1,8 +1,14 @@
 import { Header, Input } from "semantic-ui-react";
 import { FORM_TEXT } from "../settingsFiles/languages/landingpage_NO";
-import { FC } from "react";
+import { FC, SyntheticEvent } from "react";
+import { YamlContent } from "@libs/lesson/src/lib/lesson.dto";
 
-const License: FC<any> = ({ changeHandler, data }) => {
+interface LicenseProps {
+  changeHandler: (e: SyntheticEvent, data: Record<string, string>) => void;
+  data: YamlContent;
+}
+
+const License: FC<LicenseProps> = ({ changeHandler, data }) => {
   return (
     <>
       <label>

@@ -16,7 +16,7 @@ const COURSESLIST = [
   { courseTitle: "Scratch", slug: "scratch" },
   { courseTitle: "Scratch Jr", slug: "scratchjr" },
   { courseTitle: "Web", slug: "web" },
-  { courseTitle: "Uten Datamaskin", slug: "uten_datamaskin" }
+  { courseTitle: "Uten Datamaskin", slug: "uten_datamaskin" },
 ];
 
 // const GITHUB_URL =

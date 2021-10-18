@@ -21,7 +21,8 @@
       "@lessoneditor/lesson": ["libs/lesson/src/index.ts"],
       "@lessoneditor/session": ["libs/session/src/index.ts"],
       "@lessoneditor/thumb": ["libs/thumb/src/index.ts"],
-      "@lessoneditor/user": ["libs/user/src/index.ts"]
+      "@lessoneditor/user": ["libs/user/src/index.ts"],
+      "@libs/*": ["libs/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]

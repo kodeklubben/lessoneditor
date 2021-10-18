@@ -1,25 +1,17 @@
-import { Button, Card, Image } from "semantic-ui-react";
-import {LessonDTO} from "../../../../../../libs/lesson/src/lib/lesson.dto"
-import { FC, useEffect } from "react";
-import Item from "./Item"
+import { Card } from "semantic-ui-react";
+import { LessonDTO } from "@libs/lesson/src/lib/lesson.dto";
+import { FC } from "react";
+import Item from "./Item";
 
 interface ItemListProps {
-  lessons: LessonDTO[]
-  removeLesson: (lessonId: number) => void;
-  navigateToHome: (lessonId: string) => void;
+  lessons: LessonDTO[];
 }
 
-const ItemList: FC<ItemListProps> = ({ lessons, removeLesson, navigateToHome }) => {
-
-
+const ItemList: FC<ItemListProps> = ({ lessons }) => {
   return (
     <Card.Group>
       {lessons.length > 0 &&
-        lessons.map(
-          (lesson: LessonDTO) => (
-            <Item lesson={lesson} removeLesson={removeLesson} navigateToHome={navigateToHome} ></Item>  
-          )
-        )}
+        lessons.map((lesson: LessonDTO) => <Item key={lesson.lessonId} lesson={lesson}></Item>)}
     </Card.Group>
   );
 };

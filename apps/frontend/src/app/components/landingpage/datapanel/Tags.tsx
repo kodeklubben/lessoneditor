@@ -1,39 +1,43 @@
-import { FC } from "react";
-// @ts-ignore
-// @ts-ignore
-// @ts-ignore
+import { FC, SyntheticEvent } from "react";
+import { Checkbox } from "semantic-ui-react";
 import { gradeSettings, subjectSettings, topicSettings } from "../settingsFiles/LESSONTAGSSETTINGS";
 
-const Checkbox: FC<any> = ({ value, onCheck, data, name, subtag }) => {
-  const onInputChange = (event: any) => {
-    onCheck(event);
-  };
+interface CheckboxWrapperProps {
+  name: string;
+  subtag: string;
+  data: Record<string, boolean>;
+  value: string;
+  onCheck: (e: SyntheticEvent, data: Record<string, string>) => void;
+}
 
+interface Tags {
+  changeHandler: (e: SyntheticEvent, data: Record<string, string>) => void;
+  data: Record<string, boolean>;
+}
+
+const CheckboxWrapper: FC<CheckboxWrapperProps> = ({ value, onCheck, data, name, subtag }) => {
   return (
-    <div className="ui checkbox">
-      <input
+    <>
+      <Checkbox
+        label={name}
         type="checkbox"
         checked={data[value]}
         name={name}
-        //@ts-expect-error
         subtag={subtag}
         id={value}
         value={value}
-        onChange={onInputChange}
+        onChange={onCheck}
       />
-      <label style={{ cursor: "pointer" }} htmlFor={value}>
-        {name}
-      </label>
-    </div>
+    </>
   );
 };
 
-const TagsGrade: FC<any> = ({ changeHandler, data }) => {
+const TagsGrade: FC<Tags> = ({ changeHandler, data }) => {
   return (
     <>
       {gradeSettings.map((element, index) => (
         <div className="column" key={"element" + index}>
-          <Checkbox
+          <CheckboxWrapper
             name={element.name}
             subtag={element.subtag}
             data={data}
@@ -46,12 +50,12 @@ const TagsGrade: FC<any> = ({ changeHandler, data }) => {
   );
 };
 
-const TagsSubject: FC<any> = ({ changeHandler, data }) => {
+const TagsSubject: FC<Tags> = ({ changeHandler, data }) => {
   return (
     <>
       {subjectSettings.map((element, index) => (
         <div className="column" key={"element" + index}>
-          <Checkbox
+          <CheckboxWrapper
             name={element.name}
             subtag={element.subtag}
             data={data}
@@ -64,12 +68,12 @@ const TagsSubject: FC<any> = ({ changeHandler, data }) => {
   );
 };
 
-const TagsTopic: FC<any> = ({ changeHandler, data }) => {
+const TagsTopic: FC<Tags> = ({ changeHandler, data }) => {
   return (
     <>
       {topicSettings.map((element, index) => (
         <div className="column" key={"element-" + index}>
-          <Checkbox
+          <CheckboxWrapper
             name={element.name}
             subtag={element.subtag}
             data={data}

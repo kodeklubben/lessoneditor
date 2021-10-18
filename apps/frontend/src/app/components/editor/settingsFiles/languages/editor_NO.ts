@@ -5,14 +5,14 @@ const SAVED = "dokument er lagret";
 // imagePopup text
 const PHOTO_TEXT = "Bildebeskrivelse her";
 
-// section-buttons text message
-const SECTION_TEXT = "Tekst her";
+//buttons default text
+const DEFAULT_TEXT = "Tekst her";
 
 // Page navigation buttons
 const NAV_BUTTONS = {
   prev: "Tilbake",
   next: "Neste",
-  submit: "Sende inn"
+  submit: "Sende inn",
 };
 
 // Button Names
@@ -40,7 +40,7 @@ const BUTTON_TITLE = {
   try: "Prøv Selv",
   inline: "Inline Code",
   codeblock: "Code Block",
-  save: "Lagre"
+  save: "Lagre",
 };
 
-export { SAVING, SAVED, PHOTO_TEXT, SECTION_TEXT, BUTTON_TITLE, NAV_BUTTONS };
+export { SAVING, SAVED, PHOTO_TEXT, DEFAULT_TEXT, BUTTON_TITLE, NAV_BUTTONS };

@@ -1,8 +1,7 @@
-export interface UserDTO
-{
-    userId: number
-    username: string
-    name: string
-    email: string
-
+export interface UserDTO {
+  photo: string;
+  userId: number;
+  username: string;
+  name: string;
+  email: string;
 }

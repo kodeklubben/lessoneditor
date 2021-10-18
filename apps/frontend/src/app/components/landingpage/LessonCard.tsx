@@ -1,16 +1,16 @@
 import { useHistory } from "react-router";
 import { Button, Card, Image } from "semantic-ui-react";
-import { FC, useEffect, useState } from "react";
+import { FC, useState, useEffect } from "react";
 import nbFlag from "/assets/public/languagesFlag/flag_nb.svg";
 import nnFlag from "/assets/public/languagesFlag/flag_nn.svg";
 import enFlag from "/assets/public/languagesFlag/flag_en.svg";
 import isFlag from "/assets/public/languagesFlag/flag_is.svg";
 import noLessonPreviewImage from "/assets/public/landingPage/image.png";
-import { FileDTO } from "../../../../../../libs/lesson/src/lib/lesson.dto";
-import { paths } from "@lessoneditor/api-interfaces";
+import { useLessonContext } from "../../contexts/LessonContext";
 import axios from "axios";
+import { paths } from "@lessoneditor/api-interfaces";
 
-const languageOptions = {
+const languageOptions: Record<string, any> = {
   nb: {
     text: "Bokmål",
     value: "nb",
@@ -33,49 +33,39 @@ const languageOptions = {
   },
 };
 
-const LessonCard: FC<any> = ({ title, lessonId, language, hasContent, lessonTitle }) => {
-
-  const [image, setImage] = useState<FileDTO<string>>()
-  useEffect(() =>
-  {
-    async function getImage()
-        {
-            try
-            {
-                const file = await axios.get<FileDTO<string>>(paths.LESSON_FILE.replace(":lessonId",lessonId.toString()).replace(":fileName","preview"))
-                setImage(file.data)
-            }
-            catch(error)
-            {
-                console.error(error)
-                const file: FileDTO<string> = {
-                  fileId: 0,
-                  filename: "",
-                  ext: ".png",
-                  content: ""
-                }
-
-                setImage(file)
-
-            }
-        }
-        getImage()
-  })
+const LessonCard: FC<any> = ({ lessonId, language, hasContent, lessonTitle, lessonSlug }) => {
   const history = useHistory();
+  const { state } = useLessonContext();
+  const [image, setImage] = useState<string>();
 
-  const navigateToEditor = (lessonId: any, lessonTitle: any, language: string) => {
+  useEffect(() => {
+    async function getImage() {
+      try {
+        const file: any = await axios.get(
+          paths.LESSON_FILE.replace(":lessonId", lessonId.toString()).replace(
+            ":fileName",
+            "preview"
+          )
+        );
+        setImage(file.data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    getImage();
+  }, [lessonSlug]);
+
+  const navigateToEditor = (lessonId: any, lessonSlug: any, language: string) => {
     const target = [
       "/editor",
       lessonId,
-      language === "nb" ? lessonTitle : `${lessonTitle}_${language}`,
+      language === "nb" ? lessonSlug : `${lessonSlug}_${language}`,
     ].join("/");
     history.push({ pathname: target });
   };
-  const imgSrc = `/api/display/${lessonId}/preview.png?${performance.now()}`;
+  const imgSrc = "data:image/png;base64," + image;
 
-  // @ts-ignore
   const languageText = languageOptions[language].text;
-  // @ts-ignore
   const languageImage = languageOptions[language].image.src;
   return (
     <>
@@ -84,7 +74,7 @@ const LessonCard: FC<any> = ({ title, lessonId, language, hasContent, lessonTitl
           <>
             <Card.Content>
               <Image
-                src={image?.content}
+                src={imgSrc}
                 size="medium"
                 alt="thumbUrl"
                 rounded
@@ -141,7 +131,7 @@ const LessonCard: FC<any> = ({ title, lessonId, language, hasContent, lessonTitl
         )}
         <div className="extra content">
           <Button
-            onClick={() => navigateToEditor(lessonId, lessonTitle, language)}
+            onClick={() => navigateToEditor(lessonId, lessonSlug, language)}
             content={hasContent ? "Åpne" : "Lag tekstfil"}
             positive={hasContent}
           />

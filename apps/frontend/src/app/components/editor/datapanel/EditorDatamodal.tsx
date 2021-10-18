@@ -1,64 +1,58 @@
 import "./editordatamodal.scss";
-import { useState } from "react";
-import { useHistory, useParams } from "react-router";
+import { Dispatch, SetStateAction, SyntheticEvent, FC } from "react";
+import { useHistory, useParams, useLocation } from "react-router";
 import { Button, Header, Input, Modal, Popup } from "semantic-ui-react";
 import MultiInput from "./MultiInput";
 import { FORM_TEXT } from "./settings/landingpage_NO";
 import { useFileContext } from "../../../contexts/FileContext";
 import { filenameParser } from "../../../utils/filename-parser";
-import { stat } from "fs/promises";
 
-// @ts-ignore
-const EditorDatamodal = ({ courseTitle, lessonTitle, setShowSpinner }) => {
+interface EditorDatamodalProps {
+  courseTitle: string;
+  lessonTitle: string;
+  setShowSpinner: Dispatch<SetStateAction<boolean>>;
+  openSettings: boolean;
+  setOpenSettings: Dispatch<SetStateAction<boolean>>;
+}
+
+const EditorDatamodal: FC<EditorDatamodalProps> = ({
+  courseTitle,
+  lessonTitle,
+  setShowSpinner,
+  openSettings,
+  setOpenSettings,
+}) => {
   const history = useHistory();
-  const { lessonId, file } = useParams<any>();
+  const location = useLocation();
+  const { lessonId, file } = useParams<{ lessonId: string; file: string }>();
   const { state, saveFileHeader, setFileContextState } = useFileContext();
-  const [open, setOpen] = useState<boolean>(false);
-
 
   const { language, languageName } = filenameParser(file);
 
+  const changeHandler = (event: SyntheticEvent, data: Record<string, string>) => {
+    const { name, value } = data;
 
-  const changeHandler = (event: { target: { name: any; value: any; }; }) => {
-    const { name, value } = event.target;
     if (setFileContextState) {
       setFileContextState((s) => {
         return {
           ...s,
           headerData: {
             ...s.headerData,
-            [name]: value
-          }
-
-        }
-      })
-      // setHeaderData((prevState) => ({ ...prevState, [name]: value }));
-      // if (headerData?.author) {
-      //   setHeaderData((prevState) => ({ ...prevState, err: "" }));
-      // }
-      // if (headerData?.title) {
-      //   setHeaderData((prevState) => ({ ...prevState, err: "" }));
-      // }
-    }
-  };
-
-  const multiInputHandler = (
-    object: { [s: string]: unknown } | ArrayLike<unknown>,
-    name: any
-  ) => {
-    const key = Object.keys(object)[0];
-    const value = Object.values(object)[0];
-    if (setFileContextState) {
-      setFileContextState((s) => {
-        return {
-          ...s,
-          headerData: {
-            ...s.headerData,
-            [key]:value
-
-          }
-        }
-      })
+            [name]: value,
+          },
+        };
+      });
+      if (state.headerData.author && state.headerData.title) {
+        setFileContextState((s) => {
+          return {
+            ...s,
+            headerData: {
+              ...s.headerData,
+              err: "",
+            },
+          };
+        });
+      }
     }
   };
 
@@ -67,26 +61,22 @@ const EditorDatamodal = ({ courseTitle, lessonTitle, setShowSpinner }) => {
       setShowSpinner(true);
       await saveFileHeader(state.headerData);
       setShowSpinner(false);
-      setOpen(false);
-      history.push("/");
-      history.replace(["editor", lessonId, file].join("/"));
+      setOpenSettings(false);
+      console.log({ file });
+      console.log({ lessonId });
+      history.push(location.pathname);
     }
   };
 
   const onCancel = async () => {
-    if (setFileContextState && state.headerData) {
-      setFileContextState((s) => {
-        return {
-          ...s,
-          headerData: state.headerData
-        }
-      })
-      setOpen(false);
+    if (saveFileHeader && state.headerData) {
+      await saveFileHeader({ ...state.headerData });
+      setOpenSettings(false);
     }
   };
 
   return (
-    <div>
+    <>
       <Popup
         content={"Endre data for oppgavetekst"}
         mouseEnterDelay={250}
@@ -99,34 +89,38 @@ const EditorDatamodal = ({ courseTitle, lessonTitle, setShowSpinner }) => {
             size="big"
             icon="address card"
             content="Oppgavedata"
-            onClick={() => setOpen(true)}
+            onClick={() => setOpenSettings(true)}
           />
         }
       />
       <Modal
         closeOnDimmerClick={
-          !(!state.headerData?.title ||
-            (!state.headerData?.author && state.headerData.authorList.length === 0))
+          !(
+            !state.headerData?.title ||
+            (!state.headerData?.author && state.headerData.authorList.length === 0)
+          )
         }
-        onClose={() => setOpen(false)}
-        onOpen={() => setOpen(true)}
-        open={open}
+        onClose={() => setOpenSettings(false)}
+        onOpen={() => setOpenSettings(true)}
+        open={openSettings}
         size="large"
-        dimmer="inverted"
+        closeIcon={
+          !(
+            !state.headerData?.title ||
+            (!state.headerData?.author && state.headerData.authorList.length === 0)
+          )
+        }
         className="editor_modal"
       >
         <Modal.Header className="editor_modal">
           <Header as="h1">
-            <span
-              style={{ color: "grey", marginRight: "1ch" }}
-            >{`Prosjekttittel: `}</span>
+            <span style={{ color: "grey", marginRight: "1ch" }}>{`Prosjekttittel: `}</span>
             {lessonTitle}
             <Header.Subheader>{`Kurs: ${courseTitle}`}</Header.Subheader>
           </Header>
         </Modal.Header>
         <Modal.Content className="editor_modal">
           <Header as="h3" className="formLabel">
-            { /* @ts-ignore */}
             {`${FORM_TEXT.TITLE.heading} på ${languageName}`}
             <span className="labelTextSpan">(obligatorisk)</span>
           </Header>
@@ -137,11 +131,11 @@ const EditorDatamodal = ({ courseTitle, lessonTitle, setShowSpinner }) => {
             type="text"
             name="title"
             placeholder={FORM_TEXT.TITLE.placeholder}
-            value={state.headerData?.title}
+            value={state.headerData.title}
             onChange={changeHandler}
             fluid
           />
-          {!state.headerData?.title ? (
+          {!state.headerData.title ? (
             <p style={{ color: "red" }}>
               <i>Må ha tittel</i>
             </p>
@@ -152,9 +146,8 @@ const EditorDatamodal = ({ courseTitle, lessonTitle, setShowSpinner }) => {
         <Modal.Content className="editor_modal">
           <MultiInput
             changeHandler={changeHandler}
-            inputArray={state.headerData?.authorList}
-            inputValue={state.headerData?.author}
-            multiInputHandler={multiInputHandler}
+            inputArray={state.headerData.authorList}
+            inputValue={state.headerData.author}
             name="author"
             placeholder={FORM_TEXT.AUTHOR.placeholder}
             required="(obligatorisk)"
@@ -171,11 +164,11 @@ const EditorDatamodal = ({ courseTitle, lessonTitle, setShowSpinner }) => {
         <Modal.Content className="editor_modal">
           <MultiInput
             changeHandler={changeHandler}
-            inputArray={state.headerData?.translatorList}
+            inputArray={state.headerData.translatorList}
             inputValue={state.headerData?.translator}
-            multiInputHandler={multiInputHandler}
             name="translator"
             placeholder={FORM_TEXT.TRANSLATOR.placeholder}
+            required=""
             title={FORM_TEXT.TRANSLATOR.heading}
           />
         </Modal.Content>
@@ -197,7 +190,8 @@ const EditorDatamodal = ({ courseTitle, lessonTitle, setShowSpinner }) => {
           />
           <Button
             disabled={
-              !state.headerData?.title || (!state.headerData.author && state.headerData.authorList.length === 0)
+              !state.headerData?.title ||
+              (!state.headerData.author && state.headerData.authorList.length === 0)
             }
             onClick={onSubmit}
             content="OK"
@@ -207,7 +201,7 @@ const EditorDatamodal = ({ courseTitle, lessonTitle, setShowSpinner }) => {
           />
         </Modal.Actions>
       </Modal>
-    </div>
+    </>
   );
 };
 

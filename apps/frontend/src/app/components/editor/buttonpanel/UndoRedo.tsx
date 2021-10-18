@@ -1,102 +1,59 @@
-import ButtonComponent from "./ButtonComponent";
+import { ButtonController } from "./buttoncontroller/ButtonController";
+import { undoRedo as config } from "./buttoncontroller/settings/buttonConfig";
+import { FC, RefObject } from "react";
 
-import { useHotkeys } from "react-hotkeys-hook";
+interface UndoRedoProps {
+  editorRef: RefObject<HTMLTextAreaElement>;
+  mdText: string;
+  cursorPositionStart: number;
+  undoCursorPosition: number[];
+  redoCursorPosition: number[];
+  setUndoCursorPosition: React.Dispatch<React.SetStateAction<number[]>>;
+  setRedoCursorPosition: React.Dispatch<React.SetStateAction<number[]>>;
+  pushUndoValue: (mdText: string, cursorPositionStart: number) => void;
+  pushRedoValue: (mdText: string) => void;
+  setCursorPosition: (positionStart: number, positionEnd: number) => void;
+}
 
-import { KEY_COMBINATIONS as KEY, undoRedo as config } from "./settings/buttonConfig";
-import { FC } from "react";
-
-let position: any;
-
-const UndoRedo: FC<any> = ({
-                             editorRef,
-                             mdText,
-                             undo,
-                             redo,
-                             cursorPositionStart,
-                             undoCursorPosition,
-                             redoCursorPosition,
-                             setUndoCursorPosition,
-                             setRedoCursorPosition,
-                             pushUndoValue,
-                             pushRedoValue,
-                             setCursorPosition
-                           }) => {
-  const set = {
-    undo: () => {
-      if (undoCursorPosition.length > 0) {
-        position = undoCursorPosition[undoCursorPosition.length - 1];
-        setUndoCursorPosition(
-          undoCursorPosition.slice(0, undoCursorPosition.length - 1)
-        );
-      }
-      if (undo.length <= 0) {
-        return;
-      }
-
-      pushRedoValue(mdText, cursorPositionStart);
-      setCursorPosition(position, position);
-    },
-    redo: () => {
-      if (redoCursorPosition.length > 0) {
-        position = redoCursorPosition[redoCursorPosition.length - 1];
-        setRedoCursorPosition(
-          redoCursorPosition.slice(0, redoCursorPosition.length - 1)
-        );
-      }
-      if (redo.length <= 0) {
-        return;
-      }
-      pushUndoValue(mdText, cursorPositionStart);
-      setCursorPosition(position, position);
-    }
-  };
-  useHotkeys(
-    `${KEY.undo}, ${KEY.redo}`,
-    (event, handler) => {
-      event.preventDefault();
-      switch (handler.key) {
-        case KEY.undo:
-          set.undo();
-          break;
-        case KEY.redo:
-          set.redo();
-          break;
-        default:
-          break;
-      }
-      return false;
-    },
-    { enableOnTags: ["TEXTAREA"], keydown: true },
-    [pushUndoValue, pushRedoValue]
-  );
-
-  const handleButtonClick = (button: any) => {
-    editorRef.current.focus();
-    switch (button) {
-      case config.undo.buttonTitle:
-        set.undo();
-        break;
-      case config.redo.buttonTitle:
-        set.redo();
-        break;
-      default:
-        break;
-    }
-  };
+const UndoRedo: FC<UndoRedoProps> = ({
+  editorRef,
+  mdText,
+  cursorPositionStart,
+  undoCursorPosition,
+  redoCursorPosition,
+  setUndoCursorPosition,
+  setRedoCursorPosition,
+  pushUndoValue,
+  pushRedoValue,
+  setCursorPosition,
+}) => {
   return (
-    <div>
+    <>
       {Object.entries(config).map((element, index) => (
-        <ButtonComponent
-          key={"element" + index}
-          buttonValues={""}
-          icon={element[1].icon}
+        <ButtonController
+          key={element[1].slug}
+          editorRef={editorRef}
+          isON={false}
           title={element[1].title}
-          onButtonClick={handleButtonClick}
-          buttonTitle={element[1].buttonTitle}
+          buttonSlug={element[1].slug}
           shortcutKey={element[1].shortcut}
+          icon={element[1].icon}
+          cursorIntON={0}
+          cursorIntOFF={0}
+          output={""}
+          mdText={mdText}
+          setCursorPosition={setCursorPosition}
+          cursorPositionStart={cursorPositionStart}
+          cursorPositionEnd={0}
+          undoCursorPosition={undoCursorPosition}
+          redoCursorPosition={redoCursorPosition}
+          setUndoCursorPosition={setUndoCursorPosition}
+          setRedoCursorPosition={setRedoCursorPosition}
+          pushUndoValue={pushUndoValue}
+          pushRedoValue={pushRedoValue}
         />
       ))}
-    </div>
+    </>
   );
 };
 

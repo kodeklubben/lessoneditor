@@ -1,53 +1,47 @@
 import "./ladingpagedatamodal.scss";
-import { useEffect, useState } from "react";
+import { SyntheticEvent, useEffect, useState } from "react";
+import { useParams } from "react-router";
 import { Button, Grid, Modal, Popup } from "semantic-ui-react";
 import { TagsGrade, TagsSubject, TagsTopic } from "./Tags";
 import CheckboxField from "./CheckboxField";
+
 import Levels from "./Levels";
 import License from "./License";
 import { useLessonContext } from "../../../contexts/LessonContext";
 import { YML_TEXT } from "../settingsFiles/languages/landingpage_NO";
-import { LessonContextState } from "../../../contexts/lessonContext.functions";
-
-// TODO: FIKSE AVBRYTKNAPP
 
 const LandingpageDatamodal = () => {
-  const context = useLessonContext();
-  const { state, setLessonContextState, updateYaml } = context;
+  const lessonContext = useLessonContext();
+  const { state, setLessonContextState, updateYaml, updateLesson } = lessonContext;
   const [checkBoxState, setCheckBoxState] = useState({});
   const [open, setOpen] = useState(false);
+  const { lessonId } = useParams<{ lessonId: string }>();
 
-  const ymlData = state.yml?.content
+  const isEmptyDatapanel = false;
 
-  const isEmptyDatapanel =
-    JSON.stringify(ymlData?.tags) === JSON.stringify({ topic: [], subject: [], grade: [] });
-
-  /*
-   * Det ser ut som vi trenger denne useEffecten for å forhindre inifite loop
-   */
   useEffect(() => {
     if (isEmptyDatapanel) {
       setOpen(true);
     }
     const mapYamlTags = () => {
-      let obj: {};
-      obj = ymlData?.tags.topic.reduce(
-        (accumulator: { [x: string]: boolean }, currentValue: string | number) => {
-          accumulator[currentValue] = true;
-          return accumulator;
-        },
-        // @ts-ignore
-        { ...obj }
-      );
-      obj = ymlData?.tags.subject.reduce(
-        (accumulator: { [x: string]: boolean }, currentValue: string | number) => {
+      let obj: Record<string, boolean> = {};
+
+      obj = state.yml.tags.topic.reduce(
+        (accumulator: { [x: string]: boolean }, currentValue: string) => {
           accumulator[currentValue] = true;
           return accumulator;
         },
         { ...obj }
       );
-      obj = ymlData?.tags.grade.reduce(
-        (accumulator: { [x: string]: boolean }, currentValue: string | number) => {
+      obj = state.yml.tags.subject.reduce(
+        (accumulator: { [x: string]: boolean }, currentValue: string) => {
+          accumulator[currentValue] = true;
+          return accumulator;
+        },
+        { ...obj }
+      );
+      obj = state.yml.tags.grade.reduce(
+        (accumulator: { [x: string]: boolean }, currentValue: string) => {
           accumulator[currentValue] = true;
           return accumulator;
         },
@@ -55,106 +49,68 @@ const LandingpageDatamodal = () => {
       );
       setCheckBoxState((prevState) => ({ ...prevState, ...obj }));
     };
-    if (ymlData?.tags) {
+    if (state.yml.tags) {
       mapYamlTags();
     }
-  }, [ymlData?.tags, isEmptyDatapanel]);
+  }, [state.yml.tags]);
 
-  const onSubmit = async () => {
-    updateYaml(state.lesson!.lessonId ,ymlData!)
+  const onSubmit = () => {
+    updateYaml(lessonId, state.yml);
     setOpen(false);
   };
 
-  const dropdownHandler = (event: any, { name, value }: any) => {
-    setLessonContextState((s) =>
-    {
-      return{
-        ...s,
-        yml: {
-          fileId: s.yml!.fileId,
-          filename: s.yml!.filename,
-          ext: s.yml!.ext,
-          content: {
-            ...s.yml!.content,
-            level: value
-          }
-        }
-      }
-    })
+  const dropdownHandler = (event: SyntheticEvent, data: Record<string, string>) => {
+    setLessonContextState((s: any) => ({
+      ...s,
+      yml: { ...s.yml, level: data.value },
+    }));
   };
 
-  const checboxHandler = (event: {
-    target: { getAttribute: (arg0: string) => any; value: any; checked: any };
-  }) => {
-    const subtag = event.target.getAttribute("subtag");
-    const name = event.target.value;
-    const value = event.target.checked;
+  const checboxHandler = (event: SyntheticEvent, data: Record<string, string>) => {
+    const subtag: "grade" | "subject" | "topic" =
+      data.subtag === "grade" || data.subtag === "subject" || data.subtag === "topic"
+        ? data.subtag
+        : "grade";
 
+    const name: string = data.value;
+    const value: string = data.checked;
     setCheckBoxState((prevState) => ({
       ...prevState,
       [name]: value,
     }));
-
-    if (!ymlData?.tags[subtag].includes(name)) {
-      setLessonContextState((s) =>
-      {
-        return{
-          ...s,
-          yml: {
-            fileId: s.yml!.fileId,
-            filename: s.yml!.filename,
-            ext: s.yml!.ext,
-            content: {
-              ...s.yml!.content,
-              tags: {
-                ...s.yml!.content.tags,
-                [subtag]: [...s.yml!.content.tags[subtag], name]
-              }
-            }
-          }
-        }
-      })
+    if (!state.yml.tags[subtag].includes(name)) {
+      setLessonContextState((prevState: any) => ({
+        ...prevState,
+        yml: {
+          ...prevState.yml,
+          tags: {
+            ...prevState.yml.tags,
+            [subtag]: [...prevState.yml.tags[subtag], name],
+          },
+        },
+      }));
     } else {
-      setLessonContextState((s) =>
-      {
-        return{
-          ...s,
-          yml: {
-            fileId: s.yml!.fileId,
-            filename: s.yml!.filename,
-            ext: s.yml!.ext,
-            content: {
-              ...s.yml!.content,
-              tags: {
-                ...s.yml!.content.tags,
-                [subtag]: s.yml!.content.tags[subtag].filter((e: any) => e !== name)
-              }
-            }
-          }
-        }
-      })
+      setLessonContextState((prevState: any) => ({
+        ...prevState,
+        yml: {
+          ...prevState.yml,
+          tags: {
+            ...prevState.yml.tags,
+            [subtag]: prevState.yml.tags[subtag].filter((e: string) => e !== name),
+          },
+        },
+      }));
     }
   };
 
-  const changeHandler = (event: { target: { name: any; value: any } }) => {
-    const name = event.target.name;
-    const value = event.target.value;
+  const changeHandler = (event: SyntheticEvent, data: Record<string, string>) => {
+    const name = data.name;
+    const value = data.value;
 
-    setLessonContextState((s) =>
-    {
-      return {
-        ...s,
-        yml: {
-          fileId: s.yml!.fileId,
-          filename: s.yml!.filename,
-          ext: s.yml!.ext,
-          content: {
-            ...s.yml!.content,
-            license: value
-          },
-        }
-      }
-    })
+    setLessonContextState((prevState: any) => ({
+      ...prevState,
+      yml: { ...prevState.yml, [name]: value },
+    }));
   };
 
   return (
@@ -210,12 +166,12 @@ const LandingpageDatamodal = () => {
                 />
               </Grid.Column>
               <Grid.Column>
-                <Levels changeHandler={dropdownHandler} data={ymlData} />
+                <Levels changeHandler={dropdownHandler} data={state.yml} />
               </Grid.Column>
             </Grid.Row>
           </Grid>
 
-          <License changeHandler={changeHandler} data={ymlData} />
+          <License changeHandler={changeHandler} data={state.yml} />
         </Modal.Content>
 
         <Modal.Actions className="landingpage_modal">
@@ -230,7 +186,7 @@ const LandingpageDatamodal = () => {
           )}
 
           <Button
-            disabled={isEmptyDatapanel}
+            disabled={false}
             onClick={onSubmit}
             content="OK"
             labelPosition="right"

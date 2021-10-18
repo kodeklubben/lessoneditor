@@ -1,47 +1,70 @@
 import { Button, Header, Input } from "semantic-ui-react";
-import { FC } from "react";
+import { FC, SyntheticEvent } from "react";
+import { useFileContext } from "../../../contexts/FileContext";
 
-const MultiInput: FC<any> = ({
-                               changeHandler,
-                               multiInputHandler,
-                               name,
-                               title,
-                               inputArray = [],
-                               inputValue,
-                               placeholder,
-                               required
-                             }) => {
+interface MultiInputProps {
+  changeHandler: (event: SyntheticEvent, data: Record<string, string>) => void;
+  name: string;
+  title: string;
+  inputArray: string[];
+  inputValue: string;
+  placeholder: string;
+  required: string;
+}
+
+const MultiInput: FC<MultiInputProps> = ({
+  changeHandler,
+  name,
+  title,
+  inputArray = [],
+  inputValue,
+  placeholder,
+  required,
+}) => {
   let inputOrder = 1;
+  const { setFileContextState } = useFileContext();
 
   let textInput: Input | null = null;
 
-  const handleClick = (event: any) => {
+  const handleClick = (event: SyntheticEvent<HTMLButtonElement> | KeyboardEvent) => {
     if (inputValue && !inputArray.includes(inputValue)) {
-      let i = event.target.name + "List";
-      let temp = { [i]: [...inputArray, inputValue] };
-      multiInputHandler(temp, event.target.name);
+      const i = name + "List";
+      const temp = { [i]: [...inputArray, inputValue] };
+      multiInputHandler(temp, name);
       inputOrder += 1;
 
-      // @ts-ignore
-      textInput.focus();
+      textInput ? textInput.focus() : "";
     }
   };
 
-  const onBlur = (event: any) => {
+  const multiInputHandler = (
+    object: { [s: string]: unknown } | ArrayLike<unknown>,
+    name: string
+  ) => {
+    const key = Object.keys(object)[0];
+    const value = Object.values(object)[0];
+    if (setFileContextState) {
+      setFileContextState((prevState) => ({
+        ...prevState,
+        headerData: { ...prevState.headerData, [key]: value, [name]: "" },
+      }));
+    }
+  };
+
+  const onBlur = (event: SyntheticEvent<HTMLButtonElement>) => {
     handleClick(event);
   };
 
   const inputClick = () => {
-    // @ts-ignore
-    textInput.focus();
+    textInput ? textInput.focus() : "";
   };
 
-  const removeClickHandler = (name: string, value: any) => {
-    let i = name + "List";
-    let tempArray = inputArray;
-    let index = inputArray.indexOf(value);
+  const removeClickHandler = (name: string, value: string) => {
+    const i = name + "List";
+    const tempArray = inputArray;
+    const index = inputArray.indexOf(value);
     tempArray.splice(index, 1);
-    let temp = { [i]: tempArray };
+    const temp = { [i]: tempArray };
     multiInputHandler(temp, name);
 
     inputOrder -= 1;
@@ -57,7 +80,7 @@ const MultiInput: FC<any> = ({
         <div
           style={{
             order: inputOrder,
-            width: "100%"
+            width: "100%",
           }}
         >
           <Input
@@ -70,14 +93,14 @@ const MultiInput: FC<any> = ({
             onClick={inputClick}
             onTouchStart={inputClick}
             onChange={changeHandler}
-            onKeyUp={(e: any) => (e.key === "Enter" ? handleClick(e) : "")}
-            onBlur={(e: any) => onBlur(e)}
+            onKeyUp={(e: KeyboardEvent) => (e.key === "Enter" ? handleClick(e) : "")}
+            onBlur={(e: SyntheticEvent<HTMLButtonElement>) => onBlur(e)}
             fluid
           />
         </div>
 
         <Button.Group>
-          {inputArray.map((element: {} | null | undefined, index: number) => (
+          {inputArray.map((element: string, index: number) => (
             <Button
               basic
               icon="x"
@@ -94,7 +117,7 @@ const MultiInput: FC<any> = ({
           icon="plus"
           style={{
             order: inputOrder + 1,
-            backgroundColor: "white"
+            backgroundColor: "white",
           }}
           id="addNameButton"
           name={name}
