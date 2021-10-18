@@ -86,7 +86,7 @@ export class UserService {
               tags: { topic: [], subject: [], grade: [] },
           }
           emptyYamlFile.content = Buffer.from(JSON.stringify(jsonContent))
-          emptyYamlFile.ext = ".yml"
+          emptyYamlFile.ext = "yml"
           emptyYamlFile.updated_by = user.name
           emptyYamlFile.created_by = user.name
 
@@ -102,14 +102,14 @@ export class UserService {
           const rawREADMEBody = "---\n" + yaml.dump(header) + "---\n" + this.insertMetaData(jsonContent)
           const defaultReadMeFile = new FileStore()
           defaultReadMeFile.filename = "README"
-          defaultReadMeFile.ext = ".md"
+          defaultReadMeFile.ext = "md"
           defaultReadMeFile.content = Buffer.from(rawREADMEBody)
           defaultReadMeFile.updated_by = user.name
           defaultReadMeFile.created_by = user.name
           const rawBody = "---\n" + yaml.dump(header) + "---\n" + laererveiledningMal
           const emptyMdFile = new FileStore()
           emptyMdFile.content = Buffer.from(rawBody)
-          emptyMdFile.ext = ".md";
+          emptyMdFile.ext = "md";
           emptyMdFile.filename = lesson.lessonSlug
           emptyMdFile.updated_by = user.name
           emptyMdFile.created_by = user.name
@@ -126,7 +126,7 @@ export class UserService {
             var buffer = new Int8Array(thumbImage)
             const previewPngFile = new FileStore()
             previewPngFile.content = Buffer.from(thumbImage)
-            previewPngFile.ext = ".png"
+            previewPngFile.ext = "png"
             previewPngFile.filename = "preview"
             previewPngFile.updated_by = user.name
             previewPngFile.created_by = user.name

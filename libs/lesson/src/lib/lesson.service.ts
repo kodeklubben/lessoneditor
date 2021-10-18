@@ -6,6 +6,8 @@ import { Repository } from 'typeorm';
 import { LessonFilterDTO, NewFileDTO, NewLessonDTO, ShareLessonDTO } from "./lesson.dto";
 import {GithubService} from "../../../github/src/lib/github.service"
 import * as fs from "fs"
+import { ThumbService } from "../../../../libs/thumb/src/lib/thumb.service";
+import { Request } from "express";
 
 @Injectable()
 export class LessonService {
@@ -13,7 +15,8 @@ export class LessonService {
     private lessonRepository: Repository<Lesson>,
     @InjectRepository(User)
     private userRepository: Repository<User>,
-    private githubService: GithubService
+    private githubService: GithubService,
+    private thumbService: ThumbService
     )
     {
     }
@@ -105,7 +108,7 @@ export class LessonService {
         return savedLesson.files[savedLesson.files.length-1].fileId
     }
 
-    async updateLessonFile(lessonId: number, fileName: string, updatedByUserId: number, fileContent: string): Promise<FileStore>
+    async updateLessonFile(lessonId: number, fileName: string, updatedByUserId: number, fileContent: string, request: Request): Promise<FileStore>
     {
         const lesson = await this.getLesson(lessonId)
         const file = lesson.files.find(file => file.filename == fileName);
@@ -120,6 +123,10 @@ export class LessonService {
         }
         file.content = Buffer.from(fileContent)
         file.updated_by = updatedByUser.name
+
+        const thumbImage = await this.thumbService.getThumb(lesson.lessonId,lesson.lessonSlug, request)
+        const previewFile = lesson.files.find(file => file.filename == "preview")
+        previewFile.content = Buffer.from(thumbImage)
 
         const savedLesson = await this.lessonRepository.save(lesson);
         return file

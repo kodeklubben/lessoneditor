@@ -115,7 +115,7 @@ export class LessonController {
   @Put(':lessonId/files/:fileName')
   async UpdateLessonFile(@Req() req, @Param('lessonId') lessonId,@Param('fileName') fileName, @Body() updatedFile: UpdatedFileDTO): Promise<FileDTO<string>>
   {
-    const {lesson, content, ...fileProps} = await this.lessonService.updateLessonFile(lessonId,fileName,req.user.userId,updatedFile.content);
+    const {lesson, content, ...fileProps} = await this.lessonService.updateLessonFile(lessonId,fileName,req.user.userId,updatedFile.content, req);
     const newFile: FileDTO<string> = 
     {
       ...fileProps,
