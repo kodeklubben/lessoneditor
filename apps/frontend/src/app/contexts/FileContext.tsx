@@ -7,8 +7,8 @@ import { useLessonContext } from "./LessonContext";
 import { filenameParser } from "../utils/filename-parser";
 import axios from "axios";
 import { paths } from "@lessoneditor/api-interfaces";
-import { FileDTO, HeaderData, UpdatedFileDTO } from "../../../../../libs/lesson/src/lib/lesson.dto";
-import { YamlContent } from "../../../../../libs/lesson/src/lib/lesson.dto";
+import { FileDTO, HeaderData, UpdatedFileDTO } from "@libs/lesson/src/lib/lesson.dto";
+import { YamlContent } from "@libs/lesson/src/lib/lesson.dto";
 import {
   FileContextModel,
   FileContextState,
@@ -34,7 +34,7 @@ const FileContextProvider = (props: any) => {
   const { state } = useLessonContext();
   const { language } = filenameParser(file);
 
-  // Må ta savedFileBody ut av FileContextState pga at jeg bruker den som en useEffect-dependency.
+  // Må ta savedFileBody ut av FileContextState pga at den brukes  som en useEffect-dependency.
   // Dette for å forhindre at useEffect kjører mer enn nødvendig.
   const [savedFileBody, setSavedFileBody] = useState("");
 
@@ -73,7 +73,6 @@ const FileContextProvider = (props: any) => {
         const [_, header, body] = result.data.content.split(separator);
 
         const headerData = yml.load(header) as HeaderData;
-        console.log({ headerData });
         setFileContextState((s) => {
           return {
             ...s,

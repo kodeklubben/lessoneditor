@@ -95,42 +95,42 @@ export const buttonAction: (
   };
 };
 
-export const heading = (
-  isON: boolean,
-  mdText: string,
-  cursorPositionStart: number,
-  output: string
-) => {
-  if (
-    !ifNewLine(mdText, cursorPositionStart) &&
-    !(
-      mdText.slice(cursorPositionStart - 3, cursorPositionStart) === "## " ||
-      mdText.slice(cursorPositionStart - 2, cursorPositionStart) === "# "
-    )
-  ) {
-    mdText = mdText.slice(0, cursorPositionStart) + "\n\n" + mdText.slice(cursorPositionStart);
-    cursorPositionStart += 1;
-    heading(isON, mdText, cursorPositionStart, output);
-  }
+// export const heading = (
+//   isON: boolean,
+//   mdText: string,
+//   cursorPositionStart: number,
+//   output: string
+// ) => {
+//   if (
+//     !ifNewLine(mdText, cursorPositionStart) &&
+//     !(
+//       mdText.slice(cursorPositionStart - 3, cursorPositionStart) === "## " ||
+//       mdText.slice(cursorPositionStart - 2, cursorPositionStart) === "# "
+//     )
+//   ) {
+//     mdText = mdText.slice(0, cursorPositionStart) + "\n\n" + mdText.slice(cursorPositionStart);
+//     cursorPositionStart += 1;
+//     heading(isON, mdText, cursorPositionStart, output);
+//   }
 
-  if (isON) {
-    if (mdText.slice(cursorPositionStart - 3, cursorPositionStart) === output) {
-      mdText = mdText.slice(0, cursorPositionStart - 3) + "# " + mdText.slice(cursorPositionStart);
-      cursorPositionStart -= 1;
-      return { isON, mdText, cursorPositionStart };
-    } else if (mdText.slice(cursorPositionStart - 2, cursorPositionStart) === "# ") {
-      mdText = mdText.slice(0, cursorPositionStart - 2) + mdText.slice(cursorPositionStart);
-      cursorPositionStart -= 2;
-      isON = !isON;
-      return { isON, mdText, cursorPositionStart };
-    } else {
-      isON = !isON;
-      return { isON, mdText, cursorPositionStart };
-    }
-  } else {
-    isON = !isON;
-    mdText = mdText.slice(0, cursorPositionStart) + output + mdText.slice(cursorPositionStart);
-    cursorPositionStart += output.length;
-    return { isON, mdText, cursorPositionStart };
-  }
-};
+//   if (isON) {
+//     if (mdText.slice(cursorPositionStart - 3, cursorPositionStart) === output) {
+//       mdText = mdText.slice(0, cursorPositionStart - 3) + "# " + mdText.slice(cursorPositionStart);
+//       cursorPositionStart -= 1;
+//       return { isON, mdText, cursorPositionStart };
+//     } else if (mdText.slice(cursorPositionStart - 2, cursorPositionStart) === "# ") {
+//       mdText = mdText.slice(0, cursorPositionStart - 2) + mdText.slice(cursorPositionStart);
+//       cursorPositionStart -= 2;
+//       isON = !isON;
+//       return { isON, mdText, cursorPositionStart };
+//     } else {
+//       isON = !isON;
+//       return { isON, mdText, cursorPositionStart };
+//     }
+//   } else {
+//     isON = !isON;
+//     mdText = mdText.slice(0, cursorPositionStart) + output + mdText.slice(cursorPositionStart);
+//     cursorPositionStart += output.length;
+//     return { isON, mdText, cursorPositionStart };
+//   }
+// };

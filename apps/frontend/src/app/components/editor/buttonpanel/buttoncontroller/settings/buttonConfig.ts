@@ -11,7 +11,7 @@ const KEY_COMBINATIONS = {
   emphasis: {
     bold: [SHORTCUTKEY, "+", "b"].join(""),
     italic: [SHORTCUTKEY, "+", "i"].join(""),
-    heading: [SHORTCUTKEY, "+", "h"].join(""),
+    //heading: [SHORTCUTKEY, "+", "h"].join(""),
     strikethrough: [SHORTCUTKEY, "+", "s"].join(""),
   },
   undoRedo: {
@@ -64,15 +64,15 @@ const emphasis = {
     cursorIntOFF: 1,
     shortcut: KEY_COMBINATIONS.emphasis.italic,
   },
-  heading: {
-    slug: "heading",
-    icon: "heading",
-    output: "## ",
-    title: BUTTON_TITLE.heading,
-    cursorIntON: 0,
-    cursorIntOFF: 0,
-    shortcut: KEY_COMBINATIONS.emphasis.heading,
-  },
+  // heading: {
+  //   slug: "heading",
+  //   icon: "heading",
+  //   output: "## ",
+  //   title: BUTTON_TITLE.heading,
+  //   cursorIntON: 0,
+  //   cursorIntOFF: 0,
+  //   shortcut: KEY_COMBINATIONS.emphasis.heading,
+  // },
   strikethrough: {
     slug: "strikethrough",
     icon: "strikethrough",

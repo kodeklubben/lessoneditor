@@ -39,11 +39,13 @@ export class UserService {
   }
 
   async addUser(newUser: UserDTO): Promise<User> {
+    console.log(newUser);
     const user = new User();
     user.userId = newUser.userId;
     user.email = newUser.email;
     user.username = newUser.username;
     user.name = newUser.name;
+    user.photo = newUser.photo;
 
     try {
       return await this.userRepository.save(user);
