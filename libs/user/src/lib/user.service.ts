@@ -54,7 +54,10 @@ export class UserService {
     }
   }
 
-
+  async getUserLessons(userId: number): Promise<User> {
+    const user = await this.getUser(userId);
+    return user;
+  }
 
   async addUserLesson(userId: number, lesson: NewLessonDTO, request: Request): Promise<number> {
     const user = await this.userRepository.findOne(userId, { relations: ["lessons"] });

@@ -229,10 +229,10 @@ export class GithubService {
 
     async downloadImage(url){
         try {
-            const response = await axios.get(url, {
+            const response = await axios.get<ArrayBuffer>(url, {
                 responseType: "arraybuffer",
             });
-            return Buffer.from(response.data, "binary");
+            return Buffer.from(response.data);
         } catch (e) {
             return null;
         }
