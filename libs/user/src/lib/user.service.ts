@@ -121,9 +121,11 @@ export class UserService {
         savedLesson.lessonSlug,
         request
       );
-      var buffer = new Int8Array(thumbImage);
       const previewPngFile = new FileStore();
       previewPngFile.content = Buffer.from(thumbImage);
+      fs.writeFile('image.png', Buffer.from(thumbImage), (error) => {
+        console.error(error)
+      });
       previewPngFile.ext = ".png";
       previewPngFile.filename = "preview";
       previewPngFile.updated_by = user.name;

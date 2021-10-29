@@ -2,6 +2,12 @@ import { FC, useState, Ref } from "react";
 import ShowSpinner from "../ShowSpinner";
 import uploadImage from "../../api/upload-image";
 import { useParams } from "react-router";
+import { Modal, Button, Header} from "semantic-ui-react";
+import { read } from "fs";
+import { paths } from "@lessoneditor/api-interfaces";
+import axios from "axios";
+import { NewFileDTO } from "../../../../../../libs/lesson/src/lib/lesson.dto"
+import { useLessonContext } from "../../contexts/LessonContext";
 
 const imgRegex = /^[\w-]+(.jpg|.jpeg|.gif|.png)$/i;
 const imageSizeErrorMessage = "Bildet kan ikke være over 5mb";
@@ -32,6 +38,9 @@ const ImageUpload: FC<ImageUploadProps> = ({
 
   const { lessonId } = useParams<any>();
   const [showSpinner, setShowSpinner] = useState(false);
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>("");
+  const { state } = useLessonContext();
 
   const fileNameErrorMessage =
     "Ugyldig filnavn, sjekk om det er mellomrom eller spesialtegn i filnavnet";
@@ -46,7 +55,8 @@ const ImageUpload: FC<ImageUploadProps> = ({
       );
       start = start - 2;
       end = end - 18 + fileNameErrorMessage.length;
-    } else {
+    } 
+    else {
       setMdText(
         mdText.slice(0, cursorPositionStart) +
           "![Bildebeskrivelse](" +
@@ -66,21 +76,47 @@ const ImageUpload: FC<ImageUploadProps> = ({
         return;
       }
       if (event.target.files[0].size > 5000000) {
-        imageSubmitHandler(imageSizeErrorMessage);
+        setErrorMessage(imageSizeErrorMessage);
+        setShowModal(true);
         return;
       }
       if (imgRegex.test(event.target.files[0].name)) {
+        const file: File = event.target.files[0]
         setShowSpinner(true);
-        const fileInfo: any = await uploadImage(lessonId, event.target.files[0]);
+        const reader = new FileReader()
+        reader.readAsDataURL(event.target.files[0])
+        reader.onload = async () => {
+          try{
+            const newFileDTO: NewFileDTO = 
+            {
+              filename: file.name.split(".")[0].toLowerCase(),
+              ext: "." + file.name.split(".").pop()?.toLowerCase(),
+              content: reader.result?.toString().split(`data:${file.type};base64,`).pop()!
+            }
+            await axios.post(paths.LESSON_FILES
+              .replace(":lessonId", state.lesson.lessonId.toString())
+              ,newFileDTO)
+          }
+          catch(error)
+          {
+            console.error(error)
+          }
+        }
         setShowSpinner(false);
-        imageSubmitHandler(await fileInfo.imageUrl);
+        imageSubmitHandler(file.name.toLowerCase());
       } else {
-        imageSubmitHandler("fileNameError");
+        setErrorMessage("fileNameError")
+        setShowModal(true);
       }
     } catch (err) {
       console.log(err);
     }
   };
+
+  const onClose = () => {
+    setErrorMessage("");
+    setShowModal(false);
+  }
 
   return (
     <>
@@ -92,6 +128,20 @@ const ImageUpload: FC<ImageUploadProps> = ({
         ref={uploadImageRef}
         onChange={fileSelectedHandler}
       />
+        <Modal
+        open={showModal}
+        >
+        <Modal.Header className="editor_modal">
+          <Header as="h1">
+          </Header>
+        </Modal.Header>
+        <Modal.Content className="editor_modal">
+          {errorMessage}
+        </Modal.Content>
+        <Modal.Actions className="editor_modal">
+          <Button onClick={onClose} content="OK"/>
+        </Modal.Actions>
+      </Modal>
     </>
   );
 };

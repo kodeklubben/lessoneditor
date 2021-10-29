@@ -6,11 +6,12 @@ import {Lesson} from "./lesson.entity"
 import { UserModule } from "../../../user/src/lib/user.module"
 import {GithubModule} from "../../../github/src/lib/github.module"
 import { ThumbModule } from "../../../thumb/src/lib/thumb.module";
+import { FileStore } from "./lesson.entity";
 
 
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Lesson]), 
+  imports: [TypeOrmModule.forFeature([Lesson, FileStore]), 
   forwardRef(() => UserModule), 
   GithubModule,
   ThumbModule

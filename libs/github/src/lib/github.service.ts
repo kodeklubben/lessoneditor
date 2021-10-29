@@ -7,6 +7,7 @@ import {FileStore, Lesson} from "../../../lesson/src/lib/lesson.entity"
 import * as jwt from "jsonwebtoken"
 import { createTokenAuth } from "@octokit/auth-token";
 import axios from "axios";
+import * as fs from "fs"
 
 interface UploadObject
 {
@@ -21,12 +22,22 @@ interface UploadBlob
 }
 
 
-const octokit = new Octokit({auth: "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"})
+
 
 @Injectable()
 export class GithubService {
+    octokit: Octokit
     constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache)
-    {}
+    {
+        try{
+            this.octokit = new Octokit({auth: "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"})
+        }
+        catch(error)
+        {
+            console.error(error)
+        }
+        
+    }
 
     async submitLesson(lesson: Lesson)
     {
@@ -41,50 +52,52 @@ export class GithubService {
         const lessonPath = ["src", lesson.courseSlug, lesson.courseTitle].join("/");
     
         const filesToUpload: UploadObject[] = [];
-        const filesToDownload: Promise<void>[] = [];
+        
         lesson.files.forEach((file) => {
-            const path = [lessonPath, file.filename + "." + file.ext].join("/");
-            if (file.ext === "yml") {
+            const path = [lessonPath, file.filename + file.ext].join("/");
+            if (file.ext === ".yml") {
                 filesToUpload.push({
                     path,
-                    buffer: file.content,
+                    buffer: Buffer.from(file.content),
                 });
-            } else if (file.ext === "md") {
-                 const markdownContent = this.resolveMarkdownImageUrls(file.content.toString());
+            } else if (file.ext === ".md") {
                 filesToUpload.push({
                     path,
-                    buffer: Buffer.from(markdownContent),
-                });
-                filesToDownload.push(
-                    ...this.getMarkdownUrlsSubmit(file.content.toString()).map(async (imgFile) => {
-                        filesToUpload.push({
-                            path: [lessonPath, imgFile.name].join("/"),
-                            buffer: await this.downloadImage(imgFile.url),
-                        });
-                    })
-                );
+                    buffer: Buffer.from(file.content.toString()),
+            });
             }
+            else if (file.filename == "preview")
+            {
+                return;
+            }
+            else if([".jpg",".jpeg", ".gif",".png"].includes(file.ext))
+            {
+                filesToUpload.push({
+                    path,
+                    buffer: Buffer.from(file.content),
+
+            });
+            }
+            
         });
         const branchName = lesson.lessonId.toString()
-        await Promise.all(filesToDownload);
         const branch = await this.ensureBranch(owner, repo, branchName);
         const filesToUpdate = await this.getChangedFilesList(owner, repo, branchName,filesToUpload)
-        
         const uploadBlobs: Promise<UploadBlob>[] = []
         uploadBlobs.push(
-            ...filesToUpdate.map(createBlobForFile(owner, repo))
+            ...filesToUpdate.map(this.createBlobForFile(owner, repo))
         )
         const uploadBlobResults = await Promise.all(uploadBlobs)
-        const newTree = await createNewTree(owner, repo,uploadBlobResults, branch.commit.sha)
+        const newTree = await this.createNewTree(owner, repo,uploadBlobResults, branch.commit.sha)
         const commitMessage = `My commit message`
-        const newCommit = await createNewCommit(
+        const newCommit = await this.createNewCommit(
             owner,
             repo,
             commitMessage,
             newTree.sha,
             branch.commit.sha
         )
-        await setBranchToCommit(owner, repo, branchName, newCommit.sha)
+        await this.setBranchToCommit(owner, repo, branchName, newCommit.sha)
          if (false) {
                 return await this.createPullRequest(
                     owner,
@@ -97,7 +110,7 @@ export class GithubService {
     }
 
     async createFork(){
-        const forkResponse = await octokit.repos.createFork({
+        const forkResponse = await this.octokit.repos.createFork({
             owner: process.env.GITHUB_LESSON_REPO_OWNER,
             repo: process.env.GITHUB_LESSON_REPO,
         });
@@ -116,7 +129,7 @@ export class GithubService {
             return <components["schemas"]["branch-with-protection"]> value
         } else {
             try {
-                const branchInfo = await octokit.repos.getBranch({
+                const branchInfo = await this.octokit.repos.getBranch({
                     owner,
                     repo,
                     branch,
@@ -141,7 +154,7 @@ export class GithubService {
             console.log("Branch is not existing, creating", {owner, repo, branch});
             const masterBranch = await this.getBranchCached(owner, repo, "master");
    
-            await octokit.git.createRef({
+            await this.octokit.git.createRef({
                 owner,
                 repo,
                 ref: `refs/heads/${branch}`,
@@ -187,7 +200,7 @@ export class GithubService {
 
     async getContentCached(owner, repo, ref, path) {
         try {
-            const response = await octokit.repos.getContent({
+            const response = await this.octokit.repos.getContent({
                 owner,
                 repo,
                 path,
@@ -242,7 +255,7 @@ export class GithubService {
         try {
             
             console.log("Creating pull request.");
-            return await octokit.pulls.create({
+            return await this.octokit.pulls.create({
                 owner: process.env.GITHUB_LESSON_REPO_OWNER,
                 repo: process.env.GITHUB_LESSON_REPO,
                 title: title, // title of PR
@@ -259,89 +272,90 @@ export class GithubService {
             }
         }
     };
+
+    createBlobForFile = (owner: string, repo:string) => async (uploadbject: UploadObject): Promise<UploadBlob> => 
+    {
+        const ext = uploadbject.path.split(".").pop()
+        if(["jpg","jpeg", "gif","png"].includes(ext))
+        {
+            const blobData: RestEndpointMethodTypes["git"]["createBlob"]["response"] = await this.octokit.git.createBlob({
+                owner: owner,
+                repo: repo,
+                content: uploadbject.buffer.toString("base64"),
+                encoding: "base64"
+            })
+            const uploadBlob: UploadBlob = {
+                path: uploadbject.path,
+                blob: blobData.data
+            }
+            return uploadBlob
+        }
+        else
+        {
+            const blobData: RestEndpointMethodTypes["git"]["createBlob"]["response"] = await this.octokit.git.createBlob({
+                owner: owner,
+                repo: repo,
+                content: uploadbject.buffer.toString(),
+                encoding: 'utf-8',
+            })
+            const uploadBlob: UploadBlob = {
+                path: uploadbject.path,
+                blob: blobData.data
+            }
+            return uploadBlob
+        }
+    }
+    setBranchToCommit = (
+        org: string,
+        repo: string,
+        branch: string = `master`,
+        commitSha: string
+      ) =>
+        this.octokit.git.updateRef({
+          owner: org,
+          repo,
+          ref: `heads/${branch}`,
+          sha: commitSha,
+        })
+
+    createNewCommit = async (
+        org: string,
+        repo: string,
+        message: string,
+        currentTreeSha: string,
+        currentCommitSha: string
+        ) =>
+        (await this.octokit.git.createCommit({
+            owner: org,
+            repo,
+            message,
+            tree: currentTreeSha,
+            parents: [currentCommitSha],
+        })).data
+    
+    createNewTree = async (
+
+            owner: string,
+            repo: string,
+            uploadBlobs: UploadBlob[],
+            parentTreeSha: string
+          ) => {
+            // My custom config. Could be taken as parameters
+            const tree = uploadBlobs.map(({ blob, path }, index) => ({
+              path: path,
+              mode: `100644`,
+              type: `blob`,
+              sha: blob.sha,
+            })) as RestEndpointMethodTypes["git"]["createTree"]["parameters"]["tree"]
+            const { data } = await this.octokit.git.createTree({
+              owner,
+              repo,
+              tree,
+              base_tree: parentTreeSha,
+            })
+            return data
+     }
+        
 }
 
 
-const createBlobForFile = (owner: string, repo:string) => async (uploadbject: UploadObject): Promise<UploadBlob> => 
-{
-    const ext = uploadbject.path.split(".").pop()
-    if(ext == "png" || ext =="jpg")
-    {
-        const blobData: RestEndpointMethodTypes["git"]["createBlob"]["response"] = await octokit.git.createBlob({
-            owner: owner,
-            repo: repo,
-            content: uploadbject.buffer.toString(),
-            encoding: 'base64',
-          })
-          const uploadBlob: UploadBlob = {
-            path: uploadbject.path,
-            blob: blobData.data
-          }
-        return uploadBlob
-    }
-    else
-    {
-        const blobData: RestEndpointMethodTypes["git"]["createBlob"]["response"] = await octokit.git.createBlob({
-            owner: owner,
-            repo: repo,
-            content: uploadbject.buffer.toString(),
-            encoding: 'utf-8',
-          })
-          const uploadBlob: UploadBlob = {
-            path: uploadbject.path,
-            blob: blobData.data
-          }
-        return uploadBlob
-    }
-}
-
-const setBranchToCommit = (
-    org: string,
-    repo: string,
-    branch: string = `master`,
-    commitSha: string
-  ) =>
-    octokit.git.updateRef({
-      owner: org,
-      repo,
-      ref: `heads/${branch}`,
-      sha: commitSha,
-    })
-
-const createNewCommit = async (
-    org: string,
-    repo: string,
-    message: string,
-    currentTreeSha: string,
-    currentCommitSha: string
-  ) =>
-    (await octokit.git.createCommit({
-      owner: org,
-      repo,
-      message,
-      tree: currentTreeSha,
-      parents: [currentCommitSha],
-    })).data
-
-const createNewTree = async (
-
-    owner: string,
-    repo: string,
-    uploadBlobs: UploadBlob[],
-    parentTreeSha: string
-  ) => {
-    // My custom config. Could be taken as parameters
-    const tree = uploadBlobs.map(({ blob, path }, index) => ({
-      path: path,
-      mode: `100644`,
-      type: `blob`,
-      sha: blob.sha,
-    })) as RestEndpointMethodTypes["git"]["createTree"]["parameters"]["tree"]
-    const { data } = await octokit.git.createTree({
-      owner,
-      repo,
-      tree,
-      base_tree: parentTreeSha,
-    })
-    return data
-  }

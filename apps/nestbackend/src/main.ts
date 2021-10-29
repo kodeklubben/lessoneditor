@@ -19,7 +19,7 @@ async function bootstrap() {
   const sessionRepsitory = app.get(Connection).getRepository(Session);
   app.enableCors();
 
-  app.use(bodyParser.json());
+  app.use(bodyParser.json({limit:'50mb'}));
   app.use(
     ExpressSession({
       resave: false,

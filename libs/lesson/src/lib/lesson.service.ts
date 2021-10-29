@@ -1,4 +1,4 @@
-import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
+import { Injectable, HttpException, HttpStatus, flatten } from "@nestjs/common";
 import {Lesson, FileStore} from "./lesson.entity"
 import {User} from "../../../user/src/lib/user.entity"
 import { InjectRepository } from '@nestjs/typeorm';
@@ -11,10 +11,13 @@ import { Request } from "express";
 
 @Injectable()
 export class LessonService {
-    constructor(@InjectRepository(Lesson)
+    constructor(
+    @InjectRepository(Lesson)
     private lessonRepository: Repository<Lesson>,
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    @InjectRepository(FileStore)
+    private fileStoreRepository: Repository<FileStore>,
     private githubService: GithubService,
     private thumbService: ThumbService
     )
@@ -28,7 +31,15 @@ export class LessonService {
       {
         throw new HttpException('Lesson does not exist', HttpStatus.NOT_FOUND);
       }
-      return await this.githubService.submitLesson(lesson)
+      try
+      {
+        await this.githubService.submitLesson(lesson)
+
+      }
+      catch(error)
+      {
+        console.error(error)
+      }
     }
 
     async getLesson(lessonId: number): Promise<Lesson> {
@@ -83,29 +94,41 @@ export class LessonService {
         throw new HttpException('File does not exist', HttpStatus.NOT_FOUND);
       }
       if(file.filename == "preview")
-      {
-        fs.writeFile("test.png", file.content, (error) => {
-          console.error(error)
-        })
-      
+      { 
         return file
       }
       return file
 
     }
 
-    async addLessonFile(lessonId:number, newFile: NewFileDTO): Promise<number>
+    async addLessonFile(lessonId:number, newFile: NewFileDTO, request: Request): Promise<number>
     {
         const lesson = await this.getLesson(lessonId)
         const file = new FileStore()
+        const user = request.user as User
         file.filename= newFile.filename
         file.ext = newFile.ext
-        file.content = Buffer.from(newFile.content)
+        file.created_by = user.name
+        file.updated_by = user.name
+        file.lesson = lesson
+        if([".jpg",".jpeg", ".gif",".png"].includes(file.ext))
+        {
+          file.content = Buffer.from(newFile.content, "base64")
+        }
+        else
+        {
+          file.content = Buffer.from(newFile.content)
+        }
+        try
+        {
+          const newFile = await this.fileStoreRepository.save(file);
+          return newFile.fileId
+        }
+        catch(error)
+        {
+          console.error(error)
+        }
 
-        lesson.files.push(file);
-
-        const savedLesson = await this.lessonRepository.save(lesson);
-        return savedLesson.files[savedLesson.files.length-1].fileId
     }
 
     async updateLessonFile(lessonId: number, fileName: string, updatedByUserId: number, fileContent: string, request: Request): Promise<FileStore>
