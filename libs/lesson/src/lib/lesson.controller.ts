@@ -70,6 +70,8 @@ export class LessonController {
   //   return filesArray
   // }
 
+  
+
   @UseGuards(LoginGuard)
   @Get(":lessonId/files/:fileName")
   async GetLessonFile(@Res() res, @Param("lessonId") lessonId, @Param("fileName") fileName) {
@@ -78,7 +80,7 @@ export class LessonController {
         lessonId,
         fileName
       );
-      if (fileName == "preview") {
+      if ([".jpg",".jpeg", ".gif",".png"].includes(fileProps.ext)) {
         res.end(content.toString("base64"));
       } else {
         const fileDTO: FileDTO<string> = {
@@ -111,7 +113,6 @@ export class LessonController {
     const {lesson, content, ...fileProps} = await this.lessonService.updateLessonFile(lessonId,fileName,req.user.userId,updatedFile.content, req);
     const newFile: FileDTO<string> = 
     {
-
       ...fileProps,
       content: content.toString("utf-8"),
     };

@@ -3,6 +3,9 @@ import { FC, useEffect, useState } from "react";
 import { renderMicrobit } from "../../utils/renderMicrobit";
 import { renderScratchBlocks } from "../../utils/renderScratchblocks";
 import { mdParser } from "../../utils/mdParser";
+import { useLessonContext } from "../../contexts/LessonContext";
+import axios, {AxiosResponse} from "axios"
+import {paths} from "@lessoneditor/api-interfaces"
 
 interface MDPreviewProps {
   mdText: string;
@@ -11,13 +14,64 @@ interface MDPreviewProps {
 }
 
 const MDPreview: FC<MDPreviewProps> = ({ mdText, course, language }) => {
-  const parseMD = mdParser(mdText);
+  const {state} = useLessonContext()
+
+  const [mdTextUrlReplaced, setMdTextUrlReplaced] = useState<string>("")
+  const parseMD = mdTextUrlReplaced && mdParser(mdTextUrlReplaced);
+
+  
 
   useEffect(() => {
+
+    async function replaceUrlWithBase64(markdownContent: any): Promise<string>{
+      const promises: Promise<AxiosResponse<string>>[] = [];
+      markdownContent.replace(/(!\[.*?\]\(")(.+?)("\))/gs, function (
+          whole: string,
+          prefix: string,
+          imagePathRaw: string,
+          postfix: string
+      ){ 
+          const promise = axios.get<string>(
+              paths.LESSON_FILE.replace(":lessonId", state.lesson.lessonId.toString()).replace(
+                ":fileName",
+                imagePathRaw.split(".")[0]
+              )
+            );
+          promises.push(promise);
+      });
+      try
+      {
+        const data = await Promise.all(promises);
+        return markdownContent.replace(/(!\[.*?\]\()(.+?)(\))/gs, function (
+          whole: string,
+            prefix: string,
+            imagePathRaw: string,
+            postfix: string
+        ){
+          imagePathRaw = imagePathRaw.slice(1,-1)
+          return prefix + `data:image/${imagePathRaw.split(".").pop()};base64,` + data.shift()?.data + postfix;
+        })
+
+      }
+      catch(error)
+      {
+        console.error(error)
+        return ""
+      }
+
+  }
+
+    async function replaceUrls()
+    {
+      const newMdText = await replaceUrlWithBase64(mdText)
+      setMdTextUrlReplaced(newMdText)
+    }
+    replaceUrls();
+  
     if (course === "microbit") {
       renderMicrobit(language);
     }
-  }, [parseMD]);
+  }, [mdText]);
 
   if (course === "scratch" && parseMD) {
     const lessonContent = renderScratchBlocks(parseMD);

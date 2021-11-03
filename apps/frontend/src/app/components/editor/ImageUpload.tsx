@@ -87,23 +87,28 @@ const ImageUpload: FC<ImageUploadProps> = ({
         reader.readAsDataURL(event.target.files[0])
         reader.onload = async () => {
           try{
-            const newFileDTO: NewFileDTO = 
+            if(reader.result)
             {
-              filename: file.name.split(".")[0].toLowerCase(),
-              ext: "." + file.name.split(".").pop()?.toLowerCase(),
-              content: reader.result?.toString().split(`data:${file.type};base64,`).pop()!
+              const newFileDTO: NewFileDTO = 
+              {
+                filename: file.name.split(".")[0].toLowerCase(),
+                ext: "." + file.name.split(".").pop()?.toLowerCase(),
+                content: reader.result.toString().split(`data:${file.type};base64,`).pop()!
+              }
+              await axios.post(paths.LESSON_FILES
+                .replace(":lessonId", state.lesson.lessonId.toString())
+                ,newFileDTO)
+              
+              setShowSpinner(false);
+              imageSubmitHandler(reader.result.toString());
             }
-            await axios.post(paths.LESSON_FILES
-              .replace(":lessonId", state.lesson.lessonId.toString())
-              ,newFileDTO)
           }
           catch(error)
           {
             console.error(error)
           }
         }
-        setShowSpinner(false);
-        imageSubmitHandler(file.name.toLowerCase());
+       
       } else {
         setErrorMessage("fileNameError")
         setShowModal(true);

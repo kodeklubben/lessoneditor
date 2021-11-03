@@ -12,7 +12,7 @@ import {
 import { FileStore, Lesson } from "../../../lesson/src/lib/lesson.entity";
 import { ThumbService } from "../../../thumb/src/lib/thumb.service";
 import { Request } from "express";
-import { GRADE, SUBJECT, TOPIC, oppgaveMal } from "./fileTemplates";
+import { GRADE, SUBJECT, TOPIC, oppgaveMal, imageTemplate } from "./fileTemplates";
 import * as fs from "fs";
 import * as yaml from "js-yaml";
 
@@ -107,9 +107,16 @@ export class UserService {
     emptyMdFile.updated_by = user.name;
     emptyMdFile.created_by = user.name;
 
+    const templateImage = new FileStore();
+    templateImage.content = Buffer.from(imageTemplate, "base64")
+    templateImage.ext = ".png"
+    templateImage.filename = "image"
+    templateImage.updated_by = user.name;
+    templateImage.created_by = user.name
+
     newLesson.files
-      ? newLesson.files.push(defaultReadMeFile, emptyMdFile, emptyYamlFile)
-      : (newLesson.files = [defaultReadMeFile, emptyMdFile, emptyYamlFile]);
+      ? newLesson.files.push(defaultReadMeFile, emptyMdFile, emptyYamlFile, templateImage)
+      : (newLesson.files = [defaultReadMeFile, emptyMdFile, emptyYamlFile, templateImage]);
     user.lessons ? user.lessons.push(newLesson) : (user.lessons = [newLesson]);
 
     const savedLesson = await this.lessonRepository.save(newLesson);

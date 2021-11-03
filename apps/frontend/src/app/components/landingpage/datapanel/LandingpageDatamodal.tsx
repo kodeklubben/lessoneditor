@@ -12,7 +12,7 @@ import { YML_TEXT } from "../settingsFiles/languages/landingpage_NO";
 
 const LandingpageDatamodal = () => {
   const lessonContext = useLessonContext();
-  const { state, setLessonContextState, updateYaml, updateLesson } = lessonContext;
+  const { state, setYml, updateYaml, updateLesson } = lessonContext;
   const [checkBoxState, setCheckBoxState] = useState({});
   const [open, setOpen] = useState(false);
   const { lessonId } = useParams<{ lessonId: string }>();
@@ -60,10 +60,12 @@ const LandingpageDatamodal = () => {
   };
 
   const dropdownHandler = (event: SyntheticEvent, data: Record<string, string>) => {
-    setLessonContextState((s: any) => ({
-      ...s,
-      yml: { ...s.yml, level: data.value },
-    }));
+    setYml((s) => {
+      return {
+        ...s,
+        level: +data.value
+      }
+    })
   };
 
   const checboxHandler = (event: SyntheticEvent, data: Record<string, string>) => {
@@ -79,27 +81,28 @@ const LandingpageDatamodal = () => {
       [name]: value,
     }));
     if (!state.yml.tags[subtag].includes(name)) {
-      setLessonContextState((prevState: any) => ({
-        ...prevState,
-        yml: {
-          ...prevState.yml,
+      setYml((s) => {
+        return {
+          ...s,
           tags: {
-            ...prevState.yml.tags,
-            [subtag]: [...prevState.yml.tags[subtag], name],
+            ...s.tags,
+            [subtag]: [...s.tags[subtag], name],
           },
-        },
-      }));
+        }
+      })
     } else {
-      setLessonContextState((prevState: any) => ({
-        ...prevState,
-        yml: {
-          ...prevState.yml,
+      setYml((s) => {
+
+        return {
+          ...s,
           tags: {
-            ...prevState.yml.tags,
-            [subtag]: prevState.yml.tags[subtag].filter((e: string) => e !== name),
+            ...s.tags,
+            [subtag]: s.tags[subtag].filter((e: string) => e !== name),
           },
-        },
-      }));
+        }
+
+
+      })
     }
   };
 
@@ -107,9 +110,9 @@ const LandingpageDatamodal = () => {
     const name = data.name;
     const value = data.value;
 
-    setLessonContextState((prevState: any) => ({
-      ...prevState,
-      yml: { ...prevState.yml, [name]: value },
+    setYml((s) => ({
+      ...s,
+       [name]: value ,
     }));
   };
 
