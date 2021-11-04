@@ -59,8 +59,8 @@ const ImageUpload: FC<ImageUploadProps> = ({
     else {
       setMdText(
         mdText.slice(0, cursorPositionStart) +
-          "![Bildebeskrivelse](" +
-          imageInputValue +
+          "![Bildebeskrivelse](" + "\"" +
+          imageInputValue + "\"" +
           ")" +
           mdText.slice(cursorPositionStart)
       );
@@ -100,7 +100,7 @@ const ImageUpload: FC<ImageUploadProps> = ({
                 ,newFileDTO)
               
               setShowSpinner(false);
-              imageSubmitHandler(reader.result.toString());
+              imageSubmitHandler(newFileDTO.filename + newFileDTO.ext);
             }
           }
           catch(error)

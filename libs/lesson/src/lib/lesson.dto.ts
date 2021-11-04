@@ -9,6 +9,8 @@ export interface LessonDTO {
 
   courseTitle: string;
 
+  submitted: boolean;
+
   created_by: string;
 
   updated_by: string;

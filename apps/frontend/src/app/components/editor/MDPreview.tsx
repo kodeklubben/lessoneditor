@@ -49,7 +49,12 @@ const MDPreview: FC<MDPreviewProps> = ({ mdText, course, language }) => {
             postfix: string
         ){
           imagePathRaw = imagePathRaw.slice(1,-1)
-          return prefix + `data:image/${imagePathRaw.split(".").pop()};base64,` + data.shift()?.data + postfix;
+          let ext = imagePathRaw.split(".").pop()
+          if(ext == 'jpg')
+          {
+            ext = 'jpeg';
+          }
+          return prefix + `data:image/${ext};base64,` + data.shift()?.data + postfix;
         })
 
       }

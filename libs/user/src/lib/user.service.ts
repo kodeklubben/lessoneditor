@@ -15,6 +15,7 @@ import { Request } from "express";
 import { GRADE, SUBJECT, TOPIC, oppgaveMal, imageTemplate } from "./fileTemplates";
 import * as fs from "fs";
 import * as yaml from "js-yaml";
+import { FilesInterceptor } from "@nestjs/platform-express";
 
 @Injectable()
 export class UserService {
@@ -23,6 +24,8 @@ export class UserService {
     private lessonRepository: Repository<Lesson>,
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    @InjectRepository(FileStore)
+    private fileStoreRepository: Repository<FileStore>,
     private thumbService: ThumbService
   ) {}
 
@@ -65,13 +68,18 @@ export class UserService {
       throw new HttpException("User does not exist", HttpStatus.NOT_FOUND);
     }
 
+    const files: FileStore[]= []
+
     const newLesson = new Lesson();
     newLesson.lessonTitle = lesson.lessonTitle;
     newLesson.lessonSlug = lesson.lessonSlug;
     newLesson.courseSlug = lesson.courseSlug;
     newLesson.courseTitle = lesson.courseTitle;
+    newLesson.submitted = false;
     newLesson.updated_by = user.name;
     newLesson.created_by = user.name;
+
+    const savedLesson = await this.lessonRepository.save(newLesson);
     const emptyYamlFile = new FileStore();
     emptyYamlFile.filename = "lesson";
     const jsonContent: YamlContent = {
@@ -83,6 +91,7 @@ export class UserService {
     emptyYamlFile.ext = ".yml";
     emptyYamlFile.updated_by = user.name;
     emptyYamlFile.created_by = user.name;
+    emptyYamlFile.lesson = savedLesson
 
     const header: HeaderData = {
       title: lesson.lessonTitle,
@@ -99,6 +108,7 @@ export class UserService {
     defaultReadMeFile.content = Buffer.from(rawREADMEBody);
     defaultReadMeFile.updated_by = user.name;
     defaultReadMeFile.created_by = user.name;
+    defaultReadMeFile.lesson = savedLesson;
     const rawBody = "---\n" + yaml.dump(header) + "---\n" + oppgaveMal;
     const emptyMdFile = new FileStore();
     emptyMdFile.content = Buffer.from(rawBody);
@@ -106,6 +116,9 @@ export class UserService {
     emptyMdFile.filename = lesson.lessonSlug;
     emptyMdFile.updated_by = user.name;
     emptyMdFile.created_by = user.name;
+    emptyMdFile.lesson = savedLesson;
+
+
 
     const templateImage = new FileStore();
     templateImage.content = Buffer.from(imageTemplate, "base64")
@@ -113,13 +126,21 @@ export class UserService {
     templateImage.filename = "image"
     templateImage.updated_by = user.name;
     templateImage.created_by = user.name
+    templateImage.lesson = savedLesson;
 
-    newLesson.files
-      ? newLesson.files.push(defaultReadMeFile, emptyMdFile, emptyYamlFile, templateImage)
-      : (newLesson.files = [defaultReadMeFile, emptyMdFile, emptyYamlFile, templateImage]);
-    user.lessons ? user.lessons.push(newLesson) : (user.lessons = [newLesson]);
+    // newLesson.files
+    //   ? newLesson.files.push(defaultReadMeFile, emptyMdFile, emptyYamlFile, templateImage)
+    //   : (newLesson.files = [defaultReadMeFile, emptyMdFile, emptyYamlFile, templateImage]);
 
-    const savedLesson = await this.lessonRepository.save(newLesson);
+    files.push(defaultReadMeFile, emptyMdFile, emptyYamlFile, templateImage)
+    user.lessons ? user.lessons.push(savedLesson) : (user.lessons = [savedLesson]);
+
+    
+    const promises: Promise<FileStore>[] = []
+    files.map( (file) => {
+      promises.push( this.fileStoreRepository.save(file));
+    })
+    await Promise.all(promises);
     const savedUser = await this.userRepository.save(user);
 
     try {
@@ -137,8 +158,9 @@ export class UserService {
       previewPngFile.filename = "preview";
       previewPngFile.updated_by = user.name;
       previewPngFile.created_by = user.name;
-      savedLesson.files.push(previewPngFile);
-      await this.lessonRepository.save(savedLesson);
+      previewPngFile.lesson = savedLesson;
+
+      await this.fileStoreRepository.save(previewPngFile)
     } catch (error) {
       console.error(error.message);
     }
@@ -179,7 +201,8 @@ export class UserService {
 
   async deleteUserLesson(userId: number, lessonId: number): Promise<Lesson> {
     const user = await this.getUser(userId);
-    const lesson = user.lessons.find((lesson) => lesson.lessonId == lessonId);
+    const lesson = await this.lessonRepository.findOne(lessonId, { relations: ["files"] });
+
     if (!lesson) {
       throw new HttpException("Lesson does not exist", HttpStatus.NOT_FOUND);
     }
@@ -187,6 +210,13 @@ export class UserService {
     if (!(lesson.created_by == user.name)) {
       throw new HttpException("Lesson can only be deleted by creator", HttpStatus.FORBIDDEN);
     }
+    const promises: Promise<FileStore>[] = []
+    lesson.files.map(file =>{
+      promises.push(this.fileStoreRepository.remove(file))
+    })
+    await Promise.all(promises)
+    user.lessons = user.lessons.filter(lesson => lesson.lessonId != lessonId)
+    await this.userRepository.save(user);
     return await this.lessonRepository.remove(lesson);
   }
 

@@ -7,6 +7,7 @@ import {LessonModule} from "../../../lesson/src/lib/lesson.module"
 import {ThumbModule} from "../../../thumb/src/lib/thumb.module"
 import {AuthModule} from "../../../auth/src/lib/auth.module"
 import { PassportModule } from "@nestjs/passport";
+import { FileStore } from "@lessoneditor/lesson";
 
 @Module({
   imports: [TypeOrmModule.forFeature([User]), 

@@ -103,7 +103,7 @@ export class LessonService {
 
     async addLessonFile(lessonId:number, newFile: NewFileDTO, request: Request): Promise<number>
     {
-        const lesson = await this.getLesson(lessonId)
+        const lesson = await this.lessonRepository.findOne(lessonId);
         const file = new FileStore()
         const user = request.user as User
         file.filename= newFile.filename

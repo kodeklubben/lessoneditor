@@ -20,6 +20,9 @@ export class Lesson {
     courseTitle: string;
 
     @Column()
+    submitted: boolean;
+
+    @Column()
     created_by: string;
 
     @Column()
