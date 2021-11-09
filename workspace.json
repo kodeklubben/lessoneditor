@@ -12,28 +12,8 @@
             "lintFilePatterns": ["libs/api-interfaces/**/*.ts"]
           }
         }
-      }
-    },
-    "auth": {
-      "root": "libs/auth",
-      "sourceRoot": "libs/auth/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/auth/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/auth"],
-          "options": {
-            "jestConfig": "libs/auth/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
+      },
+      "tags": []
     },
     "backend": {
       "root": "apps/backend",
@@ -93,7 +73,42 @@
             "passWithNoTests": true
           }
         }
-      }
+      },
+      "tags": []
+    },
+    "contracts": {
+      "root": "libs/contracts",
+      "sourceRoot": "libs/contracts/src",
+      "projectType": "library",
+      "targets": {
+        "lint": {
+          "executor": "@nrwl/linter:eslint",
+          "outputs": ["{options.outputFile}"],
+          "options": {
+            "lintFilePatterns": ["libs/contracts/**/*.ts"]
+          }
+        },
+        "test": {
+          "executor": "@nrwl/jest:jest",
+          "outputs": ["coverage/libs/contracts"],
+          "options": {
+            "jestConfig": "libs/contracts/jest.config.js",
+            "passWithNoTests": true
+          }
+        },
+        "build": {
+          "executor": "@nrwl/node:package",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/libs/contracts",
+            "tsConfig": "libs/contracts/tsconfig.lib.json",
+            "packageJson": "libs/contracts/package.json",
+            "main": "libs/contracts/src/index.ts",
+            "assets": ["libs/contracts/*.md"]
+          }
+        }
+      },
+      "tags": []
     },
     "frontend": {
       "root": "apps/frontend",
@@ -167,49 +182,8 @@
             "passWithNoTests": true
           }
         }
-      }
-    },
-    "github": {
-      "root": "libs/github",
-      "sourceRoot": "libs/github/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/github/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/github"],
-          "options": {
-            "jestConfig": "libs/github/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "lesson": {
-      "root": "libs/lesson",
-      "sourceRoot": "libs/lesson/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/lesson/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/lesson"],
-          "options": {
-            "jestConfig": "libs/lesson/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
+      },
+      "tags": []
     },
     "nestbackend": {
       "root": "apps/nestbackend",
@@ -259,60 +233,8 @@
             "passWithNoTests": true
           }
         }
-      }
-    },
-    "session": {
-      "root": "libs/session",
-      "sourceRoot": "libs/session/src",
-      "projectType": "library",
-      "targets": {
-        "build": {
-          "executor": "@nrwl/node:package",
-          "outputs": ["{options.outputPath}"],
-          "options": {
-            "outputPath": "dist/libs/session",
-            "tsConfig": "libs/session/tsconfig.lib.json",
-            "packageJson": "libs/session/package.json",
-            "main": "libs/session/src/index.ts",
-            "assets": ["libs/session/*.md"]
-          }
-        },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/session/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/session"],
-          "options": {
-            "jestConfig": "libs/session/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    },
-    "thumb": {
-      "root": "libs/thumb",
-      "sourceRoot": "libs/thumb/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/thumb/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/thumb"],
-          "options": {
-            "jestConfig": "libs/thumb/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
+      },
+      "tags": []
     },
     "thumbnailer": {
       "root": "apps/thumbnailer",
@@ -384,50 +306,8 @@
             "passWithNoTests": true
           }
         }
-      }
-    },
-    "user": {
-      "root": "libs/user",
-      "sourceRoot": "libs/user/src",
-      "projectType": "library",
-      "targets": {
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/user/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/libs/user"],
-          "options": {
-            "jestConfig": "libs/user/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      }
-    }
-  },
-  "cli": {
-    "defaultCollection": "@nrwl/react"
-  },
-  "generators": {
-    "@nrwl/react": {
-      "application": {
-        "style": "scss",
-        "linter": "eslint",
-        "strict": true,
-        "babel": true
       },
-      "component": {
-        "style": "scss"
-      },
-      "library": {
-        "style": "scss",
-        "linter": "eslint",
-        "strict": true
-      }
+      "tags": []
     }
-  },
-  "defaultProject": "frontend"
+  }
 }

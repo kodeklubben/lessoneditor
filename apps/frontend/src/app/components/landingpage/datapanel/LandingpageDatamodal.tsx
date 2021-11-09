@@ -63,9 +63,9 @@ const LandingpageDatamodal = () => {
     setYml((s) => {
       return {
         ...s,
-        level: +data.value
-      }
-    })
+        level: +data.value,
+      };
+    });
   };
 
   const checboxHandler = (event: SyntheticEvent, data: Record<string, string>) => {
@@ -88,21 +88,18 @@ const LandingpageDatamodal = () => {
             ...s.tags,
             [subtag]: [...s.tags[subtag], name],
           },
-        }
-      })
+        };
+      });
     } else {
       setYml((s) => {
-
         return {
           ...s,
           tags: {
             ...s.tags,
             [subtag]: s.tags[subtag].filter((e: string) => e !== name),
           },
-        }
-
-
-      })
+        };
+      });
     }
   };
 
@@ -112,7 +109,7 @@ const LandingpageDatamodal = () => {
 
     setYml((s) => ({
       ...s,
-       [name]: value ,
+      [name]: value,
     }));
   };
 

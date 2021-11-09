@@ -1,0 +1,9 @@
+{
+    "extends": "./tsconfig.node.json",
+    "include": [
+        "src/root/index.ts"
+    ],
+    "compilerOptions": {
+        "outDir": "/dist/models/",
+      },
+}

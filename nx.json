@@ -18,39 +18,26 @@
       }
     }
   },
-  "projects": {
-    "api-interfaces": {
-      "tags": []
-    },
-    "auth": {
-      "tags": []
-    },
-    "backend": {
-      "tags": []
-    },
-    "frontend": {
-      "tags": []
-    },
-    "github": {
-      "tags": []
-    },
-    "lesson": {
-      "tags": []
-    },
-    "nestbackend": {
-      "tags": []
-    },
-    "session": {
-      "tags": []
-    },
-    "thumb": {
-      "tags": []
-    },
-    "thumbnailer": {
-      "tags": []
-    },
-    "user": {
-      "tags": []
+  "cli": {
+    "defaultCollection": "@nrwl/react"
+  },
+  "generators": {
+    "@nrwl/react": {
+      "application": {
+        "style": "scss",
+        "linter": "eslint",
+        "strict": true,
+        "babel": true
+      },
+      "component": {
+        "style": "scss"
+      },
+      "library": {
+        "style": "scss",
+        "linter": "eslint",
+        "strict": true
+      }
     }
-  }
+  },
+  "defaultProject": "frontend"
 }

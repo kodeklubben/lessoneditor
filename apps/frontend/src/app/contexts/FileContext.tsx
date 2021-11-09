@@ -7,8 +7,8 @@ import { useLessonContext } from "./LessonContext";
 import { filenameParser } from "../utils/filename-parser";
 import axios from "axios";
 import { paths } from "@lessoneditor/api-interfaces";
-import { FileDTO, HeaderData, UpdatedFileDTO } from "@libs/lesson/src/lib/lesson.dto";
-import { YamlContent } from "@libs/lesson/src/lib/lesson.dto";
+import { FileDTO, HeaderData, UpdatedFileDTO } from "@lessoneditor/contracts";
+import { YamlContent } from "@lessoneditor/contracts";
 import {
   FileContextModel,
   FileContextState,

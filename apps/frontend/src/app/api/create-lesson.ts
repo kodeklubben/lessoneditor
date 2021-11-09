@@ -1,5 +1,5 @@
 import { paths } from "@lessoneditor/api-interfaces";
-import { NewLessonDTO } from "../../../../../libs/lesson/src/lib/lesson.dto";
+import { NewLessonDTO } from "@lessoneditor/contracts";
 import axios from "axios";
 
 const createLesson = async (userId: number, data: NewLessonDTO) => {

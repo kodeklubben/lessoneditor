@@ -2,11 +2,11 @@ import { FC, useState, Ref } from "react";
 import ShowSpinner from "../ShowSpinner";
 import uploadImage from "../../api/upload-image";
 import { useParams } from "react-router";
-import { Modal, Button, Header} from "semantic-ui-react";
+import { Modal, Button, Header } from "semantic-ui-react";
 import { read } from "fs";
 import { paths } from "@lessoneditor/api-interfaces";
 import axios from "axios";
-import { NewFileDTO } from "../../../../../../libs/lesson/src/lib/lesson.dto"
+import { NewFileDTO } from "@lessoneditor/contracts";
 import { useLessonContext } from "../../contexts/LessonContext";
 
 const imgRegex = /^[\w-]+(.jpg|.jpeg|.gif|.png)$/i;
@@ -55,12 +55,13 @@ const ImageUpload: FC<ImageUploadProps> = ({
       );
       start = start - 2;
       end = end - 18 + fileNameErrorMessage.length;
-    } 
-    else {
+    } else {
       setMdText(
         mdText.slice(0, cursorPositionStart) +
-          "![Bildebeskrivelse](" + "\"" +
-          imageInputValue + "\"" +
+          "![Bildebeskrivelse](" +
+          '"' +
+          imageInputValue +
+          '"' +
           ")" +
           mdText.slice(cursorPositionStart)
       );
@@ -81,36 +82,32 @@ const ImageUpload: FC<ImageUploadProps> = ({
         return;
       }
       if (imgRegex.test(event.target.files[0].name)) {
-        const file: File = event.target.files[0]
+        const file: File = event.target.files[0];
         setShowSpinner(true);
-        const reader = new FileReader()
-        reader.readAsDataURL(event.target.files[0])
+        const reader = new FileReader();
+        reader.readAsDataURL(event.target.files[0]);
         reader.onload = async () => {
-          try{
-            if(reader.result)
-            {
-              const newFileDTO: NewFileDTO = 
-              {
+          try {
+            if (reader.result) {
+              const newFileDTO: NewFileDTO = {
                 filename: file.name.split(".")[0].toLowerCase(),
                 ext: "." + file.name.split(".").pop()?.toLowerCase(),
-                content: reader.result.toString().split(`data:${file.type};base64,`).pop()!
-              }
-              await axios.post(paths.LESSON_FILES
-                .replace(":lessonId", state.lesson.lessonId.toString())
-                ,newFileDTO)
-              
+                content: reader.result.toString().split(`data:${file.type};base64,`).pop()!,
+              };
+              await axios.post(
+                paths.LESSON_FILES.replace(":lessonId", state.lesson.lessonId.toString()),
+                newFileDTO
+              );
+
               setShowSpinner(false);
               imageSubmitHandler(newFileDTO.filename + newFileDTO.ext);
             }
+          } catch (error) {
+            console.error(error);
           }
-          catch(error)
-          {
-            console.error(error)
-          }
-        }
-       
+        };
       } else {
-        setErrorMessage("fileNameError")
+        setErrorMessage("fileNameError");
         setShowModal(true);
       }
     } catch (err) {
@@ -121,7 +118,7 @@ const ImageUpload: FC<ImageUploadProps> = ({
   const onClose = () => {
     setErrorMessage("");
     setShowModal(false);
-  }
+  };
 
   return (
     <>
@@ -133,18 +130,13 @@ const ImageUpload: FC<ImageUploadProps> = ({
         ref={uploadImageRef}
         onChange={fileSelectedHandler}
       />
-        <Modal
-        open={showModal}
-        >
+      <Modal open={showModal}>
         <Modal.Header className="editor_modal">
-          <Header as="h1">
-          </Header>
+          <Header as="h1"></Header>
         </Modal.Header>
-        <Modal.Content className="editor_modal">
-          {errorMessage}
-        </Modal.Content>
+        <Modal.Content className="editor_modal">{errorMessage}</Modal.Content>
         <Modal.Actions className="editor_modal">
-          <Button onClick={onClose} content="OK"/>
+          <Button onClick={onClose} content="OK" />
         </Modal.Actions>
       </Modal>
     </>

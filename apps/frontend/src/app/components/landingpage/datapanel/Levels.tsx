@@ -1,7 +1,7 @@
 import { Dropdown, Header } from "semantic-ui-react";
 import { FORM_TEXT, levelOptions } from "../settingsFiles/languages/landingpage_NO";
 import { FC, SyntheticEvent } from "react";
-import { YamlContent } from "@libs/lesson/src/lib/lesson.dto";
+import { YamlContent } from "@lessoneditor/contracts";
 
 interface LevelsProps {
   changeHandler: (e: SyntheticEvent, data: Record<string, string>) => void;

@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Lesson, paths, User } from "@lessoneditor/api-interfaces";
-import { UserDTO } from "@libs/user/src/lib/user.dto";
-import { LessonDTO, NewLessonDTO } from "@libs/lesson/src/lib/lesson.dto";
+import { UserDTO } from "@lessoneditor/contracts";
+import { LessonDTO, NewLessonDTO } from "@lessoneditor/contracts";
 
 import {
   initialUserContextState,

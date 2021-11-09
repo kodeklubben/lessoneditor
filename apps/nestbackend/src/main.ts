@@ -9,7 +9,7 @@ import * as bodyParser from "body-parser";
 import { AppModule } from "./app/app.module";
 import * as Express from "express";
 import * as ExpressSession from "express-session";
-import { Session } from "../../../libs/session/src/lib/session.entity";
+import { Session } from "./session/session.entity";
 import { Connection } from "typeorm";
 import { TypeormStore } from "connect-typeorm";
 import * as passport from "passport";
@@ -19,7 +19,7 @@ async function bootstrap() {
   const sessionRepsitory = app.get(Connection).getRepository(Session);
   app.enableCors();
 
-  app.use(bodyParser.json({limit:'50mb'}));
+  app.use(bodyParser.json({ limit: "50mb" }));
   app.use(
     ExpressSession({
       resave: false,

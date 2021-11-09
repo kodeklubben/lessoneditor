@@ -1,11 +1,11 @@
 import { useHistory } from "react-router";
 import { Button, Card, Image } from "semantic-ui-react";
 import { FC, useState, useEffect } from "react";
-import nbFlag from "/assets/public/languagesFlag/flag_nb.svg";
-import nnFlag from "/assets/public/languagesFlag/flag_nn.svg";
-import enFlag from "/assets/public/languagesFlag/flag_en.svg";
-import isFlag from "/assets/public/languagesFlag/flag_is.svg";
-import noLessonPreviewImage from "/assets/public/landingPage/image.png";
+import nbFlag from "../../../../src/assets/public/languagesFlag/flag_nb.svg"
+import nnFlag from "../../../../src/assets/public/languagesFlag/flag_nn.svg";
+import enFlag from "../../../../src/assets/public/languagesFlag/flag_en.svg";
+import isFlag from "../../../../src/assets/public/languagesFlag/flag_is.svg";
+import noLessonPreviewImage from "../../../../src/assets/public/landingPage/image.png";
 import { useLessonContext } from "../../contexts/LessonContext";
 import axios from "axios";
 import { paths } from "@lessoneditor/api-interfaces";

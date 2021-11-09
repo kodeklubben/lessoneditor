@@ -1,4 +1,4 @@
-import { LessonDTO, FileDTO } from "@libs/lesson/src/lib/lesson.dto";
+import { LessonDTO, FileDTO } from "@lessoneditor/contracts";
 import React, { useEffect, useState } from "react";
 import { Button, Card, Image, Icon } from "semantic-ui-react";
 import { paths } from "@lessoneditor/api-interfaces";

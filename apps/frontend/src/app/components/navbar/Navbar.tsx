@@ -3,7 +3,7 @@ import { FC } from "react";
 import { useHistory } from "react-router-dom";
 import ProfileMenu from "./ProfileMenu";
 import { useUserContext } from "../../contexts/UserContext";
-import logo from "/assets/public/lav_logo.jpg";
+import logo from "../../../../src/assets/public/lav_logo.jpg";
 
 const Navbar: FC = (props) => {
   const { state: userState } = useUserContext();

@@ -8,14 +8,10 @@
   "synchronize": false,
   "logging": false,
   "entities": [
-    "libs/lesson/src/lib/lesson.entity.ts",
-    "libs/user/src/lib/user.entity.ts",
-    "libs/session/src/lib/session.entity.ts"
+    "dist/**/*.entity.js"
   ],
-  "migrations": [
-     "db/migration/**/*.ts"
-  ],
+  "migrations": ["dist/**/migration/**/*.js"],
   "cli": {
-      "migrationsDir": "db/migration"
+    "migrationsDir": "db/migration"
   }
 }

@@ -7,13 +7,10 @@ import {
   LessonDTO,
   FileDTO,
   YamlContent,
-} from "../../../../../libs/lesson/src/lib/lesson.dto";
-import {
-  LessonContextState,
-  LessonContextModel,
-} from "./lessonContext.functions";
+} from "@lessoneditor/contracts";
+import { LessonContextState, LessonContextModel } from "./lessonContext.functions";
 import ShowSpinner from "../components/ShowSpinner";
-import { paths } from "../../../../../libs/api-interfaces/src/lib/api-interfaces";
+import { paths } from "@lessoneditor/api-interfaces";
 import { useUserContext } from "./UserContext";
 import { stringify } from "querystring";
 
@@ -24,9 +21,13 @@ export const LessonContextProvider = (props: any) => {
   const { lessonId } = useParams<{ lessonId: string }>();
   const { lessonDataPath, lessonYamlPath, lessonFilesPath } = getLessonPaths(lessonId);
 
-  const [lesson, setLesson] = useState<LessonDTO | undefined>(undefined)
-  const [files, setFiles] = useState<string[]>([])
-  const [yml, setYml] = useState<YamlContent>({ level: 1, license: "CC BY-SA 4.0", tags: { grade: [], subject: [], topic: [] } })
+  const [lesson, setLesson] = useState<LessonDTO | undefined>(undefined);
+  const [files, setFiles] = useState<string[]>([]);
+  const [yml, setYml] = useState<YamlContent>({
+    level: 1,
+    license: "CC BY-SA 4.0",
+    tags: { grade: [], subject: [], topic: [] },
+  });
 
   useEffect(() => {
     async function fetchLessonData() {
@@ -38,10 +39,9 @@ export const LessonContextProvider = (props: any) => {
         const yamlFile = await axios.get<FileDTO<YamlContent>>(
           paths.LESSON_FILE.replace(":lessonId", lessonId).replace(":fileName", "lesson")
         );
-        setFiles(fileNames.data)
-        setYml(yamlFile.data.content)
-        setLesson(lesson.data)
-   
+        setFiles(fileNames.data);
+        setYml(yamlFile.data.content);
+        setLesson(lesson.data);
       } catch (error) {
         console.error(error);
       }
@@ -59,7 +59,7 @@ export const LessonContextProvider = (props: any) => {
         ),
         data
       );
-      setYml(updatedFile.data.content)
+      setYml(updatedFile.data.content);
     } catch (error) {
       console.error(error);
     }
@@ -70,16 +70,13 @@ export const LessonContextProvider = (props: any) => {
       paths.USER_LESSON_UPDATE.replace(":userId", state.user!.userId.toString()),
       data
     );
-    setLesson(savedLesson.data)
+    setLesson(savedLesson.data);
   };
 
-
-  if(!lesson)
-  {
-    return <ShowSpinner></ShowSpinner>
-
+  if (!lesson) {
+    return <ShowSpinner></ShowSpinner>;
   }
-  
+
   const lessonState: LessonContextState = {
     lesson: lesson,
     files: files,
@@ -92,8 +89,6 @@ export const LessonContextProvider = (props: any) => {
     updateLesson: updatelesson,
     updateYaml: updateYaml,
   };
-
-
 
   return (
     <>

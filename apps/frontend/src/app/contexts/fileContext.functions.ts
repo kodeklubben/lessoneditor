@@ -1,4 +1,4 @@
-import { HeaderData } from "libs/lesson/src/lib/lesson.dto";
+import { HeaderData } from "@lessoneditor/contracts";
 
 export interface FileContextState {
   rawMdFileContent: string | undefined;

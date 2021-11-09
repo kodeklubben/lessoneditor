@@ -1,7 +1,7 @@
-import { LessonDTO, NewLessonDTO, YamlContent } from "@libs/lesson/src/lib/lesson.dto";
+import { LessonDTO, NewLessonDTO, YamlContent } from "@lessoneditor/contracts";
 
 export interface LessonContextState {
-  lesson: LessonDTO ;
+  lesson: LessonDTO;
   files: string[];
   yml: YamlContent;
 }
@@ -12,4 +12,3 @@ export interface LessonContextModel {
   updateLesson: (data: NewLessonDTO) => void;
   updateYaml: (lessonId: string, data: YamlContent) => void;
 }
-
