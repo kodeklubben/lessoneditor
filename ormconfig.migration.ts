@@ -1,4 +1,4 @@
-{
+const config = {
   "type": "postgres",
   "host": "localhost",
   "port": 5432,
@@ -7,9 +7,15 @@
   "database": "lesson-editor",
   "synchronize": false,
   "logging": false,
-  "entities": ["libs/domain/src/lib/*.entity.ts"],
+  "entities": [
+    "apps/nestbackend/src/user/user.entity.ts",
+    "apps/nestbackend/src/lesson/lesson.entity.ts",
+    "apps/nestbackend/src/session/session.entity.ts"
+  ],
   "migrations": ["db/migration/**/*.ts"],
   "cli": {
     "migrationsDir": "db/migration"
   }
 }
+
+export default config;

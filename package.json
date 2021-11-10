@@ -7,6 +7,8 @@
     "start:dev": "ts-node -P apps/nestbackend/tsconfig.app.json apps/nestbackend/src/main.ts",
     "nx": "nx",
     "start": "nx serve",
+    "build-nestbackend": "tsc --p apps/nestbackend/tsconfig.app.json",
+    "start-nestbackend": "node dist/apps/nestbackend/apps/nestbackend/src/main.js",
     "start-all": "(ts-node -P apps/nestbackend/tsconfig.app.json apps/nestbackend/src/main.ts) & (nx run-many --target=serve --projects=frontend,thumbnailer --parallel=true)",
     "start-dist": "npm run build-all && node -r dotenv/config ./dist/apps/backend/main.js",
     "build": "nx build",
