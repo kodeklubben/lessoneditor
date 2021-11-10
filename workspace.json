@@ -185,57 +185,6 @@
       },
       "tags": []
     },
-    "nestbackend": {
-      "root": "apps/nestbackend",
-      "sourceRoot": "apps/nestbackend/src",
-      "projectType": "application",
-      "targets": {
-        "build": {
-          "executor": "@nrwl/node:build",
-          "outputs": ["{options.outputPath}"],
-          "options": {
-            "outputPath": "dist/apps/nestbackend",
-            "main": "apps/nestbackend/src/main.ts",
-            "tsConfig": "apps/nestbackend/tsconfig.app.json",
-            "assets": ["apps/nestbackend/src/assets"]
-          },
-          "configurations": {
-            "production": {
-              "optimization": true,
-              "extractLicenses": true,
-              "inspect": false,
-              "fileReplacements": [
-                {
-                  "replace": "apps/nestbackend/src/environments/environment.ts",
-                  "with": "apps/nestbackend/src/environments/environment.prod.ts"
-                }
-              ]
-            }
-          }
-        },
-        "serve": {
-          "executor": "@nrwl/node:execute",
-          "options": {
-            "buildTarget": "nestbackend:build"
-          }
-        },
-        "lint": {
-          "executor": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["apps/nestbackend/**/*.ts"]
-          }
-        },
-        "test": {
-          "executor": "@nrwl/jest:jest",
-          "outputs": ["coverage/apps/nestbackend"],
-          "options": {
-            "jestConfig": "apps/nestbackend/jest.config.js",
-            "passWithNoTests": true
-          }
-        }
-      },
-      "tags": []
-    },
     "thumbnailer": {
       "root": "apps/thumbnailer",
       "sourceRoot": "apps/thumbnailer/src",

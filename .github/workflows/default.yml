@@ -41,7 +41,10 @@ jobs:
             cache-nx-${{ hashFiles('package-lock.json') }}-
             cache-nx-
       - run: npm run test-all
+      - run: npm run test-nestbackend
       - run: npm run build-all
+      - run: npm run build-nestbackend
+      - run: npm r
       - name: Caching Dist Folder
         uses: actions/cache@v2
         with:
