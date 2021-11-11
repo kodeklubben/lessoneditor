@@ -1,4 +1,4 @@
-const config = {
+module.exports = {
   "type": "postgres",
   "host": "localhost",
   "port": 5432,
@@ -8,14 +8,10 @@ const config = {
   "synchronize": false,
   "logging": false,
   "entities": [
-    "apps/nestbackend/src/user/user.entity.ts",
-    "apps/nestbackend/src/lesson/lesson.entity.ts",
-    "apps/nestbackend/src/session/session.entity.ts"
+    "dist/**/*.entity.js"
   ],
-  "migrations": ["db/migration/**/*.ts"],
+  "migrations": ["db/migration/**/*.js"],
   "cli": {
     "migrationsDir": "db/migration"
   }
 }
-
-export default config;
