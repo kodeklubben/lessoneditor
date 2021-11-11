@@ -78,8 +78,10 @@ jobs:
         with:
           args: info
       - name: fetch access token
-        run: ACCESS_TOKEN=$(gcloud auth print-access-token)
-      - run: echo "ACCESS_TOKEN=${gcloud auth print-access-token}" >> $GITHUB_ENV
+        run: echo ${{ secrets.SERVICE_ACCOUNT }} > credentials.json
+      - run: gcloud auth activate-service-account github-actions@lessoneditor.iam.gserviceaccount.com --key-file=credentials.json
+      - run: ACCESS_TOKEN=$(gcloud auth print-access-token)
+      - run: echo "ACCESS_TOKEN=${ACCESS_TOKEN}" >> $GITHUB_ENV
       - name: run migrations
         run: node ./node_modules/typeorm/cli.js --config ormconfig.migration.js migration:run
         env:
