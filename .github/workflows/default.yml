@@ -78,7 +78,7 @@ jobs:
         with:
           args: info
       - name: fetch access token
-        run: echo ${{ secrets.SERVICE_ACCOUNT }} > credentials.json
+        run: echo "test" > credentials.json
       - run: gcloud auth activate-service-account github-actions@lessoneditor.iam.gserviceaccount.com --key-file=credentials.json
       - run: ACCESS_TOKEN=$(gcloud auth print-access-token)
       - run: echo "ACCESS_TOKEN=${ACCESS_TOKEN}" >> $GITHUB_ENV
@@ -87,7 +87,7 @@ jobs:
         env:
           TYPEORM_CONNECTION: postgres
           TYPEORM_HOST: 35.228.106.158 
-          TYPEORM_USERNAME: postgres
+          TYPEORM_USERNAME: github-actions@lessoneditor.iam
           TYPEORM_PASSWORD: ${{ env.ACCESS_TOKEN }}
           TYPEORM_DATABASE: lessoneditor
           TYPEORM_PORT: 5432
