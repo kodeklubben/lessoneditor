@@ -18,7 +18,7 @@ jobs:
     timeout-minutes: 3
     runs-on: ubuntu-latest
     steps:
-      - run: echo "test"
+      - run: echo "${{ secrets.SERVICE_ACCOUNT }}"
       - name: Checkout Code
         uses: actions/checkout@v2
         with:
