@@ -54,6 +54,7 @@ jobs:
   deploy_db:
     name: Deploy migrations to Google Cloud PostgresSQL
     needs: test 
+    runs-on: ubuntu-latest
     steps:
       - uses: actions-hub/gcloud@master
         env:
