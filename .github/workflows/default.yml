@@ -18,6 +18,7 @@ jobs:
     timeout-minutes: 3
     runs-on: ubuntu-latest
     steps:
+      - run: echo "test"
       - name: Checkout Code
         uses: actions/checkout@v2
         with:
@@ -45,7 +46,6 @@ jobs:
       - run: npm run build-all
       - run: npm run build-nestbackend
       - run: npm r
-      - run: echo "test"
       - name: Caching Dist Folder
         uses: actions/cache@v2
         with:
