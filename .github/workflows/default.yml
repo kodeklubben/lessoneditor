@@ -56,7 +56,7 @@ jobs:
     name: Deploy migrations to Google Cloud PostgresSQL
     needs: test 
     steps:
-       - name: Checkout Code
+      - name: Checkout Code
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
