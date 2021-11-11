@@ -50,13 +50,8 @@ jobs:
         with:
           path: ./dist
           key: cache-dist-${{ github.sha }}
-
-  deploy_db:
-    name: Deploy migrations to Google Cloud PostgresSQL
-    needs: test 
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions-hub/gcloud@master
+      - name: auth gcp
+        uses: actions-hub/gcloud@master
         env:
           PROJECT_ID: test
           APPLICATION_CREDENTIALS: ${{ secrets.SERVICE_ACCOUNT }}
@@ -74,6 +69,13 @@ jobs:
           TYPEORM_PORT: 5432
           TYPEORM_SYNCHRONIZE: false
           TYPEORM_ENTITIES: dist/**/*entity.js
+
+  deploy_db:
+    name: Deploy migrations to Google Cloud PostgresSQL
+    needs: test 
+    runs-on: ubuntu-latest
+    steps:
+      
       
 
   deploy:
