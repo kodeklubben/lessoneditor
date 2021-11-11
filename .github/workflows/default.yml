@@ -51,26 +51,6 @@ jobs:
         with:
           path: ./dist
           key: cache-dist-${{ github.sha }}
-
-  deploy_db:
-    name: Deploy migrations to Google Cloud PostgresSQL
-    runs-on: ubuntu-latest
-    needs: test 
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: Restore node modules
-        uses: actions/cache@v1
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-      - name: Restoring dist folder
-        uses: actions/cache@v2
-        with:
-          path: ./dist
-          key: cache-dist-${{ github.sha }}
       - uses: actions-hub/gcloud@master
         env:
           PROJECT_ID: test
@@ -93,7 +73,7 @@ jobs:
           TYPEORM_PORT: 5432
           TYPEORM_SYNCHRONIZE: false
           TYPEORM_ENTITIES: dist/**/*entity.js
-      
+     
 
   deploy:
     name: Deploy to Google App Engine
