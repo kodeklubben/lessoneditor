@@ -51,6 +51,33 @@ jobs:
           path: ./dist
           key: cache-dist-${{ github.sha }}
 
+  deploy_db:
+    name: Deploy migrations to Google Cloud PostgresSQL
+    needs: test 
+    steps:
+      - uses: actions-hub/gcloud@master
+        env:
+          PROJECT_ID: test
+          APPLICATION_CREDENTIALS: ${{ secrets.SERVICE_ACCOUNT }}
+        with:
+          args: info
+      - name: fetch access token
+        run: echo ${{ secrets.SERVICE_ACCOUNT }} > credentials.json
+        run: gcloud auth activate-service-account github-actions@lessoneditor.iam.gserviceaccount.com --key-file=credentials.json
+        run: echo "{ACCESS_TOKEN}={gcloud auth print-access-token}" >> $GITHUB_ENV
+      - name: run migrations
+        run: 
+        env:
+          TYPEORM_CONNECTION: postgres
+          TYPEORM_HOST: 35.228.106.158 
+          TYPEORM_USERNAME: postgres
+          TYPEORM_PASSWORD: ${{ env.ACCESS_TOKEN }}
+          TYPEORM_DATABASE: lessoneditor
+          TYPEORM_PORT: 5432
+          TYPEORM_SYNCHRONIZE: false
+          TYPEORM_ENTITIES: dist/**/*entity.js
+      
+
   deploy:
     name: Deploy to Google App Engine
     timeout-minutes: 3

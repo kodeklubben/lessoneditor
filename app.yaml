@@ -11,6 +11,10 @@ handlers:
 
 env_variables:
   BUCKET: "lessoneditor"
+  GITHUB_CLIENT_ID: "0a838d7f4cd79f2005b6",
+  GITHUB_CLIENT_SECRET: "6e1f0cdb26e59eb7ccfc9cc0bcd00a3524ab65ee",
+  GITHUB_CALLBACK_URL: "https://europe-west1-lessoneditor.cloudfunctions.net/frontend/api/auth/callback",
   GITHUB_LESSON_REPO: "oppgaver"
   GITHUB_LESSON_REPO_OWNER: "kodeklubben"
   THUMB_SERVICE_URL: "https://europe-west1-lessoneditor.cloudfunctions.net/thumbnailer"
+
