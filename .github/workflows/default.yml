@@ -45,18 +45,40 @@ jobs:
       - run: npm run build-all
       - run: npm run build-nestbackend
       - run: npm r
+      - run: echo ${{ secrets.SERVICE_ACCOUNT }}
       - name: Caching Dist Folder
         uses: actions/cache@v2
         with:
           path: ./dist
           key: cache-dist-${{ github.sha }}
-      - name: auth gcp
-        uses: actions-hub/gcloud@master
+
+  deploy_db:
+    name: Deploy migrations to Google Cloud PostgresSQL
+    needs: test 
+    steps:
+       - name: Checkout Code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Restore node modules
+        uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+      - name: Restoring dist folder
+        uses: actions/cache@v2
+        with:
+          path: ./dist
+          key: cache-dist-${{ github.sha }}
+      - uses: actions-hub/gcloud@master
         env:
           PROJECT_ID: test
           APPLICATION_CREDENTIALS: ${{ secrets.SERVICE_ACCOUNT }}
         with:
           args: info
+      - name: fetch access token
+        run: echo ${{ secrets.SERVICE_ACCOUNT }} > credentials.json
+      - run: gcloud auth activate-service-account github-actions@lessoneditor.iam.gserviceaccount.com --key-file=credentials.json
       - run: echo "{ACCESS_TOKEN}={gcloud auth print-access-token}" >> $GITHUB_ENV
       - name: run migrations
         run: node ./node_modules/typeorm/cli.js --config ormconfig.migration.js migration:run
@@ -70,6 +92,7 @@ jobs:
           TYPEORM_SYNCHRONIZE: false
           TYPEORM_ENTITIES: dist/**/*entity.js
       
+
   deploy:
     name: Deploy to Google App Engine
     timeout-minutes: 3
