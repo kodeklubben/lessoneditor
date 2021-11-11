@@ -69,15 +69,7 @@ jobs:
           TYPEORM_PORT: 5432
           TYPEORM_SYNCHRONIZE: false
           TYPEORM_ENTITIES: dist/**/*entity.js
-
-  deploy_db:
-    name: Deploy migrations to Google Cloud PostgresSQL
-    needs: test 
-    runs-on: ubuntu-latest
-    steps:
       
-      
-
   deploy:
     name: Deploy to Google App Engine
     timeout-minutes: 3
