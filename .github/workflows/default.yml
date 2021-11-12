@@ -72,7 +72,7 @@ jobs:
           TYPEORM_CONNECTION: postgres
           TYPEORM_HOST: localhost 
           TYPEORM_USERNAME: github-actions@lessoneditor.iam
-          TYPEORM_PASSWORD: $ACCESS_TOKEN
+          TYPEORM_PASSWORD: ${{ env.ACCESS_TOKEN }}
           TYPEORM_DATABASE: lessoneditor
           TYPEORM_PORT: 5432
           TYPEORM_SYNCHRONIZE: false
