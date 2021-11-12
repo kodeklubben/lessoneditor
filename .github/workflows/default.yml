@@ -114,5 +114,5 @@ jobs:
       - name: Deploy to Google App Engine
         uses: atRobertoFlores/gae_deploy_action@master
         with:
-          service_account: ${{ secrets.SERVICE_ACCOUNT }}
+          service_account: ${{ secrets.SERVICE_ACCOUNT }} | base64 --decode
           project_name: lessoneditor
