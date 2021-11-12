@@ -6,7 +6,7 @@
   "scripts": {
     "start:dev": "ts-node -P apps/nestbackend/tsconfig.app.json apps/nestbackend/src/main.ts",
     "nx": "nx",
-    "start": "nx serve",
+    "start": "(node dist/apps/nestbackend/apps/nestbackend/src/main.js) && (nx run-many --target=serve --projects=frontend,thumbnailer --parallel=true)",
     "build-nestbackend": "tsc --p apps/nestbackend/tsconfig.app.json",
     "start-nestbackend": "node dist/apps/nestbackend/apps/nestbackend/src/main.js",
     "test-nestbackend": "jest -c apps/nestbackend/jest.config.js",
@@ -85,7 +85,8 @@
     "rxjs": "^7.4.0",
     "sequelize": "^6.7.0",
     "tslib": "^2.3.1",
-    "typeorm": "^0.2.40"
+    "typeorm": "^0.2.40",
+    "ts-node": "^10.4.0"
   },
   "devDependencies": {
     "@babel/core": "7.15.8",
@@ -176,7 +177,7 @@
     "source-map-loader": "^3.0.0",
     "terser-webpack-plugin": "^5.2.4",
     "ts-jest": "27.0.6",
-    "ts-node": "^10.3.0",
+    "ts-node": "^10.4.0",
     "typescript": "^4.4.4",
     "url-regex-safe": "^2.0.2",
     "webpack": "^5.58.2",
