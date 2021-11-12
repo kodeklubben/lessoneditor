@@ -15,28 +15,28 @@ interface YmlData {
 
 const LandingpageDatamodal = () => {
   const lessonContext = useLessonContext();
-  const { ymlData, setYmlData, saveYmlData } = lessonContext;
+  const { state, setYml } = lessonContext;
   const [checkBoxState, setCheckBoxState] = useState({});
 
   useEffect(() => {
     const mapYamlTags = () => {
       let obj: Record<string, boolean> = {};
 
-      obj = ymlData.tags.topic.reduce(
+      obj = state.yml.tags.topic.reduce(
         (accumulator: { [x: string]: boolean }, currentValue: string) => {
           accumulator[currentValue] = true;
           return accumulator;
         },
         { ...obj }
       );
-      obj = ymlData.tags.subject.reduce(
+      obj = state.yml.tags.subject.reduce(
         (accumulator: { [x: string]: boolean }, currentValue: string) => {
           accumulator[currentValue] = true;
           return accumulator;
         },
         { ...obj }
       );
-      obj = ymlData.tags.grade.reduce(
+      obj = state.yml.tags.grade.reduce(
         (accumulator: { [x: string]: boolean }, currentValue: string) => {
           accumulator[currentValue] = true;
           return accumulator;
@@ -45,20 +45,15 @@ const LandingpageDatamodal = () => {
       );
       setCheckBoxState((prevState) => ({ ...prevState, ...obj }));
     };
-    if (ymlData) {
+    if (state.yml) {
       mapYamlTags();
     }
-  }, [ymlData]);
+  }, [state.yml]);
 
-  useEffect(() => {
-    return () => {
-      saveYmlData(ymlData);
-    };
-  });
 
   const dropdownHandler = (event: SyntheticEvent, data: Record<string, string>) => {
-    setYmlData((prevState: YmlData) => ({
-      ...prevState,
+    setYml((s) => ({
+      ...s,
       [data.name]: data.value,
     }));
   };
@@ -75,20 +70,20 @@ const LandingpageDatamodal = () => {
       ...prevState,
       [name]: value,
     }));
-    if (!ymlData.tags[subtag].includes(name)) {
-      setYmlData((prevState: YmlData) => ({
-        ...prevState,
+    if (!state.yml.tags[subtag].includes(name)) {
+      setYml((s) => ({
+        ...s,
         tags: {
-          ...prevState.tags,
-          [subtag]: [...prevState.tags[subtag], name],
+          ...s.tags,
+          [subtag]: [...s.tags[subtag], name],
         },
       }));
     } else {
-      setYmlData((prevState: YmlData) => ({
-        ...prevState,
+      setYml((s) => ({
+        ...s,
         tags: {
-          ...prevState.tags,
-          [subtag]: prevState.tags[subtag].filter((e: string) => e !== name),
+          ...s.tags,
+          [subtag]: s.tags[subtag].filter((e: string) => e !== name),
         },
       }));
     }
@@ -98,8 +93,8 @@ const LandingpageDatamodal = () => {
     const name = data.name;
     const value = data.value;
 
-    setYmlData((prevState: YmlData) => ({
-      ...prevState,
+    setYml((s) => ({
+      ...s,
       [name]: value,
     }));
   };
@@ -131,12 +126,12 @@ const LandingpageDatamodal = () => {
             />
           </Grid.Column>
           <Grid.Column>
-            <Levels changeHandler={dropdownHandler} data={ymlData} />
+            <Levels changeHandler={dropdownHandler} data={state.yml} />
           </Grid.Column>
         </Grid.Row>
       </Grid>
 
-      <License changeHandler={changeHandler} data={ymlData} />
+      <License changeHandler={changeHandler} data={state.yml} />
     </Container>
   );
 };

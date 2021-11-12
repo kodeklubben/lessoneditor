@@ -2,31 +2,31 @@ import { buttonAction } from "./buttonMethods";
 import { emphasis, lists } from "../settings/buttonConfig";
 import { DEFAULT_TEXT } from "../../../settingsFiles/languages/editor_NO";
 
-const testListInput = {
-  isOn: false,
-  mdText: "Dette er en test",
-  cursorPositionStart: 2,
-  cursorPositionEnd: 2,
-};
+// const testListInput = {
+//   isOn: false,
+//   mdText: "Dette er en test",
+//   cursorPositionStart: 2,
+//   cursorPositionEnd: 2,
+// };
 
-const getListResults = (
-  cursorIntON: number,
-  cursorIntOFF: number,
-  Output: string,
-  mdText = testListInput.mdText,
-  cursorPositionStart = testListInput.cursorPositionStart,
-  cursorPositionEnd = testListInput.cursorPositionEnd
-) => {
-  return buttonAction(
-    false,
-    mdText,
-    cursorPositionStart,
-    cursorPositionEnd,
-    cursorIntON,
-    cursorIntOFF,
-    Output
-  );
-};
+// const getListResults = (
+//   cursorIntON: number,
+//   cursorIntOFF: number,
+//   Output: string,
+//   mdText = testListInput.mdText,
+//   cursorPositionStart = testListInput.cursorPositionStart,
+//   cursorPositionEnd = testListInput.cursorPositionEnd
+// ) => {
+//   return buttonAction(
+//     false,
+//     mdText,
+//     cursorPositionStart,
+//     cursorPositionEnd,
+//     cursorIntON,
+//     cursorIntOFF,
+//     Output
+//   );
+// };
 
 describe("buttonAction", () => {
   it("dummy", () =>{

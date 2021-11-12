@@ -1,4 +1,3 @@
-import "./landingpage.scss";
 import LessonCard from "./LessonCard";
 import { Card } from "semantic-ui-react";
 import { FC } from "react";

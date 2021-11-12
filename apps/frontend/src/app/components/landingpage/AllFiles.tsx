@@ -1,4 +1,3 @@
-import "./landingpage.scss";
 import { useLessonContext } from "../../contexts/LessonContext";
 
 const AllFiles = () => {
