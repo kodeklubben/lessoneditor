@@ -64,6 +64,8 @@ jobs:
       - run: gcloud auth activate-service-account github-actions@lessoneditor.iam.gserviceaccount.com --key-file=credentials.json
       - run: ACCESS_TOKEN=$(gcloud auth print-access-token)
       - run: echo "ACCESS_TOKEN=${ACCESS_TOKEN}" >> $GITHUB_ENV
+      - run: echo $ACCESS_TOKEN
+      - run: echo $GITHUB_ENV
       - name: run migrations
         run: (./cloud_sql_proxy -instances=lessoneditor:europe-north1:lessoneditor=tcp:5432 -credential_file=credentials.json & sleep 2) && node ./node_modules/typeorm/cli.js  migration:run
         env:
