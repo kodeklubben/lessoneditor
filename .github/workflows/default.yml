@@ -62,6 +62,7 @@ jobs:
       - name: fetch access token
         run: echo ${{ secrets.SERVICE_ACCOUNT }} | base64 --decode > credentials.json
       - run: gcloud auth activate-service-account github-actions@lessoneditor.iam.gserviceaccount.com --key-file=credentials.json
+      - run: gcloud auth print-access-token
       - run: ACCESS_TOKEN=$(gcloud auth print-access-token)
       - run: echo "ACCESS_TOKEN=${ACCESS_TOKEN}" >> $GITHUB_ENV
       - run: echo $ACCESS_TOKEN
@@ -72,7 +73,7 @@ jobs:
           TYPEORM_CONNECTION: postgres
           TYPEORM_HOST: localhost 
           TYPEORM_USERNAME: github-actions@lessoneditor.iam
-          TYPEORM_PASSWORD: ${{ env.ACCESS_TOKEN }}
+          TYPEORM_PASSWORD: $ACCESS_TOKEN
           TYPEORM_DATABASE: lessoneditor
           TYPEORM_PORT: 5432
           TYPEORM_SYNCHRONIZE: false
