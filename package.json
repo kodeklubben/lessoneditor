@@ -85,8 +85,7 @@
     "rxjs": "^7.4.0",
     "sequelize": "^6.7.0",
     "tslib": "^2.3.1",
-    "typeorm": "^0.2.40",
-    "ts-node": "^10.4.0"
+    "typeorm": "^0.2.40"
   },
   "devDependencies": {
     "@babel/core": "7.15.8",

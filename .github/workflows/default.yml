@@ -66,6 +66,7 @@ jobs:
       - run: ACCESS_TOKEN=$(gcloud auth print-access-token); echo "ACCESS_TOKEN=${ACCESS_TOKEN}" >> $GITHUB_ENV
       - run: echo $ACCESS_TOKEN
       - run: echo ${{ env.ACCESS_TOKEN }}
+      - run: npm install -g ts-node
       - name: run migrations
         run: (./cloud_sql_proxy -instances=lessoneditor:europe-north1:lessoneditor=tcp:5432 -credential_file=credentials.json & sleep 2) && ts-node -P tsconfig.node.json ./node_modules/typeorm/cli.js migration:run
         env:
