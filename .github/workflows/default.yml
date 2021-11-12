@@ -58,6 +58,7 @@ jobs:
     timeout-minutes: 3
     needs: test
     runs-on: ubuntu-latest
+    steps:
       - name: install cloud sql auth proxy
         run: wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql_proxy && chmod +x cloud_sql_proxy
       - uses: actions-hub/gcloud@master
