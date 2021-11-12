@@ -6,9 +6,8 @@ import LessonTexts from "./LessonTexts";
 import AllFiles from "./AllFiles";
 import LandingageNavbar from "./landingpageNavbar/LandingpageNavbar";
 import Areyousure from "./AreyousurePopup";
-import ThankU from "./ThankU";
+// import ThankU from "./ThankU";
 
-import { Button } from "semantic-ui-react";
 import Navbar from "../navbar/Navbar";
 import LessonData from "./datapanel/LessonData";
 import MDPreview from "../editor/MDPreview";
@@ -56,11 +55,11 @@ const Landingpage = () => {
 
   return (
     <>
-      {areYouSure && (
+      {/* {areYouSure && (
         <Areyousure setAreYouSure={setAreYouSure} setThankU={setThankU} lessonId={lessonId} />
       )}
 
-      {thankU && <ThankU setThankU={setThankU} />}
+      {thankU && <ThankU setThankU={setThankU} />} */}
 
       <Navbar />
       <div className="landingpage_container">
