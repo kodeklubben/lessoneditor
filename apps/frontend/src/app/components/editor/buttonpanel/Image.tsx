@@ -13,13 +13,7 @@ interface ImageProps {
   cursorPositionStart: number;
 }
 
-const Image: FC<ImageProps> = ({
-  editorRef,
-  uploadImageRef,
-  setUndoAndCursorPosition,
-  mdText,
-  cursorPositionStart,
-}) => {
+const Image: FC<ImageProps> = ({ editorRef, uploadImageRef }) => {
   useHotkeys(
     KEY.media.image,
     (event) => {
@@ -35,16 +29,16 @@ const Image: FC<ImageProps> = ({
     return;
   };
   return (
-    <div>
+    <>
       <RenderButtons
         isON={false}
         icon={config.image.icon}
         title={config.image.title}
         handleButtonClick={handleButtonClick}
-        buttonTitle={config.image.slug}
+        buttonSlug={config.image.slug}
         shortcutKey={config.image.shortcut}
       />
-    </div>
+    </>
   );
 };
 

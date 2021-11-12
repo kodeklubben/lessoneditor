@@ -19,10 +19,11 @@ Require nodejs and a normal developer setup. Run `npm install`.
 - Start thumbnail serice with `npm start thumbnailer`
 - Open `http://localhost:3012` in your browser
 
-### Backend:
+### Nestbackend:
 
-- Start the server with `npm start backend`
-- Open `http://localhost:3333` in your browser
+- Nestbackend is using typeorm which is not compatible with webpack build the nestbacken using `npm run build-nestbackend`
+and server the backend using `npm run start-nestbackend` 
+
 
 ### Setup Dev Environment:
 
@@ -39,6 +40,15 @@ GITHUB_LESSON_REPO= your lesson_repo name
 BUCKET=lessoneditor
 THUMB_SERVICE_URL= your thumbnailer url. ex: http://localhost:3012
 ´´´
+
+#### Database
+
+- install docker
+- create folder for db files, ex Windows: mkdir %userprofile%\data\pg-node-orms
+- start postgres docker container "docker run --name pg-node-orms -p 5432:5432 -e POSTGRES_PASSWORD=testing -e POSTGRES_USER=orm-user -e POSTGRES_DB=lesson-editor -v %userprofile%\data\pg-node-orms:/var/lib/postgresql/data -d postgres"
+
+- to generate migration file from schema changes run ex: "ts-node -P tsconfig.node.json ./node_modules/typeorm/cli.js --config ormconfig.migration.ts migration:generate -n CreateModels"
+- to run the migration run ex: "ts-node -P tsconfig.node.json ./node_modules/typeorm/cli.js --config ormconfig.migration.ts migration:run"
 
 ## Project structure
 

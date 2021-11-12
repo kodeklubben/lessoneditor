@@ -1,22 +1,11 @@
 import { Dropdown, Header } from "semantic-ui-react";
 import { FORM_TEXT, levelOptions } from "../settingsFiles/languages/landingpage_NO";
 import { FC, SyntheticEvent } from "react";
-
-interface Subtag {
-  grade: string[];
-  subject: string[];
-  topic: string[];
-}
-
-interface YmlData {
-  level: number;
-  license: string;
-  tags: Subtag;
-}
+import { YamlContent } from "@lessoneditor/contracts";
 
 interface LevelsProps {
   changeHandler: (e: SyntheticEvent, data: Record<string, string>) => void;
-  data: YmlData;
+  data: YamlContent;
 }
 
 const Levels: FC<LevelsProps> = ({ changeHandler, data }) => {
@@ -26,8 +15,7 @@ const Levels: FC<LevelsProps> = ({ changeHandler, data }) => {
       <Dropdown
         placeholder="Velg Nivå"
         name="level"
-        //defaultValue={levelOptions[0].value}
-        value={data["level"]}
+        value={data.level}
         fluid
         selection
         onChange={changeHandler}

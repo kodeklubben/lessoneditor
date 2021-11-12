@@ -1,8 +1,8 @@
 import { FC, RefObject, Dispatch, SetStateAction, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
-import { buttonAction, heading } from "./utils/buttonMethods";
+import { buttonAction } from "./utils/buttonMethods";
 import { DEFAULT_TEXT } from "./settings/buttonConfig";
-import { codebuttons } from "./settings/buttonConfig";
+import { codebuttons, sections } from "./settings/buttonConfig";
 import { microbitbuttons, scratchbuttons } from "./settings/microbitAndScratchButtonConfig";
 import { RenderButtons } from "./views/RenderButtons";
 import { RenderMicroScratchButtons } from "./views/RenderMicroScratchButtons";
@@ -12,7 +12,7 @@ interface ButtonControllerProps {
   editorRef: RefObject<HTMLTextAreaElement>;
   isON: boolean;
   title: string;
-  buttonTitle: string;
+  buttonSlug: string;
   shortcutKey: string;
   style?: Record<string, string>;
   imageurl?: string;
@@ -22,7 +22,7 @@ interface ButtonControllerProps {
   setUndoCursorPosition?: React.Dispatch<React.SetStateAction<number[]>>;
   setRedoCursorPosition?: React.Dispatch<React.SetStateAction<number[]>>;
   pushUndoValue?: (mdText: string, cursorPositionStart: number) => void;
-  pushRedoValue?: (mdText: string, cursorPositionStart: number) => void;
+  pushRedoValue?: (mdText: string) => void;
   setButtonValues?: Dispatch<SetStateAction<Record<string, boolean>>>;
   setListButtonValues?: React.Dispatch<
     React.SetStateAction<{ bTitle: string; output: string; cursorInt: number }>
@@ -47,7 +47,7 @@ export const ButtonController: FC<ButtonControllerProps> = ({
   editorRef,
   isON,
   title,
-  buttonTitle,
+  buttonSlug,
   shortcutKey,
   style,
   imageurl,
@@ -102,14 +102,13 @@ export const ButtonController: FC<ButtonControllerProps> = ({
     cursorPositionStart: number,
     cursorPositionEnd: number
   ) => {
-    if (!isON && !prevTextData.mdText) {
+    if (!isON) {
       setPrevTextData({ mdText, cursorPositionStart, cursorPositionEnd });
 
       if (setUndoAndCursorPosition) {
         setUndoAndCursorPosition(mdText, cursorPositionStart);
       }
       const results = buttonAction(
-        isON,
         mdText,
         cursorPositionStart,
         cursorPositionEnd,
@@ -118,20 +117,34 @@ export const ButtonController: FC<ButtonControllerProps> = ({
         output
       );
       setChanges(results.mdText, results.cursorPositionStart, results.cursorPositionEnd);
-    } else if (isON && mdText.slice(cursorPositionStart, cursorPositionEnd) !== DEFAULT_TEXT) {
-      setPrevTextData({ mdText: "", cursorPositionStart: -1, cursorPositionEnd: -1 });
-
-      setChanges(mdText, cursorPositionStart + cursorIntOFF, cursorPositionEnd + cursorIntOFF);
-    } else {
-      setPrevTextData({ mdText: "", cursorPositionStart: -1, cursorPositionEnd: -1 });
-      if (setUndoAndCursorPosition) {
-        setUndoAndCursorPosition(mdText, cursorPositionStart);
+    } else if (isON) {
+      if (
+        cursorPositionStart === cursorPositionEnd &&
+        cursorPositionStart !== prevTextData.cursorPositionStart
+      ) {
+        setPrevTextData({ mdText: "", cursorPositionStart: -1, cursorPositionEnd: -1 });
+        if (output.slice(-3) === "\n#\n") {
+          const position =
+            mdText.slice(cursorPositionStart).indexOf("\n#\n") + cursorPositionEnd + 3;
+          setChanges(mdText, position, position);
+        } else {
+          setChanges(
+            mdText,
+            cursorPositionStart + cursorIntOFF,
+            cursorPositionStart + cursorIntOFF
+          );
+        }
+      } else {
+        setPrevTextData({ mdText: "", cursorPositionStart: -1, cursorPositionEnd: -1 });
+        if (setUndoAndCursorPosition) {
+          setUndoAndCursorPosition(mdText, cursorPositionStart);
+        }
+        setChanges(
+          prevTextData.mdText,
+          prevTextData.cursorPositionStart,
+          prevTextData.cursorPositionEnd
+        );
       }
-      setChanges(
-        prevTextData.mdText,
-        prevTextData.cursorPositionStart,
-        prevTextData.cursorPositionEnd
-      );
     }
   };
 
@@ -147,23 +160,22 @@ export const ButtonController: FC<ButtonControllerProps> = ({
         cursorPositionStart,
         cursorPositionEnd
       );
-    } else if (setButtonValues && button === "heading") {
-      if (buttonTitle) {
-        setPrevTextData({ mdText, cursorPositionStart, cursorPositionEnd });
-      }
-      const results: { isON: boolean; mdText: string; cursorPositionStart: number } = heading(
-        isON,
-        mdText,
-        cursorPositionStart,
-        output
-      );
+    }
+    // else if (setButtonValues && button === "heading") {
+    //   const results: { isON: boolean; mdText: string; cursorPositionStart: number } = heading(
+    //     isON,
+    //     mdText,
+    //     cursorPositionStart,
+    //     output
+    //   );
 
-      setButtonValues((prevButtonValues) => ({
-        ...prevButtonValues,
-        [buttonTitle]: results.isON,
-      }));
-      setChanges(results.mdText, results.cursorPositionStart, results.cursorPositionStart);
-    } else if (button === "undo") {
+    //   setButtonValues((prevButtonValues) => ({
+    //     ...prevButtonValues,
+    //     [buttonSlug]: results.isON,
+    //   }));
+    //   setChanges(results.mdText, results.cursorPositionStart, results.cursorPositionStart);
+    // }
+    else if (button === "undo") {
       if (pushUndoValue) {
         pushUndoValue(mdText, cursorPositionStart);
       } else {
@@ -171,15 +183,15 @@ export const ButtonController: FC<ButtonControllerProps> = ({
       }
     } else if (button === "redo") {
       if (pushRedoValue) {
-        pushRedoValue(mdText, cursorPositionStart);
+        pushRedoValue(mdText);
       } else {
         return;
       }
     } else if (button === "listUl" || button === "listOl" || button === "listCheck") {
-      toggleButton(buttonTitle);
+      toggleButton(buttonSlug);
       if (setListButtonValues) {
         setListButtonValues({
-          bTitle: buttonTitle,
+          bTitle: buttonSlug,
           output: outputOnEnter || "",
           cursorInt: cursorIntON,
         });
@@ -194,7 +206,7 @@ export const ButtonController: FC<ButtonControllerProps> = ({
         cursorPositionEnd
       );
     } else {
-      toggleButton(buttonTitle);
+      toggleButton(buttonSlug);
       setButton(
         isON,
         cursorIntON,
@@ -211,7 +223,7 @@ export const ButtonController: FC<ButtonControllerProps> = ({
     shortcutKey,
     (event) => {
       event.preventDefault();
-      set(buttonTitle);
+      set(buttonSlug);
     },
     { enableOnTags: ["TEXTAREA"], keydown: true },
     [toggleButton, setButton]
@@ -224,29 +236,29 @@ export const ButtonController: FC<ButtonControllerProps> = ({
     set(button);
   };
 
-  const returnType = (buttonTitle: string) => {
-    if (Object.keys(codebuttons).filter((item) => item === buttonTitle).length > 0) {
+  const returnContent = (buttonSlug: string) => {
+    if (Object.keys(codebuttons).findIndex((item) => item === buttonSlug) > -1) {
       return (
         <RenderCodeButtons
           isON={isON}
           title={title}
           handleButtonClick={handleButtonClick}
-          buttonTitle={buttonTitle}
+          buttonSlug={buttonSlug}
           shortcutKey={shortcutKey}
           style={style || {}}
           courseTitle={courseTitle || ""}
         />
       );
     } else if (
-      Object.keys(scratchbuttons).filter((item) => item === buttonTitle).length > 0 ||
-      Object.keys(microbitbuttons).filter((item) => item === buttonTitle).length > 0
+      Object.keys(scratchbuttons).findIndex((item) => item === buttonSlug) > -1 ||
+      Object.keys(microbitbuttons).findIndex((item) => item === buttonSlug) > -1
     ) {
       return (
         <RenderMicroScratchButtons
           isON={isON}
           title={title}
           handleButtonClick={handleButtonClick}
-          buttonTitle={buttonTitle}
+          buttonSlug={buttonSlug}
           shortcutKey={shortcutKey}
           color={color || ""}
         />
@@ -258,7 +270,7 @@ export const ButtonController: FC<ButtonControllerProps> = ({
           icon={icon || ""}
           title={title}
           handleButtonClick={handleButtonClick}
-          buttonTitle={buttonTitle}
+          buttonSlug={buttonSlug}
           shortcutKey={shortcutKey}
           style={style || {}}
           imageurl={imageurl || ""}
@@ -267,5 +279,5 @@ export const ButtonController: FC<ButtonControllerProps> = ({
     }
   };
 
-  return returnType(buttonTitle);
+  return returnContent(buttonSlug);
 };

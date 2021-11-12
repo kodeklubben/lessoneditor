@@ -3,19 +3,20 @@ import LandingpageDatamodal from "../datapanel/LandingpageDatamodal";
 import { Dropdown, Popup } from "semantic-ui-react";
 import { FC } from "react";
 
-interface LandingpageNavbarProps {
-  lessonTitle: string;
-  courseTitle: string;
-}
-
-const LandingageNavbar: FC<LandingpageNavbarProps> = ({ lessonTitle, courseTitle }) => {
+const LandingageNavbar: FC<any> = ({ lessonTitle, courseTitle }) => {
   const history = useHistory();
-  const { lessonId } = useParams<{ lessonId: string; mode: string }>();
+  const { lessonId, mode } = useParams<any>();
 
-  // const handleChange = (e: any, value: string) => {
-  //   const target = ["/landingpage", lessonId, value].join("/");
-  //   history.push(target);
-  // };
+  const options = [
+    { key: 1, text: "Oppgaver", value: "lessontexts" },
+    { key: 2, text: "Lærerveiledning", value: "teacherguides" },
+    { key: 3, text: "Alle filer", value: "allfiles" },
+  ];
+
+  const handleChange = (e: any, data: any) => {
+    const target = ["/landingpage", lessonId, data.value].join("/");
+    history.push(target);
+  };
 
   return (
     <>

@@ -4,17 +4,10 @@ import NewLessonModal from "./NewLessonModal";
 import ItemList from "./ItemList";
 import { useUserContext } from "../../contexts/UserContext";
 import Navbar from "../navbar/Navbar";
-import { useHistory } from "react-router-dom";
 import { Card, Divider, Header, Icon, Message } from "semantic-ui-react";
 
 const Overview: FC = () => {
-  const history = useHistory();
-  const { lessons, removeLesson } = useUserContext();
-
-  const navigateToHome = (lessonId: string) => {
-    const target = ["/landingpage", lessonId].join("/");
-    history.push(target);
-  };
+  const { state } = useUserContext();
 
   return (
     <div>
@@ -40,7 +33,6 @@ const Overview: FC = () => {
               <Card.Header>
                 <Divider />
               </Card.Header>
-              <Card.Meta></Card.Meta>
             </Card.Content>
             <Card.Content extra>
               <NewLessonModal />
@@ -48,11 +40,10 @@ const Overview: FC = () => {
           </Card.Content>
         </Card>
         <Divider style={{ height: "2px" }} section />
-
-        {lessons.length > 0 ? (
+        {state.lessons.length > 0 ? (
           <>
             <Header as="h2">Mine oppgaver</Header>
-            <ItemList items={lessons} removeLesson={removeLesson} navigateToHome={navigateToHome} />
+            <ItemList lessons={state.lessons} />
           </>
         ) : (
           <Message>

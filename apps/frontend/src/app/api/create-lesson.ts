@@ -1,13 +1,10 @@
 import { paths } from "@lessoneditor/api-interfaces";
+import { NewLessonDTO } from "@lessoneditor/contracts";
 import axios from "axios";
 
-const createLesson = async (data: {
-  course: string;
-  courseTitle: string;
-  lesson: string;
-  lessonTitle: string;
-}) => {
-  const result = await axios.post(paths.LESSON, data);
+const createLesson = async (userId: number, data: NewLessonDTO) => {
+  const url = paths.USER + "/" + userId + "/lesson";
+  const result: any = await axios.post(url, data);
   return result.data.lessonId;
 };
 

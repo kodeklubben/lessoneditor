@@ -5,7 +5,7 @@ interface RenderMicroScratchButtonsProps {
   isON: boolean;
   title: string;
   handleButtonClick: (button: string) => void;
-  buttonTitle: string;
+  buttonSlug: string;
   shortcutKey: string;
   color: string;
 }
@@ -14,7 +14,7 @@ export const RenderMicroScratchButtons: FC<RenderMicroScratchButtonsProps> = ({
   isON,
   title,
   handleButtonClick,
-  buttonTitle,
+  buttonSlug,
   shortcutKey,
   color,
 }) => {
@@ -29,7 +29,7 @@ export const RenderMicroScratchButtons: FC<RenderMicroScratchButtonsProps> = ({
             style={isON ? { backgroundColor: "#AAA" } : { backgroundColor: color }}
             className="MBButton"
             size="tiny"
-            onClick={() => handleButtonClick(buttonTitle)}
+            onClick={() => handleButtonClick(buttonSlug)}
           >
             {title}
           </Button>

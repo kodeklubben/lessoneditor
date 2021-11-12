@@ -1,8 +1,7 @@
-import "./profileMenu.scss";
 import { FC } from "react";
 import { Image, Icon } from "semantic-ui-react";
 
-type ProfileMenuProps = { name: string; photo: string };
+type ProfileMenuProps = { name: string; photo: string | undefined };
 
 const ProfileMenu: FC<ProfileMenuProps> = ({ name, photo }) => {
   return (

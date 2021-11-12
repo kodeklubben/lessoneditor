@@ -91,13 +91,13 @@ const Video: FC<VideoProps> = ({
   };
 
   return (
-    <div>
+    <>
       <RenderButtons
         isON={false}
         icon={config.video.icon}
         title={config.video.title}
         handleButtonClick={handleButtonClick}
-        buttonTitle={config.video.slug}
+        buttonSlug={config.video.slug}
         shortcutKey={config.video.shortcut}
       />
 
@@ -163,7 +163,7 @@ const Video: FC<VideoProps> = ({
           />
         </Modal.Actions>
       </Modal>
-    </div>
+    </>
   );
 };
 

@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction, ChangeEvent, MouseEvent, KeyboardEvent, FC, Ref } from "react";
-import { listController, TABcontroller, textSelectController } from "./utils/mdTextAreaControllers";
+import { listController, TABcontroller } from "./utils/mdTextAreaControllers";
 
 interface MDTextAreaProps {
   editorRef: Ref<HTMLTextAreaElement>;
@@ -45,36 +45,38 @@ const MDTextArea: FC<MDTextAreaProps> = ({
   const onTextareaSelect = (event: ChangeEvent<HTMLTextAreaElement>) => {
     const start = event.target.selectionStart;
     const end = event.target.selectionEnd;
-    if (mdText) {
-      textSelectController(
-        start,
-        end,
-        setCursor,
-        mdText,
-        buttonValues,
-        setButtonValues,
-        setCursorPosition
-      );
-    }
+    setCursor(start, end);
   };
-
   const onTextareaMouseDown = (event: MouseEvent<HTMLTextAreaElement>) => {
     resetButtons();
   };
 
   const onTextareaKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.key === "Enter") {
-      if (mdText) {
-        listController(
-          event,
-          buttonValues,
-          listButtonValues,
-          mdText,
-          cursorPositionStart,
-          setButtonValues,
-          setMdText,
-          setCursorPosition
-        );
+      listController(
+        event,
+        buttonValues,
+        listButtonValues,
+        mdText,
+        cursorPositionStart,
+        setButtonValues,
+        setMdText,
+        setCursorPosition
+      );
+
+      if (buttonValues["heading"]) {
+        setButtonValues((prevButtonValues: Record<string, boolean>) => ({
+          ...prevButtonValues,
+          heading: !buttonValues["heading"],
+        }));
+      }
+
+      if (mdText.slice(cursorPositionStart, cursorPositionStart + 3) === " {.") {
+        let i = cursorPositionStart;
+        while (mdText[i] !== "\n") {
+          i++;
+        }
+        setCursorPosition(i, i);
       }
     }
 
@@ -89,12 +91,7 @@ const MDTextArea: FC<MDTextAreaProps> = ({
       );
     }
 
-    if (
-      event.key === "ArrowLeft" ||
-      event.key === "ArrowUp" ||
-      event.key === "ArrowRight" ||
-      event.key === "ArrowDown"
-    ) {
+    if (["ArrowLeft", "ArrowUp", "ArrowRight", "ArrowDown"].includes(event.key)) {
       resetButtons();
     }
   };

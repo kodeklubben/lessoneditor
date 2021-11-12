@@ -18,6 +18,7 @@ jobs:
     timeout-minutes: 3
     runs-on: ubuntu-latest
     steps:
+      - run: echo "${{ secrets.SERVICE_ACCOUNT }}"
       - name: Checkout Code
         uses: actions/checkout@v2
         with:
@@ -41,12 +42,58 @@ jobs:
             cache-nx-${{ hashFiles('package-lock.json') }}-
             cache-nx-
       - run: npm run test-all
+      - run: npm run test-nestbackend
       - run: npm run build-all
+      - run: npm run build-nestbackend
+      - run: npm r
       - name: Caching Dist Folder
         uses: actions/cache@v2
         with:
           path: ./dist
           key: cache-dist-${{ github.sha }}
+   
+  
+  deply_db:
+    name: Deploy to Google App Engine
+    timeout-minutes: 3
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: install cloud sql auth proxy
+        run: wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql_proxy && chmod +x cloud_sql_proxy
+      - uses: actions-hub/gcloud@master
+        env:
+          PROJECT_ID: test
+          APPLICATION_CREDENTIALS: ${{ secrets.SERVICE_ACCOUNT }}
+        with:
+          args: info
+      - name: fetch access token
+        run: echo ${{ secrets.SERVICE_ACCOUNT }} | base64 --decode > credentials.json
+      - run: gcloud auth activate-service-account github-actions@lessoneditor.iam.gserviceaccount.com --key-file=credentials.json
+      - run: gcloud auth print-access-token
+      - run: ACCESS_TOKEN=$(gcloud auth print-access-token); echo "ACCESS_TOKEN=${ACCESS_TOKEN}" >> $GITHUB_ENV
+      - run: echo $ACCESS_TOKEN
+      - run: echo ${{ env.ACCESS_TOKEN }}
+      - run: npm ci --ignore-scripts --no-optional --prefer-offline --no-audit
+      - run: npm install -g ts-node
+      - name: run migrations
+        run: (./cloud_sql_proxy -instances=lessoneditor:europe-north1:lessoneditor=tcp:5432 -credential_file=credentials.json & sleep 2) && ts-node -P tsconfig.node.json ./node_modules/typeorm/cli.js migration:run
+        env:
+          TYPEORM_CONNECTION: postgres
+          TYPEORM_HOST: localhost 
+          TYPEORM_USERNAME: github-actions@lessoneditor.iam
+          TYPEORM_PASSWORD: ${{ env.ACCESS_TOKEN }}
+          TYPEORM_DATABASE: lessoneditor
+          TYPEORM_PORT: 5432
+          TYPEORM_SYNCHRONIZE: false
+          TYPEORM_MIGRATIONS: db/migration/**/*.ts
+          TYPEORM_MIGRATIONS_DIR: db/migration
+          TYPEORM_ENTITIES: apps/nestbackend/src/user/user.entity.ts,apps/nestbackend/src/lesson/lesson.entity.ts,apps/nestbackend/src/session/session.entity.ts
+
 
   deploy:
     name: Deploy to Google App Engine

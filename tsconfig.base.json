@@ -10,12 +10,21 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "esnext",
-    "lib": ["es2017", "dom"],
+    "lib": ["es2017", "dom", "ES6", "ES2020.String"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@lessoneditor/api-interfaces": ["libs/api-interfaces/src/index.ts"]
+      "@lessoneditor/api-interfaces": ["libs/api-interfaces/src/index.ts"],
+      "@lessoneditor/auth": ["libs/auth/src/index.ts"],
+      "@lessoneditor/contracts": ["libs/contracts/src/index.ts"],
+      "@lessoneditor/github": ["libs/github/src/index.ts"],
+      "@lessoneditor/lesson": ["libs/lesson/src/index.ts"],
+      "@lessoneditor/session": ["libs/session/src/index.ts"],
+      "@lessoneditor/thumb": ["libs/thumb/src/index.ts"],
+      "@lessoneditor/user": ["libs/user/src/index.ts"],
+      "@libs/*": ["libs/*"],
+      "libtest": ["libs/libtest/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

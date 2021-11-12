@@ -1,12 +1,16 @@
 import "./newlessonmodal.scss";
 
-import { FC, useState } from "react";
+import { FC, SyntheticEvent, useState } from "react";
 import slugify from "slugify";
 import { COURSESLIST } from "../editor/settingsFiles/COURSELIST";
 import { useUserContext } from "../../contexts/UserContext";
 import { useHistory } from "react-router";
-import { Button, Grid, GridColumn, Input, Modal } from "semantic-ui-react";
+import { Button, Grid, GridColumn, Input, Modal, Dropdown, Ref } from "semantic-ui-react";
 import ShowSpinner from "../ShowSpinner";
+
+const courseDropdownOptions = COURSESLIST.map((e) => {
+  return { key: e.slug, text: e.courseTitle, value: e.courseTitle };
+});
 
 const NewLessonModal: FC = () => {
   const [open, setOpen] = useState(false);
@@ -15,18 +19,42 @@ const NewLessonModal: FC = () => {
   const { addLesson } = useUserContext();
   const defaultState = {
     lessonTitle: "",
+    courses: courseDropdownOptions,
     course: COURSESLIST[0].slug,
   };
   const [values, setValues] = useState(defaultState);
+  const [openNewCourseModal, setOpenNewCourseModal] = useState(false);
+  const [isEmptyField, setIsEmptyField] = useState(false);
 
   const errorMessage = "Oppgavetittel må være satt";
 
-  const onChange = (e: { target: { name: string; value: string } }) => {
-    const { name, value } = e.target;
+  const onChange = (e: SyntheticEvent, { name, value }: Record<string, string>) => {
     setValues((prevValues) => ({ ...prevValues, [name]: value }));
   };
-  const navigateToEditor = (lessonId: string, lessonSlug: string) => {
-    const target = ["/editor", lessonId, lessonSlug, "nb"].join("/");
+
+  const addCourseHandler = (e: SyntheticEvent, { value }: Record<string, string>) => {
+    const tempCourselist = COURSESLIST;
+    const newCourseSlug = slugify(value, { lower: true, strict: true });
+    tempCourselist.push({ courseTitle: value, slug: newCourseSlug });
+    setValues((prevValues) => ({
+      ...prevValues,
+      courses: [{ key: newCourseSlug, text: value, value }, ...prevValues.courses],
+    }));
+
+    setOpenNewCourseModal(true);
+    COURSESLIST.splice(0, COURSESLIST.length, ...tempCourselist);
+  };
+
+  const onBlur = (e: any) => {
+    setIsEmptyField(true);
+  };
+  const closeModal = () => {
+    setValues(defaultState);
+    setIsEmptyField(false);
+    setOpen(false);
+  };
+  const navigateToEditor = (lessonId: number, lessonSlug: string) => {
+    const target = ["/editor", lessonId, lessonSlug].join("/");
     history.push({ pathname: target });
   };
   const onSubmit = async (e: { preventDefault: () => void }) => {
@@ -34,23 +62,36 @@ const NewLessonModal: FC = () => {
     setLoading(true);
     const { course, lessonTitle } = values;
 
+    const courseSlug = slugify(course, { lower: true, strict: true });
+
     const lesson = {
       title: lessonTitle,
       slug: slugify(lessonTitle, { lower: true, strict: true }),
     };
-    const getCourseFromSlug = COURSESLIST.find(({ slug }) => slug === values.course);
+    const getCourseFromSlug = COURSESLIST.find(({ slug }) => slug === courseSlug);
+
     const courseTitle: string = getCourseFromSlug ? getCourseFromSlug.courseTitle : "";
     const lessonId = await addLesson(course, courseTitle, lesson.slug, lesson.title);
-    navigateToEditor(lessonId, lesson.slug);
+    if (lessonId) {
+      navigateToEditor(lessonId, lesson.slug);
+    }
+
     setLoading(false);
   };
 
   return (
     <>
+      <Modal
+        open={openNewCourseModal}
+        onClose={() => setOpenNewCourseModal(false)}
+        header="Opprette et nytt kurs"
+        content="Kurset vil bli opprettet når moderatorer har gått gjennom innleveringen"
+        actions={[{ key: "Ok", content: "Ok", positive: true }]}
+      />
       {loading ? <ShowSpinner /> : ""}
       <Modal
         closeOnDimmerClick={!loading}
-        onClose={() => setOpen(false)}
+        onClose={() => closeModal()}
         onOpen={() => setOpen(true)}
         open={open}
         dimmer="inverted"
@@ -67,11 +108,12 @@ const NewLessonModal: FC = () => {
                   <Input
                     disabled={loading}
                     autoFocus
+                    onBlur={onBlur}
                     onChange={onChange}
                     name={"lessonTitle"}
                     defaultValue={values["lessonTitle"]}
                   />
-                  {!values.lessonTitle ? (
+                  {!values.lessonTitle && isEmptyField ? (
                     <p>
                       <i style={{ color: "red" }}>{errorMessage}</i>
                     </p>
@@ -84,7 +126,19 @@ const NewLessonModal: FC = () => {
                 <label>
                   Kurs:
                   <br />
-                  <select
+                  <Dropdown
+                    options={values.courses}
+                    placeholder={COURSESLIST[0].courseTitle}
+                    selection
+                    search
+                    allowAdditions
+                    name="course"
+                    value={values.course}
+                    additionLabel="Legg til nytt kurs: "
+                    onAddItem={addCourseHandler}
+                    onChange={onChange}
+                  />
+                  {/* <select
                     className="ui dropdown"
                     name="course"
                     onChange={onChange}
@@ -95,22 +149,14 @@ const NewLessonModal: FC = () => {
                         {course.courseTitle}
                       </option>
                     ))}
-                  </select>
+                  </select> */}
                 </label>
               </GridColumn>
             </Grid>
           </form>
         </Modal.Content>
         <Modal.Actions className="newLessonModal">
-          <Button
-            disabled={loading}
-            color="black"
-            onClick={() => {
-              setValues(defaultState);
-              setOpen(false);
-            }}
-            content="Avbryt"
-          />
+          <Button disabled={loading} color="black" onClick={closeModal} content="Avbryt" />
           <Button
             loading={loading}
             form={"skjema-for-oppretting-av-ny-oppgave"}

@@ -5,7 +5,7 @@ interface RenderCodeButtonsProps {
   isON: boolean;
   title: string;
   handleButtonClick: (button: string) => void;
-  buttonTitle: string;
+  buttonSlug: string;
   shortcutKey: string;
   style: Record<string, string>;
   courseTitle: string;
@@ -14,7 +14,7 @@ interface RenderCodeButtonsProps {
 export const RenderCodeButtons: FC<RenderCodeButtonsProps> = ({
   title,
   shortcutKey,
-  buttonTitle,
+  buttonSlug,
   isON,
   style,
   handleButtonClick,
@@ -27,12 +27,12 @@ export const RenderCodeButtons: FC<RenderCodeButtonsProps> = ({
         mouseEnterDelay={250}
         mouseLeaveDelay={250}
         trigger={
-          buttonTitle === "codeblock" ? (
+          buttonSlug === "codeblock" ? (
             <Button
               style={isON ? { ...style, backgroundColor: "#bbb" } : style}
               className="CPButton"
               size="tiny"
-              onClick={() => handleButtonClick(buttonTitle)}
+              onClick={() => handleButtonClick(buttonSlug)}
             >
               <div style={{ position: "relative", top: "-5px" }}>
                 {"```Kodeblokk"}
@@ -44,7 +44,7 @@ export const RenderCodeButtons: FC<RenderCodeButtonsProps> = ({
               style={isON ? { ...style, backgroundColor: "#bbb" } : style}
               className="CPButton"
               size="tiny"
-              onClick={() => handleButtonClick(buttonTitle)}
+              onClick={() => handleButtonClick(buttonSlug)}
             >
               <div style={{ position: "relative", top: "-5px" }}>{"`Inline-kode"}</div>
             </Button>

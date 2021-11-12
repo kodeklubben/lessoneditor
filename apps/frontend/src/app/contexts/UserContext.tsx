@@ -1,123 +1,128 @@
 import React, { useContext, useEffect, useState, FC } from "react";
 import axios from "axios";
-import { paths } from "@lessoneditor/api-interfaces";
-import createLesson from "../api/create-lesson";
+import { Lesson, paths, User } from "@lessoneditor/api-interfaces";
+import { UserDTO } from "@lessoneditor/contracts";
+import { LessonDTO, NewLessonDTO } from "@lessoneditor/contracts";
 
-interface User {
-  email: string;
-  name: string;
-  username: string;
-  photo: string;
-}
+import {
+  initialUserContextState,
+  UserContextModel,
+  UserContextState,
+} from "./userContext.functions";
+import NotLoggedInPage from "../pages/NotLoggedInPage";
 
-interface Lesson {
-  course: string;
-  courseTitle: string;
-  lesson: string;
-  lessonId: string;
-  lessonTitle: string;
-  thumb?: string;
-}
+export const UserContext = React.createContext({} as UserContextModel);
 
-interface UserContextProps {
-  user: User;
-  lessons: Lesson[];
-  addLesson: (
-    course: string,
-    courseTitle: string,
-    lesson: string,
-    lessonTitle: string
-  ) => Promise<string>;
-  removeLesson: (lessonId: string) => Promise<void>;
-}
-
-export const UserContext = React.createContext<UserContextProps>({
-  user: { email: "", name: "", username: "", photo: "" },
-  lessons: [],
-  addLesson: async () => {
-    return "";
-  },
-  removeLesson: async () => {
-    return;
-  },
-});
-
-export const UserContextProvider: FC = (props) => {
-  const [user, setUser] = useState<User>({
-    email: "",
-    name: "",
-    username: "",
-    photo: "",
-  });
-  const [lessons, setLessons] = useState<Lesson[]>([]);
+export const UserContextProvider = (props: any) => {
+  const [userContexState, setUserContextState] =
+    useState<UserContextState>(initialUserContextState);
+  const [error, setError] = useState({});
 
   useEffect(() => {
     let isSubscribed = true;
     async function fetchData() {
-      const userRes = await axios.get(paths.USER);
-      const userLessonsRes = await axios.get(paths.USER_LESSONS);
-      if (isSubscribed) {
-        setUser({ ...userRes.data });
-        setLessons(userLessonsRes.data);
+      try {
+        const userRes = await axios.get<UserDTO>(paths.USER);
+        const userLessonsRes = await axios.get<LessonDTO[]>(
+          paths.USER_LESSONS.replace(":userId", userRes.data.userId.toString())
+        );
+        setUserContextState((s) => {
+          return {
+            ...s,
+            user: userRes.data,
+            lessons: userLessonsRes.data,
+            loggedIn: true,
+          };
+        });
+      } catch (error: any) {
+        setError(error);
       }
     }
-    fetchData();
-    return () => {
-      isSubscribed = false;
-    };
+    fetchData().then();
   }, []);
 
-  const getLesson = (lessonId: string) => {
-    const lesson = lessons.find((item: Lesson) => item.lessonId === lessonId);
-    return lesson;
+  const getLesson = (lessonId: number): LessonDTO | undefined => {
+    return userContexState.lessons?.find((item: LessonDTO) => item.lessonId === lessonId);
+  };
+
+  const getLessonByCourseAndLesson = (
+    courseSlug: string,
+    lessonSlug: string
+  ): LessonDTO | undefined => {
+    return userContexState.lessons?.find(
+      (item: LessonDTO) => item.courseSlug === courseSlug && item.lessonSlug === lessonSlug
+    );
   };
 
   const addLesson = async (
-    course: string,
+    courseSlug: string,
     courseTitle: string,
-    lesson: string,
+    lessonSlug: string,
     lessonTitle: string
-  ) => {
-    const existing = getLessonByCourseAndLesson(course, lesson);
-    const lessonId: string = existing
-      ? existing.lessonId
-      : await createLesson({
-          course,
-          courseTitle,
-          lesson,
-          lessonTitle,
-        });
-    setLessons((oldLessons) => [
-      ...oldLessons,
-      { course, courseTitle, lesson, lessonId, lessonTitle },
-    ]);
-    await saveLessons([...lessons, { course, courseTitle, lesson, lessonId, lessonTitle }]);
-    return lessonId;
-  };
-
-  const removeLesson = async (lessonId: string) => {
-    const existing = getLesson(lessonId);
-    if (existing) {
-      await saveLessons(lessons.filter((lesson: Lesson) => lesson.lessonId !== lessonId));
-    } else {
-      console.error("Trying to remove a lesson that doesn't exists.", lessonId);
+  ): Promise<number | undefined> => {
+    try {
+      const newLesson: NewLessonDTO = {
+        courseSlug: courseSlug,
+        courseTitle: courseTitle,
+        lessonSlug: lessonSlug,
+        lessonTitle: lessonTitle,
+      };
+      const newLessonRes = await axios.post<number>(
+        paths.USER_LESSON_NEW.replace(":userId", userContexState.user!.userId.toString()),
+        newLesson
+      );
+      const userLessonsRes = await axios.get<LessonDTO[]>(
+        paths.USER_LESSONS.replace(":userId", userContexState.user!.userId.toString())
+      );
+      setUserContextState((s) => {
+        return {
+          ...s,
+          lessons: userLessonsRes.data,
+        };
+      });
+      console.log({ newLessonRes });
+      return newLessonRes.data;
+    } catch (error) {
+      console.error(error);
+      return undefined;
     }
   };
 
-  const getLessonByCourseAndLesson = (course: string, lesson: string) => {
-    return lessons.find((item: Lesson) => item.course === course && item.lesson === lesson);
+  const removeLesson = async (lessonId: number) => {
+    const existing = getLesson(lessonId);
+    if (existing) {
+      try {
+        await axios.delete(
+          paths.USER_LESSON_UPDATE.replace(
+            ":userId",
+            userContexState.user!.userId.toString()
+          ).replace(":lessonId", lessonId.toString())
+        );
+        const userLessonsRes = await axios.get<LessonDTO[]>(
+          paths.USER_LESSONS.replace(":userId", userContexState.user!.userId.toString())
+        );
+        setUserContextState((s) => {
+          return {
+            ...s,
+            lessons: userLessonsRes.data,
+          };
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    }
   };
 
-  const saveLessons = async (updatedLessons: Lesson[]) => {
-    await axios.post(paths.USER_LESSONS, updatedLessons);
-    setLessons(updatedLessons);
+  const context: UserContextModel = {
+    state: userContexState,
+    addLesson: addLesson,
+    removeLesson: removeLesson,
   };
-  const context: UserContextProps = {
-    user,
-    lessons,
-    addLesson,
-    removeLesson,
-  };
-  return <UserContext.Provider value={context}>{props.children}</UserContext.Provider>;
+
+  if (userContexState.loggedIn) {
+    return <UserContext.Provider value={context}>{props.children}</UserContext.Provider>;
+  } else {
+    return <NotLoggedInPage></NotLoggedInPage>;
+  }
 };
-export const useUserContext = () => useContext(UserContext);
+export const useUserContext = (): UserContextModel => useContext<UserContextModel>(UserContext);

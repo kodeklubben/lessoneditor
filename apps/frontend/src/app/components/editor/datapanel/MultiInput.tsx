@@ -22,41 +22,44 @@ const MultiInput: FC<MultiInputProps> = ({
   required,
 }) => {
   let inputOrder = 1;
-  const { setHeaderData } = useFileContext();
+  const { setFileContextState } = useFileContext();
 
   let textInput: Input | null = null;
 
-  const handleClick = (event: any) => {
+  const handleClick = (event: SyntheticEvent<HTMLButtonElement> | KeyboardEvent) => {
     if (inputValue && !inputArray.includes(inputValue)) {
-      let i = event.target.name + "List";
-      let temp = { [i]: [...inputArray, inputValue] };
-      multiInputHandler(temp, event.target.name);
+      const i = name + "List";
+      const temp = { [i]: [...inputArray, inputValue] };
+      multiInputHandler(temp, name);
       inputOrder += 1;
 
-      // @ts-ignore
-      textInput.focus();
+      textInput ? textInput.focus() : "";
     }
   };
 
-  const multiInputHandler = (object: { [s: string]: unknown } | ArrayLike<unknown>, name: any) => {
+  const multiInputHandler = (
+    object: { [s: string]: unknown } | ArrayLike<unknown>,
+    name: string
+  ) => {
     const key = Object.keys(object)[0];
     const value = Object.values(object)[0];
-    if (setHeaderData) {
-      setHeaderData((prevState) => ({ ...prevState, [key]: value }));
-      setHeaderData((prevState) => ({ ...prevState, [name]: "" }));
+    if (setFileContextState) {
+      setFileContextState((prevState) => ({
+        ...prevState,
+        headerData: { ...prevState.headerData, [key]: value, [name]: "" },
+      }));
     }
   };
 
-  const onBlur = (event: any) => {
+  const onBlur = (event: SyntheticEvent<HTMLButtonElement>) => {
     handleClick(event);
   };
 
   const inputClick = () => {
-    // @ts-ignore
-    textInput.focus();
+    textInput ? textInput.focus() : "";
   };
 
-  const removeClickHandler = (name: string, value: any) => {
+  const removeClickHandler = (name: string, value: string) => {
     const i = name + "List";
     const tempArray = inputArray;
     const index = inputArray.indexOf(value);
@@ -90,14 +93,14 @@ const MultiInput: FC<MultiInputProps> = ({
             onClick={inputClick}
             onTouchStart={inputClick}
             onChange={changeHandler}
-            onKeyUp={(e: any) => (e.key === "Enter" ? handleClick(e) : "")}
-            onBlur={(e: any) => onBlur(e)}
+            onKeyUp={(e: KeyboardEvent) => (e.key === "Enter" ? handleClick(e) : "")}
+            onBlur={(e: SyntheticEvent<HTMLButtonElement>) => onBlur(e)}
             fluid
           />
         </div>
 
         <Button.Group>
-          {inputArray.map((element: {} | null | undefined, index: number) => (
+          {inputArray.map((element: string, index: number) => (
             <Button
               basic
               icon="x"

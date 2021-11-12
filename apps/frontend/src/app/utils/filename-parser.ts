@@ -3,7 +3,7 @@ export type FilenameData = {
   languageName?: string;
   isMarkdown: boolean;
   isReadme: boolean;
-}
+};
 /**
  * Samler alle funksjoner som tolker innholdet i filenavnet ett sted.
  * @param filename
@@ -16,13 +16,13 @@ export const filenameParser = (filename?: string): FilenameData => {
     nb: "Bokmål",
     nn: "Nynorsk",
     en: "Engelsk",
-    is: "Islandsk"
+    is: "Islandsk",
   }[language];
+
   return {
     language,
     isMarkdown,
     isReadme,
-    languageName
+    languageName,
   };
 };
-

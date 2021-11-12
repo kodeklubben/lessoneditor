@@ -28,15 +28,15 @@ const Emphasis: FC<EmphasisProps> = ({
   setUndoAndCursorPosition,
 }) => {
   return (
-    <div>
-      {Object.entries(config).map((element, index) => {
+    <>
+      {Object.entries(config).map((element) => {
         return (
           <ButtonController
-            key={"element" + index}
+            key={element[1].slug}
             editorRef={editorRef}
             isON={buttonValues[element[1].slug]}
             title={element[1].title}
-            buttonTitle={element[1].slug}
+            buttonSlug={element[1].slug}
             shortcutKey={element[1].shortcut}
             icon={element[1].icon}
             setButtonValues={setButtonValues}
@@ -53,7 +53,7 @@ const Emphasis: FC<EmphasisProps> = ({
           />
         );
       })}
-    </div>
+    </>
   );
 };
 

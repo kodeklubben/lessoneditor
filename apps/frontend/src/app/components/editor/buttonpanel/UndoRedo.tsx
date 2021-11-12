@@ -11,7 +11,7 @@ interface UndoRedoProps {
   setUndoCursorPosition: React.Dispatch<React.SetStateAction<number[]>>;
   setRedoCursorPosition: React.Dispatch<React.SetStateAction<number[]>>;
   pushUndoValue: (mdText: string, cursorPositionStart: number) => void;
-  pushRedoValue: (mdText: string, cursorPositionStart: number) => void;
+  pushRedoValue: (mdText: string) => void;
   setCursorPosition: (positionStart: number, positionEnd: number) => void;
 }
 
@@ -28,19 +28,19 @@ const UndoRedo: FC<UndoRedoProps> = ({
   setCursorPosition,
 }) => {
   return (
-    <div>
+    <>
       {Object.entries(config).map((element, index) => (
         <ButtonController
-          key={"element" + index}
+          key={element[1].slug}
           editorRef={editorRef}
           isON={false}
           title={element[1].title}
-          buttonTitle={element[1].slug}
+          buttonSlug={element[1].slug}
           shortcutKey={element[1].shortcut}
           icon={element[1].icon}
           cursorIntON={0}
           cursorIntOFF={0}
-          output={"element[1].output"}
+          output={""}
           mdText={mdText}
           setCursorPosition={setCursorPosition}
           cursorPositionStart={cursorPositionStart}
@@ -53,7 +53,7 @@ const UndoRedo: FC<UndoRedoProps> = ({
           pushRedoValue={pushRedoValue}
         />
       ))}
-    </div>
+    </>
   );
 };
 

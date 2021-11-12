@@ -6,7 +6,7 @@ interface RenderButtonsProps {
   icon: string;
   title: string;
   handleButtonClick: (button: string) => void;
-  buttonTitle: string;
+  buttonSlug: string;
   shortcutKey: string;
   style?: Record<string, string>;
   imageurl?: string;
@@ -17,7 +17,7 @@ export const RenderButtons: FC<RenderButtonsProps> = ({
   icon,
   title,
   handleButtonClick,
-  buttonTitle,
+  buttonSlug,
   shortcutKey,
   style,
   imageurl,
@@ -51,14 +51,14 @@ export const RenderButtons: FC<RenderButtonsProps> = ({
               className="CPButton"
               size="huge"
               icon={icon}
-              onClick={() => handleButtonClick(buttonTitle)}
+              onClick={() => handleButtonClick(buttonSlug)}
             />
           ) : (
             <Button
               style={isON ? { ...style, background: "#bbb" } : style}
               className="CPButton"
               size="tiny"
-              onClick={() => handleButtonClick(buttonTitle)}
+              onClick={() => handleButtonClick(buttonSlug)}
             >
               {imageurl ? (
                 <span>

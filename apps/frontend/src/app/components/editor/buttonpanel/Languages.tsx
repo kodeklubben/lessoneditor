@@ -32,7 +32,7 @@ const Languages: FC<LanguagesProps> = ({ saveEditorText, setShowSpinner }) => {
   };
 
   return (
-    <div>
+    <>
       <Popup
         content={"Endre språk for oppgavetekst"}
         mouseEnterDelay={250}
@@ -49,7 +49,7 @@ const Languages: FC<LanguagesProps> = ({ saveEditorText, setShowSpinner }) => {
           ></Dropdown>
         }
       />
-    </div>
+    </>
   );
 };
 

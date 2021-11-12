@@ -1,144 +1,134 @@
 import React, { Dispatch, FC, SetStateAction, useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import saveMdText from "../api/save-md-text";
-import fetchMdText from "../api/fetch-md-text";
-import yamlHeaderDump from "./utils/yaml-header-dump";
-import yamlHeaderLoad from "./utils/yaml-header-load";
 import insertMetaDataInTeacherGuide from "../components/editor/utils/insertMetaDataInTeacherGuide";
 import oppgaveMal from "../components/editor/settingsFiles/oppgaveMal";
 import { useLessonContext } from "./LessonContext";
 import { filenameParser } from "../utils/filename-parser";
+import axios from "axios";
+import { paths } from "@lessoneditor/api-interfaces";
+import { FileDTO, HeaderData, UpdatedFileDTO } from "@lessoneditor/contracts";
+import { YamlContent } from "@lessoneditor/contracts";
+import {
+  FileContextModel,
+  FileContextState,
+  initialFileContextState,
+} from "./fileContext.functions";
+import { useUserContext } from "./UserContext";
+import * as yml from "js-yaml";
 
-const SEPERATOR = "---\n";
+const separator = "---\n";
 
-interface FileContextProps {
-  headerData: HeaderData;
-  saveFileHeader: (lessonId: string, filename: string, data: HeaderData) => Promise<void>;
-  savedFileBody: string;
-  saveFileBody: (
-    lessonId: string,
-    filename: string,
-    headerData: string,
-    regenThumb: boolean
-  ) => Promise<void>;
-  setHeaderData: Dispatch<SetStateAction<HeaderData>>;
-}
+const FileContext = React.createContext<FileContextModel>({} as FileContextModel);
 
-export interface HeaderData {
-  title: string;
-  authorList: string[];
-  translatorList: string[];
-  translator: string;
-  language: string;
-  author: string;
-}
-
-const FileContext = React.createContext<FileContextProps>({
-  headerData: {
-    title: "",
-    authorList: [],
-    translatorList: [],
-    translator: "",
-    language: "",
-    author: "",
-  },
-  saveFileHeader: async () => {
-    return;
-  },
-  savedFileBody: "",
-  saveFileBody: async () => {
-    return;
-  },
-  setHeaderData: () => {
-    return;
-  },
-});
-
-function createDefaultFileBody(
-  file: string,
-  ymlData: {
-    tags: { subject: string[]; topic: string[]; grade: string[] };
-  }
-) {
+function createDefaultFileBody(file: string, ymlData: YamlContent) {
   const { isReadme } = filenameParser(file);
   return isReadme ? insertMetaDataInTeacherGuide(ymlData) : oppgaveMal;
 }
 
-const FileContextProvider: FC = (props) => {
-  const { lessonId, file } = useParams<{ lessonId: string; file: string }>();
-  const { fetchYmlData } = useLessonContext();
-  const [rawMdFileContent, setRawMdFileContent] = useState<string>("");
+const FileContextProvider = (props: any) => {
+  const [fileContextState, setFileContextState] =
+    useState<FileContextState>(initialFileContextState);
+  const { lessonId, file } = useParams<any>();
+  const { state: userState } = useUserContext();
+  const { state } = useLessonContext();
   const { language } = filenameParser(file);
-  const [headerData, setHeaderData] = useState<HeaderData>({
-    title: "",
-    authorList: [],
-    translatorList: [],
-    language,
-    author: "",
-    translator: "",
-  });
-  const [savedFileBody, setSavedFileBody] = useState<string>("");
 
-  const saveFileBody = async (
-    lessonId: string,
-    filename: string,
-    body: string,
-    regenThumb: boolean
-  ) => {
-    const fileHeader = rawMdFileContent.split(SEPERATOR)[1];
-    const newRawText = ["", fileHeader, body].join(SEPERATOR);
-    await saveMdText(lessonId, filename, newRawText, regenThumb);
-    setRawMdFileContent(newRawText);
-  };
+  // Må ta savedFileBody ut av FileContextState pga at den brukes  som en useEffect-dependency.
+  // Dette for å forhindre at useEffect kjører mer enn nødvendig.
+  const [savedFileBody, setSavedFileBody] = useState("");
 
-  const saveDefaultFileBody = async (lessonId: string, filename: string) => {
-    const ymlData = await fetchYmlData();
-    const defaultFileBody = createDefaultFileBody(filename, ymlData);
-    setSavedFileBody(defaultFileBody);
-    await saveFileBody(lessonId, filename, defaultFileBody, false);
+  const saveFileBody = async (body: string) => {
+    const fileHeader = fileContextState.rawMdFileContent?.split(separator)[1] || "";
+    const newRawText = ["", fileHeader, body].join(separator);
+    try {
+      const updatedFile: UpdatedFileDTO = {
+        content: newRawText,
+      };
+      const uploadedFile = await axios.put<FileDTO<string>>(
+        paths.LESSON_FILE_UPDATE.replace(":lessonId", lessonId.toString()).replace(
+          ":fileName",
+          file
+        ),
+        updatedFile
+      );
+      setFileContextState((s) => {
+        return {
+          ...s,
+          rawMdFileContent: newRawText,
+          savedFileBody: body,
+        };
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
     let isSubscribed = true;
     async function fetchData() {
-      const result = await fetchMdText(lessonId, file);
-      const [_, header, body] = result.split(SEPERATOR);
-      if (isSubscribed) {
-        setRawMdFileContent(result);
+      try {
+        const result = await axios.get<FileDTO<string>>(
+          paths.LESSON_FILE.replace(":lessonId", lessonId).replace(":fileName", file)
+        );
+        const [_, header, body] = result.data.content.split(separator);
+
+        const headerData = yml.load(header) as HeaderData;
+        setFileContextState((s) => {
+          return {
+            ...s,
+            rawMdFileContent: result.data.content,
+            savedFileBody: body,
+            headerData: headerData,
+          };
+        });
         setSavedFileBody(body);
-        setHeaderData(yamlHeaderLoad(header, language));
-        console.log("FileContext done loading...");
-        if (!body || body.trim().length === 0) {
-          await saveDefaultFileBody(lessonId, file);
-        }
+      } catch (error) {
+        console.error(error);
       }
     }
 
     if (lessonId && file) {
       fetchData();
     }
-    return () => {
-      isSubscribed = false;
-    };
-  }, [file]);
+  }, [lessonId]);
 
-  const saveFileHeader = async (lessonId: string, filename: string, data: HeaderData) => {
-    const fileBody = rawMdFileContent.split(SEPERATOR)[2];
-    const header = yamlHeaderDump(data);
-    const newRawText = ["", header, fileBody].join(SEPERATOR);
-    await saveMdText(lessonId, filename, newRawText);
-    setRawMdFileContent(newRawText);
-    // setHeaderData(yamlHeaderLoad(data, language));
+  const saveFileHeader = async (data: HeaderData) => {
+    const fileBody = fileContextState?.rawMdFileContent?.split(separator)[2];
+    const header = yml.dump(data);
+    const newRawText = ["", header, fileBody].join(separator);
+    try {
+      const updatedFile: UpdatedFileDTO = {
+        content: newRawText,
+      };
+      const newFile = await axios.put<FileDTO<UpdatedFileDTO>>(
+        paths.LESSON_FILE_UPDATE.replace(":lessonId", lessonId.toString()).replace(
+          ":fileName",
+          file
+        ),
+        updatedFile
+      );
+      setFileContextState((s) => {
+        return {
+          ...s,
+          rawMdFileContent: newRawText,
+          headerData: data,
+        };
+      });
+    } catch (error) {
+      console.error(error);
+    }
   };
-  const context: FileContextProps = {
-    headerData,
-    saveFileHeader,
-    savedFileBody,
+
+  const context: FileContextModel = {
+    state: fileContextState,
     saveFileBody,
-    setHeaderData,
+    savedFileBody,
+    saveFileHeader,
+    setFileContextState,
   };
   return <FileContext.Provider value={context}>{props.children}</FileContext.Provider>;
 };
-const useFileContext = () => useContext(FileContext);
+const useFileContext = (): FileContextModel => useContext(FileContext);
 
 export { useFileContext, FileContextProvider };

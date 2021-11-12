@@ -5,21 +5,14 @@ const ifNewLine = (mdText: string, cursorPositionStart: number) => {
   return mdText[cursorPositionStart - 1] === "\n" || cursorPositionStart === 0;
 };
 
-const noNewLineButtons = (output: string) => {
+const doNotNeedNewLine = (output: string) => {
   return (
-    Object.entries(emphasis).filter((item) => item[1].output === output).length > 0 ||
-    Object.entries(microbitbuttons).filter((item) => item[1].output === output).length > 0 ||
-    Object.entries(scratchbuttons).filter((item) => item[1].output === output).length > 0 ||
+    Object.entries(emphasis).findIndex((item) => item[1].output === output) > -1 ||
+    Object.entries(microbitbuttons).findIndex((item) => item[1].output === output) > -1 ||
+    Object.entries(scratchbuttons).findIndex((item) => item[1].output === output) > -1 ||
     output === codebuttons.inline.output
   );
 };
-
-// const isListOrSection = (output: string) => {
-//   return (
-//     Object.entries(lists).filter((item) => item[1].output === output).length > 0 ||
-//     Object.entries(sections).filter((item) => item[1].output === output).length > 0
-//   );
-// };
 
 const trimTextAndUpdatePosition = (
   mdText: string,
@@ -53,7 +46,6 @@ const trimTextAndUpdatePosition = (
 };
 
 export const buttonAction: (
-  isON: boolean,
   mdText: string,
   cursorPositionStart: number,
   cursorPositionEnd: number,
@@ -61,7 +53,6 @@ export const buttonAction: (
   cursorIntOFF: number,
   output: string
 ) => { mdText: string; cursorPositionStart: number; cursorPositionEnd: number } = (
-  isON,
   mdText,
   cursorPositionStart,
   cursorPositionEnd,
@@ -69,147 +60,77 @@ export const buttonAction: (
   cursorIntOFF,
   output
 ) => {
-  if (!isON) {
-    if (!ifNewLine(mdText, cursorPositionStart) && !noNewLineButtons(output)) {
-      mdText = mdText.slice(0, cursorPositionStart) + "\n\n" + mdText.slice(cursorPositionStart);
-      cursorPositionStart += 1;
-      cursorPositionEnd += 1;
-
-      return buttonAction(
-        isON,
-        mdText,
-        cursorPositionStart,
-        cursorPositionEnd,
-        cursorIntON,
-        cursorIntOFF,
-        output
-      );
-    }
-    if (cursorPositionStart !== cursorPositionEnd) {
-      return trimTextAndUpdatePosition(
-        mdText,
-        cursorPositionStart,
-        cursorPositionEnd,
-        output,
-        cursorIntON
-      );
-    }
-
-    mdText = mdText.slice(0, cursorPositionStart) + output + mdText.slice(cursorPositionStart);
-
-    cursorPositionStart += cursorIntON;
-    cursorPositionEnd += cursorIntON + DEFAULT_TEXT.length;
-    return {
-      mdText,
-      cursorPositionStart,
-      cursorPositionEnd,
-    };
-  } else {
-    cursorPositionStart = cursorPositionEnd += cursorIntOFF;
-    return {
-      mdText,
-      cursorPositionStart,
-      cursorPositionEnd,
-    };
-  }
-};
-
-// export const onButtonClick = (
-//   isON: boolean,
-//   cursorIntON: number,
-//   cursorIntOFF: number,
-//   output: string,
-//   mdText: string,
-//   cursorPositionStart: number,
-//   cursorPositionEnd: number
-// ) => {
-//   if (isON) {
-//     return cancelButton(mdText, cursorPositionStart, cursorPositionEnd, cursorIntON, output);
-//   } else {
-//     return buttonAction(
-//       mdText,
-//       cursorPositionStart,
-//       cursorPositionEnd,
-//       cursorIntON,
-//       cursorIntOFF,
-//       output
-//     );
-//   }
-// };
-
-// export const cancelButton = (
-//   mdText: string,
-//   cursorPositionStart: number,
-//   cursorPositionEnd: number,
-//   cursorIntON: number,
-//   output: string
-// ) => {
-//   const selection = mdText.slice(cursorPositionStart, cursorPositionEnd);
-
-//   if (selection && selection !== DEFAULT_TEXT) {
-//     mdText =
-//       mdText.slice(0, cursorPositionStart - cursorIntON) +
-//       selection +
-//       mdText.slice(cursorPositionEnd + cursorIntON);
-//     cursorPositionStart -= cursorIntON;
-//     cursorPositionEnd -= cursorIntON;
-//   } else if (isListOrSection(output)) {
-//     mdText =
-//       mdText.slice(0, cursorPositionStart - (cursorIntON + 1)) +
-//       mdText.slice(cursorPositionStart - cursorIntON + (output.length + 1));
-//     cursorPositionStart -= cursorIntON + 1;
-//     cursorPositionEnd = cursorPositionStart;
-//   } else {
-//     mdText =
-//       mdText.slice(0, cursorPositionStart - cursorIntON) +
-//       mdText.slice(cursorPositionStart - cursorIntON + output.length);
-//     cursorPositionStart -= cursorIntON;
-//     cursorPositionEnd = cursorPositionStart;
-//   }
-
-//   return {
-//     mdText,
-//     cursorPositionStart,
-//     cursorPositionEnd,
-//   };
-// };
-
-export const heading = (
-  isON: boolean,
-  mdText: string,
-  cursorPositionStart: number,
-  output: string
-) => {
-  if (
-    !ifNewLine(mdText, cursorPositionStart) &&
-    !(
-      mdText.slice(cursorPositionStart - 3, cursorPositionStart) === "## " ||
-      mdText.slice(cursorPositionStart - 2, cursorPositionStart) === "# "
-    )
-  ) {
+  if (!ifNewLine(mdText, cursorPositionStart) && !doNotNeedNewLine(output)) {
     mdText = mdText.slice(0, cursorPositionStart) + "\n\n" + mdText.slice(cursorPositionStart);
     cursorPositionStart += 1;
-    heading(isON, mdText, cursorPositionStart, output);
+    cursorPositionEnd += 1;
+
+    return buttonAction(
+      mdText,
+      cursorPositionStart,
+      cursorPositionEnd,
+      cursorIntON,
+      cursorIntOFF,
+      output
+    );
+  }
+  if (cursorPositionStart !== cursorPositionEnd) {
+    return trimTextAndUpdatePosition(
+      mdText,
+      cursorPositionStart,
+      cursorPositionEnd,
+      output,
+      cursorIntON
+    );
   }
 
-  if (isON) {
-    if (mdText.slice(cursorPositionStart - 3, cursorPositionStart) === output) {
-      mdText = mdText.slice(0, cursorPositionStart - 3) + "# " + mdText.slice(cursorPositionStart);
-      cursorPositionStart -= 1;
-      return { isON, mdText, cursorPositionStart };
-    } else if (mdText.slice(cursorPositionStart - 2, cursorPositionStart) === "# ") {
-      mdText = mdText.slice(0, cursorPositionStart - 2) + mdText.slice(cursorPositionStart);
-      cursorPositionStart -= 2;
-      // isON = !isON;
-      return { isON, mdText, cursorPositionStart };
-    } else {
-      isON = !isON;
-      return { isON, mdText, cursorPositionStart };
-    }
-  } else {
-    isON = !isON;
-    mdText = mdText.slice(0, cursorPositionStart) + output + mdText.slice(cursorPositionStart);
-    cursorPositionStart += output.length;
-    return { isON, mdText, cursorPositionStart };
-  }
+  mdText = mdText.slice(0, cursorPositionStart) + output + mdText.slice(cursorPositionStart);
+
+  cursorPositionStart += cursorIntON;
+  cursorPositionEnd += cursorIntON + DEFAULT_TEXT.length;
+  return {
+    mdText,
+    cursorPositionStart,
+    cursorPositionEnd,
+  };
 };
+
+// export const heading = (
+//   isON: boolean,
+//   mdText: string,
+//   cursorPositionStart: number,
+//   output: string
+// ) => {
+//   if (
+//     !ifNewLine(mdText, cursorPositionStart) &&
+//     !(
+//       mdText.slice(cursorPositionStart - 3, cursorPositionStart) === "## " ||
+//       mdText.slice(cursorPositionStart - 2, cursorPositionStart) === "# "
+//     )
+//   ) {
+//     mdText = mdText.slice(0, cursorPositionStart) + "\n\n" + mdText.slice(cursorPositionStart);
+//     cursorPositionStart += 1;
+//     heading(isON, mdText, cursorPositionStart, output);
+//   }
+
+//   if (isON) {
+//     if (mdText.slice(cursorPositionStart - 3, cursorPositionStart) === output) {
+//       mdText = mdText.slice(0, cursorPositionStart - 3) + "# " + mdText.slice(cursorPositionStart);
+//       cursorPositionStart -= 1;
+//       return { isON, mdText, cursorPositionStart };
+//     } else if (mdText.slice(cursorPositionStart - 2, cursorPositionStart) === "# ") {
+//       mdText = mdText.slice(0, cursorPositionStart - 2) + mdText.slice(cursorPositionStart);
+//       cursorPositionStart -= 2;
+//       isON = !isON;
+//       return { isON, mdText, cursorPositionStart };
+//     } else {
+//       isON = !isON;
+//       return { isON, mdText, cursorPositionStart };
+//     }
+//   } else {
+//     isON = !isON;
+//     mdText = mdText.slice(0, cursorPositionStart) + output + mdText.slice(cursorPositionStart);
+//     cursorPositionStart += output.length;
+//     return { isON, mdText, cursorPositionStart };
+//   }
+// };

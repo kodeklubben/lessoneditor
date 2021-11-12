@@ -35,23 +35,27 @@ const takeScreenshot = async (url, token, waitForSelector?) => {
   await page.setExtraHTTPHeaders({
     Authorization: "Bearer " + token,
   });
-  await page.setDefaultNavigationTimeout(9000);
+  await page.setDefaultNavigationTimeout(3000);
   await page.setViewport({
     width: 600,
     height: 1000,
     deviceScaleFactor: 1,
   });
-  await page.goto(url, {
-    waitUntil: "networkidle0",
-  });
+  try {
+    await page.goto(url, {
+      waitUntil: "networkidle0",
+    });
+  } catch (error) {
+    console.error(error);
+  }
   if (waitForSelector) {
     logger.info("Waiting for selector: " + waitForSelector);
     await page.waitForSelector(waitForSelector, {
-      timeout: 15000,
+      timeout: 10000,
     });
   } else {
     logger.info("Waiting for timeout", metadata);
-    await page.waitForTimeout(3000);
+    await page.waitForTimeout(1000);
   }
   const screenShotBuffer = await page.screenshot({
     type: "png",

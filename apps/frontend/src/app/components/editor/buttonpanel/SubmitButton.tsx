@@ -6,7 +6,7 @@ import { FC } from "react";
 interface SubmitButtonProps {
   mdText: string;
   setShowSpinner: React.Dispatch<React.SetStateAction<boolean>>;
-  saveEditorText: (regenThumb: boolean) => void;
+  saveEditorText: () => void;
 }
 
 const SubmitButton: FC<SubmitButtonProps> = ({ mdText, setShowSpinner, saveEditorText }) => {
@@ -20,13 +20,13 @@ const SubmitButton: FC<SubmitButtonProps> = ({ mdText, setShowSpinner, saveEdito
   };
 
   const navigateToHome = () => {
-    saveEditorText(true);
-    const target = ["/landingpage", lessonId].join("/");
+    saveEditorText();
+    const target = ["/landingpage", lessonId, "lessontexts"].join("/");
     history.push(target);
   };
 
   return (
-    <div>
+    <>
       <Popup
         content={"Til prosjektoversikt"}
         mouseEnterDelay={250}
@@ -46,7 +46,7 @@ const SubmitButton: FC<SubmitButtonProps> = ({ mdText, setShowSpinner, saveEdito
           />
         }
       />
-    </div>
+    </>
   );
 };
 

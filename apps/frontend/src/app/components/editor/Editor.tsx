@@ -1,4 +1,4 @@
-import { FC, useRef, useState, useEffect } from "react";
+import { useRef, useState, FC, useEffect } from "react";
 import "./editor.scss";
 import ButtonPanel from "./buttonpanel/ButtonPanel";
 import ImageUpload from "./ImageUpload";
@@ -11,19 +11,25 @@ import { useLessonContext } from "../../contexts/LessonContext";
 import Navbar from "../navbar/Navbar";
 import { filenameParser } from "../../utils/filename-parser";
 
+import oppgaveMal from "./settingsFiles/oppgaveMal";
+import laererveiledningMal from "./settingsFiles/LaererveiledningMal";
+
 const Editor: FC = () => {
-  const { lessonId, file } = useParams<{ lessonId: string; file: string }>();
-  const { lessonData } = useLessonContext();
-  const { saveFileBody, savedFileBody } = useFileContext();
-  const [mdText, setMdText] = useState<string>("");
-  const [showSpinner, setShowSpinner] = useState<boolean>(true);
-  const [buttonValues, setButtonValues] = useState<Record<string, boolean>>({});
-  const [cursorPositionStart, setCursorPositionStart] = useState<number>(0);
-  const [cursorPositionEnd, setCursorPositionEnd] = useState<number>(0);
+  const { file, lessonId } = useParams<{ lessonId: string; file: string }>();
+  const { state } = useLessonContext();
+
+  const { saveFileBody, state: fileState, savedFileBody } = useFileContext();
+
+  const [mdText, setMdText] = useState("");
+  const [showSpinner, setShowSpinner] = useState(true);
+  const [openSettings, setOpenSettings] = useState<boolean>(false);
+  const [buttonValues, setButtonValues] = useState({});
+  const [cursorPositionStart, setCursorPositionStart] = useState(0);
+  const [cursorPositionEnd, setCursorPositionEnd] = useState(0);
   const [undo, setUndo] = useState<string[]>([]);
   const [redo, setRedo] = useState<string[]>([]);
-  const [undoCursorPosition, setUndoCursorPosition] = useState<number[]>([0]);
-  const [redoCursorPosition, setRedoCursorPosition] = useState<number[]>([0]);
+  const [undoCursorPosition, setUndoCursorPosition] = useState<number[]>([]);
+  const [redoCursorPosition, setRedoCursorPosition] = useState<number[]>([]);
   const [listButtonValues, setListButtonValues] = useState<{
     bTitle: string;
     output: string;
@@ -38,6 +44,14 @@ const Editor: FC = () => {
   const uploadImageRef = useRef<HTMLInputElement>(null);
 
   const { language } = filenameParser(file);
+
+  const isDefaultText = [laererveiledningMal, oppgaveMal].includes(fileState.savedFileBody || "");
+
+  useEffect(() => {
+    if (isDefaultText) {
+      setOpenSettings(true);
+    }
+  }, [isDefaultText]);
 
   useEffect(() => {
     if (savedFileBody) {
@@ -76,7 +90,7 @@ const Editor: FC = () => {
     }
   };
 
-  const pushRedoValue = (mdText: string, position: number) => {
+  const pushRedoValue = (mdText: string) => {
     resetButtons();
     if (redo.length > 0) {
       const text = redo[redo.length - 1];
@@ -107,73 +121,77 @@ const Editor: FC = () => {
     setButtonValues({});
   };
 
-  const saveEditorText = async (regenThumb: boolean) => {
+  // Autosave bruker denne.
+  const saveEditorText = () => {
     if (saveFileBody) {
-      await saveFileBody(lessonId, file, mdText, regenThumb);
+      saveFileBody(mdText);
     }
   };
 
   return (
     <>
-      {showSpinner ? <ShowSpinner /> : ""}
-      <ImageUpload
-        uploadImageRef={uploadImageRef}
-        mdText={mdText}
-        pushUndoValue={pushUndoValue}
-        cursorPositionStart={cursorPositionStart}
-        cursorPositionEnd={cursorPositionEnd}
-        setMdText={setMdText}
-        setCursor={setCursor}
-        setCursorPosition={setCursorPosition}
-      />
-      <Navbar />
-      <ButtonPanel
-        buttonValues={buttonValues}
-        course={lessonData.course}
-        courseTitle={lessonData.courseTitle}
-        cursorPositionStart={cursorPositionStart}
-        cursorPositionEnd={cursorPositionEnd}
-        editorRef={editorRef}
-        lessonTitle={lessonData.lessonTitle}
-        mdText={mdText}
-        pushRedoValue={pushRedoValue}
-        pushUndoValue={pushUndoValue}
-        redoCursorPosition={redoCursorPosition}
-        saveEditorText={saveEditorText}
-        setButtonValues={setButtonValues}
-        setCursor={setCursor}
-        setCursorPosition={setCursorPosition}
-        setListButtonValues={setListButtonValues}
-        setMdText={setMdText}
-        setRedoCursorPosition={setRedoCursorPosition}
-        setUndoCursorPosition={setUndoCursorPosition}
-        undoCursorPosition={undoCursorPosition}
-        uploadImageRef={uploadImageRef}
-        setUndoAndCursorPosition={setUndoAndUndoPosition}
-      />
-      <div className="text-editor-container">
-        <div className="editor-windows">
-          <MDTextArea
-            editorRef={editorRef}
+      {state.lesson && (
+        <>
+          <ImageUpload
+            uploadImageRef={uploadImageRef}
             mdText={mdText}
-            buttonValues={buttonValues}
-            listButtonValues={listButtonValues}
+            pushUndoValue={pushUndoValue}
             cursorPositionStart={cursorPositionStart}
-            setCursorPosition={setCursorPosition}
+            cursorPositionEnd={cursorPositionEnd}
             setMdText={setMdText}
+            setCursor={setCursor}
+            setCursorPosition={setCursorPosition}
+          />
+          <Navbar>
+            <h1 style={{ display: "inline" }}>{state.lesson.lessonTitle}</h1>
+            <h3 style={{ color: "silver", display: "inline" }}>{state.lesson.courseTitle}</h3>
+          </Navbar>
+          <ButtonPanel
+            buttonValues={buttonValues}
+            course={state.lesson.courseSlug}
+            courseTitle={state.lesson.courseTitle}
+            cursorPositionStart={cursorPositionStart}
+            cursorPositionEnd={cursorPositionEnd}
+            editorRef={editorRef}
+            lessonTitle={state.lesson.lessonTitle}
+            mdText={mdText}
+            pushRedoValue={pushRedoValue}
+            pushUndoValue={pushUndoValue}
+            redoCursorPosition={redoCursorPosition}
+            saveEditorText={saveEditorText}
             setButtonValues={setButtonValues}
             setCursor={setCursor}
+            setCursorPosition={setCursorPosition}
+            setListButtonValues={setListButtonValues}
+            setMdText={setMdText}
+            setRedoCursorPosition={setRedoCursorPosition}
+            setUndoCursorPosition={setUndoCursorPosition}
+            undoCursorPosition={undoCursorPosition}
+            uploadImageRef={uploadImageRef}
             setUndoAndCursorPosition={setUndoAndUndoPosition}
-            resetButtons={resetButtons}
+            openSettings={openSettings}
+            setOpenSettings={setOpenSettings}
           />
-          <MDPreview
-            mdText={mdText}
-            course={lessonData.course}
-            language={language}
-            cursorPositionStart={cursorPositionStart}
-          />
-        </div>
-      </div>
+          <div className="text-editor-container">
+            <div className="editor-windows">
+              <MDTextArea
+                editorRef={editorRef}
+                mdText={mdText}
+                buttonValues={buttonValues}
+                listButtonValues={listButtonValues}
+                cursorPositionStart={cursorPositionStart}
+                setCursorPosition={setCursorPosition}
+                setMdText={setMdText}
+                setButtonValues={setButtonValues}
+                setCursor={setCursor}
+                setUndoAndCursorPosition={setUndoAndUndoPosition}
+                resetButtons={resetButtons}
+              />
+              <MDPreview mdText={mdText} course={state.lesson.courseSlug} language={language} />
+            </div>
+          </div>
+        </>
+      )}
     </>
   );
 };

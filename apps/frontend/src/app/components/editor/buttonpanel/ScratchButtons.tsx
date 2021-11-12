@@ -33,13 +33,13 @@ const ScratchButtons: FC<ScratchButtonsProps> = ({
 }) => {
   return (
     <>
-      {Object.entries(config).map((element, index) => (
+      {Object.entries(config).map((element) => (
         <ButtonController
-          key={"element" + index}
+          key={element[1].slug}
           editorRef={editorRef}
           isON={buttonValues[element[1].slug]}
           title={element[1].title}
-          buttonTitle={element[1].slug}
+          buttonSlug={element[1].slug}
           shortcutKey={element[1].shortcut}
           setButtonValues={setButtonValues}
           setCursor={setCursor}

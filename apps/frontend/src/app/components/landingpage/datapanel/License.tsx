@@ -1,22 +1,11 @@
 import { Header, Input } from "semantic-ui-react";
 import { FORM_TEXT } from "../settingsFiles/languages/landingpage_NO";
 import { FC, SyntheticEvent } from "react";
-
-interface Subtag {
-  grade: string[];
-  subject: string[];
-  topic: string[];
-}
-
-interface YmlData {
-  level: number;
-  license: string;
-  tags: Subtag;
-}
+import { YamlContent } from "@lessoneditor/contracts";
 
 interface LicenseProps {
   changeHandler: (e: SyntheticEvent, data: Record<string, string>) => void;
-  data: YmlData;
+  data: YamlContent;
 }
 
 const License: FC<LicenseProps> = ({ changeHandler, data }) => {

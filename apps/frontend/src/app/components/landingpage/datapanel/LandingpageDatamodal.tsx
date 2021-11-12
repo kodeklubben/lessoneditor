@@ -1,24 +1,21 @@
 import "./ladingpagedatamodal.scss";
 import { SyntheticEvent, useEffect, useState } from "react";
+import { useParams } from "react-router";
 import { Button, Grid, Modal, Popup } from "semantic-ui-react";
 import { TagsGrade, TagsSubject, TagsTopic } from "./Tags";
 import CheckboxField from "./CheckboxField";
+
 import Levels from "./Levels";
 import License from "./License";
 import { useLessonContext } from "../../../contexts/LessonContext";
 import { YML_TEXT } from "../settingsFiles/languages/landingpage_NO";
 
-interface YmlData {
-  level: number;
-  license: string;
-  tags: { grade: string[]; subject: string[]; topic: string[] };
-}
-
 const LandingpageDatamodal = () => {
   const lessonContext = useLessonContext();
-  const { ymlData, setYmlData, saveYmlData } = lessonContext;
+  const { state, setYml, updateYaml, updateLesson } = lessonContext;
   const [checkBoxState, setCheckBoxState] = useState({});
   const [open, setOpen] = useState(false);
+  const { lessonId } = useParams<{ lessonId: string }>();
 
   const isEmptyDatapanel = false;
 
@@ -29,21 +26,21 @@ const LandingpageDatamodal = () => {
     const mapYamlTags = () => {
       let obj: Record<string, boolean> = {};
 
-      obj = ymlData.tags.topic.reduce(
+      obj = state.yml.tags.topic.reduce(
         (accumulator: { [x: string]: boolean }, currentValue: string) => {
           accumulator[currentValue] = true;
           return accumulator;
         },
         { ...obj }
       );
-      obj = ymlData.tags.subject.reduce(
+      obj = state.yml.tags.subject.reduce(
         (accumulator: { [x: string]: boolean }, currentValue: string) => {
           accumulator[currentValue] = true;
           return accumulator;
         },
         { ...obj }
       );
-      obj = ymlData.tags.grade.reduce(
+      obj = state.yml.tags.grade.reduce(
         (accumulator: { [x: string]: boolean }, currentValue: string) => {
           accumulator[currentValue] = true;
           return accumulator;
@@ -52,21 +49,23 @@ const LandingpageDatamodal = () => {
       );
       setCheckBoxState((prevState) => ({ ...prevState, ...obj }));
     };
-    if (ymlData) {
+    if (state.yml.tags) {
       mapYamlTags();
     }
-  }, [ymlData]);
+  }, [state.yml.tags]);
 
-  const onSubmit = async () => {
-    await saveYmlData(ymlData);
+  const onSubmit = () => {
+    updateYaml(lessonId, state.yml);
     setOpen(false);
   };
 
   const dropdownHandler = (event: SyntheticEvent, data: Record<string, string>) => {
-    setYmlData((prevState: YmlData) => ({
-      ...prevState,
-      [data.name]: data.value,
-    }));
+    setYml((s) => {
+      return {
+        ...s,
+        level: +data.value,
+      };
+    });
   };
 
   const checboxHandler = (event: SyntheticEvent, data: Record<string, string>) => {
@@ -81,22 +80,26 @@ const LandingpageDatamodal = () => {
       ...prevState,
       [name]: value,
     }));
-    if (!ymlData.tags[subtag].includes(name)) {
-      setYmlData((prevState: YmlData) => ({
-        ...prevState,
-        tags: {
-          ...prevState.tags,
-          [subtag]: [...prevState.tags[subtag], name],
-        },
-      }));
+    if (!state.yml.tags[subtag].includes(name)) {
+      setYml((s) => {
+        return {
+          ...s,
+          tags: {
+            ...s.tags,
+            [subtag]: [...s.tags[subtag], name],
+          },
+        };
+      });
     } else {
-      setYmlData((prevState: YmlData) => ({
-        ...prevState,
-        tags: {
-          ...prevState.tags,
-          [subtag]: prevState.tags[subtag].filter((e: string) => e !== name),
-        },
-      }));
+      setYml((s) => {
+        return {
+          ...s,
+          tags: {
+            ...s.tags,
+            [subtag]: s.tags[subtag].filter((e: string) => e !== name),
+          },
+        };
+      });
     }
   };
 
@@ -104,8 +107,8 @@ const LandingpageDatamodal = () => {
     const name = data.name;
     const value = data.value;
 
-    setYmlData((prevState: YmlData) => ({
-      ...prevState,
+    setYml((s) => ({
+      ...s,
       [name]: value,
     }));
   };
@@ -163,12 +166,12 @@ const LandingpageDatamodal = () => {
                 />
               </Grid.Column>
               <Grid.Column>
-                <Levels changeHandler={dropdownHandler} data={ymlData} />
+                <Levels changeHandler={dropdownHandler} data={state.yml} />
               </Grid.Column>
             </Grid.Row>
           </Grid>
 
-          <License changeHandler={changeHandler} data={ymlData} />
+          <License changeHandler={changeHandler} data={state.yml} />
         </Modal.Content>
 
         <Modal.Actions className="landingpage_modal">

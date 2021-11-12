@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../dist/apps/nestbackend",
+    "module": "commonjs",
+    "types": ["node"],
+    "emitDecoratorMetadata": true,
+    "target": "es2015"
+  },
+  "exclude": ["**/*.spec.ts"],
+  "include": [
+    "**/*.ts",
+    "../../libs/lesson/src/lib/lesson.dto.ts",
+    "../../libs/lesson/src/lib/lesson.entity.ts",
+    "../../libs/user/src/lib/user.entity.ts"
+, "../../libs/contracts/src/lib/lesson.dto.ts", "../../libs/contracts/src/lib/user.dto.ts"  ]
+}

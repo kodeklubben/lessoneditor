@@ -1,13 +1,12 @@
-import "./navbar.scss";
+import classes from "./Navbar.module.scss";
 import { FC } from "react";
 import { useHistory } from "react-router-dom";
 import ProfileMenu from "./ProfileMenu";
 import { useUserContext } from "../../contexts/UserContext";
-import { Menu, Image } from "semantic-ui-react";
-import logo from "/assets/public/lav_logo.jpg";
+import logo from "../../../../src/assets/public/lav_logo.jpg";
 
-const Navbar: FC = () => {
-  const { user } = useUserContext();
+const Navbar: FC = (props) => {
+  const { state: userState } = useUserContext();
   const history = useHistory();
 
   const navigateToFrontpage = () => {
@@ -16,25 +15,20 @@ const Navbar: FC = () => {
 
   return (
     <>
-      <Menu
-        style={{
-          borderStyle: "none none solid none",
-          borderWidth: "2px",
-          borderColor: "silver",
-        }}
-        size="small"
-        secondary
-      >
-        <Menu.Item>
-          <div className="navbar_logo" onClick={navigateToFrontpage}>
-            <Image src={logo} size="small" />
-            <p>lessoneditor.kidsakoder.no</p>
+      <header>
+        <div className={classes.container}>
+          <div className={classes.image_container}>
+            <img className={classes.logo} src={logo} onClick={navigateToFrontpage}></img>
           </div>
-        </Menu.Item>
-        <Menu.Item position="right">
-          <ProfileMenu name={user ? user.name : ""} photo={user ? user.photo : ""} />
-        </Menu.Item>
-      </Menu>
+          <div className={classes.children_container}>{props.children}</div>
+          <div className={classes.profileMenu_container}>
+            <ProfileMenu
+              name={userState.user ? userState.user.name : ""}
+              photo={userState.user ? userState.user.photo : ""}
+            />
+          </div>
+        </div>
+      </header>
     </>
   );
 };

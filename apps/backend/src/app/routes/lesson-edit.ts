@@ -55,7 +55,7 @@ const lessonEdit = (app: Application) => {
                         Buffer.from(resolvedFile)
                     );
                 } else if (files.data[i].name.match(yamlRegex)) {
-                    const file = await axios.get(files.data[i].download_url);
+                    const file: any = await axios.get(files.data[i].download_url);
                     const ymlBuffer = Buffer.from(
                         JSON.stringify(yaml.load(file.data))
                     );
@@ -64,7 +64,7 @@ const lessonEdit = (app: Application) => {
                         ymlBuffer
                     );
                 } else {
-                    const file = await axios.get(files.data[i].download_url);
+                    const file: any = await axios.get(files.data[i].download_url);
                     await saveFile(
                         ["drafts", lessonData.lessonId, files.data[i].name],
                         Buffer.from(file.data)
