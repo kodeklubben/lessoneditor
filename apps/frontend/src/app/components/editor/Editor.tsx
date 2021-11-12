@@ -108,7 +108,7 @@ const Editor: FC = () => {
   };
 
   /*
-   * Av en eller annen grunn må denne funksjonen være async med awaitfor å fungere.
+   * Av en eller annen grunn må denne funksjonen være async med await for å fungere.
    */
   const setCursorPosition = async (positionStart: number, positionEnd: number) => {
     if (!editorRef.current) {

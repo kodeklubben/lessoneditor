@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { Dispatch, FC, SetStateAction, useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import axios from "axios";
 import { getLessonPaths } from "./utils/get-lesson-paths";
@@ -46,9 +46,12 @@ export const LessonContextProvider = (props: any) => {
         console.error(error);
       }
     }
+  };
 
-    if (lessonId) fetchLessonData().then();
-  }, [lessonId]);
+  const fetchYmlData = async () => {
+    const lessonYMLDataRes = await axios.get(lessonYamlPath);
+    return lessonYMLDataRes.data;
+  };
 
   const updateYaml = async (lessonId: string, data: YamlContent) => {
     try {

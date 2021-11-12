@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useContext, useEffect, useState } from "react";
+import React, { Dispatch, FC, SetStateAction, useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import saveMdText from "../api/save-md-text";
 import insertMetaDataInTeacherGuide from "../components/editor/utils/insertMetaDataInTeacherGuide";
@@ -65,6 +65,7 @@ const FileContextProvider = (props: any) => {
   };
 
   useEffect(() => {
+    let isSubscribed = true;
     async function fetchData() {
       try {
         const result = await axios.get<FileDTO<string>>(

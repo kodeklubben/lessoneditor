@@ -165,6 +165,61 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
               saveEditorText={saveEditorText}
             />
           </div>
+          '
+          <UndoRedo
+            editorRef={editorRef}
+            mdText={mdText}
+            cursorPositionStart={cursorPositionStart}
+            undoCursorPosition={undoCursorPosition}
+            redoCursorPosition={redoCursorPosition}
+            setUndoCursorPosition={setUndoCursorPosition}
+            setRedoCursorPosition={setRedoCursorPosition}
+            pushUndoValue={pushUndoValue}
+            pushRedoValue={pushRedoValue}
+            setCursorPosition={setCursorPosition}
+          />
+          <div style={{ marginRight: "3em" }} />
+          <Hyperlink
+            editorRef={editorRef}
+            mdText={mdText}
+            cursorPositionStart={cursorPositionStart}
+            cursorPositionEnd={cursorPositionEnd}
+            setMdText={setMdText}
+            setCursorPosition={setCursorPosition}
+            setCursor={setCursor}
+            setUndoAndCursorPosition={setUndoAndCursorPosition}
+          />
+          <Image
+            editorRef={editorRef}
+            uploadImageRef={uploadImageRef}
+            setUndoAndCursorPosition={setUndoAndCursorPosition}
+            mdText={mdText}
+            cursorPositionStart={cursorPositionStart}
+          />
+          <Video
+            editorRef={editorRef}
+            mdText={mdText}
+            cursorPositionStart={cursorPositionStart}
+            cursorPositionEnd={cursorPositionEnd}
+            setMdText={setMdText}
+            setCursorPosition={setCursorPosition}
+            setCursor={setCursor}
+            setUndoAndCursorPosition={setUndoAndCursorPosition}
+          />
+          <div style={{ marginRight: "3em" }} />
+          <Lists
+            editorRef={editorRef}
+            cursorPositionStart={cursorPositionStart}
+            cursorPositionEnd={cursorPositionEnd}
+            mdText={mdText}
+            buttonValues={buttonValues}
+            setMdText={setMdText}
+            setCursorPosition={setCursorPosition}
+            setCursor={setCursor}
+            setListButtonValues={setListButtonValues}
+            setButtonValues={setButtonValues}
+            setUndoAndCursorPosition={setUndoAndCursorPosition}
+          />
         </div>
 
         <div className="secondrow">

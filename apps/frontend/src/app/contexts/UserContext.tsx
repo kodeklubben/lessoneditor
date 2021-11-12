@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, FC } from "react";
 import axios from "axios";
 import { Lesson, paths, User } from "@lessoneditor/api-interfaces";
 import { UserDTO } from "@lessoneditor/contracts";
@@ -19,6 +19,7 @@ export const UserContextProvider = (props: any) => {
   const [error, setError] = useState({});
 
   useEffect(() => {
+    let isSubscribed = true;
     async function fetchData() {
       try {
         const userRes = await axios.get<UserDTO>(paths.USER);

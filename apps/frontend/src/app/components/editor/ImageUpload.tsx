@@ -1,4 +1,4 @@
-import { FC, useState, Ref } from "react";
+import { FC, Dispatch, SetStateAction, useState, Ref } from "react";
 import ShowSpinner from "../ShowSpinner";
 import uploadImage from "../../api/upload-image";
 import { useParams } from "react-router";
@@ -18,7 +18,7 @@ interface ImageUploadProps {
   pushUndoValue: (mdText: string, cursorPositionStart: number) => void;
   cursorPositionStart: number;
   cursorPositionEnd: number;
-  setMdText: React.Dispatch<React.SetStateAction<string>>;
+  setMdText: Dispatch<SetStateAction<string>>;
   setCursor: (pos1: number, pos2: number) => void;
   setCursorPosition: (positionStart: number, positionEnd: number) => void;
 }
@@ -36,7 +36,7 @@ const ImageUpload: FC<ImageUploadProps> = ({
   let start = cursorPositionStart + 2;
   let end = cursorPositionEnd + 18;
 
-  const { lessonId } = useParams<any>();
+  const { lessonId } = useParams<{ lessonId: string }>();
   const [showSpinner, setShowSpinner] = useState(false);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -46,7 +46,6 @@ const ImageUpload: FC<ImageUploadProps> = ({
     "Ugyldig filnavn, sjekk om det er mellomrom eller spesialtegn i filnavnet";
 
   const imageSubmitHandler = (imageInputValue: string) => {
-    pushUndoValue(mdText, cursorPositionStart);
     if (imageInputValue === "fileNameError") {
       setMdText(
         mdText.slice(0, cursorPositionStart) +

@@ -1,5 +1,4 @@
-import "./landingpage.scss";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { Link } from "react-router-dom";
 import TeacherGuides from "./TeacherGuides";
@@ -11,6 +10,9 @@ import ThankU from "./ThankU";
 
 import { Button } from "semantic-ui-react";
 import Navbar from "../navbar/Navbar";
+import LessonData from "./datapanel/LessonData";
+import MDPreview from "../editor/MDPreview";
+import { Button, Container, Grid, Menu, Segment, Icon, Image, Item } from "semantic-ui-react";
 import { useLessonContext } from "../../contexts/LessonContext";
 
 const Landingpage = () => {
