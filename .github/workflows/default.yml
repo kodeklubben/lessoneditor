@@ -73,6 +73,7 @@ jobs:
           args: info
       - name: fetch access token
         run: echo ${{ secrets.SERVICE_ACCOUNT }} | base64 --decode > credentials.json
+      - run: TEST=$(cat credentials.json); echo $TEST;
       - run: gcloud auth activate-service-account github-actions@lessoneditor.iam.gserviceaccount.com --key-file=credentials.json
       - run: gcloud auth print-access-token
       - run: ACCESS_TOKEN=$(gcloud auth print-access-token); echo "ACCESS_TOKEN=${ACCESS_TOKEN}" >> $GITHUB_ENV
@@ -110,7 +111,7 @@ jobs:
           path: ./dist
           key: cache-dist-${{ github.sha }}
       - run: echo "${{ secrets.DOTENV }}" > .env
-      - run: echo ${{ secrets.SERVICE_ACCOUNT }} | base64 --decode > credentials.json
+      - run: echo "${{ secrets.SERVICE_ACCOUNT }}" | base64 --decode > credentials.json
       - run: SERVICE_ACCOUNT=$(cat credentials.json)
       - run: echo $SERVICE_ACCOUNT
       - name: Deploy to Google App Engine
