@@ -113,7 +113,7 @@ jobs:
       - run: echo "${{ secrets.DOTENV }}" > .env
       - name: fetch access token
         run: echo ${{ secrets.SERVICE_ACCOUNT }} | base64 --decode > credentials.json
-      - run: TEST=$(cat credentials.json); echo $TEST;
+      - run: SERVICE_ACCOUNT=$(cat credentials.json); echo $SERVICE_ACCOUNT;
       - name: Deploy to Google App Engine
         uses: atRobertoFlores/gae_deploy_action@master
         with:
