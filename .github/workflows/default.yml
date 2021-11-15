@@ -111,7 +111,7 @@ jobs:
           key: cache-dist-${{ github.sha }}
       - run: echo "${{ secrets.DOTENV }}" > .env
       - run: echo ${{ secrets.SERVICE_ACCOUNT }} | base64 --decode > credentials.json
-      - run: SERVICE_ACCOUNT = $(cat credentials.json)
+      - run: SERVICE_ACCOUNT=$(cat credentials.json)
       - run: echo $SERVICE_ACCOUNT
       - name: Deploy to Google App Engine
         uses: atRobertoFlores/gae_deploy_action@master
