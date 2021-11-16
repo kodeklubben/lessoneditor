@@ -85,7 +85,8 @@
     "rxjs": "^7.4.0",
     "sequelize": "^6.7.0",
     "tslib": "^2.3.1",
-    "typeorm": "^0.2.40"
+    "typeorm": "^0.2.40",
+    "husky": "^7.0.4"
   },
   "devDependencies": {
     "@babel/core": "7.15.8",
@@ -147,7 +148,7 @@
     "eslint-plugin-react-hooks": "4.2.0",
     "faker": "^5.5.3",
     "highlight.js": "^11.2.0",
-    "husky": "^7.0.2",
+    "husky": "^7.0.4",
     "jest": "^27.2.5",
     "jest-mock-axios": "^4.4.1",
     "lint-staged": "^11.2.3",
