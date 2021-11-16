@@ -1,5 +1,5 @@
 runtime: nodejs14
-entrypoint: node ./dist/apps/backend/main.js
+entrypoint: node ./dist/apps/nestbackend/apps/nestbackend/src/main.js
 handlers:
   - url: /static
     static_dir: dist/apps/frontend/static
