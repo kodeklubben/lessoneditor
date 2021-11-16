@@ -1,13 +1,8 @@
 runtime: nodejs14
-entrypoint: node ./dist/apps/nestbackend/apps/nestbackend/src/main.js
+entrypoint: node dist/apps/nestbackend/apps/nestbackend/src/main.js
 handlers:
-  - url: /static
-    static_dir: dist/apps/frontend/static
-
-  - url: /.*
-    secure: always
-    redirect_http_response_code: 301
-    script: auto
+  - url: /
+    static_dir: dist/apps/frontend/
 
 env_variables:
   BUCKET: "lessoneditor"
