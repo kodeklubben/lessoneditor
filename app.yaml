@@ -3,7 +3,15 @@ entrypoint: node dist/apps/nestbackend/apps/nestbackend/src/main.js
 
 handlers:
   - url: /
-    static_dir: dist/apps/frontend/
+    static_files: dist/apps/frontend/index.html
+    upload: dist/apps/frontend/index.html
+  - url: /(.*)$
+    static_files: dist/apps/frontend/\1
+    upload: dist/apps/frontend/(.*)
+  - url: /.*
+    script: auto
+    secure: always
+    redirect_http_response_code: 301
 
 env_variables:
   BUCKET: "lessoneditor"
@@ -21,4 +29,3 @@ env_variables:
   TYPEORM_PORT: 5432
   TYPEORM_SYNCHRONIZE: false
   TYPEORM_ENTITIES: dist/**/*.entity.js
-
