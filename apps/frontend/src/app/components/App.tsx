@@ -14,7 +14,7 @@ const App = () => {
         <UserContextProvider>
           <Route exact path="/" component={Overview} />
           <Route exact path="/landingpage" component={Landingpage} />
-          <Route exact path="/landingpage/:lessonId">
+          <Route exact path="/landingpage/:lessonId/:mode">
             <LessonContextProvider>
               <Landingpage />
             </LessonContextProvider>

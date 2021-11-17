@@ -46,7 +46,9 @@ export const LessonContextProvider = (props: any) => {
         console.error(error);
       }
     }
-  });
+
+    fetchLessonData()
+  },[]);
 
   const fetchYmlData = async () => {
     const lessonYMLDataRes = await axios.get(lessonYamlPath);
