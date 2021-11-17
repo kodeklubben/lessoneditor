@@ -15,10 +15,11 @@ env_variables:
   THUMB_SERVICE_URL: "https://europe-west1-lessoneditor.cloudfunctions.net/thumbnailer"
   TYPEORM_CONNECTION: postgres
   TYPEORM_HOST: /cloudsql/lessoneditor:europe-north1:lessoneditor
-  TYPEORM_USERNAME: appengine
+  TYPEORM_USERNAME: github-actions@lessoneditor.iam
   TYPEORM_PASSWORD: appengine
   TYPEORM_DATABASE: lessoneditor
   TYPEORM_PORT: 5432
   TYPEORM_SYNCHRONIZE: false
   TYPEORM_ENTITIES: dist/**/*.entity.js
+  TYPEORM_DRIVER_EXTRA: '{"socketPath": "/cloudsql/lessoneditor:europe-north1:lessoneditor"}'
 
