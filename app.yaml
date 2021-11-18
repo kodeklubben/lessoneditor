@@ -21,5 +21,4 @@ env_variables:
   TYPEORM_PORT: 5432
   TYPEORM_SYNCHRONIZE: false
   TYPEORM_ENTITIES: dist/**/*.entity.js
-  TYPEORM_DRIVER_EXTRA: '{"socketPath": "/cloudsql/lessoneditor:europe-north1:lessoneditor"}'
 
