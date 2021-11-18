@@ -1,9 +1,4 @@
 runtime: nodejs14
-entrypoint: node dist/apps/nestbackend/apps/nestbackend/src/main.js
-
-handlers:
-  - url: /
-    static_dir: dist/apps/frontend/
 
 env_variables:
   BUCKET: "lessoneditor"
@@ -22,4 +17,5 @@ env_variables:
   TYPEORM_SYNCHRONIZE: false
   TYPEORM_ENTITIES: dist/**/*.entity.js
   TYPEORM_DRIVER_EXTRA: '{"socketPath": "/cloudsql/lessoneditor:europe-north1:lessoneditor"}'
+
 
