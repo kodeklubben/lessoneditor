@@ -9,7 +9,7 @@ env_variables:
   GITHUB_LESSON_REPO_OWNER: "kodeklubben"
   THUMB_SERVICE_URL: "https://europe-west1-lessoneditor.cloudfunctions.net/thumbnailer"
   TYPEORM_CONNECTION: postgres
-  TYPEORM_HOST: /cloudsql/lessoneditor:europe-north1:lessoneditor
+  TYPEORM_HOST: /cloudsql/lessoneditor:europe-west1:lesson-editor
   TYPEORM_USERNAME: appengine
   TYPEORM_PASSWORD: appengine
   TYPEORM_DATABASE: lessoneditor
