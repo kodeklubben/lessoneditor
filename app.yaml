@@ -1,7 +1,6 @@
 runtime: nodejs14
 entrypoint: node dist/apps/nestbackend/apps/nestbackend/src/main.js
 
-
 env_variables:
   BUCKET: "lessoneditor"
   PORT: 8080
@@ -20,4 +19,5 @@ env_variables:
   TYPEORM_SYNCHRONIZE: false
   TYPEORM_ENTITIES: dist/**/*.entity.js
   
+
 
