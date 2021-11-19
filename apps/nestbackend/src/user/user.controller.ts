@@ -28,14 +28,10 @@ export class UserController {
     return lessons;
   }
 
-  @UseGuards(LoginGuard)
   @Get()
-  async GetUser(@Req() req): Promise<UserDTO> {
-    if (req.user == null) {
-      throw new ForbiddenException();
-    }
-    console.log(req.user);
-    return req.user;
+  GetUser(@Req() req): string {
+    return "Hello"
+
   }
 
   @UseGuards(LoginGuard)

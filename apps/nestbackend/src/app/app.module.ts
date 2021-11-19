@@ -1,6 +1,6 @@
 import { Module, forwardRef } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
-import { TypeOrmModule } from "@nestjs/typeorm";
+  import { TypeOrmModule } from "@nestjs/typeorm";
 // import { User, UserModule } from '@lessoneditor/user';
 // import { Lesson, LessonModule } from "@lessoneditor/lesson";
 import { AuthGuard, PassportModule } from "@nestjs/passport";
