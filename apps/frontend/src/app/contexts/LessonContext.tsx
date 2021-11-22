@@ -2,12 +2,7 @@ import React, { Dispatch, FC, SetStateAction, useContext, useEffect, useState } 
 import { useParams } from "react-router";
 import axios from "axios";
 import { getLessonPaths } from "./utils/get-lesson-paths";
-import {
-  NewLessonDTO,
-  LessonDTO,
-  FileDTO,
-  YamlContent,
-} from "@lessoneditor/contracts";
+import { NewLessonDTO, LessonDTO, FileDTO, YamlContent } from "@lessoneditor/contracts";
 import { LessonContextState, LessonContextModel } from "./lessonContext.functions";
 import ShowSpinner from "../components/ShowSpinner";
 import { paths } from "@lessoneditor/api-interfaces";
@@ -23,6 +18,7 @@ export const LessonContextProvider = (props: any) => {
 
   const [lesson, setLesson] = useState<LessonDTO | undefined>(undefined);
   const [files, setFiles] = useState<string[]>([]);
+  const [images, setImages] = useState({});
   const [yml, setYml] = useState<YamlContent>({
     level: 1,
     license: "CC BY-SA 4.0",
@@ -42,13 +38,23 @@ export const LessonContextProvider = (props: any) => {
         setFiles(fileNames.data);
         setYml(yamlFile.data.content);
         setLesson(lesson.data);
+        downloadImages(fileNames.data);
+        console.log({ files });
       } catch (error) {
         console.error(error);
       }
     }
 
-    fetchLessonData()
-  },[]);
+    fetchLessonData();
+  }, []);
+
+  useEffect(() => {
+    console.log(images);
+  }, [images]);
+
+  const downloadImages = async (filenames: any) => {
+    const imageFileTypes = ["jpg", "jpeg", "gif", "png"];
+  };
 
   const fetchYmlData = async () => {
     const lessonYMLDataRes = await axios.get(lessonYamlPath);
@@ -93,6 +99,8 @@ export const LessonContextProvider = (props: any) => {
     setYml: setYml,
     updateLesson: updatelesson,
     updateYaml: updateYaml,
+    images,
+    setImages,
   };
 
   return (

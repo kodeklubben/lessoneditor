@@ -54,6 +54,7 @@
     "@octokit/types": "^6.34.0",
     "@types/multer": "^1.4.7",
     "axios": "^0.23.0",
+    "blob-util": "^2.0.2",
     "cache-manager": "^3.4.4",
     "connect-typeorm": "^1.1.4",
     "core-js": "^3.18.3",

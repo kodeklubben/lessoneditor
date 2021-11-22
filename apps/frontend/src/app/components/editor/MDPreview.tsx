@@ -14,7 +14,7 @@ interface MDPreviewProps {
 }
 
 const MDPreview: FC<MDPreviewProps> = ({ mdText, course, language }) => {
-  const { state } = useLessonContext();
+  const { state, images } = useLessonContext();
 
   const [mdTextUrlReplaced, setMdTextUrlReplaced] = useState<string>("");
   const parseMD = mdTextUrlReplaced && mdParser(mdTextUrlReplaced);
