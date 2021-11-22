@@ -8,7 +8,7 @@ import { paths } from "@lessoneditor/api-interfaces";
 import axios from "axios";
 import { NewFileDTO } from "@lessoneditor/contracts";
 import { useLessonContext } from "../../contexts/LessonContext";
-import blobUtil from "blob-util";
+import { base64StringToBlob, createObjectURL } from "blob-util";
 
 const imgRegex = /^[\w-]+(.jpg|.jpeg|.gif|.png)$/i;
 const imageSizeErrorMessage = "Bildet kan ikke være over 5mb";
@@ -106,10 +106,14 @@ const ImageUpload: FC<ImageUploadProps> = ({
                 paths.LESSON_FILES.replace(":lessonId", state.lesson.lessonId.toString()),
                 newFileDTO
               );
+
               setImages((prevImages: any) => ({
                 ...prevImages,
-                [filename + ext]: blobUtil.base64StringToBlob(content),
+                [newFileDTO.filename + newFileDTO.ext]: createObjectURL(
+                  base64StringToBlob(newFileDTO.content, "image/png")
+                ),
               }));
+
               setShowSpinner(false);
               imageSubmitHandler(newFileDTO.filename + newFileDTO.ext);
             }

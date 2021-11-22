@@ -8,8 +8,11 @@ import ShowSpinner from "../components/ShowSpinner";
 import { paths } from "@lessoneditor/api-interfaces";
 import { useUserContext } from "./UserContext";
 import { stringify } from "querystring";
+import { base64StringToBlob, createObjectURL } from "blob-util";
 
 const LessonContext = React.createContext<LessonContextModel>({} as LessonContextModel);
+
+const imageExt = ["jpeg", "jpg", "gif", "png"];
 
 export const LessonContextProvider = (props: any) => {
   const { state } = useUserContext();
@@ -35,11 +38,28 @@ export const LessonContextProvider = (props: any) => {
         const yamlFile = await axios.get<FileDTO<YamlContent>>(
           paths.LESSON_FILE.replace(":lessonId", lessonId).replace(":fileName", "lesson")
         );
+
+        for (const file of fileNames.data) {
+          const ext = file.split(".").pop() === "jpg" ? "jpeg" : file.split(".").pop() ?? "";
+          if (!imageExt.includes(ext)) {
+            continue;
+          }
+          const url = paths.LESSON_FILE.replace(":lessonId", lessonId).replace(
+            ":fileName",
+            file.split(".")[0]
+          );
+
+          const imageRes: any = await axios.get(url);
+          setImages((prevImages) => ({
+            ...prevImages,
+            [file]: createObjectURL(base64StringToBlob(imageRes.data, `image/${ext}`)),
+          }));
+        }
+
         setFiles(fileNames.data);
         setYml(yamlFile.data.content);
         setLesson(lesson.data);
         downloadImages(fileNames.data);
-        console.log({ files });
       } catch (error) {
         console.error(error);
       }
@@ -48,9 +68,6 @@ export const LessonContextProvider = (props: any) => {
     fetchLessonData();
   }, []);
 
-  useEffect(() => {
-    console.log(images);
-  }, [images]);
 
   const downloadImages = async (filenames: any) => {
     const imageFileTypes = ["jpg", "jpeg", "gif", "png"];
