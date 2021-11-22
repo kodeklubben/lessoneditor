@@ -1,21 +1,21 @@
 runtime: nodejs14
+entrypoint: node dist/apps/nestbackend/apps/nestbackend/src/main.js
 
 env_variables:
-  BUCKET: "lessoneditor"
   GITHUB_CLIENT_ID: "0a838d7f4cd79f2005b6"
   GITHUB_CLIENT_SECRET: "6e1f0cdb26e59eb7ccfc9cc0bcd00a3524ab65ee"
-  GITHUB_CALLBACK_URL: "https://europe-west1-lessoneditor.cloudfunctions.net/frontend/api/auth/callback"
+  GITHUB_CALLBACK_URL: "https://lessoneditor.ew.r.appspot.com/api/auth/callback"
   GITHUB_LESSON_REPO: "oppgaver"
   GITHUB_LESSON_REPO_OWNER: "kodeklubben"
   THUMB_SERVICE_URL: "https://europe-west1-lessoneditor.cloudfunctions.net/thumbnailer"
   TYPEORM_CONNECTION: postgres
-  TYPEORM_HOST: /cloudsql/lessoneditor:europe-north1:lessoneditor
-  TYPEORM_USERNAME: github-actions@lessoneditor.iam
+  TYPEORM_HOST: /cloudsql/lessoneditor:europe-west1:lesson-editor
+  TYPEORM_USERNAME: appengine
   TYPEORM_PASSWORD: appengine
   TYPEORM_DATABASE: lessoneditor
   TYPEORM_PORT: 5432
   TYPEORM_SYNCHRONIZE: false
   TYPEORM_ENTITIES: dist/**/*.entity.js
-  TYPEORM_DRIVER_EXTRA: '{"socketPath": "/cloudsql/lessoneditor:europe-north1:lessoneditor"}'
+  
 
 
