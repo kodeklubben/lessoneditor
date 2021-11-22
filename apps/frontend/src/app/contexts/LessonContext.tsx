@@ -68,9 +68,6 @@ export const LessonContextProvider = (props: any) => {
     fetchLessonData();
   }, []);
 
-  useEffect(() => {
-    console.log(images);
-  }, [images]);
 
   const downloadImages = async (filenames: any) => {
     const imageFileTypes = ["jpg", "jpeg", "gif", "png"];

@@ -89,10 +89,18 @@ const ImageUpload: FC<ImageUploadProps> = ({
         reader.onload = async () => {
           try {
             if (reader.result) {
+              const filename = file.name.split(".")[0].toLowerCase();
+              const ext = `.${
+                file.name.split(".").pop()?.toLowerCase() === "jpg"
+                  ? "jpeg"
+                  : file.name.split(".").pop()?.toLowerCase()
+              }`;
+              const content =
+                reader.result.toString().split(`data:${file.type};base64,`).pop()! ?? "";
               const newFileDTO: NewFileDTO = {
-                filename: file.name.split(".")[0].toLowerCase(),
-                ext: "." + file.name.split(".").pop()?.toLowerCase(),
-                content: reader.result.toString().split(`data:${file.type};base64,`).pop()!,
+                filename,
+                ext,
+                content,
               };
               await axios.post(
                 paths.LESSON_FILES.replace(":lessonId", state.lesson.lessonId.toString()),
