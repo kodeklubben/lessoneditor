@@ -39,7 +39,6 @@ export const LessonContextProvider = (props: any) => {
         setYml(yamlFile.data.content);
         setLesson(lesson.data);
         downloadImages(fileNames.data);
-        console.log({ files });
       } catch (error) {
         console.error(error);
       }
@@ -47,10 +46,6 @@ export const LessonContextProvider = (props: any) => {
 
     fetchLessonData();
   }, []);
-
-  useEffect(() => {
-    console.log(images);
-  }, [images]);
 
   const downloadImages = async (filenames: any) => {
     const imageFileTypes = ["jpg", "jpeg", "gif", "png"];
