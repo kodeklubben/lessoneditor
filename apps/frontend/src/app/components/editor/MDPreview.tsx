@@ -4,10 +4,6 @@ import { renderMicrobit } from "../../utils/renderMicrobit";
 import { renderScratchBlocks } from "../../utils/renderScratchblocks";
 import { mdParser } from "../../utils/mdParser";
 import { useLessonContext } from "../../contexts/LessonContext";
-import axios, { AxiosResponse } from "axios";
-import { paths } from "@lessoneditor/api-interfaces";
-
-import blobUtil from "blob-util";
 
 interface MDPreviewProps {
   mdText: string;
@@ -16,14 +12,13 @@ interface MDPreviewProps {
 }
 
 const MDPreview: FC<MDPreviewProps> = ({ mdText, course, language }) => {
-  const { state, images } = useLessonContext();
+  const { images } = useLessonContext();
 
   const [mdTextUrlReplaced, setMdTextUrlReplaced] = useState<string>("");
   const parseMD = mdTextUrlReplaced && mdParser(mdTextUrlReplaced);
 
   useEffect(() => {
-    console.log(images);
-    function replaceUrlWithBase64(markdownContent: any) {
+    function replaceUrlWithBlobUrl(markdownContent: any) {
       const filenames: string[] = [];
       markdownContent.replace(
         /(!\[.*?\]\(")(.+?)("\))/gs,
@@ -43,7 +38,7 @@ const MDPreview: FC<MDPreviewProps> = ({ mdText, course, language }) => {
     }
 
     async function replaceUrls() {
-      const newMdText = replaceUrlWithBase64(mdText);
+      const newMdText = replaceUrlWithBlobUrl(mdText);
       setMdTextUrlReplaced(newMdText);
     }
     replaceUrls();
@@ -51,7 +46,7 @@ const MDPreview: FC<MDPreviewProps> = ({ mdText, course, language }) => {
     if (course === "microbit") {
       renderMicrobit(language);
     }
-  }, [mdText, images]);
+  }, [mdText]);
 
   if (course === "scratch" && parseMD) {
     const lessonContent = renderScratchBlocks(parseMD);
