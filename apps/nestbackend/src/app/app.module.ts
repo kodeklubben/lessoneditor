@@ -1,6 +1,6 @@
 import { Module, forwardRef } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
-import { TypeOrmModule } from "@nestjs/typeorm";
+  import { TypeOrmModule } from "@nestjs/typeorm";
 // import { User, UserModule } from '@lessoneditor/user';
 // import { Lesson, LessonModule } from "@lessoneditor/lesson";
 import { AuthGuard, PassportModule } from "@nestjs/passport";
@@ -9,10 +9,16 @@ import { UserModule } from "../user/user.module";
 import { LessonModule } from "../lesson/lesson.module";
 import { AuthModule } from "../auth/auth.module";
 import { LoginGuard } from "../auth/login.guard";
+import { join } from 'path';
+import { ServeStaticModule } from '@nestjs/serve-static';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ envFilePath: ".local.env" }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '../../../../../frontend'),
+      exclude: ['/api*'],
+    }),
     TypeOrmModule.forRoot(),
     forwardRef(() => UserModule),
     AuthModule,
