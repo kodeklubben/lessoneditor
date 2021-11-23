@@ -101,11 +101,6 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
-      - name: Restoring Dist Folder
-        uses: actions/cache@v2
-        with:
-          path: ./dist
-          key: cache-dist-${{ github.sha }}
       - run: echo "${{ secrets.DOTENV }}" > .env
       - name: deploy
         uses: google-github-actions/deploy-appengine@main
