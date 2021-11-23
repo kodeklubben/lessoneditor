@@ -8,6 +8,7 @@ import { paths } from "@lessoneditor/api-interfaces";
 import axios from "axios";
 import { NewFileDTO } from "@lessoneditor/contracts";
 import { useLessonContext } from "../../contexts/LessonContext";
+import { base64StringToBlob, createObjectURL } from "blob-util";
 
 const imgRegex = /^[\w-]+(.jpg|.jpeg|.gif|.png)$/i;
 const imageSizeErrorMessage = "Bildet kan ikke være over 5mb";
@@ -40,7 +41,7 @@ const ImageUpload: FC<ImageUploadProps> = ({
   const [showSpinner, setShowSpinner] = useState(false);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const { state } = useLessonContext();
+  const { state, setImages, images } = useLessonContext();
 
   const fileNameErrorMessage =
     "Ugyldig filnavn, sjekk om det er mellomrom eller spesialtegn i filnavnet";
@@ -88,15 +89,30 @@ const ImageUpload: FC<ImageUploadProps> = ({
         reader.onload = async () => {
           try {
             if (reader.result) {
+              const filename = file.name.split(".")[0].toLowerCase();
+              const ext = `.${
+                file.name.split(".").pop()?.toLowerCase() === "jpg"
+                  ? "jpeg"
+                  : file.name.split(".").pop()?.toLowerCase()
+              }`;
+              const content =
+                reader.result.toString().split(`data:${file.type};base64,`).pop()! ?? "";
               const newFileDTO: NewFileDTO = {
-                filename: file.name.split(".")[0].toLowerCase(),
-                ext: "." + file.name.split(".").pop()?.toLowerCase(),
-                content: reader.result.toString().split(`data:${file.type};base64,`).pop()!,
+                filename,
+                ext,
+                content,
               };
               await axios.post(
                 paths.LESSON_FILES.replace(":lessonId", state.lesson.lessonId.toString()),
                 newFileDTO
               );
+
+              setImages((prevImages: any) => ({
+                ...prevImages,
+                [newFileDTO.filename + newFileDTO.ext]: createObjectURL(
+                  base64StringToBlob(newFileDTO.content, "image/png")
+                ),
+              }));
 
               setShowSpinner(false);
               imageSubmitHandler(newFileDTO.filename + newFileDTO.ext);
