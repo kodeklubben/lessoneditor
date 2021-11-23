@@ -122,7 +122,7 @@ export const UserContextProvider = (props: any) => {
   if (userContexState.loggedIn) {
     return <UserContext.Provider value={context}>{props.children}</UserContext.Provider>;
   } else {
-    return <NotLoggedInPage></NotLoggedInPage>;
+    return <NotLoggedInPage></NotLoggedInPage>
   }
 };
 export const useUserContext = (): UserContextModel => useContext<UserContextModel>(UserContext);

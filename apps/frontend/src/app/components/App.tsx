@@ -28,9 +28,11 @@ const App = () => {
             </LessonContextProvider>
           </Route>
           <Route exact path="/preview/:lessonId/:file">
-            <FileContextProvider>
-              <SimplePreview />
-            </FileContextProvider>
+            <LessonContextProvider>
+              <FileContextProvider>
+                <SimplePreview />
+              </FileContextProvider>
+            </LessonContextProvider>
           </Route>
         </UserContextProvider>
         <Route path="*">
