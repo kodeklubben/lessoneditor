@@ -65,7 +65,6 @@ const FileContextProvider = (props: any) => {
   };
 
   useEffect(() => {
-    let isSubscribed = true;
     async function fetchData() {
       try {
         const result = await axios.get<FileDTO<string>>(

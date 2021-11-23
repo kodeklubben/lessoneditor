@@ -53,9 +53,20 @@ export const LessonContextProvider = (props: any) => {
           }));
         }
 
+        for (const file2 of fileNames.data) {
+          const url = paths.LESSON_FILE.replace(":lessonId", lessonId).replace(
+            ":fileName",
+            file2.split(".")[0]
+          );
+
+          const fileRes: any = await axios.get(url);
+          console.log(fileRes);
+        }
+
         setFiles(fileNames.data);
         setYml(yamlFile.data.content);
         setLesson(lesson.data);
+        console.log(yml);
       } catch (error) {
         console.error(error);
       }
