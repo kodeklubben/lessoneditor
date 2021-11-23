@@ -53,6 +53,7 @@ export const LessonContextProvider = (props: any) => {
           }));
         }
 
+
         setFiles(fileNames.data);
         setYml(yamlFile.data.content);
         setLesson(lesson.data);
