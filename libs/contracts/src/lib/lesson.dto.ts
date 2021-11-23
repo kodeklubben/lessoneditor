@@ -36,8 +36,8 @@ export interface NewLessonDTO {
 }
 
 export interface YamlContent {
-  level?: number;
-  license?: string;
+  level: number;
+  license: string;
   tags: any;
 }
 

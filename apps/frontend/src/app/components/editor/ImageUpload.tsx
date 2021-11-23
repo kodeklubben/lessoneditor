@@ -97,6 +97,7 @@ const ImageUpload: FC<ImageUploadProps> = ({
               }`;
               const content =
                 reader.result.toString().split(`data:${file.type};base64,`).pop()! ?? "";
+
               const newFileDTO: NewFileDTO = {
                 filename,
                 ext,
@@ -109,13 +110,11 @@ const ImageUpload: FC<ImageUploadProps> = ({
 
               setImages((prevImages: any) => ({
                 ...prevImages,
-                [newFileDTO.filename + newFileDTO.ext]: createObjectURL(
-                  base64StringToBlob(newFileDTO.content, "image/png")
-                ),
+                [filename + ext]: createObjectURL(base64StringToBlob(content, `image/${ext}`)),
               }));
 
               setShowSpinner(false);
-              imageSubmitHandler(newFileDTO.filename + newFileDTO.ext);
+              imageSubmitHandler(filename + ext);
             }
           } catch (error) {
             console.error(error);

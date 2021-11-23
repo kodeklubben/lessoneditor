@@ -19,7 +19,6 @@ export const UserContextProvider = (props: any) => {
   const [error, setError] = useState({});
 
   useEffect(() => {
-    let isSubscribed = true;
     async function fetchData() {
       try {
         const userRes = await axios.get<UserDTO>(paths.USER);
@@ -80,7 +79,6 @@ export const UserContextProvider = (props: any) => {
           lessons: userLessonsRes.data,
         };
       });
-      console.log({ newLessonRes });
       return newLessonRes.data;
     } catch (error) {
       console.error(error);

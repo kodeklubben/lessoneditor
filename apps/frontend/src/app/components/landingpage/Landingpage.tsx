@@ -8,10 +8,7 @@ import AllFiles from "./AllFiles";
 import LandingageNavbar from "./landingpageNavbar/LandingpageNavbar";
 import Areyousure from "./AreyousurePopup";
 import ThankU from "./ThankU";
-
 import Navbar from "../navbar/Navbar";
-import LessonData from "./datapanel/LessonData";
-import MDPreview from "../editor/MDPreview";
 import { Button, Container, Grid, Menu, Segment, Icon, Image, Item } from "semantic-ui-react";
 import { useLessonContext } from "../../contexts/LessonContext";
 

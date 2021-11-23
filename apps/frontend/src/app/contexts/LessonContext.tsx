@@ -7,12 +7,9 @@ import { LessonContextState, LessonContextModel } from "./lessonContext.function
 import ShowSpinner from "../components/ShowSpinner";
 import { paths } from "@lessoneditor/api-interfaces";
 import { useUserContext } from "./UserContext";
-import { stringify } from "querystring";
 import { base64StringToBlob, createObjectURL } from "blob-util";
 
 const LessonContext = React.createContext<LessonContextModel>({} as LessonContextModel);
-
-const imageExt = ["jpeg", "jpg", "gif", "png"];
 
 export const LessonContextProvider = (props: any) => {
   const { state } = useUserContext();
@@ -22,7 +19,7 @@ export const LessonContextProvider = (props: any) => {
   const [lesson, setLesson] = useState<LessonDTO | undefined>(undefined);
   const [files, setFiles] = useState<string[]>([]);
   const [images, setImages] = useState({});
-  const [yml, setYml] = useState<YamlContent>({
+  const [yml, setYml] = useState<any>({
     level: 1,
     license: "CC BY-SA 4.0",
     tags: { grade: [], subject: [], topic: [] },
@@ -41,7 +38,7 @@ export const LessonContextProvider = (props: any) => {
 
         for (const file of fileNames.data) {
           const ext = file.split(".").pop() === "jpg" ? "jpeg" : file.split(".").pop() ?? "";
-          if (!imageExt.includes(ext)) {
+          if (!/^[\w-]+(.jpg|.jpeg|.gif|.png)$/i.test(file)) {
             continue;
           }
           const url = paths.LESSON_FILE.replace(":lessonId", lessonId).replace(
@@ -59,7 +56,6 @@ export const LessonContextProvider = (props: any) => {
         setFiles(fileNames.data);
         setYml(yamlFile.data.content);
         setLesson(lesson.data);
-        downloadImages(fileNames.data);
       } catch (error) {
         console.error(error);
       }
@@ -67,11 +63,6 @@ export const LessonContextProvider = (props: any) => {
 
     fetchLessonData();
   }, []);
-
-
-  const downloadImages = async (filenames: any) => {
-    const imageFileTypes = ["jpg", "jpeg", "gif", "png"];
-  };
 
   const fetchYmlData = async () => {
     const lessonYMLDataRes = await axios.get(lessonYamlPath);
@@ -113,6 +104,7 @@ export const LessonContextProvider = (props: any) => {
 
   const context: LessonContextModel = {
     state: lessonState,
+    yml,
     setYml: setYml,
     updateLesson: updatelesson,
     updateYaml: updateYaml,

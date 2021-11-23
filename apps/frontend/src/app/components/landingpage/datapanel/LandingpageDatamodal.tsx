@@ -12,7 +12,7 @@ import { YML_TEXT } from "../settingsFiles/languages/landingpage_NO";
 
 const LandingpageDatamodal = () => {
   const lessonContext = useLessonContext();
-  const { state, setYml, updateYaml, updateLesson } = lessonContext;
+  const { state, yml, setYml, updateYaml, updateLesson } = lessonContext;
   const [checkBoxState, setCheckBoxState] = useState({});
   const [open, setOpen] = useState(false);
   const { lessonId } = useParams<{ lessonId: string }>();
@@ -26,21 +26,21 @@ const LandingpageDatamodal = () => {
     const mapYamlTags = () => {
       let obj: Record<string, boolean> = {};
 
-      obj = state.yml.tags.topic.reduce(
+      obj = yml.tags.topic.reduce(
         (accumulator: { [x: string]: boolean }, currentValue: string) => {
           accumulator[currentValue] = true;
           return accumulator;
         },
         { ...obj }
       );
-      obj = state.yml.tags.subject.reduce(
+      obj = yml.tags.subject.reduce(
         (accumulator: { [x: string]: boolean }, currentValue: string) => {
           accumulator[currentValue] = true;
           return accumulator;
         },
         { ...obj }
       );
-      obj = state.yml.tags.grade.reduce(
+      obj = yml.tags.grade.reduce(
         (accumulator: { [x: string]: boolean }, currentValue: string) => {
           accumulator[currentValue] = true;
           return accumulator;
@@ -49,18 +49,18 @@ const LandingpageDatamodal = () => {
       );
       setCheckBoxState((prevState) => ({ ...prevState, ...obj }));
     };
-    if (state.yml.tags) {
+    if (yml.tags) {
       mapYamlTags();
     }
-  }, [state.yml.tags]);
+  }, [yml]);
 
   const onSubmit = () => {
-    updateYaml(lessonId, state.yml);
+    updateYaml(lessonId, yml);
     setOpen(false);
   };
 
   const dropdownHandler = (event: SyntheticEvent, data: Record<string, string>) => {
-    setYml((s) => {
+    setYml((s: any) => {
       return {
         ...s,
         level: +data.value,
@@ -73,41 +73,46 @@ const LandingpageDatamodal = () => {
       data.subtag === "grade" || data.subtag === "subject" || data.subtag === "topic"
         ? data.subtag
         : "grade";
-
-    const name: string = data.value;
-    const value: string = data.checked;
+    const value: string = data.value;
+    const isChecked: string = data.checked;
+    console.log(data);
+    console.log(subtag);
     setCheckBoxState((prevState) => ({
       ...prevState,
-      [name]: value,
+      [value]: isChecked,
     }));
-    if (!state.yml.tags[subtag].includes(name)) {
-      setYml((s) => {
-        return {
-          ...s,
-          tags: {
-            ...s.tags,
-            [subtag]: [...s.tags[subtag], name],
-          },
-        };
-      });
-    } else {
-      setYml((s) => {
-        return {
-          ...s,
-          tags: {
-            ...s.tags,
-            [subtag]: s.tags[subtag].filter((e: string) => e !== name),
-          },
-        };
-      });
-    }
+    console.log({ checkBoxState });
+    setYml((prevYml) => ({ ...prevYml, tags: { ...prevYml.tags, [subtag]: ["hei"] } }));
+    console.log(yml);
+    console.log(state);
+    //   setYml((s) => {
+    //     return {
+    //       ...s,
+    //       tags: {
+    //         ...s.tags,
+    //         [subtag]: [...s.tags[subtag], value],
+    //       },
+    //     };
+    //   });
+
+    //else {
+    //   setYml((s) => {
+    //     return {
+    //       ...s,
+    //       tags: {
+    //         ...s.tags,
+    //         [subtag]: s.tags[subtag].filter((e: string) => e !== value),
+    //       },
+    //     };
+    //   });
+    // }
   };
 
   const changeHandler = (event: SyntheticEvent, data: Record<string, string>) => {
     const name = data.name;
     const value = data.value;
 
-    setYml((s) => ({
+    setYml((s: any) => ({
       ...s,
       [name]: value,
     }));
@@ -166,12 +171,12 @@ const LandingpageDatamodal = () => {
                 />
               </Grid.Column>
               <Grid.Column>
-                <Levels changeHandler={dropdownHandler} data={state.yml} />
+                <Levels changeHandler={dropdownHandler} data={yml} />
               </Grid.Column>
             </Grid.Row>
           </Grid>
 
-          <License changeHandler={changeHandler} data={state.yml} />
+          <License changeHandler={changeHandler} data={yml} />
         </Modal.Content>
 
         <Modal.Actions className="landingpage_modal">

@@ -8,6 +8,7 @@ export interface LessonContextState {
 
 export interface LessonContextModel {
   state: LessonContextState;
+  yml: YamlContent;
   setYml: React.Dispatch<React.SetStateAction<YamlContent>>;
   updateLesson: (data: NewLessonDTO) => void;
   updateYaml: (lessonId: string, data: YamlContent) => void;
