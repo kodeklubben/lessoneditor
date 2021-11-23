@@ -34,7 +34,6 @@ export class UserController {
     if (req.user == null) {
       throw new ForbiddenException();
     }
-    console.log(req.user);
     return req.user;
   }
 

@@ -1,13 +1,14 @@
-import React from "react";
+import React,{useEffect} from "react";
 
 const NotLoggedInPage: React.FC = () => {
+
+  useEffect(() => {
+    window.location.href = "http://localhost:4200/api/auth/login/";
+  })
+
   return (
-    <div className="PreviewArea">
-      <h1>Du er ikke logget inn.</h1>
-      <p>
-        <a href="/api/auth/login/">Trykk her for å logge inn</a>:
-      </p>
-    </div>
+    <>
+    </>
   );
 };
 
