@@ -15,7 +15,7 @@ import { useLessonContext } from "../../contexts/LessonContext";
 const Landingpage = () => {
   const [areYouSure, setAreYouSure] = useState(false);
   const [thankU, setThankU] = useState(false);
-  const { lessonId, mode } = useParams<any>();
+  const { lessonId, mode } = useParams() as any;
   const pageContent = mode;
   const { state } = useLessonContext();
 

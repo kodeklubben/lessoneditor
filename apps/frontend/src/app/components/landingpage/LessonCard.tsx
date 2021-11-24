@@ -1,7 +1,7 @@
-import { useHistory } from "react-router";
+import { useNavigate } from "react-router";
 import { Button, Card, Image } from "semantic-ui-react";
 import { FC, useState, useEffect } from "react";
-import nbFlag from "../../../../src/assets/public/languagesFlag/flag_nb.svg"
+import nbFlag from "../../../../src/assets/public/languagesFlag/flag_nb.svg";
 import nnFlag from "../../../../src/assets/public/languagesFlag/flag_nn.svg";
 import enFlag from "../../../../src/assets/public/languagesFlag/flag_en.svg";
 import isFlag from "../../../../src/assets/public/languagesFlag/flag_is.svg";
@@ -34,7 +34,7 @@ const languageOptions: Record<string, any> = {
 };
 
 const LessonCard: FC<any> = ({ lessonId, language, hasContent, lessonTitle, lessonSlug }) => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { state } = useLessonContext();
   const [image, setImage] = useState<string>();
 
@@ -61,7 +61,7 @@ const LessonCard: FC<any> = ({ lessonId, language, hasContent, lessonTitle, less
       lessonId,
       language === "nb" ? lessonSlug : `${lessonSlug}_${language}`,
     ].join("/");
-    history.push({ pathname: target });
+    navigate({ pathname: target });
   };
   const imgSrc = "data:image/png;base64," + image;
 

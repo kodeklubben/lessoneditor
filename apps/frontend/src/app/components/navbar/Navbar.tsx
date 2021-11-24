@@ -1,16 +1,16 @@
 import classes from "./Navbar.module.scss";
 import { FC } from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import ProfileMenu from "./ProfileMenu";
 import { useUserContext } from "../../contexts/UserContext";
 import logo from "../../../../src/assets/public/lav_logo.jpg";
 
 const Navbar: FC = (props) => {
   const { state: userState } = useUserContext();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const navigateToFrontpage = () => {
-    history.push("/");
+    navigate("/");
   };
 
   return (

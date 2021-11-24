@@ -2,7 +2,7 @@ import { LessonDTO, FileDTO } from "@lessoneditor/contracts";
 import React, { useEffect, useState } from "react";
 import { Button, Card, Image, Icon } from "semantic-ui-react";
 import { paths } from "@lessoneditor/api-interfaces";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../../contexts/UserContext";
 import axios from "axios";
 
@@ -11,12 +11,12 @@ interface Props {
 }
 
 const Item: React.FC<Props> = ({ lesson }) => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { removeLesson } = useUserContext();
 
   const navigateToHome = (lessonId: string) => {
     const target = ["/landingpage", lessonId, "lessontexts"].join("/");
-    history.push(target);
+    navigate(target);
   };
   const [image, setImage] = useState<string>();
 

@@ -15,7 +15,7 @@ const LandingpageDatamodal = () => {
   const { state, yml, setYml, updateYaml, updateLesson } = lessonContext;
   const [checkBoxState, setCheckBoxState] = useState({});
   const [open, setOpen] = useState(false);
-  const { lessonId } = useParams<{ lessonId: string }>();
+  const { lessonId } = useParams() as any;
 
   const isEmptyDatapanel = false;
 
@@ -75,37 +75,31 @@ const LandingpageDatamodal = () => {
         : "grade";
     const value: string = data.value;
     const isChecked: string = data.checked;
-    console.log(data);
-    console.log(subtag);
     setCheckBoxState((prevState) => ({
       ...prevState,
       [value]: isChecked,
     }));
-    console.log({ checkBoxState });
-    setYml((prevYml) => ({ ...prevYml, tags: { ...prevYml.tags, [subtag]: ["hei"] } }));
-    console.log(yml);
-    console.log(state);
-    //   setYml((s) => {
-    //     return {
-    //       ...s,
-    //       tags: {
-    //         ...s.tags,
-    //         [subtag]: [...s.tags[subtag], value],
-    //       },
-    //     };
-    //   });
-
-    //else {
-    //   setYml((s) => {
-    //     return {
-    //       ...s,
-    //       tags: {
-    //         ...s.tags,
-    //         [subtag]: s.tags[subtag].filter((e: string) => e !== value),
-    //       },
-    //     };
-    //   });
-    // }
+    if (!state.yml.tags[subtag].includes(value)) {
+      setYml((s) => {
+        return {
+          ...s,
+          tags: {
+            ...s.tags,
+            [subtag]: [...s.tags[subtag], value],
+          },
+        };
+      });
+    } else {
+      setYml((s) => {
+        return {
+          ...s,
+          tags: {
+            ...s.tags,
+            [subtag]: s.tags[subtag].filter((e: string) => e !== value),
+          },
+        };
+      });
+    }
   };
 
   const changeHandler = (event: SyntheticEvent, data: Record<string, string>) => {

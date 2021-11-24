@@ -13,7 +13,7 @@ const LessonContext = React.createContext<LessonContextModel>({} as LessonContex
 
 export const LessonContextProvider = (props: any) => {
   const { state } = useUserContext();
-  const { lessonId } = useParams<{ lessonId: string }>();
+  const { lessonId } = useParams() as any;
   const { lessonDataPath, lessonYamlPath, lessonFilesPath } = getLessonPaths(lessonId);
 
   const [lesson, setLesson] = useState<LessonDTO | undefined>(undefined);
@@ -53,15 +53,15 @@ export const LessonContextProvider = (props: any) => {
           }));
         }
 
-        for (const file2 of fileNames.data) {
-          const url = paths.LESSON_FILE.replace(":lessonId", lessonId).replace(
-            ":fileName",
-            file2.split(".")[0]
-          );
+        // for (const file2 of fileNames.data) {
+        //   const url = paths.LESSON_FILE.replace(":lessonId", lessonId).replace(
+        //     ":fileName",
+        //     file2.split(".")[0]
+        //   );
 
-          const fileRes: any = await axios.get(url);
-          console.log(fileRes);
-        }
+        //   const fileRes: any = await axios.get(url);
+        //   console.log(fileRes);
+        // }
 
         setFiles(fileNames.data);
         setYml(yamlFile.data.content);
@@ -83,10 +83,7 @@ export const LessonContextProvider = (props: any) => {
   const updateYaml = async (lessonId: string, data: YamlContent) => {
     try {
       const updatedFile = await axios.put<FileDTO<YamlContent>>(
-        paths.LESSON_FILE_UPDATE.replace(":lessonId", lessonId.toString()).replace(
-          ":fileName",
-          "lesson"
-        ),
+        paths.LESSON_FILE_UPDATE.replace(":lessonId", lessonId).replace(":fileName", "lesson"),
         data
       );
       setYml(updatedFile.data.content);

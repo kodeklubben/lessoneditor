@@ -4,7 +4,7 @@ import { FC, SyntheticEvent, useState } from "react";
 import slugify from "slugify";
 import { COURSESLIST } from "../editor/settingsFiles/COURSELIST";
 import { useUserContext } from "../../contexts/UserContext";
-import { useHistory } from "react-router";
+import { useNavigate } from "react-router";
 import { Button, Grid, GridColumn, Input, Modal, Dropdown, Ref } from "semantic-ui-react";
 import ShowSpinner from "../ShowSpinner";
 
@@ -15,7 +15,7 @@ const courseDropdownOptions = COURSESLIST.map((e) => {
 const NewLessonModal: FC = () => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const history = useHistory();
+  const navigate = useNavigate();
   const { addLesson } = useUserContext();
   const defaultState = {
     lessonTitle: "",
@@ -55,7 +55,7 @@ const NewLessonModal: FC = () => {
   };
   const navigateToEditor = (lessonId: number, lessonSlug: string) => {
     const target = ["/editor", lessonId, lessonSlug].join("/");
-    history.push({ pathname: target });
+    navigate({ pathname: target });
   };
   const onSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
