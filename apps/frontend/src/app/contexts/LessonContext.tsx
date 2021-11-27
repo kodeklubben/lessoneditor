@@ -66,7 +66,6 @@ export const LessonContextProvider = (props: any) => {
         setFiles(fileNames.data);
         setYml(yamlFile.data.content);
         setLesson(lesson.data);
-        console.log(yml);
       } catch (error) {
         console.error(error);
       }

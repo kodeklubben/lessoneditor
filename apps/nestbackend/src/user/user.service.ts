@@ -3,12 +3,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Connection, Repository } from "typeorm";
 import { UserDTO } from "@lessoneditor/contracts";
 import { User } from "./user.entity";
-import {
-  LessonDTO,
-  NewLessonDTO,
-  YamlContent,
-  HeaderData,
-} from "@lessoneditor/contracts";
+import { LessonDTO, NewLessonDTO, YamlContent, HeaderData } from "@lessoneditor/contracts";
 import { FileStore, Lesson } from "../lesson/lesson.entity";
 import { ThumbService } from "../thumb/thumb.service";
 import { Request } from "express";
@@ -97,23 +92,27 @@ export class UserService {
       title: lesson.lessonTitle,
       author: "",
       authorList: [user.name],
-      language: "nb",
+      language: lesson.language,
       translator: "",
       translatorList: [],
     };
-    const rawREADMEBody = "---\n" + yaml.dump(header) + "---\n" + this.insertMetaData(jsonContent);
-    const defaultReadMeFile = new FileStore();
-    defaultReadMeFile.filename = "README";
-    defaultReadMeFile.ext = ".md";
-    defaultReadMeFile.content = Buffer.from(rawREADMEBody);
-    defaultReadMeFile.updated_by = user.name;
-    defaultReadMeFile.created_by = user.name;
-    defaultReadMeFile.lesson = savedLesson;
+
+    // LAGER IKKE README PÅ INIT - HAR DET SOM ET VALG I LANDINGPAGE
+
+    // const rawREADMEBody = "---\n" + yaml.dump(header) + "---\n" + this.insertMetaData(jsonContent);
+    // const defaultReadMeFile = new FileStore();
+    // defaultReadMeFile.filename = "README";
+    // defaultReadMeFile.ext = ".md";
+    // defaultReadMeFile.content = Buffer.from(rawREADMEBody);
+    // defaultReadMeFile.updated_by = user.name;
+    // defaultReadMeFile.created_by = user.name;
+    // defaultReadMeFile.lesson = savedLesson;
     const rawBody = "---\n" + yaml.dump(header) + "---\n" + oppgaveMal;
     const emptyMdFile = new FileStore();
     emptyMdFile.content = Buffer.from(rawBody);
     emptyMdFile.ext = ".md";
-    emptyMdFile.filename = lesson.lessonSlug;
+    emptyMdFile.filename =
+      lesson.language === "nb" ? lesson.lessonSlug : `${lesson.lessonSlug}_${lesson.language}`;
     emptyMdFile.updated_by = user.name;
     emptyMdFile.created_by = user.name;
     emptyMdFile.lesson = savedLesson;
@@ -130,7 +129,7 @@ export class UserService {
     //   ? newLesson.files.push(defaultReadMeFile, emptyMdFile, emptyYamlFile, templateImage)
     //   : (newLesson.files = [defaultReadMeFile, emptyMdFile, emptyYamlFile, templateImage]);
 
-    files.push(defaultReadMeFile, emptyMdFile, emptyYamlFile, templateImage);
+    files.push(emptyMdFile, emptyYamlFile, templateImage);
     user.lessons ? user.lessons.push(savedLesson) : (user.lessons = [savedLesson]);
 
     const promises: Promise<FileStore>[] = [];

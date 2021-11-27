@@ -6,9 +6,11 @@ import { LessonContextProvider } from "../contexts/LessonContext";
 import { UserContextProvider } from "../contexts/UserContext";
 import { FileContextProvider } from "../contexts/FileContext";
 import SimplePreview from "./simple-preview/simple-preview";
+import Dummy from "./Dummy";
 
 const App = () => {
   return (
+    // <Dummy />
     <BrowserRouter>
       <Routes>
         <Route

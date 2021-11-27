@@ -17,6 +17,9 @@ export class Lesson {
   lessonId: number;
 
   @Column()
+  language: string;
+
+  @Column()
   lessonSlug: string;
 
   @Column()

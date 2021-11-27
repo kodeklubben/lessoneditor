@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router";
 import { Dropdown, Popup } from "semantic-ui-react";
-import languageOptions from "./buttoncontroller/settings/LanguageOptions";
+import { LANGUAGEOPTIONS as languageOptions } from "../../frontpage/settings/newLessonOptions";
 import { FC, SyntheticEvent } from "react";
 import { filenameParser } from "../../../utils/filename-parser";
 
