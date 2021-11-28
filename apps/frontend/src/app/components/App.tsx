@@ -10,7 +10,6 @@ import Dummy from "./Dummy";
 
 const App = () => {
   return (
-    // <Dummy />
     <BrowserRouter>
       <Routes>
         <Route

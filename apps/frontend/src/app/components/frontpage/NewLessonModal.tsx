@@ -52,7 +52,7 @@ const NewLessonModal: FC = () => {
     setOpen(false);
   };
   const navigateToEditor = (lessonId: number, lessonSlug: string) => {
-    const target = ["/editor", lessonId, lessonSlug].join("/");
+    const target = ["/editor", lessonId, lessonSlug, lessonData.language].join("/");
     navigate({ pathname: target });
   };
   const onSubmit = async (e: { preventDefault: () => void }) => {
