@@ -3,18 +3,21 @@ import { Card, Divider, Icon, Button, Dropdown } from "semantic-ui-react";
 import { useNavigate } from "react-router";
 import { FC, SyntheticEvent, useState } from "react";
 import { LANGUAGEOPTIONS } from "../frontpage/settings/newLessonOptions";
-import { filenameParser } from "../../utils/filename-parser";
+//import { filenameParser } from "../../utils/filename-parser";
 
 const LessonTexts: FC<any> = ({ lessonId, fileList, lessonSlug, lessonTitle, languages }) => {
-  const navigate = useNavigate();
-
   const unusedLanguages = LANGUAGEOPTIONS.filter((item) => !languages.includes(item.value)) ?? "";
   const [lang, setLang] = useState<string>(unusedLanguages[0].value);
-  const navigateToEditor = (lessonId: any, lessonSlug: any) => {};
+  const navigate = useNavigate();
+
+  const navigateToEditor = () => {
+    const target = ["/editor", lessonId, lessonSlug, lang].join("/");
+
+    navigate(target);
+  };
 
   const onChange = (e: SyntheticEvent, { name, value }: Record<string, string>) => {
     setLang(value);
-    console.log(lang);
   };
 
   return (

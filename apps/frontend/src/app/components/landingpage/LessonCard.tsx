@@ -33,7 +33,7 @@ const languageOptions: Record<string, any> = {
   },
 };
 
-const LessonCard: FC<any> = ({ lessonId, language, hasContent, lessonTitle, lessonSlug }) => {
+const LessonCard: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug }) => {
   const navigate = useNavigate();
   const { state } = useLessonContext();
   const [image, setImage] = useState<string>();
@@ -56,11 +56,7 @@ const LessonCard: FC<any> = ({ lessonId, language, hasContent, lessonTitle, less
   }, [lessonSlug]);
 
   const navigateToEditor = (lessonId: any, lessonSlug: any, language: string) => {
-    const target = [
-      "/editor",
-      lessonId,
-      language === "nb" ? lessonSlug : `${lessonSlug}_${language}`,
-    ].join("/");
+    const target = ["/editor", lessonId, lessonSlug, language].join("/");
     navigate({ pathname: target });
   };
   const imgSrc = "data:image/png;base64," + image;

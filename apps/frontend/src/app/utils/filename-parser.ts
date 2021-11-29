@@ -22,8 +22,6 @@ export const filenameParser = (filename?: string): FilenameData => {
       ? LANGUAGEOPTIONS.filter((item) => item.value === language)[0].text
       : "";
 
-    console.log({ filename, language, isMarkdown, isReadme, languageName });
-
     return {
       language,
       isMarkdown,

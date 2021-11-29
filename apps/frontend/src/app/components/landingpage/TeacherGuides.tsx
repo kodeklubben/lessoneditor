@@ -1,14 +1,16 @@
-import LessonCard from "./LessonCard";
-
-import { Card, Button, Icon, Divider, Dropdown } from "semantic-ui-react";
 import { FC, SyntheticEvent, useState, useEffect } from "react";
+import { useNavigate } from "react-router";
+import { Card, Button, Icon, Divider, Dropdown } from "semantic-ui-react";
 import { filenameParser } from "../../utils/filename-parser";
 import { LANGUAGEOPTIONS } from "../frontpage/settings/newLessonOptions";
+import LessonCard from "./LessonCard";
 
-const TeacherGuides: FC<any> = ({ lessonId, fileList, lessonTitle, languages }) => {
-  const navigateToEditor = (lessonId: any, lessonSlug: any) => {};
+const TeacherGuides: FC<any> = ({ lessonId, fileList, lessonTitle }) => {
   const [usedLanguages, setUsedLanguages] = useState<string[]>([]);
+  const unusedLanguages = LANGUAGEOPTIONS.filter((item) => !usedLanguages.includes(item.value));
 
+  const [lang, setLang] = useState<string>(unusedLanguages[0].value);
+  const navigate = useNavigate();
   useEffect(() => {
     fileList.forEach((filename: string) => {
       const { isMarkdown, isReadme, language } = filenameParser(filename);
@@ -19,10 +21,13 @@ const TeacherGuides: FC<any> = ({ lessonId, fileList, lessonTitle, languages }) 
     });
   }, []);
 
-  const unusedLanguages = LANGUAGEOPTIONS.filter((item) => !usedLanguages.includes(item.value));
+  const navigateToEditor = () => {
+    const target = ["/editor", lessonId, "README", lang].join("/");
+    navigate(target);
+  };
 
   const onChange = (e: SyntheticEvent, { name, value }: Record<string, string>) => {
-    console.log("test");
+    setLang(value);
   };
 
   return (
@@ -34,7 +39,6 @@ const TeacherGuides: FC<any> = ({ lessonId, fileList, lessonTitle, languages }) 
               key={lessonId}
               content={"Lærerveiledning"}
               language={language}
-              hasContent={languages.includes(language)}
               lessonId={lessonId}
               lessonSlug={"README"}
               lessonTitle={lessonTitle}

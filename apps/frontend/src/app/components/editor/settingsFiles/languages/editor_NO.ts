@@ -30,6 +30,7 @@ const BUTTON_TITLE = {
   listUl: "Uordnet liste",
   listOl: "Ordnet liste",
   listCheck: "Sjekkliste",
+  explorer: "Filutforsker",
   activity: "Steg",
   intro: "Intro",
   check: "Sjekkliste",

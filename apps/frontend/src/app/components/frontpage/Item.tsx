@@ -1,6 +1,6 @@
 import { LessonDTO, FileDTO } from "@lessoneditor/contracts";
 import React, { useEffect, useState } from "react";
-import { Button, Card, Image, Icon } from "semantic-ui-react";
+import { Button, Card, Image, Icon, Popup } from "semantic-ui-react";
 import { paths } from "@lessoneditor/api-interfaces";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../../contexts/UserContext";
@@ -40,7 +40,7 @@ const Item: React.FC<Props> = ({ lesson }) => {
   return (
     <>
       <Card>
-        <Card.Content>
+        <Card.Content style={{ position: "relative" }}>
           <Image
             src={`data:image/png;base64,${image}`}
             size="medium"
@@ -53,6 +53,23 @@ const Item: React.FC<Props> = ({ lesson }) => {
               objectPosition: "0 0",
             }}
           />
+          {lesson.submitted && (
+            <Popup
+              content="Informasjon om levert oppgave.. Dato, etc"
+              trigger={
+                <Icon
+                  name="github square"
+                  size="huge"
+                  style={{
+                    position: "absolute",
+                    bottom: "0",
+                    right: "0",
+                    transform: "rotate(10deg)",
+                  }}
+                />
+              }
+            ></Popup>
+          )}
         </Card.Content>
         <Card.Content>
           <Card.Header>{lesson.lessonTitle ? lesson.lessonTitle : lesson.lessonSlug}</Card.Header>

@@ -28,6 +28,7 @@ const KEY_COMBINATIONS = {
     listol: [SHORTCUTKEY, "+", "o"].join(""),
     listcheck: [SHORTCUTKEY, "+", "r"].join(""),
   },
+  fileExplorer: { explorer: [SHORTCUTKEY, "+", SHORTCUTKEY2, "+", "d"].join("") },
   sections: {
     activity: [SHORTCUTKEY, "+", SHORTCUTKEY2, "+", "a"].join(""),
     intro: [SHORTCUTKEY, "+", SHORTCUTKEY2, "+", "i"].join(""),
@@ -167,6 +168,17 @@ const lists = {
     cursorIntON: 6,
     cursorIntOFF: 0,
     shortcut: KEY_COMBINATIONS.lists.listcheck,
+  },
+};
+
+const fileExplorer = {
+  explorer: {
+    slug: "explorer",
+    icon: "folder open",
+    output: "",
+    title: BUTTON_TITLE.explorer,
+
+    shortcut: KEY_COMBINATIONS.fileExplorer.explorer,
   },
 };
 
@@ -357,6 +369,7 @@ export {
   hyperlink,
   media,
   lists,
+  fileExplorer,
   sections,
   codebuttons,
   KEY_COMBINATIONS,
