@@ -19,10 +19,8 @@ const Landingpage = () => {
   const pageContent = mode;
   const { state } = useLessonContext();
 
-  const lessonList = state.files;
-  const lessonTitle = state.lesson?.lessonTitle;
-  const courseTitle = state.lesson?.courseTitle;
-  const lessonSlug = state.lesson.lessonSlug;
+  const { lessonTitle, courseTitle, lessonSlug, languages } = state.lesson;
+  const fileList = state.files;
 
   const dropdownValue = (input: string) => {
     switch (input) {
@@ -30,18 +28,20 @@ const Landingpage = () => {
         return (
           <LessonTexts
             lessonId={lessonId}
-            lessonList={lessonList}
+            fileList={fileList}
             lessonTitle={lessonTitle}
             lessonSlug={lessonSlug}
+            languages={languages}
           />
         );
       case "teacherguides":
         return (
           <TeacherGuides
             lessonId={lessonId}
-            lessonList={lessonList}
+            fileList={fileList}
             lessonTitle={lessonTitle}
             lessonSlug={lessonSlug}
+            languages={languages}
           />
         );
       case "allfiles":
@@ -70,7 +70,7 @@ const Landingpage = () => {
           </Link>
           <Button
             onClick={() => setAreYouSure(true)}
-            content="Sende inn"
+            content="Sende inn oppgave"
             positive
             labelPosition="right"
             icon="arrow right"

@@ -68,6 +68,7 @@ export class UserService {
     const newLesson = new Lesson();
     newLesson.lessonTitle = lesson.lessonTitle;
     newLesson.lessonSlug = lesson.lessonSlug;
+    newLesson.languages = lesson.languages;
     newLesson.courseSlug = lesson.courseSlug;
     newLesson.courseTitle = lesson.courseTitle;
     newLesson.submitted = false;
@@ -92,7 +93,7 @@ export class UserService {
       title: lesson.lessonTitle,
       author: "",
       authorList: [user.name],
-      language: lesson.language,
+      language: lesson.languages[0],
       translator: "",
       translatorList: [],
     };
@@ -107,12 +108,13 @@ export class UserService {
     // defaultReadMeFile.updated_by = user.name;
     // defaultReadMeFile.created_by = user.name;
     // defaultReadMeFile.lesson = savedLesson;
+
     const rawBody = "---\n" + yaml.dump(header) + "---\n" + oppgaveMal;
     const emptyMdFile = new FileStore();
     emptyMdFile.content = Buffer.from(rawBody);
     emptyMdFile.ext = ".md";
     emptyMdFile.filename =
-      lesson.language === "nb" ? lesson.lessonSlug : `${lesson.lessonSlug}_${lesson.language}`;
+      lesson.languages[0] === "nb" ? lesson.lessonSlug : `${lesson.lessonSlug}_${lesson.languages}`;
     emptyMdFile.updated_by = user.name;
     emptyMdFile.created_by = user.name;
     emptyMdFile.lesson = savedLesson;
@@ -147,9 +149,9 @@ export class UserService {
       );
       const previewPngFile = new FileStore();
       previewPngFile.content = Buffer.from(thumbImage);
-      fs.writeFile("image.png", Buffer.from(thumbImage), (error) => {
-        console.error(error);
-      });
+      // fs.writeFile("image.png", Buffer.from(thumbImage), (error) => {
+      //   console.error(error);
+      // });
       previewPngFile.ext = ".png";
       previewPngFile.filename = "preview";
       previewPngFile.updated_by = user.name;

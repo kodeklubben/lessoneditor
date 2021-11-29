@@ -17,10 +17,10 @@ export class Lesson {
   lessonId: number;
 
   @Column()
-  language: string;
-
-  @Column()
   lessonSlug: string;
+
+  @Column("text", { array: true })
+  languages: string[];
 
   @Column()
   lessonTitle: string;

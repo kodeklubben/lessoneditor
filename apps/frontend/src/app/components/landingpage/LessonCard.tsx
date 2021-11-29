@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router";
-import { Button, Card, Image } from "semantic-ui-react";
+import { Button, Card, Image, Divider } from "semantic-ui-react";
 import { FC, useState, useEffect } from "react";
 import nbFlag from "../../../../src/assets/public/languagesFlag/flag_nb.svg";
 import nnFlag from "../../../../src/assets/public/languagesFlag/flag_nn.svg";
@@ -69,51 +69,42 @@ const LessonCard: FC<any> = ({ lessonId, language, hasContent, lessonTitle, less
   const languageImage = languageOptions[language].image.src;
   return (
     <>
-      <Card centered>
-        {hasContent ? (
-          <>
-            <Card.Content>
-              <Image
-                src={imgSrc}
-                size="medium"
-                alt="thumbUrl"
-                rounded
-                bordered
-                style={{
-                  maxHeight: "220px",
-                  overflow: "hidden",
-                  objectFit: "cover",
-                  objectPosition: "0 0",
-                }}
-              />
-            </Card.Content>
-            <Card.Content>
-              <Card.Header>{lessonTitle}</Card.Header>
-              <Card.Meta>{languageText}</Card.Meta>
-            </Card.Content>
-          </>
-        ) : (
-          <>
-            <Card.Content>
-              <Image
-                src={noLessonPreviewImage}
-                size="medium"
-                disabled
-                rounded
-                bordered
-                style={{
-                  maxHeight: "220px",
-                  overflow: "hidden",
-                  objectFit: "cover",
-                }}
-              />
-            </Card.Content>
-            <Card.Content>
-              <Card.Header style={{ color: "gray" }}>Ingen innhold</Card.Header>
-              <Card.Meta>{languageText}</Card.Meta>
-            </Card.Content>
-          </>
-        )}
+      <Card>
+        <Card.Content>
+          <Card.Content>
+            <Image
+              src={imgSrc}
+              size="medium"
+              alt="thumbUrl"
+              rounded
+              bordered
+              style={{
+                maxHeight: "220px",
+                overflow: "hidden",
+                objectFit: "cover",
+                objectPosition: "0 0",
+              }}
+            />
+          </Card.Content>
+
+          <Card.Content>
+            <Divider />
+          </Card.Content>
+          <Card.Content>
+            <Card.Header>{lessonTitle}</Card.Header>
+            <Card.Meta>{languageText}</Card.Meta>
+          </Card.Content>
+          <Card.Content>
+            <Divider />
+          </Card.Content>
+          <Card.Content extra>
+            <Button
+              onClick={() => navigateToEditor(lessonId, lessonSlug, language)}
+              content={"Åpne"}
+              positive
+            />
+          </Card.Content>
+        </Card.Content>
 
         {language ? (
           <Image
@@ -129,13 +120,6 @@ const LessonCard: FC<any> = ({ lessonId, language, hasContent, lessonTitle, less
         ) : (
           ""
         )}
-        <div className="extra content">
-          <Button
-            onClick={() => navigateToEditor(lessonId, lessonSlug, language)}
-            content={hasContent ? "Åpne" : "Lag tekstfil"}
-            positive={hasContent}
-          />
-        </div>
       </Card>
     </>
   );

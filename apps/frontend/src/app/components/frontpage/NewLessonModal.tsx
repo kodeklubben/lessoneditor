@@ -27,7 +27,6 @@ const NewLessonModal: FC = () => {
 
   const onChange = (e: SyntheticEvent, { name, value }: Record<string, string>) => {
     setLessonData((prevValues) => ({ ...prevValues, [name]: value }));
-    console.log(lessonData);
   };
 
   const addCourseHandler = (e: SyntheticEvent, { value: v }: Record<string, string>) => {

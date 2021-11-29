@@ -38,7 +38,7 @@ export const LessonContextProvider = (props: any) => {
 
         for (const file of fileNames.data) {
           const ext = file.split(".").pop() === "jpg" ? "jpeg" : file.split(".").pop() ?? "";
-          if (!/^[\w-]+(.jpg|.jpeg|.gif|.png)$/i.test(file)) {
+          if (!["jpeg", "png", "gif"].includes(ext)) {
             continue;
           }
           const url = paths.LESSON_FILE.replace(":lessonId", lessonId).replace(

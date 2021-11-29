@@ -42,7 +42,7 @@ const App = () => {
         />
 
         <Route
-          path="/editor"
+          path="/editor/:language"
           element={
             <UserContextProvider>
               <Editor />

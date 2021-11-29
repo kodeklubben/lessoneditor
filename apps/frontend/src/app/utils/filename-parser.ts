@@ -1,6 +1,8 @@
+import { LANGUAGEOPTIONS } from "../components/frontpage/settings/newLessonOptions";
+
 export type FilenameData = {
   language: string;
-  languageName?: string;
+  languageName: string;
   isMarkdown: boolean;
   isReadme: boolean;
 };
@@ -9,20 +11,26 @@ export type FilenameData = {
  * @param filename
  */
 export const filenameParser = (filename?: string): FilenameData => {
-  const language = filename && filename.slice(-3, -2) === "_" ? filename.slice(-2) : "nb";
-  const isMarkdown = filename ? filename.slice(-2) === "md" : false;
-  const isReadme = filename ? filename.slice(0, 6) === "README" : false;
-  const languageName = {
-    nb: "Bokmål",
-    nn: "Nynorsk",
-    en: "Engelsk",
-    is: "Islandsk",
-  }[language];
+  if (filename) {
+    const [name, ext] = filename.split(".");
 
-  return {
-    language,
-    isMarkdown,
-    isReadme,
-    languageName,
-  };
+    const isMarkdown = ext === "md";
+    const language = isMarkdown ? (name.includes("_") ? name.split("_")[1] : "nb") : "";
+
+    const isReadme = name === "README";
+    const languageName = isMarkdown
+      ? LANGUAGEOPTIONS.filter((item) => item.value === language)[0].text
+      : "";
+
+    console.log({ filename, language, isMarkdown, isReadme, languageName });
+
+    return {
+      language,
+      isMarkdown,
+      isReadme,
+      languageName,
+    };
+  } else {
+    return { language: "", languageName: "", isMarkdown: false, isReadme: false };
+  }
 };

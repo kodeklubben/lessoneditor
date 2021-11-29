@@ -66,21 +66,24 @@ export const UserContextProvider = (props: any) => {
         courseTitle: courseTitle,
         lessonSlug: lessonSlug,
         lessonTitle: lessonTitle,
-        language: language,
+        languages: [language],
       };
       const newLessonRes = await axios.post<number>(
         paths.USER_LESSON_NEW.replace(":userId", userContexState.user!.userId.toString()),
         newLesson
       );
+
       const userLessonsRes = await axios.get<LessonDTO[]>(
         paths.USER_LESSONS.replace(":userId", userContexState.user!.userId.toString())
       );
+
       setUserContextState((s) => {
         return {
           ...s,
           lessons: userLessonsRes.data,
         };
       });
+
       return newLessonRes.data;
     } catch (error) {
       console.error(error);
