@@ -17,7 +17,7 @@ export const filenameParser = (filename?: string): FilenameData => {
     const isMarkdown = ext === "md";
     const language = isMarkdown ? (name.includes("_") ? name.split("_")[1] : "nb") : "";
 
-    const isReadme = name === "README";
+    const isReadme = name.split("_")[0] === "README";
     const languageName = isMarkdown
       ? LANGUAGEOPTIONS.filter((item) => item.value === language)[0].text
       : "";
