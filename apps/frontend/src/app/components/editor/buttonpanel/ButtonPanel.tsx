@@ -9,6 +9,7 @@ import Image from "./Image";
 import Video from "./Video";
 import Languages from "./Languages";
 import Lists from "./Lists";
+import Explorer from "./Explorer";
 import Sections from "./Sections";
 import CodeButtons from "./CodeButtons";
 import MicrobitButtons from "./MicrobitButtons";
@@ -148,6 +149,8 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
               setButtonValues={setButtonValues}
               setUndoAndCursorPosition={setUndoAndCursorPosition}
             />
+            <div style={{ marginRight: "3em" }} />
+            <Explorer />
           </div>
 
           <div className="settingspanel">

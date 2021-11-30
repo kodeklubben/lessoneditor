@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState, FC } from "react";
 import axios from "axios";
-import { Lesson, paths, User } from "@lessoneditor/api-interfaces";
+import { paths } from "@lessoneditor/api-interfaces";
 import { UserDTO } from "@lessoneditor/contracts";
 import { LessonDTO, NewLessonDTO } from "@lessoneditor/contracts";
 
@@ -19,7 +19,6 @@ export const UserContextProvider = (props: any) => {
   const [error, setError] = useState({});
 
   useEffect(() => {
-    let isSubscribed = true;
     async function fetchData() {
       try {
         const userRes = await axios.get<UserDTO>(paths.USER);
@@ -31,14 +30,14 @@ export const UserContextProvider = (props: any) => {
             ...s,
             user: userRes.data,
             lessons: userLessonsRes.data,
-            loggedIn: true,
           };
         });
+        setUserContextState((s) => ({ ...s, loggedIn: true }));
       } catch (error: any) {
         setError(error);
       }
     }
-    fetchData().then();
+    fetchData();
   }, []);
 
   const getLesson = (lessonId: number): LessonDTO | undefined => {
@@ -58,7 +57,8 @@ export const UserContextProvider = (props: any) => {
     courseSlug: string,
     courseTitle: string,
     lessonSlug: string,
-    lessonTitle: string
+    lessonTitle: string,
+    language: string
   ): Promise<number | undefined> => {
     try {
       const newLesson: NewLessonDTO = {
@@ -66,21 +66,24 @@ export const UserContextProvider = (props: any) => {
         courseTitle: courseTitle,
         lessonSlug: lessonSlug,
         lessonTitle: lessonTitle,
+        language: language,
       };
       const newLessonRes = await axios.post<number>(
         paths.USER_LESSON_NEW.replace(":userId", userContexState.user!.userId.toString()),
         newLesson
       );
+
       const userLessonsRes = await axios.get<LessonDTO[]>(
         paths.USER_LESSONS.replace(":userId", userContexState.user!.userId.toString())
       );
+
       setUserContextState((s) => {
         return {
           ...s,
           lessons: userLessonsRes.data,
         };
       });
-      console.log({ newLessonRes });
+
       return newLessonRes.data;
     } catch (error) {
       console.error(error);
@@ -122,7 +125,7 @@ export const UserContextProvider = (props: any) => {
   if (userContexState.loggedIn) {
     return <UserContext.Provider value={context}>{props.children}</UserContext.Provider>;
   } else {
-    return <NotLoggedInPage></NotLoggedInPage>
+    return <NotLoggedInPage />;
   }
 };
 export const useUserContext = (): UserContextModel => useContext<UserContextModel>(UserContext);

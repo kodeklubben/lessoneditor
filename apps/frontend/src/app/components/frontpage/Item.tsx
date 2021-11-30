@@ -1,8 +1,8 @@
 import { LessonDTO, FileDTO } from "@lessoneditor/contracts";
 import React, { useEffect, useState } from "react";
-import { Button, Card, Image, Icon } from "semantic-ui-react";
+import { Button, Card, Image, Icon, Popup } from "semantic-ui-react";
 import { paths } from "@lessoneditor/api-interfaces";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../../contexts/UserContext";
 import axios from "axios";
 
@@ -11,12 +11,12 @@ interface Props {
 }
 
 const Item: React.FC<Props> = ({ lesson }) => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const { removeLesson } = useUserContext();
 
   const navigateToHome = (lessonId: string) => {
     const target = ["/landingpage", lessonId, "lessontexts"].join("/");
-    history.push(target);
+    navigate(target);
   };
   const [image, setImage] = useState<string>();
 
@@ -24,10 +24,9 @@ const Item: React.FC<Props> = ({ lesson }) => {
     async function getImage() {
       try {
         const file: any = await axios.get(
-          paths.LESSON_FILE.replace(":lessonId", lesson.lessonId.toString()).replace(
-            ":fileName",
-            "preview"
-          )
+          paths.LESSON_FILE.replace(":lessonId", lesson.lessonId.toString())
+            .replace(":fileName", "preview")
+            .replace(":ext", ".png")
         );
         setImage(file.data);
       } catch (error) {
@@ -40,7 +39,7 @@ const Item: React.FC<Props> = ({ lesson }) => {
   return (
     <>
       <Card>
-        <Card.Content>
+        <Card.Content style={{ position: "relative" }}>
           <Image
             src={`data:image/png;base64,${image}`}
             size="medium"
@@ -53,6 +52,23 @@ const Item: React.FC<Props> = ({ lesson }) => {
               objectPosition: "0 0",
             }}
           />
+          {lesson.submitted && (
+            <Popup
+              content="Informasjon om levert oppgave.. Dato, etc"
+              trigger={
+                <Icon
+                  name="github square"
+                  size="huge"
+                  style={{
+                    position: "absolute",
+                    bottom: "0",
+                    right: "0",
+                    transform: "rotate(10deg)",
+                  }}
+                />
+              }
+            ></Popup>
+          )}
         </Card.Content>
         <Card.Content>
           <Card.Header>{lesson.lessonTitle ? lesson.lessonTitle : lesson.lessonSlug}</Card.Header>

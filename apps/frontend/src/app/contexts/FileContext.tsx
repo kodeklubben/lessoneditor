@@ -29,13 +29,11 @@ function createDefaultFileBody(file: string, ymlData: YamlContent) {
 const FileContextProvider = (props: any) => {
   const [fileContextState, setFileContextState] =
     useState<FileContextState>(initialFileContextState);
-  const { lessonId, file } = useParams<any>();
+  const { lessonId, file, lang } = useParams() as any;
+
   const { state: userState } = useUserContext();
   const { state } = useLessonContext();
   const { language } = filenameParser(file);
-
-  // Må ta savedFileBody ut av FileContextState pga at den brukes  som en useEffect-dependency.
-  // Dette for å forhindre at useEffect kjører mer enn nødvendig.
   const [savedFileBody, setSavedFileBody] = useState("");
 
   const saveFileBody = async (body: string) => {
@@ -65,7 +63,6 @@ const FileContextProvider = (props: any) => {
   };
 
   useEffect(() => {
-    let isSubscribed = true;
     async function fetchData() {
       try {
         const result = await axios.get<FileDTO<string>>(

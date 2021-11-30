@@ -7,22 +7,19 @@ import { LessonContextState, LessonContextModel } from "./lessonContext.function
 import ShowSpinner from "../components/ShowSpinner";
 import { paths } from "@lessoneditor/api-interfaces";
 import { useUserContext } from "./UserContext";
-import { stringify } from "querystring";
 import { base64StringToBlob, createObjectURL } from "blob-util";
 
 const LessonContext = React.createContext<LessonContextModel>({} as LessonContextModel);
 
-const imageExt = ["jpeg", "jpg", "gif", "png"];
-
 export const LessonContextProvider = (props: any) => {
   const { state } = useUserContext();
-  const { lessonId } = useParams<{ lessonId: string }>();
+  const { lessonId } = useParams() as any;
   const { lessonDataPath, lessonYamlPath, lessonFilesPath } = getLessonPaths(lessonId);
 
   const [lesson, setLesson] = useState<LessonDTO | undefined>(undefined);
   const [files, setFiles] = useState<string[]>([]);
   const [images, setImages] = useState({});
-  const [yml, setYml] = useState<YamlContent>({
+  const [yml, setYml] = useState<any>({
     level: 1,
     license: "CC BY-SA 4.0",
     tags: { grade: [], subject: [], topic: [] },
@@ -32,16 +29,16 @@ export const LessonContextProvider = (props: any) => {
     async function fetchLessonData() {
       try {
         const lesson = await axios.get<LessonDTO>(paths.LESSON.replace(":lessonId", lessonId));
-        const fileNames = await axios.get<string[]>(
-          paths.LESSON_FILENAMES.replace(":lessonId", lessonId)
-        );
+        console.log({ lesson });
         const yamlFile = await axios.get<FileDTO<YamlContent>>(
           paths.LESSON_FILE.replace(":lessonId", lessonId).replace(":fileName", "lesson")
         );
 
-        for (const file of fileNames.data) {
+        const fileNames = await updateFileList();
+
+        for (const file of fileNames) {
           const ext = file.split(".").pop() === "jpg" ? "jpeg" : file.split(".").pop() ?? "";
-          if (!imageExt.includes(ext)) {
+          if (!["jpeg", "png", "gif"].includes(ext)) {
             continue;
           }
           const url = paths.LESSON_FILE.replace(":lessonId", lessonId).replace(
@@ -56,11 +53,8 @@ export const LessonContextProvider = (props: any) => {
           }));
         }
 
-
-        setFiles(fileNames.data);
         setYml(yamlFile.data.content);
         setLesson(lesson.data);
-        downloadImages(fileNames.data);
       } catch (error) {
         console.error(error);
       }
@@ -69,9 +63,12 @@ export const LessonContextProvider = (props: any) => {
     fetchLessonData();
   }, []);
 
-
-  const downloadImages = async (filenames: any) => {
-    const imageFileTypes = ["jpg", "jpeg", "gif", "png"];
+  const updateFileList = async () => {
+    const fileNames = await axios.get<string[]>(
+      paths.LESSON_FILENAMES.replace(":lessonId", lessonId)
+    );
+    setFiles(fileNames.data);
+    return fileNames.data;
   };
 
   const fetchYmlData = async () => {
@@ -82,10 +79,7 @@ export const LessonContextProvider = (props: any) => {
   const updateYaml = async (lessonId: string, data: YamlContent) => {
     try {
       const updatedFile = await axios.put<FileDTO<YamlContent>>(
-        paths.LESSON_FILE_UPDATE.replace(":lessonId", lessonId.toString()).replace(
-          ":fileName",
-          "lesson"
-        ),
+        paths.LESSON_FILE_UPDATE.replace(":lessonId", lessonId).replace(":fileName", "lesson"),
         data
       );
       setYml(updatedFile.data.content);
@@ -114,11 +108,13 @@ export const LessonContextProvider = (props: any) => {
 
   const context: LessonContextModel = {
     state: lessonState,
+    yml,
     setYml: setYml,
     updateLesson: updatelesson,
     updateYaml: updateYaml,
     images,
     setImages,
+    updateFileList,
   };
 
   return (

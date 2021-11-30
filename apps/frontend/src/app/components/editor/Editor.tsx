@@ -15,7 +15,7 @@ import oppgaveMal from "./settingsFiles/oppgaveMal";
 import laererveiledningMal from "./settingsFiles/LaererveiledningMal";
 
 const Editor: FC = () => {
-  const { file, lessonId } = useParams<{ lessonId: string; file: string }>();
+  const { file, lessonId } = useParams() as any;
   const { state } = useLessonContext();
 
   const { saveFileBody, state: fileState, savedFileBody } = useFileContext();

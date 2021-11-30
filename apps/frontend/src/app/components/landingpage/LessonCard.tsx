@@ -1,7 +1,7 @@
-import { useHistory } from "react-router";
-import { Button, Card, Image } from "semantic-ui-react";
+import { useNavigate } from "react-router";
+import { Button, Card, Image, Divider } from "semantic-ui-react";
 import { FC, useState, useEffect } from "react";
-import nbFlag from "../../../../src/assets/public/languagesFlag/flag_nb.svg"
+import nbFlag from "../../../../src/assets/public/languagesFlag/flag_nb.svg";
 import nnFlag from "../../../../src/assets/public/languagesFlag/flag_nn.svg";
 import enFlag from "../../../../src/assets/public/languagesFlag/flag_en.svg";
 import isFlag from "../../../../src/assets/public/languagesFlag/flag_is.svg";
@@ -33,8 +33,8 @@ const languageOptions: Record<string, any> = {
   },
 };
 
-const LessonCard: FC<any> = ({ lessonId, language, hasContent, lessonTitle, lessonSlug }) => {
-  const history = useHistory();
+const LessonCard: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug }) => {
+  const navigate = useNavigate();
   const { state } = useLessonContext();
   const [image, setImage] = useState<string>();
 
@@ -56,12 +56,8 @@ const LessonCard: FC<any> = ({ lessonId, language, hasContent, lessonTitle, less
   }, [lessonSlug]);
 
   const navigateToEditor = (lessonId: any, lessonSlug: any, language: string) => {
-    const target = [
-      "/editor",
-      lessonId,
-      language === "nb" ? lessonSlug : `${lessonSlug}_${language}`,
-    ].join("/");
-    history.push({ pathname: target });
+    const target = ["/editor", lessonId, lessonSlug, language].join("/");
+    navigate({ pathname: target });
   };
   const imgSrc = "data:image/png;base64," + image;
 
@@ -69,51 +65,42 @@ const LessonCard: FC<any> = ({ lessonId, language, hasContent, lessonTitle, less
   const languageImage = languageOptions[language].image.src;
   return (
     <>
-      <Card centered>
-        {hasContent ? (
-          <>
-            <Card.Content>
-              <Image
-                src={imgSrc}
-                size="medium"
-                alt="thumbUrl"
-                rounded
-                bordered
-                style={{
-                  maxHeight: "220px",
-                  overflow: "hidden",
-                  objectFit: "cover",
-                  objectPosition: "0 0",
-                }}
-              />
-            </Card.Content>
-            <Card.Content>
-              <Card.Header>{lessonTitle}</Card.Header>
-              <Card.Meta>{languageText}</Card.Meta>
-            </Card.Content>
-          </>
-        ) : (
-          <>
-            <Card.Content>
-              <Image
-                src={noLessonPreviewImage}
-                size="medium"
-                disabled
-                rounded
-                bordered
-                style={{
-                  maxHeight: "220px",
-                  overflow: "hidden",
-                  objectFit: "cover",
-                }}
-              />
-            </Card.Content>
-            <Card.Content>
-              <Card.Header style={{ color: "gray" }}>Ingen innhold</Card.Header>
-              <Card.Meta>{languageText}</Card.Meta>
-            </Card.Content>
-          </>
-        )}
+      <Card>
+        <Card.Content>
+          <Card.Content>
+            <Image
+              src={imgSrc}
+              size="medium"
+              alt="thumbUrl"
+              rounded
+              bordered
+              style={{
+                maxHeight: "220px",
+                overflow: "hidden",
+                objectFit: "cover",
+                objectPosition: "0 0",
+              }}
+            />
+          </Card.Content>
+
+          <Card.Content>
+            <Divider />
+          </Card.Content>
+          <Card.Content>
+            <Card.Header>{lessonTitle}</Card.Header>
+            <Card.Meta>{languageText}</Card.Meta>
+          </Card.Content>
+          <Card.Content>
+            <Divider />
+          </Card.Content>
+          <Card.Content extra>
+            <Button
+              onClick={() => navigateToEditor(lessonId, lessonSlug, language)}
+              content={"Åpne"}
+              positive
+            />
+          </Card.Content>
+        </Card.Content>
 
         {language ? (
           <Image
@@ -129,13 +116,6 @@ const LessonCard: FC<any> = ({ lessonId, language, hasContent, lessonTitle, less
         ) : (
           ""
         )}
-        <div className="extra content">
-          <Button
-            onClick={() => navigateToEditor(lessonId, lessonSlug, language)}
-            content={hasContent ? "Åpne" : "Lag tekstfil"}
-            positive={hasContent}
-          />
-        </div>
       </Card>
     </>
   );

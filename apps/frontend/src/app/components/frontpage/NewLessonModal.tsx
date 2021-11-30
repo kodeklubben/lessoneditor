@@ -2,43 +2,40 @@ import "./newlessonmodal.scss";
 
 import { FC, SyntheticEvent, useState } from "react";
 import slugify from "slugify";
-import { COURSESLIST } from "../editor/settingsFiles/COURSELIST";
+import { COURSESLIST, LANGUAGEOPTIONS } from "./settings/newLessonOptions";
 import { useUserContext } from "../../contexts/UserContext";
-import { useHistory } from "react-router";
+import { useNavigate } from "react-router";
 import { Button, Grid, GridColumn, Input, Modal, Dropdown, Ref } from "semantic-ui-react";
 import ShowSpinner from "../ShowSpinner";
-
-const courseDropdownOptions = COURSESLIST.map((e) => {
-  return { key: e.slug, text: e.courseTitle, value: e.courseTitle };
-});
 
 const NewLessonModal: FC = () => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const history = useHistory();
+  const navigate = useNavigate();
   const { addLesson } = useUserContext();
   const defaultState = {
     lessonTitle: "",
-    courses: courseDropdownOptions,
-    course: COURSESLIST[0].slug,
+    language: LANGUAGEOPTIONS[0].value,
+    courses: COURSESLIST,
+    course: COURSESLIST[0].value,
   };
-  const [values, setValues] = useState(defaultState);
+  const [lessonData, setLessonData] = useState(defaultState);
   const [openNewCourseModal, setOpenNewCourseModal] = useState(false);
   const [isEmptyField, setIsEmptyField] = useState(false);
 
   const errorMessage = "Oppgavetittel må være satt";
 
   const onChange = (e: SyntheticEvent, { name, value }: Record<string, string>) => {
-    setValues((prevValues) => ({ ...prevValues, [name]: value }));
+    setLessonData((prevValues) => ({ ...prevValues, [name]: value }));
   };
 
-  const addCourseHandler = (e: SyntheticEvent, { value }: Record<string, string>) => {
+  const addCourseHandler = (e: SyntheticEvent, { value: v }: Record<string, string>) => {
     const tempCourselist = COURSESLIST;
-    const newCourseSlug = slugify(value, { lower: true, strict: true });
-    tempCourselist.push({ courseTitle: value, slug: newCourseSlug });
-    setValues((prevValues) => ({
+    const newCourseSlug = slugify(v, { lower: true, strict: true });
+    tempCourselist.push({ key: newCourseSlug, text: v, value: newCourseSlug });
+    setLessonData((prevValues) => ({
       ...prevValues,
-      courses: [{ key: newCourseSlug, text: value, value }, ...prevValues.courses],
+      course: newCourseSlug,
     }));
 
     setOpenNewCourseModal(true);
@@ -49,29 +46,31 @@ const NewLessonModal: FC = () => {
     setIsEmptyField(true);
   };
   const closeModal = () => {
-    setValues(defaultState);
+    setLessonData(defaultState);
     setIsEmptyField(false);
     setOpen(false);
   };
   const navigateToEditor = (lessonId: number, lessonSlug: string) => {
-    const target = ["/editor", lessonId, lessonSlug].join("/");
-    history.push({ pathname: target });
+    const target = ["/editor", lessonId, lessonSlug, lessonData.language].join("/");
+    navigate({ pathname: target });
   };
   const onSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     setLoading(true);
-    const { course, lessonTitle } = values;
-
-    const courseSlug = slugify(course, { lower: true, strict: true });
+    const { course, lessonTitle, language } = lessonData;
 
     const lesson = {
       title: lessonTitle,
       slug: slugify(lessonTitle, { lower: true, strict: true }),
     };
-    const getCourseFromSlug = COURSESLIST.find(({ slug }) => slug === courseSlug);
-
-    const courseTitle: string = getCourseFromSlug ? getCourseFromSlug.courseTitle : "";
-    const lessonId = await addLesson(course, courseTitle, lesson.slug, lesson.title);
+    const courseTitleFromSlug = COURSESLIST.find(({ value }) => value === course);
+    const lessonId = await addLesson(
+      course,
+      courseTitleFromSlug?.text,
+      lesson.slug,
+      lesson.title,
+      language
+    );
     if (lessonId) {
       navigateToEditor(lessonId, lesson.slug);
     }
@@ -111,9 +110,9 @@ const NewLessonModal: FC = () => {
                     onBlur={onBlur}
                     onChange={onChange}
                     name={"lessonTitle"}
-                    defaultValue={values["lessonTitle"]}
+                    defaultValue={lessonData["lessonTitle"]}
                   />
-                  {!values.lessonTitle && isEmptyField ? (
+                  {!lessonData.lessonTitle && isEmptyField ? (
                     <p>
                       <i style={{ color: "red" }}>{errorMessage}</i>
                     </p>
@@ -123,34 +122,34 @@ const NewLessonModal: FC = () => {
                 </label>
               </GridColumn>
               <GridColumn>
-                <label>
-                  Kurs:
-                  <br />
-                  <Dropdown
-                    options={values.courses}
-                    placeholder={COURSESLIST[0].courseTitle}
-                    selection
-                    search
-                    allowAdditions
-                    name="course"
-                    value={values.course}
-                    additionLabel="Legg til nytt kurs: "
-                    onAddItem={addCourseHandler}
-                    onChange={onChange}
-                  />
-                  {/* <select
-                    className="ui dropdown"
-                    name="course"
-                    onChange={onChange}
-                    disabled={loading}
-                  >
-                    {COURSESLIST.map((course: { courseTitle: string; slug: string }) => (
-                      <option key={course.slug} value={course.slug}>
-                        {course.courseTitle}
-                      </option>
-                    ))}
-                  </select> */}
-                </label>
+                Kurs:
+                <br />
+                <Dropdown
+                  options={lessonData.courses}
+                  placeholder={"velg kurs..."}
+                  value={lessonData.course}
+                  fluid
+                  search
+                  selection
+                  allowAdditions
+                  name="course"
+                  additionLabel="Legg til nytt kurs: "
+                  onAddItem={addCourseHandler}
+                  onChange={onChange}
+                />
+              </GridColumn>
+              <GridColumn>
+                Språk:
+                <br />
+                <Dropdown
+                  placeholder="Velg Språk"
+                  name="language"
+                  defaultValue={defaultState.language}
+                  selection
+                  onChange={onChange}
+                  options={LANGUAGEOPTIONS}
+                  id="lang_dropdown"
+                ></Dropdown>
               </GridColumn>
             </Grid>
           </form>
@@ -161,7 +160,7 @@ const NewLessonModal: FC = () => {
             loading={loading}
             form={"skjema-for-oppretting-av-ny-oppgave"}
             type={"submit"}
-            disabled={values.lessonTitle.length === 0}
+            disabled={lessonData.lessonTitle.length === 0}
             content="Neste"
             labelPosition="right"
             icon="right arrow"

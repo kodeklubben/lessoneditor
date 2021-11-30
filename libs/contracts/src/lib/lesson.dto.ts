@@ -18,6 +18,8 @@ export interface LessonDTO {
   created_at: Date;
 
   updated_at: Date;
+
+  language?: string;
 }
 
 export interface ShareLessonDTO {
@@ -33,11 +35,13 @@ export interface NewLessonDTO {
   courseSlug: string;
 
   courseTitle: string;
+
+  language?: string;
 }
 
 export interface YamlContent {
-  level?: number;
-  license?: string;
+  level: number;
+  license: string;
   tags: any;
 }
 

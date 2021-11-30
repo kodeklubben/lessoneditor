@@ -13,7 +13,8 @@ export interface UserContextModel {
     course: string,
     courseTitle: string,
     lesson: string,
-    lessonTitle: string
+    lessonTitle: string,
+    language: string
   ) => Promise<number | undefined>;
   removeLesson: (lessonId: number) => void;
 }
