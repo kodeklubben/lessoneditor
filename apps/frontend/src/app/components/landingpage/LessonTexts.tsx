@@ -1,16 +1,57 @@
 import LessonCard from "./LessonCard";
 import { Card, Divider, Icon, Button, Dropdown } from "semantic-ui-react";
 import { useNavigate } from "react-router";
-import { FC, SyntheticEvent, useState } from "react";
+import { FC, SyntheticEvent, useState, useEffect } from "react";
 import { LANGUAGEOPTIONS } from "../frontpage/settings/newLessonOptions";
-//import { filenameParser } from "../../utils/filename-parser";
+import axios from "axios";
+import { paths } from "@lessoneditor/api-interfaces";
+import { NewFileDTO, HeaderData } from "@lessoneditor/contracts";
+import { filenameParser } from "../../utils/filename-parser";
+import * as yaml from "js-yaml";
 
-const LessonTexts: FC<any> = ({ lessonId, fileList, lessonSlug, lessonTitle, languages }) => {
-  const unusedLanguages = LANGUAGEOPTIONS.filter((item) => !languages.includes(item.value)) ?? "";
+const LessonTexts: FC<any> = ({ lessonId, fileList, lessonSlug, lessonTitle }) => {
+  const [usedLanguages, setUsedLanguages] = useState<string[]>([]);
+  const unusedLanguages = LANGUAGEOPTIONS.filter((item) => !usedLanguages.includes(item.value));
   const [lang, setLang] = useState<string>(unusedLanguages[0].value);
   const navigate = useNavigate();
 
-  const navigateToEditor = () => {
+  useEffect(() => {
+    fileList.forEach((filename: string) => {
+      const { isMarkdown, isReadme, language } = filenameParser(filename);
+
+      if (!isReadme && language.length > 0) {
+        setUsedLanguages((prevLang) => [...prevLang, language]);
+      }
+    });
+  }, []);
+
+  const header: HeaderData = {
+    title: lessonTitle,
+    author: "",
+    authorList: [],
+    language: lang,
+    translator: "",
+    translatorList: [],
+  };
+
+  const rawBody = "---\n" + yaml.dump(header) + "---\n" + "\n#testTekst";
+
+  const onSubmit = async () => {
+    try {
+      const filename = lang === "nb" ? lessonSlug : `${lessonSlug}_${lang}`;
+      const newLessonFileDTO: NewFileDTO = {
+        filename,
+        ext: ".md",
+        content: rawBody,
+      };
+      const newLessonFileRes = await axios.post<number>(
+        paths.LESSON_FILES.replace(":lessonId", lessonId),
+        newLessonFileDTO
+      );
+    } catch (e) {
+      console.error(e);
+    }
+
     const target = ["/editor", lessonId, lessonSlug, lang].join("/");
 
     navigate(target);
@@ -23,7 +64,7 @@ const LessonTexts: FC<any> = ({ lessonId, fileList, lessonSlug, lessonTitle, lan
   return (
     <>
       <Card.Group centered>
-        {languages.map((language: string) => {
+        {usedLanguages.map((language: string) => {
           return (
             <LessonCard
               key={language}
@@ -63,7 +104,7 @@ const LessonTexts: FC<any> = ({ lessonId, fileList, lessonSlug, lessonTitle, lan
                 <Divider />
               </Card.Content>
               <Card.Content extra>
-                <Button onClick={navigateToEditor} content="Ny tekstfil " />
+                <Button onClick={onSubmit} content="Ny tekstfil " />
                 <Dropdown
                   inline
                   name="language"

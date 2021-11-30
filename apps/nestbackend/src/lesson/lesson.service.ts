@@ -73,13 +73,15 @@ export class LessonService {
 
   async getLessonFile(lessonId: number, filename: string) {
     const lesson = await this.getLesson(lessonId);
+
     const file = lesson.files.find((file) => file.filename == filename);
+
     if (!file) {
       throw new HttpException("File does not exist", HttpStatus.NOT_FOUND);
     }
-    if (file.filename == "preview") {
-      return file;
-    }
+    // if (file.filename == "preview") {
+    //   return file;
+    // }
     return file;
   }
 
@@ -134,5 +136,20 @@ export class LessonService {
 
     const savedLesson = await this.lessonRepository.save(lesson);
     return file;
+  }
+
+  async deleteLessonFile(lessonId: number, fileName: string, ext: string, request: Request) {
+    const lesson = await this.getLesson(lessonId);
+    const file = lesson.files.find((file) => file.filename === fileName && file.ext === `.${ext}`);
+
+    if (!file) {
+      throw new HttpException("File does not exist", HttpStatus.NOT_FOUND);
+    }
+    try {
+      const deletedFileRes = await this.fileStoreRepository.delete(file.fileId);
+      return deletedFileRes.affected;
+    } catch (e) {
+      console.log(e);
+    }
   }
 }

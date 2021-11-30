@@ -29,14 +29,14 @@ export const LessonContextProvider = (props: any) => {
     async function fetchLessonData() {
       try {
         const lesson = await axios.get<LessonDTO>(paths.LESSON.replace(":lessonId", lessonId));
-        const fileNames = await axios.get<string[]>(
-          paths.LESSON_FILENAMES.replace(":lessonId", lessonId)
-        );
+        console.log({ lesson });
         const yamlFile = await axios.get<FileDTO<YamlContent>>(
           paths.LESSON_FILE.replace(":lessonId", lessonId).replace(":fileName", "lesson")
         );
 
-        for (const file of fileNames.data) {
+        const fileNames = await updateFileList();
+
+        for (const file of fileNames) {
           const ext = file.split(".").pop() === "jpg" ? "jpeg" : file.split(".").pop() ?? "";
           if (!["jpeg", "png", "gif"].includes(ext)) {
             continue;
@@ -53,7 +53,6 @@ export const LessonContextProvider = (props: any) => {
           }));
         }
 
-        setFiles(fileNames.data);
         setYml(yamlFile.data.content);
         setLesson(lesson.data);
       } catch (error) {
@@ -63,6 +62,14 @@ export const LessonContextProvider = (props: any) => {
 
     fetchLessonData();
   }, []);
+
+  const updateFileList = async () => {
+    const fileNames = await axios.get<string[]>(
+      paths.LESSON_FILENAMES.replace(":lessonId", lessonId)
+    );
+    setFiles(fileNames.data);
+    return fileNames.data;
+  };
 
   const fetchYmlData = async () => {
     const lessonYMLDataRes = await axios.get(lessonYamlPath);
@@ -107,6 +114,7 @@ export const LessonContextProvider = (props: any) => {
     updateYaml: updateYaml,
     images,
     setImages,
+    updateFileList,
   };
 
   return (

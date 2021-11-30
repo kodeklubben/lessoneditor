@@ -19,7 +19,7 @@ export interface LessonDTO {
 
   updated_at: Date;
 
-  languages: string[];
+  language?: string;
 }
 
 export interface ShareLessonDTO {
@@ -36,7 +36,7 @@ export interface NewLessonDTO {
 
   courseTitle: string;
 
-  languages: string[];
+  language?: string;
 }
 
 export interface YamlContent {

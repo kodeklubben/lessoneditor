@@ -29,7 +29,8 @@ function createDefaultFileBody(file: string, ymlData: YamlContent) {
 const FileContextProvider = (props: any) => {
   const [fileContextState, setFileContextState] =
     useState<FileContextState>(initialFileContextState);
-  const { lessonId, file } = useParams() as any;
+  const { lessonId, file, lang } = useParams() as any;
+
   const { state: userState } = useUserContext();
   const { state } = useLessonContext();
   const { language } = filenameParser(file);

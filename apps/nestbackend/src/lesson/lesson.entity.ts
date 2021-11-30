@@ -19,9 +19,6 @@ export class Lesson {
   @Column()
   lessonSlug: string;
 
-  @Column("text", { array: true })
-  languages: string[];
-
   @Column()
   lessonTitle: string;
 

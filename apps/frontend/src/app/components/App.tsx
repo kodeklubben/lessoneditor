@@ -6,7 +6,6 @@ import { LessonContextProvider } from "../contexts/LessonContext";
 import { UserContextProvider } from "../contexts/UserContext";
 import { FileContextProvider } from "../contexts/FileContext";
 import SimplePreview from "./simple-preview/simple-preview";
-import Dummy from "./Dummy";
 
 const App = () => {
   return (
@@ -41,24 +40,24 @@ const App = () => {
           }
         />
 
-        <Route
+        {/* <Route
           path="/editor/:language"
           element={
             <UserContextProvider>
               <Editor />
             </UserContextProvider>
           }
-        />
+        /> */}
 
         <Route
-          path="/editor/:lessonId/:file/*"
+          path="/editor/:lessonId/:file/:lang"
           element={
             <UserContextProvider>
               <LessonContextProvider>
                 <FileContextProvider>
                   <Editor />
                 </FileContextProvider>
-              </LessonContextProvider>{" "}
+              </LessonContextProvider>
             </UserContextProvider>
           }
         />

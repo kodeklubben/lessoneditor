@@ -9,7 +9,7 @@ import LandingageNavbar from "./landingpageNavbar/LandingpageNavbar";
 import Areyousure from "./AreyousurePopup";
 import ThankU from "./ThankU";
 import Navbar from "../navbar/Navbar";
-import { Button, Container, Grid, Menu, Segment, Icon, Image, Item } from "semantic-ui-react";
+import { Button } from "semantic-ui-react";
 import { useLessonContext } from "../../contexts/LessonContext";
 
 const Landingpage = () => {
@@ -17,10 +17,14 @@ const Landingpage = () => {
   const [thankU, setThankU] = useState(false);
   const { lessonId, mode } = useParams() as any;
   const pageContent = mode;
-  const { state } = useLessonContext();
+  const { state, updateFileList } = useLessonContext();
 
-  const { lessonTitle, courseTitle, lessonSlug, languages } = state.lesson;
+  const { lessonTitle, courseTitle, lessonSlug } = state.lesson;
   const fileList = state.files;
+
+  useEffect(() => {
+    updateFileList();
+  }, []);
 
   const dropdownValue = (input: string) => {
     switch (input) {
@@ -31,7 +35,6 @@ const Landingpage = () => {
             fileList={fileList}
             lessonTitle={lessonTitle}
             lessonSlug={lessonSlug}
-            languages={languages}
           />
         );
       case "teacherguides":
@@ -41,11 +44,10 @@ const Landingpage = () => {
             fileList={fileList}
             lessonTitle={lessonTitle}
             lessonSlug={lessonSlug}
-            languages={languages}
           />
         );
       case "allfiles":
-        return <AllFiles />;
+        return <AllFiles lessonId={lessonId} />;
       default:
         return;
     }

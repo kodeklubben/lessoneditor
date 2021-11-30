@@ -1,4 +1,5 @@
-import { FC, useState, RefObject } from "react";
+import { FC, useState } from "react";
+import { useParams } from "react-router";
 import { RenderButtons } from "./buttoncontroller/views/RenderButtons";
 import { useHotkeys } from "react-hotkeys-hook";
 import {
@@ -13,6 +14,7 @@ import { Modal, Container } from "semantic-ui-react";
 const Explorer: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { state } = useLessonContext();
+  const { lessonId } = useParams() as any;
 
   const filterItems = ["preview.png", "lesson.yml", "data.json", "image.png"];
 
@@ -56,6 +58,7 @@ const Explorer: FC = () => {
                 ? state.files?.filter((fileName: string) => !filterItems.includes(fileName))
                 : ["No files found"]
             }
+            lessonId={lessonId}
           />
         </Container>
       </Modal>

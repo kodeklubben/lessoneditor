@@ -68,7 +68,6 @@ export class UserService {
     const newLesson = new Lesson();
     newLesson.lessonTitle = lesson.lessonTitle;
     newLesson.lessonSlug = lesson.lessonSlug;
-    newLesson.languages = lesson.languages;
     newLesson.courseSlug = lesson.courseSlug;
     newLesson.courseTitle = lesson.courseTitle;
     newLesson.submitted = false;
@@ -93,7 +92,7 @@ export class UserService {
       title: lesson.lessonTitle,
       author: "",
       authorList: [user.name],
-      language: lesson.languages[0],
+      language: lesson.language,
       translator: "",
       translatorList: [],
     };
@@ -114,7 +113,7 @@ export class UserService {
     emptyMdFile.content = Buffer.from(rawBody);
     emptyMdFile.ext = ".md";
     emptyMdFile.filename =
-      lesson.languages[0] === "nb" ? lesson.lessonSlug : `${lesson.lessonSlug}_${lesson.languages}`;
+      lesson.language === "nb" ? lesson.lessonSlug : `${lesson.lessonSlug}_${lesson.language}`;
     emptyMdFile.updated_by = user.name;
     emptyMdFile.created_by = user.name;
     emptyMdFile.lesson = savedLesson;
@@ -218,20 +217,20 @@ export class UserService {
     return await this.lessonRepository.remove(lesson);
   }
 
-  insertMetaData(ymlData: YamlContent) {
-    const subject = ymlData.tags.subject.map((element) => {
-      return SUBJECT[element];
-    });
-    const topic = ymlData.tags.topic.map((element) => {
-      return TOPIC[element];
-    });
-    const grade = ymlData.tags.grade.map((element) => {
-      return GRADE[element];
-    });
+  // insertMetaData(ymlData: YamlContent) {
+  //   const subject = ymlData.tags.subject.map((element) => {
+  //     return SUBJECT[element];
+  //   });
+  //   const topic = ymlData.tags.topic.map((element) => {
+  //     return TOPIC[element];
+  //   });
+  //   const grade = ymlData.tags.grade.map((element) => {
+  //     return GRADE[element];
+  //   });
 
-    let veiledningWithData = oppgaveMal.replace(/{subject}/, subject.join(", "));
-    veiledningWithData = veiledningWithData.replace(/{topic}/, topic.join(", "));
-    veiledningWithData = veiledningWithData.replace(/{grade}/, grade.join(", "));
-    return veiledningWithData;
-  }
+  //   let veiledningWithData = oppgaveMal.replace(/{subject}/, subject.join(", "));
+  //   veiledningWithData = veiledningWithData.replace(/{topic}/, topic.join(", "));
+  //   veiledningWithData = veiledningWithData.replace(/{grade}/, grade.join(", "));
+  //   return veiledningWithData;
+  // }
 }

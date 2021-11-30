@@ -66,7 +66,7 @@ export const UserContextProvider = (props: any) => {
         courseTitle: courseTitle,
         lessonSlug: lessonSlug,
         lessonTitle: lessonTitle,
-        languages: [language],
+        language: language,
       };
       const newLessonRes = await axios.post<number>(
         paths.USER_LESSON_NEW.replace(":userId", userContexState.user!.userId.toString()),

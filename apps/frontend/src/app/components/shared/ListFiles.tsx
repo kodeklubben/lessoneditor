@@ -1,19 +1,37 @@
 import { FC } from "react";
 import { Item, Button, Divider, Icon, Placeholder } from "semantic-ui-react";
+import axios from "axios";
+import { paths } from "@lessoneditor/api-interfaces";
+import { useLessonContext } from "../../contexts/LessonContext";
 
 type ListFilesProps = {
   list: string[];
+  lessonId: string;
 };
 
-const ListFiles: FC<ListFilesProps> = ({ list }) => {
-  console.log({ list });
-  const removeFile = () => {
-    console.log("file soon removed");
+const ListFiles: FC<ListFilesProps> = ({ list, lessonId }) => {
+  const { updateFileList } = useLessonContext();
+
+  const removeFile = async (item: string) => {
+    const filename = item.split(".").slice(0, -1).toString();
+    const ext: string = item.split(".").pop() ?? "";
+    try {
+      const isDeleted = await axios.delete(
+        paths.LESSON_FILE_DELETE.replace(":lessonId", lessonId.toString())
+          .replace(":fileName", filename)
+          .replace(":ext", ext)
+      );
+      if (isDeleted.data === 1) {
+        updateFileList();
+      }
+    } catch (e) {
+      console.log(e);
+    }
   };
   return (
     <>
       {list.map((item) => (
-        <>
+        <li key={item} style={{ listStyleType: "none" }}>
           <div style={{ display: "flex", flexFlow: "row", justifyContent: "space-between" }}>
             <div style={{ display: "flex", flexFlow: "row", alignContent: "center" }}>
               <Placeholder style={{ marginRight: "20px" }}>
@@ -28,16 +46,14 @@ const ListFiles: FC<ListFilesProps> = ({ list }) => {
               style={{ background: "none" }}
               icon
               floated="right"
-              onClick={(item) => {
-                removeFile();
-              }}
+              onClick={() => removeFile(item)}
             >
               <Icon name="delete" />
               Slett
             </Button>
           </div>
           <Divider />
-        </>
+        </li>
       ))}
     </>
   );

@@ -139,7 +139,7 @@ const NewLessonModal: FC = () => {
                 />
               </GridColumn>
               <GridColumn>
-                Kurs:
+                Språk:
                 <br />
                 <Dropdown
                   placeholder="Velg Språk"
