@@ -24,7 +24,7 @@ const Landingpage = () => {
 
   useEffect(() => {
     updateFileList();
-  }, []);
+  }, [state.files]);
 
   const dropdownValue = (input: string) => {
     switch (input) {

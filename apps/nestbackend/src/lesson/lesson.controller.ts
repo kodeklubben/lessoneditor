@@ -125,20 +125,22 @@ export class LessonController {
     @Req() req,
     @Param("lessonId") lessonId,
     @Param("fileName") fileName,
-
     @Body() updatedFile: UpdatedFileDTO
   ): Promise<FileDTO<string>> {
+    console.log({ updatedFile });
     const { lesson, content, ...fileProps } = await this.lessonService.updateLessonFile(
       lessonId,
       fileName,
       req.user.userId,
-      updatedFile.content,
+      JSON.stringify(updatedFile.content),
       req
     );
     const newFile: FileDTO<string> = {
       ...fileProps,
       content: content.toString("utf-8"),
     };
+    console.log({ lesson });
+    console.log({ newFile });
     return newFile;
   }
 
