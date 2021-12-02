@@ -55,6 +55,7 @@ const LandingpageDatamodal = () => {
   }, [yml]);
 
   const onSubmit = () => {
+    console.log({ yml });
     updateYaml(lessonId, yml);
     setOpen(false);
   };

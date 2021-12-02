@@ -12,7 +12,7 @@ import * as yaml from "js-yaml";
 const LessonTexts: FC<any> = ({ lessonId, fileList, lessonSlug, lessonTitle }) => {
   const [usedLanguages, setUsedLanguages] = useState<string[]>([]);
   const unusedLanguages = LANGUAGEOPTIONS.filter((item) => !usedLanguages.includes(item.value));
-  const [lang, setLang] = useState<string>(unusedLanguages[0].value);
+  const [lang, setLang] = useState<string>("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,6 +24,10 @@ const LessonTexts: FC<any> = ({ lessonId, fileList, lessonSlug, lessonTitle }) =
       }
     });
   }, []);
+
+  useEffect(() => {
+    setLang(unusedLanguages[0].value);
+  }, [unusedLanguages[0].value]);
 
   const header: HeaderData = {
     title: lessonTitle,

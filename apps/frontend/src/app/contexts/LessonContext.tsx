@@ -8,6 +8,7 @@ import ShowSpinner from "../components/ShowSpinner";
 import { paths } from "@lessoneditor/api-interfaces";
 import { useUserContext } from "./UserContext";
 import { base64StringToBlob, createObjectURL } from "blob-util";
+import yaml from "js-yaml";
 
 const LessonContext = React.createContext<LessonContextModel>({} as LessonContextModel);
 
@@ -29,10 +30,11 @@ export const LessonContextProvider = (props: any) => {
     async function fetchLessonData() {
       try {
         const lesson = await axios.get<LessonDTO>(paths.LESSON.replace(":lessonId", lessonId));
-        console.log({ lesson });
         const yamlFile = await axios.get<FileDTO<YamlContent>>(
           paths.LESSON_FILE.replace(":lessonId", lessonId).replace(":fileName", "lesson")
         );
+
+        console.log({ yamlFile });
 
         const fileNames = await updateFileList();
 
@@ -78,11 +80,12 @@ export const LessonContextProvider = (props: any) => {
 
   const updateYaml = async (lessonId: string, data: YamlContent) => {
     try {
-      const updatedFile = await axios.put<FileDTO<YamlContent>>(
+      const updatedFile = await axios.put<FileDTO<any>>(
         paths.LESSON_FILE_UPDATE.replace(":lessonId", lessonId).replace(":fileName", "lesson"),
-        data
+        { content: data }
       );
-      setYml(updatedFile.data.content);
+      const newData: unknown = yaml.load(updatedFile.data.content);
+      setYml(newData);
     } catch (error) {
       console.error(error);
     }
