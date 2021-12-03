@@ -10,10 +10,17 @@ import {
   Res,
   UseInterceptors,
   UploadedFile,
+  Delete,
 } from "@nestjs/common";
 import { ExpressAdapter, FileInterceptor, MulterModule } from "@nestjs/platform-express";
 import { LessonService } from "./lesson.service";
-import { LessonDTO, FileDTO, LessonFilterDTO, ShareLessonDTO, NewFileDTO } from "@lessoneditor/contracts";
+import {
+  LessonDTO,
+  FileDTO,
+  LessonFilterDTO,
+  ShareLessonDTO,
+  NewFileDTO,
+} from "@lessoneditor/contracts";
 import { UserDTO } from "@lessoneditor/contracts";
 import { AuthGuard } from "@nestjs/passport";
 import { fileURLToPath } from "url";
@@ -43,8 +50,8 @@ export class LessonController {
 
   @UseGuards(LoginGuard)
   @Post(":lessonId/submit")
-  async SubmitLesson(@Param() params) {
-    await this.lessonService.submitLesson(params.lessonId);
+  async SubmitLesson(@Req() req,@Param() params) {
+    await this.lessonService.submitLesson(req.user,params.lessonId);
   }
 
   @UseGuards(LoginGuard)
@@ -78,6 +85,7 @@ export class LessonController {
         lessonId,
         fileName
       );
+
       if ([".jpg", ".jpeg", ".gif", ".png"].includes(fileProps.ext)) {
         res.end(content.toString("base64"));
       } 
@@ -121,6 +129,7 @@ export class LessonController {
     @Param("fileName") fileName,
     @Body() updatedFile: UpdatedFileDTO
   ): Promise<FileDTO<string>> {
+    console.log({ updatedFile });
     const { lesson, content, ...fileProps } = await this.lessonService.updateLessonFile(
       lessonId,
       fileName,
@@ -133,5 +142,17 @@ export class LessonController {
       content: content.toString("utf-8"),
     };
     return newFile;
+  }
+
+  @UseGuards(LoginGuard)
+  @Delete(":lessonId/files/:fileName/:ext")
+  async DeleteLessonFile(
+    @Req() req,
+    @Param("lessonId") lessonId,
+    @Param("fileName") fileName,
+    @Param("ext") ext
+  ): Promise<any> {
+    const deleteRes = await this.lessonService.deleteLessonFile(lessonId, fileName, ext, req);
+    return deleteRes;
   }
 }

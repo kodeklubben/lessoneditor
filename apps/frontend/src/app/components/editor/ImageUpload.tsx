@@ -36,7 +36,7 @@ const ImageUpload: FC<ImageUploadProps> = ({
   let start = cursorPositionStart + 2;
   let end = cursorPositionEnd + 18;
 
-  const { lessonId } = useParams<{ lessonId: string }>();
+  const { lessonId } = useParams() as any;
   const [showSpinner, setShowSpinner] = useState(false);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
@@ -96,6 +96,7 @@ const ImageUpload: FC<ImageUploadProps> = ({
               }`;
               const content =
                 reader.result.toString().split(`data:${file.type};base64,`).pop()! ?? "";
+
               const newFileDTO: NewFileDTO = {
                 filename,
                 ext,
@@ -108,13 +109,11 @@ const ImageUpload: FC<ImageUploadProps> = ({
 
               setImages((prevImages: any) => ({
                 ...prevImages,
-                [newFileDTO.filename + newFileDTO.ext]: createObjectURL(
-                  base64StringToBlob(newFileDTO.content, "image/png")
-                ),
+                [filename + ext]: createObjectURL(base64StringToBlob(content, `image/${ext}`)),
               }));
 
               setShowSpinner(false);
-              imageSubmitHandler(newFileDTO.filename + newFileDTO.ext);
+              imageSubmitHandler(filename + ext);
             }
           } catch (error) {
             console.error(error);

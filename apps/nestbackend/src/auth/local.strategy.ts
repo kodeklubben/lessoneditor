@@ -10,6 +10,7 @@ import { AxiosResponse } from "axios";
 import { HttpService } from "@nestjs/common";
 import { Inject, CACHE_MANAGER } from "@nestjs/common";
 import { Cache } from "cache-manager";
+import { User} from "../user/user.entity"
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy, "github") {
@@ -40,8 +41,9 @@ export class LocalStrategy extends PassportStrategy(Strategy, "github") {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
     const response: any = await lastValueFrom(this.axiosResponse$);
+    let user: User
     try {
-      return await this.userService.getUser(response.data.id);
+      user = await this.userService.getUser(response.data.id); 
     } catch (error) {
       const newUserDTO: UserDTO = {
         userId: response.data.id,
@@ -50,9 +52,9 @@ export class LocalStrategy extends PassportStrategy(Strategy, "github") {
         email: response.data.email,
         photo: response.data.avatar_url,
       };
-      const newUser = await this.userService.addUser(newUserDTO);
-      this.cacheManager.set(newUser.userId.toString(), accessToken);
-      return newUser
+      user = await this.userService.addUser(newUserDTO);
     }
+    this.cacheManager.set(user.userId.toString(), accessToken);
+    return user;
   }
 }

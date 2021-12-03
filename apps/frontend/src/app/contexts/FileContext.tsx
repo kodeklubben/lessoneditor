@@ -14,6 +14,7 @@ import {
 } from "./fileContext.functions";
 import { useUserContext } from "./UserContext";
 import * as yml from "js-yaml";
+import ShowSpinner from "../components/ShowSpinner";
 
 const separator = "---\n";
 
@@ -27,13 +28,11 @@ function createDefaultFileBody(file: string, ymlData: YamlContent) {
 const FileContextProvider = (props: any) => {
   const [fileContextState, setFileContextState] =
     useState<FileContextState>(initialFileContextState);
-  const { lessonId, file } = useParams<any>();
+  const { lessonId, file, lang } = useParams() as any;
+
   const { state: userState } = useUserContext();
   const { state } = useLessonContext();
   const { language } = filenameParser(file);
-
-  // Må ta savedFileBody ut av FileContextState pga at den brukes  som en useEffect-dependency.
-  // Dette for å forhindre at useEffect kjører mer enn nødvendig.
   const [savedFileBody, setSavedFileBody] = useState("");
 
   const saveFileBody = async (body: string) => {
@@ -63,7 +62,6 @@ const FileContextProvider = (props: any) => {
   };
 
   useEffect(() => {
-    let isSubscribed = true;
     async function fetchData() {
       try {
         const result = await axios.get<FileDTO<string>>(
@@ -125,7 +123,16 @@ const FileContextProvider = (props: any) => {
     saveFileHeader,
     setFileContextState,
   };
+
+  if(context.state.savedFileBody)
+{
   return <FileContext.Provider value={context}>{props.children}</FileContext.Provider>;
+}
+else
+{
+  return <ShowSpinner></ShowSpinner>
+}
+
 };
 const useFileContext = (): FileContextModel => useContext(FileContext);
 

@@ -1,25 +1,28 @@
 import { useLessonContext } from "../../contexts/LessonContext";
+import ListFiles from "../shared/ListFiles";
+import { Item, Container } from "semantic-ui-react";
+import { FC } from "react";
 
-const AllFiles = () => {
+type AllFilesProps = { lessonId: string };
+
+const AllFiles: FC<AllFilesProps> = ({ lessonId }) => {
   const { state } = useLessonContext();
 
-  const filteredArray =
-    state.files!.length > 0
-      ? state.files!.filter(
-          (fileName: string) => fileName !== "data.json" && fileName !== "preview.png"
-        )
-      : ["No files found"];
+  const filterItems = ["preview.png", "lesson.yml", "data.json", "image.png"];
 
   return (
-    <>
-      <div style={{ marginBottom: "5em" }}>
-        <div style={{ marginLeft: "5em" }}>
-          {filteredArray.map((element: any) => {
-            return <h2>{element}</h2>;
-          })}
-        </div>
-      </div>
-    </>
+    <Container>
+      <ul>
+        <ListFiles
+          list={
+            state.files?.length > 0
+              ? state.files?.filter((fileName: string) => !filterItems.includes(fileName))
+              : ["No files found"]
+          }
+          lessonId={lessonId}
+        />
+      </ul>
+    </Container>
   );
 };
 

@@ -8,24 +8,23 @@ import AllFiles from "./AllFiles";
 import LandingageNavbar from "./landingpageNavbar/LandingpageNavbar";
 import Areyousure from "./AreyousurePopup";
 import ThankU from "./ThankU";
-
 import Navbar from "../navbar/Navbar";
-import LessonData from "./datapanel/LessonData";
-import MDPreview from "../editor/MDPreview";
-import { Button, Container, Grid, Menu, Segment, Icon, Image, Item } from "semantic-ui-react";
+import { Button } from "semantic-ui-react";
 import { useLessonContext } from "../../contexts/LessonContext";
 
 const Landingpage = () => {
   const [areYouSure, setAreYouSure] = useState(false);
   const [thankU, setThankU] = useState(false);
-  const { lessonId, mode } = useParams<any>();
+  const { lessonId, mode } = useParams() as any;
   const pageContent = mode;
-  const { state } = useLessonContext();
+  const { state, updateFileList } = useLessonContext();
 
-  const lessonList = state.files;
-  const lessonTitle = state.lesson?.lessonTitle;
-  const courseTitle = state.lesson?.courseTitle;
-  const lessonSlug = state.lesson.lessonSlug;
+  const { lessonTitle, courseTitle, lessonSlug } = state.lesson;
+  const fileList = state.files;
+
+  useEffect(() => {
+    updateFileList();
+  }, [state.files]);
 
   const dropdownValue = (input: string) => {
     switch (input) {
@@ -33,7 +32,7 @@ const Landingpage = () => {
         return (
           <LessonTexts
             lessonId={lessonId}
-            lessonList={lessonList}
+            fileList={fileList}
             lessonTitle={lessonTitle}
             lessonSlug={lessonSlug}
           />
@@ -42,13 +41,13 @@ const Landingpage = () => {
         return (
           <TeacherGuides
             lessonId={lessonId}
-            lessonList={lessonList}
+            fileList={fileList}
             lessonTitle={lessonTitle}
             lessonSlug={lessonSlug}
           />
         );
       case "allfiles":
-        return <AllFiles />;
+        return <AllFiles lessonId={lessonId} />;
       default:
         return;
     }
@@ -73,7 +72,7 @@ const Landingpage = () => {
           </Link>
           <Button
             onClick={() => setAreYouSure(true)}
-            content="Sende inn"
+            content="Sende inn oppgave"
             positive
             labelPosition="right"
             icon="arrow right"

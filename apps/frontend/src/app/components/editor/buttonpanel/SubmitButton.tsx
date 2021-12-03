@@ -1,5 +1,5 @@
 import { Button, Popup } from "semantic-ui-react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router";
 import { FC } from "react";
 
@@ -10,8 +10,8 @@ interface SubmitButtonProps {
 }
 
 const SubmitButton: FC<SubmitButtonProps> = ({ mdText, setShowSpinner, saveEditorText }) => {
-  const history = useHistory();
-  const { lessonId } = useParams<{ lessonId: string }>();
+  const navigate = useNavigate();
+  const { lessonId } = useParams<any>();
 
   const onSubmit = () => {
     setShowSpinner(true);
@@ -22,7 +22,7 @@ const SubmitButton: FC<SubmitButtonProps> = ({ mdText, setShowSpinner, saveEdito
   const navigateToHome = () => {
     saveEditorText();
     const target = ["/landingpage", lessonId, "lessontexts"].join("/");
-    history.push(target);
+    navigate(target);
   };
 
   return (

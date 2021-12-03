@@ -44,14 +44,12 @@ jobs:
       - run: npm run test-nestbackend
       - run: npm run build-all
       - run: npm run build-nestbackend
-      - run: npm r
       - name: Caching Dist Folder
         uses: actions/cache@v2
         with:
           path: ./dist
           key: cache-dist-${{ github.sha }}
-   
-  
+
   deply_db:
     name: Deploy to Cloud SQL Postgres
     timeout-minutes: 3
@@ -81,7 +79,7 @@ jobs:
         run: (./cloud_sql_proxy -instances=lessoneditor:europe-west1:lesson-editor=tcp:5432 -credential_file=credentials.json & sleep 2) && ts-node -P tsconfig.node.json ./node_modules/typeorm/cli.js migration:run
         env:
           TYPEORM_CONNECTION: postgres
-          TYPEORM_HOST: localhost 
+          TYPEORM_HOST: localhost
           TYPEORM_USERNAME: github-actions@lessoneditor.iam
           TYPEORM_PASSWORD: ${{ env.ACCESS_TOKEN }}
           TYPEORM_DATABASE: lessoneditor
@@ -90,7 +88,6 @@ jobs:
           TYPEORM_MIGRATIONS: db/migration/**/*.ts
           TYPEORM_MIGRATIONS_DIR: db/migration
           TYPEORM_ENTITIES: apps/nestbackend/src/user/user.entity.ts,apps/nestbackend/src/lesson/lesson.entity.ts,apps/nestbackend/src/session/session.entity.ts
-
 
   deploy:
     name: Deploy to Google App Engine
