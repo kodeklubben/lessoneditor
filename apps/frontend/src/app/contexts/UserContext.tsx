@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState, FC } from "react";
 import axios from "axios";
-import { Lesson, paths, User } from "@lessoneditor/api-interfaces";
+import { paths } from "@lessoneditor/contracts";;
+import { LessonDTO, NewLessonDTO } from "@lessoneditor/contracts";;
 import { UserDTO } from "@lessoneditor/contracts";
-import { LessonDTO, NewLessonDTO } from "@lessoneditor/contracts";
 
 import {
   initialUserContextState,
@@ -35,7 +35,7 @@ export const UserContextProvider = (props: any) => {
           };
         });
       } catch (error: any) {
-        setError(error);
+        window.location.href = "/api/auth/login/"
       }
     }
     fetchData().then();

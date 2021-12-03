@@ -42,7 +42,6 @@ export class UserService {
   }
 
   async addUser(newUser: UserDTO): Promise<User> {
-    console.log(newUser);
     const user = new User();
     user.userId = newUser.userId;
     user.email = newUser.email;
@@ -148,9 +147,6 @@ export class UserService {
       );
       const previewPngFile = new FileStore();
       previewPngFile.content = Buffer.from(thumbImage);
-      fs.writeFile("image.png", Buffer.from(thumbImage), (error) => {
-        console.error(error);
-      });
       previewPngFile.ext = ".png";
       previewPngFile.filename = "preview";
       previewPngFile.updated_by = user.name;
@@ -176,14 +172,14 @@ export class UserService {
       throw new HttpException("Lesson is not assigned user", HttpStatus.NOT_FOUND);
     }
     const lesson = await this.lessonRepository.findOne(lessonId, { relations: ["files"] });
-    if (regenThumb) {
-      const previewFile = lesson.files.find((file) => file.filename == "preview");
-      if (!previewFile) {
-        throw new HttpException("Preview file not found", HttpStatus.NOT_FOUND);
-      }
-      const thumbImage = await this.thumbService.getThumb(lessonId, lesson.lessonSlug, request);
-      previewFile.content = Buffer.from(thumbImage);
-    }
+    // if (regenThumb) {
+    //   const previewFile = lesson.files.find((file) => file.filename == "preview");
+    //   if (!previewFile) {
+    //     throw new HttpException("Preview file not found", HttpStatus.NOT_FOUND);
+    //   }
+    //   const thumbImage = await this.thumbService.getThumb(lessonId, lesson.lessonSlug, request);
+    //   previewFile.content = Buffer.from(thumbImage);
+    // }
     lesson.lessonTitle = updatedLesson.lessonTitle;
     lesson.lessonSlug = updatedLesson.lessonSlug;
     lesson.courseSlug = updatedLesson.courseSlug;

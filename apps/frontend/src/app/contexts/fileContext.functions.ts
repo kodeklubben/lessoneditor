@@ -1,4 +1,4 @@
-import { HeaderData } from "@lessoneditor/contracts";
+import { HeaderData } from "@lessoneditor/contracts";;
 
 export interface FileContextState {
   rawMdFileContent: string | undefined;

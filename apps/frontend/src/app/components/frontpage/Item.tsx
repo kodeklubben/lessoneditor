@@ -1,7 +1,7 @@
-import { LessonDTO, FileDTO } from "@lessoneditor/contracts";
+import { LessonDTO, FileDTO } from "@lessoneditor/contracts";;
 import React, { useEffect, useState } from "react";
 import { Button, Card, Image, Icon } from "semantic-ui-react";
-import { paths } from "@lessoneditor/api-interfaces";
+import { paths } from "@lessoneditor/contracts";;
 import { useHistory } from "react-router-dom";
 import { useUserContext } from "../../contexts/UserContext";
 import axios from "axios";
@@ -18,7 +18,7 @@ const Item: React.FC<Props> = ({ lesson }) => {
     const target = ["/landingpage", lessonId, "lessontexts"].join("/");
     history.push(target);
   };
-  const [image, setImage] = useState<string>();
+  const [image, setImage] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     async function getImage() {
@@ -39,9 +39,10 @@ const Item: React.FC<Props> = ({ lesson }) => {
 
   return (
     <>
+    {image && (
       <Card>
         <Card.Content>
-          <Image
+          {/* <Image
             src={`data:image/png;base64,${image}`}
             size="medium"
             bordered
@@ -52,7 +53,7 @@ const Item: React.FC<Props> = ({ lesson }) => {
               objectFit: "cover",
               objectPosition: "0 0",
             }}
-          />
+          /> */}
         </Card.Content>
         <Card.Content>
           <Card.Header>{lesson.lessonTitle ? lesson.lessonTitle : lesson.lessonSlug}</Card.Header>
@@ -81,6 +82,7 @@ const Item: React.FC<Props> = ({ lesson }) => {
           </Button>
         </Card.Content>
       </Card>
+    )}
     </>
   );
 };

@@ -1,12 +1,11 @@
 import { FC, Dispatch, SetStateAction, useState, Ref } from "react";
 import ShowSpinner from "../ShowSpinner";
-import uploadImage from "../../api/upload-image";
 import { useParams } from "react-router";
 import { Modal, Button, Header } from "semantic-ui-react";
 import { read } from "fs";
-import { paths } from "@lessoneditor/api-interfaces";
+import { paths } from "@lessoneditor/contracts";
 import axios from "axios";
-import { NewFileDTO } from "@lessoneditor/contracts";
+import { NewFileDTO } from "@lessoneditor/contracts";;
 import { useLessonContext } from "../../contexts/LessonContext";
 import { base64StringToBlob, createObjectURL } from "blob-util";
 

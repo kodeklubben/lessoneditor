@@ -1,5 +1,4 @@
 import moxios from "moxios";
-import { paths } from "@lessoneditor/api-interfaces";
 import { UserContext, UserContextProvider } from "./UserContext";
 import TestRenderer from "react-test-renderer";
 

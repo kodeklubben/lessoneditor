@@ -8,6 +8,8 @@ import { UserDTO } from "@lessoneditor/contracts";
 import { lastValueFrom } from "rxjs";
 import { AxiosResponse } from "axios";
 import { HttpService } from "@nestjs/common";
+import { Inject, CACHE_MANAGER } from "@nestjs/common";
+import { Cache } from "cache-manager";
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy, "github") {
@@ -16,7 +18,8 @@ export class LocalStrategy extends PassportStrategy(Strategy, "github") {
   constructor(
     private authService: AuthService,
     private http: HttpService,
-    private userService: UserService
+    private userService: UserService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache
   ) {
     super({
       authorizationURL: `https://github.com/login/oauth/authorize?${stringify({
@@ -40,15 +43,16 @@ export class LocalStrategy extends PassportStrategy(Strategy, "github") {
     try {
       return await this.userService.getUser(response.data.id);
     } catch (error) {
-      const newUser: UserDTO = {
+      const newUserDTO: UserDTO = {
         userId: response.data.id,
         name: response.data.name,
         username: response.data.username,
         email: response.data.email,
         photo: response.data.avatar_url,
       };
-      console.log(newUser);
-      return await this.userService.addUser(newUser);
+      const newUser = await this.userService.addUser(newUserDTO);
+      this.cacheManager.set(newUser.userId.toString(), accessToken);
+      return newUser
     }
   }
 }

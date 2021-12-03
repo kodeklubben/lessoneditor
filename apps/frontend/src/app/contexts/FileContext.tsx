@@ -1,14 +1,12 @@
 import React, { Dispatch, FC, SetStateAction, useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
-import saveMdText from "../api/save-md-text";
 import insertMetaDataInTeacherGuide from "../components/editor/utils/insertMetaDataInTeacherGuide";
 import oppgaveMal from "../components/editor/settingsFiles/oppgaveMal";
 import { useLessonContext } from "./LessonContext";
 import { filenameParser } from "../utils/filename-parser";
 import axios from "axios";
-import { paths } from "@lessoneditor/api-interfaces";
-import { FileDTO, HeaderData, UpdatedFileDTO } from "@lessoneditor/contracts";
-import { YamlContent } from "@lessoneditor/contracts";
+import { FileDTO, HeaderData, UpdatedFileDTO, YamlContent } from "@lessoneditor/contracts";;
+import { paths } from "@lessoneditor/contracts";;
 import {
   FileContextModel,
   FileContextState,
