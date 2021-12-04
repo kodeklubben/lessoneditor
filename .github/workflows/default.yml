@@ -19,14 +19,6 @@ jobs:
         with:
           fetch-depth: 0
       - run: npm ci --ignore-scripts --no-optional --prefer-offline --no-audit
-      - name: Caching Nx
-        uses: actions/cache@v2
-        with:
-          path: node_modules/.cache
-          key: cache-nx-${{ hashFiles('package-lock.json') }}-${{ github.sha }}
-          restore-keys: |
-            cache-nx-${{ hashFiles('package-lock.json') }}-
-            cache-nx-
       - run: npm run test-all
       - run: npm run test-nestbackend
       - run: npm run build-all
