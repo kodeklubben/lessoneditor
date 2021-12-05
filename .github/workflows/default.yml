@@ -8,6 +8,10 @@ on:
     branches:
       - main
 
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test:
     name: Run Test and Build Apps
@@ -18,11 +22,29 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - run: npm install
+      - name: Cache node modules
+        uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - run: npm ci --ignore-scripts --no-optional --prefer-offline --no-audit
+      - name: Caching Nx
+        uses: actions/cache@v2
+        with:
+          path: node_modules/.cache
+          key: cache-nx-${{ hashFiles('package-lock.json') }}-${{ github.sha }}
+          restore-keys: |
+            cache-nx-${{ hashFiles('package-lock.json') }}-
+            cache-nx-
       - run: npm run test-all
       - run: npm run test-nestbackend
       - run: npm run build-all
       - run: npm run build-nestbackend
+
       - name: Caching Dist Folder
         uses: actions/cache@v2
         with:
