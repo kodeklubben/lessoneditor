@@ -5,8 +5,13 @@ import oppgaveMal from "../components/editor/settingsFiles/oppgaveMal";
 import { useLessonContext } from "./LessonContext";
 import { filenameParser } from "../utils/filename-parser";
 import axios from "axios";
-import { FileDTO, HeaderData, UpdatedFileDTO, YamlContent } from "@lessoneditor/contracts";;
-import { paths } from "@lessoneditor/contracts";;
+import {
+  FileDTO,
+  HeaderData,
+  UpdatedFileDTO,
+  YamlContent,
+} from "../../../../../libs/contracts/src/index";
+import { paths } from "../../../../../libs/contracts/src/index";
 import {
   FileContextModel,
   FileContextState,
@@ -124,15 +129,11 @@ const FileContextProvider = (props: any) => {
     setFileContextState,
   };
 
-  if(context.state.savedFileBody)
-{
-  return <FileContext.Provider value={context}>{props.children}</FileContext.Provider>;
-}
-else
-{
-  return <ShowSpinner></ShowSpinner>
-}
-
+  if (context.state.savedFileBody) {
+    return <FileContext.Provider value={context}>{props.children}</FileContext.Provider>;
+  } else {
+    return <ShowSpinner></ShowSpinner>;
+  }
 };
 const useFileContext = (): FileContextModel => useContext(FileContext);
 

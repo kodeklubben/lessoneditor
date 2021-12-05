@@ -20,8 +20,8 @@ import {
   LessonFilterDTO,
   ShareLessonDTO,
   NewFileDTO,
-} from "@lessoneditor/contracts";
-import { UserDTO } from "@lessoneditor/contracts";
+} from "../../../../libs/contracts/src/index";
+import { UserDTO } from "../../../../libs/contracts/src/index";
 import { AuthGuard } from "@nestjs/passport";
 import { fileURLToPath } from "url";
 import { LoginGuard } from "../auth/login.guard";
@@ -29,7 +29,7 @@ import { Express } from "express";
 import { Multer } from "multer";
 import { Readable } from "stream";
 import * as fs from "fs";
-import { UpdatedFileDTO, YamlContent } from "@lessoneditor/contracts";
+import { UpdatedFileDTO, YamlContent } from "../../../../libs/contracts/src/index";
 
 @Controller("lesson")
 export class LessonController {
@@ -50,8 +50,8 @@ export class LessonController {
 
   @UseGuards(LoginGuard)
   @Post(":lessonId/submit")
-  async SubmitLesson(@Req() req,@Param() params) {
-    await this.lessonService.submitLesson(req.user,params.lessonId);
+  async SubmitLesson(@Req() req, @Param() params) {
+    await this.lessonService.submitLesson(req.user, params.lessonId);
   }
 
   @UseGuards(LoginGuard)
@@ -88,16 +88,14 @@ export class LessonController {
 
       if ([".jpg", ".jpeg", ".gif", ".png"].includes(fileProps.ext)) {
         res.end(content.toString("base64"));
-      } 
-      if(fileName == "lesson")
-      {
+      }
+      if (fileName == "lesson") {
         const fileDTO: FileDTO<string> = {
           ...fileProps,
           content: JSON.parse(content.toString()),
         };
-        res.send(fileDTO)
-      }
-      else {
+        res.send(fileDTO);
+      } else {
         const fileDTO: FileDTO<string> = {
           ...fileProps,
           content: content.toString("utf-8"),
@@ -129,12 +127,11 @@ export class LessonController {
     @Param("fileName") fileName,
     @Body() updatedFile: UpdatedFileDTO
   ): Promise<FileDTO<string>> {
-    console.log({ updatedFile });
     const { lesson, content, ...fileProps } = await this.lessonService.updateLessonFile(
       lessonId,
       fileName,
       req.user.userId,
-      updatedFile.content,
+      JSON.stringify(updatedFile.content),
       req
     );
     const newFile: FileDTO<string> = {

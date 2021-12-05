@@ -3,7 +3,12 @@ import { Lesson, FileStore } from "./lesson.entity";
 import { User } from "../user/user.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { LessonFilterDTO, NewFileDTO, NewLessonDTO, ShareLessonDTO } from "@lessoneditor/contracts";
+import {
+  LessonFilterDTO,
+  NewFileDTO,
+  NewLessonDTO,
+  ShareLessonDTO,
+} from "../../../../libs/contracts/src/index";
 import { GithubService } from "../github/github.service";
 import * as fs from "fs";
 import { ThumbService } from "../thumb/thumb.service";
@@ -22,7 +27,7 @@ export class LessonService {
     private thumbService: ThumbService
   ) {}
 
-  async submitLesson(user:User, lessonId: number) {
+  async submitLesson(user: User, lessonId: number) {
     const lesson = await this.getLesson(lessonId);
     if (lesson == null) {
       throw new HttpException("Lesson does not exist", HttpStatus.NOT_FOUND);

@@ -1,5 +1,5 @@
-import { UserDTO } from "@lessoneditor/contracts";
-import { LessonDTO } from "@lessoneditor/contracts";
+import { UserDTO } from "../../../../../libs/contracts/src/index";
+import { LessonDTO } from "../../../../../libs/contracts/src/index";
 
 export interface UserContextState {
   user: UserDTO | undefined;

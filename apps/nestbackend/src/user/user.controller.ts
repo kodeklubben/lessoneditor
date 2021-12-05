@@ -12,9 +12,8 @@ import {
   ForbiddenException,
 } from "@nestjs/common";
 import { UserService } from "./user.service";
-import { LessonDTO, NewLessonDTO } from "@lessoneditor/contracts";
-import { UserDTO } from "@lessoneditor/contracts";
-import { query } from "express";
+import { LessonDTO, NewLessonDTO } from "../../../../libs/contracts/src/index";
+import { UserDTO } from "../../../../libs/contracts/src/index";
 import { LoginGuard } from "../auth/login.guard";
 
 @Controller("user")

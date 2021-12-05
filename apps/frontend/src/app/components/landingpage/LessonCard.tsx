@@ -5,10 +5,9 @@ import nbFlag from "../../../../src/assets/public/languagesFlag/flag_nb.svg";
 import nnFlag from "../../../../src/assets/public/languagesFlag/flag_nn.svg";
 import enFlag from "../../../../src/assets/public/languagesFlag/flag_en.svg";
 import isFlag from "../../../../src/assets/public/languagesFlag/flag_is.svg";
-import noLessonPreviewImage from "../../../../src/assets/public/landingPage/image.png";
 import { useLessonContext } from "../../contexts/LessonContext";
 import axios from "axios";
-import { paths } from "@lessoneditor/contracts";;
+import { paths } from "../../../../../../libs/contracts/src/index";
 
 const languageOptions: Record<string, any> = {
   nb: {
@@ -117,7 +116,7 @@ const LessonCard: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug }) =>
           ""
         )}
       </Card>
-    )
+      )
     </>
   );
 };

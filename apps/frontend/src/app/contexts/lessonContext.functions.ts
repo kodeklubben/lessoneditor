@@ -1,5 +1,4 @@
-import { LessonDTO, NewLessonDTO, YamlContent } from "@lessoneditor/contracts";;
-
+import { LessonDTO, NewLessonDTO, YamlContent } from "../../../../../libs/contracts/src/index";
 export interface LessonContextState {
   lesson: LessonDTO;
   files: string[];

@@ -3,9 +3,9 @@ import ShowSpinner from "../ShowSpinner";
 import { useParams } from "react-router";
 import { Modal, Button, Header } from "semantic-ui-react";
 import { read } from "fs";
-import { paths } from "@lessoneditor/contracts";
+import { paths } from "../../../../../../libs/contracts/src/index";
 import axios from "axios";
-import { NewFileDTO } from "@lessoneditor/contracts";;
+import { NewFileDTO } from "../../../../../../libs/contracts/src/index";
 import { useLessonContext } from "../../contexts/LessonContext";
 import { base64StringToBlob, createObjectURL } from "blob-util";
 

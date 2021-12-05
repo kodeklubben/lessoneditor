@@ -3,15 +3,17 @@ import { LockNotSupportedOnGivenDriverError } from "typeorm";
 import { AuthService } from "./auth.service";
 import { AuthGuard } from "@nestjs/passport";
 import { LoginGuard } from "./login.guard";
-import { Request } from 'express';
+import { Request } from "express";
 import { Injectable, Inject, CACHE_MANAGER } from "@nestjs/common";
 import { Cache } from "cache-manager";
-import { UserDTO } from "@lessoneditor/contracts";
+import { UserDTO } from "../../../../libs/contracts/src/index";
 
 @Controller("auth")
 export class AuthController {
-  constructor(private authService: AuthService,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache) {}
+  constructor(
+    private authService: AuthService,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache
+  ) {}
 
   @UseGuards(LoginGuard)
   @Get("login")
@@ -26,12 +28,10 @@ export class AuthController {
 
   @UseGuards(LoginGuard)
   @Get("logout")
-  async logout(@Req() req: Request)
-  {
-    req.logOut()
+  async logout(@Req() req: Request) {
+    req.logOut();
     //lear access token from cache
     this.cacheManager.del((req.user as UserDTO).userId.toString());
-    
   }
 
   @UseGuards(LoginGuard)

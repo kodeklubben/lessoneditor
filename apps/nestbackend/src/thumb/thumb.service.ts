@@ -5,7 +5,7 @@ import { AxiosResponse } from "axios";
 import * as jwt from "jsonwebtoken";
 import { lastValueFrom } from "rxjs";
 import { Request } from "express";
-import { UserDTO } from "@lessoneditor/contracts";
+import { UserDTO } from "../../../../libs/contracts/src/index";
 
 @Injectable()
 export class ThumbService {

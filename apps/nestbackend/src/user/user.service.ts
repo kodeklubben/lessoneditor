@@ -1,9 +1,14 @@
 import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Connection, Repository } from "typeorm";
-import { UserDTO } from "@lessoneditor/contracts";
+import { UserDTO } from "../../../../libs/contracts/src/index";
 import { User } from "./user.entity";
-import { LessonDTO, NewLessonDTO, YamlContent, HeaderData } from "@lessoneditor/contracts";
+import {
+  LessonDTO,
+  NewLessonDTO,
+  YamlContent,
+  HeaderData,
+} from "../../../../libs/contracts/src/index";
 import { FileStore, Lesson } from "../lesson/lesson.entity";
 import { ThumbService } from "../thumb/thumb.service";
 import { Request } from "express";

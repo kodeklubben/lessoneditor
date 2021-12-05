@@ -4,13 +4,13 @@ import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { stringify } from "querystring";
 import { UserService } from "../user/user.service";
-import { UserDTO } from "@lessoneditor/contracts";
+import { UserDTO } from "../../../../libs/contracts/src/index";
 import { lastValueFrom } from "rxjs";
 import { AxiosResponse } from "axios";
 import { HttpService } from "@nestjs/common";
 import { Inject, CACHE_MANAGER } from "@nestjs/common";
 import { Cache } from "cache-manager";
-import { User} from "../user/user.entity"
+import { User } from "../user/user.entity";
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy, "github") {
@@ -41,9 +41,9 @@ export class LocalStrategy extends PassportStrategy(Strategy, "github") {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
     const response: any = await lastValueFrom(this.axiosResponse$);
-    let user: User
+    let user: User;
     try {
-      user = await this.userService.getUser(response.data.id); 
+      user = await this.userService.getUser(response.data.id);
     } catch (error) {
       const newUserDTO: UserDTO = {
         userId: response.data.id,

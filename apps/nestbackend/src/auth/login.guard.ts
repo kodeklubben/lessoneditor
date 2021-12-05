@@ -2,7 +2,7 @@ import { ExecutionContext, Injectable } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { Express, Request } from "express";
 import { verify } from "jsonwebtoken";
-import { UserDTO } from "@lessoneditor/contracts";
+import { UserDTO } from "../../../../libs/contracts/src/index";
 
 @Injectable()
 export class LoginGuard extends AuthGuard("github") {

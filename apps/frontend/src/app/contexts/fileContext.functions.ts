@@ -1,4 +1,4 @@
-import { HeaderData } from "@lessoneditor/contracts";;
+import { HeaderData } from "../../../../../libs/contracts/src/index";
 
 export interface FileContextState {
   rawMdFileContent: string | undefined;
