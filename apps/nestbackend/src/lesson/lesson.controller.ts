@@ -50,8 +50,8 @@ export class LessonController {
 
   @UseGuards(LoginGuard)
   @Post(":lessonId/submit")
-  async SubmitLesson(@Param() params) {
-    await this.lessonService.submitLesson(params.lessonId);
+  async SubmitLesson(@Req() req, @Param() params) {
+    await this.lessonService.submitLesson(req.user, params.lessonId);
   }
 
   @UseGuards(LoginGuard)
@@ -139,8 +139,6 @@ export class LessonController {
       ...fileProps,
       content: content.toString("utf-8"),
     };
-    console.log({ lesson });
-    console.log({ newFile });
     return newFile;
   }
 

@@ -4,6 +4,7 @@ import { Octokit, RestEndpointMethodTypes } from "@octokit/rest";
 import {} from "@octokit/core";
 import { components } from "@octokit/openapi-types";
 import { Lesson } from "../lesson/lesson.entity";
+import {User} from "../user/user.entity";
 import axios from "axios";
 
 interface UploadObject {
@@ -20,14 +21,18 @@ interface UploadBlob {
 export class GithubService {
   octokit: Octokit;
   constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {
+   
+  }
+
+  async submitLesson(user: User,lesson: Lesson) {
     try {
-      this.octokit = new Octokit({ auth: "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" });
+      const test = await this.cacheManager.get('test')
+      const accessToken = await this.cacheManager.get(user.userId.toString())
+      this.octokit = new Octokit({ auth: accessToken });
     } catch (error) {
       console.error(error);
     }
-  }
 
-  async submitLesson(lesson: Lesson) {
     const { owner, repo, status } = await this.createFork();
     if (status !== 202) {
       return status;
@@ -52,9 +57,8 @@ export class GithubService {
           path,
           buffer: Buffer.from(file.content.toString()),
         });
-      } else if (file.filename == "preview") {
-        return;
-      } else if ([".jpg", ".jpeg", ".gif", ".png"].includes(file.ext)) {
+      }
+      else if ([".jpg", ".jpeg", ".gif", ".png"].includes(file.ext)) {
         filesToUpload.push({
           path,
           buffer: Buffer.from(file.content),
@@ -77,14 +81,12 @@ export class GithubService {
       branch.commit.sha
     );
     await this.setBranchToCommit(owner, repo, branchName, newCommit.sha);
-    // if (false) {
-    //   return await this.createPullRequest(
-    //     owner,
-    //     "New lesson",
-    //     branchName,
-    //     "Pull request from lesson editor"
-    //   );
-    // }
+    await this.createPullRequest(
+        owner,
+        "New lesson",
+        branchName,
+        "Pull request from lesson editor"
+      );
   }
 
   async createFork() {

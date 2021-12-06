@@ -5,7 +5,7 @@ import Editor from "./Editor";
 import { LessonContextProvider } from "../../contexts/LessonContext";
 import { FileContextProvider } from "../../contexts/FileContext";
 import mockAxios from "jest-mock-axios";
-import { LessonDTO } from "../../../../../../libs/lesson/src/lib/lesson.dto";
+
 
 Enzyme.configure({ adapter: new Adapter() });
 

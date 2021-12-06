@@ -8,7 +8,7 @@ import isFlag from "../../../../src/assets/public/languagesFlag/flag_is.svg";
 import noLessonPreviewImage from "../../../../src/assets/public/landingPage/image.png";
 import { useLessonContext } from "../../contexts/LessonContext";
 import axios from "axios";
-import { paths } from "@lessoneditor/api-interfaces";
+import { paths } from "@lessoneditor/contracts";;
 
 const languageOptions: Record<string, any> = {
   nb: {
@@ -36,7 +36,7 @@ const languageOptions: Record<string, any> = {
 const LessonCard: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug }) => {
   const navigate = useNavigate();
   const { state } = useLessonContext();
-  const [image, setImage] = useState<string>();
+  const [image, setImage] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     async function getImage() {
@@ -117,6 +117,7 @@ const LessonCard: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug }) =>
           ""
         )}
       </Card>
+    )
     </>
   );
 };

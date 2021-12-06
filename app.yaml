@@ -16,6 +16,3 @@ env_variables:
   TYPEORM_PORT: 5432
   TYPEORM_SYNCHRONIZE: false
   TYPEORM_ENTITIES: dist/**/*.entity.js
-  
-
-

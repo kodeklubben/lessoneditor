@@ -4,7 +4,7 @@ import { Card, Button, Icon, Divider, Dropdown } from "semantic-ui-react";
 import { LANGUAGEOPTIONS } from "../frontpage/settings/newLessonOptions";
 import LessonCard from "./LessonCard";
 import axios from "axios";
-import { paths } from "@lessoneditor/api-interfaces";
+import { paths } from "@lessoneditor/contracts";
 import { NewFileDTO, HeaderData } from "@lessoneditor/contracts";
 import { filenameParser } from "../../utils/filename-parser";
 import * as yaml from "js-yaml";

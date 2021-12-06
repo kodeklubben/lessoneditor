@@ -1,7 +1,6 @@
 import Enzyme, { shallow } from "enzyme";
 import ItemList from "./ItemList";
 import Adapter from "@wojtekmaj/enzyme-adapter-react-17";
-import { LessonDTO } from "@libs/lesson/src/lib/lesson.dto";
 
 Enzyme.configure({ adapter: new Adapter() });
 
