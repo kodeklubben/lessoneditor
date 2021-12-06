@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState, FC } from "react";
 import axios from "axios";
-import { paths } from "@lessoneditor/api-interfaces";
+import { paths } from "@lessoneditor/contracts";;
+import { LessonDTO, NewLessonDTO } from "@lessoneditor/contracts";;
 import { UserDTO } from "@lessoneditor/contracts";
-import { LessonDTO, NewLessonDTO } from "@lessoneditor/contracts";
 
 import {
   initialUserContextState,
@@ -34,7 +34,7 @@ export const UserContextProvider = (props: any) => {
         });
         setUserContextState((s) => ({ ...s, loggedIn: true }));
       } catch (error: any) {
-        setError(error);
+        window.location.href = "/api/auth/login/"
       }
     }
     fetchData();
@@ -125,7 +125,7 @@ export const UserContextProvider = (props: any) => {
   if (userContexState.loggedIn) {
     return <UserContext.Provider value={context}>{props.children}</UserContext.Provider>;
   } else {
-    return <NotLoggedInPage />;
+    return <NotLoggedInPage></NotLoggedInPage>
   }
 };
 export const useUserContext = (): UserContextModel => useContext<UserContextModel>(UserContext);

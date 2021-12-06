@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Item, Button, Divider, Icon, Placeholder } from "semantic-ui-react";
 import axios from "axios";
-import { paths } from "@lessoneditor/api-interfaces";
+import { paths } from "@lessoneditor/contracts";
 import { useLessonContext } from "../../contexts/LessonContext";
 
 type ListFilesProps = {

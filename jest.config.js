@@ -12,5 +12,6 @@ module.exports = {
     "<rootDir>/libs/thumb",
     "<rootDir>/libs/github",
     "<rootDir>/libs/contracts",
+    "<rootDir>/apps/testing",
   ],
 };

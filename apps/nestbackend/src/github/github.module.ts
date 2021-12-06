@@ -2,7 +2,7 @@ import { GithubService } from "./github.service";
 import { CacheModule, Module } from "@nestjs/common";
 
 @Module({
-  imports: [CacheModule.register()],
+  imports: [],
   providers: [GithubService],
   exports: [GithubService],
 })

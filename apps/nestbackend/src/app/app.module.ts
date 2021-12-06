@@ -1,4 +1,4 @@
-import { Module, forwardRef } from "@nestjs/common";
+import { Module, CacheModule, forwardRef } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
   import { TypeOrmModule } from "@nestjs/typeorm";
 // import { User, UserModule } from '@lessoneditor/user';
@@ -15,6 +15,10 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 @Module({
   imports: [
     ConfigModule.forRoot({ envFilePath: ".local.env" }),
+    CacheModule.register({
+      isGlobal: true,
+      ttl: 0, // do not expire
+    }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '../../../../../frontend'),
       exclude: ['/api*'],
