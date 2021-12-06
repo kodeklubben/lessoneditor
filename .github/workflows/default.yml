@@ -31,6 +31,7 @@ jobs:
 
   deply_db:
     name: Deploy to Cloud SQL Postgres
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     timeout-minutes: 3
     needs: test
     runs-on: ubuntu-latest
