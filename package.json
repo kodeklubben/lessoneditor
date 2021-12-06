@@ -2,7 +2,7 @@
   "name": "lessoneditor",
   "version": "0.0.0",
   "engines": {
-    "node": "16.13.1"
+    "node": "14.18.2"
   },
   "license": "MIT",
   "scripts": {
