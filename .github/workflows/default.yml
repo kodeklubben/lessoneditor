@@ -46,6 +46,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: "14"
+      - run: npm install
       - name: install cloud sql auth proxy
         run: npm install
         run: wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql_proxy && chmod +x cloud_sql_proxy
