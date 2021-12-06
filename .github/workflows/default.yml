@@ -77,14 +77,14 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
-      - name: fetch access token
-        run: echo ${{ secrets.SERVICE_ACCOUNT }} | base64 --decode > credentials.json
-      - run: gcloud auth activate-service-account github-actions@lessoneditor.iam.gserviceaccount.com --key-file=credentials.json
-      - run: gcloud auth print-access-token
-      - run: ACCESS_TOKEN=$(gcloud auth print-access-token); echo "ACCESS_TOKEN=${ACCESS_TOKEN}" >> $GITHUB_ENV
-      - run: npm ci --ignore-scripts --no-optional --prefer-offline --no-audit
-      - run: npm install -g ts-node
+      - name: Restoring Dist Folder
+        uses: actions/cache@v2
+        with:
+          path: ./dist
+          key: cache-dist-${{ github.sha }}
+      - id: "auth"
+        uses: "google-github-actions/auth@v0.4.0"
+        with:
+          credentials_json: "${{ secrets.SERVICE_ACCOUNT }}"
       - name: deploy
         uses: google-github-actions/deploy-appengine@main
-        with:
-          credentials: ${{ secrets.SERVICE_ACCOUNT }}
