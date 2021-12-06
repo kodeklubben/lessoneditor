@@ -77,7 +77,13 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
-      - run: echo "${{ secrets.DOTENV }}" > .env
+      - name: fetch access token
+        run: echo ${{ secrets.SERVICE_ACCOUNT }} | base64 --decode > credentials.json
+      - run: gcloud auth activate-service-account github-actions@lessoneditor.iam.gserviceaccount.com --key-file=credentials.json
+      - run: gcloud auth print-access-token
+      - run: ACCESS_TOKEN=$(gcloud auth print-access-token); echo "ACCESS_TOKEN=${ACCESS_TOKEN}" >> $GITHUB_ENV
+      - run: npm ci --ignore-scripts --no-optional --prefer-offline --no-audit
+      - run: npm install -g ts-node
       - name: deploy
         uses: google-github-actions/deploy-appengine@main
         with:
