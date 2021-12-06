@@ -1,11 +1,10 @@
 import React, { Dispatch, FC, SetStateAction, useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import axios from "axios";
-import { getLessonPaths } from "./utils/get-lesson-paths";
-import { NewLessonDTO, LessonDTO, FileDTO, YamlContent } from "@lessoneditor/contracts";
+import { NewLessonDTO, LessonDTO, FileDTO, YamlContent } from "@lessoneditor/contracts";;
 import { LessonContextState, LessonContextModel } from "./lessonContext.functions";
 import ShowSpinner from "../components/ShowSpinner";
-import { paths } from "@lessoneditor/api-interfaces";
+import { paths } from "@lessoneditor/contracts";;
 import { useUserContext } from "./UserContext";
 import { base64StringToBlob, createObjectURL } from "blob-util";
 import yaml from "js-yaml";
@@ -15,7 +14,6 @@ const LessonContext = React.createContext<LessonContextModel>({} as LessonContex
 export const LessonContextProvider = (props: any) => {
   const { state } = useUserContext();
   const { lessonId } = useParams() as any;
-  const { lessonDataPath, lessonYamlPath, lessonFilesPath } = getLessonPaths(lessonId);
 
   const [lesson, setLesson] = useState<LessonDTO | undefined>(undefined);
   const [files, setFiles] = useState<string[]>([]);
@@ -71,11 +69,6 @@ export const LessonContextProvider = (props: any) => {
     );
     setFiles(fileNames.data);
     return fileNames.data;
-  };
-
-  const fetchYmlData = async () => {
-    const lessonYMLDataRes = await axios.get(lessonYamlPath);
-    return lessonYMLDataRes.data;
   };
 
   const updateYaml = async (lessonId: string, data: YamlContent) => {

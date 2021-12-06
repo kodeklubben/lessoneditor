@@ -1,7 +1,7 @@
 import { Button } from "semantic-ui-react";
 import { FC } from "react";
 
-import { paths } from "@lessoneditor/api-interfaces";
+import { paths } from "@lessoneditor/contracts";;
 import axios from "axios";
 
 const AreyousurePopup: FC<any> = ({ setAreYouSure, setThankU, lessonId }) => {

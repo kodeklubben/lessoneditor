@@ -12,7 +12,7 @@
     "resolveJsonModule": true
   },
   "files": [],
-  "include": [],
+  "include": ["src/**/*","../../custom.d.ts"],
   "references": [
     {
       "path": "./tsconfig.app.json"

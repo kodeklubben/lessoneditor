@@ -1,5 +1,5 @@
-import axios, { AxiosResponse } from "axios";
-import { paths } from "@lessoneditor/api-interfaces";
+
+
 export const resolveMarkdownImageUrls = (markdownContent: string) => {
   return markdownContent.replace(
     /(!\[.*?\]\()(.+?)(\))/gs,

@@ -50,8 +50,8 @@ export class LessonController {
 
   @UseGuards(LoginGuard)
   @Post(":lessonId/submit")
-  async SubmitLesson(@Param() params) {
-    await this.lessonService.submitLesson(params.lessonId);
+  async SubmitLesson(@Req() req,@Param() params) {
+    await this.lessonService.submitLesson(req.user,params.lessonId);
   }
 
   @UseGuards(LoginGuard)
@@ -88,14 +88,16 @@ export class LessonController {
 
       if ([".jpg", ".jpeg", ".gif", ".png"].includes(fileProps.ext)) {
         res.end(content.toString("base64"));
-      }
-      if (fileName == "lesson") {
+      } 
+      if(fileName == "lesson")
+      {
         const fileDTO: FileDTO<string> = {
           ...fileProps,
           content: JSON.parse(content.toString()),
         };
-        res.send(fileDTO);
-      } else {
+        res.send(fileDTO)
+      }
+      else {
         const fileDTO: FileDTO<string> = {
           ...fileProps,
           content: content.toString("utf-8"),
@@ -132,15 +134,13 @@ export class LessonController {
       lessonId,
       fileName,
       req.user.userId,
-      JSON.stringify(updatedFile.content),
+      updatedFile.content,
       req
     );
     const newFile: FileDTO<string> = {
       ...fileProps,
       content: content.toString("utf-8"),
     };
-    console.log({ lesson });
-    console.log({ newFile });
     return newFile;
   }
 
