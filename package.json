@@ -1,6 +1,9 @@
 {
   "name": "lessoneditor",
   "version": "0.0.0",
+  "engines": {
+    "node": "16.13.1"
+  },
   "license": "MIT",
   "scripts": {
     "start:dev": "ts-node -P apps/nestbackend/tsconfig.app.json apps/nestbackend/src/main.ts",
