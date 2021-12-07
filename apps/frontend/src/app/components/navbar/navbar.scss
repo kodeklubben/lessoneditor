@@ -1,60 +1,41 @@
 .navbar_container {
+  height: 100px;
   margin: 0;
   padding: 0;
-  min-height: 7vh;
   display: flex;
-  flex-flow: row wrap;
   justify-content: space-between;
+}
+
+.navbar_image_container {
+  flex-basis: 33%;
+  max-width: 50px;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+
+.navbar_logo {
+  margin: 0;
+  padding: 0;
+  height: 80px;
+  width: 240px;
 }
 
 .navbar_logo:hover {
   cursor: pointer;
 }
 
-.linkto_kidsakoderno {
-  margin: 1em 1em 0 1em;
-}
-
-.linkto_kidsakoderno i {
-  color: black;
-}
-
-.linkto_kidsakoderno a:hover {
-  cursor: pointer;
-}
-
-.navbar_logo p {
-  color: gray;
-}
-
-.navbar_course_title {
+.navbar_children_container {
+  flex-basis: 33%;
   display: flex;
-  flex-flow: row wrap;
-  align-items: center;
-}
-
-.navbar_course_title h1 {
-  margin: 0 1rem;
-}
-
-.profileMenu_container {
-  display: flex;
-  flex-direction: column;
   justify-content: center;
-}
-
-.navbar_profile {
-  display: flex;
-  flex-flow: row wrap;
   align-items: center;
 }
 
-.navbar_profile * {
-  margin: 0;
-  padding: 0;
-}
-
-#navbar_gohome {
-  text-decoration: none;
-  color: black;
+.navbar_profilemenu_container {
+  margin-right: 1rem;
+  flex-basis: 33%;
+  display: flex;
+  justify-content: right;
+  align-items: center;
 }
