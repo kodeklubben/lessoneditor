@@ -1,10 +1,10 @@
 import React, { Dispatch, FC, SetStateAction, useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import axios from "axios";
-import { NewLessonDTO, LessonDTO, FileDTO, YamlContent } from "@lessoneditor/contracts";;
+import { NewLessonDTO, LessonDTO, FileDTO, YamlContent } from "@lessoneditor/contracts";
 import { LessonContextState, LessonContextModel } from "./lessonContext.functions";
 import ShowSpinner from "../components/ShowSpinner";
-import { paths } from "@lessoneditor/contracts";;
+import { paths } from "@lessoneditor/contracts";
 import { useUserContext } from "./UserContext";
 import { base64StringToBlob, createObjectURL } from "blob-util";
 import yaml from "js-yaml";
@@ -31,8 +31,6 @@ export const LessonContextProvider = (props: any) => {
         const yamlFile = await axios.get<FileDTO<YamlContent>>(
           paths.LESSON_FILE.replace(":lessonId", lessonId).replace(":fileName", "lesson")
         );
-
-        console.log({ yamlFile });
 
         const fileNames = await updateFileList();
 

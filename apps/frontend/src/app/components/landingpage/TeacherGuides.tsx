@@ -13,15 +13,12 @@ const TeacherGuides: FC<any> = ({ lessonId, fileList, lessonSlug, lessonTitle })
   const [usedLanguages, setUsedLanguages] = useState<string[]>([]);
   const unusedLanguages = LANGUAGEOPTIONS.filter((item) => !usedLanguages.includes(item.value));
 
-  console.log({ lessonId, fileList });
-
   const [lang, setLang] = useState<string>(unusedLanguages[0].value);
   const navigate = useNavigate();
 
   useEffect(() => {
     fileList.forEach((filename: string) => {
       const { isMarkdown, isReadme, language } = filenameParser(filename);
-      console.log({ filename, isMarkdown, isReadme, language });
 
       if (isReadme && unusedLanguages.length > 0) {
         setUsedLanguages((prevLang) => [...prevLang, language]);
