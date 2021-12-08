@@ -8,7 +8,7 @@ import isFlag from "../../../../src/assets/public/languagesFlag/flag_is.svg";
 import noLessonPreviewImage from "../../../../src/assets/public/landingPage/image.png";
 import { useLessonContext } from "../../contexts/LessonContext";
 import axios from "axios";
-import { paths } from "@lessoneditor/contracts";;
+import { paths } from "@lessoneditor/contracts";
 
 const languageOptions: Record<string, any> = {
   nb: {
@@ -117,7 +117,6 @@ const LessonCard: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug }) =>
           ""
         )}
       </Card>
-    )
     </>
   );
 };

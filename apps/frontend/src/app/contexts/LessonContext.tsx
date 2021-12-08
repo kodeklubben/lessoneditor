@@ -53,6 +53,7 @@ export const LessonContextProvider = (props: any) => {
 
         setYml(yamlFile.data.content);
         setLesson(lesson.data);
+        setFiles(fileNames);
       } catch (error) {
         console.error(error);
       }
@@ -65,7 +66,7 @@ export const LessonContextProvider = (props: any) => {
     const fileNames = await axios.get<string[]>(
       paths.LESSON_FILENAMES.replace(":lessonId", lessonId)
     );
-    setFiles(fileNames.data);
+
     return fileNames.data;
   };
 
@@ -103,6 +104,7 @@ export const LessonContextProvider = (props: any) => {
   const context: LessonContextModel = {
     state: lessonState,
     yml,
+
     setYml: setYml,
     updateLesson: updatelesson,
     updateYaml: updateYaml,

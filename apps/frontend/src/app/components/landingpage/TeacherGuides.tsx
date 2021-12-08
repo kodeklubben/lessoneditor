@@ -8,22 +8,29 @@ import { paths } from "@lessoneditor/contracts";
 import { NewFileDTO, HeaderData } from "@lessoneditor/contracts";
 import { filenameParser } from "../../utils/filename-parser";
 import * as yaml from "js-yaml";
+import { useLessonContext } from "../../contexts/LessonContext";
 
 const TeacherGuides: FC<any> = ({ lessonId, fileList, lessonSlug, lessonTitle }) => {
   const [usedLanguages, setUsedLanguages] = useState<string[]>([]);
+  const { updateFileList } = useLessonContext();
   const unusedLanguages = LANGUAGEOPTIONS.filter((item) => !usedLanguages.includes(item.value));
 
   const [lang, setLang] = useState<string>(unusedLanguages[0].value);
   const navigate = useNavigate();
 
   useEffect(() => {
-    fileList.forEach((filename: string) => {
-      const { isMarkdown, isReadme, language } = filenameParser(filename);
+    const fetchData = async () => {
+      const fileList = await updateFileList();
+      fileList.forEach((filename: string) => {
+        const { isMarkdown, isReadme, language } = filenameParser(filename);
 
-      if (isReadme && unusedLanguages.length > 0) {
-        setUsedLanguages((prevLang) => [...prevLang, language]);
-      }
-    });
+        if (isReadme && language.length > 0) {
+          setUsedLanguages((prevLang) => [...prevLang, language]);
+        }
+      });
+    };
+
+    fetchData();
   }, []);
 
   const header: HeaderData = {
