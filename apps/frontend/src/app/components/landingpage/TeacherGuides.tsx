@@ -44,8 +44,8 @@ const TeacherGuides: FC<any> = ({ lessonId, fileList, lessonSlug, lessonTitle })
     fetchData();
   }, [lessonState.files]);
 
-  const removeMD = async (language: string) => {
-    const filename = language === "nb" ? lessonSlug : `${lessonSlug}_${language}`;
+  const removeMD = async (language: string, file: string) => {
+    const filename = language === "nb" ? file : `${file}_${language}`;
     const ext = "md";
 
     try {

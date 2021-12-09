@@ -17,15 +17,6 @@ const LandingpageDatamodal = () => {
   const [open, setOpen] = useState(false);
   const { lessonId } = useParams() as any;
 
-  console.log(JSON.stringify(yml));
-  console.log(
-    JSON.stringify({
-      level: 1,
-      license: "CC BY-SA 4.0",
-      tags: { grade: [], subject: [], topic: [] },
-    })
-  );
-
   const isEmptyDatapanel =
     JSON.stringify(yml) ===
     JSON.stringify({

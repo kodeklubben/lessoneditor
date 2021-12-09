@@ -76,8 +76,6 @@ export class LessonService {
 
     const file = lesson.files.find((file) => file.filename == filename);
 
-    console.log({ file });
-
     if (!file) {
       throw new HttpException("File does not exist", HttpStatus.NOT_FOUND);
     }

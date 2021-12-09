@@ -75,7 +75,11 @@ const LessonCard: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug, remo
               content={"Åpne"}
               positive
             />
-            <Button style={{ background: "none" }} icon onClick={() => removeMD(language)}>
+            <Button
+              style={{ background: "none" }}
+              icon
+              onClick={() => removeMD(language, lessonSlug)}
+            >
               <Icon name="delete" />
               Slett
             </Button>
