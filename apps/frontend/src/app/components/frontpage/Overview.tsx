@@ -9,9 +9,9 @@ import { Card, Divider, Header, Icon, Message } from "semantic-ui-react";
 const Overview: FC = () => {
   const { state } = useUserContext();
 
-  state.lessons.map((item) =>
-    console.log(`Lesson title: ${item.lessonTitle}.  Submitted? ${item.submitted}`)
-  );
+  // state.lessons.map((item) =>
+  //   console.log(`Lesson title: ${item.lessonTitle}.  Submitted? ${item.submitted}`)
+  // );
 
   return (
     <div>

@@ -5,18 +5,15 @@ import { FC } from "react";
 
 interface SubmitButtonProps {
   mdText: string;
-  setShowSpinner: React.Dispatch<React.SetStateAction<boolean>>;
   saveEditorText: () => void;
 }
 
-const SubmitButton: FC<SubmitButtonProps> = ({ mdText, setShowSpinner, saveEditorText }) => {
+const SubmitButton: FC<SubmitButtonProps> = ({ mdText, saveEditorText }) => {
   const navigate = useNavigate();
   const { lessonId } = useParams<any>();
 
   const onSubmit = () => {
-    setShowSpinner(true);
     navigateToHome();
-    setShowSpinner(false);
   };
 
   const navigateToHome = () => {

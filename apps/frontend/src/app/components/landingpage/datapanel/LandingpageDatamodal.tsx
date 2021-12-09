@@ -137,7 +137,10 @@ const LandingpageDatamodal = () => {
       />
       <Modal
         closeOnDimmerClick={isEmptyDatapanel ? false : true}
-        onClose={() => setOpen(false)}
+        onClose={() => {
+          updateYaml(lessonId, yml);
+          setOpen(false);
+        }}
         onOpen={() => setOpen(true)}
         open={open}
         size="large"
