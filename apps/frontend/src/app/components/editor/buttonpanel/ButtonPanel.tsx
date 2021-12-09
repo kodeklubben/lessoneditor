@@ -72,11 +72,8 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
   openSettings,
   setOpenSettings,
 }) => {
-  const [showSpinner, setShowSpinner] = useState(false);
-
   return (
     <>
-      {showSpinner && <ShowSpinner />}
       <div className="buttonpanel">
         <div className="firstrow">
           <div className="buttongroup">
@@ -158,15 +155,10 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
             <EditorDatamodal
               courseTitle={courseTitle}
               lessonTitle={lessonTitle}
-              setShowSpinner={setShowSpinner}
               openSettings={openSettings}
               setOpenSettings={setOpenSettings}
             />
-            <SubmitButton
-              mdText={mdText}
-              setShowSpinner={setShowSpinner}
-              saveEditorText={saveEditorText}
-            />
+            <SubmitButton mdText={mdText} saveEditorText={saveEditorText} />
           </div>
         </div>
 

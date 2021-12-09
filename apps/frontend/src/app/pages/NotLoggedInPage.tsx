@@ -1,12 +1,7 @@
-import React,{useEffect} from "react";
+import React, { useEffect } from "react";
 
 const NotLoggedInPage: React.FC = () => {
-
-  return (
-    <>
-    Hello
-    </>
-  );
+  return <></>;
 };
 
 export default NotLoggedInPage;

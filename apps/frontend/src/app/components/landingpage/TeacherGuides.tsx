@@ -20,7 +20,7 @@ const TeacherGuides: FC<any> = ({ lessonId, fileList, lessonSlug, lessonTitle })
 
   const navigate = useNavigate();
 
-  const { fetchFileList, yml } = useLessonContext();
+  const { fetchFileList, yml, setFiles, state: lessonState } = useLessonContext();
   const { state } = useUserContext();
 
   useEffect(() => {
@@ -29,10 +29,11 @@ const TeacherGuides: FC<any> = ({ lessonId, fileList, lessonSlug, lessonTitle })
       const tempUsedLang: string[] = [];
       const tempUnusedLang: Record<string, string>[] = [...LANGUAGEOPTIONS];
       fileList.forEach((filename: string) => {
-        const { isMarkdown, isReadme, language } = filenameParser(filename);
-
+        const { isReadme, language } = filenameParser(filename);
         if (isReadme && language.length > 0) {
-          setUsedLanguages((prevLang) => [...prevLang, language]);
+          tempUsedLang.push(language);
+          const index = tempUnusedLang.findIndex((item) => item.value === language);
+          tempUnusedLang.splice(index, 1);
         }
       });
       setUsedLanguages(tempUsedLang);
@@ -41,7 +42,28 @@ const TeacherGuides: FC<any> = ({ lessonId, fileList, lessonSlug, lessonTitle })
     };
 
     fetchData();
-  }, []);
+  }, [lessonState.files]);
+
+  const removeMD = async (language: string, file: string) => {
+    const filename = language === "nb" ? file : `${file}_${language}`;
+    const ext = "md";
+
+    try {
+      const files = await fetchFileList();
+      const isDeleted = await axios.delete(
+        paths.LESSON_FILE_DELETE.replace(":lessonId", lessonId.toString())
+          .replace(":fileName", filename)
+          .replace(":ext", ext)
+      );
+      if (isDeleted.data === 1) {
+        const index = files.findIndex((item: string) => item === filename);
+        const newList = files.splice(index, 1);
+        setFiles(newList);
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   const header: HeaderData = {
     title: lessonTitle,
@@ -91,6 +113,7 @@ const TeacherGuides: FC<any> = ({ lessonId, fileList, lessonSlug, lessonTitle })
               lessonId={lessonId}
               lessonSlug={"README"}
               lessonTitle={lessonTitle}
+              removeMD={removeMD}
             />
           );
         })}

@@ -96,17 +96,6 @@ export class UserService {
       translatorList: [],
     };
 
-    // LAGER IKKE README PÅ INIT - HAR DET SOM ET VALG I LANDINGPAGE
-
-    // const rawREADMEBody = "---\n" + yaml.dump(header) + "---\n" + this.insertMetaData(jsonContent);
-    // const defaultReadMeFile = new FileStore();
-    // defaultReadMeFile.filename = "README";
-    // defaultReadMeFile.ext = ".md";
-    // defaultReadMeFile.content = Buffer.from(rawREADMEBody);
-    // defaultReadMeFile.updated_by = user.name;
-    // defaultReadMeFile.created_by = user.name;
-    // defaultReadMeFile.lesson = savedLesson;
-
     const rawBody = "---\n" + yaml.dump(header) + "---\n" + oppgaveMal;
     const emptyMdFile = new FileStore();
     emptyMdFile.content = Buffer.from(rawBody);

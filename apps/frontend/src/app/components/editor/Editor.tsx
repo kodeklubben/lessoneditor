@@ -10,12 +10,13 @@ import { useParams } from "react-router";
 import { useLessonContext } from "../../contexts/LessonContext";
 import Navbar from "../navbar/Navbar";
 import { filenameParser } from "../../utils/filename-parser";
-
-import oppgaveMal from "./settingsFiles/oppgaveMal";
-import laererveiledningMal from "./settingsFiles/LaererveiledningMal";
+import {
+  lessonGuideDefaultText,
+  teacherGuideDefaultText,
+} from "../landingpage/settingsFiles/defaultTexts";
 
 const Editor: FC = () => {
-  const { file, lessonId } = useParams() as any;
+  const { file, lessonId, lang } = useParams() as any;
   const { state } = useLessonContext();
 
   const { saveFileBody, state: fileState, savedFileBody } = useFileContext();
@@ -43,9 +44,12 @@ const Editor: FC = () => {
   const editorRef = useRef<HTMLTextAreaElement>(null);
   const uploadImageRef = useRef<HTMLInputElement>(null);
 
-  const { language } = filenameParser(file);
+  const language: string = lang;
 
-  const isDefaultText = [laererveiledningMal, oppgaveMal].includes(fileState.savedFileBody || "");
+  const isDefaultText = [
+    lessonGuideDefaultText[language],
+    teacherGuideDefaultText[language],
+  ].includes(fileState.savedFileBody || "");
 
   useEffect(() => {
     if (isDefaultText) {

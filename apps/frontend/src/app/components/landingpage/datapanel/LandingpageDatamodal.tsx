@@ -17,7 +17,13 @@ const LandingpageDatamodal = () => {
   const [open, setOpen] = useState(false);
   const { lessonId } = useParams() as any;
 
-  const isEmptyDatapanel = false;
+  const isEmptyDatapanel =
+    JSON.stringify(yml) ===
+    JSON.stringify({
+      level: 1,
+      license: "CC BY-SA 4.0",
+      tags: { topic: [], subject: [], grade: [] },
+    });
 
   useEffect(() => {
     if (isEmptyDatapanel) {
@@ -131,7 +137,10 @@ const LandingpageDatamodal = () => {
       />
       <Modal
         closeOnDimmerClick={isEmptyDatapanel ? false : true}
-        onClose={() => setOpen(false)}
+        onClose={() => {
+          updateYaml(lessonId, yml);
+          setOpen(false);
+        }}
         onOpen={() => setOpen(true)}
         open={open}
         size="large"
@@ -185,7 +194,7 @@ const LandingpageDatamodal = () => {
           )}
 
           <Button
-            disabled={false}
+            disabled={isEmptyDatapanel}
             onClick={onSubmit}
             content="OK"
             labelPosition="right"

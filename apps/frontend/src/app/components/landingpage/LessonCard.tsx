@@ -1,12 +1,12 @@
 import { useNavigate } from "react-router";
-import { Button, Card, Image, Divider } from "semantic-ui-react";
+import { Button, Card, Image, Divider, Icon } from "semantic-ui-react";
 import { FC, useState, useEffect } from "react";
 import { LANGUAGEOPTIONS } from "../frontpage/settings/newLessonOptions";
 import { useLessonContext } from "../../contexts/LessonContext";
 import axios from "axios";
 import { paths } from "@lessoneditor/contracts";
 
-const LessonCard: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug }) => {
+const LessonCard: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug, removeMD }) => {
   const navigate = useNavigate();
   const { state } = useLessonContext();
   const [image, setImage] = useState<string | undefined>(undefined);
@@ -75,6 +75,14 @@ const LessonCard: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug }) =>
               content={"Åpne"}
               positive
             />
+            <Button
+              style={{ background: "none" }}
+              icon
+              onClick={() => removeMD(language, lessonSlug)}
+            >
+              <Icon name="delete" />
+              Slett
+            </Button>
           </Card.Content>
         </Card.Content>
 
