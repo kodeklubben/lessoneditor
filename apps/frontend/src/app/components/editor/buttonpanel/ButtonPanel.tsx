@@ -30,7 +30,6 @@ interface ButtonPanelProps {
   pushUndoValue: (mdText: string, cursorPositionStart: number) => void;
   undoCursorPosition: number[];
   redoCursorPosition: number[];
-  saveEditorText: () => void;
   setButtonValues: Dispatch<SetStateAction<Record<string, boolean>>>;
   setCursor: (pos1: number, pos2: number) => void;
   setCursorPosition: (positionStart: number, positionEnd: number) => void;
@@ -59,7 +58,6 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
   pushUndoValue,
   undoCursorPosition,
   redoCursorPosition,
-  saveEditorText,
   setButtonValues,
   setCursor,
   setCursorPosition,
@@ -158,7 +156,7 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
               openSettings={openSettings}
               setOpenSettings={setOpenSettings}
             />
-            <SubmitButton mdText={mdText} saveEditorText={saveEditorText} />
+            <SubmitButton mdText={mdText} />
           </div>
         </div>
 
@@ -194,7 +192,7 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
               setUndoAndCursorPosition={setUndoAndCursorPosition}
             />
           </div>
-          <Autosave mdText={mdText} saveEditorText={saveEditorText} />
+          <Autosave mdText={mdText} />
         </div>
       </div>
 

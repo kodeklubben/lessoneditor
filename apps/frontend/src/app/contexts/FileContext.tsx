@@ -113,8 +113,10 @@ const FileContextProvider = (props: any) => {
           savedFileBody: body,
         };
       });
+      return uploadedFile.status;
     } catch (error) {
       console.error(error);
+      return -1;
     }
   };
 
