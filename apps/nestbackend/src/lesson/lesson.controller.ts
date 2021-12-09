@@ -81,10 +81,13 @@ export class LessonController {
   @Get(":lessonId/files/:fileName")
   async GetLessonFile(@Res() res, @Param("lessonId") lessonId, @Param("fileName") fileName) {
     try {
+      console.log({ lessonId, fileName });
       const { lesson, content, ...fileProps } = await this.lessonService.getLessonFile(
         lessonId,
         fileName
       );
+
+      console.log({ lesson, content });
 
       if ([".jpg", ".jpeg", ".gif", ".png"].includes(fileProps.ext)) {
         res.end(content.toString("base64"));
@@ -127,12 +130,11 @@ export class LessonController {
     @Param("fileName") fileName,
     @Body() updatedFile: UpdatedFileDTO
   ): Promise<FileDTO<string>> {
-    console.log({ updatedFile });
     const { lesson, content, ...fileProps } = await this.lessonService.updateLessonFile(
       lessonId,
       fileName,
       req.user.userId,
-      JSON.stringify(updatedFile.content),
+      fileName === "lesson" ? JSON.stringify(updatedFile.content) : updatedFile.content,
       req
     );
     const newFile: FileDTO<string> = {

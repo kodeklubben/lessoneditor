@@ -1,4 +1,5 @@
-import classes from "./Navbar.module.scss";
+// import classes from "./Navbar.module.scss";
+import "./navbar.scss";
 import { FC } from "react";
 import { useNavigate } from "react-router-dom";
 import ProfileMenu from "./ProfileMenu";
@@ -16,12 +17,12 @@ const Navbar: FC = (props) => {
   return (
     <>
       <header>
-        <div className={classes.container}>
-          <div className={classes.image_container}>
-            <img className={classes.logo} src={logo} onClick={navigateToFrontpage}></img>
+        <div className="navbar_container">
+          <div className="navbar_image_container">
+            <img className="navbar_logo" src={logo} onClick={navigateToFrontpage}></img>
           </div>
-          <div className={classes.children_container}>{props.children}</div>
-          <div className={classes.profileMenu_container}>
+          <div className="_navbar_children_container">{props.children}</div>
+          <div className="navbar_profilemenu_container">
             <ProfileMenu
               name={userState.user ? userState.user.name : ""}
               photo={userState.user ? userState.user.photo : ""}

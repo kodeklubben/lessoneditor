@@ -1,12 +1,21 @@
 import { useLessonContext } from "../../contexts/LessonContext";
 import ListFiles from "../shared/ListFiles";
 import { Item, Container } from "semantic-ui-react";
-import { FC } from "react";
+import { FC, useState, useEffect } from "react";
 
 type AllFilesProps = { lessonId: string };
 
 const AllFiles: FC<AllFilesProps> = ({ lessonId }) => {
-  const { state } = useLessonContext();
+  const { fetchFileList, state } = useLessonContext();
+  const [file, setFile] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fetchFiles = async () => {
+      const files = await fetchFileList();
+      setFile(files);
+    };
+    fetchFiles();
+  }, [state.files]);
 
   const filterItems = ["preview.png", "lesson.yml", "data.json", "image.png"];
 
@@ -15,8 +24,8 @@ const AllFiles: FC<AllFilesProps> = ({ lessonId }) => {
       <ul>
         <ListFiles
           list={
-            state.files?.length > 0
-              ? state.files?.filter((fileName: string) => !filterItems.includes(fileName))
+            file.length > 0
+              ? file.filter((fileName: string) => !filterItems.includes(fileName))
               : ["No files found"]
           }
           lessonId={lessonId}
