@@ -14,5 +14,6 @@ export interface LessonContextModel {
   updateYaml: (lessonId: string, data: YamlContent) => void;
   images: any;
   setImages: React.Dispatch<React.SetStateAction<any>>;
-  updateFileList: () => Promise<string[]>;
+  setFiles: React.Dispatch<React.SetStateAction<any>>;
+  fetchFileList: () => Promise<string[]>;
 }

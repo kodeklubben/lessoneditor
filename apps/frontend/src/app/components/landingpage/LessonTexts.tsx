@@ -9,17 +9,22 @@ import { NewFileDTO, HeaderData } from "@lessoneditor/contracts";
 import { filenameParser } from "../../utils/filename-parser";
 import * as yaml from "js-yaml";
 import { useLessonContext } from "../../contexts/LessonContext";
+import { useUserContext } from "../../contexts/UserContext";
+import { lessonGuideDefaultText } from "./settingsFiles/defaultTexts";
 
 const LessonTexts: FC<any> = ({ lessonId, fileList, lessonSlug, lessonTitle }) => {
   const [usedLanguages, setUsedLanguages] = useState<string[]>([]);
   const [unusedLanguages, setUnusedLanguages] = useState<Record<string, any>[]>([]);
-  const [lang, setLang] = useState<string>("");
+  const [lang, setLang] = useState<string>("-1");
+
   const navigate = useNavigate();
-  const { updateFileList } = useLessonContext();
+
+  const { fetchFileList } = useLessonContext();
+  const { state } = useUserContext();
 
   useEffect(() => {
     const fetchData = async () => {
-      const fileList = await updateFileList();
+      const fileList = await fetchFileList();
       const tempUsedLang: string[] = [];
       const tempUnusedLang: Record<string, string>[] = [...LANGUAGEOPTIONS];
       fileList.forEach((filename: string) => {
@@ -41,17 +46,16 @@ const LessonTexts: FC<any> = ({ lessonId, fileList, lessonSlug, lessonTitle }) =
 
   const header: HeaderData = {
     title: lessonTitle,
-    author: "",
+    author: state.user!.name,
     authorList: [],
     language: lang,
     translator: "",
     translatorList: [],
   };
 
-  const rawBody = "---\n" + yaml.dump(header) + "---\n" + "\n#testTekst";
-
   const onSubmit = async () => {
     try {
+      const rawBody = "---\n" + yaml.dump(header) + "---\n" + lessonGuideDefaultText[lang];
       const filename = lang === "nb" ? lessonSlug : `${lessonSlug}_${lang}`;
       const newLessonFileDTO: NewFileDTO = {
         filename,

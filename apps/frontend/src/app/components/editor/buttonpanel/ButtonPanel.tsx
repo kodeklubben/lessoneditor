@@ -149,8 +149,8 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
               setButtonValues={setButtonValues}
               setUndoAndCursorPosition={setUndoAndCursorPosition}
             />
-            <div style={{ marginRight: "3em" }} />
-            <Explorer />
+            {/* <div style={{ marginRight: "3em" }} />
+            <Explorer /> */}
           </div>
 
           <div className="settingspanel">
