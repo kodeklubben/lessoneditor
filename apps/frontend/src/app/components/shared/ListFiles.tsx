@@ -23,7 +23,7 @@ const ListFiles: FC<ListFilesProps> = ({ list, lessonId }) => {
           .replace(":ext", ext)
       );
       if (isDeleted.data === 1) {
-        const index = fileList.findIndex((item) => filename);
+        const index = fileList.findIndex((item: string) => item === filename);
         const newList = fileList.splice(index, 1);
         setFiles(newList);
       }

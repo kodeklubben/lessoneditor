@@ -5,7 +5,7 @@ const lessonBokmal =
 
 Her skriver du en introduksjon til oppgaven.
 
-![ALTERNATIV_TEKST](BILDEFIL)
+![ALTERNATIV_TEKST]("image.png")
 
 
 # Steg 1: Første steg {.activity}
