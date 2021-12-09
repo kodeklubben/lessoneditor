@@ -10,7 +10,6 @@ import { filenameParser } from "../../../utils/filename-parser";
 interface EditorDatamodalProps {
   courseTitle: string;
   lessonTitle: string;
-  setShowSpinner: Dispatch<SetStateAction<boolean>>;
   openSettings: boolean;
   setOpenSettings: Dispatch<SetStateAction<boolean>>;
 }
@@ -18,7 +17,6 @@ interface EditorDatamodalProps {
 const EditorDatamodal: FC<EditorDatamodalProps> = ({
   courseTitle,
   lessonTitle,
-  setShowSpinner,
   openSettings,
   setOpenSettings,
 }) => {
@@ -58,20 +56,19 @@ const EditorDatamodal: FC<EditorDatamodalProps> = ({
 
   const onSubmit = async () => {
     if (saveFileHeader) {
-      setShowSpinner(true);
-      await saveFileHeader(state.headerData);
-      setShowSpinner(false);
+      // setShowSpinner(true);
+      saveFileHeader(state.headerData);
+      // setShowSpinner(false);
       setOpenSettings(false);
-      navigate(location.pathname);
     }
   };
 
-  const onCancel = async () => {
-    if (saveFileHeader && state.headerData) {
-      await saveFileHeader({ ...state.headerData });
-      setOpenSettings(false);
-    }
-  };
+  // const onCancel = async () => {
+  //   if (saveFileHeader && state.headerData) {
+  //     await saveFileHeader({ ...state.headerData });
+  //     setOpenSettings(false);
+  //   }
+  // };
 
   return (
     <>
@@ -98,10 +95,14 @@ const EditorDatamodal: FC<EditorDatamodalProps> = ({
             (!state.headerData?.author && state.headerData.authorList.length === 0)
           )
         }
-        onClose={() => setOpenSettings(false)}
+        onClose={() => {
+          saveFileHeader(state.headerData);
+          setOpenSettings(false);
+        }}
         onOpen={() => setOpenSettings(true)}
         open={openSettings}
         size="large"
+        dimmer="inverted"
         closeIcon={
           !(
             !state.headerData?.title ||
@@ -172,7 +173,7 @@ const EditorDatamodal: FC<EditorDatamodalProps> = ({
         </Modal.Content>
 
         <Modal.Actions className="editor_modal">
-          <Button
+          {/* <Button
             disabled={
               !state.headerData?.title ||
               (!state.headerData.author && state.headerData.authorList.length === 0)
@@ -185,7 +186,7 @@ const EditorDatamodal: FC<EditorDatamodalProps> = ({
             }
             onClick={onCancel}
             content="Avbryt"
-          />
+          /> */}
           <Button
             disabled={
               !state.headerData?.title ||

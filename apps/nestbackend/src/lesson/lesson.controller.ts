@@ -81,13 +81,10 @@ export class LessonController {
   @Get(":lessonId/files/:fileName")
   async GetLessonFile(@Res() res, @Param("lessonId") lessonId, @Param("fileName") fileName) {
     try {
-      console.log({ lessonId, fileName });
       const { lesson, content, ...fileProps } = await this.lessonService.getLessonFile(
         lessonId,
         fileName
       );
-
-      console.log({ lesson, content });
 
       if ([".jpg", ".jpeg", ".gif", ".png"].includes(fileProps.ext)) {
         res.end(content.toString("base64"));

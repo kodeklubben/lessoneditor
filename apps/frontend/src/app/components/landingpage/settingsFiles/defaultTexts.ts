@@ -1,11 +1,11 @@
-const lessonBokmal =
+const lessonBokmal: string =
   `(TEKSTMAL FOR OPPGAVER)
 
 # Introduksjon {.intro}
 
 Her skriver du en introduksjon til oppgaven.
 
-![ALTERNATIV_TEKST](BILDEFIL)
+![ALTERNATIV_TEKST]("image.png")
 
 
 # Steg 1: Første steg {.activity}
@@ -92,7 +92,7 @@ Husk å lagre spillet/programmet ditt. Når du er ferdig kan du klikke på "Legg
 ut"-knappen. Da vil det bli lagt ut på Scratch-hjemmesiden din slik at du enkelt
 kan dele det med familien og vennene dine.`;
 
-const teacherBokmal = `(TEKSTMAL FOR LÆRERVEILEDNING)
+const teacherBokmal: string = `(TEKSTMAL FOR LÆRERVEILEDNING)
 
 # Om oppgaven {.activity}
 
