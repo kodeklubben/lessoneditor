@@ -8,40 +8,54 @@ import { paths } from "@lessoneditor/contracts";
 import { NewFileDTO, HeaderData } from "@lessoneditor/contracts";
 import { filenameParser } from "../../utils/filename-parser";
 import * as yaml from "js-yaml";
+import { useLessonContext } from "../../contexts/LessonContext";
+import { useUserContext } from "../../contexts/UserContext";
+import { lessonGuideDefaultText } from "./settingsFiles/defaultTexts";
 
 const LessonTexts: FC<any> = ({ lessonId, fileList, lessonSlug, lessonTitle }) => {
   const [usedLanguages, setUsedLanguages] = useState<string[]>([]);
-  const unusedLanguages = LANGUAGEOPTIONS.filter((item) => !usedLanguages.includes(item.value));
-  const [lang, setLang] = useState<string>("");
+  const [unusedLanguages, setUnusedLanguages] = useState<Record<string, any>[]>([]);
+  const [lang, setLang] = useState<string>("-1");
+
   const navigate = useNavigate();
 
-  useEffect(() => {
-    fileList.forEach((filename: string) => {
-      const { isMarkdown, isReadme, language } = filenameParser(filename);
+  const { fetchFileList } = useLessonContext();
+  const { state } = useUserContext();
 
-      if (!isReadme && language.length > 0) {
-        setUsedLanguages((prevLang) => [...prevLang, language]);
-      }
-    });
+  useEffect(() => {
+    const fetchData = async () => {
+      const fileList = await fetchFileList();
+      const tempUsedLang: string[] = [];
+      const tempUnusedLang: Record<string, string>[] = [...LANGUAGEOPTIONS];
+      fileList.forEach((filename: string) => {
+        const { isMarkdown, isReadme, language } = filenameParser(filename);
+
+        if (!isReadme && language.length > 0) {
+          tempUsedLang.push(language);
+          const index = tempUnusedLang.findIndex((item) => item.value === language);
+          tempUnusedLang.splice(index, 1);
+        }
+      });
+      setUsedLanguages(tempUsedLang);
+      setUnusedLanguages(tempUnusedLang);
+      tempUnusedLang.length > 0 ? setLang(tempUnusedLang[0].value) : setLang("-1");
+    };
+
+    fetchData();
   }, []);
-
-  useEffect(() => {
-    setLang(unusedLanguages[0].value);
-  }, [unusedLanguages[0].value]);
 
   const header: HeaderData = {
     title: lessonTitle,
-    author: "",
+    author: state.user!.name,
     authorList: [],
     language: lang,
     translator: "",
     translatorList: [],
   };
 
-  const rawBody = "---\n" + yaml.dump(header) + "---\n" + "\n#testTekst";
-
   const onSubmit = async () => {
     try {
+      const rawBody = "---\n" + yaml.dump(header) + "---\n" + lessonGuideDefaultText[lang];
       const filename = lang === "nb" ? lessonSlug : `${lessonSlug}_${lang}`;
       const newLessonFileDTO: NewFileDTO = {
         filename,
@@ -80,7 +94,7 @@ const LessonTexts: FC<any> = ({ lessonId, fileList, lessonSlug, lessonTitle }) =
             />
           );
         })}
-        {unusedLanguages ? (
+        {lang !== "-1" ? (
           <Card>
             <Card.Content>
               <Card.Content>
@@ -109,13 +123,17 @@ const LessonTexts: FC<any> = ({ lessonId, fileList, lessonSlug, lessonTitle }) =
               </Card.Content>
               <Card.Content extra>
                 <Button onClick={onSubmit} content="Ny tekstfil " />
-                <Dropdown
-                  inline
-                  name="language"
-                  defaultValue={unusedLanguages[0].value}
-                  onChange={onChange}
-                  options={unusedLanguages}
-                ></Dropdown>
+                {unusedLanguages.length > 0 ? (
+                  <Dropdown
+                    inline
+                    name="language"
+                    defaultValue={unusedLanguages.length > 0 ? unusedLanguages[0].value : ""}
+                    onChange={onChange}
+                    options={unusedLanguages}
+                  />
+                ) : (
+                  ""
+                )}
               </Card.Content>
             </Card.Content>
           </Card>

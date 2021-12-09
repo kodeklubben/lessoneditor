@@ -1,12 +1,12 @@
 import React, { Dispatch, FC, SetStateAction, useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
-import insertMetaDataInTeacherGuide from "../components/editor/utils/insertMetaDataInTeacherGuide";
+import insertMetaDataInTeacherGuide from "../components/landingpage/utils/insertMetaDataInTeacherGuide";
 import oppgaveMal from "../components/editor/settingsFiles/oppgaveMal";
 import { useLessonContext } from "./LessonContext";
 import { filenameParser } from "../utils/filename-parser";
 import axios from "axios";
-import { FileDTO, HeaderData, UpdatedFileDTO, YamlContent } from "@lessoneditor/contracts";;
-import { paths } from "@lessoneditor/contracts";;
+import { FileDTO, HeaderData, UpdatedFileDTO, YamlContent } from "@lessoneditor/contracts";
+import { paths } from "@lessoneditor/contracts";
 import {
   FileContextModel,
   FileContextState,
@@ -22,7 +22,7 @@ const FileContext = React.createContext<FileContextModel>({} as FileContextModel
 
 function createDefaultFileBody(file: string, ymlData: YamlContent) {
   const { isReadme } = filenameParser(file);
-  return isReadme ? insertMetaDataInTeacherGuide(ymlData) : oppgaveMal;
+  return isReadme ? insertMetaDataInTeacherGuide(ymlData, "nb") : oppgaveMal;
 }
 
 const FileContextProvider = (props: any) => {
@@ -35,40 +35,14 @@ const FileContextProvider = (props: any) => {
   const { language } = filenameParser(file);
   const [savedFileBody, setSavedFileBody] = useState("");
 
-  const saveFileBody = async (body: string) => {
-    const fileHeader = fileContextState.rawMdFileContent?.split(separator)[1] || "";
-    const newRawText = ["", fileHeader, body].join(separator);
-    try {
-      const updatedFile: UpdatedFileDTO = {
-        content: newRawText,
-      };
-      const uploadedFile = await axios.put<FileDTO<string>>(
-        paths.LESSON_FILE_UPDATE.replace(":lessonId", lessonId.toString()).replace(
-          ":fileName",
-          file
-        ),
-        updatedFile
-      );
-      setFileContextState((s) => {
-        return {
-          ...s,
-          rawMdFileContent: newRawText,
-          savedFileBody: body,
-        };
-      });
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   useEffect(() => {
     async function fetchData() {
       try {
+        const filename = lang === "nb" ? file : `${file}_${lang}`;
         const result = await axios.get<FileDTO<string>>(
-          paths.LESSON_FILE.replace(":lessonId", lessonId).replace(":fileName", file)
+          paths.LESSON_FILE.replace(":lessonId", lessonId).replace(":fileName", filename)
         );
         const [_, header, body] = result.data.content.split(separator);
-
         const headerData = yml.load(header) as HeaderData;
         setFileContextState((s) => {
           return {
@@ -87,7 +61,7 @@ const FileContextProvider = (props: any) => {
     if (lessonId && file) {
       fetchData();
     }
-  }, [lessonId]);
+  }, [lessonId, lang]);
 
   const saveFileHeader = async (data: HeaderData) => {
     const fileBody = fileContextState?.rawMdFileContent?.split(separator)[2];
@@ -97,10 +71,11 @@ const FileContextProvider = (props: any) => {
       const updatedFile: UpdatedFileDTO = {
         content: newRawText,
       };
+      const filename = lang === "nb" ? file : `${file}_${lang}`;
       const newFile = await axios.put<FileDTO<UpdatedFileDTO>>(
         paths.LESSON_FILE_UPDATE.replace(":lessonId", lessonId.toString()).replace(
           ":fileName",
-          file
+          filename
         ),
         updatedFile
       );
@@ -116,6 +91,33 @@ const FileContextProvider = (props: any) => {
     }
   };
 
+  const saveFileBody = async (body: string) => {
+    const fileHeader = fileContextState.rawMdFileContent?.split(separator)[1] || "";
+    const newRawText = ["", fileHeader, body].join(separator);
+    try {
+      const updatedFile: UpdatedFileDTO = {
+        content: newRawText,
+      };
+      const filename = lang === "nb" ? file : `${file}_${lang}`;
+      const uploadedFile = await axios.put<FileDTO<string>>(
+        paths.LESSON_FILE_UPDATE.replace(":lessonId", lessonId.toString()).replace(
+          ":fileName",
+          filename
+        ),
+        updatedFile
+      );
+      setFileContextState((s) => {
+        return {
+          ...s,
+          rawMdFileContent: newRawText,
+          savedFileBody: body,
+        };
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const context: FileContextModel = {
     state: fileContextState,
     saveFileBody,
@@ -124,15 +126,11 @@ const FileContextProvider = (props: any) => {
     setFileContextState,
   };
 
-  if(context.state.savedFileBody)
-{
-  return <FileContext.Provider value={context}>{props.children}</FileContext.Provider>;
-}
-else
-{
-  return <ShowSpinner></ShowSpinner>
-}
-
+  if (context.state.savedFileBody) {
+    return <FileContext.Provider value={context}>{props.children}</FileContext.Provider>;
+  } else {
+    return <ShowSpinner></ShowSpinner>;
+  }
 };
 const useFileContext = (): FileContextModel => useContext(FileContext);
 

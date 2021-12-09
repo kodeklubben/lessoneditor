@@ -17,34 +17,19 @@ const Landingpage = () => {
   const [thankU, setThankU] = useState(false);
   const { lessonId, mode } = useParams() as any;
   const pageContent = mode;
-  const { state, updateFileList } = useLessonContext();
+  const { state } = useLessonContext();
 
   const { lessonTitle, courseTitle, lessonSlug } = state.lesson;
-  const fileList = state.files;
-
-  useEffect(() => {
-    updateFileList();
-  }, [state.files]);
 
   const dropdownValue = (input: string) => {
     switch (input) {
       case "lessontexts":
         return (
-          <LessonTexts
-            lessonId={lessonId}
-            fileList={fileList}
-            lessonTitle={lessonTitle}
-            lessonSlug={lessonSlug}
-          />
+          <LessonTexts lessonId={lessonId} lessonTitle={lessonTitle} lessonSlug={lessonSlug} />
         );
       case "teacherguides":
         return (
-          <TeacherGuides
-            lessonId={lessonId}
-            fileList={fileList}
-            lessonTitle={lessonTitle}
-            lessonSlug={lessonSlug}
-          />
+          <TeacherGuides lessonId={lessonId} lessonTitle={lessonTitle} lessonSlug={lessonSlug} />
         );
       case "allfiles":
         return <AllFiles lessonId={lessonId} />;

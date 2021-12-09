@@ -1,37 +1,10 @@
 import { useNavigate } from "react-router";
 import { Button, Card, Image, Divider } from "semantic-ui-react";
 import { FC, useState, useEffect } from "react";
-import nbFlag from "../../../../src/assets/public/languagesFlag/flag_nb.svg";
-import nnFlag from "../../../../src/assets/public/languagesFlag/flag_nn.svg";
-import enFlag from "../../../../src/assets/public/languagesFlag/flag_en.svg";
-import isFlag from "../../../../src/assets/public/languagesFlag/flag_is.svg";
-import noLessonPreviewImage from "../../../../src/assets/public/landingPage/image.png";
+import { LANGUAGEOPTIONS } from "../frontpage/settings/newLessonOptions";
 import { useLessonContext } from "../../contexts/LessonContext";
 import axios from "axios";
-import { paths } from "@lessoneditor/contracts";;
-
-const languageOptions: Record<string, any> = {
-  nb: {
-    text: "Bokmål",
-    value: "nb",
-    image: { avatar: true, src: nbFlag },
-  },
-  nn: {
-    text: "Nynorsk",
-    value: "nn",
-    image: { avatar: true, src: nnFlag },
-  },
-  en: {
-    text: "Engelsk",
-    value: "en",
-    image: { avatar: true, src: enFlag },
-  },
-  is: {
-    text: "Islandsk",
-    value: "is",
-    image: { avatar: true, src: isFlag },
-  },
-};
+import { paths } from "@lessoneditor/contracts";
 
 const LessonCard: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug }) => {
   const navigate = useNavigate();
@@ -61,8 +34,11 @@ const LessonCard: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug }) =>
   };
   const imgSrc = "data:image/png;base64," + image;
 
-  const languageText = languageOptions[language].text;
-  const languageImage = languageOptions[language].image.src;
+  const lang = LANGUAGEOPTIONS.find((item) => item.value === language);
+
+  const languageText = lang!.text;
+  const languageImage = lang!.image!.src;
+
   return (
     <>
       <Card>
@@ -117,7 +93,6 @@ const LessonCard: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug }) =>
           ""
         )}
       </Card>
-    )
     </>
   );
 };
