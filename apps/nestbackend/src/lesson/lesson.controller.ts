@@ -88,16 +88,14 @@ export class LessonController {
 
       if ([".jpg", ".jpeg", ".gif", ".png"].includes(fileProps.ext)) {
         res.end(content.toString("base64"));
-      } 
-      if(fileName == "lesson")
-      {
+      }
+      if (fileName == "lesson") {
         const fileDTO: FileDTO<string> = {
           ...fileProps,
           content: JSON.parse(content.toString()),
         };
-        res.send(fileDTO)
-      }
-      else {
+        res.send(fileDTO);
+      } else {
         const fileDTO: FileDTO<string> = {
           ...fileProps,
           content: content.toString("utf-8"),

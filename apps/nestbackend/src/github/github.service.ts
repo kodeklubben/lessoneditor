@@ -4,8 +4,9 @@ import { Octokit, RestEndpointMethodTypes } from "@octokit/rest";
 import {} from "@octokit/core";
 import { components } from "@octokit/openapi-types";
 import { Lesson } from "../lesson/lesson.entity";
-import {User} from "../user/user.entity";
+import { User } from "../user/user.entity";
 import axios from "axios";
+import * as yaml from "js-yaml";
 
 interface UploadObject {
   path: string;
@@ -20,14 +21,12 @@ interface UploadBlob {
 @Injectable()
 export class GithubService {
   octokit: Octokit;
-  constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {
-   
-  }
+  constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {}
 
-  async submitLesson(user: User,lesson: Lesson) {
+  async submitLesson(user: User, lesson: Lesson) {
     try {
-      const test = await this.cacheManager.get('test')
-      const accessToken = await this.cacheManager.get(user.userId.toString())
+      const test = await this.cacheManager.get("test");
+      const accessToken = await this.cacheManager.get(user.userId.toString());
       this.octokit = new Octokit({ auth: accessToken });
     } catch (error) {
       console.error(error);
@@ -50,15 +49,14 @@ export class GithubService {
       if (file.ext === ".yml") {
         filesToUpload.push({
           path,
-          buffer: Buffer.from(file.content),
+          buffer: Buffer.from(yaml.dump(file.content)),
         });
       } else if (file.ext === ".md") {
         filesToUpload.push({
           path,
           buffer: Buffer.from(file.content.toString()),
         });
-      }
-      else if ([".jpg", ".jpeg", ".gif", ".png"].includes(file.ext)) {
+      } else if ([".jpg", ".jpeg", ".gif", ".png"].includes(file.ext)) {
         filesToUpload.push({
           path,
           buffer: Buffer.from(file.content),
@@ -82,11 +80,11 @@ export class GithubService {
     );
     await this.setBranchToCommit(owner, repo, branchName, newCommit.sha);
     await this.createPullRequest(
-        owner,
-        "New lesson",
-        branchName,
-        "Pull request from lesson editor"
-      );
+      owner,
+      "New lesson",
+      branchName,
+      "Pull request from lesson editor"
+    );
   }
 
   async createFork() {

@@ -1,4 +1,4 @@
-import { HeaderData } from "@lessoneditor/contracts";;
+import { HeaderData } from "@lessoneditor/contracts";
 
 export interface FileContextState {
   rawMdFileContent: string | undefined;
@@ -8,7 +8,7 @@ export interface FileContextState {
 
 export interface FileContextModel {
   state: FileContextState;
-  saveFileBody: (body: string) => void;
+  saveFileBody: (body: string) => Promise<number>;
   savedFileBody: string;
   saveFileHeader: (data: HeaderData) => void;
   setFileContextState: React.Dispatch<React.SetStateAction<FileContextState>>;
