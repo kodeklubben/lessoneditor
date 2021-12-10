@@ -18,6 +18,12 @@ const MDPreview: FC<MDPreviewProps> = ({ mdText, course, language }) => {
   const parseMD = mdTextUrlReplaced && mdParser(mdTextUrlReplaced);
 
   useEffect(() => {
+    if (course === "microbit") {
+      renderMicrobit(language);
+    }
+  }, [parseMD]);
+
+  useEffect(() => {
     function replaceUrlWithBlobUrl(markdownContent: any) {
       if (!/(!\[.*?\]\(")(.+?)("\))/.test(markdownContent)) {
         return markdownContent;

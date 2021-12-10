@@ -23,7 +23,10 @@ const LandingageNavbar: FC<any> = ({ lessonTitle, courseTitle }) => {
       <div
         style={
           mode === "lessontexts"
-            ? { backgroundColor: "#7cd3c31a", width: "100%" }
+            ? {
+                backgroundColor: "#7cd3c31a",
+                width: "100%",
+              }
             : mode === "teacherguides"
             ? { backgroundColor: "#897cd31a" }
             : { backgroundColor: "#d37cb21a" }

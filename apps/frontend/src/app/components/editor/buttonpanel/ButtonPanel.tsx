@@ -194,37 +194,36 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
           </div>
           <Autosave mdText={mdText} />
         </div>
-      </div>
-
-      <div>
-        {course === "microbit" && (
-          <MicrobitButtons
-            editorRef={editorRef}
-            cursorPositionStart={cursorPositionStart}
-            cursorPositionEnd={cursorPositionEnd}
-            mdText={mdText}
-            buttonValues={buttonValues}
-            setMdText={setMdText}
-            setCursorPosition={setCursorPosition}
-            setCursor={setCursor}
-            setButtonValues={setButtonValues}
-            setUndoAndCursorPosition={setUndoAndCursorPosition}
-          />
-        )}
-        {course === "scratch" && (
-          <SratchButtons
-            editorRef={editorRef}
-            cursorPositionStart={cursorPositionStart}
-            cursorPositionEnd={cursorPositionEnd}
-            mdText={mdText}
-            buttonValues={buttonValues}
-            setMdText={setMdText}
-            setCursorPosition={setCursorPosition}
-            setCursor={setCursor}
-            setButtonValues={setButtonValues}
-            setUndoAndCursorPosition={setUndoAndCursorPosition}
-          />
-        )}
+        <div>
+          {course === "microbit" && (
+            <MicrobitButtons
+              editorRef={editorRef}
+              cursorPositionStart={cursorPositionStart}
+              cursorPositionEnd={cursorPositionEnd}
+              mdText={mdText}
+              buttonValues={buttonValues}
+              setMdText={setMdText}
+              setCursorPosition={setCursorPosition}
+              setCursor={setCursor}
+              setButtonValues={setButtonValues}
+              setUndoAndCursorPosition={setUndoAndCursorPosition}
+            />
+          )}
+          {course === "scratch" && (
+            <SratchButtons
+              editorRef={editorRef}
+              cursorPositionStart={cursorPositionStart}
+              cursorPositionEnd={cursorPositionEnd}
+              mdText={mdText}
+              buttonValues={buttonValues}
+              setMdText={setMdText}
+              setCursorPosition={setCursorPosition}
+              setCursor={setCursor}
+              setButtonValues={setButtonValues}
+              setUndoAndCursorPosition={setUndoAndCursorPosition}
+            />
+          )}
+        </div>
       </div>
     </>
   );

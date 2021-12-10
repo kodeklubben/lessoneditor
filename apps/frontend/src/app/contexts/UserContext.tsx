@@ -16,11 +16,12 @@ export const UserContext = React.createContext({} as UserContextModel);
 export const UserContextProvider = (props: any) => {
   const [userContexState, setUserContextState] =
     useState<UserContextState>(initialUserContextState);
-  const [error, setError] = useState({});
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     async function fetchData() {
       try {
+        setLoading(true);
         const userRes = await axios.get<UserDTO>(paths.USER);
         const userLessonsRes = await axios.get<LessonDTO[]>(
           paths.USER_LESSONS.replace(":userId", userRes.data.userId.toString())
@@ -34,6 +35,7 @@ export const UserContextProvider = (props: any) => {
           };
         });
         setUserContextState((s) => ({ ...s, loggedIn: true }));
+        setLoading(false);
       } catch (error: any) {
         console.log("error");
         window.location.href = "/api/auth/login/";
@@ -121,6 +123,8 @@ export const UserContextProvider = (props: any) => {
     state: userContexState,
     addLesson: addLesson,
     removeLesson: removeLesson,
+    loading,
+    setLoading,
   };
 
   if (userContexState.loggedIn) {
