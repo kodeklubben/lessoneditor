@@ -1,10 +1,11 @@
 import React, { Dispatch, FC, SetStateAction, useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import axios from "axios";
-import { NewLessonDTO, LessonDTO, FileDTO, YamlContent } from "@lessoneditor/contracts";;
+
+import { NewLessonDTO, LessonDTO, FileDTO, YamlContent } from "@lessoneditor/contracts";
 import { LessonContextState, LessonContextModel } from "./lessonContext.functions";
 import ShowSpinner from "../components/ShowSpinner";
-import { paths } from "@lessoneditor/contracts";;
+import { paths } from "@lessoneditor/contracts";
 import { useUserContext } from "./UserContext";
 import { base64StringToBlob, createObjectURL } from "blob-util";
 import yaml from "js-yaml";
@@ -32,9 +33,7 @@ export const LessonContextProvider = (props: any) => {
           paths.LESSON_FILE.replace(":lessonId", lessonId).replace(":fileName", "lesson")
         );
 
-        console.log({ yamlFile });
-
-        const fileNames = await updateFileList();
+        const fileNames = await fetchFileList();
 
         for (const file of fileNames) {
           const ext = file.split(".").pop() === "jpg" ? "jpeg" : file.split(".").pop() ?? "";
@@ -55,6 +54,7 @@ export const LessonContextProvider = (props: any) => {
 
         setYml(yamlFile.data.content);
         setLesson(lesson.data);
+        setFiles(fileNames);
       } catch (error) {
         console.error(error);
       }
@@ -63,11 +63,12 @@ export const LessonContextProvider = (props: any) => {
     fetchLessonData();
   }, []);
 
-  const updateFileList = async () => {
+  const fetchFileList = async () => {
     const fileNames = await axios.get<string[]>(
       paths.LESSON_FILENAMES.replace(":lessonId", lessonId)
     );
-    setFiles(fileNames.data);
+
+
     return fileNames.data;
   };
 
@@ -110,7 +111,8 @@ export const LessonContextProvider = (props: any) => {
     updateYaml: updateYaml,
     images,
     setImages,
-    updateFileList,
+    setFiles,
+    fetchFileList,
   };
 
   return (

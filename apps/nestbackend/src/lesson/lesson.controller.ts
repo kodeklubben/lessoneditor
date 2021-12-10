@@ -50,8 +50,8 @@ export class LessonController {
 
   @UseGuards(LoginGuard)
   @Post(":lessonId/submit")
-  async SubmitLesson(@Req() req,@Param() params) {
-    await this.lessonService.submitLesson(req.user,params.lessonId);
+  async SubmitLesson(@Req() req, @Param() params) {
+    await this.lessonService.submitLesson(req.user, params.lessonId);
   }
 
   @UseGuards(LoginGuard)
@@ -129,12 +129,11 @@ export class LessonController {
     @Param("fileName") fileName,
     @Body() updatedFile: UpdatedFileDTO
   ): Promise<FileDTO<string>> {
-    console.log({ updatedFile });
     const { lesson, content, ...fileProps } = await this.lessonService.updateLessonFile(
       lessonId,
       fileName,
       req.user.userId,
-      updatedFile.content,
+      fileName === "lesson" ? JSON.stringify(updatedFile.content) : updatedFile.content,
       req
     );
     const newFile: FileDTO<string> = {

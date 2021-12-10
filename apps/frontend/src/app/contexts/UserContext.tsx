@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState, FC } from "react";
 import axios from "axios";
-import { paths } from "@lessoneditor/contracts";;
-import { LessonDTO, NewLessonDTO } from "@lessoneditor/contracts";;
+import { paths } from "@lessoneditor/contracts";
+import { LessonDTO, NewLessonDTO } from "@lessoneditor/contracts";
 import { UserDTO } from "@lessoneditor/contracts";
 
 import {
@@ -25,6 +25,7 @@ export const UserContextProvider = (props: any) => {
         const userLessonsRes = await axios.get<LessonDTO[]>(
           paths.USER_LESSONS.replace(":userId", userRes.data.userId.toString())
         );
+
         setUserContextState((s) => {
           return {
             ...s,
@@ -34,7 +35,8 @@ export const UserContextProvider = (props: any) => {
         });
         setUserContextState((s) => ({ ...s, loggedIn: true }));
       } catch (error: any) {
-        window.location.href = "/api/auth/login/"
+        console.log("error");
+        window.location.href = "/api/auth/login/";
       }
     }
     fetchData();
@@ -72,7 +74,6 @@ export const UserContextProvider = (props: any) => {
         paths.USER_LESSON_NEW.replace(":userId", userContexState.user!.userId.toString()),
         newLesson
       );
-
       const userLessonsRes = await axios.get<LessonDTO[]>(
         paths.USER_LESSONS.replace(":userId", userContexState.user!.userId.toString())
       );
@@ -125,7 +126,7 @@ export const UserContextProvider = (props: any) => {
   if (userContexState.loggedIn) {
     return <UserContext.Provider value={context}>{props.children}</UserContext.Provider>;
   } else {
-    return <NotLoggedInPage></NotLoggedInPage>
+    return <NotLoggedInPage></NotLoggedInPage>;
   }
 };
 export const useUserContext = (): UserContextModel => useContext<UserContextModel>(UserContext);

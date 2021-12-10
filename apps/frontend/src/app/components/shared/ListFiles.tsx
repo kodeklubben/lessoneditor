@@ -10,9 +10,10 @@ type ListFilesProps = {
 };
 
 const ListFiles: FC<ListFilesProps> = ({ list, lessonId }) => {
-  const { updateFileList } = useLessonContext();
+  const { fetchFileList, setFiles } = useLessonContext();
 
   const removeFile = async (item: string) => {
+    const fileList = await fetchFileList();
     const filename = item.split(".").slice(0, -1).toString();
     const ext: string = item.split(".").pop() ?? "";
     try {
@@ -22,7 +23,9 @@ const ListFiles: FC<ListFilesProps> = ({ list, lessonId }) => {
           .replace(":ext", ext)
       );
       if (isDeleted.data === 1) {
-        updateFileList();
+        const index = fileList.findIndex((item: string) => item === filename);
+        const newList = fileList.splice(index, 1);
+        setFiles(newList);
       }
     } catch (e) {
       console.log(e);
