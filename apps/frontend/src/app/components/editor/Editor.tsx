@@ -9,7 +9,6 @@ import { useFileContext } from "../../contexts/FileContext";
 import { useParams } from "react-router";
 import { useLessonContext } from "../../contexts/LessonContext";
 import Navbar from "../navbar/Navbar";
-import { filenameParser } from "../../utils/filename-parser";
 import {
   lessonGuideDefaultText,
   teacherGuideDefaultText,

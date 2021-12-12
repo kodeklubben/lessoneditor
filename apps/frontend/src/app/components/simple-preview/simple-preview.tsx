@@ -8,10 +8,8 @@ const SimplePreview = () => {
 
   return (
     <div className={"simple-preview"}>
-      {typeof state.savedFileBody === "string" ? (
+      {typeof state.savedFileBody === "string" && (
         <MDPreview mdText={state.savedFileBody} course={"python"} language={"nb"} />
-      ) : (
-        <ShowSpinner />
       )}
     </div>
   );

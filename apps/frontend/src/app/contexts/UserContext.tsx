@@ -124,7 +124,6 @@ export const UserContextProvider = (props: any) => {
     addLesson: addLesson,
     removeLesson: removeLesson,
     loading,
-    setLoading,
   };
 
   if (userContexState.loggedIn) {

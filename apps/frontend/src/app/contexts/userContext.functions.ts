@@ -19,7 +19,6 @@ export interface UserContextModel {
   ) => Promise<number | undefined>;
   removeLesson: (lessonId: number) => void;
   loading: boolean;
-  setLoading: Dispatch<SetStateAction<boolean>>;
 }
 
 export const initialUserContextState: UserContextState = {

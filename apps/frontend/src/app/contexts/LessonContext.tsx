@@ -23,10 +23,12 @@ export const LessonContextProvider = (props: any) => {
     license: "CC BY-SA 4.0",
     tags: { grade: [], subject: [], topic: [] },
   });
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     async function fetchLessonData() {
       try {
+        setLoading(true);
         const lesson = await axios.get<LessonDTO>(paths.LESSON.replace(":lessonId", lessonId));
         const yamlFile = await axios.get<FileDTO<YamlContent>>(
           paths.LESSON_FILE.replace(":lessonId", lessonId).replace(":fileName", "lesson")
@@ -54,6 +56,7 @@ export const LessonContextProvider = (props: any) => {
         setYml(yamlFile.data.content);
         setLesson(lesson.data);
         setFiles(fileNames);
+        setLoading(false);
       } catch (error) {
         console.error(error);
       }
@@ -111,6 +114,7 @@ export const LessonContextProvider = (props: any) => {
     setImages,
     setFiles,
     fetchFileList,
+    loading,
   };
 
   return (

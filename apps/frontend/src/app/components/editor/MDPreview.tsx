@@ -4,6 +4,7 @@ import { renderMicrobit } from "../../utils/renderMicrobit";
 import { renderScratchBlocks } from "../../utils/renderScratchblocks";
 import { mdParser } from "../../utils/mdParser";
 import { useLessonContext } from "../../contexts/LessonContext";
+import { Placeholder } from "semantic-ui-react";
 
 interface MDPreviewProps {
   mdText: string;
@@ -60,6 +61,78 @@ const MDPreview: FC<MDPreviewProps> = ({ mdText, course, language }) => {
   if (course === "scratch" && parseMD) {
     const lessonContent = renderScratchBlocks(parseMD);
     return <div className="preview-area" dangerouslySetInnerHTML={{ __html: lessonContent }} />;
+  } else if (!parseMD) {
+    return (
+      <div className="preview-area">
+        <Placeholder>
+          <Placeholder.Header image>
+            <Placeholder.Line />
+            <Placeholder.Line />
+          </Placeholder.Header>
+          <Placeholder.Paragraph>
+            <Placeholder.Line />
+            <Placeholder.Line />
+            <Placeholder.Line />
+            <Placeholder.Line />
+          </Placeholder.Paragraph>
+          <Placeholder.Paragraph>
+            <Placeholder.Line />
+            <Placeholder.Line />
+            <Placeholder.Line />
+          </Placeholder.Paragraph>
+          <Placeholder.Header image>
+            <Placeholder.Line />
+            <Placeholder.Line />
+          </Placeholder.Header>
+          <Placeholder.Paragraph>
+            <Placeholder.Line />
+            <Placeholder.Line />
+            <Placeholder.Line />
+            <Placeholder.Line />
+          </Placeholder.Paragraph>
+          <Placeholder.Paragraph>
+            <Placeholder.Line />
+            <Placeholder.Line />
+            <Placeholder.Line />
+          </Placeholder.Paragraph>
+          <Placeholder.Header image>
+            <Placeholder.Line />
+            <Placeholder.Line />
+          </Placeholder.Header>
+          <Placeholder.Paragraph>
+            <Placeholder.Line />
+            <Placeholder.Line />
+            <Placeholder.Line />
+            <Placeholder.Line />
+          </Placeholder.Paragraph>
+          <Placeholder.Header image>
+            <Placeholder.Line />
+            <Placeholder.Line />
+          </Placeholder.Header>
+          <Placeholder.Paragraph>
+            <Placeholder.Line />
+            <Placeholder.Line />
+            <Placeholder.Line />
+            <Placeholder.Line />
+          </Placeholder.Paragraph>
+          <Placeholder.Paragraph>
+            <Placeholder.Line />
+            <Placeholder.Line />
+            <Placeholder.Line />
+          </Placeholder.Paragraph>
+          <Placeholder.Header image>
+            <Placeholder.Line />
+            <Placeholder.Line />
+          </Placeholder.Header>
+          <Placeholder.Paragraph>
+            <Placeholder.Line />
+            <Placeholder.Line />
+            <Placeholder.Line />
+            <Placeholder.Line />
+          </Placeholder.Paragraph>
+        </Placeholder>
+      </div>
+    );
   } else {
     return <div className="preview-area" dangerouslySetInnerHTML={{ __html: parseMD }} />;
   }
