@@ -1,5 +1,5 @@
 import LessonCard from "./LessonCard";
-import { Card, Divider, Icon, Button, Dropdown } from "semantic-ui-react";
+import { Card, Divider, Icon, Button, Dropdown, Placeholder } from "semantic-ui-react";
 import { useNavigate } from "react-router";
 import { FC, SyntheticEvent, useState, useEffect } from "react";
 import { LANGUAGEOPTIONS } from "../frontpage/settings/newLessonOptions";
@@ -12,6 +12,30 @@ import { useLessonContext } from "../../contexts/LessonContext";
 import { useUserContext } from "../../contexts/UserContext";
 import { lessonGuideDefaultText } from "./settingsFiles/defaultTexts";
 
+const cardPlaceholder = (key: number) => {
+  return (
+    <Card key={key}>
+      <Placeholder>
+        <Placeholder.Image square />
+      </Placeholder>
+
+      <Card.Content>
+        <Placeholder>
+          <Placeholder.Header>
+            <Placeholder.Line length="very short" />
+            <Placeholder.Line length="medium" />
+          </Placeholder.Header>
+          <Placeholder.Paragraph>
+            <Placeholder.Line length="short" />
+          </Placeholder.Paragraph>
+        </Placeholder>
+      </Card.Content>
+
+      <Card.Content extra></Card.Content>
+    </Card>
+  );
+};
+
 const LessonTexts: FC<any> = ({ lessonId, fileList, lessonSlug, lessonTitle }) => {
   const [usedLanguages, setUsedLanguages] = useState<string[]>([]);
   const [unusedLanguages, setUnusedLanguages] = useState<Record<string, any>[]>([]);
@@ -19,7 +43,7 @@ const LessonTexts: FC<any> = ({ lessonId, fileList, lessonSlug, lessonTitle }) =
 
   const navigate = useNavigate();
 
-  const { fetchFileList, setFiles, state: lessonState } = useLessonContext();
+  const { fetchFileList, setFiles, state: lessonState, loading } = useLessonContext();
   const { state } = useUserContext();
 
   useEffect(() => {
@@ -100,22 +124,30 @@ const LessonTexts: FC<any> = ({ lessonId, fileList, lessonSlug, lessonTitle }) =
     setLang(value);
   };
 
+  const returnValue = () => {
+    return usedLanguages.map((language: string, index: number) => {
+      return (
+        <LessonCard
+          key={index}
+          content={"Oppgavetekst"}
+          language={language}
+          lessonId={lessonId}
+          lessonSlug={lessonSlug}
+          lessonTitle={lessonTitle}
+          removeMD={removeMD}
+        />
+      );
+    });
+  };
+
   return (
     <>
       <Card.Group centered>
-        {usedLanguages.map((language: string) => {
-          return (
-            <LessonCard
-              key={language}
-              content={"Oppgavetekst"}
-              language={language}
-              lessonId={lessonId}
-              lessonSlug={lessonSlug}
-              lessonTitle={lessonTitle}
-              removeMD={removeMD}
-            />
-          );
-        })}
+        {!usedLanguages
+          ? cardPlaceholder(-1)
+          : loading
+          ? usedLanguages.map((item, index) => cardPlaceholder(index))
+          : returnValue()}
         {lang !== "-1" ? (
           <Card>
             <Card.Content>
@@ -168,3 +200,67 @@ const LessonTexts: FC<any> = ({ lessonId, fileList, lessonSlug, lessonTitle }) =
 };
 
 export default LessonTexts;
+
+// const returnValue = (key: number) => {return()
+//     usedLanguages.map((language: string, index: number) => {
+//       return (
+//         <LessonCard
+//           key={index}
+//           content={"Oppgavetekst"}
+//           language={language}
+//           lessonId={lessonId}
+//           lessonSlug={lessonSlug}
+//           lessonTitle={lessonTitle}
+//           removeMD={removeMD}
+//         />
+//       );
+//     });
+//     {
+//       lang !== "-1" ? (
+//         <Card>
+//           <Card.Content>
+//             <Card.Content>
+//               <div
+//                 style={{
+//                   display: "flex",
+//                   justifyContent: "center",
+//                   alignItems: "center",
+//                   height: "220px",
+//                 }}
+//               >
+//                 <Icon.Group>
+//                   <Icon color="grey" name="file text outline" size="massive" />
+//                 </Icon.Group>
+//               </div>
+//             </Card.Content>
+//             <Card.Content>
+//               <Divider />
+//             </Card.Content>
+//             <Card.Content>
+//               <Card.Header>{"Opprett ny tekstfil"}</Card.Header>
+//               <Card.Meta>{"Oppgavetekst"}</Card.Meta>
+//             </Card.Content>
+//             <Card.Content>
+//               <Divider />
+//             </Card.Content>
+//             <Card.Content extra>
+//               <Button onClick={onSubmit} content="Ny tekstfil " />
+//               {unusedLanguages.length > 0 ? (
+//                 <Dropdown
+//                   inline
+//                   name="language"
+//                   defaultValue={unusedLanguages.length > 0 ? unusedLanguages[0].value : ""}
+//                   onChange={onChange}
+//                   options={unusedLanguages}
+//                 />
+//               ) : (
+//                 ""
+//               )}
+//             </Card.Content>
+//           </Card.Content>
+//         </Card>
+//       ) : (
+//         ""
+//       );
+//     }
+//   };

@@ -1,18 +1,13 @@
-import React, { Dispatch, FC, SetStateAction, useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
-import insertMetaDataInTeacherGuide from "../components/landingpage/utils/insertMetaDataInTeacherGuide";
-import oppgaveMal from "../components/editor/settingsFiles/oppgaveMal";
-import { useLessonContext } from "./LessonContext";
-import { filenameParser } from "../utils/filename-parser";
 import axios from "axios";
-import { FileDTO, HeaderData, UpdatedFileDTO, YamlContent } from "@lessoneditor/contracts";
+import { FileDTO, HeaderData, UpdatedFileDTO } from "@lessoneditor/contracts";
 import { paths } from "@lessoneditor/contracts";
 import {
   FileContextModel,
   FileContextState,
   initialFileContextState,
 } from "./fileContext.functions";
-import { useUserContext } from "./UserContext";
 import * as yml from "js-yaml";
 import ShowSpinner from "../components/ShowSpinner";
 
@@ -20,21 +15,11 @@ const separator = "---\n";
 
 const FileContext = React.createContext<FileContextModel>({} as FileContextModel);
 
-function createDefaultFileBody(file: string, ymlData: YamlContent) {
-  const { isReadme } = filenameParser(file);
-  return isReadme ? insertMetaDataInTeacherGuide(ymlData, "nb") : oppgaveMal;
-}
-
 const FileContextProvider = (props: any) => {
   const [fileContextState, setFileContextState] =
     useState<FileContextState>(initialFileContextState);
   const { lessonId, file, lang } = useParams() as any;
-
-  const { state: userState } = useUserContext();
-  const { state } = useLessonContext();
-  const { language } = filenameParser(file);
   const [savedFileBody, setSavedFileBody] = useState("");
-
   useEffect(() => {
     async function fetchData() {
       try {

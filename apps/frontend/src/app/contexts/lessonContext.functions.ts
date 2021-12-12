@@ -16,4 +16,5 @@ export interface LessonContextModel {
   setImages: React.Dispatch<React.SetStateAction<any>>;
   setFiles: React.Dispatch<React.SetStateAction<any>>;
   fetchFileList: () => Promise<string[]>;
+  loading: boolean;
 }

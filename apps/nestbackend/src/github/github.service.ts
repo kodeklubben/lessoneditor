@@ -24,6 +24,12 @@ export class GithubService {
   constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {}
 
   async submitLesson(user: User, lesson: Lesson) {
+    const test = lesson.files.filter(
+      (item) => item.ext === ".yml" && item.filename === "lesson"
+    )[0];
+    console.log(test);
+    console.log(yaml.dump(test));
+
     try {
       const test = await this.cacheManager.get("test");
       const accessToken = await this.cacheManager.get(user.userId.toString());
@@ -57,6 +63,9 @@ export class GithubService {
           buffer: Buffer.from(file.content.toString()),
         });
       } else if ([".jpg", ".jpeg", ".gif", ".png"].includes(file.ext)) {
+        if (file.filename === "preview" && file.ext === ".png") {
+          return;
+        }
         filesToUpload.push({
           path,
           buffer: Buffer.from(file.content),
