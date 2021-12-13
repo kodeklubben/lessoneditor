@@ -1,6 +1,6 @@
 import "./buttonpanel.scss";
 import { Dispatch, SetStateAction, FC, RefObject, useState } from "react";
-import ShowSpinner from "../../ShowSpinner";
+// import ShowSpinner from "../../ShowSpinner";
 import Autosave from "../Autosave";
 import Emphasis from "./Emphasis";
 import UndoRedo from "./UndoRedo";

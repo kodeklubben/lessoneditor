@@ -6,7 +6,7 @@ import { COURSESLIST, LANGUAGEOPTIONS } from "./settings/newLessonOptions";
 import { useUserContext } from "../../contexts/UserContext";
 import { useNavigate } from "react-router";
 import { Button, Grid, GridColumn, Input, Modal, Dropdown, Ref } from "semantic-ui-react";
-import ShowSpinner from "../ShowSpinner";
+// import ShowSpinner from "../ShowSpinner";
 
 const NewLessonModal: FC = () => {
   const [open, setOpen] = useState(false);
@@ -87,7 +87,7 @@ const NewLessonModal: FC = () => {
         content="Kurset vil bli opprettet når moderatorer har gått gjennom innleveringen"
         actions={[{ key: "Ok", content: "Ok", positive: true }]}
       />
-      {loading ? <ShowSpinner /> : ""}
+
       <Modal
         closeOnDimmerClick={!loading}
         onClose={() => closeModal()}
