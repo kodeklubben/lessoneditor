@@ -12,7 +12,7 @@ interface Props {
 
 const Item: React.FC<Props> = ({ lesson }) => {
   const navigate = useNavigate();
-  const { removeLesson, loading, setLoading } = useUserContext();
+  const { removeLesson } = useUserContext();
 
   const navigateToHome = (lessonId: string) => {
     const target = ["/landingpage", lessonId, "lessontexts"].join("/");
