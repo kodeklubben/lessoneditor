@@ -95,7 +95,7 @@ export const LessonContextProvider = (props: any) => {
   };
 
   if (!lesson) {
-    return <div />;
+    return <ShowSpinner />;
   }
 
   const lessonState: LessonContextState = {

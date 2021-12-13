@@ -116,7 +116,7 @@ const FileContextProvider = (props: any) => {
   if (context.state.savedFileBody) {
     return <FileContext.Provider value={context}>{props.children}</FileContext.Provider>;
   } else {
-    return <div />;
+    return <ShowSpinner />;
   }
 };
 const useFileContext = (): FileContextModel => useContext(FileContext);
