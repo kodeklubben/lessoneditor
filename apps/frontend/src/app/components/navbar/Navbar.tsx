@@ -24,7 +24,7 @@ const Navbar: FC = (props) => {
           <div className="navbar_children_container">{props.children}</div>
           <div className="navbar_profilemenu_container">
             <ProfileMenu
-              name={userState.user ? userState.user.name : ""}
+              name={userState.user ? userState.user.name || userState.user.username : ""}
               photo={userState.user ? userState.user.photo : ""}
             />
           </div>
