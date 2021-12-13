@@ -1,5 +1,5 @@
 import "./ladingpagedatamodal.scss";
-import { SyntheticEvent, useEffect, useState } from "react";
+import { SyntheticEvent, useEffect, useState, useRef } from "react";
 import { useParams } from "react-router";
 import { Button, Grid, Modal, Popup } from "semantic-ui-react";
 import { TagsGrade, TagsSubject, TagsTopic } from "./Tags";
@@ -9,13 +9,18 @@ import Levels from "./Levels";
 import License from "./License";
 import { useLessonContext } from "../../../contexts/LessonContext";
 import { YML_TEXT } from "../settingsFiles/languages/landingpage_NO";
+import ShowSpinner from "../../ShowSpinner";
+import { deepEqual } from "fast-equals";
 
 const LandingpageDatamodal = () => {
   const lessonContext = useLessonContext();
   const { state, yml, setYml, updateYaml, updateLesson } = lessonContext;
   const [checkBoxState, setCheckBoxState] = useState({});
   const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const { lessonId } = useParams() as any;
+
+  const prevData = useRef<any>(null);
 
   const isEmptyDatapanel =
     JSON.stringify(yml) ===
@@ -24,6 +29,10 @@ const LandingpageDatamodal = () => {
       license: "CC BY-SA 4.0",
       tags: { topic: [], subject: [], grade: [] },
     });
+
+  useEffect(() => {
+    prevData.current = { ...yml };
+  }, [open]);
 
   useEffect(() => {
     if (isEmptyDatapanel) {
@@ -60,9 +69,17 @@ const LandingpageDatamodal = () => {
     }
   }, [yml]);
 
-  const onSubmit = () => {
-    updateYaml(lessonId, yml);
-    setOpen(false);
+  const onSubmit = async () => {
+    if (deepEqual(yml, prevData.current)) {
+      updateYaml(lessonId, yml);
+      return setOpen(false);
+    }
+    setLoading(true);
+    const status = await updateYaml(lessonId, yml);
+    if (status === 200) {
+      setOpen(false);
+      setLoading(false);
+    }
   };
 
   const dropdownHandler = (event: SyntheticEvent, data: Record<string, string>) => {
@@ -120,6 +137,7 @@ const LandingpageDatamodal = () => {
 
   return (
     <>
+      {loading && <ShowSpinner />}
       <Popup
         content={"Endre prosjektdata"}
         mouseEnterDelay={250}
@@ -138,8 +156,8 @@ const LandingpageDatamodal = () => {
       <Modal
         closeOnDimmerClick={isEmptyDatapanel ? false : true}
         onClose={() => {
-          updateYaml(lessonId, yml);
-          setOpen(false);
+          onSubmit();
+          loading ? setOpen(false) : "";
         }}
         onOpen={() => setOpen(true)}
         open={open}

@@ -64,6 +64,7 @@ const FileContextProvider = (props: any) => {
         ),
         updatedFile
       );
+
       setFileContextState((s) => {
         return {
           ...s,
@@ -71,8 +72,10 @@ const FileContextProvider = (props: any) => {
           headerData: data,
         };
       });
+      return newFile.status;
     } catch (error) {
       console.error(error);
+      return -1;
     }
   };
 

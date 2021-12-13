@@ -10,7 +10,7 @@ export interface FileContextModel {
   state: FileContextState;
   saveFileBody: (body: string) => Promise<number>;
   savedFileBody: string;
-  saveFileHeader: (data: HeaderData) => void;
+  saveFileHeader: (data: HeaderData) => Promise<number>;
   setFileContextState: React.Dispatch<React.SetStateAction<FileContextState>>;
 }
 

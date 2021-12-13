@@ -81,8 +81,10 @@ export const LessonContextProvider = (props: any) => {
       );
       const newData: unknown = yaml.load(updatedFile.data.content);
       setYml(newData);
+      return updatedFile.status;
     } catch (error) {
       console.error(error);
+      return -1;
     }
   };
 
