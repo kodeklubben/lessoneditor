@@ -9,7 +9,7 @@ import {
   initialFileContextState,
 } from "./fileContext.functions";
 import * as yml from "js-yaml";
-// import ShowSpinner from "../components/ShowSpinner";
+import ShowSpinner from "../components/ShowSpinner";
 
 const separator = "---\n";
 
