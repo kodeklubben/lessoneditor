@@ -64,7 +64,7 @@ export class LessonService {
       throw new HttpException("Lesson does not exist", HttpStatus.NOT_FOUND);
     }
     //A lesson can only be shared by the creator
-    if (!(lesson.created_by == (await invitedByUser).name)) {
+    if (!(lesson.created_by == (await invitedByUser).username)) {
       throw new HttpException("Lesson can only be shared by creator", HttpStatus.FORBIDDEN);
     }
     invitedToUser.lessons.push(lesson);
@@ -91,8 +91,8 @@ export class LessonService {
     const user = request.user as User;
     file.filename = newFile.filename;
     file.ext = newFile.ext;
-    file.created_by = user.name;
-    file.updated_by = user.name;
+    file.created_by = user.username;
+    file.updated_by = user.username;
     file.lesson = lesson;
     if ([".jpg", ".jpeg", ".gif", ".png"].includes(file.ext)) {
       file.content = Buffer.from(newFile.content, "base64");
@@ -124,7 +124,7 @@ export class LessonService {
       throw new HttpException("User does not exist", HttpStatus.NOT_FOUND);
     }
     file.content = Buffer.from(fileContent);
-    file.updated_by = updatedByUser.name;
+    file.updated_by = updatedByUser.username;
 
     const thumbImage = await this.thumbService.getThumb(
       lesson.lessonId,

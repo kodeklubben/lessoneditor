@@ -9,7 +9,7 @@ import {
   initialFileContextState,
 } from "./fileContext.functions";
 import * as yml from "js-yaml";
-// import ShowSpinner from "../components/ShowSpinner";
+import ShowSpinner from "../components/ShowSpinner";
 
 const separator = "---\n";
 
@@ -116,7 +116,7 @@ const FileContextProvider = (props: any) => {
   if (context.state.savedFileBody) {
     return <FileContext.Provider value={context}>{props.children}</FileContext.Provider>;
   } else {
-    return <div />;
+    return <ShowSpinner />;
   }
 };
 const useFileContext = (): FileContextModel => useContext(FileContext);
