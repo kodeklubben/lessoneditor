@@ -3,7 +3,7 @@ import { useParams } from "react-router";
 import axios from "axios";
 import { NewLessonDTO, LessonDTO, FileDTO, YamlContent } from "@lessoneditor/contracts";
 import { LessonContextState, LessonContextModel } from "./lessonContext.functions";
-import ShowSpinner from "../components/ShowSpinner";
+// import ShowSpinner from "../components/ShowSpinner";
 import { paths } from "@lessoneditor/contracts";
 import { useUserContext } from "./UserContext";
 import { base64StringToBlob, createObjectURL } from "blob-util";
