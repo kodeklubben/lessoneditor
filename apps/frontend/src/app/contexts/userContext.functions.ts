@@ -1,5 +1,6 @@
 import { UserDTO } from "@lessoneditor/contracts";
 import { LessonDTO } from "@lessoneditor/contracts";
+import { Dispatch, SetStateAction } from "react";
 
 export interface UserContextState {
   user: UserDTO | undefined;
@@ -17,6 +18,7 @@ export interface UserContextModel {
     language: string
   ) => Promise<number | undefined>;
   removeLesson: (lessonId: number) => void;
+  loading: boolean;
 }
 
 export const initialUserContextState: UserContextState = {

@@ -1,6 +1,6 @@
 import { LessonDTO, FileDTO } from "@lessoneditor/contracts";
 import React, { useEffect, useState } from "react";
-import { Button, Card, Image, Icon, Popup } from "semantic-ui-react";
+import { Button, Card, Image, Icon, Popup, Placeholder } from "semantic-ui-react";
 import { paths } from "@lessoneditor/contracts";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../../contexts/UserContext";
@@ -28,7 +28,6 @@ const Item: React.FC<Props> = ({ lesson }) => {
             .replace(":fileName", "preview")
             .replace(":ext", ".png")
         );
-        console.log("h");
         setImage(file.data);
       } catch (error) {
         console.error(error);

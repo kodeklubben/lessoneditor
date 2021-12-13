@@ -1,11 +1,11 @@
 import "./editordatamodal.scss";
 import { Dispatch, SetStateAction, SyntheticEvent, FC } from "react";
-import { useNavigate, useParams, useLocation } from "react-router";
+import { LANGUAGEOPTIONS } from "../../frontpage/settings/newLessonOptions";
+import { useParams } from "react-router";
 import { Button, Header, Input, Modal, Popup } from "semantic-ui-react";
 import MultiInput from "./MultiInput";
 import { FORM_TEXT } from "./settings/landingpage_NO";
 import { useFileContext } from "../../../contexts/FileContext";
-import { filenameParser } from "../../../utils/filename-parser";
 
 interface EditorDatamodalProps {
   courseTitle: string;
@@ -20,12 +20,10 @@ const EditorDatamodal: FC<EditorDatamodalProps> = ({
   openSettings,
   setOpenSettings,
 }) => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const { lessonId, file } = useParams<any>();
+  const { lessonId, file, lang } = useParams<any>();
   const { state, saveFileHeader, setFileContextState } = useFileContext();
 
-  const { language, languageName } = filenameParser(file);
+  const languageName = LANGUAGEOPTIONS.filter((item) => item.value === lang)[0].text;
 
   const changeHandler = (event: SyntheticEvent, data: Record<string, string>) => {
     const { name, value } = data;

@@ -21,7 +21,7 @@ const Navbar: FC = (props) => {
           <div className="navbar_image_container">
             <img className="navbar_logo" src={logo} onClick={navigateToFrontpage}></img>
           </div>
-          <div className="_navbar_children_container">{props.children}</div>
+          <div className="navbar_children_container">{props.children}</div>
           <div className="navbar_profilemenu_container">
             <ProfileMenu
               name={userState.user ? userState.user.name : ""}

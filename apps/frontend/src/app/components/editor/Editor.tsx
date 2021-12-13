@@ -9,7 +9,6 @@ import { useFileContext } from "../../contexts/FileContext";
 import { useParams } from "react-router";
 import { useLessonContext } from "../../contexts/LessonContext";
 import Navbar from "../navbar/Navbar";
-import { filenameParser } from "../../utils/filename-parser";
 import {
   lessonGuideDefaultText,
   teacherGuideDefaultText,
@@ -125,13 +124,6 @@ const Editor: FC = () => {
     setButtonValues({});
   };
 
-  // Autosave bruker denne.
-  const saveEditorText = () => {
-    if (saveFileBody) {
-      saveFileBody(mdText);
-    }
-  };
-
   return (
     <>
       {state.lesson && (
@@ -162,7 +154,6 @@ const Editor: FC = () => {
             pushRedoValue={pushRedoValue}
             pushUndoValue={pushUndoValue}
             redoCursorPosition={redoCursorPosition}
-            saveEditorText={saveEditorText}
             setButtonValues={setButtonValues}
             setCursor={setCursor}
             setCursorPosition={setCursorPosition}
