@@ -64,7 +64,7 @@ const MDPreview: FC<MDPreviewProps> = ({ mdText, course, language }) => {
   } else if (!parseMD) {
     return (
       <div className="preview-area">
-        <Placeholder>
+        <Placeholder fluid>
           <Placeholder.Header image>
             <Placeholder.Line />
             <Placeholder.Line />

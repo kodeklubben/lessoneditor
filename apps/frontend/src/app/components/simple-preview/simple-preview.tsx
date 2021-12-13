@@ -1,7 +1,7 @@
 import "./simple-preview.scss";
 import MDPreview from "../editor/MDPreview";
 import { useFileContext } from "../../contexts/FileContext";
-import ShowSpinner from "../ShowSpinner";
+// import ShowSpinner from "../ShowSpinner";
 
 const SimplePreview = () => {
   const { state } = useFileContext();

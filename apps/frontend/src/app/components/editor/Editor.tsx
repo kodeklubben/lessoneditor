@@ -4,7 +4,7 @@ import ButtonPanel from "./buttonpanel/ButtonPanel";
 import ImageUpload from "./ImageUpload";
 import MDPreview from "./MDPreview";
 import MDTextArea from "./MDTextArea";
-import ShowSpinner from "../ShowSpinner";
+// import ShowSpinner from "../ShowSpinner";
 import { useFileContext } from "../../contexts/FileContext";
 import { useParams } from "react-router";
 import { useLessonContext } from "../../contexts/LessonContext";

@@ -16,7 +16,7 @@ export const UserContext = React.createContext({} as UserContextModel);
 export const UserContextProvider = (props: any) => {
   const [userContexState, setUserContextState] =
     useState<UserContextState>(initialUserContextState);
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     async function fetchData() {

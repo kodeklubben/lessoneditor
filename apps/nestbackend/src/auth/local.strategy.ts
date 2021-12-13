@@ -10,7 +10,7 @@ import { AxiosResponse } from "axios";
 import { HttpService } from "@nestjs/common";
 import { Inject, CACHE_MANAGER } from "@nestjs/common";
 import { Cache } from "cache-manager";
-import { User} from "../user/user.entity"
+import { User } from "../user/user.entity";
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy, "github") {
@@ -27,7 +27,7 @@ export class LocalStrategy extends PassportStrategy(Strategy, "github") {
         client_id: process.env.GITHUB_CLIENT_ID,
         redirect_uri: process.env.GITHUB_CALLBACK_URL,
         response_type: "code",
-        scope: "repo"
+        scope: "repo",
       })}`,
       tokenURL: "https://github.com/login/oauth/access_token",
       clientID: process.env.GITHUB_CLIENT_ID,
@@ -42,14 +42,14 @@ export class LocalStrategy extends PassportStrategy(Strategy, "github") {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
     const response: any = await lastValueFrom(this.axiosResponse$);
-    let user: User
+    let user: User;
     try {
-      user = await this.userService.getUser(response.data.id); 
+      user = await this.userService.getUser(response.data.id);
     } catch (error) {
       const newUserDTO: UserDTO = {
         userId: response.data.id,
         name: response.data.name,
-        username: response.data.username,
+        username: response.data.login || response.data.id,
         email: response.data.email,
         photo: response.data.avatar_url,
       };
