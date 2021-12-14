@@ -13,7 +13,6 @@ import { useLessonContext } from "../../contexts/LessonContext";
 
 const Landingpage = () => {
   const [openSubmitModal, setOpenSubmitModal] = useState(false);
-  const [thankU, setThankU] = useState(false);
   const { lessonId, mode } = useParams() as any;
   const pageContent = mode;
   const { state } = useLessonContext();

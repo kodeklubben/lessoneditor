@@ -14,6 +14,7 @@ const DeleteModal: FC<{
       onOpen={() => setOpenDeleteContent(true)}
       open={openDeleteContent}
       dimmer="inverted"
+      closeOnDimmerClick={!loading}
     >
       <Modal.Content>
         <Modal.Description>
@@ -21,7 +22,7 @@ const DeleteModal: FC<{
         </Modal.Description>
       </Modal.Content>
       <Modal.Actions>
-        <Button color="black" onClick={() => setOpenDeleteContent(false)}>
+        <Button disabled={loading} color="black" onClick={() => setOpenDeleteContent(false)}>
           Nei
         </Button>
         <Button
