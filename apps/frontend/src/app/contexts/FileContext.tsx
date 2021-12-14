@@ -31,6 +31,7 @@ const FileContextProvider = (props: any) => {
           paths.LESSON_FILE.replace(":lessonId", lessonId).replace(":fileName", filename)
         );
         const [_, header, body] = result.data.content.split(separator);
+
         const headerData = yml.load(header) as HeaderData;
         setFileContextState((s) => {
           return {
@@ -54,6 +55,7 @@ const FileContextProvider = (props: any) => {
 
   const saveFileHeader = async (data: HeaderData) => {
     const fileBody = fileContextState?.rawMdFileContent?.split(separator)[2];
+
     const header = yml.dump(data);
     const newRawText = ["", header, fileBody].join(separator);
     try {

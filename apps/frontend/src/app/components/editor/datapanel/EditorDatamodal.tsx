@@ -99,8 +99,9 @@ const EditorDatamodal: FC<EditorDatamodalProps> = ({
       />
       <Modal
         closeOnDimmerClick={
+          typeof state.headerData.authorList === "object" &&
           !!state.headerData?.title &&
-          (!!state.headerData.author || state.headerData!.authorList!.length > 0)
+          (!!state.headerData.author || state.headerData.authorList.length > 0)
         }
         onClose={() => {
           onSubmit();
@@ -152,7 +153,7 @@ const EditorDatamodal: FC<EditorDatamodalProps> = ({
             required="(obligatorisk)"
             title={FORM_TEXT.AUTHOR.heading}
           />
-          {!state.headerData?.title ||
+          {typeof state.headerData.authorList === "object" &&
           !(state.headerData.author || state.headerData!.authorList!.length > 0) ? (
             <p>
               <i style={{ color: "red" }}>Må ha forfatter</i>
@@ -165,7 +166,7 @@ const EditorDatamodal: FC<EditorDatamodalProps> = ({
           <MultiInput
             changeHandler={changeHandler}
             inputArray={state.headerData.translatorList ?? []}
-            inputValue={state.headerData?.translator}
+            inputValue={state.headerData?.translator ?? ""}
             name="translator"
             placeholder={FORM_TEXT.TRANSLATOR.placeholder}
             required=""
@@ -190,7 +191,7 @@ const EditorDatamodal: FC<EditorDatamodalProps> = ({
           /> */}
           <Button
             disabled={
-              !state.headerData?.title ||
+              typeof state.headerData.authorList === "object" &&
               !(state.headerData.author || state.headerData!.authorList!.length > 0)
             }
             onClick={onSubmit}

@@ -30,7 +30,6 @@ const LandingpageDatamodal = () => {
     });
 
   useEffect(() => {
-    console.log("tittei");
     prevData.current = { ...yml };
   }, [open]);
 
