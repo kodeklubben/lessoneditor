@@ -57,7 +57,7 @@ const Editor: FC = () => {
   }, [isDefaultText]);
 
   useEffect(() => {
-    if (savedFileBody) {
+    if (typeof savedFileBody !== "undefined") {
       setCursor(savedFileBody.length, savedFileBody.length);
       setMdText(savedFileBody);
       setUndo([savedFileBody]);

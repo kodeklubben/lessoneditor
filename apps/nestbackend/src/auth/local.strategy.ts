@@ -42,6 +42,7 @@ export class LocalStrategy extends PassportStrategy(Strategy, "github") {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
     const response: any = await lastValueFrom(this.axiosResponse$);
+    console.log(response);
     let user: User;
     try {
       user = await this.userService.getUser(response.data.id);

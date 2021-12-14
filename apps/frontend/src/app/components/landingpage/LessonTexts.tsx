@@ -68,7 +68,10 @@ const LessonTexts: FC<any> = ({ lessonId, fileList, lessonSlug, lessonTitle }) =
     fetchData();
   }, [lessonState.files]);
 
-  const removeMD = async (language: string, file: string) => {
+  const removeMD: (language: string, file: string) => Promise<number> = async (
+    language: string,
+    file: string
+  ) => {
     const filename = language === "nb" ? file : `${file}_${language}`;
     const ext = "md";
 
@@ -79,19 +82,21 @@ const LessonTexts: FC<any> = ({ lessonId, fileList, lessonSlug, lessonTitle }) =
           .replace(":fileName", filename)
           .replace(":ext", ext)
       );
-      if (isDeleted.data === 1) {
+      if (isDeleted.status === 200) {
         const index = files.findIndex((item: string) => item === filename);
         const newList = files.splice(index, 1);
         setFiles(newList);
       }
+      return isDeleted.status;
     } catch (e) {
       console.log(e);
+      return -1;
     }
   };
 
   const header: HeaderData = {
     title: lessonTitle,
-    author: state.user!.name,
+    author: state.user!.name || state.user!.username,
     authorList: [],
     language: lang,
     translator: "",

@@ -16,8 +16,8 @@ const Autosave: FC<AutosaveProps> = ({ mdText }) => {
       if (status === 200) setAutoSaveMessage(SAVED);
       setTimeout(() => {
         setAutoSaveMessage("");
-      }, 1000);
-    }, 500);
+      }, 2000);
+    }, 750);
 
     return () => {
       clearTimeout(timeoutHandler);

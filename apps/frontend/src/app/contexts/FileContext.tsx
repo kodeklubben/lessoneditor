@@ -20,9 +20,12 @@ const FileContextProvider = (props: any) => {
     useState<FileContextState>(initialFileContextState);
   const { lessonId, file, lang } = useParams() as any;
   const [savedFileBody, setSavedFileBody] = useState("");
+  const [loading, setLoading] = useState<boolean>(false);
+
   useEffect(() => {
     async function fetchData() {
       try {
+        setLoading(true);
         const filename = lang === "nb" ? file : `${file}_${lang}`;
         const result = await axios.get<FileDTO<string>>(
           paths.LESSON_FILE.replace(":lessonId", lessonId).replace(":fileName", filename)
@@ -38,6 +41,7 @@ const FileContextProvider = (props: any) => {
           };
         });
         setSavedFileBody(body);
+        setLoading(false);
       } catch (error) {
         console.error(error);
       }
@@ -64,6 +68,7 @@ const FileContextProvider = (props: any) => {
         ),
         updatedFile
       );
+
       setFileContextState((s) => {
         return {
           ...s,
@@ -71,18 +76,22 @@ const FileContextProvider = (props: any) => {
           headerData: data,
         };
       });
+      return newFile.status;
     } catch (error) {
       console.error(error);
+      return -1;
     }
   };
 
   const saveFileBody = async (body: string) => {
     const fileHeader = fileContextState.rawMdFileContent?.split(separator)[1] || "";
     const newRawText = ["", fileHeader, body].join(separator);
+
     try {
       const updatedFile: UpdatedFileDTO = {
         content: newRawText,
       };
+
       const filename = lang === "nb" ? file : `${file}_${lang}`;
       const uploadedFile = await axios.put<FileDTO<string>>(
         paths.LESSON_FILE_UPDATE.replace(":lessonId", lessonId.toString()).replace(
@@ -111,9 +120,10 @@ const FileContextProvider = (props: any) => {
     savedFileBody,
     saveFileHeader,
     setFileContextState,
+    loading,
   };
 
-  if (context.state.savedFileBody) {
+  if (context.state.savedFileBody || context.state.savedFileBody === "") {
     return <FileContext.Provider value={context}>{props.children}</FileContext.Provider>;
   } else {
     return <ShowSpinner />;
