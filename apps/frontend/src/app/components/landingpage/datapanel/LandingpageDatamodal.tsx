@@ -9,7 +9,6 @@ import Levels from "./Levels";
 import License from "./License";
 import { useLessonContext } from "../../../contexts/LessonContext";
 import { YML_TEXT } from "../settingsFiles/languages/landingpage_NO";
-import ShowSpinner from "../../ShowSpinner";
 import { deepEqual } from "fast-equals";
 
 const LandingpageDatamodal = () => {
@@ -31,6 +30,7 @@ const LandingpageDatamodal = () => {
     });
 
   useEffect(() => {
+    console.log("tittei");
     prevData.current = { ...yml };
   }, [open]);
 
@@ -137,7 +137,6 @@ const LandingpageDatamodal = () => {
 
   return (
     <>
-      {loading && <ShowSpinner />}
       <Popup
         content={"Endre prosjektdata"}
         mouseEnterDelay={250}
@@ -218,6 +217,7 @@ const LandingpageDatamodal = () => {
             labelPosition="right"
             icon="checkmark"
             positive
+            loading={loading}
           />
         </Modal.Actions>
       </Modal>

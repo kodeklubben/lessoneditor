@@ -5,6 +5,7 @@ import { paths } from "@lessoneditor/contracts";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../../contexts/UserContext";
 import axios from "axios";
+import DeleteModal from "../shared/DeleteModal";
 
 interface Props {
   lesson: LessonDTO;
@@ -12,7 +13,18 @@ interface Props {
 
 const Item: React.FC<Props> = ({ lesson }) => {
   const navigate = useNavigate();
+  const [openDeleteLesson, setOpenDeleteLesson] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const { removeLesson } = useUserContext();
+
+  const deleteLesson = async () => {
+    setLoading(true);
+    const status = await removeLesson(lesson.lessonId);
+    if (status === 200) {
+      setOpenDeleteLesson(false);
+      setLoading(false);
+    }
+  };
 
   const navigateToHome = (lessonId: string) => {
     const target = ["/landingpage", lessonId, "lessontexts"].join("/");
@@ -38,6 +50,14 @@ const Item: React.FC<Props> = ({ lesson }) => {
 
   return (
     <>
+      {openDeleteLesson && (
+        <DeleteModal
+          openDeleteContent={openDeleteLesson}
+          setOpenDeleteContent={setOpenDeleteLesson}
+          deleteContent={deleteLesson}
+          loading={loading}
+        />
+      )}
       {image && (
         <Card>
           <Card.Content style={{ position: "relative" }}>
@@ -92,7 +112,7 @@ const Item: React.FC<Props> = ({ lesson }) => {
               style={{ background: "none" }}
               icon
               onClick={() => {
-                removeLesson(lesson.lessonId);
+                setOpenDeleteLesson(true);
               }}
             >
               <Icon name="delete" />

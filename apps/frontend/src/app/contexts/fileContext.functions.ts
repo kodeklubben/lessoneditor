@@ -12,6 +12,7 @@ export interface FileContextModel {
   savedFileBody: string;
   saveFileHeader: (data: HeaderData) => Promise<number>;
   setFileContextState: React.Dispatch<React.SetStateAction<FileContextState>>;
+  loading: boolean;
 }
 
 export const initialFileContextState: FileContextState = {

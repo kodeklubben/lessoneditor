@@ -5,11 +5,14 @@ import { LANGUAGEOPTIONS } from "../frontpage/settings/newLessonOptions";
 import { useLessonContext } from "../../contexts/LessonContext";
 import axios from "axios";
 import { paths } from "@lessoneditor/contracts";
+import DeleteModal from "../shared/DeleteModal";
 
 const LessonCard: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug, removeMD }) => {
   const navigate = useNavigate();
   const { state } = useLessonContext();
   const [image, setImage] = useState<string | undefined>(undefined);
+  const [openDeleteContent, setOpenDeleteContent] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     async function getImage() {
@@ -28,6 +31,15 @@ const LessonCard: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug, remo
     getImage();
   }, [lessonSlug]);
 
+  const deleteContent = async () => {
+    setLoading(true);
+    const status = await removeMD(language, lessonSlug);
+    if (status === 200) {
+      setOpenDeleteContent(false);
+      setLoading(false);
+    }
+  };
+
   const navigateToEditor = (lessonId: any, lessonSlug: any, language: string) => {
     const target = ["/editor", lessonId, lessonSlug, language].join("/");
     navigate({ pathname: target });
@@ -41,6 +53,14 @@ const LessonCard: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug, remo
 
   return (
     <>
+      {openDeleteContent && (
+        <DeleteModal
+          openDeleteContent={openDeleteContent}
+          setOpenDeleteContent={setOpenDeleteContent}
+          deleteContent={deleteContent}
+          loading={loading}
+        />
+      )}
       <Card>
         <Card.Content>
           <Card.Content>
@@ -75,11 +95,7 @@ const LessonCard: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug, remo
               content={"Åpne"}
               positive
             />
-            <Button
-              style={{ background: "none" }}
-              icon
-              onClick={() => removeMD(language, lessonSlug)}
-            >
+            <Button style={{ background: "none" }} icon onClick={() => setOpenDeleteContent(true)}>
               <Icon name="delete" />
               Slett
             </Button>

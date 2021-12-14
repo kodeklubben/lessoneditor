@@ -4,14 +4,34 @@ import NewLessonModal from "./NewLessonModal";
 import ItemList from "./ItemList";
 import { useUserContext } from "../../contexts/UserContext";
 import Navbar from "../navbar/Navbar";
-import { Card, Divider, Header, Icon, Message } from "semantic-ui-react";
+import { Card, Divider, Header, Icon, Message, Placeholder } from "semantic-ui-react";
 
 const Overview: FC = () => {
   const { state } = useUserContext();
 
-  // state.lessons.map((item) =>
-  //   console.log(`Lesson title: ${item.lessonTitle}.  Submitted? ${item.submitted}`)
-  // );
+  const cardPlaceholder = (key: number) => {
+    return (
+      <Card key={key}>
+        <Placeholder>
+          <Placeholder.Image square />
+        </Placeholder>
+
+        <Card.Content>
+          <Placeholder>
+            <Placeholder.Header>
+              <Placeholder.Line length="very short" />
+              <Placeholder.Line length="medium" />
+            </Placeholder.Header>
+            <Placeholder.Paragraph>
+              <Placeholder.Line length="short" />
+            </Placeholder.Paragraph>
+          </Placeholder>
+        </Card.Content>
+
+        <Card.Content extra></Card.Content>
+      </Card>
+    );
+  };
 
   return (
     <div>
@@ -44,11 +64,13 @@ const Overview: FC = () => {
           </Card.Content>
         </Card>
         <Divider style={{ height: "2px" }} section />
+
+        <Header as="h2">Mine oppgaver</Header>
+
+        {/* <Card.Group>{[1, 2, 3, 4].map((item) => cardPlaceholder(item))}</Card.Group> */}
+
         {state.lessons.length > 0 ? (
-          <>
-            <Header as="h2">Mine oppgaver</Header>
-            <ItemList lessons={state.lessons} />
-          </>
+          <ItemList lessons={state.lessons} />
         ) : (
           <Message>
             <Message.Header>Du har ingen kurs</Message.Header>

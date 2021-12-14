@@ -4,7 +4,8 @@ import { renderMicrobit } from "../../utils/renderMicrobit";
 import { renderScratchBlocks } from "../../utils/renderScratchblocks";
 import { mdParser } from "../../utils/mdParser";
 import { useLessonContext } from "../../contexts/LessonContext";
-import { Placeholder } from "semantic-ui-react";
+import { useFileContext } from "../../contexts/FileContext";
+import ContentPlaceholder from "./ContentPlaceholder";
 
 interface MDPreviewProps {
   mdText: string;
@@ -14,6 +15,7 @@ interface MDPreviewProps {
 
 const MDPreview: FC<MDPreviewProps> = ({ mdText, course, language }) => {
   const { images } = useLessonContext();
+  const { loading } = useFileContext();
 
   const [mdTextUrlReplaced, setMdTextUrlReplaced] = useState<string>("");
   const parseMD = mdTextUrlReplaced && mdParser(mdTextUrlReplaced);
@@ -61,76 +63,10 @@ const MDPreview: FC<MDPreviewProps> = ({ mdText, course, language }) => {
   if (course === "scratch" && parseMD) {
     const lessonContent = renderScratchBlocks(parseMD);
     return <div className="preview-area" dangerouslySetInnerHTML={{ __html: lessonContent }} />;
-  } else if (!parseMD) {
+  } else if (!parseMD && mdText !== "") {
     return (
       <div className="preview-area">
-        <Placeholder fluid>
-          <Placeholder.Header image>
-            <Placeholder.Line />
-            <Placeholder.Line />
-          </Placeholder.Header>
-          <Placeholder.Paragraph>
-            <Placeholder.Line />
-            <Placeholder.Line />
-            <Placeholder.Line />
-            <Placeholder.Line />
-          </Placeholder.Paragraph>
-          <Placeholder.Paragraph>
-            <Placeholder.Line />
-            <Placeholder.Line />
-            <Placeholder.Line />
-          </Placeholder.Paragraph>
-          <Placeholder.Header image>
-            <Placeholder.Line />
-            <Placeholder.Line />
-          </Placeholder.Header>
-          <Placeholder.Paragraph>
-            <Placeholder.Line />
-            <Placeholder.Line />
-            <Placeholder.Line />
-            <Placeholder.Line />
-          </Placeholder.Paragraph>
-          <Placeholder.Paragraph>
-            <Placeholder.Line />
-            <Placeholder.Line />
-            <Placeholder.Line />
-          </Placeholder.Paragraph>
-          <Placeholder.Header image>
-            <Placeholder.Line />
-            <Placeholder.Line />
-          </Placeholder.Header>
-          <Placeholder.Paragraph>
-            <Placeholder.Line />
-            <Placeholder.Line />
-            <Placeholder.Line />
-            <Placeholder.Line />
-          </Placeholder.Paragraph>
-          <Placeholder.Header image>
-            <Placeholder.Line />
-            <Placeholder.Line />
-          </Placeholder.Header>
-          <Placeholder.Paragraph>
-            <Placeholder.Line />
-            <Placeholder.Line />
-            <Placeholder.Line />
-            <Placeholder.Line />
-          </Placeholder.Paragraph>
-          <Placeholder.Paragraph>
-            <Placeholder.Line />
-            <Placeholder.Line />
-            <Placeholder.Line />
-          </Placeholder.Paragraph>
-          <Placeholder.Header image>
-            <Placeholder.Line />
-            <Placeholder.Line />
-          </Placeholder.Header>
-          <Placeholder.Paragraph>
-            <Placeholder.Line />
-            <Placeholder.Line />
-            <Placeholder.Line />
-            <Placeholder.Line />
-          </Placeholder.Paragraph>
-        </Placeholder>
+        <ContentPlaceholder />
       </div>
     );
   } else {

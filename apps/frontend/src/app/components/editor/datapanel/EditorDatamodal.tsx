@@ -7,7 +7,6 @@ import { Button, Header, Input, Modal, Popup } from "semantic-ui-react";
 import MultiInput from "./MultiInput";
 import { FORM_TEXT } from "./settings/landingpage_NO";
 import { useFileContext } from "../../../contexts/FileContext";
-import ShowSpinner from "../../ShowSpinner";
 import { shallowEqual } from "fast-equals";
 
 interface EditorDatamodalProps {
@@ -30,6 +29,20 @@ const EditorDatamodal: FC<EditorDatamodalProps> = ({
   const prevData = useRef<any>(null);
 
   useEffect(() => {
+    if (state.headerData.author && state.headerData.title) {
+      setFileContextState((s) => {
+        return {
+          ...s,
+          headerData: {
+            ...s.headerData,
+            err: "",
+          },
+        };
+      });
+    }
+  }, [state.headerData.author, state.headerData.title]);
+
+  useEffect(() => {
     prevData.current = { ...state };
   }, [openSettings]);
 
@@ -37,30 +50,16 @@ const EditorDatamodal: FC<EditorDatamodalProps> = ({
 
   const changeHandler = (event: SyntheticEvent, data: Record<string, string>) => {
     const { name, value } = data;
-    console.log({ name, value });
 
-    if (setFileContextState) {
-      setFileContextState((s) => {
-        return {
-          ...s,
-          headerData: {
-            ...s.headerData,
-            [name]: value,
-          },
-        };
-      });
-      if (state.headerData.author && state.headerData.title) {
-        setFileContextState((s) => {
-          return {
-            ...s,
-            headerData: {
-              ...s.headerData,
-              err: "",
-            },
-          };
-        });
-      }
-    }
+    setFileContextState((s) => {
+      return {
+        ...s,
+        headerData: {
+          ...s.headerData,
+          [name]: value,
+        },
+      };
+    });
   };
 
   const onSubmit = async () => {
@@ -80,16 +79,8 @@ const EditorDatamodal: FC<EditorDatamodalProps> = ({
     }
   };
 
-  // const onCancel = async () => {
-  //   if (saveFileHeader && state.headerData) {
-  //     await saveFileHeader({ ...state.headerData });
-  //     setOpenSettings(false);
-  //   }
-  // };
-
   return (
     <>
-      {loading && <ShowSpinner />}
       <Popup
         content={"Endre data for oppgavetekst"}
         mouseEnterDelay={250}
@@ -207,6 +198,7 @@ const EditorDatamodal: FC<EditorDatamodalProps> = ({
             positive
             labelPosition="right"
             icon="checkmark"
+            loading={loading}
           />
         </Modal.Actions>
       </Modal>
