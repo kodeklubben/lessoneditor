@@ -18,11 +18,13 @@ const Item: React.FC<Props> = ({ lesson }) => {
   const { removeLesson } = useUserContext();
 
   const deleteLesson = async () => {
-    setLoading(true);
-    const status = await removeLesson(lesson.lessonId);
-    if (status === 200) {
+    try {
+      setLoading(true);
+      await removeLesson(lesson.lessonId);
       setOpenDeleteLesson(false);
       setLoading(false);
+    } catch (e) {
+      console.error(e);
     }
   };
 

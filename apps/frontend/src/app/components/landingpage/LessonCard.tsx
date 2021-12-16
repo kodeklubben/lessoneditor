@@ -32,11 +32,13 @@ const LessonCard: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug, remo
   }, [lessonSlug]);
 
   const deleteContent = async () => {
-    setLoading(true);
-    const status = await removeMD(language, lessonSlug);
-    if (status === 200) {
+    try {
+      setLoading(true);
+      await removeMD(language, lessonSlug);
       setOpenDeleteContent(false);
       setLoading(false);
+    } catch (e) {
+      console.error(e);
     }
   };
 

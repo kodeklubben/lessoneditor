@@ -8,6 +8,8 @@ import { GithubService } from "../github/github.service";
 import * as fs from "fs";
 import { ThumbService } from "../thumb/thumb.service";
 import { Request } from "express";
+import * as yaml from "js-yaml";
+import { text } from "stream/consumers";
 
 @Injectable()
 export class LessonService {
@@ -24,6 +26,7 @@ export class LessonService {
 
   async submitLesson(user: User, lessonId: number) {
     const lesson = await this.getLesson(lessonId);
+
     if (lesson == null) {
       throw new HttpException("Lesson does not exist", HttpStatus.NOT_FOUND);
     }

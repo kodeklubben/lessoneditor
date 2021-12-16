@@ -73,11 +73,13 @@ const LandingpageDatamodal = () => {
       updateYaml(lessonId, yml);
       return setOpen(false);
     }
-    setLoading(true);
-    const status = await updateYaml(lessonId, yml);
-    if (status === 200) {
+    try {
+      setLoading(true);
+      await updateYaml(lessonId, yml);
       setOpen(false);
       setLoading(false);
+    } catch (e) {
+      console.error(e);
     }
   };
 

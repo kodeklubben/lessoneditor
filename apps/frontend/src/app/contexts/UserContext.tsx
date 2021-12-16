@@ -35,7 +35,7 @@ export const UserContextProvider = (props: any) => {
           };
         });
         setUserContextState((s) => ({ ...s, loggedIn: true }));
-        userRes.status === 200 && userLessonsRes.status === 200 && setLoading(false);
+        setLoading(false);
       } catch (error: any) {
         console.log("error");
         window.location.href = "/api/auth/login/";
@@ -113,13 +113,9 @@ export const UserContextProvider = (props: any) => {
             lessons: userLessonsRes.data,
           };
         });
-        return deletedLesson.status;
       } catch (error) {
         console.error(error);
-        return -1;
       }
-    } else {
-      return -1;
     }
   };
 

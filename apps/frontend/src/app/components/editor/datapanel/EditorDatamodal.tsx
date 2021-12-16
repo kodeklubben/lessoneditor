@@ -28,19 +28,19 @@ const EditorDatamodal: FC<EditorDatamodalProps> = ({
 
   const prevData = useRef<any>(null);
 
-  useEffect(() => {
-    if (state.headerData.author && state.headerData.title) {
-      setFileContextState((s) => {
-        return {
-          ...s,
-          headerData: {
-            ...s.headerData,
-            err: "",
-          },
-        };
-      });
-    }
-  }, [state.headerData.author, state.headerData.title]);
+  // useEffect(() => {
+  //   if (state.headerData.author && state.headerData.title) {
+  //     setFileContextState((s) => {
+  //       return {
+  //         ...s,
+  //         headerData: {
+  //           ...s.headerData,
+  //           err: "",
+  //         },
+  //       };
+  //     });
+  //   }
+  // }, [state.headerData.author, state.headerData.title]);
 
   useEffect(() => {
     prevData.current = { ...state };
@@ -68,13 +68,13 @@ const EditorDatamodal: FC<EditorDatamodalProps> = ({
       return setOpenSettings(false);
     }
     if (saveFileHeader) {
-      setLoading(true);
-      const status = await saveFileHeader(state.headerData);
-      if (status === 200) {
+      try {
+        setLoading(true);
+        await saveFileHeader(state.headerData);
         setLoading(false);
         setOpenSettings(false);
-      } else {
-        console.error("file not submitted");
+      } catch (e) {
+        console.error(e);
       }
     }
   };

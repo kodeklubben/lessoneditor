@@ -79,9 +79,9 @@ export interface LessonFilterDTO {
 
 export interface HeaderData {
   title: string;
-  authorList: string[];
-  translatorList: string[];
-  translator: string;
-  language: string;
   author: string;
+  authorList: string[];
+  translator: string;
+  translatorList: string[];
+  language: string;
 }
