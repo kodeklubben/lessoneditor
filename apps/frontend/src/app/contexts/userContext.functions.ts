@@ -17,7 +17,7 @@ export interface UserContextModel {
     lessonTitle: string,
     language: string
   ) => Promise<number | undefined>;
-  removeLesson: (lessonId: number) => Promise<number>;
+  removeLesson: (lessonId: number) => void;
   loading: boolean;
 }
 

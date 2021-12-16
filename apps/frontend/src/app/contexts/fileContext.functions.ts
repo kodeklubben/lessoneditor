@@ -20,10 +20,10 @@ export const initialFileContextState: FileContextState = {
   savedFileBody: undefined,
   headerData: {
     title: "",
+    author: "",
     authorList: [],
+    translator: "",
     translatorList: [],
     language: "nb",
-    author: "",
-    translator: "",
   },
 };

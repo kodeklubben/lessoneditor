@@ -12,8 +12,12 @@ const Autosave: FC<AutosaveProps> = ({ mdText }) => {
 
   useEffect(() => {
     const timeoutHandler = setTimeout(async () => {
-      const status: number = await saveFileBody(mdText);
-      if (status === 200) setAutoSaveMessage(SAVED);
+      try {
+        await saveFileBody(mdText);
+        setAutoSaveMessage(SAVED);
+      } catch (e) {
+        console.error(e);
+      }
       setTimeout(() => {
         setAutoSaveMessage("");
       }, 2000);

@@ -24,10 +24,6 @@ export class GithubService {
   constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {}
 
   async submitLesson(user: User, lesson: Lesson) {
-    const test = lesson.files.filter(
-      (item) => item.ext === ".yml" && item.filename === "lesson"
-    )[0];
-
     try {
       const accessToken = await this.cacheManager.get(user.userId.toString());
       this.octokit = new Octokit({ auth: accessToken });
@@ -43,10 +39,41 @@ export class GithubService {
       console.warn("No lesson data files");
       return null;
     }
+
+    const updateLessonData = lesson.files.map((file) => {
+      if (file.ext === ".yml") {
+        const newContent = yaml.dump(JSON.parse(file.content.toString()));
+        return { ...file, content: Buffer.from(newContent, "utf-8") };
+      } else if (file.ext === ".md") {
+        const separator = "---\n";
+        const textContent = file.content.toString();
+        const [_, header, body] = textContent.split(separator);
+        const headerData = yaml.load(header);
+        const newHeaderData =
+          headerData["translatorList"].length > 0
+            ? {
+                title: headerData["title"],
+                author: headerData["authorList"].join(", "),
+                translator: headerData["translatorList"].join(", "),
+                language: headerData["language"],
+              }
+            : {
+                title: headerData["title"],
+                author: headerData["authorList"].join(", "),
+                language: headerData["language"],
+              };
+        const newContent = ["", yaml.dump(newHeaderData), body].join(separator);
+        return { ...file, content: Buffer.from(newContent, "utf-8") };
+      } else {
+        return file;
+      }
+    });
+
+    lesson.files = updateLessonData;
+
     const lessonPath = ["src", lesson.courseSlug, lesson.courseTitle].join("/");
 
     const filesToUpload: UploadObject[] = [];
-
     lesson.files.forEach((file) => {
       const path = [lessonPath, file.filename + file.ext].join("/");
       if (file.ext === ".yml") {

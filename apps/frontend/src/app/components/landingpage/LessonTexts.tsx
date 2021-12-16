@@ -68,7 +68,7 @@ const LessonTexts: FC<any> = ({ lessonId, fileList, lessonSlug, lessonTitle }) =
     fetchData();
   }, [lessonState.files]);
 
-  const removeMD: (language: string, file: string) => Promise<number> = async (
+  const removeMD: (language: string, file: string) => void = async (
     language: string,
     file: string
   ) => {
@@ -77,20 +77,17 @@ const LessonTexts: FC<any> = ({ lessonId, fileList, lessonSlug, lessonTitle }) =
 
     try {
       const files = await fetchFileList();
-      const isDeleted = await axios.delete(
+      await axios.delete(
         paths.LESSON_FILE_DELETE.replace(":lessonId", lessonId.toString())
           .replace(":fileName", filename)
           .replace(":ext", ext)
       );
-      if (isDeleted.status === 200) {
-        const index = files.findIndex((item: string) => item === filename);
-        const newList = files.splice(index, 1);
-        setFiles(newList);
-      }
-      return isDeleted.status;
+
+      const index = files.findIndex((item: string) => item === filename);
+      const newList = files.splice(index, 1);
+      setFiles(newList);
     } catch (e) {
       console.log(e);
-      return -1;
     }
   };
 

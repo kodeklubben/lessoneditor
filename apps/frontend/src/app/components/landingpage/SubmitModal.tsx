@@ -9,12 +9,13 @@ const SubmitModal: FC<any> = ({ openSubmitModal, setOpenSubmitModal, lessonId })
   const [loading, setLoading] = useState<boolean>(false);
 
   const onSubmit = async (lessonId: string) => {
-    setLoading(true);
-    const submitted = await axios.post(paths.LESSON_SUBMIT.replace(":lessonId", lessonId));
-
-    if (submitted.status === 201) {
+    try {
+      setLoading(true);
+      await axios.post(paths.LESSON_SUBMIT.replace(":lessonId", lessonId));
       setIsSubmitted(true);
       setLoading(false);
+    } catch (e) {
+      console.error(e);
     }
   };
 
