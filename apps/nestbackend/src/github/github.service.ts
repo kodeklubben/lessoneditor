@@ -31,8 +31,6 @@ export class GithubService {
       console.error(error);
     }
 
-    console.log("kom hit");
-
     const { owner, repo, status } = await this.createFork();
     if (status !== 202) {
       return status;
@@ -41,8 +39,6 @@ export class GithubService {
       console.warn("No lesson data files");
       return null;
     }
-
-    console.log("kom også  hit");
 
     const updateLessonData = lesson.files.map((file) => {
       if (file.ext === ".yml") {
@@ -78,9 +74,7 @@ export class GithubService {
     const lessonPath = ["src", lesson.courseSlug, lesson.courseTitle].join("/");
 
     const filesToUpload: UploadObject[] = [];
-    console.log("HER");
     lesson.files.forEach((file) => {
-      console.log(file);
       const path = [lessonPath, file.filename + file.ext].join("/");
       if (file.ext === ".yml") {
         filesToUpload.push({
