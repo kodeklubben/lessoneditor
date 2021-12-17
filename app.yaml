@@ -1,4 +1,4 @@
-runtime: nodejs14
+runtime: nodejs16
 entrypoint: node dist/apps/nestbackend/apps/nestbackend/src/main.js
 
 env_variables:

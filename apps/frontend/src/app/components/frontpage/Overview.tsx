@@ -67,8 +67,6 @@ const Overview: FC = () => {
 
         <Header as="h2">Mine oppgaver</Header>
 
-        {/* <Card.Group>{[1, 2, 3, 4].map((item) => cardPlaceholder(item))}</Card.Group> */}
-
         {state.lessons.length > 0 ? (
           <ItemList lessons={state.lessons} />
         ) : (
