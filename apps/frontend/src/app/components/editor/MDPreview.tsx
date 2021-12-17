@@ -4,7 +4,6 @@ import { renderMicrobit } from "../../utils/renderMicrobit";
 import { renderScratchBlocks } from "../../utils/renderScratchblocks";
 import { mdParser } from "../../utils/mdParser";
 import { useLessonContext } from "../../contexts/LessonContext";
-import { useFileContext } from "../../contexts/FileContext";
 import ContentPlaceholder from "./ContentPlaceholder";
 
 interface MDPreviewProps {
@@ -15,7 +14,6 @@ interface MDPreviewProps {
 
 const MDPreview: FC<MDPreviewProps> = ({ mdText, course, language }) => {
   const { images } = useLessonContext();
-  const { loading } = useFileContext();
 
   const [mdTextUrlReplaced, setMdTextUrlReplaced] = useState<string>("");
   const parseMD = mdTextUrlReplaced && mdParser(mdTextUrlReplaced);

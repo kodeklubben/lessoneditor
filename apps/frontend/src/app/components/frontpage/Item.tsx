@@ -15,7 +15,9 @@ const Item: React.FC<Props> = ({ lesson }) => {
   const navigate = useNavigate();
   const [openDeleteLesson, setOpenDeleteLesson] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const { removeLesson } = useUserContext();
+  const { removeLesson, state } = useUserContext();
+
+  console.log(state);
 
   const deleteLesson = async () => {
     try {

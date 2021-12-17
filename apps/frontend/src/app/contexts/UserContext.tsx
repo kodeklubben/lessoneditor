@@ -17,6 +17,7 @@ export const UserContextProvider = (props: any) => {
   const [userContexState, setUserContextState] =
     useState<UserContextState>(initialUserContextState);
   const [loading, setLoading] = useState<boolean>(true);
+  const [prewImages, setPrewImages] = useState<any>();
 
   useEffect(() => {
     async function fetchData() {
