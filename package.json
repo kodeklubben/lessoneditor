@@ -2,7 +2,7 @@
   "name": "lessoneditor",
   "version": "0.0.0",
   "engines": {
-    "node": "16.x.x"
+    "node": "14.x.x"
   },
   "license": "MIT",
   "scripts": {
@@ -73,7 +73,7 @@
     "mime": "^3.0.0",
     "multer": "^1.4.4",
     "nanoid": "^3.1.30",
-    "passport": "^0.4.0",
+    "passport": "^0.5.2",
     "passport-github2": "^0.1.12",
     "passport-oauth2": "^1.6.1",
     "pg": "^8.7.1",
@@ -143,7 +143,7 @@
     "@types/react-router-dom": "^5.3.2",
     "@types/react-test-renderer": "^17.0.1",
     "@typescript-eslint/eslint-plugin": "~5.7.0",
-    "@typescript-eslint/parser": "~5.3.0",
+    "@typescript-eslint/parser": "~5.7.0",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.6",
     "babel-jest": "27.4.5",
     "babel-loader": "^8.2.3",
