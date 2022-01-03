@@ -18,6 +18,7 @@ export interface UserContextModel {
     language: string
   ) => Promise<number | undefined>;
   removeLesson: (lessonId: number) => void;
+  previewImage: any;
   loading: boolean;
 }
 

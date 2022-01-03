@@ -10,6 +10,7 @@ import {
   UserContextState,
 } from "./userContext.functions";
 import NotLoggedInPage from "../pages/NotLoggedInPage";
+import { base64StringToBlob, createObjectURL } from "blob-util";
 
 export const UserContext = React.createContext({} as UserContextModel);
 
@@ -17,7 +18,7 @@ export const UserContextProvider = (props: any) => {
   const [userContexState, setUserContextState] =
     useState<UserContextState>(initialUserContextState);
   const [loading, setLoading] = useState<boolean>(true);
-  const [prewImages, setPrewImages] = useState<any>();
+  const [previewImage, setPreviewImages] = useState({});
 
   useEffect(() => {
     async function fetchData() {
@@ -27,6 +28,20 @@ export const UserContextProvider = (props: any) => {
         const userLessonsRes = await axios.get<LessonDTO[]>(
           paths.USER_LESSONS.replace(":userId", userRes.data.userId.toString())
         );
+
+        userLessonsRes.data.map(async (lesson: LessonDTO) => {
+          const lessonId = lesson.lessonId.toString();
+          const file = await axios.get(
+            paths.LESSON_FILE.replace(":lessonId", lessonId)
+              .replace(":fileName", "preview")
+              .replace(":ext", ".png")
+          );
+
+          setPreviewImages((prevImages) => ({
+            ...prevImages,
+            [lessonId]: createObjectURL(base64StringToBlob(file.data, "image/png")),
+          }));
+        });
 
         setUserContextState((s) => {
           return {
@@ -124,6 +139,7 @@ export const UserContextProvider = (props: any) => {
     state: userContexState,
     addLesson: addLesson,
     removeLesson: removeLesson,
+    previewImage,
     loading,
   };
 

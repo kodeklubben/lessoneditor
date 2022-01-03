@@ -87,20 +87,20 @@ export class LessonController {
       );
 
       if ([".jpg", ".jpeg", ".gif", ".png"].includes(fileProps.ext)) {
-        res.end(content.toString("base64"));
+        return res.end(content.toString("base64"));
       }
       if (fileName == "lesson") {
         const fileDTO: FileDTO<string> = {
           ...fileProps,
           content: JSON.parse(content.toString()),
         };
-        res.send(fileDTO);
+        return res.send(fileDTO);
       } else {
         const fileDTO: FileDTO<string> = {
           ...fileProps,
           content: content.toString("utf-8"),
         };
-        res.send(fileDTO);
+        return res.send(fileDTO);
       }
     } catch (error) {
       console.error(error);

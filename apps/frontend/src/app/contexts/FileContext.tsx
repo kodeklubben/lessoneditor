@@ -26,7 +26,8 @@ const FileContextProvider = (props: any) => {
     async function fetchData() {
       try {
         setLoading(true);
-        const filename = lang === "nb" ? file : `${file}_${lang}`;
+        const filename =
+          lang === "nb" ? file : typeof lang !== "undefined" ? `${file}_${lang}` : file;
         const result = await axios.get<FileDTO<string>>(
           paths.LESSON_FILE.replace(":lessonId", lessonId).replace(":fileName", filename)
         );

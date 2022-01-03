@@ -2,34 +2,15 @@ import { useNavigate } from "react-router";
 import { Button, Card, Image, Divider, Icon } from "semantic-ui-react";
 import { FC, useState, useEffect } from "react";
 import { LANGUAGEOPTIONS } from "../frontpage/settings/newLessonOptions";
-import { useLessonContext } from "../../contexts/LessonContext";
-import axios from "axios";
-import { paths } from "@lessoneditor/contracts";
+import { useUserContext } from "../../contexts/UserContext";
+
 import DeleteModal from "../shared/DeleteModal";
 
 const LessonCard: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug, removeMD }) => {
   const navigate = useNavigate();
-  const { state } = useLessonContext();
-  const [image, setImage] = useState<string | undefined>(undefined);
+  const { previewImage } = useUserContext();
   const [openDeleteContent, setOpenDeleteContent] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-
-  useEffect(() => {
-    async function getImage() {
-      try {
-        const file: any = await axios.get(
-          paths.LESSON_FILE.replace(":lessonId", lessonId.toString()).replace(
-            ":fileName",
-            "preview"
-          )
-        );
-        setImage(file.data);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-    getImage();
-  }, [lessonSlug]);
 
   const deleteContent = async () => {
     try {
@@ -46,7 +27,6 @@ const LessonCard: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug, remo
     const target = ["/editor", lessonId, lessonSlug, language].join("/");
     navigate({ pathname: target });
   };
-  const imgSrc = "data:image/png;base64," + image;
 
   const lang = LANGUAGEOPTIONS.find((item) => item.value === language);
 
@@ -67,7 +47,7 @@ const LessonCard: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug, remo
         <Card.Content>
           <Card.Content>
             <Image
-              src={imgSrc}
+              src={previewImage[lessonId]}
               size="medium"
               alt="thumbUrl"
               rounded
