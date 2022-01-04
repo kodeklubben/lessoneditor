@@ -129,13 +129,13 @@ export class UserService {
     const savedUser = await this.userRepository.save(user);
 
     try {
-      const thumbImage = await this.thumbService.getThumb(
-        savedLesson.lessonId,
-        savedLesson.lessonSlug,
-        request
-      );
+      // const thumbImage = await this.thumbService.getThumb(
+      //   savedLesson.lessonId,
+      //   savedLesson.lessonSlug,
+      //   request
+      // );
       const previewPngFile = new FileStore();
-      previewPngFile.content = Buffer.from(thumbImage);
+      previewPngFile.content = Buffer.from(" ");
       previewPngFile.ext = ".png";
       previewPngFile.filename = "preview";
       previewPngFile.updated_by = user.username;

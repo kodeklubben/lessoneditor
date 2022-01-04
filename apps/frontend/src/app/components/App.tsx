@@ -70,7 +70,7 @@ const App = () => {
                 <FileContextProvider>
                   <SimplePreview />
                 </FileContextProvider>
-              </LessonContextProvider>{" "}
+              </LessonContextProvider>
             </UserContextProvider>
           }
         />

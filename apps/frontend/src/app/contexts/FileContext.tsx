@@ -26,7 +26,8 @@ const FileContextProvider = (props: any) => {
     async function fetchData() {
       try {
         setLoading(true);
-        const filename = lang === "nb" ? file : `${file}_${lang}`;
+        const filename =
+          lang === "nb" ? file : typeof lang !== "undefined" ? `${file}_${lang}` : file;
         const result = await axios.get<FileDTO<string>>(
           paths.LESSON_FILE.replace(":lessonId", lessonId).replace(":fileName", filename)
         );
@@ -102,6 +103,13 @@ const FileContextProvider = (props: any) => {
         ),
         updatedFile
       );
+      const isThumbUpdated = await axios.put<boolean>(
+        paths.LESSON_FILE_UPDATE_THUMB.replace(":lessonId", lessonId.toString()).replace(
+          ":fileName",
+          filename
+        )
+      );
+
       setFileContextState((s) => {
         return {
           ...s,
