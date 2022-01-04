@@ -129,14 +129,24 @@ export class LessonService {
     file.content = Buffer.from(fileContent);
     file.updated_by = updatedByUser.username;
 
-    if (fileName !== "lesson") {
-      const thumbImage = await this.thumbService.getThumb(lessonId, fileName, request);
-      const previewFile = lesson.files.find((file) => file.filename == "preview");
-      previewFile.content = Buffer.from(thumbImage);
-    }
+    // if (updateThumb) {
+    //   console.log("thumbUpdated");
+    //   const thumbImage = await this.thumbService.getThumb(lessonId, fileName, request);
+    //   const previewFile = lesson.files.find((file) => file.filename == "preview");
+    //   previewFile.content = Buffer.from(thumbImage);
+    // }
 
     const savedLesson = await this.lessonRepository.save(lesson);
     return file;
+  }
+
+  async updateThumbnail(lessonId, fileName, request): Promise<any> {
+    const lesson = await this.getLesson(lessonId);
+    const thumbImage = await this.thumbService.getThumb(lessonId, fileName, request);
+    const previewFile = lesson.files.find((file) => file.filename == "preview");
+    previewFile.content = Buffer.from(thumbImage);
+    const savedLesson = await this.lessonRepository.save(lesson);
+    return true;
   }
 
   async deleteLessonFile(lessonId: number, fileName: string, ext: string, request: Request) {
