@@ -101,7 +101,7 @@ export class UserService {
     emptyMdFile.content = Buffer.from(rawBody);
     emptyMdFile.ext = ".md";
     emptyMdFile.filename =
-      lesson.language === "nb" ? lesson.lessonSlug : `${lesson.lessonSlug}_${lesson.language}k`;
+      lesson.language === "nb" ? lesson.lessonSlug : `${lesson.lessonSlug}_${lesson.language}`;
     emptyMdFile.updated_by = user.username;
     emptyMdFile.created_by = user.username;
     emptyMdFile.lesson = savedLesson;

@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState, FC } from "react";
+import { useParams } from "react-router";
 import axios from "axios";
 import { paths } from "@lessoneditor/contracts";
 import { LessonDTO, NewLessonDTO } from "@lessoneditor/contracts";
@@ -19,6 +20,7 @@ export const UserContextProvider = (props: any) => {
     useState<UserContextState>(initialUserContextState);
   const [loading, setLoading] = useState<boolean>(true);
   const [previewImage, setPreviewImages] = useState({});
+  const { mode } = useParams() as any;
 
   useEffect(() => {
     async function fetchData() {
@@ -58,7 +60,7 @@ export const UserContextProvider = (props: any) => {
       }
     }
     fetchData();
-  }, []);
+  }, [mode]);
 
   const getLesson = (lessonId: number): LessonDTO | undefined => {
     return userContexState.lessons?.find((item: LessonDTO) => item.lessonId === lessonId);

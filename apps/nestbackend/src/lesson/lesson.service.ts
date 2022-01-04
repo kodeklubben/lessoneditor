@@ -129,13 +129,11 @@ export class LessonService {
     file.content = Buffer.from(fileContent);
     file.updated_by = updatedByUser.username;
 
-    const thumbImage = await this.thumbService.getThumb(
-      lesson.lessonId,
-      lesson.lessonSlug,
-      request
-    );
-    const previewFile = lesson.files.find((file) => file.filename == "preview");
-    previewFile.content = Buffer.from(thumbImage);
+    if (fileName !== "lesson") {
+      const thumbImage = await this.thumbService.getThumb(lessonId, fileName, request);
+      const previewFile = lesson.files.find((file) => file.filename == "preview");
+      previewFile.content = Buffer.from(thumbImage);
+    }
 
     const savedLesson = await this.lessonRepository.save(lesson);
     return file;
