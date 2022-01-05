@@ -142,6 +142,18 @@ export class LessonController {
   }
 
   @UseGuards(LoginGuard)
+  @Put(":lessonId/files/:fileName/updateThumbnail")
+  async UpdateThumbnail(
+    @Req() req,
+    @Param("lessonId") lessonId,
+    @Param("fileName") fileName
+  ): Promise<any> {
+    const isThumbUpdated = await this.lessonService.updateThumbnail(lessonId, fileName, req);
+
+    return isThumbUpdated;
+  }
+
+  @UseGuards(LoginGuard)
   @Delete(":lessonId/files/:fileName/:ext")
   async DeleteLessonFile(
     @Req() req,

@@ -103,6 +103,13 @@ const FileContextProvider = (props: any) => {
         ),
         updatedFile
       );
+      const isThumbUpdated = await axios.put<boolean>(
+        paths.LESSON_FILE_UPDATE_THUMB.replace(":lessonId", lessonId.toString()).replace(
+          ":fileName",
+          filename
+        )
+      );
+
       setFileContextState((s) => {
         return {
           ...s,

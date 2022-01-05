@@ -1,4 +1,3 @@
-
 export const paths = {
   AUTH_CALLBACK: "/callback",
   AUTH_LOGIN_FAILED: "/login-failed",
@@ -10,6 +9,7 @@ export const paths = {
   LESSON_FILES: "/api/lesson/:lessonId/files",
   LESSON_FILE: "api/lesson/:lessonId/files/:fileName",
   LESSON_FILE_UPDATE: "/api/lesson/:lessonId/files/:fileName",
+  LESSON_FILE_UPDATE_THUMB: "/api/lesson/:lessonId/files/:fileName/updateThumbnail",
   LESSON_FILE_DELETE: "api/lesson/:lessonId/files/:fileName/:ext",
   LESSON_PROXY: "/api/lessons-proxy/*",
   LESSON_SUBMIT: "/api/lesson/:lessonId/submit",
@@ -20,4 +20,3 @@ export const paths = {
   USER: "/api/user",
   USER_LESSONS: "/api/user/:userId/lessons",
 };
-
