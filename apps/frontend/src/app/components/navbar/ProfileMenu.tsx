@@ -1,12 +1,20 @@
 import { FC } from "react";
 import { Image, Icon, Button } from "semantic-ui-react";
 import { useUserContext } from "../../contexts/UserContext";
+import { useNavigate } from "react-router-dom";
 
 type ProfileMenuProps = { name: string; photo: string | undefined };
 
 const ProfileMenu: FC<ProfileMenuProps> = ({ name, photo }) => {
 
+  const navigate = useNavigate()
   const { logoutUser } = useUserContext();
+  const logout = () => {
+    logoutUser()
+    navigate("/logout")
+
+  }
+
   return (
     <>
       {photo ? (
@@ -19,7 +27,7 @@ const ProfileMenu: FC<ProfileMenuProps> = ({ name, photo }) => {
           id="next"
           size="big"
           content="Logout"
-          onClick={() => logoutUser()}
+          onClick={logout}
           />
 
         </div>

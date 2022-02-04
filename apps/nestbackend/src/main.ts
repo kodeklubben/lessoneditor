@@ -36,7 +36,8 @@ async function bootstrap() {
 
   app.use(passport.initialize());
   app.use(passport.session());
-  app.use(cookieParser(process.env.COOKIE_SECRET));
+  const secret = process.env.COOKIE_SECRET
+  app.use(cookieParser());
   const globalPrefix = "api";
   app.setGlobalPrefix(globalPrefix);
   const port = process.env.PORT || 8080;

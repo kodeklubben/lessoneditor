@@ -110,13 +110,22 @@ export class GithubService {
       newTree.sha,
       branch.commit.sha
     );
-    await this.setBranchToCommit(owner, repo, branchName, newCommit.sha);
-    await this.createPullRequest(
-      owner,
-      "New lesson",
-      branchName,
-      "Pull request from lesson editor"
-    );
+    try
+    {
+      await this.setBranchToCommit(owner, repo, branchName, newCommit.sha);
+      await this.createPullRequest(
+        owner,
+        "New lesson",
+        branchName,
+        "Pull request from lesson editor"
+      );
+
+    }
+    catch(error)
+    {
+      console.error(error)
+    }
+   
   }
 
   async createFork(user:User) {

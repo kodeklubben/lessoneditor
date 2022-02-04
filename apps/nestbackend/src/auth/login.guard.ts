@@ -37,7 +37,6 @@ export class LoginGuard extends AuthGuard("github") {
         //store the accesstoken in an http-only cookie
         const user = request.user
         const accessToken = await this.cacheManager.get((request.user as User).userId.toString());
-
         response.cookie('access_token', accessToken, {
           httpOnly: true,
           domain: process.env.LESSON_EDITOR_DOMAIN, // your domain here!
