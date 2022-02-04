@@ -25,11 +25,12 @@ import { UserDTO } from "@lessoneditor/contracts";
 import { AuthGuard } from "@nestjs/passport";
 import { fileURLToPath } from "url";
 import { LoginGuard } from "../auth/login.guard";
-import { Express } from "express";
 import { Multer } from "multer";
 import { Readable } from "stream";
 import * as fs from "fs";
 import { UpdatedFileDTO, YamlContent } from "@lessoneditor/contracts";
+import { Request } from "express";
+import { User } from "../user/user.entity";
 
 @Controller("lesson")
 export class LessonController {
@@ -50,8 +51,9 @@ export class LessonController {
 
   @UseGuards(LoginGuard)
   @Post(":lessonId/submit")
-  async SubmitLesson(@Req() req, @Param() params) {
-    await this.lessonService.submitLesson(req.user, params.lessonId);
+  async SubmitLesson(@Req() req: Request, @Param() params) {
+    const accessToken: string = req.cookies['access_token']
+    await this.lessonService.submitLesson(req.user as User, accessToken, params.lessonId);
   }
 
   @UseGuards(LoginGuard)

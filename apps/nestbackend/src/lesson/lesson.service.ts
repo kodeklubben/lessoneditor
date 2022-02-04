@@ -24,14 +24,14 @@ export class LessonService {
     private thumbService: ThumbService
   ) {}
 
-  async submitLesson(user: User, lessonId: number) {
+  async submitLesson(user: User, accessToken: string, lessonId: number) {
     const lesson = await this.getLesson(lessonId);
 
     if (lesson == null) {
       throw new HttpException("Lesson does not exist", HttpStatus.NOT_FOUND);
     }
     try {
-      await this.githubService.submitLesson(user, lesson);
+      await this.githubService.submitLesson(user, accessToken, lesson);
     } catch (error) {
       console.error(error);
     }

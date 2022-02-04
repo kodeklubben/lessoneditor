@@ -23,7 +23,7 @@ export class GithubService {
   octokit: Octokit;
   constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {}
 
-  async submitLesson(user: User, lesson: Lesson) {
+  async submitLesson(user: User, accessToken: string, lesson: Lesson) {
     try {
       const accessToken = await this.cacheManager.get(user.userId.toString());
       this.octokit = new Octokit({ auth: accessToken });
@@ -31,7 +31,7 @@ export class GithubService {
       console.error(error);
     }
 
-    const { owner, repo, status } = await this.createFork();
+    const { owner, repo, status } = await this.createFork(user);
     if (status !== 202) {
       return status;
     }
@@ -40,7 +40,7 @@ export class GithubService {
       return null;
     }
 
-    const updateLessonData = lesson.files.map((file) => {
+    const formatLessonData = lesson.files.map((file) => {
       if (file.ext === ".yml") {
         const newContent = yaml.dump(JSON.parse(file.content.toString()));
         return { ...file, content: Buffer.from(newContent, "utf-8") };
@@ -69,8 +69,7 @@ export class GithubService {
       }
     });
 
-    lesson.files = updateLessonData;
-
+    lesson.files = formatLessonData
     const lessonPath = ["src", lesson.courseSlug, lesson.courseTitle].join("/");
 
     const filesToUpload: UploadObject[] = [];
@@ -120,16 +119,44 @@ export class GithubService {
     );
   }
 
-  async createFork() {
-    const forkResponse = await this.octokit.repos.createFork({
-      owner: process.env.GITHUB_LESSON_REPO_OWNER,
-      repo: process.env.GITHUB_LESSON_REPO,
-    });
-    return {
-      status: forkResponse.status,
-      owner: forkResponse.data.owner.login,
-      repo: forkResponse.data.name,
-    };
+  async createFork(user:User) {
+    try
+    {
+      const response = await this.octokit.request('GET /users/{username}/repos', {
+        username: user.username
+      })
+      const alreadyForked = response.data.find( item => 
+        item.fork && 
+        item.owner.login == process.env.GITHUB_LESSON_REPO_OWNER &&
+        item.name == process.env.GITHUB_LESSON_REPO
+         )
+      if(alreadyForked)
+      {
+        return {
+          status: true,
+          owner: process.env.GITHUB_LESSON_REPO_OWNER,
+          repo: process.env.GITHUB_LESSON_REPO,
+        };
+      }
+      else
+      {
+        const forkResponse = await this.octokit.repos.createFork({
+          owner: process.env.GITHUB_LESSON_REPO_OWNER,
+          repo: process.env.GITHUB_LESSON_REPO,
+        });
+        return {
+          status: forkResponse.status,
+          owner: forkResponse.data.owner.login,
+          repo: forkResponse.data.name,
+        };
+
+      }
+    }
+    catch(error)
+    {
+      console.error(error)
+    }
+  
   }
 
   async getBranchCached(

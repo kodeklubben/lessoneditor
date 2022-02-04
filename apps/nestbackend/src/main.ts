@@ -13,6 +13,7 @@ import { Session } from "./session/session.entity";
 import { Connection } from "typeorm";
 import { TypeormStore } from "connect-typeorm";
 import * as passport from "passport";
+import * as cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -35,6 +36,7 @@ async function bootstrap() {
 
   app.use(passport.initialize());
   app.use(passport.session());
+  app.use(cookieParser(process.env.COOKIE_SECRET));
   const globalPrefix = "api";
   app.setGlobalPrefix(globalPrefix);
   const port = process.env.PORT || 8080;
