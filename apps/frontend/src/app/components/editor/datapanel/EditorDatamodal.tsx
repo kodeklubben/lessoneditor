@@ -1,11 +1,13 @@
 import "./editordatamodal.scss";
-import { Dispatch, SetStateAction, SyntheticEvent, FC } from "react";
-import { useNavigate, useParams, useLocation } from "react-router";
+import { Dispatch, SetStateAction, SyntheticEvent, FC, useEffect, useRef } from "react";
+import { LANGUAGEOPTIONS } from "../../frontpage/settings/newLessonOptions";
+import { useParams } from "react-router";
+import { useState } from "react";
 import { Button, Header, Input, Modal, Popup } from "semantic-ui-react";
 import MultiInput from "./MultiInput";
 import { FORM_TEXT } from "./settings/landingpage_NO";
 import { useFileContext } from "../../../contexts/FileContext";
-import { filenameParser } from "../../../utils/filename-parser";
+import { shallowEqual } from "fast-equals";
 
 interface EditorDatamodalProps {
   courseTitle: string;
@@ -20,55 +22,62 @@ const EditorDatamodal: FC<EditorDatamodalProps> = ({
   openSettings,
   setOpenSettings,
 }) => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const { lessonId, file } = useParams<any>();
+  const { lang } = useParams<any>();
   const { state, saveFileHeader, setFileContextState } = useFileContext();
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const { language, languageName } = filenameParser(file);
+  const prevData = useRef<any>(null);
+
+  // useEffect(() => {
+  //   if (state.headerData.author && state.headerData.title) {
+  //     setFileContextState((s) => {
+  //       return {
+  //         ...s,
+  //         headerData: {
+  //           ...s.headerData,
+  //           err: "",
+  //         },
+  //       };
+  //     });
+  //   }
+  // }, [state.headerData.author, state.headerData.title]);
+
+  useEffect(() => {
+    prevData.current = { ...state };
+  }, [openSettings]);
+
+  const languageName = LANGUAGEOPTIONS.filter((item) => item.value === lang)[0].text;
 
   const changeHandler = (event: SyntheticEvent, data: Record<string, string>) => {
     const { name, value } = data;
 
-    if (setFileContextState) {
-      setFileContextState((s) => {
-        return {
-          ...s,
-          headerData: {
-            ...s.headerData,
-            [name]: value,
-          },
-        };
-      });
-      if (state.headerData.author && state.headerData.title) {
-        setFileContextState((s) => {
-          return {
-            ...s,
-            headerData: {
-              ...s.headerData,
-              err: "",
-            },
-          };
-        });
-      }
-    }
+    setFileContextState((s) => {
+      return {
+        ...s,
+        headerData: {
+          ...s.headerData,
+          [name]: value,
+        },
+      };
+    });
   };
 
   const onSubmit = async () => {
-    if (saveFileHeader) {
-      // setShowSpinner(true);
+    if (shallowEqual(state.headerData, prevData.current.headerData)) {
       saveFileHeader(state.headerData);
-      // setShowSpinner(false);
-      setOpenSettings(false);
+      return setOpenSettings(false);
+    }
+    if (saveFileHeader) {
+      try {
+        setLoading(true);
+        await saveFileHeader(state.headerData);
+        setLoading(false);
+        setOpenSettings(false);
+      } catch (e) {
+        console.error(e);
+      }
     }
   };
-
-  // const onCancel = async () => {
-  //   if (saveFileHeader && state.headerData) {
-  //     await saveFileHeader({ ...state.headerData });
-  //     setOpenSettings(false);
-  //   }
-  // };
 
   return (
     <>
@@ -90,25 +99,17 @@ const EditorDatamodal: FC<EditorDatamodalProps> = ({
       />
       <Modal
         closeOnDimmerClick={
-          !(
-            !state.headerData?.title ||
-            (!state.headerData?.author && state.headerData.authorList.length === 0)
-          )
+          typeof state.headerData.authorList === "object" &&
+          !!state.headerData?.title &&
+          (!!state.headerData.author || state.headerData.authorList.length > 0)
         }
         onClose={() => {
-          saveFileHeader(state.headerData);
-          setOpenSettings(false);
+          onSubmit();
         }}
         onOpen={() => setOpenSettings(true)}
         open={openSettings}
         size="large"
         dimmer="inverted"
-        closeIcon={
-          !(
-            !state.headerData?.title ||
-            (!state.headerData?.author && state.headerData.authorList.length === 0)
-          )
-        }
         className="editor_modal"
       >
         <Modal.Header className="editor_modal">
@@ -145,14 +146,15 @@ const EditorDatamodal: FC<EditorDatamodalProps> = ({
         <Modal.Content className="editor_modal">
           <MultiInput
             changeHandler={changeHandler}
-            inputArray={state.headerData.authorList}
+            inputArray={state.headerData.authorList ?? []}
             inputValue={state.headerData.author}
             name="author"
             placeholder={FORM_TEXT.AUTHOR.placeholder}
             required="(obligatorisk)"
             title={FORM_TEXT.AUTHOR.heading}
           />
-          {state.headerData?.authorList.length === 0 && !state.headerData?.author ? (
+          {typeof state.headerData.authorList === "object" &&
+          !(state.headerData.author || state.headerData!.authorList!.length > 0) ? (
             <p>
               <i style={{ color: "red" }}>Må ha forfatter</i>
             </p>
@@ -163,8 +165,8 @@ const EditorDatamodal: FC<EditorDatamodalProps> = ({
         <Modal.Content className="editor_modal">
           <MultiInput
             changeHandler={changeHandler}
-            inputArray={state.headerData.translatorList}
-            inputValue={state.headerData?.translator}
+            inputArray={state.headerData.translatorList ?? []}
+            inputValue={state.headerData?.translator ?? ""}
             name="translator"
             placeholder={FORM_TEXT.TRANSLATOR.placeholder}
             required=""
@@ -189,14 +191,15 @@ const EditorDatamodal: FC<EditorDatamodalProps> = ({
           /> */}
           <Button
             disabled={
-              !state.headerData?.title ||
-              (!state.headerData.author && state.headerData.authorList.length === 0)
+              typeof state.headerData.authorList === "object" &&
+              !(state.headerData.author || state.headerData!.authorList!.length > 0)
             }
             onClick={onSubmit}
             content="OK"
             positive
             labelPosition="right"
             icon="checkmark"
+            loading={loading}
           />
         </Modal.Actions>
       </Modal>

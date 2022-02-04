@@ -35,7 +35,7 @@ const takeScreenshot = async (url, token, waitForSelector?) => {
   await page.setExtraHTTPHeaders({
     Authorization: "Bearer " + token,
   });
-  await page.setDefaultNavigationTimeout(3000);
+  page.setDefaultNavigationTimeout(13000);
   await page.setViewport({
     width: 600,
     height: 1000,
@@ -48,10 +48,11 @@ const takeScreenshot = async (url, token, waitForSelector?) => {
   } catch (error) {
     console.error(error);
   }
+
   if (waitForSelector) {
     logger.info("Waiting for selector: " + waitForSelector);
     await page.waitForSelector(waitForSelector, {
-      timeout: 10000,
+      visible: true,
     });
   } else {
     logger.info("Waiting for timeout", metadata);

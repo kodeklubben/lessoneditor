@@ -3,12 +3,12 @@
   margin: 0;
   padding: 0;
   display: flex;
+  flex-direction: row;
   justify-content: space-between;
 }
 
 .navbar_image_container {
   flex-basis: 33%;
-  max-width: 50px;
   display: flex;
   justify-content: left;
   align-items: center;

@@ -51,6 +51,21 @@ export class UserService {
     }
   }
 
+  async updateUser(newUser: UserDTO, userId: number): Promise<User> {
+    const user = await this.getUser(userId);
+    user.userId = newUser.userId;
+    user.email = newUser.email;
+    user.username = newUser.username;
+    user.name = newUser.name;
+    user.photo = newUser.photo;
+
+    try {
+      return await this.userRepository.save(user);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   async getUserLessons(userId: number): Promise<User> {
     const user = await this.getUser(userId);
     return user;
@@ -70,8 +85,8 @@ export class UserService {
     newLesson.courseSlug = lesson.courseSlug;
     newLesson.courseTitle = lesson.courseTitle;
     newLesson.submitted = false;
-    newLesson.updated_by = user.name;
-    newLesson.created_by = user.name;
+    newLesson.updated_by = user.username;
+    newLesson.created_by = user.username;
 
     const savedLesson = await this.lessonRepository.save(newLesson);
     const emptyYamlFile = new FileStore();
@@ -83,14 +98,14 @@ export class UserService {
     };
     emptyYamlFile.content = Buffer.from(JSON.stringify(jsonContent));
     emptyYamlFile.ext = ".yml";
-    emptyYamlFile.updated_by = user.name;
-    emptyYamlFile.created_by = user.name;
+    emptyYamlFile.updated_by = user.username;
+    emptyYamlFile.created_by = user.username;
     emptyYamlFile.lesson = savedLesson;
 
     const header: HeaderData = {
       title: lesson.lessonTitle,
       author: "",
-      authorList: [user.name],
+      authorList: [user.name || user.username],
       language: lesson.language,
       translator: "",
       translatorList: [],
@@ -102,16 +117,16 @@ export class UserService {
     emptyMdFile.ext = ".md";
     emptyMdFile.filename =
       lesson.language === "nb" ? lesson.lessonSlug : `${lesson.lessonSlug}_${lesson.language}`;
-    emptyMdFile.updated_by = user.name;
-    emptyMdFile.created_by = user.name;
+    emptyMdFile.updated_by = user.username;
+    emptyMdFile.created_by = user.username;
     emptyMdFile.lesson = savedLesson;
 
     const templateImage = new FileStore();
     templateImage.content = Buffer.from(imageTemplate, "base64");
     templateImage.ext = ".png";
     templateImage.filename = "image";
-    templateImage.updated_by = user.name;
-    templateImage.created_by = user.name;
+    templateImage.updated_by = user.username;
+    templateImage.created_by = user.username;
     templateImage.lesson = savedLesson;
 
     // newLesson.files
@@ -129,17 +144,17 @@ export class UserService {
     const savedUser = await this.userRepository.save(user);
 
     try {
-      const thumbImage = await this.thumbService.getThumb(
-        savedLesson.lessonId,
-        savedLesson.lessonSlug,
-        request
-      );
+      // const thumbImage = await this.thumbService.getThumb(
+      //   savedLesson.lessonId,
+      //   savedLesson.lessonSlug,
+      //   request
+      // );
       const previewPngFile = new FileStore();
-      previewPngFile.content = Buffer.from(thumbImage);
+      previewPngFile.content = Buffer.from(" ");
       previewPngFile.ext = ".png";
       previewPngFile.filename = "preview";
-      previewPngFile.updated_by = user.name;
-      previewPngFile.created_by = user.name;
+      previewPngFile.updated_by = user.username;
+      previewPngFile.created_by = user.username;
       previewPngFile.lesson = savedLesson;
 
       await this.fileStoreRepository.save(previewPngFile);
@@ -173,7 +188,7 @@ export class UserService {
     lesson.lessonSlug = updatedLesson.lessonSlug;
     lesson.courseSlug = updatedLesson.courseSlug;
     lesson.lessonTitle = updatedLesson.lessonTitle;
-    lesson.updated_by = user.name;
+    lesson.updated_by = user.username;
 
     const savedUser = await this.userRepository.save(user);
     const savedLesson = await this.lessonRepository.save(lesson);
@@ -189,7 +204,7 @@ export class UserService {
       throw new HttpException("Lesson does not exist", HttpStatus.NOT_FOUND);
     }
     //You can only delete the items you have self created
-    if (!(lesson.created_by == user.name)) {
+    if (!(lesson.created_by == user.username)) {
       throw new HttpException("Lesson can only be deleted by creator", HttpStatus.FORBIDDEN);
     }
     const promises: Promise<FileStore>[] = [];

@@ -25,11 +25,12 @@ import { UserDTO } from "@lessoneditor/contracts";
 import { AuthGuard } from "@nestjs/passport";
 import { fileURLToPath } from "url";
 import { LoginGuard } from "../auth/login.guard";
-import { Express } from "express";
 import { Multer } from "multer";
 import { Readable } from "stream";
 import * as fs from "fs";
 import { UpdatedFileDTO, YamlContent } from "@lessoneditor/contracts";
+import { Request } from "express";
+import { User } from "../user/user.entity";
 
 @Controller("lesson")
 export class LessonController {
@@ -50,8 +51,9 @@ export class LessonController {
 
   @UseGuards(LoginGuard)
   @Post(":lessonId/submit")
-  async SubmitLesson(@Req() req, @Param() params) {
-    await this.lessonService.submitLesson(req.user, params.lessonId);
+  async SubmitLesson(@Req() req: Request, @Param() params) {
+    const accessToken: string = req.cookies['access_token']
+    await this.lessonService.submitLesson(req.user as User, accessToken, params.lessonId);
   }
 
   @UseGuards(LoginGuard)
@@ -87,22 +89,20 @@ export class LessonController {
       );
 
       if ([".jpg", ".jpeg", ".gif", ".png"].includes(fileProps.ext)) {
-        res.end(content.toString("base64"));
-      } 
-      if(fileName == "lesson")
-      {
+        return res.end(content.toString("base64"));
+      }
+      if (fileName == "lesson") {
         const fileDTO: FileDTO<string> = {
           ...fileProps,
           content: JSON.parse(content.toString()),
         };
-        res.send(fileDTO)
-      }
-      else {
+        return res.send(fileDTO);
+      } else {
         const fileDTO: FileDTO<string> = {
           ...fileProps,
           content: content.toString("utf-8"),
         };
-        res.send(fileDTO);
+        return res.send(fileDTO);
       }
     } catch (error) {
       console.error(error);
@@ -141,6 +141,18 @@ export class LessonController {
       content: content.toString("utf-8"),
     };
     return newFile;
+  }
+
+  @UseGuards(LoginGuard)
+  @Put(":lessonId/files/:fileName/updateThumbnail")
+  async UpdateThumbnail(
+    @Req() req,
+    @Param("lessonId") lessonId,
+    @Param("fileName") fileName
+  ): Promise<any> {
+    const isThumbUpdated = await this.lessonService.updateThumbnail(lessonId, fileName, req);
+
+    return isThumbUpdated;
   }
 
   @UseGuards(LoginGuard)

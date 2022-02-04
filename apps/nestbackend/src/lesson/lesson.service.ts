@@ -8,6 +8,8 @@ import { GithubService } from "../github/github.service";
 import * as fs from "fs";
 import { ThumbService } from "../thumb/thumb.service";
 import { Request } from "express";
+import * as yaml from "js-yaml";
+import { text } from "stream/consumers";
 
 @Injectable()
 export class LessonService {
@@ -22,13 +24,14 @@ export class LessonService {
     private thumbService: ThumbService
   ) {}
 
-  async submitLesson(user: User, lessonId: number) {
+  async submitLesson(user: User, accessToken: string, lessonId: number) {
     const lesson = await this.getLesson(lessonId);
+
     if (lesson == null) {
       throw new HttpException("Lesson does not exist", HttpStatus.NOT_FOUND);
     }
     try {
-      await this.githubService.submitLesson(user, lesson);
+      await this.githubService.submitLesson(user, accessToken, lesson);
     } catch (error) {
       console.error(error);
     }
@@ -64,7 +67,7 @@ export class LessonService {
       throw new HttpException("Lesson does not exist", HttpStatus.NOT_FOUND);
     }
     //A lesson can only be shared by the creator
-    if (!(lesson.created_by == (await invitedByUser).name)) {
+    if (!(lesson.created_by == (await invitedByUser).username)) {
       throw new HttpException("Lesson can only be shared by creator", HttpStatus.FORBIDDEN);
     }
     invitedToUser.lessons.push(lesson);
@@ -91,8 +94,8 @@ export class LessonService {
     const user = request.user as User;
     file.filename = newFile.filename;
     file.ext = newFile.ext;
-    file.created_by = user.name;
-    file.updated_by = user.name;
+    file.created_by = user.username;
+    file.updated_by = user.username;
     file.lesson = lesson;
     if ([".jpg", ".jpeg", ".gif", ".png"].includes(file.ext)) {
       file.content = Buffer.from(newFile.content, "base64");
@@ -124,18 +127,26 @@ export class LessonService {
       throw new HttpException("User does not exist", HttpStatus.NOT_FOUND);
     }
     file.content = Buffer.from(fileContent);
-    file.updated_by = updatedByUser.name;
+    file.updated_by = updatedByUser.username;
 
-    const thumbImage = await this.thumbService.getThumb(
-      lesson.lessonId,
-      lesson.lessonSlug,
-      request
-    );
-    const previewFile = lesson.files.find((file) => file.filename == "preview");
-    previewFile.content = Buffer.from(thumbImage);
+    // if (updateThumb) {
+    //   console.log("thumbUpdated");
+    //   const thumbImage = await this.thumbService.getThumb(lessonId, fileName, request);
+    //   const previewFile = lesson.files.find((file) => file.filename == "preview");
+    //   previewFile.content = Buffer.from(thumbImage);
+    // }
 
     const savedLesson = await this.lessonRepository.save(lesson);
     return file;
+  }
+
+  async updateThumbnail(lessonId, fileName, request): Promise<any> {
+    const lesson = await this.getLesson(lessonId);
+    const thumbImage = await this.thumbService.getThumb(lessonId, fileName, request);
+    const previewFile = lesson.files.find((file) => file.filename == "preview");
+    previewFile.content = Buffer.from(thumbImage);
+    const savedLesson = await this.lessonRepository.save(lesson);
+    return true;
   }
 
   async deleteLessonFile(lessonId: number, fileName: string, ext: string, request: Request) {

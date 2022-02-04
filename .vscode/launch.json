@@ -4,28 +4,36 @@
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
-    {
-      "type": "pwa-chrome",
-      "request": "launch",
-      "name": "Launch Chrome against localhost",
-      "url": "http://localhost:4200",
-      "webRoot": "${workspaceFolder}/apps/frontend/"
-    }
     // {
-    //   "name": "Debug nestbackend node",
-    //   "type": "node",
+    //   "type": "pwa-chrome",
     //   "request": "launch",
-    //   "program": "${workspaceFolder}/dist/apps/nestbackend/apps/nestbackend/src/main.js",
-    //   "env": {
-    //       "GITHUB_CLIENT_ID": "0a838d7f4cd79f2005b6",
-    //       "GITHUB_CLIENT_SECRET": "6e1f0cdb26e59eb7ccfc9cc0bcd00a3524ab65ee",
-    //       "GITHUB_CALLBACK_URL": "http://localhost:4200/api/auth/callback",
-    //       "THUMB_SERVICE_URL": "http://localhost:3012/",
-    //       "GITHUB_LESSON_REPO_OWNER": "kodeklubben",
-    //       "GITHUB_LESSON_REPO": "oppgaver"
+    //   "name": "Launch Chrome against localhost",
+    //   "url": "http://localhost:4200",
+    //   "webRoot": "${workspaceFolder}/apps/frontend/"
+    // }
+    {
+      "name": "Debug nestbackend node",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/dist/apps/nestbackend/apps/nestbackend/src/main.js",
+      "env": {
+          "GITHUB_CLIENT_ID": "0a838d7f4cd79f2005b6",
+          "GITHUB_CLIENT_SECRET": "6e1f0cdb26e59eb7ccfc9cc0bcd00a3524ab65ee",
+          "GITHUB_CALLBACK_URL": "http://localhost:8080/api/auth/callback",
+          "THUMB_SERVICE_URL": "http://localhost:3012/",
+          "GITHUB_LESSON_REPO_OWNER": "kodeklubben",
+          "GITHUB_LESSON_REPO": "oppgaver",
+          "TYPEORM_CONNECTION": "postgres",
+          "TYPEORM_HOST": "localhost",
+          "TYPEORM_USERNAME":"orm-user",
+          "TYPEORM_PASSWORD": "testing",
+          "TYPEORM_DATABASE": "lesson-editor",
+          "TYPEORM_PORT": "5432",
+          "TYPEORM_SYNCHRONIZE": "false",
+          "TYPEORM_ENTITIES": "dist/**/*.entity.js"
 
-    //   }
-    // },
+      }
+    },
     //     {
     //   "name": "Attach to Process",
     //   "type": "node",

@@ -14,24 +14,28 @@ const Navbar: FC = (props) => {
     navigate("/");
   };
 
-  return (
-    <>
-      <header>
-        <div className="navbar_container">
-          <div className="navbar_image_container">
-            <img className="navbar_logo" src={logo} onClick={navigateToFrontpage}></img>
+  if (userState.user) {
+    return (
+      <>
+        <header>
+          <div className="navbar_container">
+            <div className="navbar_image_container">
+              <img className="navbar_logo" src={logo} onClick={navigateToFrontpage}></img>
+            </div>
+            <div className="navbar_children_container">{props.children}</div>
+            <div className="navbar_profilemenu_container">
+              <ProfileMenu
+                name={userState.user.name || userState.user.username}
+                photo={userState.user ? userState.user.photo : ""}
+              />
+            </div>
           </div>
-          <div className="_navbar_children_container">{props.children}</div>
-          <div className="navbar_profilemenu_container">
-            <ProfileMenu
-              name={userState.user ? userState.user.name : ""}
-              photo={userState.user ? userState.user.photo : ""}
-            />
-          </div>
-        </div>
-      </header>
-    </>
-  );
+        </header>
+      </>
+    );
+  } else {
+    return <div />;
+  }
 };
 
 export default Navbar;

@@ -1,22 +1,27 @@
 import { useEffect, useRef, useState, FC } from "react";
 import { SAVED, SAVING } from "./settingsFiles/languages/editor_NO";
+import { useFileContext } from "../../contexts/FileContext";
 
 interface AutosaveProps {
   mdText: string;
-  saveEditorText: () => void;
 }
 
-const Autosave: FC<AutosaveProps> = ({ mdText, saveEditorText }) => {
+const Autosave: FC<AutosaveProps> = ({ mdText }) => {
   const [autoSaveMessage, setAutoSaveMessage] = useState("");
+  const { saveFileBody } = useFileContext();
 
   useEffect(() => {
-    const timeoutHandler = setTimeout(() => {
-      saveEditorText();
-      setAutoSaveMessage(SAVED);
+    const timeoutHandler = setTimeout(async () => {
+      try {
+        await saveFileBody(mdText);
+        setAutoSaveMessage(SAVED);
+      } catch (e) {
+        console.error(e);
+      }
       setTimeout(() => {
         setAutoSaveMessage("");
-      }, 1000);
-    }, 500);
+      }, 2000);
+    }, 750);
 
     return () => {
       clearTimeout(timeoutHandler);

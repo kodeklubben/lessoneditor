@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState, FC } from "react";
+import { useParams } from "react-router";
 import axios from "axios";
 import { paths } from "@lessoneditor/contracts";
 import { LessonDTO, NewLessonDTO } from "@lessoneditor/contracts";
@@ -10,21 +11,39 @@ import {
   UserContextState,
 } from "./userContext.functions";
 import NotLoggedInPage from "../pages/NotLoggedInPage";
+import { base64StringToBlob, createObjectURL } from "blob-util";
 
 export const UserContext = React.createContext({} as UserContextModel);
 
 export const UserContextProvider = (props: any) => {
   const [userContexState, setUserContextState] =
     useState<UserContextState>(initialUserContextState);
-  const [error, setError] = useState({});
+  const [loading, setLoading] = useState<boolean>(true);
+  const [previewImage, setPreviewImages] = useState({});
+  const { mode } = useParams() as any;
 
   useEffect(() => {
     async function fetchData() {
       try {
+        setLoading(true);
         const userRes = await axios.get<UserDTO>(paths.USER);
         const userLessonsRes = await axios.get<LessonDTO[]>(
           paths.USER_LESSONS.replace(":userId", userRes.data.userId.toString())
         );
+
+        userLessonsRes.data.map(async (lesson: LessonDTO) => {
+          const lessonId = lesson.lessonId.toString();
+          const file = await axios.get(
+            paths.LESSON_FILE.replace(":lessonId", lessonId)
+              .replace(":fileName", "preview")
+              .replace(":ext", ".png")
+          );
+
+          setPreviewImages((prevImages) => ({
+            ...prevImages,
+            [lessonId]: createObjectURL(base64StringToBlob(file.data, "image/png")),
+          }));
+        });
 
         setUserContextState((s) => {
           return {
@@ -34,13 +53,14 @@ export const UserContextProvider = (props: any) => {
           };
         });
         setUserContextState((s) => ({ ...s, loggedIn: true }));
+        setLoading(false);
       } catch (error: any) {
         console.log("error");
         window.location.href = "/api/auth/login/";
       }
     }
     fetchData();
-  }, []);
+  }, [mode]);
 
   const getLesson = (lessonId: number): LessonDTO | undefined => {
     return userContexState.lessons?.find((item: LessonDTO) => item.lessonId === lessonId);
@@ -55,6 +75,20 @@ export const UserContextProvider = (props: any) => {
     );
   };
 
+
+  const logoutUser = async () => 
+  {
+    try
+    {
+      const newLessonRes = await axios.post(paths.AUTH_LOGOUT);
+    }
+    catch(error)
+    {
+        console.log(error)
+    }
+
+
+  }
   const addLesson = async (
     courseSlug: string,
     courseTitle: string,
@@ -96,7 +130,7 @@ export const UserContextProvider = (props: any) => {
     const existing = getLesson(lessonId);
     if (existing) {
       try {
-        await axios.delete(
+        const deletedLesson = await axios.delete(
           paths.USER_LESSON_UPDATE.replace(
             ":userId",
             userContexState.user!.userId.toString()
@@ -120,7 +154,10 @@ export const UserContextProvider = (props: any) => {
   const context: UserContextModel = {
     state: userContexState,
     addLesson: addLesson,
+    logoutUser: logoutUser,
     removeLesson: removeLesson,
+    previewImage,
+    loading,
   };
 
   if (userContexState.loggedIn) {

@@ -25,7 +25,9 @@ const md = require("markdown-it")({
     return "";
   },
 })
-  .use(require("markdown-it-attrs"), { allowedAttributes: ["class"] })
+  .use(require("markdown-it-attrs"), {
+    allowedAttributes: ["class", /^style.*$/, /^width.*$/, /^height.*$/],
+  })
   .use(headerSections)
   .use(insertImg)
   .use(generateChecklist)

@@ -4,6 +4,7 @@ import { renderMicrobit } from "../../utils/renderMicrobit";
 import { renderScratchBlocks } from "../../utils/renderScratchblocks";
 import { mdParser } from "../../utils/mdParser";
 import { useLessonContext } from "../../contexts/LessonContext";
+import ContentPlaceholder from "./ContentPlaceholder";
 
 interface MDPreviewProps {
   mdText: string;
@@ -16,6 +17,12 @@ const MDPreview: FC<MDPreviewProps> = ({ mdText, course, language }) => {
 
   const [mdTextUrlReplaced, setMdTextUrlReplaced] = useState<string>("");
   const parseMD = mdTextUrlReplaced && mdParser(mdTextUrlReplaced);
+
+  useEffect(() => {
+    if (course === "microbit") {
+      renderMicrobit(language);
+    }
+  }, [parseMD]);
 
   useEffect(() => {
     function replaceUrlWithBlobUrl(markdownContent: any) {
@@ -54,6 +61,12 @@ const MDPreview: FC<MDPreviewProps> = ({ mdText, course, language }) => {
   if (course === "scratch" && parseMD) {
     const lessonContent = renderScratchBlocks(parseMD);
     return <div className="preview-area" dangerouslySetInnerHTML={{ __html: lessonContent }} />;
+  } else if (!parseMD && mdText !== "") {
+    return (
+      <div className="preview-area">
+        <ContentPlaceholder />
+      </div>
+    );
   } else {
     return <div className="preview-area" dangerouslySetInnerHTML={{ __html: parseMD }} />;
   }

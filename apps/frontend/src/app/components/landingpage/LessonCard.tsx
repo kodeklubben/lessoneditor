@@ -2,37 +2,31 @@ import { useNavigate } from "react-router";
 import { Button, Card, Image, Divider, Icon } from "semantic-ui-react";
 import { FC, useState, useEffect } from "react";
 import { LANGUAGEOPTIONS } from "../frontpage/settings/newLessonOptions";
-import { useLessonContext } from "../../contexts/LessonContext";
-import axios from "axios";
-import { paths } from "@lessoneditor/contracts";
+import { useUserContext } from "../../contexts/UserContext";
+
+import DeleteModal from "../shared/DeleteModal";
 
 const LessonCard: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug, removeMD }) => {
   const navigate = useNavigate();
-  const { state } = useLessonContext();
-  const [image, setImage] = useState<string | undefined>(undefined);
+  const { previewImage } = useUserContext();
+  const [openDeleteContent, setOpenDeleteContent] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
 
-  useEffect(() => {
-    async function getImage() {
-      try {
-        const file: any = await axios.get(
-          paths.LESSON_FILE.replace(":lessonId", lessonId.toString()).replace(
-            ":fileName",
-            "preview"
-          )
-        );
-        setImage(file.data);
-      } catch (error) {
-        console.error(error);
-      }
+  const deleteContent = async () => {
+    try {
+      setLoading(true);
+      await removeMD(language, lessonSlug);
+      setOpenDeleteContent(false);
+      setLoading(false);
+    } catch (e) {
+      console.error(e);
     }
-    getImage();
-  }, [lessonSlug]);
+  };
 
   const navigateToEditor = (lessonId: any, lessonSlug: any, language: string) => {
     const target = ["/editor", lessonId, lessonSlug, language].join("/");
     navigate({ pathname: target });
   };
-  const imgSrc = "data:image/png;base64," + image;
 
   const lang = LANGUAGEOPTIONS.find((item) => item.value === language);
 
@@ -41,11 +35,19 @@ const LessonCard: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug, remo
 
   return (
     <>
+      {openDeleteContent && (
+        <DeleteModal
+          openDeleteContent={openDeleteContent}
+          setOpenDeleteContent={setOpenDeleteContent}
+          deleteContent={deleteContent}
+          loading={loading}
+        />
+      )}
       <Card>
         <Card.Content>
           <Card.Content>
             <Image
-              src={imgSrc}
+              src={previewImage[lessonId]}
               size="medium"
               alt="thumbUrl"
               rounded
@@ -75,11 +77,7 @@ const LessonCard: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug, remo
               content={"Åpne"}
               positive
             />
-            <Button
-              style={{ background: "none" }}
-              icon
-              onClick={() => removeMD(language, lessonSlug)}
-            >
+            <Button style={{ background: "none" }} icon onClick={() => setOpenDeleteContent(true)}>
               <Icon name="delete" />
               Slett
             </Button>

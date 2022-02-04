@@ -1,18 +1,13 @@
-import React, { Dispatch, FC, SetStateAction, useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
-import insertMetaDataInTeacherGuide from "../components/landingpage/utils/insertMetaDataInTeacherGuide";
-import oppgaveMal from "../components/editor/settingsFiles/oppgaveMal";
-import { useLessonContext } from "./LessonContext";
-import { filenameParser } from "../utils/filename-parser";
 import axios from "axios";
-import { FileDTO, HeaderData, UpdatedFileDTO, YamlContent } from "@lessoneditor/contracts";
+import { FileDTO, HeaderData, UpdatedFileDTO } from "@lessoneditor/contracts";
 import { paths } from "@lessoneditor/contracts";
 import {
   FileContextModel,
   FileContextState,
   initialFileContextState,
 } from "./fileContext.functions";
-import { useUserContext } from "./UserContext";
 import * as yml from "js-yaml";
 import ShowSpinner from "../components/ShowSpinner";
 
@@ -20,29 +15,24 @@ const separator = "---\n";
 
 const FileContext = React.createContext<FileContextModel>({} as FileContextModel);
 
-function createDefaultFileBody(file: string, ymlData: YamlContent) {
-  const { isReadme } = filenameParser(file);
-  return isReadme ? insertMetaDataInTeacherGuide(ymlData, "nb") : oppgaveMal;
-}
-
 const FileContextProvider = (props: any) => {
   const [fileContextState, setFileContextState] =
     useState<FileContextState>(initialFileContextState);
   const { lessonId, file, lang } = useParams() as any;
-
-  const { state: userState } = useUserContext();
-  const { state } = useLessonContext();
-  const { language } = filenameParser(file);
   const [savedFileBody, setSavedFileBody] = useState("");
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const filename = lang === "nb" ? file : `${file}_${lang}`;
+        setLoading(true);
+        const filename =
+          lang === "nb" ? file : typeof lang !== "undefined" ? `${file}_${lang}` : file;
         const result = await axios.get<FileDTO<string>>(
           paths.LESSON_FILE.replace(":lessonId", lessonId).replace(":fileName", filename)
         );
         const [_, header, body] = result.data.content.split(separator);
+
         const headerData = yml.load(header) as HeaderData;
         setFileContextState((s) => {
           return {
@@ -53,6 +43,7 @@ const FileContextProvider = (props: any) => {
           };
         });
         setSavedFileBody(body);
+        setLoading(false);
       } catch (error) {
         console.error(error);
       }
@@ -65,6 +56,7 @@ const FileContextProvider = (props: any) => {
 
   const saveFileHeader = async (data: HeaderData) => {
     const fileBody = fileContextState?.rawMdFileContent?.split(separator)[2];
+
     const header = yml.dump(data);
     const newRawText = ["", header, fileBody].join(separator);
     try {
@@ -79,6 +71,7 @@ const FileContextProvider = (props: any) => {
         ),
         updatedFile
       );
+
       setFileContextState((s) => {
         return {
           ...s,
@@ -86,18 +79,22 @@ const FileContextProvider = (props: any) => {
           headerData: data,
         };
       });
+      return newFile.status;
     } catch (error) {
       console.error(error);
+      return -1;
     }
   };
 
   const saveFileBody = async (body: string) => {
     const fileHeader = fileContextState.rawMdFileContent?.split(separator)[1] || "";
     const newRawText = ["", fileHeader, body].join(separator);
+
     try {
       const updatedFile: UpdatedFileDTO = {
         content: newRawText,
       };
+
       const filename = lang === "nb" ? file : `${file}_${lang}`;
       const uploadedFile = await axios.put<FileDTO<string>>(
         paths.LESSON_FILE_UPDATE.replace(":lessonId", lessonId.toString()).replace(
@@ -106,6 +103,13 @@ const FileContextProvider = (props: any) => {
         ),
         updatedFile
       );
+      const isThumbUpdated = await axios.put<boolean>(
+        paths.LESSON_FILE_UPDATE_THUMB.replace(":lessonId", lessonId.toString()).replace(
+          ":fileName",
+          filename
+        )
+      );
+
       setFileContextState((s) => {
         return {
           ...s,
@@ -113,8 +117,10 @@ const FileContextProvider = (props: any) => {
           savedFileBody: body,
         };
       });
+      return uploadedFile.status;
     } catch (error) {
       console.error(error);
+      return -1;
     }
   };
 
@@ -124,12 +130,13 @@ const FileContextProvider = (props: any) => {
     savedFileBody,
     saveFileHeader,
     setFileContextState,
+    loading,
   };
 
-  if (context.state.savedFileBody) {
+  if (context.state.savedFileBody || context.state.savedFileBody === "") {
     return <FileContext.Provider value={context}>{props.children}</FileContext.Provider>;
   } else {
-    return <ShowSpinner></ShowSpinner>;
+    return <ShowSpinner />;
   }
 };
 const useFileContext = (): FileContextModel => useContext(FileContext);

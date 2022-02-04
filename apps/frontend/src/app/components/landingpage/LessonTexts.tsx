@@ -1,5 +1,5 @@
 import LessonCard from "./LessonCard";
-import { Card, Divider, Icon, Button, Dropdown } from "semantic-ui-react";
+import { Card, Divider, Icon, Button, Dropdown, Placeholder } from "semantic-ui-react";
 import { useNavigate } from "react-router";
 import { FC, SyntheticEvent, useState, useEffect } from "react";
 import { LANGUAGEOPTIONS } from "../frontpage/settings/newLessonOptions";
@@ -12,6 +12,30 @@ import { useLessonContext } from "../../contexts/LessonContext";
 import { useUserContext } from "../../contexts/UserContext";
 import { lessonGuideDefaultText } from "./settingsFiles/defaultTexts";
 
+const cardPlaceholder = (key: number) => {
+  return (
+    <Card key={key}>
+      <Placeholder>
+        <Placeholder.Image square />
+      </Placeholder>
+
+      <Card.Content>
+        <Placeholder>
+          <Placeholder.Header>
+            <Placeholder.Line length="very short" />
+            <Placeholder.Line length="medium" />
+          </Placeholder.Header>
+          <Placeholder.Paragraph>
+            <Placeholder.Line length="short" />
+          </Placeholder.Paragraph>
+        </Placeholder>
+      </Card.Content>
+
+      <Card.Content extra></Card.Content>
+    </Card>
+  );
+};
+
 const LessonTexts: FC<any> = ({ lessonId, fileList, lessonSlug, lessonTitle }) => {
   const [usedLanguages, setUsedLanguages] = useState<string[]>([]);
   const [unusedLanguages, setUnusedLanguages] = useState<Record<string, any>[]>([]);
@@ -19,7 +43,7 @@ const LessonTexts: FC<any> = ({ lessonId, fileList, lessonSlug, lessonTitle }) =
 
   const navigate = useNavigate();
 
-  const { fetchFileList, setFiles, state: lessonState } = useLessonContext();
+  const { fetchFileList, setFiles, state: lessonState, loading } = useLessonContext();
   const { state } = useUserContext();
 
   useEffect(() => {
@@ -44,22 +68,24 @@ const LessonTexts: FC<any> = ({ lessonId, fileList, lessonSlug, lessonTitle }) =
     fetchData();
   }, [lessonState.files]);
 
-  const removeMD = async (language: string, file: string) => {
+  const removeMD: (language: string, file: string) => void = async (
+    language: string,
+    file: string
+  ) => {
     const filename = language === "nb" ? file : `${file}_${language}`;
     const ext = "md";
 
     try {
       const files = await fetchFileList();
-      const isDeleted = await axios.delete(
+      await axios.delete(
         paths.LESSON_FILE_DELETE.replace(":lessonId", lessonId.toString())
           .replace(":fileName", filename)
           .replace(":ext", ext)
       );
-      if (isDeleted.data === 1) {
-        const index = files.findIndex((item: string) => item === filename);
-        const newList = files.splice(index, 1);
-        setFiles(newList);
-      }
+
+      const index = files.findIndex((item: string) => item === filename);
+      const newList = files.splice(index, 1);
+      setFiles(newList);
     } catch (e) {
       console.log(e);
     }
@@ -67,7 +93,7 @@ const LessonTexts: FC<any> = ({ lessonId, fileList, lessonSlug, lessonTitle }) =
 
   const header: HeaderData = {
     title: lessonTitle,
-    author: state.user!.name,
+    author: state.user!.name || state.user!.username,
     authorList: [],
     language: lang,
     translator: "",
@@ -100,22 +126,30 @@ const LessonTexts: FC<any> = ({ lessonId, fileList, lessonSlug, lessonTitle }) =
     setLang(value);
   };
 
+  const returnValue = () => {
+    return usedLanguages.map((language: string, index: number) => {
+      return (
+        <LessonCard
+          key={index}
+          content={"Oppgavetekst"}
+          language={language}
+          lessonId={lessonId}
+          lessonSlug={lessonSlug}
+          lessonTitle={lessonTitle}
+          removeMD={removeMD}
+        />
+      );
+    });
+  };
+
   return (
     <>
       <Card.Group centered>
-        {usedLanguages.map((language: string) => {
-          return (
-            <LessonCard
-              key={language}
-              content={"Oppgavetekst"}
-              language={language}
-              lessonId={lessonId}
-              lessonSlug={lessonSlug}
-              lessonTitle={lessonTitle}
-              removeMD={removeMD}
-            />
-          );
-        })}
+        {!usedLanguages
+          ? cardPlaceholder(-1)
+          : loading
+          ? usedLanguages.map((item, index) => cardPlaceholder(index))
+          : returnValue()}
         {lang !== "-1" ? (
           <Card>
             <Card.Content>

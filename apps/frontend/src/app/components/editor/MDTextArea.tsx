@@ -1,5 +1,7 @@
 import { Dispatch, SetStateAction, ChangeEvent, MouseEvent, KeyboardEvent, FC, Ref } from "react";
+import ContentPlaceholder from "./ContentPlaceholder";
 import { listController, TABcontroller } from "./utils/mdTextAreaControllers";
+import { useFileContext } from "../../contexts/FileContext";
 
 interface MDTextAreaProps {
   editorRef: Ref<HTMLTextAreaElement>;
@@ -32,6 +34,8 @@ const MDTextArea: FC<MDTextAreaProps> = ({
   setUndoAndCursorPosition,
   resetButtons,
 }) => {
+  const { loading } = useFileContext();
+
   const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setCursor(event.target.selectionStart, event.target.selectionEnd);
     const inputText = event.target.value;
@@ -97,16 +101,22 @@ const MDTextArea: FC<MDTextAreaProps> = ({
   };
 
   return (
-    <textarea
-      autoFocus
-      ref={editorRef}
-      className="text-area"
-      value={mdText}
-      onChange={handleChange}
-      onKeyDown={onTextareaKeyDown}
-      onMouseDown={onTextareaMouseDown}
-      onSelect={onTextareaSelect}
-    />
+    <>
+      {typeof mdText === "undefined" ? (
+        <ContentPlaceholder />
+      ) : (
+        <textarea
+          autoFocus
+          ref={editorRef}
+          className="text-area"
+          value={mdText}
+          onChange={handleChange}
+          onKeyDown={onTextareaKeyDown}
+          onMouseDown={onTextareaMouseDown}
+          onSelect={onTextareaSelect}
+        />
+      )}
+    </>
   );
 };
 

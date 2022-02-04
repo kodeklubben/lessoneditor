@@ -2,22 +2,23 @@ import { Button, Popup } from "semantic-ui-react";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router";
 import { FC } from "react";
+import { useFileContext } from "../../../contexts/FileContext";
 
 interface SubmitButtonProps {
   mdText: string;
-  saveEditorText: () => void;
 }
 
-const SubmitButton: FC<SubmitButtonProps> = ({ mdText, saveEditorText }) => {
+const SubmitButton: FC<SubmitButtonProps> = ({ mdText }) => {
   const navigate = useNavigate();
   const { lessonId } = useParams<any>();
+  const { saveFileBody } = useFileContext();
 
   const onSubmit = () => {
     navigateToHome();
   };
 
   const navigateToHome = () => {
-    saveEditorText();
+    saveFileBody(mdText);
     const target = ["/landingpage", lessonId, "lessontexts"].join("/");
     navigate(target);
   };

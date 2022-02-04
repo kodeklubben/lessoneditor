@@ -4,8 +4,9 @@ import { Octokit, RestEndpointMethodTypes } from "@octokit/rest";
 import {} from "@octokit/core";
 import { components } from "@octokit/openapi-types";
 import { Lesson } from "../lesson/lesson.entity";
-import {User} from "../user/user.entity";
+import { User } from "../user/user.entity";
 import axios from "axios";
+import * as yaml from "js-yaml";
 
 interface UploadObject {
   path: string;
@@ -20,20 +21,17 @@ interface UploadBlob {
 @Injectable()
 export class GithubService {
   octokit: Octokit;
-  constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {
-   
-  }
+  constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {}
 
-  async submitLesson(user: User,lesson: Lesson) {
+  async submitLesson(user: User, accessToken: string, lesson: Lesson) {
     try {
-      const test = await this.cacheManager.get('test')
-      const accessToken = await this.cacheManager.get(user.userId.toString())
+      const accessToken = await this.cacheManager.get(user.userId.toString());
       this.octokit = new Octokit({ auth: accessToken });
     } catch (error) {
       console.error(error);
     }
 
-    const { owner, repo, status } = await this.createFork();
+    const { owner, repo, status } = await this.createFork(user);
     if (status !== 202) {
       return status;
     }
@@ -41,10 +39,40 @@ export class GithubService {
       console.warn("No lesson data files");
       return null;
     }
+
+    const formatLessonData = lesson.files.map((file) => {
+      if (file.ext === ".yml") {
+        const newContent = yaml.dump(JSON.parse(file.content.toString()));
+        return { ...file, content: Buffer.from(newContent, "utf-8") };
+      } else if (file.ext === ".md") {
+        const separator = "---\n";
+        const textContent = file.content.toString();
+        const [_, header, body] = textContent.split(separator);
+        const headerData = yaml.load(header);
+        const newHeaderData =
+          headerData["translatorList"].length > 0
+            ? {
+                title: headerData["title"],
+                author: headerData["authorList"].join(", "),
+                translator: headerData["translatorList"].join(", "),
+                language: headerData["language"],
+              }
+            : {
+                title: headerData["title"],
+                author: headerData["authorList"].join(", "),
+                language: headerData["language"],
+              };
+        const newContent = ["", yaml.dump(newHeaderData), body].join(separator);
+        return { ...file, content: Buffer.from(newContent, "utf-8") };
+      } else {
+        return file;
+      }
+    });
+
+    lesson.files = formatLessonData
     const lessonPath = ["src", lesson.courseSlug, lesson.courseTitle].join("/");
 
     const filesToUpload: UploadObject[] = [];
-
     lesson.files.forEach((file) => {
       const path = [lessonPath, file.filename + file.ext].join("/");
       if (file.ext === ".yml") {
@@ -57,8 +85,10 @@ export class GithubService {
           path,
           buffer: Buffer.from(file.content.toString()),
         });
-      }
-      else if ([".jpg", ".jpeg", ".gif", ".png"].includes(file.ext)) {
+      } else if ([".jpg", ".jpeg", ".gif", ".png"].includes(file.ext)) {
+        if (file.filename === "preview" && file.ext === ".png") {
+          return;
+        }
         filesToUpload.push({
           path,
           buffer: Buffer.from(file.content),
@@ -82,23 +112,51 @@ export class GithubService {
     );
     await this.setBranchToCommit(owner, repo, branchName, newCommit.sha);
     await this.createPullRequest(
-        owner,
-        "New lesson",
-        branchName,
-        "Pull request from lesson editor"
-      );
+      owner,
+      "New lesson",
+      branchName,
+      "Pull request from lesson editor"
+    );
   }
 
-  async createFork() {
-    const forkResponse = await this.octokit.repos.createFork({
-      owner: process.env.GITHUB_LESSON_REPO_OWNER,
-      repo: process.env.GITHUB_LESSON_REPO,
-    });
-    return {
-      status: forkResponse.status,
-      owner: forkResponse.data.owner.login,
-      repo: forkResponse.data.name,
-    };
+  async createFork(user:User) {
+    try
+    {
+      const response = await this.octokit.request('GET /users/{username}/repos', {
+        username: user.username
+      })
+      const alreadyForked = response.data.find( item => 
+        item.fork && 
+        item.owner.login == process.env.GITHUB_LESSON_REPO_OWNER &&
+        item.name == process.env.GITHUB_LESSON_REPO
+         )
+      if(alreadyForked)
+      {
+        return {
+          status: true,
+          owner: process.env.GITHUB_LESSON_REPO_OWNER,
+          repo: process.env.GITHUB_LESSON_REPO,
+        };
+      }
+      else
+      {
+        const forkResponse = await this.octokit.repos.createFork({
+          owner: process.env.GITHUB_LESSON_REPO_OWNER,
+          repo: process.env.GITHUB_LESSON_REPO,
+        });
+        return {
+          status: forkResponse.status,
+          owner: forkResponse.data.owner.login,
+          repo: forkResponse.data.name,
+        };
+
+      }
+    }
+    catch(error)
+    {
+      console.error(error)
+    }
+  
   }
 
   async getBranchCached(
