@@ -16,7 +16,6 @@ export class AuthController {
   @UseGuards(LoginGuard)
   @Get("login")
   async login(@Res() res) {
-
     
     // const authorizationURL = `https://github.com/login/oauth/authorize?${ stringify({
     //     client_id    : process.env.GITHUB_CLIENT_ID,
@@ -37,7 +36,6 @@ export class AuthController {
       res.clearCookie("access_token")
       
       res.redirect("/logout");
-
 
     }
     catch(error)
