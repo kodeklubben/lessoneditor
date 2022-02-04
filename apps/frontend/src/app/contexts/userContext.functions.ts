@@ -10,6 +10,7 @@ export interface UserContextState {
 
 export interface UserContextModel {
   state: UserContextState;
+  logoutUser: () => void,
   addLesson: (
     course: string,
     courseTitle: string,

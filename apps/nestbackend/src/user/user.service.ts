@@ -51,6 +51,21 @@ export class UserService {
     }
   }
 
+  async updateUser(newUser: UserDTO, userId: number): Promise<User> {
+    const user = await this.getUser(userId);
+    user.userId = newUser.userId;
+    user.email = newUser.email;
+    user.username = newUser.username;
+    user.name = newUser.name;
+    user.photo = newUser.photo;
+
+    try {
+      return await this.userRepository.save(user);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   async getUserLessons(userId: number): Promise<User> {
     const user = await this.getUser(userId);
     return user;

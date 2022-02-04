@@ -1,6 +1,7 @@
 import React, { Dispatch, FC, SetStateAction, useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import axios from "axios";
+
 import { NewLessonDTO, LessonDTO, FileDTO, YamlContent } from "@lessoneditor/contracts";
 import { LessonContextState, LessonContextModel } from "./lessonContext.functions";
 import ShowSpinner from "../components/ShowSpinner";
@@ -69,6 +70,7 @@ export const LessonContextProvider = (props: any) => {
     const fileNames = await axios.get<string[]>(
       paths.LESSON_FILENAMES.replace(":lessonId", lessonId)
     );
+
 
     return fileNames.data;
   };

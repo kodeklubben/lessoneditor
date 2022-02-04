@@ -45,6 +45,20 @@ export class LocalStrategy extends PassportStrategy(Strategy, "github") {
     let user: User;
     try {
       user = await this.userService.getUser(response.data.id);
+      const {lessons, ...storedUser} = user
+      const newUserDTO: UserDTO = {
+        userId: response.data.id,
+        name: response.data.name,
+        username: response.data.login || response.data.id,
+        email: response.data.email,
+        photo: response.data.avatar_url,
+      };
+
+      if(!this.shallowEqual(storedUser, newUserDTO))
+      {
+        user = await this.userService.updateUser(newUserDTO, storedUser.userId)
+      }
+
     } catch (error) {
       const newUserDTO: UserDTO = {
         userId: response.data.id,
@@ -57,5 +71,19 @@ export class LocalStrategy extends PassportStrategy(Strategy, "github") {
     }
     this.cacheManager.set(user.userId.toString(), accessToken);
     return user;
+  }
+
+  shallowEqual(object1, object2) {
+    const keys1 = Object.keys(object1);
+    const keys2 = Object.keys(object2);
+    if (keys1.length !== keys2.length) {
+      return false;
+    }
+    for (let key of keys1) {
+      if (object1[key] !== object2[key]) {
+        return false;
+      }
+    }
+    return true;
   }
 }

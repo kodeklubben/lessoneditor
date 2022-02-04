@@ -1,6 +1,7 @@
 export const paths = {
   AUTH_CALLBACK: "/callback",
   AUTH_LOGIN_FAILED: "/login-failed",
+  AUTH_LOGOUT: "/api/auth/logout",
   DISPLAY_FILE: "/api/display/:lessonId/:file",
   FILE: "/file/*",
   LESSON: "/api/lesson/:lessonId",

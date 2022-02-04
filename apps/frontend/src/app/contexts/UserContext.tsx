@@ -75,6 +75,20 @@ export const UserContextProvider = (props: any) => {
     );
   };
 
+
+  const logoutUser = async () => 
+  {
+    try
+    {
+      const newLessonRes = await axios.post(paths.AUTH_LOGOUT);
+    }
+    catch(error)
+    {
+        console.log(error)
+    }
+
+
+  }
   const addLesson = async (
     courseSlug: string,
     courseTitle: string,
@@ -140,6 +154,7 @@ export const UserContextProvider = (props: any) => {
   const context: UserContextModel = {
     state: userContexState,
     addLesson: addLesson,
+    logoutUser: logoutUser,
     removeLesson: removeLesson,
     previewImage,
     loading,
