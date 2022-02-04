@@ -20,6 +20,7 @@
           "GITHUB_CLIENT_ID": "0a838d7f4cd79f2005b6",
           "GITHUB_CLIENT_SECRET": "6e1f0cdb26e59eb7ccfc9cc0bcd00a3524ab65ee",
           "GITHUB_CALLBACK_URL": "http://localhost:8080/api/auth/callback",
+          "COOKIE_SECRET":"ZPnm=2CO3pRIXQb",
           "THUMB_SERVICE_URL": "http://localhost:3012/",
           "GITHUB_LESSON_REPO_OWNER": "kodeklubben",
           "GITHUB_LESSON_REPO": "oppgaver",

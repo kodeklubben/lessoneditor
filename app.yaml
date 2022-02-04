@@ -2,8 +2,9 @@ runtime: nodejs14
 entrypoint: node dist/apps/nestbackend/apps/nestbackend/src/main.js
 
 env_variables:
-  GITHUB_CLIENT_ID: "0a838d7f4cd79f2005b6"
-  GITHUB_CLIENT_SECRET: "6e1f0cdb26e59eb7ccfc9cc0bcd00a3524ab65ee"
+  GITHUB_CLIENT_ID: "e880a288499ff2a0599c"
+  COOKIE_SECRET: "ZPnm=2CO3pRIXQb"
+  GITHUB_CLIENT_SECRET: "57ad83b9a6a6bf48e5e95fa518178ee152d38c8f"
   GITHUB_CALLBACK_URL: "https://lessoneditor.ew.r.appspot.com/api/auth/callback"
   GITHUB_LESSON_REPO: "oppgaver"
   GITHUB_LESSON_REPO_OWNER: "kodeklubben"
