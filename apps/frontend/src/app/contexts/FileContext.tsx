@@ -86,6 +86,16 @@ const FileContextProvider = (props: any) => {
     }
   };
 
+  const updateThumbnail = async () => {
+    const filename = lang === "nb" ? file : `${file}_${lang}`;
+    const isThumbUpdated = await axios.put<boolean>(
+      paths.LESSON_FILE_UPDATE_THUMB.replace(":lessonId", lessonId.toString()).replace(
+        ":fileName",
+        filename
+      )
+    );
+  };
+
   const saveFileBody = async (body: string) => {
     const fileHeader = fileContextState.rawMdFileContent?.split(separator)[1] || "";
     const newRawText = ["", fileHeader, body].join(separator);
@@ -103,14 +113,8 @@ const FileContextProvider = (props: any) => {
         ),
         updatedFile
       );
-      const isThumbUpdated = await axios.put<boolean>(
-        paths.LESSON_FILE_UPDATE_THUMB.replace(":lessonId", lessonId.toString()).replace(
-          ":fileName",
-          filename
-        )
-      );
 
-      setFileContextState((s) => {
+      setFileContextState((s: any) => {
         return {
           ...s,
           rawMdFileContent: newRawText,
@@ -128,6 +132,7 @@ const FileContextProvider = (props: any) => {
     state: fileContextState,
     saveFileBody,
     savedFileBody,
+    updateThumbnail,
     saveFileHeader,
     setFileContextState,
     loading,

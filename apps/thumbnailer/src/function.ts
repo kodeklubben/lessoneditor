@@ -14,7 +14,7 @@ export const thumbnailer: HttpFunction = async (req, res) => {
   if (url && token) {
     try {
       logger.info("Start fetching " + url);
-      const waitForSelector = "div.preview-area";
+      const waitForSelector = null;
       const buffer = await takeScreenshot(url, token, waitForSelector);
       res.writeHead(200, {
         "Content-Type": "image/png",
