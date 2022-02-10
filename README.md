@@ -100,7 +100,6 @@ correctness in the app.
 
 #### Node js + express (backend)
 
-An Express application is most often used as backend application in a client-server architecture whereas the client could
-be written in React.js, the server could be written in Express. We used express as our server.
-Express ensured that all middleware can respond to HTTP requests and routing tables were setup to respond to different actions
-based on the HTTP method.
+The backend is written in the NESTjs framework. The user is authenticate with their github account and is served the react page on successful authentication. A cookie is set in the browser to provide authentication for the api endpoints. A token is issued from the server to enable to app to make a call to the react application wihtout a user to obtain the thumbnail image for the lessons. When the user is logged out the session is cleared and the users is redirected to a logout page.
+
+The NESTjs app uses typeorm t communicate with the postgres database

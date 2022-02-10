@@ -22,6 +22,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '../../../../../frontend'),
       exclude: ['/api*'],
+      
     }),
     TypeOrmModule.forRoot(),
     forwardRef(() => UserModule),

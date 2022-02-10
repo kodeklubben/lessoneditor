@@ -1,9 +1,9 @@
-import { Controller, UseGuards, Get, Res, Req } from "@nestjs/common";
+import { Controller, UseGuards, Get, Res, Req, Post } from "@nestjs/common";
 import { LockNotSupportedOnGivenDriverError } from "typeorm";
 import { AuthService } from "./auth.service";
 import { AuthGuard } from "@nestjs/passport";
 import { LoginGuard } from "./login.guard";
-import { Request } from 'express';
+import { Request, Response } from 'express';
 import { Injectable, Inject, CACHE_MANAGER } from "@nestjs/common";
 import { Cache } from "cache-manager";
 import { UserDTO } from "@lessoneditor/contracts";
@@ -16,6 +16,7 @@ export class AuthController {
   @UseGuards(LoginGuard)
   @Get("login")
   async login(@Res() res) {
+    
     // const authorizationURL = `https://github.com/login/oauth/authorize?${ stringify({
     //     client_id    : process.env.GITHUB_CLIENT_ID,
     //     redirect_uri :  process.env.GITHUB_CALLBACK_URL,
@@ -25,12 +26,23 @@ export class AuthController {
   }
 
   @UseGuards(LoginGuard)
-  @Get("logout")
-  async logout(@Req() req: Request)
+  @Post("logout")
+  async logout(@Req() req: Request,@Res() res: Response)
   {
-    req.logOut()
-    //lear access token from cache
-    this.cacheManager.del((req.user as UserDTO).userId.toString());
+    try
+    {
+      this.cacheManager.del((req.user as UserDTO).userId.toString());
+      req.logOut()
+      res.clearCookie("access_token")
+      
+      res.redirect("/logout");
+
+    }
+    catch(error)
+    {
+      console.error(error)
+    }
+
     
   }
 

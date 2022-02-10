@@ -5,6 +5,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { LessonContextProvider } from "../contexts/LessonContext";
 import { UserContextProvider } from "../contexts/UserContext";
 import { FileContextProvider } from "../contexts/FileContext";
+import Logout from "../components/shared/Logout"
 import SimplePreview from "./simple-preview/simple-preview";
 
 const App = () => {
@@ -76,6 +77,7 @@ const App = () => {
         />
 
         <Route path="*" element={<h1>PAGE NOT FOUND</h1>} />
+        <Route path="/logout" element={<Logout></Logout>} />
       </Routes>
     </BrowserRouter>
   );
