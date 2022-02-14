@@ -35,7 +35,7 @@ const takeScreenshot = async (url, token, waitForSelector?) => {
   await page.setExtraHTTPHeaders({
     Authorization: "Bearer " + token,
   });
-  page.setDefaultNavigationTimeout(3000);
+  page.setDefaultNavigationTimeout(7000);
   await page.setViewport({
     width: 600,
     height: 1000,
