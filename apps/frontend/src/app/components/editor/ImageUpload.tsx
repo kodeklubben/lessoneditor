@@ -69,17 +69,22 @@ const ImageUpload: FC<ImageUploadProps> = ({
       ext,
       content: content,
     };
-    await axios.post(
-      paths.LESSON_FILES.replace(":lessonId", state.lesson.lessonId.toString()),
-      newFileDTO
-    );
+
+    try {
+      await axios.post(
+        paths.LESSON_FILES.replace(":lessonId", state.lesson.lessonId.toString()),
+        newFileDTO
+      );
+      setShowSpinner(false);
+    } catch (e) {
+      console.error("couldnt upload image: " + e);
+    }
 
     setImages((prevImages: any) => ({
       ...prevImages,
       [filename + ext]: createObjectURL(imageBlob),
     }));
 
-    setShowSpinner(false);
     imageSubmitHandler(filename + ext);
   };
 
