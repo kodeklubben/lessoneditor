@@ -52,7 +52,7 @@ export class LessonController {
   @UseGuards(LoginGuard)
   @Post(":lessonId/submit")
   async SubmitLesson(@Req() req: Request, @Param() params) {
-    const accessToken: string = req.cookies['access_token']
+    const accessToken: string = req.cookies["access_token"];
     await this.lessonService.submitLesson(req.user as User, accessToken, params.lessonId);
   }
 
