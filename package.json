@@ -135,7 +135,11 @@
     "@types/mime": "^2.0.3",
     "@types/moxios": "^0.4.14",
     "@types/multer": "^1.4.7",
+<<<<<<< HEAD
     "@types/node": "^17.0.17",
+=======
+    "@types/node": "17.0.17",
+>>>>>>> 8b70945871a4c51ca06c4ccceef025d83aab9c71
     "@types/passport": "^1.0.7",
     "@types/passport-github2": "^1.2.5",
     "@types/passport-oauth2": "^1.4.11",
