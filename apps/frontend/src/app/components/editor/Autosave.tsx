@@ -8,20 +8,26 @@ interface AutosaveProps {
 
 const Autosave: FC<AutosaveProps> = ({ mdText }) => {
   const [autoSaveMessage, setAutoSaveMessage] = useState("");
-  const { saveFileBody } = useFileContext();
+  const { saveFileBody, updateThumbnail } = useFileContext();
 
   useEffect(() => {
     const timeoutHandler = setTimeout(async () => {
       try {
-        await saveFileBody(mdText);
-        setAutoSaveMessage(SAVED);
+        saveFileBody(mdText).then(() => {
+          updateThumbnail()
+            .then(() => {
+              setAutoSaveMessage(SAVED);
+            })
+            .then(() => {
+              setTimeout(() => {
+                setAutoSaveMessage("");
+              }, 3000);
+            });
+        });
       } catch (e) {
         console.error(e);
       }
-      setTimeout(() => {
-        setAutoSaveMessage("");
-      }, 2000);
-    }, 750);
+    }, 1500);
 
     return () => {
       clearTimeout(timeoutHandler);
