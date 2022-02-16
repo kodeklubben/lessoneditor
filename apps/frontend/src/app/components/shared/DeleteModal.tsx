@@ -22,7 +22,7 @@ const DeleteModal: FC<{
         </Modal.Description>
       </Modal.Content>
       <Modal.Actions>
-        <Button disabled={loading} color="black" onClick={() => setOpenDeleteContent(false)}>
+        <Button disabled={loading} onClick={() => setOpenDeleteContent(false)}>
           Nei
         </Button>
         <Button
