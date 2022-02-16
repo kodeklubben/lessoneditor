@@ -79,11 +79,11 @@ const Overview: FC = () => {
             {state.lessons.length > 0 ? (
               <ItemList lessons={state.lessons} />
             ) : (
-              <Message>
+              <Message compact>
                 <Message.Header>Du har ingen kurs</Message.Header>
-                <Message.Content>
+                <p >
                   Opprett en ny oppgave ved å trykke på knappen "Ny oppgave"
-                </Message.Content>
+                </p>
               </Message>
             )}
             <br />
