@@ -99,6 +99,7 @@ const LessonCard: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug, remo
           ""
         )}
       </Card>
+    )
     </>
   );
 };

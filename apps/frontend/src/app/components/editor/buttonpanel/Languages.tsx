@@ -19,7 +19,7 @@ const Languages: FC<LanguagesProps> = ({ saveEditorText, setShowSpinner }) => {
   const handleChange = async (event: SyntheticEvent, { value }: Record<string, string>) => {
     setShowSpinner(true);
     const target = lessonId
-      ? ["/editor", lessonId, value === "nb" ? filename : `${filename}_${value}t`].join("/")
+      ? ["/editor", lessonId, value === "nb" ? filename : `${filename}_${value}`].join("/")
       : "";
 
     saveEditorText(true);

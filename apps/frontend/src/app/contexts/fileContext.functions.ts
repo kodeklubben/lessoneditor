@@ -10,7 +10,6 @@ export interface FileContextModel {
   state: FileContextState;
   saveFileBody: (body: string) => Promise<number>;
   savedFileBody: string;
-  updateThumbnail: () => Promise<void>;
   saveFileHeader: (data: HeaderData) => Promise<number>;
   setFileContextState: React.Dispatch<React.SetStateAction<FileContextState>>;
   loading: boolean;

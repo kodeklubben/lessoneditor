@@ -1,6 +1,6 @@
 import { Injectable, Scope, Inject, HttpException, HttpStatus } from "@nestjs/common";
 import { REQUEST } from "@nestjs/core";
-import { HttpService } from "@nestjs/axios";
+import { HttpService } from "@nestjs/common";
 import { AxiosResponse } from "axios";
 import * as jwt from "jsonwebtoken";
 import { lastValueFrom } from "rxjs";
