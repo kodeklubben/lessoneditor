@@ -1,26 +1,48 @@
-.landing_navbar {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  width: 100%;
-  min-height: 8vh;
-  padding: 1em;
-}
-
-.card_container {
-  margin: 5vh;
-}
-
 .landingpage_container {
   display: flex;
-  min-height: 92vh;
-  flex-direction: column;
-  background-image: linear-gradient(to bottom right, #eef7ee, #fff, #eef7ee);
-
-  border: 1px #b1daae;
-  border-style: solid solid solid solid;
+  height: 90%;
+  flex-flow: column wrap;
+  justify-content: center;
+  align-items: center;
 }
 
-#landingpageButtonContainer {
-  margin: auto 5vh 5vh auto;
+.landingpage_section1 {
+  position: relative;
+  background-color: #f7f7f7;
+  height: 40%;
+  width: 100%;
+  padding: 70px;
+}
+
+.landingpage_section2 {
+  height: 60%;
+  padding: 2em;
+}
+
+.landingpage_section1_content {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+
+  margin: auto;
+  width: 1210px;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.landingpage_datamodal_button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 1em;
+}
+
+.landingpageButtonContainer {
+  margin: 7em 0 0 0;
+}
+
+.landingpage_cardsection {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
 }

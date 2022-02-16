@@ -1,6 +1,6 @@
 .navbar_container {
-  height: 100px;
-  margin: 0;
+  height: 8%;
+  margin: 0 4.5em 0 4.5em;
   padding: 0;
   display: flex;
   flex-direction: row;
@@ -17,8 +17,8 @@
 .navbar_logo {
   margin: 0;
   padding: 0;
-  height: 80px;
-  width: 240px;
+  height: 100%;
+  width: auto;
 }
 
 .navbar_logo:hover {
@@ -33,7 +33,6 @@
 }
 
 .navbar_profilemenu_container {
-  margin-right: 1rem;
   flex-basis: 33%;
   display: flex;
   justify-content: right;

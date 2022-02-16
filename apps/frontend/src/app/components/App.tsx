@@ -1,11 +1,12 @@
 import Editor from "./editor/Editor";
+// import Landingpage from "./landingpage/Landingpage";
 import Landingpage from "./landingpage/Landingpage";
 import Overview from "./frontpage/Overview";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { LessonContextProvider } from "../contexts/LessonContext";
 import { UserContextProvider } from "../contexts/UserContext";
 import { FileContextProvider } from "../contexts/FileContext";
-import Logout from "../components/shared/Logout"
+import Logout from "../components/shared/Logout";
 import SimplePreview from "./simple-preview/simple-preview";
 
 const App = () => {

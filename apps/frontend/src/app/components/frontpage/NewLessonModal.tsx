@@ -95,7 +95,7 @@ const NewLessonModal: FC = () => {
         onOpen={() => setOpen(true)}
         open={open}
         dimmer="inverted"
-        trigger={<Button icon="plus" labelPosition="left" positive content="Ny oppgave" />}
+        trigger={<Button icon="plus" labelPosition="left" content="Ny oppgave" positive />}
       >
         <Modal.Header className="newLessonModal">Opprett en ny oppgave</Modal.Header>
         <Modal.Content className="newLessonModal">
@@ -156,7 +156,7 @@ const NewLessonModal: FC = () => {
           </form>
         </Modal.Content>
         <Modal.Actions className="newLessonModal">
-          <Button disabled={loading} color="black" onClick={closeModal} content="Avbryt" />
+          <Button disabled={loading} onClick={closeModal} content="Avbryt" />
           <Button
             loading={loading}
             form={"skjema-for-oppretting-av-ny-oppgave"}

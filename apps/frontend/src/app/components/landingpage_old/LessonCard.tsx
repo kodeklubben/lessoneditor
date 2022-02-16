@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router";
-import { Button, Card, Item, Image, Divider, Icon } from "semantic-ui-react";
+import { Button, Card, Image, Divider, Icon } from "semantic-ui-react";
 import { FC, useState, useEffect } from "react";
 import { LANGUAGEOPTIONS } from "../frontpage/settings/newLessonOptions";
 import { useUserContext } from "../../contexts/UserContext";
@@ -43,73 +43,62 @@ const LessonCard: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug, remo
           loading={loading}
         />
       )}
-      <Item style={{ marginBottom: "1em", paddingTop: "2em", minWidth: "70em" }}>
-        <div style={{ display: "flex", flexDirection: "row" }}>
-          <Item.Content style={{ position: "relative" }}>
-            <Item.Image
+      <Card>
+        <Card.Content>
+          <Card.Content>
+            <Image
               src={previewImage[lessonId]}
-              size="small"
+              size="medium"
               alt="thumbUrl"
               rounded
               bordered
               style={{
-                maxHeight: "120px",
+                maxHeight: "220px",
                 overflow: "hidden",
                 objectFit: "cover",
                 objectPosition: "0 0",
               }}
             />
+          </Card.Content>
 
-            {language ? (
-              <Image
-                style={{
-                  width: "50%",
-                  position: "absolute",
-                  left: "0",
-                  bottom: "0",
-                }}
-                src={languageImage}
-                alt={""}
-              />
-            ) : (
-              ""
-            )}
-          </Item.Content>
+          <Card.Content>
+            <Divider />
+          </Card.Content>
+          <Card.Content>
+            <Card.Header>{lessonTitle}</Card.Header>
+            <Card.Meta>{languageText}</Card.Meta>
+          </Card.Content>
+          <Card.Content>
+            <Divider />
+          </Card.Content>
+          <Card.Content extra>
+            <Button
+              onClick={() => navigateToEditor(lessonId, lessonSlug, language)}
+              content={"Åpne"}
+              positive
+            />
+            <Button style={{ background: "none" }} icon onClick={() => setOpenDeleteContent(true)}>
+              <Icon name="delete" />
+              Slett
+            </Button>
+          </Card.Content>
+        </Card.Content>
 
-          <Item.Content
+        {language ? (
+          <Image
             style={{
-              display: "flex",
-              flexFlow: "column nowrap",
-              justifyContent: "start",
-              alignItems: "center",
-              margin: "1em",
+              width: "15%",
+              position: "absolute",
+              left: "80%",
+              top: "57%",
             }}
-          >
-            <Item.Header>Tittel: {lessonTitle}</Item.Header>
-            <Item.Meta>Språk: {languageText}</Item.Meta>
-          </Item.Content>
-        </div>
-        <Item.Content
-          style={{
-            display: "flex",
-            flexFlow: "row nowrap",
-            justifyContent: "flex-end",
-            alignItems: "center",
-            margin: "1em",
-            windth: "100%",
-          }}
-        >
-          <Button
-            onClick={() => navigateToEditor(lessonId, lessonSlug, language)}
-            content={"Åpne"}
-            positive
+            src={languageImage}
+            alt={""}
           />
-          <Button style={{ background: "none" }} icon onClick={() => setOpenDeleteContent(true)}>
-            <Icon name="delete" />
-            Slett
-          </Button>
-        </Item.Content>
-      </Item>
+        ) : (
+          ""
+        )}
+      </Card>
     </>
   );
 };

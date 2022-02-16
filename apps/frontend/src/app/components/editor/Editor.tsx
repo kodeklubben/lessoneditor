@@ -9,10 +9,7 @@ import { useFileContext } from "../../contexts/FileContext";
 import { useParams } from "react-router";
 import { useLessonContext } from "../../contexts/LessonContext";
 import Navbar from "../navbar/Navbar";
-import {
-  lessonGuideDefaultText,
-  teacherGuideDefaultText,
-} from "../landingpage/settingsFiles/defaultTexts";
+import { lessonGuideDefaultText, teacherGuideDefaultText } from "./settingsFiles/defaultTexts";
 
 const Editor: FC = () => {
   const { file, lessonId, lang } = useParams() as any;
