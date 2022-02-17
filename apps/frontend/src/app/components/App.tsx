@@ -32,7 +32,7 @@ const App = () => {
         />
 
         <Route
-          path="/landingpage/:lessonId/:mode"
+          path="/landingpage/:lessonId/"
           element={
             <UserContextProvider>
               <LessonContextProvider>

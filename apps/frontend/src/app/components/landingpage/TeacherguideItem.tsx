@@ -6,7 +6,7 @@ import { useUserContext } from "../../contexts/UserContext";
 
 import DeleteModal from "../shared/DeleteModal";
 
-const LessontextItem: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug, removeMD }) => {
+const TeacherguideItem: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug, removeMD }) => {
   const navigate = useNavigate();
   const { previewImage } = useUserContext();
   const [openDeleteContent, setOpenDeleteContent] = useState<boolean>(false);
@@ -15,7 +15,7 @@ const LessontextItem: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug, 
   const deleteContent = async () => {
     try {
       setLoading(true);
-      await removeMD(language, lessonSlug);
+      await removeMD(language, "README");
       setOpenDeleteContent(false);
       setLoading(false);
     } catch (e) {
@@ -24,7 +24,7 @@ const LessontextItem: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug, 
   };
 
   const navigateToEditor = (lessonId: any, lessonSlug: any, language: string) => {
-    const target = ["/editor", lessonId, lessonSlug, language].join("/");
+    const target = ["/editor", lessonId, "README", language].join("/");
     navigate({ pathname: target });
   };
 
@@ -87,10 +87,11 @@ const LessontextItem: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug, 
             }}
           >
             <Item.Header>
-              <h3>Tittel: {lessonTitle}</h3>
+              <h3>{`Tittel: ${lessonTitle} (lærerveildening)`}</h3>
             </Item.Header>
+
             <Item.Meta>
-              <h3>Språk: {languageText}</h3>
+              <h3>Språk: {languageText} </h3>
             </Item.Meta>
           </Item.Content>
         </div>
@@ -118,4 +119,4 @@ const LessontextItem: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug, 
   );
 };
 
-export default LessontextItem;
+export default TeacherguideItem;

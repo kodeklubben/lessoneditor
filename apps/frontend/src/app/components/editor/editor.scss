@@ -2,7 +2,7 @@
 
 .preview-area {
   padding: 1em;
-  height: 84vh;
+  height: 81vh;
   width: 100%;
   border-radius: 5px;
   background-color: white;
@@ -15,7 +15,7 @@
   margin-right: 1em;
   border-radius: 5px;
   border-style: none;
-  height: 84vh;
+  height: 81vh;
   width: 100%;
   outline: none;
   resize: none;
@@ -33,7 +33,7 @@
 }
 
 .text-editor-container {
-  background-image: linear-gradient(to bottom right, #eef7ee, #eef7ee, #b1daae);
+  background-color: #f7f7f7 !important;
   max-height: fit-content;
   padding: 1em 0;
 }

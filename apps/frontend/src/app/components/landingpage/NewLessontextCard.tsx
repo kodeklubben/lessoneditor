@@ -8,8 +8,10 @@ import { paths } from "@lessoneditor/contracts";
 import { useLessonContext } from "../../contexts/LessonContext";
 import { useUserContext } from "../../contexts/UserContext";
 import { lessonGuideDefaultText } from "./settingsFiles/defaultTexts";
+import NewLessontextModal from "./NewLessontextModal";
 
 const NewLessontextCard = () => {
+  const [openNewLessontextModal, setOpenNewLessontextModal] = useState(false);
   const [lang, setLang] = useState<string>("-1");
 
   const navigate = useNavigate();
@@ -54,6 +56,13 @@ const NewLessontextCard = () => {
 
   return (
     <>
+      {openNewLessontextModal && (
+        <NewLessontextModal
+          openNewLessontextModal={openNewLessontextModal}
+          setOpenNewLessontextModal={setOpenNewLessontextModal}
+          lessonId={lessonId}
+        />
+      )}
       <Header>Opprett ny tekstfil</Header>
       <Card
         style={{ border: "3px solid #0fbe7b", width: "16em", height: "15em", marginRight: "2em" }}
@@ -79,7 +88,7 @@ const NewLessontextCard = () => {
           </Card.Content>
           <Card.Content extra>
             <Button
-              onClick={onSubmit}
+              onClick={() => setOpenNewLessontextModal(true)}
               content="Ny tekstfil "
               positive
               icon="plus"

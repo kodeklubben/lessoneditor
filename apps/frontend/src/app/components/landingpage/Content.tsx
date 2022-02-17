@@ -1,86 +1,49 @@
-import React, { FC, SyntheticEvent, useState, useEffect } from "react";
+import { SyntheticEvent, useState } from "react";
+import LessontextItems from "./LessonTextItems";
+import TeacherguideItems from "./TeacherguideItems";
+import AllFiles from "../landingpage/AllFiles";
+import { Menu, Segment } from "semantic-ui-react";
 import { useParams } from "react-router";
-import { useLessonContext } from "../../contexts/LessonContext";
-import LessontextItem from "./LessontextItem";
-import axios from "axios";
-import { paths } from "@lessoneditor/contracts";
-import { LANGUAGEOPTIONS } from "../frontpage/settings/newLessonOptions";
-import { filenameParser } from "../../utils/filename-parser";
-import { Item } from "semantic-ui-react";
 
 const Content = () => {
-  const [fileList, setFileList] = useState<string[]>([]);
-  const [usedLanguages, setUsedLanguages] = useState<string[]>([]);
-  const [unusedLanguages, setUnusedLanguages] = useState<Record<string, any>[]>([]);
-  const [lang, setLang] = useState<string>("-1");
+  const { mode } = useParams() as any;
+  const [activeItem, setActiveItem] = useState("lessontext");
 
-  const { fetchFileList, setFiles, state: lessonState, loading } = useLessonContext();
-  const { lessonId } = useParams() as any;
-
-  const { lessonTitle, lessonSlug } = lessonState.lesson;
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const fileList = await fetchFileList();
-      setFileList(fileList);
-      const tempUsedLang: string[] = [];
-      const tempUnusedLang: Record<string, string>[] = [...LANGUAGEOPTIONS];
-      fileList.forEach((filename: string) => {
-        const { isReadme, language } = filenameParser(filename);
-
-        if (!isReadme && language.length > 0) {
-          tempUsedLang.push(language);
-          const index = tempUnusedLang.findIndex((item) => item.value === language);
-          tempUnusedLang.splice(index, 1);
-        }
-      });
-      setUsedLanguages(tempUsedLang);
-      setUnusedLanguages(tempUnusedLang);
-      tempUnusedLang.length > 0 ? setLang(tempUnusedLang[0].value) : setLang("-1");
-    };
-
-    fetchData();
-  }, [lessonState.files]);
-
-  const removeMD: (language: string, file: string) => void = async (
-    language: string,
-    file: string
-  ) => {
-    const filename = language === "nb" ? file : `${file}_${language}`;
-    const ext = "md";
-
-    try {
-      const files = await fetchFileList();
-      await axios.delete(
-        paths.LESSON_FILE_DELETE.replace(":lessonId", lessonId.toString())
-          .replace(":fileName", filename)
-          .replace(":ext", ext)
-      );
-
-      const index = files.findIndex((item: string) => item === filename);
-      const newList = files.splice(index, 1);
-      setFiles(newList);
-    } catch (e) {
-      console.log(e);
-    }
+  const handleItemClick = (e: SyntheticEvent) => {
+    console.log(e);
   };
 
   return (
-    <Item.Group divided>
-      {usedLanguages!.map((language: string, index: number) => {
-        return (
-          <LessontextItem
-            key={index}
-            content={"Oppgavetekst"}
-            language={language}
-            lessonId={lessonId}
-            lessonSlug={lessonSlug}
-            lessonTitle={lessonTitle}
-            removeMD={removeMD}
+    <>
+      <div>
+        <Menu pointing secondary style={{ width: "75em" }}>
+          <Menu.Item
+            name="Oppgavetekst"
+            active={activeItem === "lessontext"}
+            onClick={() => setActiveItem("lessontext")}
+            style={activeItem === "lessontext" ? { borderBottom: "5px solid green" } : {}}
           />
-        );
-      })}
-    </Item.Group>
+          <Menu.Item
+            name="Veiledningtekst"
+            active={activeItem === "teacherguide"}
+            onClick={() => setActiveItem("teacherguide")}
+            style={activeItem === "teacherguide" ? { borderBottom: "5px solid green" } : {}}
+          />
+          <Menu.Item
+            name="Alle Filer"
+            active={activeItem === "allfiles"}
+            onClick={() => setActiveItem("allfiles")}
+            style={activeItem === "allfiles" ? { borderBottom: "5px solid green" } : {}}
+          />
+          {/* <Menu.Menu position="right">
+            <Menu.Item name="Sorter" active={activeItem === "sort"} onClick={handleItemClick} />
+          </Menu.Menu> */}
+        </Menu>
+      </div>
+      {activeItem === "lessontext" && <LessontextItems />}
+      {activeItem === "teacherguide" && <TeacherguideItems />}
+      {activeItem === "allfiles" && <AllFiles />}
+    </>
   );
 };
 

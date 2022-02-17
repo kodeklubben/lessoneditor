@@ -4,7 +4,7 @@ import NewLessonModal from "./NewLessonModal";
 import ItemList from "./ItemList";
 import { useUserContext } from "../../contexts/UserContext";
 import Navbar from "../navbar/Navbar";
-import { Card, Divider, Header, Icon, Message, Placeholder } from "semantic-ui-react";
+import { Button, Card, Divider, Header, Icon, Message, Placeholder } from "semantic-ui-react";
 
 const Overview: FC = () => {
   const { state } = useUserContext();
@@ -39,40 +39,101 @@ const Overview: FC = () => {
       <div className="overViewContainer">
         <section className="overviewSection1">
           <div className="overviewSection_content">
-            <Header as="h3" style={{ marginBottom: "1em" }}>
-              Ny Oppgave
-            </Header>
-            <Card style={{ border: "3px solid #0fbe7b", width: "16em", height: "15em" }}>
-              <Card.Content>
-                <Card.Content>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      margin: "2.4em",
-                    }}
-                  >
-                    <Icon.Group>
-                      <Icon color="grey" name="file text outline" size="huge" />
-                    </Icon.Group>
-                  </div>
-                </Card.Content>
+            <Header as={"h1"}>KidsaKoder's Tekstbehandler</Header>
+            <div
+              style={{
+                borderBottom: "5px solid",
+                borderBottomColor: "green",
+                margin: "0 0 5vh 0vh",
+                width: "30%",
+              }}
+            ></div>
 
-                <Card.Content>
-                  <Card.Header>
-                    <Divider />
-                  </Card.Header>
-                </Card.Content>
-                <Card.Content extra>
-                  <NewLessonModal />
-                </Card.Content>
-              </Card.Content>
-            </Card>
+            <section
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "flex-start",
+                width: "100%",
+              }}
+            >
+              <div style={{ marginRight: "5em" }}>
+                <Header as="h3" style={{ marginBottom: "1em" }}>
+                  Ny Oppgave
+                </Header>
+                <Card style={{ border: "3px solid #0fbe7b", width: "16em", height: "15em" }}>
+                  <Card.Content>
+                    <Card.Content>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          margin: "2.4em",
+                        }}
+                      >
+                        <Icon.Group>
+                          <Icon color="grey" name="file text outline" size="huge" />
+                        </Icon.Group>
+                      </div>
+                    </Card.Content>
+
+                    <Card.Content>
+                      <Card.Header>
+                        <Divider />
+                      </Card.Header>
+                    </Card.Content>
+                    <Card.Content extra>
+                      <NewLessonModal />
+                    </Card.Content>
+                  </Card.Content>
+                </Card>
+              </div>
+              <div>
+                <Header as="h3" style={{ marginBottom: "1em" }}>
+                  Åpne eksisterende oppgave
+                </Header>
+                <Card style={{ border: "3px solid #0fbe7b", width: "16em", height: "15em" }}>
+                  <Card.Content>
+                    <Card.Content>
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                          alignItems: "center",
+                          margin: "2.4em",
+                        }}
+                      >
+                        <Icon.Group>
+                          <Icon color="grey" name="github" size="huge" />
+                        </Icon.Group>
+                      </div>
+                    </Card.Content>
+
+                    <Card.Content>
+                      <Card.Header>
+                        <Divider />
+                      </Card.Header>
+                    </Card.Content>
+                    <Card.Content extra>
+                      <Button
+                        icon="folder"
+                        labelPosition="left"
+                        positive
+                        content="Åpne"
+                        onClick={() => {
+                          alert("WIP");
+                        }}
+                      />
+                    </Card.Content>
+                  </Card.Content>
+                </Card>
+              </div>
+            </section>
           </div>
         </section>
         <section className="overviewSection2">
-          <div className="overviewSection_content">
+          <div className="overviewSection2_content">
             <Header as="h3" style={{ marginBottom: "2em" }}>
               Mine Oppgaver
             </Header>
@@ -81,9 +142,7 @@ const Overview: FC = () => {
             ) : (
               <Message compact>
                 <Message.Header>Du har ingen kurs</Message.Header>
-                <p >
-                  Opprett en ny oppgave ved å trykke på knappen "Ny oppgave"
-                </p>
+                <p>Opprett en ny oppgave ved å trykke på knappen "Ny oppgave"</p>
               </Message>
             )}
             <br />
