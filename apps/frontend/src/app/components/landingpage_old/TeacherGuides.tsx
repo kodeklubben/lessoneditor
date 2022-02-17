@@ -45,7 +45,7 @@ const TeacherGuides: FC<any> = ({ lessonId, fileList, lessonSlug, lessonTitle })
   }, [lessonState.files]);
 
   const removeMD = async (language: string, file: string) => {
-    const filename = language === "nb" ? file : `${file}_${language}b`;
+    const filename = language === "nb" ? file : `${file}_${language}`;
     const ext = "md";
 
     try {
@@ -79,7 +79,7 @@ const TeacherGuides: FC<any> = ({ lessonId, fileList, lessonSlug, lessonTitle })
       const lessonText = insertMetaDataInTeacherGuide(yml, lang);
       const rawBody = "---\n" + yaml.dump(header) + "---\n" + lessonText;
 
-      const filename = lang === "nb" ? "README" : `README_${lang}j`;
+      const filename = lang === "nb" ? "README" : `README_${lang}`;
       const newFileDTO: NewFileDTO = {
         filename,
         ext: ".md",

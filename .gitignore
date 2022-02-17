@@ -7,7 +7,6 @@
 .env.production.local
 .env.test.local
 .eslintrc.js
-env.sh
 /.idea
 /backend/.env
 /backend/.env.local

@@ -54,7 +54,6 @@ const SubmitModal: FC<any> = ({ openSubmitModal, setOpenSubmitModal, lessonId })
         onClose={() => onClose()}
         onOpen={() => setOpenSubmitModal(true)}
         open={openSubmitModal}
-        trigger={<Button>Show Modal</Button>}
         closeOnDimmerClick={!loading}
         dimmer={"inverted"}
       >
