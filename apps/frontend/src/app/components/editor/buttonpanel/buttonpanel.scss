@@ -1,37 +1,48 @@
 .buttonpanel {
-  padding: 0 0.5em 0 0.5em;
+  padding: 0 0.5em;
   border: 1px #b1daae;
   border-style: solid solid hidden solid;
   border-radius: 5px;
   background-image: linear-gradient(white, #eef7ee);
-  max-height: 10%;
+  max-height: fit-content;
+}
+
+.buttonpanel_container {
+  max-width: 1920px;
+  margin: auto;
 }
 
 .sectiongroup {
-  display: inline;
+  display: flex;
+  flex-wrap: nowrap;
 }
 
 .firstrow {
   display: flex;
   justify-content: space-between;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .secondrow {
   display: flex;
   justify-content: space-between;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .buttongroup {
   display: flex;
   justify-content: space-between;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .settingspanel {
   display: flex;
   justify-content: space-between;
+  flex-wrap: nowrap;
+}
+
+.scratchMB_buttons {
+  display: flex;
   flex-wrap: nowrap;
 }
 
@@ -41,6 +52,8 @@
   padding-bottom: 16px !important;
   padding-top: 2px !important;
   margin-top: 1px !important;
+  display: flex;
+  flex-wrap: nowrap;
 }
 
 .hyperlink_modal {
