@@ -1,7 +1,7 @@
 import React, { FC, SyntheticEvent, useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { useLessonContext } from "../../contexts/LessonContext";
-import LessonCard from "./LessonCard";
+import LessontextItem from "./LessontextItem";
 import axios from "axios";
 import { paths } from "@lessoneditor/contracts";
 import { LANGUAGEOPTIONS } from "../frontpage/settings/newLessonOptions";
@@ -69,7 +69,7 @@ const Content = () => {
     <Item.Group divided>
       {usedLanguages!.map((language: string, index: number) => {
         return (
-          <LessonCard
+          <LessontextItem
             key={index}
             content={"Oppgavetekst"}
             language={language}

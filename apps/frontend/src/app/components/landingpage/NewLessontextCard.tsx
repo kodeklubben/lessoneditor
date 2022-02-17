@@ -1,18 +1,7 @@
-import React, { SyntheticEvent, useState, useEffect } from "react";
-import {
-  Card,
-  Divider,
-  Icon,
-  Button,
-  Dropdown,
-  Placeholder,
-  Header,
-  Image,
-} from "semantic-ui-react";
+import React, { useState } from "react";
+import { Card, Divider, Icon, Button, Header } from "semantic-ui-react";
 import { useNavigate } from "react-router";
 import * as yaml from "js-yaml";
-import { LANGUAGEOPTIONS } from "../frontpage/settings/newLessonOptions";
-import { filenameParser } from "../../utils/filename-parser";
 import axios from "axios";
 import { NewFileDTO, HeaderData } from "@lessoneditor/contracts";
 import { paths } from "@lessoneditor/contracts";
@@ -20,41 +9,17 @@ import { useLessonContext } from "../../contexts/LessonContext";
 import { useUserContext } from "../../contexts/UserContext";
 import { lessonGuideDefaultText } from "./settingsFiles/defaultTexts";
 
-const NewLessonCard = () => {
-  const [usedLanguages, setUsedLanguages] = useState<string[]>([]);
-  const [unusedLanguages, setUnusedLanguages] = useState<Record<string, any>[]>([]);
+const NewLessontextCard = () => {
   const [lang, setLang] = useState<string>("-1");
 
   const navigate = useNavigate();
 
-  const { fetchFileList, setFiles, state: lessonState, loading } = useLessonContext();
+  const { state: lessonState } = useLessonContext();
   const { state: userState } = useUserContext();
 
   const { lessonTitle, lessonSlug, lessonId } = lessonState.lesson;
   const name = userState.user!.name;
   const username = userState.user!.username;
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const fileList = await fetchFileList();
-      const tempUsedLang: string[] = [];
-      const tempUnusedLang: Record<string, string>[] = [...LANGUAGEOPTIONS];
-      fileList.forEach((filename: string) => {
-        const { isReadme, language } = filenameParser(filename);
-
-        if (!isReadme && language.length > 0) {
-          tempUsedLang.push(language);
-          const index = tempUnusedLang.findIndex((item) => item.value === language);
-          tempUnusedLang.splice(index, 1);
-        }
-      });
-      setUsedLanguages(tempUsedLang);
-      setUnusedLanguages(tempUnusedLang);
-      tempUnusedLang.length > 0 ? setLang(tempUnusedLang[0].value) : setLang("-1");
-    };
-
-    fetchData();
-  }, [lessonState.files]);
 
   const header: HeaderData = {
     title: lessonTitle,
@@ -85,12 +50,6 @@ const NewLessonCard = () => {
     const target = ["/editor", lessonId, lessonSlug, lang].join("/");
 
     navigate(target);
-  };
-
-  const onChange = (e: SyntheticEvent, { name, value }: Record<string, string>) => {
-    console.log(e);
-
-    setLang(value);
   };
 
   return (
@@ -133,4 +92,4 @@ const NewLessonCard = () => {
   );
 };
 
-export default NewLessonCard;
+export default NewLessontextCard;

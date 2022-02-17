@@ -1,6 +1,6 @@
 import "./landingpage.scss";
 import Navbar from "../navbar/Navbar";
-import NewLesson from "./NewLesson";
+import NewLessontext from "./NewLessontext";
 import SubmitLesson from "./SubmitLesson";
 import CourseInfo from "./CourseInfo";
 import Content from "./Content";
@@ -28,7 +28,7 @@ const Landingpage = () => {
               isSubmitted={submitted}
             />
             <div className="landingpage_cardsection">
-              <NewLesson />
+              <NewLessontext />
               <SubmitLesson />
             </div>
           </div>

@@ -1,26 +1,8 @@
-import React, { SyntheticEvent, useState, useEffect } from "react";
-import {
-  Card,
-  Divider,
-  Icon,
-  Button,
-  Dropdown,
-  Placeholder,
-  Header,
-  Image,
-} from "semantic-ui-react";
-import { useNavigate, useParams } from "react-router";
-import * as yaml from "js-yaml";
-import { LANGUAGEOPTIONS } from "../frontpage/settings/newLessonOptions";
-import { filenameParser } from "../../utils/filename-parser";
-import axios from "axios";
-import { NewFileDTO, HeaderData } from "@lessoneditor/contracts";
-import { paths } from "@lessoneditor/contracts";
-import { useLessonContext } from "../../contexts/LessonContext";
-import { useUserContext } from "../../contexts/UserContext";
-import { lessonGuideDefaultText } from "./settingsFiles/defaultTexts";
+import React, { useState } from "react";
+import { Card, Divider, Button, Header, Image } from "semantic-ui-react";
+import { useParams } from "react-router";
 import lkkLogo from "../../../assets/public/lkk_logo.png";
-import SubmitModal from "./SubmitModal";
+import SubmitlessonModal from "./SubmitLessonModal";
 
 const SubmitLessonCard = () => {
   const [openSubmitModal, setOpenSubmitModal] = useState(false);
@@ -33,7 +15,7 @@ const SubmitLessonCard = () => {
   return (
     <>
       {openSubmitModal && (
-        <SubmitModal
+        <SubmitlessonModal
           openSubmitModal={openSubmitModal}
           setOpenSubmitModal={setOpenSubmitModal}
           lessonId={lessonId}

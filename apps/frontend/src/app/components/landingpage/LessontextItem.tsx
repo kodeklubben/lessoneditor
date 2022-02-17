@@ -6,7 +6,7 @@ import { useUserContext } from "../../contexts/UserContext";
 
 import DeleteModal from "../shared/DeleteModal";
 
-const LessonCard: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug, removeMD }) => {
+const LessontextItem: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug, removeMD }) => {
   const navigate = useNavigate();
   const { previewImage } = useUserContext();
   const [openDeleteContent, setOpenDeleteContent] = useState<boolean>(false);
@@ -114,4 +114,4 @@ const LessonCard: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug, remo
   );
 };
 
-export default LessonCard;
+export default LessontextItem;
