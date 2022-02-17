@@ -7,7 +7,7 @@ import { UserService } from "../user/user.service";
 import { UserDTO } from "@lessoneditor/contracts";
 import { lastValueFrom } from "rxjs";
 import { AxiosResponse } from "axios";
-import { HttpService } from "@nestjs/common";
+import { HttpService } from "@nestjs/axios";
 import { Inject, CACHE_MANAGER } from "@nestjs/common";
 import { Cache } from "cache-manager";
 import { User } from "../user/user.entity";
@@ -45,7 +45,7 @@ export class LocalStrategy extends PassportStrategy(Strategy, "github") {
     let user: User;
     try {
       user = await this.userService.getUser(response.data.id);
-      const {lessons, ...storedUser} = user
+      const { lessons, ...storedUser } = user;
       const newUserDTO: UserDTO = {
         userId: response.data.id,
         name: response.data.name,
@@ -54,11 +54,9 @@ export class LocalStrategy extends PassportStrategy(Strategy, "github") {
         photo: response.data.avatar_url,
       };
 
-      if(!this.shallowEqual(storedUser, newUserDTO))
-      {
-        user = await this.userService.updateUser(newUserDTO, storedUser.userId)
+      if (!this.shallowEqual(storedUser, newUserDTO)) {
+        user = await this.userService.updateUser(newUserDTO, storedUser.userId);
       }
-
     } catch (error) {
       const newUserDTO: UserDTO = {
         userId: response.data.id,

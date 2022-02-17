@@ -1,9 +1,12 @@
 * {
   padding: 0;
   margin: 0;
+  box-sizing: border-box;
 }
 
-// body {
-//   max-width: 1920px;
-//   margin: auto !important;
-// }
+#root {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+
+}

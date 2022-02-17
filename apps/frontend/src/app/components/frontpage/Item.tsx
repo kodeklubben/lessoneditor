@@ -29,7 +29,7 @@ const Item: React.FC<Props> = ({ lesson }) => {
   };
 
   const navigateToHome = (lessonId: string) => {
-    const target = ["/landingpage", lessonId, "lessontexts"].join("/");
+    const target = ["/landingpage", lessonId].join("/");
     navigate(target);
   };
 
@@ -44,15 +44,18 @@ const Item: React.FC<Props> = ({ lesson }) => {
         />
       )}
 
-      <Card>
-        <Card.Content style={{ position: "relative" }}>
+      <Card
+        style={{ border: "3px solid #0fbe7b", width: "16em", height: "21em", marginRight: "2em" }}
+      >
+        <div style={{ position: "relative", height: "160px" }}>
           <Image
             src={previewImage[lesson.lessonId]}
             size="medium"
             bordered
             rounded
             style={{
-              maxHeight: "220px",
+              height: "100%",
+              maxWidrg: "120px",
               overflow: "hidden",
               objectFit: "cover",
               objectPosition: "0 0",
@@ -75,7 +78,7 @@ const Item: React.FC<Props> = ({ lesson }) => {
               }
             ></Popup>
           )}
-        </Card.Content>
+        </div>
         <Card.Content>
           <Card.Header>{lesson.lessonTitle ? lesson.lessonTitle : lesson.lessonSlug}</Card.Header>
           <Card.Meta>{lesson.courseTitle ? lesson.courseTitle : lesson.courseSlug}</Card.Meta>

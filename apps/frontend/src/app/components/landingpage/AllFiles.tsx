@@ -1,11 +1,11 @@
 import { useLessonContext } from "../../contexts/LessonContext";
-import ListFiles from "../shared/ListFiles";
-import { Item, Container } from "semantic-ui-react";
+import ListFiles from "./ListFiles";
+import { Button, Card, Item, Image, Divider, Icon } from "semantic-ui-react";
 import { FC, useState, useEffect } from "react";
+import { useParams } from "react-router";
 
-type AllFilesProps = { lessonId: string };
-
-const AllFiles: FC<AllFilesProps> = ({ lessonId }) => {
+const AllFiles = () => {
+  const { lessonId } = useParams() as any;
   const { fetchFileList, state } = useLessonContext();
   const [file, setFile] = useState<string[]>([]);
 
@@ -20,18 +20,13 @@ const AllFiles: FC<AllFilesProps> = ({ lessonId }) => {
   const filterItems = ["preview.png", "lesson.yml", "data.json", "image.png"];
 
   return (
-    <Container>
-      <ul>
-        <ListFiles
-          list={
-            file.length > 0
-              ? file.filter((fileName: string) => !filterItems.includes(fileName))
-              : ["No files found"]
-          }
-          lessonId={lessonId}
-        />
-      </ul>
-    </Container>
+    <Item.Group divided>
+      {file
+        .filter((item) => !filterItems.includes(item))
+        .map((item) => (
+          <ListFiles item={item} lessonId={lessonId} />
+        ))}
+    </Item.Group>
   );
 };
 

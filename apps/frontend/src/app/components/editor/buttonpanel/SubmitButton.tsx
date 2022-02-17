@@ -19,7 +19,7 @@ const SubmitButton: FC<SubmitButtonProps> = ({ mdText }) => {
 
   const navigateToHome = () => {
     saveFileBody(mdText);
-    const target = ["/landingpage", lessonId, "lessontexts"].join("/");
+    const target = ["/landingpage", lessonId].join("/");
     navigate(target);
   };
 

@@ -73,156 +73,157 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
   return (
     <>
       <div className="buttonpanel">
-        <div className="firstrow">
-          <div className="buttongroup">
-            <Emphasis
-              editorRef={editorRef}
-              mdText={mdText}
-              buttonValues={buttonValues}
-              cursorPositionStart={cursorPositionStart}
-              cursorPositionEnd={cursorPositionEnd}
-              setMdText={setMdText}
-              setCursorPosition={setCursorPosition}
-              setCursor={setCursor}
-              setButtonValues={setButtonValues}
-              setUndoAndCursorPosition={setUndoAndCursorPosition}
-            />
+        <div className="buttonpanel_container">
+          <div className="firstrow">
+            <div className="buttongroup">
+              <Emphasis
+                editorRef={editorRef}
+                mdText={mdText}
+                buttonValues={buttonValues}
+                cursorPositionStart={cursorPositionStart}
+                cursorPositionEnd={cursorPositionEnd}
+                setMdText={setMdText}
+                setCursorPosition={setCursorPosition}
+                setCursor={setCursor}
+                setButtonValues={setButtonValues}
+                setUndoAndCursorPosition={setUndoAndCursorPosition}
+              />
 
-            <div style={{ marginRight: "3em" }} />
+              <div style={{ marginRight: "3em" }} />
 
-            <UndoRedo
-              editorRef={editorRef}
-              mdText={mdText}
-              cursorPositionStart={cursorPositionStart}
-              undoCursorPosition={undoCursorPosition}
-              redoCursorPosition={redoCursorPosition}
-              setUndoCursorPosition={setUndoCursorPosition}
-              setRedoCursorPosition={setRedoCursorPosition}
-              pushUndoValue={pushUndoValue}
-              pushRedoValue={pushRedoValue}
-              setCursorPosition={setCursorPosition}
-            />
-            <div style={{ marginRight: "3em" }} />
-            <Hyperlink
-              editorRef={editorRef}
-              mdText={mdText}
-              cursorPositionStart={cursorPositionStart}
-              cursorPositionEnd={cursorPositionEnd}
-              setMdText={setMdText}
-              setCursorPosition={setCursorPosition}
-              setCursor={setCursor}
-              setUndoAndCursorPosition={setUndoAndCursorPosition}
-            />
-            <Image
-              editorRef={editorRef}
-              uploadImageRef={uploadImageRef}
-              setUndoAndCursorPosition={setUndoAndCursorPosition}
-              mdText={mdText}
-              cursorPositionStart={cursorPositionStart}
-            />
-            <Video
-              editorRef={editorRef}
-              mdText={mdText}
-              cursorPositionStart={cursorPositionStart}
-              cursorPositionEnd={cursorPositionEnd}
-              setMdText={setMdText}
-              setCursorPosition={setCursorPosition}
-              setCursor={setCursor}
-              setUndoAndCursorPosition={setUndoAndCursorPosition}
-            />
-            <div style={{ marginRight: "3em" }} />
-            <Lists
-              editorRef={editorRef}
-              cursorPositionStart={cursorPositionStart}
-              cursorPositionEnd={cursorPositionEnd}
-              mdText={mdText}
-              buttonValues={buttonValues}
-              setMdText={setMdText}
-              setCursorPosition={setCursorPosition}
-              setCursor={setCursor}
-              setListButtonValues={setListButtonValues}
-              setButtonValues={setButtonValues}
-              setUndoAndCursorPosition={setUndoAndCursorPosition}
-            />
-            {/* <div style={{ marginRight: "3em" }} />
+              <UndoRedo
+                editorRef={editorRef}
+                mdText={mdText}
+                cursorPositionStart={cursorPositionStart}
+                undoCursorPosition={undoCursorPosition}
+                redoCursorPosition={redoCursorPosition}
+                setUndoCursorPosition={setUndoCursorPosition}
+                setRedoCursorPosition={setRedoCursorPosition}
+                pushUndoValue={pushUndoValue}
+                pushRedoValue={pushRedoValue}
+                setCursorPosition={setCursorPosition}
+              />
+              <div style={{ marginRight: "3em" }} />
+              <Hyperlink
+                editorRef={editorRef}
+                mdText={mdText}
+                cursorPositionStart={cursorPositionStart}
+                cursorPositionEnd={cursorPositionEnd}
+                setMdText={setMdText}
+                setCursorPosition={setCursorPosition}
+                setCursor={setCursor}
+                setUndoAndCursorPosition={setUndoAndCursorPosition}
+              />
+              <Image
+                editorRef={editorRef}
+                uploadImageRef={uploadImageRef}
+                setUndoAndCursorPosition={setUndoAndCursorPosition}
+                mdText={mdText}
+                cursorPositionStart={cursorPositionStart}
+              />
+              <Video
+                editorRef={editorRef}
+                mdText={mdText}
+                cursorPositionStart={cursorPositionStart}
+                cursorPositionEnd={cursorPositionEnd}
+                setMdText={setMdText}
+                setCursorPosition={setCursorPosition}
+                setCursor={setCursor}
+                setUndoAndCursorPosition={setUndoAndCursorPosition}
+              />
+              <div style={{ marginRight: "3em" }} />
+              <Lists
+                editorRef={editorRef}
+                cursorPositionStart={cursorPositionStart}
+                cursorPositionEnd={cursorPositionEnd}
+                mdText={mdText}
+                buttonValues={buttonValues}
+                setMdText={setMdText}
+                setCursorPosition={setCursorPosition}
+                setCursor={setCursor}
+                setListButtonValues={setListButtonValues}
+                setButtonValues={setButtonValues}
+                setUndoAndCursorPosition={setUndoAndCursorPosition}
+              />
+              {/* <div style={{ marginRight: "3em" }} />
             <Explorer /> */}
+            </div>
+
+            <div className="settingspanel">
+              {/* <Languages saveEditorText={saveEditorText} setShowSpinner={setShowSpinner} /> */}
+              <EditorDatamodal
+                courseTitle={courseTitle}
+                lessonTitle={lessonTitle}
+                openSettings={openSettings}
+                setOpenSettings={setOpenSettings}
+              />
+              <SubmitButton mdText={mdText} />
+            </div>
           </div>
+          <div className="secondrow">
+            <div className="sectiongroup">
+              <Sections
+                editorRef={editorRef}
+                cursorPositionStart={cursorPositionStart}
+                cursorPositionEnd={cursorPositionEnd}
+                mdText={mdText}
+                buttonValues={buttonValues}
+                setMdText={setMdText}
+                setCursorPosition={setCursorPosition}
+                setCursor={setCursor}
+                setButtonValues={setButtonValues}
+                setUndoAndCursorPosition={setUndoAndCursorPosition}
+              />
 
-          <div className="settingspanel">
-            {/* <Languages saveEditorText={saveEditorText} setShowSpinner={setShowSpinner} /> */}
-            <EditorDatamodal
-              courseTitle={courseTitle}
-              lessonTitle={lessonTitle}
-              openSettings={openSettings}
-              setOpenSettings={setOpenSettings}
-            />
-            <SubmitButton mdText={mdText} />
+              <span style={{ marginRight: "5em" }} />
+
+              <CodeButtons
+                editorRef={editorRef}
+                mdText={mdText}
+                cursorPositionStart={cursorPositionStart}
+                cursorPositionEnd={cursorPositionEnd}
+                buttonValues={buttonValues}
+                setMdText={setMdText}
+                setCursorPosition={setCursorPosition}
+                setCursor={setCursor}
+                setButtonValues={setButtonValues}
+                course={course}
+                courseTitle={courseTitle}
+                setUndoAndCursorPosition={setUndoAndCursorPosition}
+              />
+            </div>
+            <Autosave mdText={mdText} />
           </div>
-        </div>
-
-        <div className="secondrow">
-          <div className="sectiongroup">
-            <Sections
-              editorRef={editorRef}
-              cursorPositionStart={cursorPositionStart}
-              cursorPositionEnd={cursorPositionEnd}
-              mdText={mdText}
-              buttonValues={buttonValues}
-              setMdText={setMdText}
-              setCursorPosition={setCursorPosition}
-              setCursor={setCursor}
-              setButtonValues={setButtonValues}
-              setUndoAndCursorPosition={setUndoAndCursorPosition}
-            />
-
-            <span style={{ marginRight: "5em" }} />
-
-            <CodeButtons
-              editorRef={editorRef}
-              mdText={mdText}
-              cursorPositionStart={cursorPositionStart}
-              cursorPositionEnd={cursorPositionEnd}
-              buttonValues={buttonValues}
-              setMdText={setMdText}
-              setCursorPosition={setCursorPosition}
-              setCursor={setCursor}
-              setButtonValues={setButtonValues}
-              course={course}
-              courseTitle={courseTitle}
-              setUndoAndCursorPosition={setUndoAndCursorPosition}
-            />
+          <div className="scratchMB_buttons">
+            {course === "microbit" && (
+              <MicrobitButtons
+                editorRef={editorRef}
+                cursorPositionStart={cursorPositionStart}
+                cursorPositionEnd={cursorPositionEnd}
+                mdText={mdText}
+                buttonValues={buttonValues}
+                setMdText={setMdText}
+                setCursorPosition={setCursorPosition}
+                setCursor={setCursor}
+                setButtonValues={setButtonValues}
+                setUndoAndCursorPosition={setUndoAndCursorPosition}
+              />
+            )}
+            {course === "scratch" && (
+              <SratchButtons
+                editorRef={editorRef}
+                cursorPositionStart={cursorPositionStart}
+                cursorPositionEnd={cursorPositionEnd}
+                mdText={mdText}
+                buttonValues={buttonValues}
+                setMdText={setMdText}
+                setCursorPosition={setCursorPosition}
+                setCursor={setCursor}
+                setButtonValues={setButtonValues}
+                setUndoAndCursorPosition={setUndoAndCursorPosition}
+              />
+            )}
           </div>
-          <Autosave mdText={mdText} />
-        </div>
-        <div>
-          {course === "microbit" && (
-            <MicrobitButtons
-              editorRef={editorRef}
-              cursorPositionStart={cursorPositionStart}
-              cursorPositionEnd={cursorPositionEnd}
-              mdText={mdText}
-              buttonValues={buttonValues}
-              setMdText={setMdText}
-              setCursorPosition={setCursorPosition}
-              setCursor={setCursor}
-              setButtonValues={setButtonValues}
-              setUndoAndCursorPosition={setUndoAndCursorPosition}
-            />
-          )}
-          {course === "scratch" && (
-            <SratchButtons
-              editorRef={editorRef}
-              cursorPositionStart={cursorPositionStart}
-              cursorPositionEnd={cursorPositionEnd}
-              mdText={mdText}
-              buttonValues={buttonValues}
-              setMdText={setMdText}
-              setCursorPosition={setCursorPosition}
-              setCursor={setCursor}
-              setButtonValues={setButtonValues}
-              setUndoAndCursorPosition={setUndoAndCursorPosition}
-            />
-          )}
         </div>
       </div>
     </>
