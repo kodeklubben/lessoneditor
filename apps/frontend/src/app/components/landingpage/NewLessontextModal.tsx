@@ -175,10 +175,9 @@ const NewLessontextModal: FC<any> = ({ openNewLessontextModal, setOpenNewLessont
       >
         <>
           <Modal.Header>Opprett ny tekstfil</Modal.Header>
-          <Modal.Content style={{ display: "flex" }}>
-            <Modal.Description style={{ display: "flex" }}>
+          <Modal.Content style={{ display: "flex", flexFlow: "row wrap" }}>
+            <Modal.Description style={{ display: "flex", flexFlow: "row wrap" }}>
               <Header style={{ marginRight: "1em" }}>Velg type tekst: </Header>
-
               <Radio
                 label="Oppgavetekst"
                 name="lessontext"
@@ -196,7 +195,7 @@ const NewLessontextModal: FC<any> = ({ openNewLessontextModal, setOpenNewLessont
                 onChange={() => onRadiobuttonChange("teacherguide")}
               />
             </Modal.Description>
-            <Modal.Description style={{ display: "flex" }}>
+            <Modal.Description style={{ display: "flex", flexFlow: "row wrap" }}>
               <Header style={{ marginRight: "1em" }}>Velg språk: </Header>
 
               {textMode === "lessontext" && unusedLanguages.length > 0 ? (

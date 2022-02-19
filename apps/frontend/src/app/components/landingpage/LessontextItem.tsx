@@ -43,7 +43,7 @@ const LessontextItem: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug, 
           loading={loading}
         />
       )}
-      <Item style={{ marginBottom: "1em", paddingTop: "2em", minWidth: "70em" }}>
+      <Item style={{ marginBottom: "1em", paddingTop: "2em" }}>
         <div style={{ display: "flex", flexDirection: "row" }}>
           <Item.Content style={{ position: "relative" }}>
             <Item.Image
@@ -80,9 +80,9 @@ const LessontextItem: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug, 
           <Item.Content
             style={{
               display: "flex",
-              flexFlow: "column nowrap",
+              flexFlow: "column",
               justifyContent: "start",
-              alignItems: "center",
+              alignItems: "start",
               margin: "1em",
             }}
           >

@@ -1,25 +1,23 @@
-.overViewContainer {
-  height: 92%;
-}
-
 .overviewSection1 {
   background-color: #f7f7f7;
-  width: 100%;
-  height: 50%;
-  padding: 3em 0;
+  padding: 2vh;
 }
 
-.overviewSection_content {
+.overviewSection1_content {
   margin: auto;
-  width: 75em;
+  max-width: 1200px;
 }
 
 .overviewSection2_content {
   margin: auto;
-  width: 75em;
+  max-width: 1200px;
 }
 
 .overviewSection2 {
-  height: 50%;
-  padding: 1.5em 1em;
+  padding: 6vh;
+}
+
+.overview_Button:hover {
+  border: 1px solid #0fbe7b;
+  cursor: pointer;
 }

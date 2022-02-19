@@ -10,7 +10,7 @@ interface LevelsProps {
 
 const Levels: FC<LevelsProps> = ({ changeHandler, data }) => {
   return (
-    <>
+    <label style={{ flex: "1", margin: "1vw", minWidth: "45%" }}>
       <Header as="h3">{FORM_TEXT.LEVEL.heading}</Header>
       <Dropdown
         placeholder="Velg Nivå"
@@ -23,7 +23,7 @@ const Levels: FC<LevelsProps> = ({ changeHandler, data }) => {
         options={levelOptions}
         label={FORM_TEXT.LEVEL.heading}
       />
-    </>
+    </label>
   );
 };
 

@@ -1,5 +1,5 @@
 import "./overview.scss";
-import { FC } from "react";
+import { FC, useState } from "react";
 import NewLessonModal from "./NewLessonModal";
 import ItemList from "./ItemList";
 import { useUserContext } from "../../contexts/UserContext";
@@ -8,6 +8,7 @@ import { Button, Card, Divider, Header, Icon, Message, Placeholder } from "seman
 
 const Overview: FC = () => {
   const { state } = useUserContext();
+  const [openNewLessonModal, setOpenNewLessonModal] = useState(false);
 
   const cardPlaceholder = (key: number) => {
     return (
@@ -27,44 +28,51 @@ const Overview: FC = () => {
             </Placeholder.Paragraph>
           </Placeholder>
         </Card.Content>
-
         <Card.Content extra></Card.Content>
       </Card>
     );
   };
 
   return (
-    <>
+    <div>
       <Navbar />
       <div className="overViewContainer">
         <section className="overviewSection1">
-          <div className="overviewSection_content">
+          <div className="overviewSection1_content">
             <Header as={"h1"}>KidsaKoder's Tekstbehandler</Header>
             <div
               style={{
                 borderBottom: "5px solid",
                 borderBottomColor: "green",
-                margin: "0 0 5vh 0vh",
+                margin: "0 0 6vh 0vh",
                 width: "30%",
               }}
-            ></div>
-
-            <section
+            />
+            <div
               style={{
                 display: "flex",
+                flexFlow: "row wrap",
                 alignItems: "center",
-                justifyContent: "flex-start",
-                width: "100%",
               }}
             >
-              <div style={{ marginRight: "5em" }}>
+              <div style={{ margin: "0 1vw 0vh 0" }}>
                 <Header as="h3" style={{ marginBottom: "1em" }}>
                   Ny Oppgave
                 </Header>
-                <Card style={{ border: "3px solid #0fbe7b", width: "16em", height: "15em" }}>
-                  <Card.Content>
+                <div
+                  style={{ margin: "0", padding: "0" }}
+                  onClick={() => setOpenNewLessonModal(true)}
+                >
+                  <Card
+                    className="overview_Button"
+                    style={{
+                      width: "16em",
+                      height: "15em",
+                      padding: "0",
+                    }}
+                  >
                     <Card.Content>
-                      <div
+                      <Card.Content
                         style={{
                           display: "flex",
                           justifyContent: "center",
@@ -75,25 +83,28 @@ const Overview: FC = () => {
                         <Icon.Group>
                           <Icon color="grey" name="file text outline" size="huge" />
                         </Icon.Group>
-                      </div>
-                    </Card.Content>
+                      </Card.Content>
 
-                    <Card.Content>
-                      <Card.Header>
-                        <Divider />
-                      </Card.Header>
+                      <Card.Content>
+                        <Card.Header>
+                          <Divider />
+                        </Card.Header>
+                      </Card.Content>
+                      <Card.Content extra>
+                        <NewLessonModal
+                          openNewLessonModal={openNewLessonModal}
+                          setOpenNewLessonModal={setOpenNewLessonModal}
+                        />
+                      </Card.Content>
                     </Card.Content>
-                    <Card.Content extra>
-                      <NewLessonModal />
-                    </Card.Content>
-                  </Card.Content>
-                </Card>
+                  </Card>
+                </div>
               </div>
-              <div>
+              <div style={{ margin: "0 0 0vh 4vw" }}>
                 <Header as="h3" style={{ marginBottom: "1em" }}>
                   Åpne eksisterende oppgave
                 </Header>
-                <Card style={{ border: "3px solid #0fbe7b", width: "16em", height: "15em" }}>
+                <Card className="overview_Button" style={{ width: "16em", height: "15em" }}>
                   <Card.Content>
                     <Card.Content>
                       <div
@@ -129,7 +140,7 @@ const Overview: FC = () => {
                   </Card.Content>
                 </Card>
               </div>
-            </section>
+            </div>
           </div>
         </section>
         <section className="overviewSection2">
@@ -149,7 +160,7 @@ const Overview: FC = () => {
           </div>
         </section>
       </div>
-    </>
+    </div>
   );
 };
 export default Overview;

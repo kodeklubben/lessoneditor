@@ -17,7 +17,7 @@ interface Tags {
 
 const CheckboxWrapper: FC<CheckboxWrapperProps> = ({ value, onCheck, data, name, subtag }) => {
   return (
-    <>
+    <div style={{ display: "flex", flexFlow: "column", margin: "0 7em 0.2vh 0" }}>
       <Checkbox
         label={name}
         type="checkbox"
@@ -28,61 +28,130 @@ const CheckboxWrapper: FC<CheckboxWrapperProps> = ({ value, onCheck, data, name,
         value={value}
         onChange={onCheck}
       />
-    </>
+    </div>
   );
 };
 
 const TagsGrade: FC<Tags> = ({ changeHandler, data }) => {
   return (
-    <>
-      {gradeSettings.map((element, index) => (
-        <div className="column" key={"element" + index}>
+    <div
+      style={{
+        display: "flex",
+        flexFlow: "row wrap",
+        backgroundColor: "white",
+        padding: "0.5em",
+        border: "1px solid lightgrey",
+        borderRadius: "5px",
+      }}
+    >
+      <div>
+        {gradeSettings.slice(0, gradeSettings.length / 2 + 1).map((element) => (
           <CheckboxWrapper
+            key={element.value}
             name={element.name}
             subtag={element.subtag}
             data={data}
             value={element.value}
             onCheck={changeHandler}
           />
-        </div>
-      ))}
-    </>
+        ))}
+      </div>
+
+      <div>
+        {gradeSettings.slice(gradeSettings.length / 2 + 1).map((element) => (
+          <CheckboxWrapper
+            key={element.value}
+            name={element.name}
+            subtag={element.subtag}
+            data={data}
+            value={element.value}
+            onCheck={changeHandler}
+          />
+        ))}
+      </div>
+    </div>
   );
 };
 
 const TagsSubject: FC<Tags> = ({ changeHandler, data }) => {
   return (
-    <>
-      {subjectSettings.map((element, index) => (
-        <div className="column" key={"element" + index}>
+    <div
+      style={{
+        display: "flex",
+        flexFlow: "row wrap",
+        backgroundColor: "white",
+        padding: "0.5em",
+        border: "1px solid lightgrey",
+        borderRadius: "5px",
+      }}
+    >
+      <div>
+        {subjectSettings.slice(0, subjectSettings.length / 2 + 1).map((element) => (
           <CheckboxWrapper
+            key={element.value}
             name={element.name}
             subtag={element.subtag}
             data={data}
             value={element.value}
             onCheck={changeHandler}
           />
-        </div>
-      ))}
-    </>
+        ))}
+      </div>
+
+      <div>
+        {subjectSettings.slice(subjectSettings.length / 2 + 1).map((element, index) => (
+          <CheckboxWrapper
+            key={element.value}
+            name={element.name}
+            subtag={element.subtag}
+            data={data}
+            value={element.value}
+            onCheck={changeHandler}
+          />
+        ))}
+      </div>
+    </div>
   );
 };
 
 const TagsTopic: FC<Tags> = ({ changeHandler, data }) => {
   return (
-    <>
-      {topicSettings.map((element, index) => (
-        <div className="column" key={"element-" + index}>
+    <div
+      style={{
+        display: "flex",
+        flexFlow: "row wrap",
+        backgroundColor: "white",
+        padding: "0.5em",
+        border: "1px solid lightgrey",
+        borderRadius: "5px",
+      }}
+    >
+      <div>
+        {topicSettings.slice(0, topicSettings.length / 2 + 1).map((element, index) => (
           <CheckboxWrapper
+            key={element.value}
             name={element.name}
             subtag={element.subtag}
             data={data}
             value={element.value}
             onCheck={changeHandler}
           />
-        </div>
-      ))}
-    </>
+        ))}
+      </div>
+
+      <div>
+        {topicSettings.slice(topicSettings.length / 2 + 1).map((element, index) => (
+          <CheckboxWrapper
+            key={element.value}
+            name={element.name}
+            subtag={element.subtag}
+            data={data}
+            value={element.value}
+            onCheck={changeHandler}
+          />
+        ))}
+      </div>
+    </div>
   );
 };
 
