@@ -167,35 +167,40 @@ const LandingpageDatamodal = () => {
       >
         <Modal.Header className="landingpage_modal">Oppgavedata</Modal.Header>
         <Modal.Content className="landingpage_modal">
-          <Grid divided="vertically">
-            <Grid.Row columns={2}>
-              <Grid.Column>
-                <CheckboxField
-                  labelTitle={YML_TEXT.topic}
-                  content={<TagsTopic data={checkBoxState} changeHandler={checboxHandler} />}
-                />
-              </Grid.Column>
-              <Grid.Column>
-                <CheckboxField
-                  labelTitle={YML_TEXT.subject}
-                  content={<TagsSubject data={checkBoxState} changeHandler={checboxHandler} />}
-                />
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-          <Grid divided="vertically">
-            <Grid.Row columns={2}>
-              <Grid.Column>
-                <CheckboxField
-                  labelTitle={YML_TEXT.grade}
-                  content={<TagsGrade data={checkBoxState} changeHandler={checboxHandler} />}
-                />
-              </Grid.Column>
-              <Grid.Column>
-                <Levels changeHandler={dropdownHandler} data={yml} />
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
+          <div
+            style={{
+              display: "flex",
+              flexFlow: "row wrap",
+              justifyContent: "space-around",
+              marginBottom: "3vh",
+            }}
+          >
+            <CheckboxField
+              labelTitle={YML_TEXT.topic}
+              content={<TagsTopic data={checkBoxState} changeHandler={checboxHandler} />}
+            />
+
+            <CheckboxField
+              labelTitle={YML_TEXT.subject}
+              content={<TagsSubject data={checkBoxState} changeHandler={checboxHandler} />}
+            />
+          </div>
+
+          <div
+            style={{
+              display: "flex",
+              flexFlow: "row wrap",
+              justifyContent: "space-around",
+              marginBottom: "3vh",
+            }}
+          >
+            <CheckboxField
+              labelTitle={YML_TEXT.grade}
+              content={<TagsGrade data={checkBoxState} changeHandler={checboxHandler} />}
+            />
+
+            <Levels changeHandler={dropdownHandler} data={yml} />
+          </div>
 
           <License changeHandler={changeHandler} data={yml} />
         </Modal.Content>

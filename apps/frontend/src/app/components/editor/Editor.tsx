@@ -139,47 +139,55 @@ const Editor: FC = () => {
             <h1 style={{ display: "inline" }}>{state.lesson.lessonTitle}</h1>
             <h3 style={{ color: "silver", display: "inline" }}>{state.lesson.courseTitle}</h3>
           </Navbar>
-          <ButtonPanel
-            buttonValues={buttonValues}
-            course={state.lesson.courseSlug}
-            courseTitle={state.lesson.courseTitle}
-            cursorPositionStart={cursorPositionStart}
-            cursorPositionEnd={cursorPositionEnd}
-            editorRef={editorRef}
-            lessonTitle={state.lesson.lessonTitle}
-            mdText={mdText}
-            pushRedoValue={pushRedoValue}
-            pushUndoValue={pushUndoValue}
-            redoCursorPosition={redoCursorPosition}
-            setButtonValues={setButtonValues}
-            setCursor={setCursor}
-            setCursorPosition={setCursorPosition}
-            setListButtonValues={setListButtonValues}
-            setMdText={setMdText}
-            setRedoCursorPosition={setRedoCursorPosition}
-            setUndoCursorPosition={setUndoCursorPosition}
-            undoCursorPosition={undoCursorPosition}
-            uploadImageRef={uploadImageRef}
-            setUndoAndCursorPosition={setUndoAndUndoPosition}
-            openSettings={openSettings}
-            setOpenSettings={setOpenSettings}
-          />
-          <div className="text-editor-container">
-            <div className="editor-windows">
-              <MDTextArea
-                editorRef={editorRef}
-                mdText={mdText}
-                buttonValues={buttonValues}
-                listButtonValues={listButtonValues}
-                cursorPositionStart={cursorPositionStart}
-                setCursorPosition={setCursorPosition}
-                setMdText={setMdText}
-                setButtonValues={setButtonValues}
-                setCursor={setCursor}
-                setUndoAndCursorPosition={setUndoAndUndoPosition}
-                resetButtons={resetButtons}
-              />
-              <MDPreview mdText={mdText} course={state.lesson.courseSlug} language={language} />
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              backgroundImage: "linear-gradient(#f7f7f7,#f7f7f7, white)",
+            }}
+          >
+            <ButtonPanel
+              buttonValues={buttonValues}
+              course={state.lesson.courseSlug}
+              courseTitle={state.lesson.courseTitle}
+              cursorPositionStart={cursorPositionStart}
+              cursorPositionEnd={cursorPositionEnd}
+              editorRef={editorRef}
+              lessonTitle={state.lesson.lessonTitle}
+              mdText={mdText}
+              pushRedoValue={pushRedoValue}
+              pushUndoValue={pushUndoValue}
+              redoCursorPosition={redoCursorPosition}
+              setButtonValues={setButtonValues}
+              setCursor={setCursor}
+              setCursorPosition={setCursorPosition}
+              setListButtonValues={setListButtonValues}
+              setMdText={setMdText}
+              setRedoCursorPosition={setRedoCursorPosition}
+              setUndoCursorPosition={setUndoCursorPosition}
+              undoCursorPosition={undoCursorPosition}
+              uploadImageRef={uploadImageRef}
+              setUndoAndCursorPosition={setUndoAndUndoPosition}
+              openSettings={openSettings}
+              setOpenSettings={setOpenSettings}
+            />
+            <div className="text-editor-container">
+              <div className="editor-windows">
+                <MDTextArea
+                  editorRef={editorRef}
+                  mdText={mdText}
+                  buttonValues={buttonValues}
+                  listButtonValues={listButtonValues}
+                  cursorPositionStart={cursorPositionStart}
+                  setCursorPosition={setCursorPosition}
+                  setMdText={setMdText}
+                  setButtonValues={setButtonValues}
+                  setCursor={setCursor}
+                  setUndoAndCursorPosition={setUndoAndUndoPosition}
+                  resetButtons={resetButtons}
+                />
+                <MDPreview mdText={mdText} course={state.lesson.courseSlug} language={language} />
+              </div>
             </div>
           </div>
         </>

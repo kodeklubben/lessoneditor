@@ -15,8 +15,8 @@ const Content = () => {
 
   return (
     <>
-      <div>
-        <Menu pointing secondary style={{ width: "75em" }}>
+      <div style={{ maxWidth: "1200px", margin: "auto" }}>
+        <Menu stackable secondary>
           <Menu.Item
             name="Oppgavetekst"
             active={activeItem === "lessontext"}
@@ -39,10 +39,11 @@ const Content = () => {
             <Menu.Item name="Sorter" active={activeItem === "sort"} onClick={handleItemClick} />
           </Menu.Menu> */}
         </Menu>
+
+        {activeItem === "lessontext" && <LessontextItems />}
+        {activeItem === "teacherguide" && <TeacherguideItems />}
+        {activeItem === "allfiles" && <AllFiles />}
       </div>
-      {activeItem === "lessontext" && <LessontextItems />}
-      {activeItem === "teacherguide" && <TeacherguideItems />}
-      {activeItem === "allfiles" && <AllFiles />}
     </>
   );
 };

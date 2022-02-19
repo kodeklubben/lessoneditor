@@ -8,14 +8,10 @@ interface CheckboxFieldProps {
 
 const CheckboxField: FC<CheckboxFieldProps> = ({ labelTitle, content }) => {
   return (
-    <>
+    <label style={{ flex: "1", margin: "1vw" }}>
       <Header as="h3">{labelTitle}</Header>
-      <Segment>
-        <Grid stackable columns={2}>
-          <Grid.Row>{content}</Grid.Row>
-        </Grid>
-      </Segment>
-    </>
+      <div>{content}</div>
+    </label>
   );
 };
 

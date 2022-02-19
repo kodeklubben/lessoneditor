@@ -9,7 +9,12 @@ import { Button, Grid, GridColumn, Input, Modal, Dropdown, Ref } from "semantic-
 
 // import ShowSpinner from "../ShowSpinner";
 
-const NewLessonModal: FC = () => {
+type NewLessonModalProps = {
+  openNewLessonModal: boolean;
+  setOpenNewLessonModal: any;
+};
+
+const NewLessonModal: FC<NewLessonModalProps> = ({ openNewLessonModal, setOpenNewLessonModal }) => {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -49,7 +54,7 @@ const NewLessonModal: FC = () => {
   const closeModal = () => {
     setLessonData(defaultState);
     setIsEmptyField(false);
-    setOpen(false);
+    setOpenNewLessonModal(false);
   };
   const navigateToEditor = (lessonId: number, lessonSlug: string) => {
     const target = ["/editor", lessonId, lessonSlug, lessonData.language].join("/");
@@ -92,16 +97,16 @@ const NewLessonModal: FC = () => {
       <Modal
         closeOnDimmerClick={!loading}
         onClose={() => closeModal()}
-        onOpen={() => setOpen(true)}
-        open={open}
+        onOpen={() => setOpenNewLessonModal(true)}
+        open={openNewLessonModal}
         dimmer="inverted"
         trigger={<Button icon="plus" labelPosition="left" content="Ny oppgave" positive />}
       >
         <Modal.Header className="newLessonModal">Opprett en ny oppgave</Modal.Header>
         <Modal.Content className="newLessonModal">
           <form id={"skjema-for-oppretting-av-ny-oppgave"} method={"POST"} onSubmit={onSubmit}>
-            <Grid className={"equal width"}>
-              <GridColumn>
+            <div style={{ display: "flex", flexFlow: "row wrap" }}>
+              <div style={{ margin: "0 3em 2em 0" }}>
                 <label>
                   Tittel:
                   <br />
@@ -121,8 +126,8 @@ const NewLessonModal: FC = () => {
                     <p style={{ height: "1.35em" }} />
                   )}
                 </label>
-              </GridColumn>
-              <GridColumn>
+              </div>
+              <div style={{ margin: "0 3em 2em 0" }}>
                 Kurs:
                 <br />
                 <Dropdown
@@ -138,8 +143,8 @@ const NewLessonModal: FC = () => {
                   onAddItem={addCourseHandler}
                   onChange={onChange}
                 />
-              </GridColumn>
-              <GridColumn>
+              </div>
+              <div>
                 Språk:
                 <br />
                 <Dropdown
@@ -151,8 +156,8 @@ const NewLessonModal: FC = () => {
                   options={LANGUAGEOPTIONS}
                   id="lang_dropdown"
                 ></Dropdown>
-              </GridColumn>
-            </Grid>
+              </div>
+            </div>
           </form>
         </Modal.Content>
         <Modal.Actions className="newLessonModal">

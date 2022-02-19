@@ -1,31 +1,27 @@
 /* EDITOR */
 
 .preview-area {
+  flex: 1;
   padding: 1em;
-  height: 81vh;
-  width: 100%;
   border-radius: 5px;
   background-color: white;
-  overflow: auto;
-  box-sizing: content-box;
+  overflow-y: auto;
+  height: 83.5vh;
 }
 
 .text-area {
+  flex: 1;
   padding: 1em;
   margin-right: 1em;
   border-radius: 5px;
   border-style: none;
-  height: 81vh;
-  width: 100%;
   outline: none;
   resize: none;
   overflow: auto;
-  box-sizing: content-box;
 }
 
 .editor-windows {
   margin: auto;
-  max-width: 1920px;
   display: flex;
   flex-direction: row;
   overflow: hidden;
@@ -33,7 +29,8 @@
 }
 
 .text-editor-container {
-  background-color: #f7f7f7 !important;
-  max-height: fit-content;
+  width: 100vw;
+  max-width: 1920px;
+  margin: auto;
   padding: 1em 0;
 }

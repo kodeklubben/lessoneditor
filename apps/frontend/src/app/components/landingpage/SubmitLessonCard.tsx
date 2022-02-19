@@ -1,3 +1,4 @@
+import "./lessoncard.scss";
 import React, { useState } from "react";
 import { Card, Divider, Button, Header, Image } from "semantic-ui-react";
 import { useParams } from "react-router";
@@ -23,7 +24,12 @@ const SubmitLessonCard = () => {
       )}
       <Header>Sende inn oppgave</Header>
       <Card
-        style={{ border: "3px solid #0fbe7b", width: "16em", height: "15em", marginRight: "2em" }}
+        className="lessonCard"
+        style={{
+          width: "16em",
+          height: "15em",
+          margin: " 0 0vw 2vh 0",
+        }}
       >
         <Card.Content>
           <Card.Content>

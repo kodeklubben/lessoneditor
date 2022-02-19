@@ -1,3 +1,4 @@
+import "./lessoncard.scss";
 import React, { useState } from "react";
 import { Card, Divider, Icon, Button, Header } from "semantic-ui-react";
 import { useNavigate } from "react-router";
@@ -65,7 +66,12 @@ const NewLessontextCard = () => {
       )}
       <Header>Opprett ny tekstfil</Header>
       <Card
-        style={{ border: "3px solid #0fbe7b", width: "16em", height: "15em", marginRight: "2em" }}
+        className="lessonCard"
+        style={{
+          width: "16em",
+          height: "15em",
+          margin: " 0 1vw 2vh 0",
+        }}
       >
         <Card.Content>
           <Card.Content>

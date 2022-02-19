@@ -3,7 +3,7 @@ import SubmitLessonCard from "./SubmitLessonCard";
 const SubmitLesson = () => {
   return (
     <>
-      <div>
+      <div style={{ marginLeft: "4vw" }}>
         <SubmitLessonCard />
       </div>
     </>

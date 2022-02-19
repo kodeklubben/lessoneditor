@@ -33,7 +33,7 @@ const ListFiles: FC<ListFilesProps> = ({ item, lessonId }) => {
   };
   return (
     <>
-      <Item style={{ marginBottom: "1em", paddingTop: "2em", minWidth: "70em" }}>
+      <Item style={{ marginBottom: "1em", paddingTop: "2em" }}>
         <div style={{ display: "flex", flexDirection: "row" }}>
           <Item.Content>
             <Placeholder>

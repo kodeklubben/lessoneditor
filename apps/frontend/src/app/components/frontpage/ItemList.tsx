@@ -9,11 +9,18 @@ interface ItemListProps {
 
 const ItemList: FC<ItemListProps> = ({ lessons }) => {
   return (
-    <Card.Group>
+    <div
+      style={{
+        display: "flex",
+        flexFlow: "row wrap",
+        alignItems: "center",
+        justifyContent: "flex-start",
+      }}
+    >
       {lessons.map((lesson: LessonDTO) => (
         <Item key={lesson.lessonId} lesson={lesson}></Item>
       ))}
-    </Card.Group>
+    </div>
   );
 };
 
