@@ -22,14 +22,14 @@ const App = () => {
           }
         />
 
-        <Route
+        {/* <Route
           path="/landingpage"
           element={
             <UserContextProvider>
               <Landingpage />
             </UserContextProvider>
           }
-        />
+        /> */}
 
         <Route
           path="/landingpage/:lessonId/"

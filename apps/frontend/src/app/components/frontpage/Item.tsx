@@ -53,44 +53,51 @@ const Item: React.FC<Props> = ({ lesson }) => {
             height: "21em",
           }}
         >
-          <Card.Content
-            style={{ position: "relative", height: "160px" }}
-            onClick={() => navigateToHome(lesson.lessonId.toString())}
-          >
-            <Image
-              src={previewImage[lesson.lessonId]}
-              size="medium"
-              bordered
-              rounded
+          <Card.Content onClick={() => navigateToHome(lesson.lessonId.toString())}>
+            <div
               style={{
-                height: "100%",
-                maxWidrg: "120px",
-                overflow: "hidden",
-                objectFit: "cover",
-                objectPosition: "0 0",
+                position: "relative",
+                height: "160px",
+                margin: "-1em -1em 0 -1em",
               }}
-            />
-            {lesson.submitted && (
-              <Popup
-                content="Informasjon om levert oppgave.. Dato, etc"
-                trigger={
-                  <Icon
-                    name="github square"
-                    size="huge"
-                    style={{
-                      position: "absolute",
-                      bottom: "0",
-                      right: "0",
-                      transform: "rotate(10deg)",
-                    }}
-                  />
-                }
-              ></Popup>
-            )}
-          </Card.Content>
-          <Card.Content>
-            <Card.Header>{lesson.lessonTitle ? lesson.lessonTitle : lesson.lessonSlug}</Card.Header>
-            <Card.Meta>{lesson.courseTitle ? lesson.courseTitle : lesson.courseSlug}</Card.Meta>
+            >
+              <Image
+                src={previewImage[lesson.lessonId]}
+                size="medium"
+                bordered
+                rounded
+                style={{
+                  height: "100%",
+                  maxWidrg: "120px",
+                  overflow: "hidden",
+                  objectFit: "cover",
+                  objectPosition: "0 0",
+                }}
+              />
+              {lesson.submitted && (
+                <Popup
+                  content="Informasjon om levert oppgave.. Dato, etc"
+                  trigger={
+                    <Icon
+                      name="github square"
+                      size="huge"
+                      style={{
+                        position: "absolute",
+                        top: "0",
+                        right: "-20px",
+                        transform: "rotate(10deg)",
+                      }}
+                    />
+                  }
+                ></Popup>
+              )}
+            </div>
+            <Card.Content style={{ marginTop: "1em" }}>
+              <Card.Header>
+                {lesson.lessonTitle ? lesson.lessonTitle : lesson.lessonSlug}
+              </Card.Header>
+              <Card.Meta>{lesson.courseTitle ? lesson.courseTitle : lesson.courseSlug}</Card.Meta>
+            </Card.Content>
           </Card.Content>
 
           <Card.Content extra>

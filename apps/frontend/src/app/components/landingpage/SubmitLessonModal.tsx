@@ -70,10 +70,10 @@ const SubmitLessonModal: FC<any> = ({ openSubmitModal, setOpenSubmitModal, lesso
             <Modal.Actions>
               <>
                 <Button disabled={loading} color="black" onClick={() => setOpenSubmitModal(false)}>
-                  Nei
+                  Avbryt
                 </Button>
                 <Button
-                  content="Ja"
+                  content="Fortsett"
                   labelPosition="right"
                   icon="checkmark"
                   onClick={() => onSubmit(lessonId)}

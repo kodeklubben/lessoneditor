@@ -224,10 +224,10 @@ const NewLessontextModal: FC<any> = ({ openNewLessontextModal, setOpenNewLessont
                 color="black"
                 onClick={() => setOpenNewLessontextModal(false)}
               >
-                Nei
+                Avbryt
               </Button>
               <Button
-                content="Ja"
+                content="Fortsett"
                 labelPosition="right"
                 icon="checkmark"
                 onClick={() => onSubmit()}

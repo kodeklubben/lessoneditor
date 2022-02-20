@@ -24,6 +24,7 @@ const Navbar: FC = (props) => {
         <ProfileMenu
           name={userState.user!.name || userState.user!.username}
           photo={userState.user!.photo}
+          email={userState.user?.email}
         />
       </div>
     </nav>

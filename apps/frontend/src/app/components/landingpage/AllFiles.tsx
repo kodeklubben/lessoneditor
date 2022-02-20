@@ -1,6 +1,6 @@
 import { useLessonContext } from "../../contexts/LessonContext";
 import ListFiles from "./ListFiles";
-import { Button, Card, Item, Image, Divider, Icon } from "semantic-ui-react";
+import { Button, Card, Item, Image, Divider, Icon, Message } from "semantic-ui-react";
 import { FC, useState, useEffect } from "react";
 import { useParams } from "react-router";
 
@@ -21,11 +21,16 @@ const AllFiles = () => {
 
   return (
     <Item.Group divided>
-      {file
-        .filter((item) => !filterItems.includes(item))
-        .map((item) => (
-          <ListFiles item={item} lessonId={lessonId} />
-        ))}
+      {file.filter((item) => !filterItems.includes(item)).length > 0 ? (
+        file
+          .filter((item) => !filterItems.includes(item))
+          .map((item) => <ListFiles item={item} lessonId={lessonId} />)
+      ) : (
+        <Message>
+          <Message.Header>Finner ingen filer</Message.Header>
+          <p>Opprett ny tekst ved å trykke på knappen "Ny tekstfil"</p>
+        </Message>
+      )}
     </Item.Group>
   );
 };

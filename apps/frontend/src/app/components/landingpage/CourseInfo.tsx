@@ -8,10 +8,16 @@ type propTypes = {
 
 const CourseInfo = ({ lessonTitle, courseTitle, isSubmitted }: propTypes) => {
   return (
-    <section>
+    <section style={{ display: "flex", flexFlow: "column nowrap" }}>
       <h1>Tittel : {lessonTitle}</h1>
-      <div style={{ borderTop: "5px solid green", width: "200px", borderRadius: "10px" }} />
-      <h1>Kurs: {courseTitle}</h1>
+      <div
+        style={{
+          borderTop: "5px solid green",
+          width: "200px",
+          borderRadius: "10px",
+        }}
+      />
+      <h1 style={{ marginTop: "1.2vh" }}>Kurs: {courseTitle}</h1>
       {isSubmitted ? <h2>Oppgaven er sendt inn til KidsaKoder</h2> : ""}
     </section>
   );

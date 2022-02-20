@@ -1,21 +1,20 @@
 import "./newlessonmodal.scss";
 
-import { FC, SyntheticEvent, useState } from "react";
+import { FC, SyntheticEvent, useState, Dispatch, SetStateAction, useEffect } from "react";
 import slugify from "slugify";
 import { COURSESLIST, LANGUAGEOPTIONS } from "./settings/newLessonOptions";
 import { useUserContext } from "../../contexts/UserContext";
 import { useNavigate } from "react-router";
-import { Button, Grid, GridColumn, Input, Modal, Dropdown, Ref } from "semantic-ui-react";
+import { Button, Input, Modal, Dropdown } from "semantic-ui-react";
 
 // import ShowSpinner from "../ShowSpinner";
 
-type NewLessonModalProps = {
+interface NewLessonModalProps {
   openNewLessonModal: boolean;
-  setOpenNewLessonModal: any;
-};
+  setOpenNewLessonModal: Dispatch<SetStateAction<boolean>>;
+}
 
 const NewLessonModal: FC<NewLessonModalProps> = ({ openNewLessonModal, setOpenNewLessonModal }) => {
-  const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { addLesson } = useUserContext();
@@ -96,8 +95,7 @@ const NewLessonModal: FC<NewLessonModalProps> = ({ openNewLessonModal, setOpenNe
 
       <Modal
         closeOnDimmerClick={!loading}
-        onClose={() => closeModal()}
-        onOpen={() => setOpenNewLessonModal(true)}
+        onClose={closeModal}
         open={openNewLessonModal}
         dimmer="inverted"
         trigger={<Button icon="plus" labelPosition="left" content="Ny oppgave" positive />}
@@ -117,6 +115,7 @@ const NewLessonModal: FC<NewLessonModalProps> = ({ openNewLessonModal, setOpenNe
                     onChange={onChange}
                     name={"lessonTitle"}
                     defaultValue={lessonData["lessonTitle"]}
+                    style={{ minWidth: "14em" }}
                   />
                   {!lessonData.lessonTitle && isEmptyField ? (
                     <p>
@@ -134,6 +133,7 @@ const NewLessonModal: FC<NewLessonModalProps> = ({ openNewLessonModal, setOpenNe
                   options={lessonData.courses}
                   placeholder={"velg kurs..."}
                   value={lessonData.course}
+                  style={{ minWidth: "14em" }}
                   fluid
                   search
                   selection
@@ -161,7 +161,7 @@ const NewLessonModal: FC<NewLessonModalProps> = ({ openNewLessonModal, setOpenNe
           </form>
         </Modal.Content>
         <Modal.Actions className="newLessonModal">
-          <Button disabled={loading} onClick={closeModal} content="Avbryt" />
+          {/* <Button disabled={loading} onClick={closeModal} content="Avbryt" /> */}
           <Button
             loading={loading}
             form={"skjema-for-oppretting-av-ny-oppgave"}
