@@ -8,13 +8,15 @@ interface ItemListProps {
 }
 
 const ItemList: FC<ItemListProps> = ({ lessons }) => {
+  console.log(lessons);
   return (
     <div
       style={{
         display: "flex",
-        flexFlow: "row wrap",
+        flexFlow: "row nowrap",
         alignItems: "center",
         justifyContent: "flex-start",
+        overflowX: "auto",
       }}
     >
       {lessons.map((lesson: LessonDTO) => (

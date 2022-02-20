@@ -5,12 +5,16 @@ import { LANGUAGEOPTIONS } from "../frontpage/settings/newLessonOptions";
 import { useUserContext } from "../../contexts/UserContext";
 
 import DeleteModal from "../shared/DeleteModal";
+import MarkdownPreview from "./MarkdownPreview";
 
 const LessontextItem: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug, removeMD }) => {
   const navigate = useNavigate();
   const { previewImage } = useUserContext();
   const [openDeleteContent, setOpenDeleteContent] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [showMDPreview, setShowMDPreview] = useState<boolean>(false);
+
+  const filename = language === "nb" ? lessonSlug : `${lessonSlug}_${language}`;
 
   const deleteContent = async () => {
     try {
@@ -35,6 +39,13 @@ const LessontextItem: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug, 
 
   return (
     <>
+      {showMDPreview && (
+        <MarkdownPreview
+          filename={filename}
+          showMDPreview={showMDPreview}
+          setShowMDPreview={setShowMDPreview}
+        />
+      )}
       {openDeleteContent && (
         <DeleteModal
           openDeleteContent={openDeleteContent}
@@ -45,7 +56,11 @@ const LessontextItem: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug, 
       )}
       <Item style={{ marginBottom: "1em", paddingTop: "2em" }}>
         <div style={{ display: "flex", flexDirection: "row" }}>
-          <Item.Content style={{ position: "relative" }}>
+          <Item.Content
+            onClick={() => setShowMDPreview((prevValue) => !prevValue)}
+            className="landingpage_item_image"
+            style={{ position: "relative" }}
+          >
             <Item.Image
               src={previewImage[lessonId]}
               size="tiny"

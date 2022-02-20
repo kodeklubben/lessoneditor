@@ -34,6 +34,7 @@ const SubmitLessonCard = () => {
         <Card.Content>
           <Card.Content>
             <div
+              onClick={onSubmit}
               style={{
                 display: "flex",
                 justifyContent: "center",
@@ -42,7 +43,7 @@ const SubmitLessonCard = () => {
               }}
             >
               <Image.Group>
-                <Image src={lkkLogo} size="small" />
+                <Image src={lkkLogo} style={{ height: "90px", marginBottom: "-1.5vh" }} />
               </Image.Group>
             </div>
           </Card.Content>

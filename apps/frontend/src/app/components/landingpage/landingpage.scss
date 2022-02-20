@@ -7,17 +7,16 @@
   position: relative;
   background-color: #f7f7f7;
   width: 100%;
-  padding: 5em 0;
+  padding: 5em 6em;
 }
 
 .landingpage_section2 {
-  padding: 3em;
+  padding: 5em 6em;
 }
 
 .landingpage_section1_content {
   display: flex;
   flex-flow: row wrap;
-
   margin: auto;
   max-width: 1200px;
   justify-content: space-between;
@@ -37,6 +36,12 @@
 
 .landingpage_cardsection {
   display: flex;
-  flex-flow: row wrap;
+  flex-flow: row nowrap;
+  overflow-x: auto;
   align-items: center;
+}
+
+.landingpage_item_image:hover {
+  box-shadow: 0 0 11px rgba(33, 33, 33, 0.2);
+  cursor: pointer;
 }

@@ -16,7 +16,7 @@ const Content = () => {
   return (
     <>
       <div style={{ maxWidth: "1200px", margin: "auto" }}>
-        <Menu stackable secondary>
+        <Menu style={{ overflow: "auto" }} secondary>
           <Menu.Item
             name="Oppgavetekst"
             active={activeItem === "lessontext"}
@@ -35,9 +35,6 @@ const Content = () => {
             onClick={() => setActiveItem("allfiles")}
             style={activeItem === "allfiles" ? { borderBottom: "5px solid green" } : {}}
           />
-          {/* <Menu.Menu position="right">
-            <Menu.Item name="Sorter" active={activeItem === "sort"} onClick={handleItemClick} />
-          </Menu.Menu> */}
         </Menu>
 
         {activeItem === "lessontext" && <LessontextItems />}

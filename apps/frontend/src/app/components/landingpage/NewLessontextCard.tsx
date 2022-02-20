@@ -76,6 +76,7 @@ const NewLessontextCard = () => {
         <Card.Content>
           <Card.Content>
             <div
+              onClick={() => setOpenNewLessontextModal(true)}
               style={{
                 display: "flex",
                 justifyContent: "center",

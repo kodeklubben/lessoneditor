@@ -6,7 +6,7 @@ import axios from "axios";
 import { paths } from "@lessoneditor/contracts";
 import { LANGUAGEOPTIONS } from "../frontpage/settings/newLessonOptions";
 import { filenameParser } from "../../utils/filename-parser";
-import { Item } from "semantic-ui-react";
+import { Item, Message } from "semantic-ui-react";
 
 const LessontextItems = () => {
   const [fileList, setFileList] = useState<string[]>([]);
@@ -67,19 +67,26 @@ const LessontextItems = () => {
 
   return (
     <Item.Group divided>
-      {usedLanguages!.map((language: string, index: number) => {
-        return (
-          <LessontextItem
-            key={index}
-            content={"Oppgavetekst"}
-            language={language}
-            lessonId={lessonId}
-            lessonSlug={lessonSlug}
-            lessonTitle={lessonTitle}
-            removeMD={removeMD}
-          />
-        );
-      })}
+      {usedLanguages.length > 0 ? (
+        usedLanguages!.map((language: string) => {
+          return (
+            <LessontextItem
+              key={language}
+              content={"Oppgavetekst"}
+              language={language}
+              lessonId={lessonId}
+              lessonSlug={lessonSlug}
+              lessonTitle={lessonTitle}
+              removeMD={removeMD}
+            />
+          );
+        })
+      ) : (
+        <Message>
+          <Message.Header>Du har ikke skrevet oppgavetekst</Message.Header>
+          <p>Opprett ny tekst ved å trykke på knappen "Ny tekstfil"</p>
+        </Message>
+      )}
     </Item.Group>
   );
 };

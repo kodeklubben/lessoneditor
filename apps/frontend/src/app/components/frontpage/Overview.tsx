@@ -1,14 +1,24 @@
 import "./overview.scss";
-import { FC, useState } from "react";
+import React, { FC, useState } from "react";
+import lkkLogo from "../../../assets/public/lkk_logo.png";
 import NewLessonModal from "./NewLessonModal";
 import ItemList from "./ItemList";
 import { useUserContext } from "../../contexts/UserContext";
 import Navbar from "../navbar/Navbar";
-import { Button, Card, Divider, Header, Icon, Message, Placeholder } from "semantic-ui-react";
+import {
+  Button,
+  Card,
+  Divider,
+  Header,
+  Icon,
+  Message,
+  Placeholder,
+  Image,
+} from "semantic-ui-react";
 
 const Overview: FC = () => {
   const { state } = useUserContext();
-  const [openNewLessonModal, setOpenNewLessonModal] = useState(false);
+  const [openNewLessonModal, setOpenNewLessonModal] = useState<boolean>(false);
 
   const cardPlaceholder = (key: number) => {
     return (
@@ -39,25 +49,27 @@ const Overview: FC = () => {
       <div className="overViewContainer">
         <section className="overviewSection1">
           <div className="overviewSection1_content">
-            <Header as={"h1"}>KidsaKoder's Tekstbehandler</Header>
+            {/* <Header as={"h1"}>Oppgaver</Header>
             <div
               style={{
                 borderBottom: "5px solid",
                 borderBottomColor: "green",
                 margin: "0 0 6vh 0vh",
-                width: "30%",
+                width: "50%",
               }}
-            />
+            /> */}
             <div
               style={{
                 display: "flex",
-                flexFlow: "row wrap",
+                flexFlow: "row nowrap",
+                justifyContent: "start",
                 alignItems: "center",
+                overflowX: "auto",
               }}
             >
-              <div style={{ margin: "0 1vw 0vh 0" }}>
+              <div style={{ margin: "0 5vw 2vh 0" }}>
                 <Header as="h3" style={{ marginBottom: "1em" }}>
-                  Ny Oppgave
+                  Lag ny oppgave
                 </Header>
                 <div
                   style={{ margin: "0", padding: "0" }}
@@ -100,45 +112,50 @@ const Overview: FC = () => {
                   </Card>
                 </div>
               </div>
-              <div style={{ margin: "0 0 0vh 4vw" }}>
-                <Header as="h3" style={{ marginBottom: "1em" }}>
-                  Åpne eksisterende oppgave
-                </Header>
-                <Card className="overview_Button" style={{ width: "16em", height: "15em" }}>
-                  <Card.Content>
+              <div style={{ margin: "0 1vw 2vh 0" }}>
+                <h3 style={{ marginBottom: "1em", minWidth: "14em" }}>
+                  KidsaKoders oppgavesamling
+                </h3>
+                <div style={{ margin: "0", padding: "0" }} onClick={() => alert("WIP")}>
+                  <Card className="overview_Button" style={{ width: "16em", height: "15em" }}>
                     <Card.Content>
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          margin: "2.4em",
-                        }}
-                      >
-                        <Icon.Group>
-                          <Icon color="grey" name="github" size="huge" />
-                        </Icon.Group>
-                      </div>
-                    </Card.Content>
+                      <Card.Content>
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            height: "110px",
+                          }}
+                        >
+                          <Image.Group>
+                            <Image
+                              src={lkkLogo}
+                              style={{ height: "90px", marginBottom: "-1.5vh" }}
+                            />
+                          </Image.Group>
+                        </div>
+                      </Card.Content>
 
-                    <Card.Content>
-                      <Card.Header>
-                        <Divider />
-                      </Card.Header>
+                      <Card.Content>
+                        <Card.Header>
+                          <Divider />
+                        </Card.Header>
+                      </Card.Content>
+                      <Card.Content extra>
+                        <Button
+                          icon="folder open"
+                          labelPosition="left"
+                          positive
+                          content="Åpne"
+                          onClick={() => {
+                            alert("WIP");
+                          }}
+                        />
+                      </Card.Content>
                     </Card.Content>
-                    <Card.Content extra>
-                      <Button
-                        icon="folder"
-                        labelPosition="left"
-                        positive
-                        content="Åpne"
-                        onClick={() => {
-                          alert("WIP");
-                        }}
-                      />
-                    </Card.Content>
-                  </Card.Content>
-                </Card>
+                  </Card>
+                </div>
               </div>
             </div>
           </div>
@@ -146,7 +163,7 @@ const Overview: FC = () => {
         <section className="overviewSection2">
           <div className="overviewSection2_content">
             <Header as="h3" style={{ marginBottom: "2em" }}>
-              Mine Oppgaver
+              Mine oppgaver
             </Header>
             {state.lessons.length > 0 ? (
               <ItemList lessons={state.lessons} />

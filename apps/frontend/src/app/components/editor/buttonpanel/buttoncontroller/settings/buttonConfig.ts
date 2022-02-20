@@ -253,23 +253,6 @@ const sections = {
     },
     imageurl: null,
   },
-  challenge: {
-    slug: "sec_challenge",
-    output: "## " + DEFAULT_TEXT + " {.challenge}\n#\n",
-    title: BUTTON_TITLE.challenge,
-    cursorIntON: 3,
-    cursorIntOFF: 16,
-    shortcut: KEY_COMBINATIONS.sections.challenge,
-    style: {
-      boxSizing: "border-box",
-      height: "2em",
-      color: "#fff",
-      background: "#00b1da",
-      padding: "10px",
-      borderRadius: "10px",
-    },
-    imageurl: null,
-  },
   flag: {
     slug: "sec_flag",
     output: "## " + DEFAULT_TEXT + " {.flag}\n#\n",
@@ -288,6 +271,24 @@ const sections = {
     },
     imageurl: "assets/public/sectionSVG/flag.svg",
   },
+  challenge: {
+    slug: "sec_challenge",
+    output: "## " + DEFAULT_TEXT + " {.challenge}\n#\n",
+    title: BUTTON_TITLE.challenge,
+    cursorIntON: 3,
+    cursorIntOFF: 16,
+    shortcut: KEY_COMBINATIONS.sections.challenge,
+    style: {
+      boxSizing: "border-box",
+      height: "2em",
+      color: "#fff",
+      background: "#00b1da",
+      padding: "10px",
+      borderRadius: "10px",
+    },
+    imageurl: null,
+  },
+
   try: {
     slug: "sec_try",
     output: "# " + DEFAULT_TEXT + " {.try}\n#\n",
@@ -325,24 +326,6 @@ const sections = {
 };
 
 const codebuttons = {
-  inline: {
-    slug: "inline",
-    output: "`" + DEFAULT_TEXT + "`",
-    title: BUTTON_TITLE.inline,
-    cursorIntON: 1,
-    cursorIntOFF: 1,
-    shortcut: KEY_COMBINATIONS.codebuttons.inline,
-    style: {
-      boxSizing: "border-box",
-      height: "2em",
-      padding: "7px",
-      color: "#c7254e",
-      backgroundColor: "#f9f2f4",
-      border: "3px solid #ccc",
-      borderRadius: "10px",
-      fontWeigth: "normal",
-    },
-  },
   codeblock: {
     slug: "codeblock",
     output: `${backticks}\n${DEFAULT_TEXT}\n${backticks}`,
@@ -356,6 +339,24 @@ const codebuttons = {
       padding: "7px",
       color: "inherit",
       backgroundColor: "#f5f5f5",
+      border: "3px solid #ccc",
+      borderRadius: "10px",
+      fontWeigth: "normal",
+    },
+  },
+  inline: {
+    slug: "inline",
+    output: "`" + DEFAULT_TEXT + "`",
+    title: BUTTON_TITLE.inline,
+    cursorIntON: 1,
+    cursorIntOFF: 1,
+    shortcut: KEY_COMBINATIONS.codebuttons.inline,
+    style: {
+      boxSizing: "border-box",
+      height: "2em",
+      padding: "7px",
+      color: "#c7254e",
+      backgroundColor: "#f9f2f4",
       border: "3px solid #ccc",
       borderRadius: "10px",
       fontWeigth: "normal",
