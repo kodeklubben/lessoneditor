@@ -26,6 +26,10 @@ export class LessonService {
 
   async submitLesson(user: User, accessToken: string, lessonId: number) {
     const lesson = await this.getLesson(lessonId);
+    if (!lesson.submitted) {
+      lesson.submitted = true;
+      const updateLessonRes = await this.lessonRepository.save(lesson);
+    }
 
     if (lesson == null) {
       throw new HttpException("Lesson does not exist", HttpStatus.NOT_FOUND);
