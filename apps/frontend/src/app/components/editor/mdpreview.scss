@@ -211,7 +211,17 @@ a:hover {
   }
 
   // sections
+
+  section.section_intro {
+  }
+
   section.section_activity {
+    ul {
+      margin-left: 0.8rem;
+    }
+    .contains-checklist {
+      margin-left: 1.5em;
+    }
     // activities, "Step 1: Bla bla"
     h1 {
       @include headingStyle;
@@ -503,6 +513,11 @@ a:hover {
       width: 100%;
       height: 100%;
     }
+  }
+
+  .contains-checklist > li {
+    margin-left: 1vw;
+    list-style-type: none;
   }
 
   .contains-checklist .checklist-item::before {
