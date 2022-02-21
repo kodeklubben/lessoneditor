@@ -1,6 +1,7 @@
 .overviewSection1 {
   background-color: #f7f7f7;
   padding: 2vh 6vh;
+  height: 50%;
 }
 
 .overviewSection1_content {
@@ -15,9 +16,14 @@
 
 .overviewSection2 {
   padding: 2vh 6vh;
+  height: 50%;
 }
 
 .overview_Button:hover {
   border: 1px solid #0fbe7b;
   cursor: pointer;
+}
+
+.overViewContainer {
+  height: 85vh;
 }

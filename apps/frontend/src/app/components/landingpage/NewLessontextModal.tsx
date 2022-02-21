@@ -2,8 +2,7 @@ import { Button, Modal, Header, Dropdown, Radio } from "semantic-ui-react";
 import { FC, SyntheticEvent, useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { useUserContext } from "../../contexts/UserContext";
-import { filenameParser } from "../../utils/filename-parser";
-import { LANGUAGEOPTIONS } from "../frontpage/settings/newLessonOptions";
+
 import { useLessonContext } from "../../contexts/LessonContext";
 import * as yaml from "js-yaml";
 import { HeaderData, NewFileDTO, paths } from "@lessoneditor/contracts";
@@ -11,74 +10,32 @@ import { lessonGuideDefaultText } from "./settingsFiles/defaultTexts";
 import axios from "axios";
 import insertMetaDataInTeacherGuide from "./utils/insertMetaDataInTeacherGuide";
 
-const NewLessontextModal: FC<any> = ({ openNewLessontextModal, setOpenNewLessontextModal }) => {
+const NewLessontextModal: FC<any> = ({
+  openNewLessontextModal,
+  setOpenNewLessontextModal,
+  lessontextLang,
+  teacherguideLang,
+  setLessontextLang,
+  setTeacherguideLang,
+  setUnusedLanguages,
+  unusedLessontextLanguages,
+  unusedTeacherguideLanguages,
+  unusedLanguages,
+}) => {
   const [, updateState] = useState<any>();
 
-  const [textMode, setTextMode] = useState<String>("lessontext");
-  const [loading, setLoading] = useState<boolean>(false);
-  const [unusedLessontextLanguages, setUnusedLessontextLanguages] = useState<Record<string, any>[]>(
-    []
+  const [textMode, setTextMode] = useState<String>(
+    unusedLessontextLanguages.length > 0 ? "lessontext" : "teacherguide"
   );
-  const [unusedTeacherguideLanguages, setUnusedTeacherguideLanguages] = useState<
-    Record<string, any>[]
-  >([]);
-  const [lessontextLang, setLessontextLang] = useState<string>("-1");
-  const [teacherguideLang, setTeacherguideLang] = useState<string>("-1");
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const [unusedLanguages, setUnusedLanguages] = useState<Record<string, any>[]>([]);
+  console.log({ unusedLessontextLanguages, unusedTeacherguideLanguages });
 
   const navigate = useNavigate();
-  const { fetchFileList, yml, setFiles, state: lessonState } = useLessonContext();
+  const { yml, state: lessonState } = useLessonContext();
   const { state } = useUserContext();
   const { lessonTitle, lessonSlug, lessonId } = lessonState.lesson;
   const forceUpdate = useCallback(() => updateState({}), [textMode]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const fileList = await fetchFileList();
-      const tempUsedLang: string[] = [];
-      const tempUnusedLang: Record<string, string>[] = [...LANGUAGEOPTIONS];
-      fileList.forEach((filename: string) => {
-        const { isReadme, language } = filenameParser(filename);
-
-        if (!isReadme && language.length > 0) {
-          tempUsedLang.push(language);
-          const index = tempUnusedLang.findIndex((item) => item.value === language);
-          tempUnusedLang.splice(index, 1);
-        }
-      });
-
-      setUnusedLessontextLanguages(tempUnusedLang);
-      setUnusedLanguages(tempUnusedLang);
-      tempUnusedLang.length > 0
-        ? setLessontextLang(tempUnusedLang[0].value)
-        : setLessontextLang("-1");
-    };
-
-    fetchData();
-  }, [lessonState.files]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const fileList = await fetchFileList();
-      const tempUsedLang: string[] = [];
-      const tempUnusedLang: Record<string, string>[] = [...LANGUAGEOPTIONS];
-      fileList.forEach((filename: string) => {
-        const { isReadme, language } = filenameParser(filename);
-        if (isReadme && language.length > 0) {
-          tempUsedLang.push(language);
-          const index = tempUnusedLang.findIndex((item) => item.value === language);
-          tempUnusedLang.splice(index, 1);
-        }
-      });
-      setUnusedTeacherguideLanguages(tempUnusedLang);
-      tempUnusedLang.length > 0
-        ? setTeacherguideLang(tempUnusedLang[0].value)
-        : setTeacherguideLang("-1");
-    };
-
-    fetchData();
-  }, [lessonState.files]);
 
   const onSubmit = async () => {
     let target;
@@ -184,8 +141,10 @@ const NewLessontextModal: FC<any> = ({ openNewLessontextModal, setOpenNewLessont
                 value="lessontext"
                 checked={textMode === "lessontext"}
                 onChange={() => onRadiobuttonChange("lessontext")}
-                style={{ marginRight: "1em" }}
-                defaultChecked
+                style={{
+                  marginRight: "1em",
+                }}
+                disabled={unusedLessontextLanguages <= 0}
               />
               <Radio
                 label="Lærerveiledning"
@@ -193,24 +152,25 @@ const NewLessontextModal: FC<any> = ({ openNewLessontextModal, setOpenNewLessont
                 value="teacherguide"
                 checked={textMode === "teacherguide"}
                 onChange={() => onRadiobuttonChange("teacherguide")}
+                disabled={unusedTeacherguideLanguages.length <= 0}
               />
             </Modal.Description>
             <Modal.Description style={{ display: "flex", flexFlow: "row wrap" }}>
               <Header style={{ marginRight: "1em" }}>Velg språk: </Header>
 
-              {textMode === "lessontext" && unusedLanguages.length > 0 ? (
+              {textMode === "lessontext" && unusedLessontextLanguages.length > 0 ? (
                 <Dropdown
                   name="language"
-                  defaultValue={unusedLanguages[0].value}
+                  defaultValue={unusedLessontextLanguages[0].value}
                   onChange={onChange}
-                  options={unusedLanguages}
+                  options={unusedLessontextLanguages}
                 />
-              ) : textMode === "teacherguide" && unusedLanguages.length > 0 ? (
+              ) : textMode === "teacherguide" && unusedTeacherguideLanguages.length > 0 ? (
                 <Dropdown
                   name="language"
-                  defaultValue={unusedLanguages[0].value}
+                  defaultValue={unusedTeacherguideLanguages[0].value}
                   onChange={onChange}
-                  options={unusedLanguages}
+                  options={unusedTeacherguideLanguages}
                 />
               ) : (
                 ""
