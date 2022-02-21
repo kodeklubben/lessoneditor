@@ -69,7 +69,7 @@ export class GithubService {
       }
     });
 
-    lesson.files = formatLessonData
+    lesson.files = formatLessonData;
     const lessonPath = ["src", lesson.courseSlug, lesson.courseTitle].join("/");
 
     const filesToUpload: UploadObject[] = [];
@@ -110,8 +110,7 @@ export class GithubService {
       newTree.sha,
       branch.commit.sha
     );
-    try
-    {
+    try {
       await this.setBranchToCommit(owner, repo, branchName, newCommit.sha);
       await this.createPullRequest(
         owner,
@@ -119,36 +118,29 @@ export class GithubService {
         branchName,
         "Pull request from lesson editor"
       );
-
+    } catch (error) {
+      console.error(error);
     }
-    catch(error)
-    {
-      console.error(error)
-    }
-   
   }
 
-  async createFork(user:User) {
-    try
-    {
-      const response = await this.octokit.request('GET /users/{username}/repos', {
-        username: user.username
-      })
-      const alreadyForked = response.data.find( item => 
-        item.fork && 
-        item.owner.login == process.env.GITHUB_LESSON_REPO_OWNER &&
-        item.name == process.env.GITHUB_LESSON_REPO
-         )
-      if(alreadyForked)
-      {
+  async createFork(user: User) {
+    try {
+      const response = await this.octokit.request("GET /users/{username}/repos", {
+        username: user.username,
+      });
+      const alreadyForked = response.data.find(
+        (item) =>
+          item.fork &&
+          item.owner.login == process.env.GITHUB_LESSON_REPO_OWNER &&
+          item.name == process.env.GITHUB_LESSON_REPO
+      );
+      if (alreadyForked) {
         return {
           status: true,
           owner: process.env.GITHUB_LESSON_REPO_OWNER,
           repo: process.env.GITHUB_LESSON_REPO,
         };
-      }
-      else
-      {
+      } else {
         const forkResponse = await this.octokit.repos.createFork({
           owner: process.env.GITHUB_LESSON_REPO_OWNER,
           repo: process.env.GITHUB_LESSON_REPO,
@@ -158,14 +150,10 @@ export class GithubService {
           owner: forkResponse.data.owner.login,
           repo: forkResponse.data.name,
         };
-
       }
+    } catch (error) {
+      console.error(error);
     }
-    catch(error)
-    {
-      console.error(error)
-    }
-  
   }
 
   async getBranchCached(
