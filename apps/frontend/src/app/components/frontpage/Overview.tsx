@@ -49,7 +49,7 @@ const Overview: FC = () => {
       <div className="overViewContainer">
         <section className="overviewSection1">
           <div className="overviewSection1_content">
-            {/* <Header as={"h1"}>Oppgaver</Header>
+            <Header as={"h1"}>KidsaKoders Tekstbehandler</Header>
             <div
               style={{
                 borderBottom: "5px solid",
@@ -57,7 +57,7 @@ const Overview: FC = () => {
                 margin: "0 0 6vh 0vh",
                 width: "50%",
               }}
-            /> */}
+            />
             <div
               style={{
                 display: "flex",
@@ -67,7 +67,7 @@ const Overview: FC = () => {
                 overflowX: "auto",
               }}
             >
-              <div style={{ margin: "0 5vw 2vh 0" }}>
+              <div style={{ margin: "0 3vw 2vh 0" }}>
                 <Header as="h3" style={{ marginBottom: "1em" }}>
                   Lag ny oppgave
                 </Header>

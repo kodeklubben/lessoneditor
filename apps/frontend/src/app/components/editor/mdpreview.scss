@@ -213,12 +213,19 @@ a:hover {
   // sections
 
   section.section_intro {
+    ul {
+      margin-left: 1.5em;
+    }
   }
 
   section.section_activity {
     ul {
-      margin-left: 0.8rem;
+      margin-left: 1.2em;
     }
+
+    // ul > li {
+    //   margin-left: 0px;
+    // }
     .contains-checklist {
       margin-left: 1.5em;
     }
@@ -237,6 +244,9 @@ a:hover {
 
   section.section_check {
     // check lists
+    ul {
+      margin-left: 1.5em;
+    }
     h2 {
       padding-top: 4px;
       padding-bottom: 9px;
@@ -279,7 +289,9 @@ a:hover {
     padding-bottom: 20px;
     margin-top: 20px;
     margin-bottom: 20px;
-
+    ul {
+      margin-left: 1.5em;
+    }
     h2 {
       color: rgb(54, 161, 55);
       margin-top: 10px;

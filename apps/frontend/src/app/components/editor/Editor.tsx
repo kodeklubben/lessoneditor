@@ -143,7 +143,7 @@ const Editor: FC = () => {
             style={{
               display: "flex",
               flexDirection: "column",
-              backgroundImage: "linear-gradient(#f7f7f7,#f7f7f7, white)",
+              backgroundImage: "linear-gradient(#f7f7f7 90%, white)",
             }}
           >
             <ButtonPanel

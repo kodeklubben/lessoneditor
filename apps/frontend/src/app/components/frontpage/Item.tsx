@@ -76,14 +76,14 @@ const Item: React.FC<Props> = ({ lesson }) => {
               />
               {lesson.submitted && (
                 <Popup
-                  content="Informasjon om levert oppgave.. Dato, etc"
+                  content="Denne oppgaven har blitt levert til KidsaKoder"
                   trigger={
                     <Icon
                       name="github square"
                       size="huge"
                       style={{
                         position: "absolute",
-                        top: "0",
+                        top: "-20px",
                         right: "-20px",
                         transform: "rotate(10deg)",
                       }}
