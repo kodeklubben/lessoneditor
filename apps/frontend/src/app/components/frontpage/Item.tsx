@@ -18,6 +18,10 @@ const Item: React.FC<Props> = ({ lesson }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const { removeLesson, previewImage } = useUserContext();
 
+  const submitDate = new Date(lesson.submitted_at).toLocaleDateString();
+
+  console.log(submitDate);
+
   const deleteLesson = async () => {
     try {
       setLoading(true);
@@ -76,20 +80,24 @@ const Item: React.FC<Props> = ({ lesson }) => {
               />
               {lesson.submitted && (
                 <Popup
-                  content="Denne oppgaven har blitt levert til KidsaKoder"
                   trigger={
                     <Icon
-                      name="github square"
+                      name="checkmark"
                       size="huge"
+                      color="grey"
                       style={{
                         position: "absolute",
                         top: "-20px",
                         right: "-20px",
-                        transform: "rotate(10deg)",
                       }}
                     />
                   }
-                ></Popup>
+                >
+                  <div>
+                    <p>Denne oppgaven har blitt sendt inn til Lær Kidsa Koding</p>
+                    <p>{`Dato: ${submitDate}`}</p>
+                  </div>
+                </Popup>
               )}
             </div>
             <Card.Content style={{ marginTop: "1em" }}>

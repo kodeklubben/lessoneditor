@@ -85,8 +85,10 @@ export class UserService {
     newLesson.courseSlug = lesson.courseSlug;
     newLesson.courseTitle = lesson.courseTitle;
     newLesson.submitted = false;
+    newLesson.submitted_at = null;
     newLesson.updated_by = user.username;
     newLesson.created_by = user.username;
+    newLesson.created_at = new Date();
 
     const savedLesson = await this.lessonRepository.save(newLesson);
     const emptyYamlFile = new FileStore();
@@ -189,6 +191,7 @@ export class UserService {
     lesson.courseSlug = updatedLesson.courseSlug;
     lesson.lessonTitle = updatedLesson.lessonTitle;
     lesson.updated_by = user.username;
+    lesson.updated_at = new Date();
 
     const savedUser = await this.userRepository.save(user);
     const savedLesson = await this.lessonRepository.save(lesson);

@@ -1,14 +1,14 @@
 import "./lessoncard.scss";
 import React, { useState } from "react";
-import { Card, Divider, Button, Header, Image } from "semantic-ui-react";
+import { Card, Divider, Button, Header, Image, Icon } from "semantic-ui-react";
 import { useParams } from "react-router";
-import lkkLogo from "../../../assets/public/lkk_logo.png";
+import { useUserContext } from "../../contexts/UserContext";
 import SubmitlessonModal from "./SubmitLessonModal";
 
 const SubmitLessonCard = () => {
   const [openSubmitModal, setOpenSubmitModal] = useState(false);
   const { lessonId } = useParams() as any;
-
+  const { previewImage } = useUserContext();
   const onSubmit = () => {
     setOpenSubmitModal(true);
   };
@@ -36,15 +36,26 @@ const SubmitLessonCard = () => {
             <div
               onClick={onSubmit}
               style={{
+                position: "relative",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
                 height: "110px",
               }}
             >
-              <Image.Group>
-                <Image src={lkkLogo} style={{ height: "90px", marginBottom: "-1.5vh" }} />
-              </Image.Group>
+              <Image
+                style={{
+                  zIndex: "0",
+                  objectFit: "cover",
+                  objectPosition: "0 0",
+                  width: "20vh",
+                  height: "12vh",
+                  borderRadius: "10px",
+                }}
+                src={previewImage[lessonId]}
+                fluid
+                rounded
+              />
             </div>
           </Card.Content>
 

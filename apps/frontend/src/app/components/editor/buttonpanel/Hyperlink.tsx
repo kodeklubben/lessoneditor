@@ -57,7 +57,6 @@ const Hyperlink: FC<HyperlinkProps> = ({
   const handleButtonClick = () => {
     setUndoAndCursorPosition(mdText, cursorPositionStart);
     setIsOpen(!isOpen);
-    return;
   };
 
   const clickOKHandler = () => {
