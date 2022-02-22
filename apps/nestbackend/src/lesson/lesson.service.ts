@@ -24,18 +24,22 @@ export class LessonService {
     private thumbService: ThumbService
   ) {}
 
-  async submitLesson(user: User, accessToken: string, lessonId: number) {
+  async submitLesson(
+    user: User,
+    accessToken: string,
+    lessonId: number,
+    submitMessage: { message: string }
+  ) {
     const lesson = await this.getLesson(lessonId);
-    if (!lesson.submitted) {
-      lesson.submitted = true;
-      const updateLessonRes = await this.lessonRepository.save(lesson);
-    }
+    lesson.submitted = true;
+    lesson.submitted_at = new Date();
+    const updateLessonRes = await this.lessonRepository.save(lesson);
 
     if (lesson == null) {
       throw new HttpException("Lesson does not exist", HttpStatus.NOT_FOUND);
     }
     try {
-      await this.githubService.submitLesson(user, accessToken, lesson);
+      await this.githubService.submitLesson(user, accessToken, lesson, submitMessage);
     } catch (error) {
       console.error(error);
     }

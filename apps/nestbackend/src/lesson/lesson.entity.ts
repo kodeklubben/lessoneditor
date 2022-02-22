@@ -31,6 +31,9 @@ export class Lesson {
   @Column()
   submitted: boolean;
 
+  @Column({ type: "timestamptz", nullable: true })
+  submitted_at: Date;
+
   @Column()
   created_by: string;
 

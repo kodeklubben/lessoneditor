@@ -23,7 +23,12 @@ export class GithubService {
   octokit: Octokit;
   constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {}
 
-  async submitLesson(user: User, accessToken: string, lesson: Lesson) {
+  async submitLesson(
+    user: User,
+    accessToken: string,
+    lesson: Lesson,
+    submitMessage: { message: string }
+  ) {
     try {
       const accessToken = await this.cacheManager.get(user.userId.toString());
       this.octokit = new Octokit({ auth: accessToken });
@@ -102,7 +107,7 @@ export class GithubService {
     uploadBlobs.push(...filesToUpdate.map(this.createBlobForFile(owner, repo)));
     const uploadBlobResults = await Promise.all(uploadBlobs);
     const newTree = await this.createNewTree(owner, repo, uploadBlobResults, branch.commit.sha);
-    const commitMessage = `My commit message`;
+    const commitMessage = `Pull request from lesson editor`;
     const newCommit = await this.createNewCommit(
       owner,
       repo,
@@ -112,12 +117,7 @@ export class GithubService {
     );
     try {
       await this.setBranchToCommit(owner, repo, branchName, newCommit.sha);
-      await this.createPullRequest(
-        owner,
-        "New lesson",
-        branchName,
-        "Pull request from lesson editor"
-      );
+      await this.createPullRequest(owner, lesson.lessonTitle, branchName, submitMessage.message);
     } catch (error) {
       console.error(error);
     }
