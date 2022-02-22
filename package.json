@@ -14,6 +14,7 @@
     "test-nestbackend": "jest -c apps/nestbackend/jest.config.js",
     "start-dist": "npm run build-all && node -r dotenv/config ./dist/apps/backend/main.js",
     "build": "(tsc --p apps/nestbackend/tsconfig.app.json) && (nx build)",
+    "build-contracts": "nx run contracts:build",
     "build-all": "nx run-many --target=build --all",
     "build-dev": "nx build-dev backend",
     "test": "nx test",

@@ -20,8 +20,6 @@ const Item: React.FC<Props> = ({ lesson }) => {
 
   const submitDate = new Date(lesson.submitted_at).toLocaleDateString();
 
-  console.log(submitDate);
-
   const deleteLesson = async () => {
     try {
       setLoading(true);
