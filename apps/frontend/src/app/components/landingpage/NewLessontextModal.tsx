@@ -17,13 +17,9 @@ const NewLessontextModal: FC<any> = ({
   teacherguideLang,
   setLessontextLang,
   setTeacherguideLang,
-  setUnusedLanguages,
   unusedLessontextLanguages,
   unusedTeacherguideLanguages,
-  unusedLanguages,
 }) => {
-  const [, updateState] = useState<any>();
-
   const [textMode, setTextMode] = useState<String>(
     unusedLessontextLanguages.length > 0 ? "lessontext" : "teacherguide"
   );
@@ -35,7 +31,6 @@ const NewLessontextModal: FC<any> = ({
   const { yml, state: lessonState } = useLessonContext();
   const { state } = useUserContext();
   const { lessonTitle, lessonSlug, lessonId } = lessonState.lesson;
-  const forceUpdate = useCallback(() => updateState({}), [textMode]);
 
   const onSubmit = async () => {
     let target;
@@ -57,7 +52,7 @@ const NewLessontextModal: FC<any> = ({
           ext: ".md",
           content: rawBody,
         };
-        const newLessonFileRes = await axios.post<number>(
+        const _newLessonFileRes = await axios.post<number>(
           paths.LESSON_FILES.replace(":lessonId", lessonId.toString()),
           newLessonFileDTO
         );
@@ -65,7 +60,7 @@ const NewLessontextModal: FC<any> = ({
         console.error(e);
       }
 
-      target = ["/editor", lessonId, lessonSlug, lessontextLang].join("/");
+      target = ["/editor", lessonId, lessonSlug, `${lessontextLang}?init`].join("/");
     } else {
       const header: HeaderData = {
         title: lessonTitle,
@@ -85,7 +80,7 @@ const NewLessontextModal: FC<any> = ({
           ext: ".md",
           content: rawBody,
         };
-        const newLessonFileRes = await axios.post<number>(
+        const _newLessonFileRes = await axios.post<number>(
           paths.LESSON_FILES.replace(":lessonId", lessonId.toString()),
           newFileDTO
         );
@@ -93,7 +88,7 @@ const NewLessontextModal: FC<any> = ({
         console.error(e);
       }
 
-      target = ["/editor", lessonId, "README", teacherguideLang].join("/");
+      target = ["/editor", lessonId, "README", `${teacherguideLang}?init`].join("/");
     }
     navigate(target);
   };
@@ -108,13 +103,6 @@ const NewLessontextModal: FC<any> = ({
 
   const onRadiobuttonChange = (s: String) => {
     setTextMode(s);
-    if (s === "lessontext") {
-      setUnusedLanguages(unusedLessontextLanguages.sort());
-      forceUpdate();
-    } else {
-      setUnusedLanguages(unusedTeacherguideLanguages.sort());
-      forceUpdate();
-    }
   };
 
   const onClose = () => {

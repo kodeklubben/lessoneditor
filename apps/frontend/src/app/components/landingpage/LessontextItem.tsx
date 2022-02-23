@@ -68,7 +68,7 @@ const LessontextItem: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug, 
               rounded
               bordered
               style={{
-                maxHeight: "9.4vh",
+                maxHeight: "7em",
                 overflow: "hidden",
                 objectFit: "cover",
                 objectPosition: "0 0",
@@ -82,7 +82,7 @@ const LessontextItem: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug, 
                   width: "66%",
                   position: "absolute",
                   left: "0",
-                  bottom: "0",
+                  bottom: "0.4em",
                 }}
                 src={languageImage}
                 alt={""}

@@ -56,7 +56,7 @@ const NewLessonModal: FC<NewLessonModalProps> = ({ openNewLessonModal, setOpenNe
     setOpenNewLessonModal(false);
   };
   const navigateToEditor = (lessonId: number, lessonSlug: string) => {
-    const target = ["/editor", lessonId, lessonSlug, lessonData.language].join("/");
+    const target = ["/editor", lessonId, lessonSlug, `${lessonData.language}?init`].join("/");
     navigate({ pathname: target });
   };
   const onSubmit = async (e: { preventDefault: () => void }) => {

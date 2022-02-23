@@ -1,24 +1,21 @@
-import { useRef, useState, FC, useEffect } from "react";
 import "./editor.scss";
+import { useRef, useState, FC, useEffect } from "react";
 import ButtonPanel from "./buttonpanel/ButtonPanel";
 import ImageUpload from "./ImageUpload";
 import MDPreview from "./MDPreview";
 import MDTextArea from "./MDTextArea";
-// import ShowSpinner from "../ShowSpinner";
 import { useFileContext } from "../../contexts/FileContext";
-import { useParams } from "react-router";
+import { useParams, useLocation } from "react-router";
 import { useLessonContext } from "../../contexts/LessonContext";
 import Navbar from "../navbar/Navbar";
-import { lessonGuideDefaultText, teacherGuideDefaultText } from "./settingsFiles/defaultTexts";
 
 const Editor: FC = () => {
-  const { file, lessonId, lang } = useParams() as any;
+  const { lang } = useParams() as any;
   const { state } = useLessonContext();
 
-  const { saveFileBody, state: fileState, savedFileBody } = useFileContext();
+  const { savedFileBody } = useFileContext();
 
   const [mdText, setMdText] = useState("");
-  const [showSpinner, setShowSpinner] = useState(true);
   const [openSettings, setOpenSettings] = useState<boolean>(false);
   const [buttonValues, setButtonValues] = useState({});
   const [cursorPositionStart, setCursorPositionStart] = useState(0);
@@ -37,21 +34,18 @@ const Editor: FC = () => {
     cursorInt: 0,
   });
 
+  const location = useLocation();
+
   const editorRef = useRef<HTMLTextAreaElement>(null);
   const uploadImageRef = useRef<HTMLInputElement>(null);
 
   const language: string = lang;
 
-  const isDefaultText = [
-    lessonGuideDefaultText[language],
-    teacherGuideDefaultText[language],
-  ].includes(fileState.savedFileBody || "");
-
   useEffect(() => {
-    if (isDefaultText) {
+    if (location.search === "?init") {
       setOpenSettings(true);
     }
-  }, [isDefaultText]);
+  }, [location.search]);
 
   useEffect(() => {
     if (typeof savedFileBody !== "undefined") {
@@ -59,7 +53,6 @@ const Editor: FC = () => {
       setMdText(savedFileBody);
       setUndo([savedFileBody]);
       setUndoCursorPosition([savedFileBody.length]);
-      setShowSpinner(false);
     }
   }, [savedFileBody]);
 

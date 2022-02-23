@@ -8,7 +8,6 @@ interface ItemListProps {
 }
 
 const ItemList: FC<ItemListProps> = ({ lessons }) => {
-  console.log(lessons);
   return (
     <div
       style={{

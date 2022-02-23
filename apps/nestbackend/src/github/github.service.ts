@@ -91,7 +91,10 @@ export class GithubService {
           buffer: Buffer.from(file.content.toString()),
         });
       } else if ([".jpg", ".jpeg", ".gif", ".png"].includes(file.ext)) {
-        if (file.filename === "preview" && file.ext === ".png") {
+        if (
+          (file.filename === "preview" || file.filename === "image_rT34Yx") &&
+          file.ext === ".png"
+        ) {
           return;
         }
         filesToUpload.push({

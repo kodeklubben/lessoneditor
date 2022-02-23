@@ -45,11 +45,11 @@ const SubmitLessonCard = () => {
             >
               <Image
                 style={{
-                  zIndex: "0",
+                  position: "absolute",
+                  height: "9em",
                   objectFit: "cover",
                   objectPosition: "0 0",
-                  width: "20vh",
-                  height: "12vh",
+
                   borderRadius: "10px",
                 }}
                 src={previewImage[lessonId]}
