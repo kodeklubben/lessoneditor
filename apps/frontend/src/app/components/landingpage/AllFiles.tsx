@@ -17,7 +17,7 @@ const AllFiles = () => {
     fetchFiles();
   }, [state.files]);
 
-  const filterItems = ["preview.png", "lesson.yml", "data.json", "image.png"];
+  const filterItems = ["preview.png", "lesson.yml", "data.json", "image_rT34Yx.png"];
 
   return (
     <Item.Group divided>

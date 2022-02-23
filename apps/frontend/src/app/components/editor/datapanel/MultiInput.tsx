@@ -106,7 +106,7 @@ const MultiInput: FC<MultiInputProps> = ({
               icon="x"
               floated="right"
               content={element}
-              style={{ order: inputOrder - 1 }}
+              style={{ order: inputOrder - 1, height: "2.6em" }}
               id="removeNameButton"
               key={"button-" + index}
               onClick={() => removeClickHandler(name, element)}
