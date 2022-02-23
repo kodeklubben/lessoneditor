@@ -40,15 +40,17 @@ const SubmitLessonModal: FC<any> = ({ openSubmitModal, setOpenSubmitModal, lesso
         <Modal.Header>Takk for ditt bidrag!</Modal.Header>
         <Modal.Content>
           <Modal.Description>
-            <Header>Oppgaven er sendt inn til kodeklubben KidsaKoder</Header>
-            <Message>
-              <p>Din oppgave vil bli gjennomgått av kidsakoder før den publiseres.</p>
-              <p>
-                Du kan følge <a href="https://github.com/kodeklubben/oppgaver/pulls">denne</a>{" "}
-                linken for å sjekke at oppgaven kom helt frem.
-              </p>
-            </Message>
+            <Header>Oppgaven er sendt inn til kodeklubben Lær Kidsa Koding</Header>
+            <p>Din oppgave vil bli gjennomgått av Lær Kidsa Koding før den publiseres.</p>
           </Modal.Description>
+
+          <p>
+            Du kan følge{" "}
+            <a href="https://github.com/kodeklubben/oppgaver/pulls" target="_blank">
+              denne
+            </a>{" "}
+            linken for å sjekke at oppgaven kom helt frem.
+          </p>
         </Modal.Content>
         <Modal.Actions>
           <Button
@@ -83,28 +85,40 @@ const SubmitLessonModal: FC<any> = ({ openSubmitModal, setOpenSubmitModal, lesso
           submitted()
         ) : (
           <>
+            <Modal.Header>Takk for ditt bidrag!</Modal.Header>
             <Modal.Content>
-              <h3>Takk for at du bidrar med oppgaver til kodeklubben Lær Kidsa Koding!</h3>
-              <Message>
+              <Modal.Description>
                 <p>
                   Din oppgave vil bli gjennomgått før den publiseres på nettsiden til
                   <a
                     style={{ marginLeft: "1ch", color: "black" }}
                     href="https://oppgaver.kidsakoder.no"
+                    target="_blank"
                   >
                     Lær Kidsa Koder.
                   </a>
                 </p>
+              </Modal.Description>
+            </Modal.Content>
 
-                <h4>Om oppgaven :</h4>
+            <Modal.Content>
+              <h4>
+                Skriv gjerne en kommentar <span style={{ color: "grey" }}>(hvis du vil)</span>:
+              </h4>
 
-                <textarea
-                  style={{ width: "100%", height: "10vh", border: "none", outline: "none" }}
-                  name="textValue"
-                  onChange={handleChange}
-                  placeholder="...dette er en oppgave som handler om..."
-                />
-              </Message>
+              <textarea
+                style={{
+                  width: "100%",
+                  height: "10vh",
+                  outline: "none",
+                  borderColor: "grey",
+                  borderRadius: "3px",
+                  padding: "1em",
+                }}
+                name="textValue"
+                onChange={handleChange}
+                placeholder="...dette er en oppgave som handler om..."
+              />
             </Modal.Content>
 
             <Modal.Actions>

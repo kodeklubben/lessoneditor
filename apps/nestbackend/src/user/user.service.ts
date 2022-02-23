@@ -126,7 +126,7 @@ export class UserService {
     const templateImage = new FileStore();
     templateImage.content = Buffer.from(imageTemplate, "base64");
     templateImage.ext = ".png";
-    templateImage.filename = "image";
+    templateImage.filename = "image_rT34Yx";
     templateImage.updated_by = user.username;
     templateImage.created_by = user.username;
     templateImage.lesson = savedLesson;

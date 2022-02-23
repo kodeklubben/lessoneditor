@@ -24,7 +24,7 @@ const AllFiles = () => {
       {file.filter((item) => !filterItems.includes(item)).length > 0 ? (
         file
           .filter((item) => !filterItems.includes(item))
-          .map((item) => <ListFiles item={item} lessonId={lessonId} />)
+          .map((item) => <ListFiles item={item} lessonId={lessonId} key={item} />)
       ) : (
         <Message>
           <Message.Header>Finner ingen filer</Message.Header>

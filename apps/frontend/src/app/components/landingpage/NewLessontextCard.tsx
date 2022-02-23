@@ -1,21 +1,14 @@
 import "./lessoncard.scss";
 import React, { useState, useEffect } from "react";
 import { Card, Divider, Icon, Button, Header } from "semantic-ui-react";
-import { useNavigate } from "react-router";
-import * as yaml from "js-yaml";
-import axios from "axios";
 import { filenameParser } from "../../utils/filename-parser";
 import { LANGUAGEOPTIONS } from "../frontpage/settings/newLessonOptions";
-import { NewFileDTO, HeaderData } from "@lessoneditor/contracts";
-import { paths } from "@lessoneditor/contracts";
 import { useLessonContext } from "../../contexts/LessonContext";
-import { useUserContext } from "../../contexts/UserContext";
-import { lessonGuideDefaultText } from "./settingsFiles/defaultTexts";
 import NewLessontextModal from "./NewLessontextModal";
 
 const NewLessontextCard = () => {
   const [openNewLessontextModal, setOpenNewLessontextModal] = useState(false);
-  const [lang, setLang] = useState<string>("-1");
+
   const [unusedLanguages, setUnusedLanguages] = useState<Record<string, any>[]>([]);
   const [unusedLessontextLanguages, setUnusedLessontextLanguages] = useState<Record<string, any>[]>(
     []
@@ -26,14 +19,10 @@ const NewLessontextCard = () => {
 
   const [lessontextLang, setLessontextLang] = useState<string>("-1");
   const [teacherguideLang, setTeacherguideLang] = useState<string>("-1");
-  const navigate = useNavigate();
 
   const { fetchFileList, state: lessonState } = useLessonContext();
-  const { state: userState } = useUserContext();
 
-  const { lessonTitle, lessonSlug, lessonId } = lessonState.lesson;
-  const name = userState.user!.name;
-  const username = userState.user!.username;
+  const { lessonId } = lessonState.lesson;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,8 +39,7 @@ const NewLessontextCard = () => {
         }
       });
       setUnusedLessontextLanguages(tempUnusedLang);
-      setUnusedLanguages(tempUnusedLang);
-      console.log(tempUnusedLang);
+
       tempUnusedLang.length > 0
         ? setLessontextLang(tempUnusedLang[0].value)
         : setLessontextLang("-1");
@@ -73,7 +61,6 @@ const NewLessontextCard = () => {
         }
       });
       setUnusedTeacherguideLanguages(tempUnusedLang);
-      // setUnusedLanguages(tempUnusedLang);
 
       tempUnusedLang.length > 0
         ? setTeacherguideLang(tempUnusedLang[0].value)
@@ -82,37 +69,6 @@ const NewLessontextCard = () => {
 
     fetchData();
   }, [lessonState.files]);
-
-  const header: HeaderData = {
-    title: lessonTitle,
-    author: name || username,
-    authorList: [],
-    language: lang,
-    translator: "",
-    translatorList: [],
-  };
-
-  const onSubmit = async () => {
-    try {
-      const rawBody = "---\n" + yaml.dump(header) + "---\n" + lessonGuideDefaultText[lang];
-      const filename = lang === "nb" ? lessonSlug : `${lessonSlug}_${lang}`;
-      const newLessonFileDTO: NewFileDTO = {
-        filename,
-        ext: ".md",
-        content: rawBody,
-      };
-      const newLessonFileRes = await axios.post<number>(
-        paths.LESSON_FILES.replace(":lessonId", lessonId.toString()),
-        newLessonFileDTO
-      );
-    } catch (e) {
-      console.error(e);
-    }
-
-    const target = ["/editor", lessonId, lessonSlug, lang].join("/");
-
-    navigate(target);
-  };
 
   return (
     <>
@@ -127,7 +83,6 @@ const NewLessontextCard = () => {
           setUnusedLanguages={setUnusedLanguages}
           unusedLessontextLanguages={unusedLessontextLanguages}
           unusedTeacherguideLanguages={unusedTeacherguideLanguages}
-          unusedLanguages={unusedLanguages}
           lessonId={lessonId}
         />
       )}

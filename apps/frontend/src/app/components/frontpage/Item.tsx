@@ -2,7 +2,7 @@ import "./item.scss";
 import { LessonDTO } from "@lessoneditor/contracts";
 import React, { useState } from "react";
 import { Button, Card, Image, Icon, Popup, Placeholder } from "semantic-ui-react";
-
+import lkkLogo from "../../../assets/public/lkk_logo.png";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../../contexts/UserContext";
 
@@ -76,19 +76,24 @@ const Item: React.FC<Props> = ({ lesson }) => {
                   objectPosition: "0 0",
                 }}
               />
+            </div>
+            <Card.Content style={{ marginTop: "1em", position: "relative" }}>
+              <Card.Header>
+                {lesson.lessonTitle ? lesson.lessonTitle : lesson.lessonSlug}
+              </Card.Header>
+              <Card.Meta>{lesson.courseTitle ? lesson.courseTitle : lesson.courseSlug}</Card.Meta>
               {lesson.submitted && (
                 <Popup
                   trigger={
                     <Icon
                       name="checkmark"
-                      size="huge"
-                      color="grey"
+                      size="big"
                       style={{
                         position: "absolute",
-                        top: "-20px",
-                        right: "-20px",
+                        bottom: "0",
+                        right: "0",
                       }}
-                    />
+                    ></Icon>
                   }
                 >
                   <div>
@@ -97,12 +102,6 @@ const Item: React.FC<Props> = ({ lesson }) => {
                   </div>
                 </Popup>
               )}
-            </div>
-            <Card.Content style={{ marginTop: "1em" }}>
-              <Card.Header>
-                {lesson.lessonTitle ? lesson.lessonTitle : lesson.lessonSlug}
-              </Card.Header>
-              <Card.Meta>{lesson.courseTitle ? lesson.courseTitle : lesson.courseSlug}</Card.Meta>
             </Card.Content>
           </Card.Content>
 
