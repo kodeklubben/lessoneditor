@@ -69,7 +69,7 @@ const ImageUpload: FC<ImageUploadProps> = ({
       ext,
       content: content,
     };
-    await axios.post(
+    const _postImageRes = await axios.post(
       paths.LESSON_FILES.replace(":lessonId", state.lesson.lessonId.toString()),
       newFileDTO
     );
@@ -111,31 +111,23 @@ const ImageUpload: FC<ImageUploadProps> = ({
             if (ext !== ".gif") {
               new Compressor(file, {
                 maxHeight: 1080,
-                maxWidth: 1920,
+                maxWidth: 1080,
                 resize: "cover",
-                quality: 0.8, // 0.6 can also be used, but its not recommended to go below.
+                quality: 0.6, // 0.6 can also be used, but its not recommended to go below.
                 success: async (compressedResult) => {
                   // compressedResult has the compressed file.
                   // Use the compressed file to upload the images to your server.
 
-                  contentFunction(
-                    await blobToBase64String(compressedResult),
-                    compressedResult,
-                    filename,
-                    ext
-                  );
+                  const contentString = await blobToBase64String(compressedResult);
+
+                  contentFunction(contentString, compressedResult, filename, ext);
                 },
               });
             } else {
               const content =
                 reader.result.toString().split(`data:${file.type};base64,`).pop()! ?? "";
 
-              contentFunction(
-                content,
-                await base64StringToBlob(content, `image/${ext}`),
-                filename,
-                ext
-              );
+              contentFunction(content, base64StringToBlob(content, `image/${ext}`), filename, ext);
             }
           }
         } catch (error) {

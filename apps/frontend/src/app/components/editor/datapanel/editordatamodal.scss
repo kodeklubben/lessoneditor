@@ -21,3 +21,7 @@
   min-width: max-content;
   background-color: white !important;
 }
+
+.ui.fluid.input > input {
+  border: 1px solid lightgray;
+}

@@ -86,12 +86,13 @@ const Item: React.FC<Props> = ({ lesson }) => {
                 <Popup
                   trigger={
                     <Icon
-                      name="checkmark"
+                      name="check circle outline"
+                      color="blue"
                       size="big"
                       style={{
                         position: "absolute",
-                        bottom: "0",
-                        right: "0",
+                        bottom: "0.7em",
+                        right: "-0.5em",
                       }}
                     ></Icon>
                   }

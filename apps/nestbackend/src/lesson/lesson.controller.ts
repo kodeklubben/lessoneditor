@@ -123,7 +123,8 @@ export class LessonController {
   @UseGuards(LoginGuard)
   @Post(":lessonId/files")
   async AddLessonFile(@Req() req, @Param() params, @Body() newFile: NewFileDTO): Promise<number> {
-    return await this.lessonService.addLessonFile(params.lessonId, newFile, req);
+    const addFileRes = await this.lessonService.addLessonFile(params.lessonId, newFile, req);
+    return addFileRes;
   }
 
   @UseGuards(LoginGuard)

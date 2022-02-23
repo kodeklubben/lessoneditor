@@ -2,7 +2,7 @@ import { Injectable, HttpException, HttpStatus, flatten } from "@nestjs/common";
 import { Lesson, FileStore } from "./lesson.entity";
 import { User } from "../user/user.entity";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { Repository, Transaction } from "typeorm";
 import { LessonFilterDTO, NewFileDTO, NewLessonDTO, ShareLessonDTO } from "@lessoneditor/contracts";
 import { GithubService } from "../github/github.service";
 import * as fs from "fs";
@@ -111,7 +111,11 @@ export class LessonService {
       file.content = Buffer.from(newFile.content);
     }
     try {
-      const newFile = await this.fileStoreRepository.save(file);
+      const newFile = await this.fileStoreRepository.save(file, {
+        transaction: true,
+        chunk: 10000,
+      });
+
       return newFile.fileId;
     } catch (error) {
       console.error(error);
