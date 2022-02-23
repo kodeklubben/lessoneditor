@@ -25,8 +25,6 @@ const NewLessontextModal: FC<any> = ({
   );
   const [loading, setLoading] = useState<boolean>(false);
 
-  console.log({ unusedLessontextLanguages, unusedTeacherguideLanguages });
-
   const navigate = useNavigate();
   const { yml, state: lessonState } = useLessonContext();
   const { state } = useUserContext();
@@ -37,8 +35,8 @@ const NewLessontextModal: FC<any> = ({
     if (textMode === "lessontext") {
       const header: HeaderData = {
         title: lessonTitle,
-        author: state.user!.name || state.user!.username,
-        authorList: [],
+        author: "",
+        authorList: [state.user!.name || state.user!.username],
         language: lessontextLang,
         translator: "",
         translatorList: [],
@@ -64,8 +62,8 @@ const NewLessontextModal: FC<any> = ({
     } else {
       const header: HeaderData = {
         title: lessonTitle,
-        author: state.user!.name || state.user!.username,
-        authorList: [],
+        author: "",
+        authorList: [state.user!.name || state.user!.username],
         language: teacherguideLang,
         translator: "",
         translatorList: [],
