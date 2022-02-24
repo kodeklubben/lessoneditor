@@ -26,7 +26,7 @@ const md = require("markdown-it")({
   },
 })
   .use(require("markdown-it-attrs"), {
-    allowedAttributes: ["class", /^style.*$/, /^width.*$/, /^height.*$/],
+    allowedAttributes: ["class", /^target.*$/, /^style.*$/, /^width.*$/, /^height.*$/],
   })
   .use(headerSections)
   .use(insertImg)

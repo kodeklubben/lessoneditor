@@ -15,14 +15,41 @@ interface MDPreviewProps {
 const MDPreview: FC<MDPreviewProps> = ({ mdText, course, language }) => {
   const { images } = useLessonContext();
 
+  const [svgTest, setSvgTest] = useState<any>({});
+
   const [mdTextUrlReplaced, setMdTextUrlReplaced] = useState<string>("");
-  const parseMD = mdTextUrlReplaced && mdParser(mdTextUrlReplaced);
+  const parseMD: string = mdTextUrlReplaced && mdParser(mdTextUrlReplaced);
 
   useEffect(() => {
     if (course === "microbit") {
       renderMicrobit(language);
     }
   }, [parseMD]);
+
+  useEffect(() => {
+    const k = parseMD.indexOf("<pre>");
+    const l = parseMD.indexOf("</pre>");
+    const hm = parseMD.slice(k, l + 6);
+    console.log(parseMD);
+    if (hm in svgTest) {
+      console.log({ hm });
+      const ttt = svgTest[hm];
+      console.log(ttt);
+      parseMD.replace(hm, ttt);
+      console.log({ parseMD });
+    } else {
+      tretre();
+    }
+    async function tretre() {
+      const test = await renderScratchBlocks(parseMD);
+
+      const i = test.indexOf("<svg");
+      const j = test.indexOf("</svg>");
+
+      const hm2 = test.slice(i, j);
+      setSvgTest((prevState: any) => ({ ...prevState, [hm]: hm2 }));
+    }
+  }, [mdText]);
 
   useEffect(() => {
     function replaceUrlWithBlobUrl(markdownContent: any) {
