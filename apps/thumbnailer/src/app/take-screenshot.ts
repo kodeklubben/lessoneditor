@@ -1,5 +1,6 @@
 import * as puppeteer from "puppeteer";
 import { Browser } from "puppeteer";
+import { ParsedQs } from "qs";
 import logger from "./logger";
 
 let browser: Browser;

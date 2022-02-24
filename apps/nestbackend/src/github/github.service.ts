@@ -75,7 +75,7 @@ export class GithubService {
     });
 
     lesson.files = formatLessonData;
-    const lessonPath = ["src", lesson.courseSlug, lesson.courseTitle].join("/");
+    const lessonPath = ["src", lesson.courseSlug, lesson.lessonSlug].join("/");
 
     const filesToUpload: UploadObject[] = [];
     lesson.files.forEach((file) => {

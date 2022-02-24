@@ -47,9 +47,8 @@ const ImageUpload: FC<ImageUploadProps> = ({
     setMdText(
       mdText.slice(0, cursorPositionStart) +
         "![Bildebeskrivelse](" +
-        '"' +
+        "./" +
         imageInputValue +
-        '"' +
         ")" +
         mdText.slice(cursorPositionStart)
     );

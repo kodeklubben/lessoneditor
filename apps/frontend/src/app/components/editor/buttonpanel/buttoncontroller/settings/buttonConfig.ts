@@ -185,10 +185,10 @@ const fileExplorer = {
 const sections = {
   intro: {
     slug: "sec_intro",
-    output: "# " + DEFAULT_TEXT + " {.intro}\n#\n",
+    output: "# " + DEFAULT_TEXT + " {.intro}\n",
     title: BUTTON_TITLE.intro,
     cursorIntON: 2,
-    cursorIntOFF: 12,
+    cursorIntOFF: 10,
     shortcut: KEY_COMBINATIONS.sections.intro,
     style: {
       boxSizing: "border-box",
@@ -203,10 +203,10 @@ const sections = {
   },
   activity: {
     slug: "sec_activity",
-    output: "# " + DEFAULT_TEXT + " {.activity}\n#\n",
+    output: "# " + DEFAULT_TEXT + " {.activity}\n",
     title: BUTTON_TITLE.activity,
     cursorIntON: 2,
-    cursorIntOFF: 15,
+    cursorIntOFF: 13,
     shortcut: KEY_COMBINATIONS.sections.activity,
     style: {
       boxSizing: "border-box",
@@ -220,10 +220,10 @@ const sections = {
   },
   check: {
     slug: "sec_check",
-    output: "## " + DEFAULT_TEXT + " {.check}\n#\n",
+    output: "## " + DEFAULT_TEXT + " {.check}\n",
     title: BUTTON_TITLE.check,
     cursorIntON: 3,
-    cursorIntOFF: 12,
+    cursorIntOFF: 10,
     shortcut: KEY_COMBINATIONS.sections.check,
     style: {
       boxSizing: "border-box",
@@ -237,10 +237,10 @@ const sections = {
   },
   protip: {
     slug: "sec_protip",
-    output: "## " + DEFAULT_TEXT + " {.protip}\n#\n",
+    output: "## " + DEFAULT_TEXT + " {.protip}\n",
     title: BUTTON_TITLE.protip,
     cursorIntON: 3,
-    cursorIntOFF: 13,
+    cursorIntOFF: 11,
     shortcut: KEY_COMBINATIONS.sections.protip,
     style: {
       boxSizing: "border-box",
@@ -255,10 +255,10 @@ const sections = {
   },
   flag: {
     slug: "sec_flag",
-    output: "## " + DEFAULT_TEXT + " {.flag}\n#\n",
+    output: "## " + DEFAULT_TEXT + " {.flag}\n",
     title: BUTTON_TITLE.flag,
     cursorIntON: 3,
-    cursorIntOFF: 11,
+    cursorIntOFF: 9,
     shortcut: KEY_COMBINATIONS.sections.flag,
     style: {
       boxSizing: "border-box",
@@ -273,10 +273,10 @@ const sections = {
   },
   challenge: {
     slug: "sec_challenge",
-    output: "## " + DEFAULT_TEXT + " {.challenge}\n#\n",
+    output: "## " + DEFAULT_TEXT + " {.challenge}\n",
     title: BUTTON_TITLE.challenge,
     cursorIntON: 3,
-    cursorIntOFF: 16,
+    cursorIntOFF: 14,
     shortcut: KEY_COMBINATIONS.sections.challenge,
     style: {
       boxSizing: "border-box",
@@ -291,10 +291,10 @@ const sections = {
 
   try: {
     slug: "sec_try",
-    output: "# " + DEFAULT_TEXT + " {.try}\n#\n",
+    output: "# " + DEFAULT_TEXT + " {.try}\n",
     title: BUTTON_TITLE.try,
     cursorIntON: 2,
-    cursorIntOFF: 10,
+    cursorIntOFF: 8,
     shortcut: KEY_COMBINATIONS.sections.try,
     style: {
       boxSizing: "border-box",
@@ -307,10 +307,10 @@ const sections = {
   },
   save: {
     slug: "sec_save",
-    output: "## " + DEFAULT_TEXT + " {.save}\n#\n",
+    output: "## " + DEFAULT_TEXT + " {.save}\n",
     title: BUTTON_TITLE.save,
     cursorIntON: 3,
-    cursorIntOFF: 11,
+    cursorIntOFF: 9,
     shortcut: KEY_COMBINATIONS.sections.save,
     style: {
       boxSizing: "border-box",

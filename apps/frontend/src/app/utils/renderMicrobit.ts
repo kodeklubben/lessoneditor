@@ -5,6 +5,14 @@ let language: any;
 const microbitIframeId = "makecoderenderer";
 const getMicrobitSnippets = (): HTMLDivElement[] => {
   return Array.from(document.getElementsByClassName("microbit")).map((element) => {
+    if (element.parentNode) {
+      const parent = element!.parentNode;
+      // @ts-ignore
+      parent.style.backgroundColor = "white";
+      // @ts-ignore
+      parent.style.border = "none";
+    }
+
     return element as HTMLDivElement;
   });
 };

@@ -26,20 +26,20 @@ const MDPreview: FC<MDPreviewProps> = ({ mdText, course, language }) => {
 
   useEffect(() => {
     function replaceUrlWithBlobUrl(markdownContent: any) {
-      if (!/(!\[.*?\]\(")(.+?)("\))/.test(markdownContent)) {
+      if (!/(!\[.*?\])(\(\.\/.*?\))/.test(markdownContent)) {
         return markdownContent;
       }
       const filenames: string[] = [];
       markdownContent.replace(
-        /(!\[.*?\]\(")(.+?)("\))/gs,
+        /(!\[.*?\])(\(\.\/.*?\))/gs,
         function (whole: string, prefix: string, imagePathRaw: string, postfix: string) {
-          filenames.push(imagePathRaw);
+          filenames.push(imagePathRaw.slice(3, -1));
         }
       );
       return markdownContent.replace(
         /(!\[.*?\]\()(.+?)(\))/gs,
         function (whole: string, prefix: string, imagePathRaw: string, postfix: string) {
-          imagePathRaw = imagePathRaw.slice(1, -1);
+          imagePathRaw = imagePathRaw.slice(2);
           const filename: string = filenames.shift() ?? "";
           const imageBlobUrl = images[filename];
           return prefix + imageBlobUrl + postfix;
