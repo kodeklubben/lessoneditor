@@ -5,6 +5,7 @@ import { renderScratchBlocks } from "../../utils/renderScratchblocks";
 import { mdParser } from "../../utils/mdParser";
 import { useLessonContext } from "../../contexts/LessonContext";
 import ContentPlaceholder from "./ContentPlaceholder";
+import md5 from "crypto-js/md5";
 
 interface MDPreviewProps {
   mdText: string;
@@ -12,44 +13,64 @@ interface MDPreviewProps {
   language: string;
 }
 
+let storeSVG = {};
+
 const MDPreview: FC<MDPreviewProps> = ({ mdText, course, language }) => {
   const { images } = useLessonContext();
 
-  const [svgTest, setSvgTest] = useState<any>({});
+  const [svgTest, setSvgTest] = useState<any>("");
 
-  const [mdTextUrlReplaced, setMdTextUrlReplaced] = useState<string>("");
-  const parseMD: string = mdTextUrlReplaced && mdParser(mdTextUrlReplaced);
+  const [parsedMDwithUpdatedImageURLS, setParsedMDwithUpdatedImageURLS] = useState<string>("");
 
   useEffect(() => {
     if (course === "microbit") {
       renderMicrobit(language);
     }
-  }, [parseMD]);
+  }, [mdText]);
 
   useEffect(() => {
-    const k = parseMD.indexOf("<pre>");
-    const l = parseMD.indexOf("</pre>");
-    const hm = parseMD.slice(k, l + 6);
-    console.log(parseMD);
-    if (hm in svgTest) {
-      console.log({ hm });
-      const ttt = svgTest[hm];
-      console.log(ttt);
-      parseMD.replace(hm, ttt);
-      console.log({ parseMD });
-    } else {
-      tretre();
+    if (course !== "scratch") {
+      return;
     }
-    async function tretre() {
-      const test = await renderScratchBlocks(parseMD);
+    const timeoutHandler = setTimeout(async () => {
+      function replaceScratchBlocksWithSVG() {
+        const replace = {
+          start: '<pre><code class="blocks">',
+          end: "</code></pre>",
+        };
+        let returnContent = parsedMDwithUpdatedImageURLS;
+        const re = new RegExp(replace.start + "[\\s\\S]*?" + replace.end, "g");
+        let blocks = parsedMDwithUpdatedImageURLS.match(re);
+        if (blocks) {
+          blocks.forEach((block: any) => {
+            let code = block.substring(replace.start.length, block.length - replace.end.length);
+            const checksum = md5(code).toString();
+            if (checksum in storeSVG) {
+              // @ts-ignore
+              returnContent = returnContent.replace(block, storeSVG[checksum]);
+              setSvgTest(returnContent);
+            } else {
+              returnContent = renderScratchBlocks(parsedMDwithUpdatedImageURLS);
+              const test = returnContent.slice(
+                returnContent.indexOf("<svg"),
+                returnContent.indexOf("</svg>") + "</svg>".length
+              );
+              // @ts-ignore
+              storeSVG[checksum] = test;
+              setSvgTest(returnContent);
+            }
+          });
+        } else {
+          setSvgTest(returnContent);
+        }
+      }
 
-      const i = test.indexOf("<svg");
-      const j = test.indexOf("</svg>");
-
-      const hm2 = test.slice(i, j);
-      setSvgTest((prevState: any) => ({ ...prevState, [hm]: hm2 }));
-    }
-  }, [mdText]);
+      replaceScratchBlocksWithSVG();
+    }, 250);
+    return () => {
+      clearTimeout(timeoutHandler);
+    };
+  }, [parsedMDwithUpdatedImageURLS]);
 
   useEffect(() => {
     function replaceUrlWithBlobUrl(markdownContent: any) {
@@ -76,26 +97,27 @@ const MDPreview: FC<MDPreviewProps> = ({ mdText, course, language }) => {
 
     async function replaceUrls() {
       const newMdText = replaceUrlWithBlobUrl(mdText);
-      setMdTextUrlReplaced(newMdText);
+      setParsedMDwithUpdatedImageURLS(mdParser(newMdText));
     }
     replaceUrls();
-
-    if (course === "microbit") {
-      renderMicrobit(language);
-    }
   }, [mdText]);
 
-  if (course === "scratch" && parseMD) {
-    const lessonContent = renderScratchBlocks(parseMD);
+  if (course === "scratch" && parsedMDwithUpdatedImageURLS) {
+    const lessonContent = renderScratchBlocks(svgTest);
     return <div className="preview-area" dangerouslySetInnerHTML={{ __html: lessonContent }} />;
-  } else if (!parseMD && mdText !== "") {
+  } else if (!parsedMDwithUpdatedImageURLS && mdText !== "") {
     return (
       <div className="preview-area">
         <ContentPlaceholder />
       </div>
     );
   } else {
-    return <div className="preview-area" dangerouslySetInnerHTML={{ __html: parseMD }} />;
+    return (
+      <div
+        className="preview-area"
+        dangerouslySetInnerHTML={{ __html: parsedMDwithUpdatedImageURLS }}
+      />
+    );
   }
 };
 
