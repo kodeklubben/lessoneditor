@@ -1,0 +1,302 @@
+/*
+ * # General CSS #
+ * This file is compiled with `gulp css`.
+ *
+ * If other files should be included, they should be imported in this file.
+ */
+@import "bootstrap"; // customized bootstrap.less
+@import "config"; // included after bootstrap, overrides variables
+@import "lesson";
+@import "lesson-index";
+@import "pulse";
+
+// readability: http://baymard.com/blog/line-length-readability
+// not keyword negate _whole_ media query,
+// making `(not print) and (min-width: @screen-sm)` impossible
+@media aural, braille, handheld, projection, screen, tty, tv, embossed {
+  .container {
+    max-width: 800px;
+  }
+  p, li {
+    @media (max-width: @screen-sm) {
+      font-size: 17px;
+    }
+    @media (min-width: @screen-sm) and (max-width: @screen-md) {
+      font-size: 19px;
+    }
+    @media (min-width: @screen-md) {
+      font-size: 20px;
+    }
+  }
+  pre > code {
+    // horisontal scroll on code blocks, do not wrap
+    word-wrap: normal;
+    white-space: pre;
+  }
+}
+@media print {
+  // avoid bug kodeklubben/oppgaver#225
+  .comment.attached div {
+    position: inherit !important;
+  }
+}
+
+// force display of horisontal scroll bar on safari
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background-color: #aaa;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 8px;
+  background-color: #000;
+}
+
+// code blocks
+code {
+  // Note that build-system must have the first listed font installed
+  //           Linux          Mac            Windows   Fallback
+  font-family: "Ubuntu Mono", Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+// responsive images
+figure > img {
+  .img-responsive;
+  margin:0 auto; // centered
+  padding: 20px;
+}
+
+// top menu
+.top-menu {
+  margin-top: 20px;
+  background-color: @light-background;
+  border-radius: 5px;
+  .clearfix;
+  @media print {
+    display:none;
+  }
+  > * {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  .navigation {
+    line-height: 35px;
+    padding-left: 15px;
+    display: inline-block;
+    a {
+      color: #000;
+    }
+    img {
+      height: 18px;
+      margin-right: 5px;
+      padding-bottom: 2px;
+    }
+  }
+  .search {
+    .form-inline;
+    display: inline-block;
+    float: right;
+    padding-right: 10px;
+    > * {
+      margin: 0;
+    }
+  }
+  a.intro {
+    float: right;
+    color: #fff;
+    padding-right: 10px;
+    text-align: center;
+    .icon {
+      .glyphicon;
+      .glyphicon-question-sign;
+      font-size: 21px;
+      display: block;
+    }
+    .text {
+      font-size: 10px;
+    }
+  }
+  .flags {
+    float: right;
+    margin-right: 10px;
+  }
+  a.flag {
+    img {
+      height: 20px;
+    }
+  }
+}
+
+// search
+div.search {
+  .make-xs-column(12);
+  display: none;
+  margin-top: 10px;
+  h1 {
+    font-size: 22px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  .results {
+    padding: 15px;
+    border-radius: 5px;
+    border: 1px solid @light-background;
+    h2 {
+      font-size: 18px;
+      margin: 0;
+    }
+    a {
+      color: #000;
+    }
+    a:hover, a:hover > * {
+      transform: none;
+    }
+    li:hover {
+      transform: scale(1.01);
+    }
+    li {
+      max-height: 100px;
+      overflow: hidden;
+      margin-bottom: 15px;
+      position: relative;
+      list-style: none;
+    }
+    li:before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 50%;
+      bottom: 0;
+      background: linear-gradient(rgba(255,255,255,0), rgba(255,255,255,255));
+    }
+  }
+}
+
+// links
+a:hover, a:hover > * {
+  text-decoration: none;
+  transform: scale(1.02);
+}
+
+// courses
+.courses {
+  .make-xs-column(12);
+  margin-top: 40px;
+  > a {
+    .make-xs-column(6);
+    .make-sm-column(4);
+    .make-md-column(3);
+    /* make sure rows clear when courses have different height */
+    @media (max-width: @screen-xs-max) {
+      &:nth-child(2n+1) {
+        clear: left;
+      }
+    }
+    @media (min-width: @screen-sm) and (max-width: @screen-sm-max) {
+      &:nth-child(3n+1) {
+        clear: left;
+      }
+    }
+    @media (min-width: @screen-md) {
+      &:nth-child(4n+1) {
+        clear: left;
+      }
+    }
+    color: #000000;
+    font-weight: 300;
+    margin-bottom: 45px; /* Vertical spacing between courses */
+    .logo-wrapper { /* FIXME: when "safe" to use flexbox? */
+      height: 35vw;
+      max-height: 150px;
+      text-align: center; /* align img horizontally inside the logo-wrapper */
+      &:before {
+        content: ' ';
+        display: inline-block;
+        vertical-align: middle; /* vertical alignment of the inline element */
+        height: 100%;
+      }
+      img {
+        width: 100%;
+        max-height: 150px;
+        max-width: 150px;
+      }
+    }
+    .lessons {
+      display: none;
+    }
+    .name {
+      .text-center;
+      padding: 10px 0;
+    }
+  }
+}
+
+// external resources
+span.external {
+  .glyphicon;
+  .glyphicon-new-window;
+  margin-left: 5px;
+}
+
+// footer
+#footer {
+  background-color: @light-background;
+  border-radius: 5px;
+  padding: 10px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  font-size: 16px;
+  p {
+    font-size: 16px;
+  }
+  .license, .author, .translator, .note {
+    float: left;
+    > * {
+      float:left;
+      margin: 0 3px 0 0;
+    }
+    > *:last-child {
+      margin: 0 10px 0 0;
+    }
+  }
+  .note img {
+    max-height: 20px;
+  }
+}
+
+// tables
+table  {
+  // add table class to all tables, assumes that tables are only used
+  // for listing stuff and is not in use for other components like calendars
+  .table;
+}
+
+// should not be in prints/PDF
+.intro-question, .modal-backdrop, .improve, .pdf {
+  @media print {
+    display: none !important;
+  }
+}
+
+// do not set max-width on intro boxes
+.introjs-tooltip {
+  max-width: none;
+}
+
+.courseIntro .popover {
+  max-width: 600px;
+}
+
+.teacher {
+  // different colors for README.md aka Læreveiledning
+  .top-menu, header, #footer {
+    color: #FFF;
+    background: @teacher1;
+  }
+  #footer a {
+    color: #FFF;
+  }
+}

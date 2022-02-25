@@ -1,0 +1,375 @@
+@checkbox-blue: #abdbea;
+
+// header
+header {
+  background-color: #B1DAAE;
+  border-radius: 5px;
+  color: #fff;
+  width: 100%;
+  min-height: 100px;
+  padding: 10px;
+  margin-top: 40px;
+
+  h1.title {
+    clear: none;
+    float: left;
+  }
+  .logo {
+    float: left;
+    max-height: 80px;
+    margin-right: 10px;
+  }
+  a {
+    color: #fff;
+  }
+  .lesson-icons {
+    .h1;
+    float: right;
+    clear: none;
+    > * {
+      margin-left:10px;
+    }
+    div span.icon {
+      .glyphicon;
+      font-size: 1em;
+      padding: 0;
+      &:hover {
+        color: #fff;
+      }
+    }
+    .pdf span.icon {
+      .glyphicon-save-file;
+    }
+    .readme span.icon {
+      .glyphicon-info-sign;
+    }
+    .lesson-link span.icon {
+      .glyphicon-file;
+    }
+    .course, .level, .pdf, .readme, .lesson-link {
+      float:left;
+      text-align: center;
+      img {
+        max-height: 39px;
+        vertical-align: text-top;
+        display:block;
+        margin: auto;
+      }
+      span, span.text {
+        display:block;
+        font-size: 0.25em;
+        padding-top:3px;
+      }
+    }
+  }
+}
+
+.playlist-navigation {
+  margin-top: 40px;
+  a.prev, a.next {
+    cursor: pointer;
+  }
+  h1 {
+    float: left;
+    font-size: 2em;
+    font-weight: 400;
+    line-height: 1;
+    color: #777;
+    margin-left: 10px;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  .pagination {
+    float: right;
+    margin: 0;
+  }
+}
+
+.intro h1 {
+  font-size: 26px;
+}
+
+// list items in .check, .activity and .save
+.check, .activity, .save {
+  ul, ol {
+    padding: 0;
+    margin: 0 0 20px 0;
+  }
+  ul.task-list li.task-list-item::before {
+    display: none;
+  }
+  li {
+    list-style: none;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-left: 45px;
+  }
+  li:before {
+    content: " ";
+    border-radius: 20px;
+    border: 3px solid @checkbox-blue;
+    padding: 8px;
+    float: left;
+    margin-left: -30px;
+    margin-top: 6px;
+  }
+  label {
+    font-weight: normal;
+    margin-left: 6px;
+  }
+}
+
+// scratch code blocks
+pre.blocks, code.b {
+  background-color: inherit !important;
+  border: 0;
+}
+
+// code blocks
+pre > code {
+  // override hljs background
+  background-color: transparent !important;
+}
+
+// sections
+section.activity {
+  // activities, "Step 1: Bla bla"
+  h1 {
+    color: #FFF;
+    background: #349946;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  .subsection h2 {
+    &:extend(.activity h1);
+    font-weight: 300;
+  }
+}
+.teacher section.activity h1 {
+  // different colors for README.md aka Læreveiledning
+  background: @teacher2;
+}
+
+section.check {
+  // check lists
+  h2 {
+    background-image: url(img/check.svg);
+    background-size: 40px 40px;
+    background-repeat: no-repeat;
+    padding-top: 4px;
+    padding-bottom: 9px;
+    padding-left: 50px;
+  }
+}
+
+section.try {
+  background: @checkbox-blue;
+  border-radius: 10px;
+  padding: 1px 20px 10px 20px;
+  code {
+    background-color: #fff;
+    color: #007CC9;
+  }
+  li:before {
+    border: 3px solid #fff !important;
+  }
+}
+.teacher section.try {
+  // different colors for README.md aka Læreveiledning
+  background: @teacher3;
+  color: #fff;
+}
+
+section.protip, section.tip {
+  border: 3px solid #ff7f00;
+  background: #fff99d;
+  border-radius: 12px;
+  padding: 0 20px 20px 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.teacher {
+  section.protip, section.tip {
+    background-color: @teacher4;
+    border-color: #000;
+    color: #fff;
+  }
+}
+
+section.flag {
+  border-top: 3px dotted rgb(230,134,45);
+  padding-bottom: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  h2 {
+    color: rgb(54,161,55);
+    background-image: url(img/flag.svg);
+    background-position: 0px 10px;
+    background-size: 40px 40px;
+    background-repeat: no-repeat;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding-top: 15px;
+    padding-bottom: 10px;
+    padding-left: 60px;
+  }
+}
+
+section.save {
+  border-top: 3px solid rgb(36,90,154);
+  margin: 20px 0;
+  h2 {
+    color: rgb(36,90,154);
+    background-image: url(img/save.svg);
+    background-position: 0px 10px;
+    background-size: 40px 40px;
+    background-repeat: no-repeat;
+    margin: 0;
+    padding-top: 10px;
+    padding-bottom: 20px;
+    padding-left: 50px;
+  }
+}
+
+section.challenge {
+  border: 3px solid #00b1da;
+  border-radius: 12px;
+  padding-bottom: 10px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  h2 {
+    color: #fff;
+    background: #00b1da;
+    padding-left: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-top: 0;
+  }
+  > * {
+    padding: 0 20px;
+  }
+}
+.teacher section.challenge {
+  border-color: @teacher5;
+  h2 {
+    background-color: @teacher5;
+  }
+}
+
+
+// scratchblocks colors
+code {
+  &.blockmotion     { background-color: @color-scratchblock-motion !important;     }
+  &.blocklooks      { background-color: @color-scratchblock-looks !important;      }
+  &.blocksound      { background-color: @color-scratchblock-sound !important;      }
+  &.blockpen        { background-color: @color-scratchblock-pen !important;        }
+  &.blockdata       { background-color: @color-scratchblock-data !important;       }
+  &.blockevents     { background-color: @color-scratchblock-events !important;     }
+  &.blockcontrol    { background-color: @color-scratchblock-control !important;    }
+  &.blocksensing    { background-color: @color-scratchblock-sensing !important;    }
+  &.blockoperators  { background-color: @color-scratchblock-operators !important;  }
+  &.blockmoreblocks { background-color: @color-scratchblock-moreblocks !important; }
+
+  &.blockmotion,
+  &.blocklooks,
+  &.blocksound,
+  &.blockpen,
+  &.blockdata,
+  &.blockevents,
+  &.blockcontrol,
+  &.blocksensing,
+  &.blockoperators,
+  &.blockmoreblocks {
+    color: #fff !important;
+  }
+}
+
+// embedded videos
+.video-container {
+  position: relative;
+  padding-bottom: 56.25%;  // 16:9
+  height: 0;
+  overflow: hidden;
+  margin: 30px 0 60px 0;
+  iframe {
+    position: absolute;
+    top:0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+// toggle hints
+toggle {
+  strong {
+    .btn;
+    .btn-default;
+  }
+  hide {
+    display:none;
+    margin-left: 10px;
+  }
+}
+
+/* hidden sections
+ * sections that have a class that starts with "test-"
+ */
+section[class^="test-"], section[class*=" test-"] {
+  display: none;
+}
+input[type="text"] {
+  .form-control;
+  width: inherit;
+  margin-top: 10px;
+}
+
+input[type="checkbox"] {
+  display: none;
+}
+
+input[type="checkbox"] + label {
+  position: relative;
+  font-weight: normal;
+  margin: 0;
+}
+
+input[type="checkbox"] + label::before {
+  content: '\a0'; // non-breaking space
+  display: inline-block;
+  visibility: visible;
+  width: 1.3em;
+  height: 1.3em;
+  margin: 0 0.6em 0 -2.2em;
+  line-height: 1.1em;
+  text-align: center;
+  border: 3px solid @checkbox-blue;
+  border-radius: 3px;
+}
+
+.checked input[type="checkbox"] + label::before {
+  content: '\2714'; // checkmark
+  line-height: 1.1em;
+  padding-left: 0.1em;
+}
+
+.improve {
+  .make-xs-column(12);
+  margin-top: 15px;
+  border-radius: 5px;
+  padding-bottom: 20px;
+  background-color: #00f080;
+  a {
+    .btn;
+    margin-right: 5px;
+  }
+  a.issue {
+    .btn-default;
+  }
+  a.code {
+    .btn-warning;
+  }
+}
+.teacher .improve {
+  background-color: @teacher2;
+}

@@ -45,7 +45,7 @@ $checkbox-blue: #abdbea;
     opacity: 0;
   }
   li {
-    // list-style: none;
+    list-style: none;
     padding-top: 10px;
     padding-bottom: 10px;
     margin-left: 35px;
@@ -62,9 +62,6 @@ $checkbox-blue: #abdbea;
   label {
     font-weight: normal;
     margin-left: 6px;
-  }
-  ul > li {
-    list-style: none;
   }
 }
 
@@ -204,11 +201,6 @@ a:hover {
     position: relative;
   }
 
-  pre:has(img) {
-    border: none;
-    background-color: white;
-  }
-
   pre > code {
     // override hljs background
     font-size: inherit;
@@ -221,9 +213,16 @@ a:hover {
   // sections
 
   section.section_intro {
+    ul {
+      margin-left: 1.5em;
+    }
   }
 
   section.section_activity {
+    ul {
+      margin-left: 1.2em;
+    }
+
     // ul > li {
     //   margin-left: 0px;
     // }
@@ -245,7 +244,9 @@ a:hover {
 
   section.section_check {
     // check lists
-
+    ul {
+      margin-left: 1.5em;
+    }
     h2 {
       padding-top: 4px;
       padding-bottom: 9px;
@@ -261,7 +262,7 @@ a:hover {
   section.section_try {
     background: #abdbea;
     border-radius: 10px;
-    padding: 1px 10px 20px 10px;
+    padding: 10px 20px 10px;
 
     code {
       background-color: #fff;
@@ -269,7 +270,7 @@ a:hover {
     }
 
     li::before {
-      border: 3px solid #fff !important;
+      border: 3px solid #fff;
     }
   }
 
@@ -278,7 +279,7 @@ a:hover {
     border: 3px solid #ff7f00;
     background: #fff99d;
     border-radius: 12px;
-    padding: 0 20px 20px 20px;
+    padding: 0 20px 20px;
     margin-top: 20px;
     margin-bottom: 20px;
   }
@@ -288,13 +289,15 @@ a:hover {
     padding-bottom: 20px;
     margin-top: 20px;
     margin-bottom: 20px;
+    ul {
+      margin-left: 1.5em;
+    }
     h2 {
       color: rgb(54, 161, 55);
       margin-top: 10px;
       margin-bottom: 10px;
       padding-top: 15px;
       padding-bottom: 10px;
-      padding-left: 60px;
 
       img {
         display: inline;
@@ -314,7 +317,6 @@ a:hover {
       margin: 0;
       padding-top: 10px;
       padding-bottom: 20px;
-      padding-left: 50px;
 
       img {
         height: 40px;
@@ -331,6 +333,10 @@ a:hover {
     margin-top: 20px;
     margin-bottom: 20px;
 
+    .contains-checklist {
+      margin-left: 1em;
+    }
+
     h2 {
       color: #fff;
       background: #00b1da;
@@ -345,7 +351,7 @@ a:hover {
     }
 
     > * {
-      padding: 0 20px;
+      padding: 0 15px;
     }
   }
 
@@ -527,7 +533,7 @@ a:hover {
 
   .contains-checklist > li {
     margin-left: 1vw;
-    // list-style-type: none;
+    list-style-type: none;
   }
 
   .contains-checklist .checklist-item::before {
