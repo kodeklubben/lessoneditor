@@ -13,14 +13,16 @@ const Autosave: FC<AutosaveProps> = ({ mdText }) => {
   useEffect(() => {
     const timeoutHandler = setTimeout(async () => {
       try {
-        await saveFileBody(mdText);
-        setAutoSaveMessage(SAVED);
+        const status = await saveFileBody(mdText);
+        if (status === 200) {
+          setAutoSaveMessage(SAVED);
+          setTimeout(() => {
+            setAutoSaveMessage("");
+          }, 2000);
+        }
       } catch (e) {
         console.error(e);
       }
-      setTimeout(() => {
-        setAutoSaveMessage("");
-      }, 2000);
     }, 750);
 
     return () => {

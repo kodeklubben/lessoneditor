@@ -113,7 +113,7 @@ export class LessonService {
     try {
       const newFile = await this.fileStoreRepository.save(file, {
         transaction: true,
-        chunk: 10000,
+        chunk: 10,
       });
 
       return newFile.fileId;
