@@ -32,39 +32,45 @@ const MDPreview: FC<MDPreviewProps> = ({ mdText, course, language }) => {
     if (course !== "scratch") {
       return;
     }
-    function replaceScratchBlocksWithSVG() {
-      const replace = {
-        start: '<pre><code class="blocks">',
-        end: "</code></pre>",
-      };
-      let returnContent = parsedMDwithUpdatedImageURLS;
-      const re = new RegExp(replace.start + "[\\s\\S]*?" + replace.end, "g");
-      let blocks = parsedMDwithUpdatedImageURLS.match(re);
-      if (blocks) {
-        blocks.forEach((block: any) => {
-          let code = block.substring(replace.start.length, block.length - replace.end.length);
-          const checksum = md5(code).toString();
-          if (checksum in storeSVG) {
-            // @ts-ignore
-            returnContent = returnContent.replace(block, storeSVG[checksum]);
-            setSvgTest(returnContent);
-          } else {
-            returnContent = renderScratchBlocks(parsedMDwithUpdatedImageURLS);
-            const test = returnContent.slice(
-              returnContent.indexOf("<svg"),
-              returnContent.indexOf("</svg>") + "</svg>".length
-            );
-            // @ts-ignore
-            storeSVG[checksum] = test;
-            setSvgTest(returnContent);
-          }
-        });
-      } else {
-        setSvgTest(returnContent);
+    const timeoutHandler = setTimeout(() => {
+      function replaceScratchBlocksWithSVG() {
+        const replace = {
+          start: '<pre><code class="blocks">',
+          end: "</code></pre>",
+        };
+        let returnContent = parsedMDwithUpdatedImageURLS;
+        const re = new RegExp(replace.start + "[\\s\\S]*?" + replace.end, "g");
+        let blocks = parsedMDwithUpdatedImageURLS.match(re);
+        if (blocks) {
+          blocks.forEach((block: any) => {
+            let code = block.substring(replace.start.length, block.length - replace.end.length);
+            const checksum = md5(code).toString();
+            if (checksum in storeSVG) {
+              // @ts-ignore
+              returnContent = returnContent.replace(block, storeSVG[checksum]);
+              setSvgTest(returnContent);
+            } else {
+              returnContent = renderScratchBlocks(parsedMDwithUpdatedImageURLS);
+              const test = returnContent.slice(
+                returnContent.indexOf("<svg"),
+                returnContent.indexOf("</svg>") + "</svg>".length
+              );
+              // @ts-ignore
+              storeSVG[checksum] = test;
+              setSvgTest(returnContent);
+            }
+          });
+        } else {
+          setSvgTest(returnContent);
+        }
       }
-    }
 
-    replaceScratchBlocksWithSVG();
+      replaceScratchBlocksWithSVG();
+    }, 300);
+
+    return () => {
+      clearTimeout(timeoutHandler);
+    };
   }, [parsedMDwithUpdatedImageURLS]);
 
   useEffect(() => {
