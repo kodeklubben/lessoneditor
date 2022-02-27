@@ -12,7 +12,7 @@ interface EmphasisProps {
   setCursorPosition: (positionStart: number, positionEnd: number) => void;
   setCursor: (pos1: number, pos2: number) => void;
   setButtonValues: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
-  setUndoAndCursorPosition: (mdText: string, position: number) => void;
+  setUndoAndUndoPosition: (mdText: string, position: number) => void;
 }
 
 const Emphasis: FC<EmphasisProps> = ({
@@ -25,7 +25,7 @@ const Emphasis: FC<EmphasisProps> = ({
   setCursorPosition,
   setCursor,
   setButtonValues,
-  setUndoAndCursorPosition,
+  setUndoAndUndoPosition,
 }) => {
   return (
     <>
@@ -49,7 +49,7 @@ const Emphasis: FC<EmphasisProps> = ({
             mdText={mdText}
             cursorPositionStart={cursorPositionStart}
             cursorPositionEnd={cursorPositionEnd}
-            setUndoAndCursorPosition={setUndoAndCursorPosition}
+            setUndoAndUndoPosition={setUndoAndUndoPosition}
           />
         );
       })}

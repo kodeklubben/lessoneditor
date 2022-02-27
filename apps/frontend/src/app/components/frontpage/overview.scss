@@ -12,6 +12,9 @@
 .overviewSection2_content {
   margin: auto;
   max-width: 1200px;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
 }
 
 .overviewSection2 {

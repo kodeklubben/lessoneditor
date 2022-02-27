@@ -40,7 +40,7 @@ interface ButtonControllerProps {
   courseTitle?: string;
   outputOnEnter?: string;
   color?: string;
-  setUndoAndCursorPosition?: (mdText: string, position: number) => void;
+  setUndoAndUndoPosition?: (mdText: string, position: number) => void;
 }
 
 export const ButtonController: FC<ButtonControllerProps> = ({
@@ -69,7 +69,7 @@ export const ButtonController: FC<ButtonControllerProps> = ({
   courseTitle,
   outputOnEnter,
   color,
-  setUndoAndCursorPosition,
+  setUndoAndUndoPosition,
 }) => {
   const [prevTextData, setPrevTextData] = useState<{
     mdText: string;
@@ -105,8 +105,8 @@ export const ButtonController: FC<ButtonControllerProps> = ({
     if (!isON) {
       setPrevTextData({ mdText, cursorPositionStart, cursorPositionEnd });
 
-      if (setUndoAndCursorPosition) {
-        setUndoAndCursorPosition(mdText, cursorPositionStart);
+      if (setUndoAndUndoPosition) {
+        setUndoAndUndoPosition(mdText, cursorPositionStart);
       }
       const results = buttonAction(
         mdText,
@@ -136,8 +136,8 @@ export const ButtonController: FC<ButtonControllerProps> = ({
         }
       } else {
         setPrevTextData({ mdText: "", cursorPositionStart: -1, cursorPositionEnd: -1 });
-        if (setUndoAndCursorPosition) {
-          setUndoAndCursorPosition(mdText, cursorPositionStart);
+        if (setUndoAndUndoPosition) {
+          setUndoAndUndoPosition(mdText, cursorPositionStart);
         }
         setChanges(
           prevTextData.mdText,
@@ -149,73 +149,73 @@ export const ButtonController: FC<ButtonControllerProps> = ({
   };
 
   const set = (button: string) => {
-    if (button === "codeblock") {
-      toggleButton(button);
-      setButton(
-        isON,
-        cursorIntON + (course === "scratch" ? 6 : course?.length || 0),
-        cursorIntOFF,
-        output.slice(0, 3) + (course === "scratch" ? "blocks" : course) + output.slice(3),
-        mdText,
-        cursorPositionStart,
-        cursorPositionEnd
-      );
-    }
-    // else if (setButtonValues && button === "heading") {
-    //   const results: { isON: boolean; mdText: string; cursorPositionStart: number } = heading(
-    //     isON,
-    //     mdText,
-    //     cursorPositionStart,
-    //     output
-    //   );
+    switch (button) {
+      case "codeblock": {
+        toggleButton(button);
+        setButton(
+          isON,
+          cursorIntON + (course === "scratch" ? 6 : course?.length || 0),
+          cursorIntOFF,
+          output.slice(0, 3) + (course === "scratch" ? "blocks" : course) + output.slice(3),
+          mdText,
+          cursorPositionStart,
+          cursorPositionEnd
+        );
+        break;
+      }
 
-    //   setButtonValues((prevButtonValues) => ({
-    //     ...prevButtonValues,
-    //     [buttonSlug]: results.isON,
-    //   }));
-    //   setChanges(results.mdText, results.cursorPositionStart, results.cursorPositionStart);
-    // }
-    else if (button === "undo") {
-      if (pushUndoValue) {
-        pushUndoValue(mdText, cursorPositionStart);
-      } else {
-        return;
+      case "undo": {
+        if (pushUndoValue) {
+          pushUndoValue(mdText, cursorPositionStart);
+          break;
+        }
+        break;
       }
-    } else if (button === "redo") {
-      if (pushRedoValue) {
-        pushRedoValue(mdText);
-      } else {
-        return;
+
+      case "redo": {
+        console.log({ mdText });
+        if (pushRedoValue) {
+          pushRedoValue(mdText);
+          break;
+        }
+        break;
       }
-    } else if (button === "listUl" || button === "listOl" || button === "listCheck") {
-      toggleButton(buttonSlug);
-      if (setListButtonValues) {
-        setListButtonValues({
-          bTitle: buttonSlug,
-          output: outputOnEnter || "",
-          cursorInt: cursorIntON,
-        });
+
+      case "listUl":
+      case "listOl":
+      case "listCheck": {
+        toggleButton(buttonSlug);
+        if (setListButtonValues) {
+          setListButtonValues({
+            bTitle: buttonSlug,
+            output: outputOnEnter || "",
+            cursorInt: cursorIntON,
+          });
+        }
+        setButton(
+          isON,
+          cursorIntON,
+          cursorIntOFF,
+          output,
+          mdText,
+          cursorPositionStart,
+          cursorPositionEnd
+        );
+        break;
       }
-      setButton(
-        isON,
-        cursorIntON,
-        cursorIntOFF,
-        output,
-        mdText,
-        cursorPositionStart,
-        cursorPositionEnd
-      );
-    } else {
-      toggleButton(buttonSlug);
-      setButton(
-        isON,
-        cursorIntON,
-        cursorIntOFF,
-        output,
-        mdText,
-        cursorPositionStart,
-        cursorPositionEnd
-      );
+
+      default: {
+        toggleButton(buttonSlug);
+        setButton(
+          isON,
+          cursorIntON,
+          cursorIntOFF,
+          output,
+          mdText,
+          cursorPositionStart,
+          cursorPositionEnd
+        );
+      }
     }
   };
 

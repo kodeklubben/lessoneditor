@@ -1,14 +1,16 @@
 import { Dispatch, SetStateAction, KeyboardEvent } from "react";
 
+let orderedListIndex = 2;
+
 export const TABcontroller = (
-  setUndoAndCursorPosition: (mdText: string, position: number) => void,
+  setUndoAndUndoPosition: (mdText: string, position: number) => void,
   mdText: string,
   cursorPositionStart: number,
   setMdText: Dispatch<SetStateAction<string>>,
   setCursorPosition: (positionStart: number, positionEnd: number) => void
 ) => {
   const tabSize = 2;
-  setUndoAndCursorPosition(mdText, cursorPositionStart);
+  setUndoAndUndoPosition(mdText, cursorPositionStart);
   const outputText =
     mdText.slice(0, cursorPositionStart) + " ".repeat(tabSize) + mdText.slice(cursorPositionStart);
   setMdText(outputText);
@@ -31,10 +33,8 @@ export const listController = (
   setMdText: Dispatch<SetStateAction<string>>,
   setCursorPosition: (positionStart: number, positionEnd: number) => void
 ) => {
-  let orderedListIndex = 2;
   if (buttonValues[listButtonValues["bTitle"]]) {
     event.preventDefault();
-
     if (
       mdText.slice(cursorPositionStart - listButtonValues["cursorInt"], cursorPositionStart) ===
         listButtonValues["output"] ||
@@ -57,6 +57,7 @@ export const listController = (
       return;
     }
     if (listButtonValues["bTitle"] === "listOl") {
+      console.log({ orderedListIndex });
       setMdText(
         mdText.slice(0, cursorPositionStart) +
           "\n\n" +

@@ -177,7 +177,7 @@ const processIframeMessage = (e: { data: any }) => {
   }
 };
 
-export const renderMicrobit = (lang: any) => {
+export const renderMicrobit = (lang: string) => {
   language = lang;
   const existingFrame = document.getElementById(microbitIframeId);
   renderSpinner();

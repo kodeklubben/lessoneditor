@@ -1,7 +1,6 @@
 import { Dispatch, SetStateAction, ChangeEvent, MouseEvent, KeyboardEvent, FC, Ref } from "react";
 import ContentPlaceholder from "./ContentPlaceholder";
 import { listController, TABcontroller } from "./utils/mdTextAreaControllers";
-import { useFileContext } from "../../contexts/FileContext";
 
 interface MDTextAreaProps {
   editorRef: Ref<HTMLTextAreaElement>;
@@ -17,7 +16,8 @@ interface MDTextAreaProps {
   setMdText: Dispatch<SetStateAction<string>>;
   setButtonValues: Dispatch<SetStateAction<Record<string, boolean>>>;
   setCursor: (pos1: number, pos2: number) => void;
-  setUndoAndCursorPosition: (mdText: string, position: number) => void;
+  setUndoAndUndoPosition: (mdText: string, position: number) => void;
+  setRedoAndRedoPosition: (mdText: string, position: number) => void;
   resetButtons: () => void;
 }
 
@@ -31,18 +31,18 @@ const MDTextArea: FC<MDTextAreaProps> = ({
   setMdText,
   setButtonValues,
   setCursor,
-  setUndoAndCursorPosition,
+  setUndoAndUndoPosition,
+  setRedoAndRedoPosition,
   resetButtons,
 }) => {
-  const { loading } = useFileContext();
-
   const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    setRedoAndRedoPosition(mdText, cursorPositionStart);
     setCursor(event.target.selectionStart, event.target.selectionEnd);
     const inputText = event.target.value;
 
     setMdText(inputText);
     if (inputText[cursorPositionStart] === " " || inputText[cursorPositionStart] === "\n") {
-      setUndoAndCursorPosition(inputText, cursorPositionStart);
+      setUndoAndUndoPosition(inputText, cursorPositionStart);
     }
   };
 
@@ -87,7 +87,7 @@ const MDTextArea: FC<MDTextAreaProps> = ({
     if (event.key === "Tab") {
       event.preventDefault();
       TABcontroller(
-        setUndoAndCursorPosition,
+        setUndoAndUndoPosition,
         mdText,
         cursorPositionStart,
         setMdText,
