@@ -3,6 +3,7 @@ import React, { FC, useState } from "react";
 import lkkLogo from "../../../assets/public/lkk_logo.png";
 import NewLessonModal from "./NewLessonModal";
 import ItemList from "./ItemList";
+import { LessonDTO } from "@lessoneditor/contracts";
 import { useUserContext } from "../../contexts/UserContext";
 import Navbar from "../navbar/Navbar";
 import {
@@ -14,11 +15,94 @@ import {
   Message,
   Placeholder,
   Image,
+  Dropdown,
 } from "semantic-ui-react";
+
+const sortOptions = [
+  { key: "date-modified", text: "Sist endret", value: "date-modified" },
+  { key: "name", text: "Navn", value: "name" },
+  { key: "date-created", text: "Dato", value: "date-created" },
+  { key: "is-submitted", text: "Sendt inn", value: "is-submitted" },
+];
 
 const Overview: FC = () => {
   const { state } = useUserContext();
   const [openNewLessonModal, setOpenNewLessonModal] = useState<boolean>(false);
+  const [sortValue, setSortValue] = useState<string>("date-modified");
+
+  const [userLessons, setUserLessons] = useState(
+    state.lessons.sort((i, j) => {
+      if (Date.parse(i.updated_at.toString()) < Date.parse(j.updated_at.toString())) {
+        return 1;
+      }
+      if (Date.parse(i.updated_at.toString()) > Date.parse(j.updated_at.toString())) {
+        return -1;
+      }
+      return 0;
+    })
+  );
+
+  const handleSortChange = (e: any, { value }: any) => {
+    setSortValue(value);
+    switch (value) {
+      case "date-modified": {
+        setUserLessons([
+          ...userLessons.sort((i, j) => {
+            if (Date.parse(i.updated_at.toString()) < Date.parse(j.updated_at.toString())) {
+              return 1;
+            }
+            if (Date.parse(i.updated_at.toString()) > Date.parse(j.updated_at.toString())) {
+              return -1;
+            }
+            return 0;
+          }),
+        ]);
+
+        break;
+      }
+      case "date-created": {
+        setUserLessons([
+          ...userLessons.sort((i, j) => {
+            if (i.created_at > j.created_at) {
+              return 1;
+            }
+            if (j.created_at > i.created_at) {
+              return -1;
+            }
+            return 0;
+          }),
+        ]);
+
+        break;
+      }
+      case "name": {
+        setUserLessons([
+          ...userLessons.sort((i, j) => {
+            return i.courseTitle.toLowerCase().localeCompare(j.courseTitle.toLowerCase());
+          }),
+        ]);
+
+        break;
+      }
+      case "is-submitted": {
+        setUserLessons([
+          ...userLessons.sort((i, j) => {
+            if (i.submitted) {
+              return -11;
+            }
+            if (j.submitted) {
+              return 1;
+            }
+            return 0;
+          }),
+        ]);
+
+        break;
+      }
+      default:
+        break;
+    }
+  };
 
   const cardPlaceholder = (key: number) => {
     return (
@@ -49,7 +133,7 @@ const Overview: FC = () => {
       <div className="overViewContainer">
         <section className="overviewSection1">
           <div className="overviewSection1_content">
-            <Header as={"h1"}>KidsaKoders Tekstbehandler</Header>
+            <Header as={"h1"}>Lær Kidsa Kodings Tekstbehandler</Header>
             <div
               style={{
                 borderBottom: "5px solid",
@@ -114,7 +198,7 @@ const Overview: FC = () => {
               </div>
               <div style={{ margin: "0 1vw 2vh 0" }}>
                 <h3 style={{ marginBottom: "1em", minWidth: "14em" }}>
-                  KidsaKoders oppgavesamling
+                  Lær Kidsa Kodings oppgavesamling
                 </h3>
                 <div style={{ margin: "0", padding: "0" }} onClick={() => alert("WIP")}>
                   <Card className="overview_Button" style={{ width: "16em", height: "15em" }}>
@@ -165,8 +249,15 @@ const Overview: FC = () => {
             <Header as="h3" style={{ marginBottom: "2em" }}>
               Mine oppgaver
             </Header>
+            <Dropdown
+              onChange={handleSortChange}
+              inline
+              options={sortOptions}
+              defaultValue={sortOptions[0].value}
+              value={sortValue}
+            />
             {state.lessons.length > 0 ? (
-              <ItemList lessons={state.lessons} />
+              <ItemList lessons={userLessons} />
             ) : (
               <Message compact>
                 <Message.Header>Du har ingen kurs</Message.Header>
