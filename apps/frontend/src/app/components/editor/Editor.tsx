@@ -70,28 +70,40 @@ const Editor: FC = () => {
     setUndoCursorPosition((prevPosition) => [...prevPosition, position]);
   };
 
+  const setRedoAndRedoPosition = (mdText: string, position: number) => {
+    setRedo([mdText]);
+    setRedoCursorPosition([position]);
+  };
+
   const pushUndoValue = (mdText: string, cursorPositionStart: number) => {
     resetButtons();
     if (undo.length > 0) {
+      console.log(undo.length);
       const text = undo[undo.length - 1];
+      console.log({ text });
       const position = undoCursorPosition[undoCursorPosition.length - 1];
       setRedo((prevRedo) => [...prevRedo, mdText]);
       setRedoCursorPosition((prevPosition) => [...prevPosition, cursorPositionStart]);
       removeLastUndoAndPosition();
       setMdText(text);
       setCursorPosition(position, position);
+    } else {
+      return;
     }
   };
 
   const pushRedoValue = (mdText: string) => {
     resetButtons();
     if (redo.length > 0) {
+      console.log(redo.length);
       const text = redo[redo.length - 1];
       const position = redoCursorPosition[redoCursorPosition.length - 1];
       setUndoAndUndoPosition(mdText, position);
       removeLastRedoAndPosition();
       setMdText(text);
       setCursor(position, position);
+    } else {
+      return;
     }
   };
 
@@ -160,7 +172,7 @@ const Editor: FC = () => {
               setUndoCursorPosition={setUndoCursorPosition}
               undoCursorPosition={undoCursorPosition}
               uploadImageRef={uploadImageRef}
-              setUndoAndCursorPosition={setUndoAndUndoPosition}
+              setUndoAndUndoPosition={setUndoAndUndoPosition}
               openSettings={openSettings}
               setOpenSettings={setOpenSettings}
             />
@@ -176,7 +188,8 @@ const Editor: FC = () => {
                   setMdText={setMdText}
                   setButtonValues={setButtonValues}
                   setCursor={setCursor}
-                  setUndoAndCursorPosition={setUndoAndUndoPosition}
+                  setUndoAndUndoPosition={setUndoAndUndoPosition}
+                  setRedoAndRedoPosition={setRedoAndRedoPosition}
                   resetButtons={resetButtons}
                 />
                 <MDPreview mdText={mdText} course={state.lesson.courseSlug} language={language} />

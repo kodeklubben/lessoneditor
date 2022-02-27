@@ -8,7 +8,7 @@ import { FC, RefObject } from "react";
 interface ImageProps {
   editorRef: RefObject<HTMLTextAreaElement>;
   uploadImageRef: RefObject<HTMLInputElement>;
-  setUndoAndCursorPosition: (mdText: string, position: number) => void;
+  setUndoAndUndoPosition: (mdText: string, position: number) => void;
   mdText: string;
   cursorPositionStart: number;
 }

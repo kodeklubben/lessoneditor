@@ -13,7 +13,7 @@ interface SectionsProps {
   setCursorPosition: (positionStart: number, positionEnd: number) => void;
   setCursor: (pos1: number, pos2: number) => void;
   setButtonValues: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
-  setUndoAndCursorPosition: (mdText: string, position: number) => void;
+  setUndoAndUndoPosition: (mdText: string, position: number) => void;
 }
 
 const Sections: FC<SectionsProps> = ({
@@ -26,7 +26,7 @@ const Sections: FC<SectionsProps> = ({
   setCursorPosition,
   setCursor,
   setButtonValues,
-  setUndoAndCursorPosition,
+  setUndoAndUndoPosition,
 }) => {
   return (
     <>
@@ -50,7 +50,7 @@ const Sections: FC<SectionsProps> = ({
           mdText={mdText}
           cursorPositionStart={cursorPositionStart}
           cursorPositionEnd={cursorPositionEnd}
-          setUndoAndCursorPosition={setUndoAndCursorPosition}
+          setUndoAndUndoPosition={setUndoAndUndoPosition}
         />
       ))}
     </>

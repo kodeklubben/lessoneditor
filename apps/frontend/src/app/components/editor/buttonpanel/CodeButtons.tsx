@@ -17,7 +17,7 @@ export interface CodeButtonsProps {
   setButtonValues: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
   course: string;
   courseTitle: string;
-  setUndoAndCursorPosition: (mdText: string, position: number) => void;
+  setUndoAndUndoPosition: (mdText: string, position: number) => void;
 }
 
 const CodeButtons: FC<CodeButtonsProps> = ({
@@ -30,7 +30,7 @@ const CodeButtons: FC<CodeButtonsProps> = ({
   setCursorPosition,
   setCursor,
   setButtonValues,
-  setUndoAndCursorPosition,
+  setUndoAndUndoPosition,
   course,
   courseTitle,
 }) => {
@@ -57,7 +57,7 @@ const CodeButtons: FC<CodeButtonsProps> = ({
           cursorPositionEnd={cursorPositionEnd}
           course={course}
           courseTitle={courseTitle}
-          setUndoAndCursorPosition={setUndoAndCursorPosition}
+          setUndoAndUndoPosition={setUndoAndUndoPosition}
         />
       ))}
     </>

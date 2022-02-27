@@ -40,7 +40,7 @@ interface ButtonPanelProps {
   setRedoCursorPosition: Dispatch<SetStateAction<number[]>>;
   setUndoCursorPosition: Dispatch<SetStateAction<number[]>>;
   uploadImageRef: RefObject<HTMLInputElement>;
-  setUndoAndCursorPosition: (mdText: string, position: number) => void;
+  setUndoAndUndoPosition: (mdText: string, position: number) => void;
   openSettings: boolean;
   setOpenSettings: Dispatch<SetStateAction<boolean>>;
 }
@@ -66,7 +66,7 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
   setRedoCursorPosition,
   setUndoCursorPosition,
   uploadImageRef,
-  setUndoAndCursorPosition,
+  setUndoAndUndoPosition,
   openSettings,
   setOpenSettings,
 }) => {
@@ -86,7 +86,7 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
                 setCursorPosition={setCursorPosition}
                 setCursor={setCursor}
                 setButtonValues={setButtonValues}
-                setUndoAndCursorPosition={setUndoAndCursorPosition}
+                setUndoAndUndoPosition={setUndoAndUndoPosition}
               />
 
               <div style={{ marginRight: "3em" }} />
@@ -112,12 +112,12 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
                 setMdText={setMdText}
                 setCursorPosition={setCursorPosition}
                 setCursor={setCursor}
-                setUndoAndCursorPosition={setUndoAndCursorPosition}
+                setUndoAndUndoPosition={setUndoAndUndoPosition}
               />
               <Image
                 editorRef={editorRef}
                 uploadImageRef={uploadImageRef}
-                setUndoAndCursorPosition={setUndoAndCursorPosition}
+                setUndoAndUndoPosition={setUndoAndUndoPosition}
                 mdText={mdText}
                 cursorPositionStart={cursorPositionStart}
               />
@@ -129,7 +129,7 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
                 setMdText={setMdText}
                 setCursorPosition={setCursorPosition}
                 setCursor={setCursor}
-                setUndoAndCursorPosition={setUndoAndCursorPosition}
+                setUndoAndUndoPosition={setUndoAndUndoPosition}
               />
               <div style={{ marginRight: "3em" }} />
               <Lists
@@ -143,7 +143,7 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
                 setCursor={setCursor}
                 setListButtonValues={setListButtonValues}
                 setButtonValues={setButtonValues}
-                setUndoAndCursorPosition={setUndoAndCursorPosition}
+                setUndoAndUndoPosition={setUndoAndUndoPosition}
               />
               {/* <div style={{ marginRight: "3em" }} />
             <Explorer /> */}
@@ -172,7 +172,7 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
                 setCursorPosition={setCursorPosition}
                 setCursor={setCursor}
                 setButtonValues={setButtonValues}
-                setUndoAndCursorPosition={setUndoAndCursorPosition}
+                setUndoAndUndoPosition={setUndoAndUndoPosition}
               />
 
               <span style={{ marginRight: "5em" }} />
@@ -189,7 +189,7 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
                 setButtonValues={setButtonValues}
                 course={course}
                 courseTitle={courseTitle}
-                setUndoAndCursorPosition={setUndoAndCursorPosition}
+                setUndoAndUndoPosition={setUndoAndUndoPosition}
               />
             </div>
             <Autosave mdText={mdText} />
@@ -206,7 +206,7 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
                 setCursorPosition={setCursorPosition}
                 setCursor={setCursor}
                 setButtonValues={setButtonValues}
-                setUndoAndCursorPosition={setUndoAndCursorPosition}
+                setUndoAndUndoPosition={setUndoAndUndoPosition}
               />
             )}
             {course === "scratch" && (
@@ -220,7 +220,7 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
                 setCursorPosition={setCursorPosition}
                 setCursor={setCursor}
                 setButtonValues={setButtonValues}
-                setUndoAndCursorPosition={setUndoAndCursorPosition}
+                setUndoAndUndoPosition={setUndoAndUndoPosition}
               />
             )}
           </div>

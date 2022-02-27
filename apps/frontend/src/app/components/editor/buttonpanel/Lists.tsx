@@ -15,7 +15,7 @@ interface ListsProps {
     React.SetStateAction<{ bTitle: string; output: string; cursorInt: number }>
   >;
   setButtonValues: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
-  setUndoAndCursorPosition: (mdText: string, position: number) => void;
+  setUndoAndUndoPosition: (mdText: string, position: number) => void;
 }
 
 const Lists: FC<ListsProps> = ({
@@ -29,7 +29,7 @@ const Lists: FC<ListsProps> = ({
   setCursor,
   setListButtonValues,
   setButtonValues,
-  setUndoAndCursorPosition,
+  setUndoAndUndoPosition,
 }) => {
   return (
     <>
@@ -54,7 +54,7 @@ const Lists: FC<ListsProps> = ({
           cursorPositionStart={cursorPositionStart}
           cursorPositionEnd={cursorPositionEnd}
           outputOnEnter={element[1].outputOnEnter}
-          setUndoAndCursorPosition={setUndoAndCursorPosition}
+          setUndoAndUndoPosition={setUndoAndUndoPosition}
         />
       ))}
     </>

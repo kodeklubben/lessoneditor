@@ -23,9 +23,33 @@ const MDPreview: FC<MDPreviewProps> = ({ mdText, course, language }) => {
   const [parsedMDwithUpdatedImageURLS, setParsedMDwithUpdatedImageURLS] = useState<string>("");
 
   useEffect(() => {
-    if (course === "microbit") {
-      renderMicrobit(language);
+    function replaceImageUrlWithBlobUrl(markdownContent: any) {
+      if (!/(!\[.*?\])(\(\.\/.*?\))/.test(markdownContent)) {
+        return markdownContent;
+      }
+      const filenames: string[] = [];
+      markdownContent.replace(
+        /(!\[.*?\])(\(\.\/.*?\))/gs,
+        function (whole: string, prefix: string, imagePathRaw: string, postfix: string) {
+          filenames.push(imagePathRaw.slice(3, -1));
+        }
+      );
+      return markdownContent.replace(
+        /(!\[.*?\]\()(.+?)(\))/gs,
+        function (whole: string, prefix: string, imagePathRaw: string, postfix: string) {
+          imagePathRaw = imagePathRaw.slice(2);
+          const filename: string = filenames.shift() ?? "";
+          const imageBlobUrl = images[filename];
+          return prefix + imageBlobUrl + postfix;
+        }
+      );
     }
+
+    async function replaceUrls() {
+      const newMdText = replaceImageUrlWithBlobUrl(mdText);
+      setParsedMDwithUpdatedImageURLS(mdParser(newMdText));
+    }
+    replaceUrls();
   }, [mdText]);
 
   useEffect(() => {
@@ -74,34 +98,10 @@ const MDPreview: FC<MDPreviewProps> = ({ mdText, course, language }) => {
   }, [parsedMDwithUpdatedImageURLS]);
 
   useEffect(() => {
-    function replaceUrlWithBlobUrl(markdownContent: any) {
-      if (!/(!\[.*?\])(\(\.\/.*?\))/.test(markdownContent)) {
-        return markdownContent;
-      }
-      const filenames: string[] = [];
-      markdownContent.replace(
-        /(!\[.*?\])(\(\.\/.*?\))/gs,
-        function (whole: string, prefix: string, imagePathRaw: string, postfix: string) {
-          filenames.push(imagePathRaw.slice(3, -1));
-        }
-      );
-      return markdownContent.replace(
-        /(!\[.*?\]\()(.+?)(\))/gs,
-        function (whole: string, prefix: string, imagePathRaw: string, postfix: string) {
-          imagePathRaw = imagePathRaw.slice(2);
-          const filename: string = filenames.shift() ?? "";
-          const imageBlobUrl = images[filename];
-          return prefix + imageBlobUrl + postfix;
-        }
-      );
+    if (course === "microbit") {
+      renderMicrobit(language);
     }
-
-    async function replaceUrls() {
-      const newMdText = replaceUrlWithBlobUrl(mdText);
-      setParsedMDwithUpdatedImageURLS(mdParser(newMdText));
-    }
-    replaceUrls();
-  }, [mdText]);
+  }, [parsedMDwithUpdatedImageURLS]);
 
   if (course === "scratch" && parsedMDwithUpdatedImageURLS) {
     const lessonContent = renderScratchBlocks(svgTest);
