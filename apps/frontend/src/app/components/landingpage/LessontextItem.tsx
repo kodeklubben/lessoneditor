@@ -101,9 +101,9 @@ const LessontextItem: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug, 
               margin: "1em",
             }}
           >
-            <Item.Header>
+            {/* <Item.Header>
               <h3>Tittel: {lessonTitle}</h3>
-            </Item.Header>
+            </Item.Header> */}
             <Item.Meta>
               <h3>Språk: {languageText}</h3>
             </Item.Meta>
