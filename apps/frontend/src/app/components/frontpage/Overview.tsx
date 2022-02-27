@@ -1,5 +1,5 @@
 import "./overview.scss";
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import lkkLogo from "../../../assets/public/lkk_logo.png";
 import NewLessonModal from "./NewLessonModal";
 import ItemList from "./ItemList";
@@ -32,15 +32,17 @@ const Overview: FC = () => {
 
   const [userLessons, setUserLessons] = useState(
     state.lessons.sort((i, j) => {
-      if (Date.parse(i.updated_at.toString()) < Date.parse(j.updated_at.toString())) {
-        return 1;
-      }
-      if (Date.parse(i.updated_at.toString()) > Date.parse(j.updated_at.toString())) {
-        return -1;
-      }
-      return 0;
+      return i.updated_at < j.updated_at ? 1 : -1;
     })
   );
+
+  useEffect(() => {
+    setUserLessons(
+      state.lessons.sort((i, j) => {
+        return i.updated_at < j.updated_at ? 1 : -1;
+      })
+    );
+  }, [state.lessons]);
 
   const handleSortChange = (e: any, { value }: any) => {
     setSortValue(value);
@@ -48,13 +50,7 @@ const Overview: FC = () => {
       case "date-modified": {
         setUserLessons([
           ...userLessons.sort((i, j) => {
-            if (Date.parse(i.updated_at.toString()) < Date.parse(j.updated_at.toString())) {
-              return 1;
-            }
-            if (Date.parse(i.updated_at.toString()) > Date.parse(j.updated_at.toString())) {
-              return -1;
-            }
-            return 0;
+            return i.updated_at < j.updated_at ? 1 : -1;
           }),
         ]);
 
@@ -63,13 +59,7 @@ const Overview: FC = () => {
       case "date-created": {
         setUserLessons([
           ...userLessons.sort((i, j) => {
-            if (i.created_at > j.created_at) {
-              return 1;
-            }
-            if (j.created_at > i.created_at) {
-              return -1;
-            }
-            return 0;
+            return i.created_at < j.created_at ? 1 : -1;
           }),
         ]);
 
@@ -78,7 +68,7 @@ const Overview: FC = () => {
       case "name": {
         setUserLessons([
           ...userLessons.sort((i, j) => {
-            return i.courseTitle.toLowerCase().localeCompare(j.courseTitle.toLowerCase());
+            return i.lessonTitle.toLowerCase().localeCompare(j.lessonTitle.toLowerCase());
           }),
         ]);
 
@@ -87,13 +77,7 @@ const Overview: FC = () => {
       case "is-submitted": {
         setUserLessons([
           ...userLessons.sort((i, j) => {
-            if (i.submitted) {
-              return -11;
-            }
-            if (j.submitted) {
-              return 1;
-            }
-            return 0;
+            return i.submitted ? -1 : 1;
           }),
         ]);
 

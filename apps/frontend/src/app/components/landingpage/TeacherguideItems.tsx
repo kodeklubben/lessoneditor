@@ -69,19 +69,23 @@ const TeacherguideItems = () => {
   return (
     <Item.Group divided>
       {usedLanguages.length > 0 ? (
-        usedLanguages!.map((language: string) => {
-          return (
-            <TeacherguideItem
-              key={language}
-              content={"Oppgavetekst"}
-              language={language}
-              lessonId={lessonId}
-              lessonSlug={lessonSlug}
-              lessonTitle={lessonTitle}
-              removeMD={removeMD}
-            />
-          );
-        })
+        usedLanguages
+          .sort((i, j) => {
+            return j.localeCompare(i);
+          })!
+          .map((language: string) => {
+            return (
+              <TeacherguideItem
+                key={language}
+                content={"Oppgavetekst"}
+                language={language}
+                lessonId={lessonId}
+                lessonSlug={lessonSlug}
+                lessonTitle={lessonTitle}
+                removeMD={removeMD}
+              />
+            );
+          })
       ) : (
         <Message>
           <Message.Header>Du har ikke skrevet lærerveiledning</Message.Header>

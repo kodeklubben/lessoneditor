@@ -1,5 +1,5 @@
 import { Button, Modal, Header, Dropdown, Radio } from "semantic-ui-react";
-import { FC, SyntheticEvent, useCallback, useEffect, useState } from "react";
+import { FC, SyntheticEvent, useState } from "react";
 import { useNavigate } from "react-router";
 import { useUserContext } from "../../contexts/UserContext";
 
@@ -147,14 +147,14 @@ const NewLessontextModal: FC<any> = ({
               {textMode === "lessontext" && unusedLessontextLanguages.length > 0 ? (
                 <Dropdown
                   name="language"
-                  defaultValue={unusedLessontextLanguages[0].value}
+                  value={lessontextLang}
                   onChange={onChange}
                   options={unusedLessontextLanguages}
                 />
               ) : textMode === "teacherguide" && unusedTeacherguideLanguages.length > 0 ? (
                 <Dropdown
                   name="language"
-                  defaultValue={unusedTeacherguideLanguages[0].value}
+                  value={teacherguideLang}
                   onChange={onChange}
                   options={unusedTeacherguideLanguages}
                 />
