@@ -16,18 +16,20 @@ import {
   Placeholder,
   Image,
   Dropdown,
+  Modal,
 } from "semantic-ui-react";
 
 const sortOptions = [
   { key: "date-modified", text: "Sist endret", value: "date-modified" },
-  { key: "name", text: "Navn", value: "name" },
-  { key: "date-created", text: "Dato", value: "date-created" },
+  { key: "lesson-title", text: "Tittel", value: "lesson-title" },
+  { key: "course-title", text: "Kurs", value: "course-title" },
   { key: "is-submitted", text: "Sendt inn", value: "is-submitted" },
 ];
 
 const Overview: FC = () => {
   const { state } = useUserContext();
   const [openNewLessonModal, setOpenNewLessonModal] = useState<boolean>(false);
+  const [openLessonModal, setOpenLessonModal] = useState<boolean>(false);
   const [sortValue, setSortValue] = useState<string>("date-modified");
 
   const [userLessons, setUserLessons] = useState(
@@ -56,16 +58,16 @@ const Overview: FC = () => {
 
         break;
       }
-      case "date-created": {
+      case "course-title": {
         setUserLessons([
           ...userLessons.sort((i, j) => {
-            return i.created_at < j.created_at ? 1 : -1;
+            return i.courseTitle.toLowerCase().localeCompare(j.courseTitle.toLowerCase());
           }),
         ]);
 
         break;
       }
-      case "name": {
+      case "lesson-title": {
         setUserLessons([
           ...userLessons.sort((i, j) => {
             return i.lessonTitle.toLowerCase().localeCompare(j.lessonTitle.toLowerCase());
@@ -112,7 +114,29 @@ const Overview: FC = () => {
   };
 
   return (
-    <div>
+    <>
+      {openLessonModal && (
+        <Modal
+          onClose={() => setOpenLessonModal(false)}
+          onOpen={() => setOpenLessonModal(true)}
+          open={openLessonModal}
+          trigger={<Button>Show Modal</Button>}
+          dimmer="inverted"
+        >
+          <Modal.Header>{"Her kommer en meny for å åpne eksisterende oppgave"}</Modal.Header>
+          <Modal.Content>
+            <h3>WorkInProgress</h3>
+          </Modal.Content>
+
+          <Button
+            onClick={() => setOpenLessonModal(false)}
+            style={{ position: "absolute", background: "none", top: "0", right: "0" }}
+            icon
+          >
+            <Icon size="huge" name="x" />
+          </Button>
+        </Modal>
+      )}
       <Navbar />
       <div className="overViewContainer">
         <section className="overviewSection1">
@@ -184,7 +208,7 @@ const Overview: FC = () => {
                 <h3 style={{ marginBottom: "1em", minWidth: "14em" }}>
                   Lær Kidsa Kodings oppgavesamling
                 </h3>
-                <div style={{ margin: "0", padding: "0" }} onClick={() => alert("WIP")}>
+                <div style={{ margin: "0", padding: "0" }} onClick={() => setOpenLessonModal(true)}>
                   <Card className="overview_Button" style={{ width: "16em", height: "15em" }}>
                     <Card.Content>
                       <Card.Content>
@@ -217,7 +241,7 @@ const Overview: FC = () => {
                           positive
                           content="Åpne"
                           onClick={() => {
-                            alert("WIP");
+                            setOpenLessonModal(true);
                           }}
                         />
                       </Card.Content>
@@ -230,18 +254,23 @@ const Overview: FC = () => {
         </section>
         <section className="overviewSection2">
           <div className="overviewSection2_content">
-            <Header as="h3" style={{ marginBottom: "2em" }}>
-              Mine oppgaver
-            </Header>
-            <Dropdown
-              onChange={handleSortChange}
-              inline
-              options={sortOptions}
-              defaultValue={sortOptions[0].value}
-              value={sortValue}
-            />
+            <div className="overviewSection2_header">
+              <Header as="h3" style={{ marginBottom: "2em" }}>
+                Mine oppgaver
+              </Header>
+              <Dropdown
+                onChange={handleSortChange}
+                inline
+                options={sortOptions}
+                defaultValue={sortOptions[0].value}
+                value={sortValue}
+              />
+            </div>
+
             {state.lessons.length > 0 ? (
-              <ItemList lessons={userLessons} />
+              <div>
+                <ItemList lessons={userLessons} />
+              </div>
             ) : (
               <Message compact>
                 <Message.Header>Du har ingen kurs</Message.Header>
@@ -252,7 +281,7 @@ const Overview: FC = () => {
           </div>
         </section>
       </div>
-    </div>
+    </>
   );
 };
 export default Overview;

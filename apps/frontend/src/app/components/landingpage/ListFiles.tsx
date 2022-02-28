@@ -1,8 +1,14 @@
-import { FC } from "react";
-import { Item, Button, Divider, Icon, Placeholder } from "semantic-ui-react";
+import { FC, useEffect, useState } from "react";
+import { Item, Button, Modal, Icon, Image, Header } from "semantic-ui-react";
 import axios from "axios";
 import { paths } from "@lessoneditor/contracts";
+import { LANGUAGEOPTIONS } from "../frontpage/settings/newLessonOptions";
 import { useLessonContext } from "../../contexts/LessonContext";
+import { useUserContext } from "../../contexts/UserContext";
+import { filenameParser } from "../../utils/filename-parser";
+import MarkdownPreview from "./MarkdownPreview";
+import DeleteModal from "../shared/DeleteModal";
+import placeholderImage from "../../../assets/public/landingPage/image.png";
 
 type ListFilesProps = {
   item: string;
@@ -11,11 +17,39 @@ type ListFilesProps = {
 
 const ListFiles: FC<ListFilesProps> = ({ item, lessonId }) => {
   const { fetchFileList, setFiles } = useLessonContext();
+  const [openDeleteContent, setOpenDeleteContent] = useState<boolean>(false);
+  const [openImageModal, setOpenImageModal] = useState<boolean>(false);
+  const { previewImage } = useUserContext();
+  const { images } = useLessonContext();
+  const [imageUrl, setImageUrl] = useState();
+  const [showMDPreview, setShowMDPreview] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [fileList, setFileList] = useState<string[]>([]);
 
-  const removeFile = async (item: string) => {
-    const fileList = await fetchFileList();
-    const filename = item.split(".").slice(0, -1).toString();
-    const ext: string = item.split(".").pop() ?? "";
+  const { language } = filenameParser(item);
+
+  const filename = item.split(".").slice(0, -1).toString();
+  const ext: string = item.split(".").pop() ?? "";
+
+  const isImage = ["jpeg", "png", "gif"].includes(ext);
+
+  let lang;
+  let languageImage;
+
+  if (ext === "md") {
+    lang = LANGUAGEOPTIONS.find((item) => item.value === language);
+
+    languageImage = lang!.image!.src;
+  }
+
+  useEffect(() => {
+    async function fetchFiles() {
+      setFileList(await fetchFileList());
+    }
+    fetchFiles();
+  }, []);
+
+  const removeFile = async () => {
     try {
       const isDeleted = await axios.delete(
         paths.LESSON_FILE_DELETE.replace(":lessonId", lessonId.toString())
@@ -31,14 +65,106 @@ const ListFiles: FC<ListFilesProps> = ({ item, lessonId }) => {
       console.log(e);
     }
   };
+
+  const getFile = async () => {
+    try {
+      const res = await axios.get(
+        paths.LESSON_FILE.replace(":lessonId", lessonId.toString()).replace(":fileName", filename)
+      );
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <>
+      {isImage && openImageModal && (
+        <Modal
+          onClose={() => setOpenImageModal(false)}
+          onOpen={() => setOpenImageModal(true)}
+          open={openImageModal}
+          trigger={<Button>Show Modal</Button>}
+          dimmer="inverted"
+        >
+          <Modal.Header>{item}</Modal.Header>
+          <Modal.Content image>
+            <Image size="massive" src={images[item]} wrapped />
+          </Modal.Content>
+          <Modal.Content>
+            <Modal.Description></Modal.Description>
+            <Button
+              onClick={() => setOpenImageModal(false)}
+              style={{ position: "absolute", background: "none", top: "0", right: "0" }}
+              icon
+            >
+              <Icon size="huge" name="x" />
+            </Button>
+          </Modal.Content>
+        </Modal>
+      )}
+      {showMDPreview && ext === "md" && (
+        <MarkdownPreview
+          filename={filename}
+          showMDPreview={showMDPreview}
+          setShowMDPreview={setShowMDPreview}
+        />
+      )}
+      {openDeleteContent && (
+        <DeleteModal
+          openDeleteContent={openDeleteContent}
+          setOpenDeleteContent={setOpenDeleteContent}
+          deleteContent={removeFile}
+          loading={loading}
+        />
+      )}
       <Item style={{ marginBottom: "1em", paddingTop: "2em" }}>
         <div style={{ display: "flex", flexDirection: "row" }}>
-          <Item.Content>
-            <Placeholder>
-              <Placeholder.Image style={{ width: "100px", height: "100px" }}></Placeholder.Image>
-            </Placeholder>
+          <Item.Content
+            onClick={
+              ext == "md"
+                ? () => setShowMDPreview((prevValue) => !prevValue)
+                : isImage
+                ? () => {
+                    setOpenImageModal(true);
+                  }
+                : () => {
+                    console.log("noPreviewContent");
+                  }
+            }
+            className="landingpage_item_image"
+            style={{ position: "relative" }}
+          >
+            <Item.Image
+              src={
+                ext === "md" ? previewImage[lessonId] : isImage ? images[item] : placeholderImage
+              }
+              size="tiny"
+              alt="thumbUrl"
+              rounded
+              bordered
+              style={{
+                maxHeight: "7em",
+                overflow: "hidden",
+                objectFit: "cover",
+                objectPosition: "0 0",
+                border: "1px solid lightgray",
+              }}
+            />
+
+            {language ? (
+              <Image
+                style={{
+                  width: "66%",
+                  position: "absolute",
+                  left: "0",
+                  bottom: "0.4em",
+                }}
+                src={languageImage}
+                alt={""}
+              />
+            ) : (
+              ""
+            )}
           </Item.Content>
           <Item.Content
             style={{
@@ -64,7 +190,7 @@ const ListFiles: FC<ListFilesProps> = ({ item, lessonId }) => {
             margin: "1em",
           }}
         >
-          <Button style={{ background: "none" }} icon onClick={() => removeFile(item)}>
+          <Button style={{ background: "none" }} icon onClick={() => setOpenDeleteContent(true)}>
             <Icon name="delete" />
             Slett
           </Button>
