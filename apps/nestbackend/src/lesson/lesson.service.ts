@@ -130,6 +130,7 @@ export class LessonService {
     request: Request
   ): Promise<FileStore> {
     const lesson = await this.getLesson(lessonId);
+    lesson.updated_at = new Date();
     const file = lesson.files.find((file) => file.filename == fileName);
     if (!file) {
       throw new HttpException("File does not exist", HttpStatus.NOT_FOUND);
