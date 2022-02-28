@@ -2,7 +2,7 @@ import { SyntheticEvent, useState } from "react";
 import LessontextItems from "./LessonTextItems";
 import TeacherguideItems from "./TeacherguideItems";
 import AllFiles from "../landingpage/AllFiles";
-import { Menu, Segment } from "semantic-ui-react";
+import { Menu } from "semantic-ui-react";
 import { useParams } from "react-router";
 
 const Content = () => {

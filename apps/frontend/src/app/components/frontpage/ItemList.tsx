@@ -12,9 +12,9 @@ const ItemList: FC<ItemListProps> = ({ lessons }) => {
     <div
       style={{
         display: "flex",
-        flexFlow: "row nowrap",
+        flexFlow: "row wrap",
         alignItems: "center",
-        justifyContent: "flex-start",
+        justifyContent: "space-between",
         overflowX: "auto",
         paddingTop: "1.5em",
       }}
