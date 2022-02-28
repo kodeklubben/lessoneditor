@@ -46,7 +46,7 @@ const Item: React.FC<Props> = ({ lesson }) => {
           loading={loading}
         />
       )}
-      <div className="item_card" style={{ margin: "0 3em 2vh 0" }}>
+      <div className="item_card" style={{ margin: "0 3.7em 2vh 0" }}>
         <Card
           style={{
             border: "3px solid #0fbe7b",

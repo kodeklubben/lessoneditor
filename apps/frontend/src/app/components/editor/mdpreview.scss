@@ -218,9 +218,20 @@ a:hover {
     border-radius: 0;
   }
 
+  ul > li {
+    list-style-type: none;
+  }
+
+  .contains-checklist {
+    margin-left: 15px;
+  }
+
   // sections
 
   section.section_intro {
+    ul > li {
+      list-style-type: initial;
+    }
   }
 
   section.section_activity {
@@ -252,6 +263,9 @@ a:hover {
         vertical-align: text-bottom;
         padding-right: 10px;
       }
+    }
+    ul {
+      margin-left: 20px;
     }
   }
 
@@ -291,7 +305,6 @@ a:hover {
       margin-bottom: 10px;
       padding-top: 15px;
       padding-bottom: 10px;
-      padding-left: 60px;
 
       img {
         display: inline;
@@ -299,6 +312,9 @@ a:hover {
         vertical-align: text-bottom;
         padding-right: 10px;
       }
+    }
+    ul {
+      margin-left: 15px;
     }
   }
 
@@ -311,7 +327,6 @@ a:hover {
       margin: 0;
       padding-top: 10px;
       padding-bottom: 20px;
-      padding-left: 50px;
 
       img {
         height: 40px;
