@@ -14,7 +14,7 @@ const ItemList: FC<ItemListProps> = ({ lessons }) => {
         display: "flex",
         flexFlow: "row wrap",
         alignItems: "center",
-        justifyContent: "space-between",
+        justifyContent: "start",
         overflowX: "auto",
         paddingTop: "1.5em",
       }}

@@ -18,7 +18,7 @@ let storeSVG = {};
 const MDPreview: FC<MDPreviewProps> = ({ mdText, course, language }) => {
   const { images } = useLessonContext();
 
-  const [svgTest, setSvgTest] = useState<any>("");
+  const [svgContent, setSvgContent] = useState<string>("");
 
   const [parsedMDwithUpdatedImageURLS, setParsedMDwithUpdatedImageURLS] = useState<string>("");
 
@@ -57,39 +57,9 @@ const MDPreview: FC<MDPreviewProps> = ({ mdText, course, language }) => {
       return;
     }
     const timeoutHandler = setTimeout(() => {
-      function replaceScratchBlocksWithSVG() {
-        const replace = {
-          start: '<pre><code class="blocks">',
-          end: "</code></pre>",
-        };
-        let returnContent = parsedMDwithUpdatedImageURLS;
-        const re = new RegExp(replace.start + "[\\s\\S]*?" + replace.end, "g");
-        let blocks = parsedMDwithUpdatedImageURLS.match(re);
-        if (blocks) {
-          blocks.forEach((block: any) => {
-            let code = block.substring(replace.start.length, block.length - replace.end.length);
-            const checksum = md5(code).toString();
-            if (checksum in storeSVG) {
-              // @ts-ignore
-              returnContent = returnContent.replace(block, storeSVG[checksum]);
-              setSvgTest(returnContent);
-            } else {
-              returnContent = renderScratchBlocks(parsedMDwithUpdatedImageURLS);
-              const test = returnContent.slice(
-                returnContent.indexOf("<svg"),
-                returnContent.indexOf("</svg>") + "</svg>".length
-              );
-              // @ts-ignore
-              storeSVG[checksum] = test;
-              setSvgTest(returnContent);
-            }
-          });
-        } else {
-          setSvgTest(returnContent);
-        }
-      }
+      const returnContent = renderScratchBlocks(parsedMDwithUpdatedImageURLS);
 
-      replaceScratchBlocksWithSVG();
+      setSvgContent(returnContent);
     }, 300);
 
     return () => {
@@ -104,7 +74,7 @@ const MDPreview: FC<MDPreviewProps> = ({ mdText, course, language }) => {
   }, [parsedMDwithUpdatedImageURLS]);
 
   if (course === "scratch" && parsedMDwithUpdatedImageURLS) {
-    const lessonContent = renderScratchBlocks(svgTest);
+    const lessonContent = renderScratchBlocks(svgContent);
     return <div className="preview-area" dangerouslySetInnerHTML={{ __html: lessonContent }} />;
   } else if (!parsedMDwithUpdatedImageURLS && mdText !== "") {
     return (
