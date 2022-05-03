@@ -1,15 +1,35 @@
 # Overview and description
 
-The aim of this project was to create web application possibility for a teacher to make new lessons for LKK’swebsite,kidsakoder.no, without difficulty.
-Our minimal requirement is to have a basic functioning application where the teacher don’t need to have any knowledge with Git when they want to edit or create an exercise for Lær kidza koding website.
+The aim of this project was to create web application possibility for a teacher to make new lessons for LKK’s website, kidsakoder.no, without difficulty.
+Our minimal requirement is to have a basic functioning application where the teacher don’t need to have any knowledge with Git when they want to edit or create an exercise for Lær Kidsa Koding website.
 
 ## Quick start
 
-Require nodejs and a normal developer setup. Run `npm install`.
+- Install Node Version Manager: https://github.com/nvm-sh/nvm
+
+- Run `nvm use` in root directory to install the correct Node-version for this project (version number in .nvnmrc - file)
+
+- Run `npm install` to install all dependencies
+
+- Install Database as described below.
+
+- Set up Dev Environment as described below.
+
+- Run `npm run build-all` to build dist-folder
+
+- Run `npm run build-nestbackend` to build backend. Before ..:
+
+- Run `npm run start-nestbackend` to start backend
+
+- Run `npm start" to start fronend
+
+- Open `http://localhost:4200/` in your browser! Happy coding!
+
+- ProTIP: Download pgAdmin: https://www.pgadmin.org/ - to manage Database!
 
 ### Frontend:
 
-- Install all dependencies with [npm](https://www.npmjs.com/) `npm install --prefix frontend`
+- Install all dependencies with [npm](https://www.npmjs.com/) `npm install`
 - Start the application with `npm start frontend`
 - Open `http://localhost:4200/` in your browser
 
@@ -22,24 +42,31 @@ Require nodejs and a normal developer setup. Run `npm install`.
 ### Nestbackend:
 
 - Nestbackend is using typeorm which is not compatible with webpack build the nestbacken using `npm run build-nestbackend`
-and server the backend using `npm run start-nestbackend` 
-
+  and server the backend using `npm run start-nestbackend`
 
 ### Setup Dev Environment:
 
 - Create new oAuth app at Github (`https://github.com/settings/developers`)
-- Create env-file at `/apps/backend/.env.local`
+- Create env-file at `/.local.env`
 - Populate the env-file with env variables:
 
-´´´
+```
 GITHUB_CLIENT_ID= your client ID
 GITHUB_CLIENT_SECRET= your client secret
-GITHUB_CALLBACK_URL= your callback url. ex: http://localhost:3333/callback
-GITHUB_LESSON_REPO_OWNER= your gitname
-GITHUB_LESSON_REPO= your lesson_repo name
-BUCKET=lessoneditor
+GITHUB_CALLBACK_URL= your callback url. ex: http://localhost:4200/api/auth/callback
 THUMB_SERVICE_URL= your thumbnailer url. ex: http://localhost:3012
-´´´
+GITHUB_LESSON_REPO_OWNER= your gitname
+GITHUB_LESSON_REPO= your lesson_repo name ex "oppgaver"
+
+TYPEORM_CONNECTION=postgres
+TYPEORM_HOST=localhost
+TYPEORM_USERNAME=orm-user
+TYPEORM_PASSWORD=testing
+TYPEORM_DATABASE=lesson-editor
+TYPEORM_PORT=5432
+TYPEORM_SYNCHRONIZE=false
+TYPEORM_ENTITIES= dist/\*_/_.entity.js
+```
 
 #### Database
 
@@ -47,14 +74,15 @@ THUMB_SERVICE_URL= your thumbnailer url. ex: http://localhost:3012
 - create folder for db files, ex Windows: mkdir %userprofile%\data\pg-node-orms
 - start postgres docker container "docker run --name pg-node-orms -p 5432:5432 -e POSTGRES_PASSWORD=testing -e POSTGRES_USER=orm-user -e POSTGRES_DB=lesson-editor -v %userprofile%\data\pg-node-orms:/var/lib/postgresql/data -d postgres"
 
-- to generate migration file from schema changes run ex: "ts-node -P tsconfig.node.json ./node_modules/typeorm/cli.js --config ormconfig.migration.ts migration:generate -n CreateModels"
-- to run the migration run ex: "ts-node -P tsconfig.node.json ./node_modules/typeorm/cli.js --config ormconfig.migration.ts migration:run"
+- to generate migration file from schema changes run (in project root) ex: "npx ts-node -P tsconfig.node.json ./node_modules/typeorm/cli.js --config ormconfig.migration.ts migration:generate -n MIGRATION_NAME" ( where MIGRATION_NAME is replaced by a migration name you chose)
+
+- to run the migration run (in project root) ex: "npx ts-node -P tsconfig.node.json ./node_modules/typeorm/cli.js --config ormconfig.migration.ts migration:run"
 
 ## Project structure
 
 Our project structure is divided in two parts, a client part and a server part. The server part contains all the necessary REST API implementations needed for handling data from frontend. Client part contains frontend "user-based" actions like create a new lesson, browse the user's created lessons and edit existing lessons.
 
-### Frontend
+## Frontend
 
 #### React js
 
@@ -96,9 +124,9 @@ We have also implemented proptypes in our react component structures which is a 
 the right type of props passed to our react components. It is not really a form of testing, but it helps maintain
 correctness in the app.
 
-### Backend
+## Backend
 
-#### Node js + express (backend)
+#### NESTjs
 
 The backend is written in the NESTjs framework. The user is authenticate with their github account and is served the react page on successful authentication. A cookie is set in the browser to provide authentication for the api endpoints. A token is issued from the server to enable to app to make a call to the react application wihtout a user to obtain the thumbnail image for the lessons. When the user is logged out the session is cleared and the users is redirected to a logout page.
 
