@@ -16,7 +16,6 @@ const ItemList: FC<ItemListProps> = ({ lessons }) => {
         alignItems: "center",
         justifyContent: "start",
         overflowX: "auto",
-        paddingTop: "1.5em",
       }}
     >
       {lessons.map((lesson: LessonDTO) => (

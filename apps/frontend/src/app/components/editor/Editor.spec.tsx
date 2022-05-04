@@ -1,11 +1,10 @@
 import Enzyme, { mount } from "enzyme";
 import Adapter from "@wojtekmaj/enzyme-adapter-react-17";
 import { MemoryRouter, Route } from "react-router-dom";
-import Editor from "./Editor";
+import Editor from "../../pages/Editor";
 import { LessonContextProvider } from "../../contexts/LessonContext";
 import { FileContextProvider } from "../../contexts/FileContext";
 import mockAxios from "jest-mock-axios";
-
 
 Enzyme.configure({ adapter: new Adapter() });
 
