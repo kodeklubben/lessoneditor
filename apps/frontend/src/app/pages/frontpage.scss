@@ -1,0 +1,109 @@
+$section-padding__phone: 2rem 0;
+$section-container-padding_phone: 0 1rem;
+
+.overview_container {
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
+  align-items: center;
+  height: 93vh;
+
+  .overview_section1 {
+    width: 100%;
+    justify-self: center;
+    background-color: #f7f7f7;
+    padding: $section-padding__phone;
+
+    .overview_section1__container {
+      display: flex;
+      flex-flow: column;
+      max-width: 1200px;
+      padding: $section-container-padding_phone;
+      height: 51rem;
+
+      .overview__header {
+        border-bottom: 0.3rem solid;
+        border-bottom-color: green;
+        margin: 0 0 1rem 0;
+        width: 50%;
+        line-height: 150%;
+
+        h1 {
+          line-height: 150%;
+          span {
+            white-space: nowrap;
+          }
+        }
+      }
+
+      .overview_section1__cards {
+        display: flex;
+        flex-flow: row wrap;
+        height: 100%;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 0;
+
+        .card_container {
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+          label {
+            h3 {
+              margin: 0 0 1rem 0;
+            }
+          }
+
+          .card {
+            align-self: center;
+            height: 17rem;
+            width: 17rem;
+            &:hover {
+              box-shadow: 0px 0px 2px 3px #0fbe7b;
+              cursor: pointer;
+            }
+            &:active {
+              box-shadow: 0px 0px 2px 3px #0fbe7b;
+            }
+
+            .card_content {
+              display: flex;
+              flex-flow: column;
+              justify-content: space-between;
+
+              .set_cardimage_height {
+                height: 10rem;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .overview_section2 {
+    padding: 4rem 0rem;
+    width: 100%;
+    height: 100%;
+    padding: $section-padding__phone;
+
+    .overview_section2__container {
+      margin: auto;
+      padding: $section-container-padding_phone;
+      max-width: 1200px;
+      display: flex;
+      flex-flow: column;
+
+      .overview_section2__header {
+        display: flex;
+        flex-flow: row;
+        justify-content: space-between;
+        margin: 0 0 2rem 0;
+
+        .ui.dropdown .menu {
+          left: -1rem;
+        }
+      }
+    }
+  }
+}

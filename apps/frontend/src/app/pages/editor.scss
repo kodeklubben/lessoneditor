@@ -1,0 +1,36 @@
+/* EDITOR */
+
+.preview-area {
+  flex: 1;
+  padding: 1em;
+  border-radius: 5px;
+  background-color: white;
+  overflow-y: auto;
+  height: 80.8vh;
+}
+
+.text-area {
+  flex: 1;
+  padding: 1em;
+  margin-right: 1em;
+  border-radius: 5px;
+  border-style: none;
+  outline: none;
+  resize: none;
+  overflow: auto;
+}
+
+.editor-windows {
+  margin: auto;
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  position: relative;
+}
+
+.text-editor-container {
+  width: 100vw;
+  max-width: 1920px;
+  margin: auto;
+  padding: 1em 0;
+}
