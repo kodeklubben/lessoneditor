@@ -94,42 +94,44 @@ const NewLessonModal: FC<NewLessonModalProps> = ({ openNewLessonModal, setOpenNe
       />
 
       <Modal
+        className="new-lesson-modal"
         closeOnDimmerClick={!loading}
         onClose={closeModal}
         open={openNewLessonModal}
         dimmer="inverted"
         trigger={<Button icon="plus" labelPosition="left" content="Ny oppgave" positive />}
       >
-        <Modal.Header className="newLessonModal">Opprett en ny oppgave</Modal.Header>
-        <Modal.Content className="newLessonModal">
+        <Modal.Header>Opprett en ny oppgave</Modal.Header>
+        <Modal.Content>
           <form id={"skjema-for-oppretting-av-ny-oppgave"} method={"POST"} onSubmit={onSubmit}>
-            <div style={{ display: "flex", flexFlow: "row wrap" }}>
-              <div style={{ margin: "0 3em 2em 0" }}>
+            <section className="new-lesson-modal-container">
+              <div className="new-lesson-modal-container__title">
                 <label>
                   Tittel:
                   <br />
                   <Input
+                    className="new-lesson-modal-container__title-input"
                     disabled={loading}
                     autoFocus
                     onBlur={onBlur}
                     onChange={onChange}
                     name={"lessonTitle"}
                     defaultValue={lessonData["lessonTitle"]}
-                    style={{ minWidth: "14em" }}
                   />
                   {!lessonData.lessonTitle && isEmptyField ? (
                     <p>
                       <i style={{ color: "red" }}>{errorMessage}</i>
                     </p>
                   ) : (
-                    <p style={{ height: "1.35em" }} />
+                    <p style={{ height: "1rem" }} />
                   )}
                 </label>
               </div>
-              <div style={{ margin: "0 3em 2em 0" }}>
+              <div className="new-lesson-modal-container__course">
                 Kurs:
                 <br />
                 <Dropdown
+                  className="new-lesson-modal-container__course-dropdown"
                   options={lessonData.courses}
                   placeholder={"velg kurs..."}
                   value={lessonData.course}
@@ -144,10 +146,11 @@ const NewLessonModal: FC<NewLessonModalProps> = ({ openNewLessonModal, setOpenNe
                   onChange={onChange}
                 />
               </div>
-              <div>
+              <div className="new-lesson-modal-container__language">
                 Språk:
                 <br />
                 <Dropdown
+                  className="new-lesson-modal-container__language-dropdown"
                   placeholder="Velg Språk"
                   name="language"
                   defaultValue={defaultState.language}
@@ -157,7 +160,7 @@ const NewLessonModal: FC<NewLessonModalProps> = ({ openNewLessonModal, setOpenNe
                   id="lang_dropdown"
                 ></Dropdown>
               </div>
-            </div>
+            </section>
           </form>
         </Modal.Content>
         <Modal.Actions className="newLessonModal">

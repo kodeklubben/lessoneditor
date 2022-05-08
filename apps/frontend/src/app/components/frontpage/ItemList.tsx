@@ -9,15 +9,7 @@ interface ItemListProps {
 
 const ItemList: FC<ItemListProps> = ({ lessons }) => {
   return (
-    <div
-      style={{
-        display: "flex",
-        flexFlow: "row wrap",
-        alignItems: "center",
-        justifyContent: "start",
-        overflowX: "auto",
-      }}
-    >
+    <div className="frontpage-lessons">
       {lessons.map((lesson: LessonDTO) => (
         <Item key={lesson.lessonId} lesson={lesson}></Item>
       ))}

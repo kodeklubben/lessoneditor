@@ -28,7 +28,7 @@ const sortOptions = [
 
 const lang_strings = { nb: {} };
 
-const Overview: FC = () => {
+const frontpage: FC = () => {
   const { state } = useUserContext();
   const [openNewLessonModal, setOpenNewLessonModal] = useState<boolean>(false);
   const [openLessonModal, setOpenLessonModal] = useState<boolean>(false);
@@ -140,20 +140,20 @@ const Overview: FC = () => {
         </Modal>
       )}
       <Navbar />
-      <div className="overview_container">
-        <section className="overview_section1">
-          <div className="overview_section1__container">
-            <header className="overview__header">
+      <div className="frontpage_container">
+        <section className="frontpage_section1">
+          <div className="frontpage_section1__container">
+            <header className="frontpage__header">
               <h1>
                 <span>Lær Kidsa Koding</span> Tekstbehandler
               </h1>
             </header>
 
-            <div className="overview_section1__cards">
+            <div className="frontpage_section1__cards">
+              <label>
+                <h3>Lag ny oppgave</h3>
+              </label>
               <div className="card_container">
-                <label>
-                  <h3>Lag ny oppgave</h3>
-                </label>
                 <div onClick={() => setOpenNewLessonModal(true)} className="card">
                   <Card>
                     <Card.Content className="card_content">
@@ -178,7 +178,7 @@ const Overview: FC = () => {
                   </Card>
                 </div>
               </div>
-              <div className="card_container">
+              {/* <div className="card_container">
                 <label>
                   <h3>Lær Kidsa Kodings oppgavesamling</h3>
                 </label>
@@ -210,13 +210,13 @@ const Overview: FC = () => {
                     </Card.Content>
                   </Card>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </section>
-        <section className="overview_section2">
-          <div className="overview_section2__container">
-            <div className="overview_section2__header">
+        <section className="frontpage_section2">
+          <div className="frontpage_section2__container">
+            <div className="frontpage_section2__header">
               <Header as="h3">Mine oppgaver</Header>
               <Dropdown
                 onChange={handleSortChange}
@@ -228,9 +228,7 @@ const Overview: FC = () => {
             </div>
 
             {state.lessons.length > 0 ? (
-              <div>
-                <ItemList lessons={userLessons} />
-              </div>
+              <ItemList lessons={userLessons} />
             ) : (
               <Message compact>
                 <Message.Header>Du har ingen kurs</Message.Header>
@@ -244,4 +242,4 @@ const Overview: FC = () => {
     </>
   );
 };
-export default Overview;
+export default frontpage;
