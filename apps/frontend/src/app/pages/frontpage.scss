@@ -1,15 +1,18 @@
 $section-padding__phone: 2rem 0;
 $section-container-padding_phone: 0 1rem;
 
-.frontpage_container {
+.frontpage {
   .frontpage_section1 {
+    max-width: 1600px;
+    margin: auto;
+    font-size: 0.8rem;
     background-color: #f7f7f7;
     padding: $section-padding__phone;
 
     .frontpage_section1__container {
       padding: $section-container-padding_phone;
 
-      .frontpage__header {
+      .frontpage_section1__header {
         border-bottom: 0.3rem solid;
         border-bottom-color: green;
         margin: 0 0 1rem 0;
@@ -17,9 +20,13 @@ $section-container-padding_phone: 0 1rem;
         line-height: 150%;
 
         h1 {
-          line-height: 150%;
+          line-height: 125%;
           span {
             white-space: nowrap;
+          }
+          .subtitle {
+            font-size: 1.5rem;
+            color: grey;
           }
         }
       }
@@ -53,11 +60,12 @@ $section-container-padding_phone: 0 1rem;
           }
 
           .card {
+            border: 1px solid lightgrey;
+            border-radius: 5px;
             width: 13.08rem;
             .ui-card {
               width: 100%;
             }
-            align-self: center;
 
             &:hover {
               box-shadow: 0px 0px 2px 3px #0fbe7b;
@@ -72,7 +80,7 @@ $section-container-padding_phone: 0 1rem;
               flex-flow: column;
               justify-content: space-between;
 
-              .set_cardimage_height {
+              .card_image_height {
                 height: 10rem;
                 display: flex;
                 justify-content: center;
@@ -90,22 +98,47 @@ $section-container-padding_phone: 0 1rem;
     height: 100%;
     padding: 2rem 0 0 0;
 
-    .frontpage_section2__container {
+    .frontpage_section2_container {
       padding: $section-container-padding_phone;
-      max-width: 1200px;
+      max-width: 1600px;
+      margin: auto;
       display: flex;
       flex-flow: column;
 
-      .frontpage_section2__header {
+      .frontpage_section2_container__header {
         display: flex;
         flex-flow: row;
         justify-content: space-between;
-        margin: 0 0 2rem 0;
+
+        .ui.inline.dropdown {
+          min-width: 6rem;
+          text-align: right;
+        }
 
         .ui.dropdown .menu {
           left: -1rem;
         }
       }
+    }
+  }
+
+  @media (min-width: 570px) {
+    .frontpage_section1 {
+      padding: 3rem;
+    }
+
+    .frontpage_section2 {
+      padding: 3rem;
+    }
+  }
+
+  @media (min-width: 900px) {
+    .frontpage_section1 {
+      padding: 6rem;
+    }
+
+    .frontpage_section2 {
+      padding: 6rem;
     }
   }
 }

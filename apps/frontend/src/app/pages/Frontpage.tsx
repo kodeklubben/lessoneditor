@@ -140,12 +140,12 @@ const frontpage: FC = () => {
         </Modal>
       )}
       <Navbar />
-      <div className="frontpage_container">
+      <div className="frontpage">
         <section className="frontpage_section1">
           <div className="frontpage_section1__container">
-            <header className="frontpage__header">
+            <header className="frontpage_section1__header">
               <h1>
-                <span>Lær Kidsa Koding</span> Tekstbehandler
+                <span>Lær Kidsa Koding</span> <span className="subtitle">Tekstbehandler</span>
               </h1>
             </header>
 
@@ -158,7 +158,7 @@ const frontpage: FC = () => {
                   <Card>
                     <Card.Content className="card_content">
                       <Card.Content>
-                        <Icon.Group className="set_cardimage_height">
+                        <Icon.Group className="card_image_height">
                           <Icon color="grey" name="file text outline" size="huge" />
                         </Icon.Group>
                       </Card.Content>
@@ -215,8 +215,8 @@ const frontpage: FC = () => {
           </div>
         </section>
         <section className="frontpage_section2">
-          <div className="frontpage_section2__container">
-            <div className="frontpage_section2__header">
+          <div className="frontpage_section2_container">
+            <div className="frontpage_section2_container__header">
               <Header as="h3">Mine oppgaver</Header>
               <Dropdown
                 onChange={handleSortChange}

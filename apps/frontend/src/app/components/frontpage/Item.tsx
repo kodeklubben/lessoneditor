@@ -46,20 +46,20 @@ const Item: React.FC<Props> = ({ lesson }) => {
           loading={loading}
         />
       )}
-      <div className="frontpage-lessons__card">
+      <div className="card">
         <Card>
           <Card.Content
-            className="frontpage-lessons__card-content"
+            className="card-content"
             onClick={() => navigateToHome(lesson.lessonId.toString())}
           >
             <Image
-              className="frontpage-lessons__card-content__image"
+              className="card-content__image"
               src={previewImage[lesson.lessonId]}
               bordered
               rounded
             />
 
-            <Card.Content className="frontpage-lessons__card-content__content">
+            <Card.Content className="card-content__content">
               <Card.Header>
                 {lesson.lessonTitle ? lesson.lessonTitle : lesson.lessonSlug}
               </Card.Header>
@@ -75,8 +75,18 @@ const Item: React.FC<Props> = ({ lesson }) => {
             </Card.Content>
           </Card.Content>
 
-          <Card.Content extra>
+          <Card.Content className="extra_content">
             <Button
+              className="button-mobile"
+              icon
+              onClick={() => navigateToHome(lesson.lessonId.toString())}
+              positive
+            >
+              <Icon name="folder open" />
+            </Button>
+
+            <Button
+              className="button-desktop"
               icon
               labelPosition="left"
               onClick={() => navigateToHome(lesson.lessonId.toString())}
@@ -87,6 +97,7 @@ const Item: React.FC<Props> = ({ lesson }) => {
             </Button>
 
             <Button
+              className="delete-button"
               style={{ background: "none" }}
               icon
               onClick={() => {
