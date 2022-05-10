@@ -46,8 +46,8 @@ const Item: React.FC<Props> = ({ lesson }) => {
           loading={loading}
         />
       )}
-      <div className="card">
-        <Card>
+      <div className="card-item">
+        <Card className="card">
           <Card.Content
             className="card-content"
             onClick={() => navigateToHome(lesson.lessonId.toString())}

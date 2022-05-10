@@ -4,61 +4,64 @@
   flex-flow: row wrap;
   align-items: center;
   justify-content: space-between;
+  margin: 1rem 0 0 0;
 
-  .card {
+  .card-item {
     width: 42vw;
-    border: 2px solid #0fbe7b;
-    border-radius: 3px;
-    margin: 2rem 0 0 0;
-    box-shadow: none;
-    &:hover {
-      box-shadow: 1px 3px 7px 6px lightgrey;
-    }
+    margin: 1rem 0;
 
-    .card-content {
-      padding: 0;
-      cursor: pointer;
-      .content {
-        padding: 0.5rem;
-      }
-      .card-content__image {
-        height: 6.67rem;
-        width: 100%;
-        object-fit: cover;
-        object-position: 0 0;
-        border: 0;
+    .card {
+      border: 2px solid #0fbe7b;
+      border-radius: 3px;
+      box-shadow: none;
+
+      &:hover {
+        box-shadow: 1px 3px 7px 6px lightgrey;
       }
 
-      .card-content__content {
-        padding: 0.5rem;
-        border-top: 0.5px solid lightgrey;
-        i {
-          position: absolute;
-          bottom: 0.7em;
-          right: -0.5em;
-          width: 10rem;
+      .card-content {
+        padding: 0;
+        cursor: pointer;
+        .content {
+          padding: 0.5rem;
+        }
+        .card-content__image {
+          height: 6.67rem;
+          width: 100%;
+          object-fit: cover;
+          object-position: 0 0;
+          border: 0;
+        }
+
+        .card-content__content {
+          padding: 0.5rem;
+          border-top: 0.5px solid lightgrey;
+          i {
+            position: absolute;
+            bottom: 0.7em;
+            right: -0.5em;
+            width: 10rem;
+          }
         }
       }
-    }
-    .extra_content {
-      display: flex;
-      justify-content: space-between;
+      .extra_content {
+        display: flex;
+        justify-content: space-between;
 
-      padding: 0.5rem 1rem;
-      position: relative;
-      .button-mobile {
-      }
+        padding: 0.5rem 1rem;
+        position: relative;
 
-      .button-desktop {
-        display: none;
-      }
+        .button-desktop {
+          display: none;
+        }
 
-      .delete-button {
-        margin: 0;
+        .delete-button {
+          margin: 0;
 
-        position: absolute;
+          position: absolute;
 
-        right: 0rem;
+          right: 0rem;
+        }
       }
     }
   }
@@ -73,18 +76,19 @@
   }
 
   @media (min-width: 570px) {
-    .card {
+    .card-item {
       width: 23vw;
     }
   }
   @media (min-width: 700px) {
-    .card {
+    .card-item {
       width: 22vw;
     }
   }
   @media (min-width: 900px) {
-    .card {
+    .card-item {
       width: 14rem;
+      margin: 1rem;
     }
   }
 }

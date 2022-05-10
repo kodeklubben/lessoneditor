@@ -1,16 +1,13 @@
-$section-padding__phone: 2rem 0;
-$section-container-padding_phone: 0 1rem;
-
 .frontpage {
   .frontpage_section1 {
-    max-width: 1600px;
-    margin: auto;
     font-size: 0.8rem;
     background-color: #f7f7f7;
-    padding: $section-padding__phone;
+    padding: 2rem 0;
 
     .frontpage_section1__container {
-      padding: $section-container-padding_phone;
+      padding: 0 1rem;
+      margin: auto;
+      max-width: 1200px;
 
       .frontpage_section1__header {
         border-bottom: 0.3rem solid;
@@ -97,11 +94,13 @@ $section-container-padding_phone: 0 1rem;
     width: 100%;
     height: 100%;
     padding: 2rem 0 0 0;
+    display: flex;
+    justify-content: center;
 
     .frontpage_section2_container {
-      padding: $section-container-padding_phone;
-      max-width: 1600px;
-      margin: auto;
+      padding: 0 1rem;
+      max-width: 1200px;
+      width: 100%;
       display: flex;
       flex-flow: column;
 
@@ -109,6 +108,10 @@ $section-container-padding_phone: 0 1rem;
         display: flex;
         flex-flow: row;
         justify-content: space-between;
+
+        h3 {
+          margin: 0;
+        }
 
         .ui.inline.dropdown {
           min-width: 6rem;
@@ -124,21 +127,13 @@ $section-container-padding_phone: 0 1rem;
 
   @media (min-width: 570px) {
     .frontpage_section1 {
+      font-size: 1rem;
       padding: 3rem;
     }
 
     .frontpage_section2 {
+      font-size: 1rem;
       padding: 3rem;
-    }
-  }
-
-  @media (min-width: 900px) {
-    .frontpage_section1 {
-      padding: 6rem;
-    }
-
-    .frontpage_section2 {
-      padding: 6rem;
     }
   }
 }
