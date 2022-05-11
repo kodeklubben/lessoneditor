@@ -14,15 +14,14 @@
         border-bottom-color: green;
         margin: 0 0 1rem 0;
         width: 50%;
-        line-height: 150%;
+        max-width: 36rem;
 
         h1 {
-          line-height: 125%;
           span {
-            white-space: nowrap;
+            font-size: 1.5rem;
           }
           .subtitle {
-            font-size: 1.5rem;
+            font-size: 2rem;
             color: grey;
           }
         }
@@ -59,7 +58,7 @@
           .card {
             border: 1px solid lightgrey;
             border-radius: 5px;
-            width: 13.08rem;
+            width: 14rem;
             .ui-card {
               width: 100%;
             }
@@ -134,6 +133,25 @@
     .frontpage_section2 {
       font-size: 1rem;
       padding: 3rem;
+    }
+  }
+
+  @media (min-width: 840px) {
+    .frontpage_section1 {
+      .frontpage_section1__container {
+        .frontpage_section1__header {
+          h1 {
+            span {
+              font-size: 2rem;
+            }
+            .subtitle {
+              font-size: 3rem;
+              color: grey;
+              line-height: 150%;
+            }
+          }
+        }
+      }
     }
   }
 }
