@@ -1,0 +1,17 @@
+.checkbox_wrapper {
+  margin: 0.5rem 0;
+}
+
+.tags_container {
+  display: flex;
+  flex-flow: row;
+  justify-content: space-around;
+  background-color: white;
+  padding: 0.5em;
+  border: 1px solid lightgrey;
+  border-radius: 5px;
+
+  div {
+    min-width: 9rem;
+  }
+}
