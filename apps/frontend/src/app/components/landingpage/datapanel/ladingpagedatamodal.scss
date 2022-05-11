@@ -1,5 +1,18 @@
-.landingpage_modal {
+#landingpage_datamodal_trigger__big {
+  display: none;
+}
+
+#landingpage_datamodal_trigger__big {
+}
+
+#landingpage_modal__content {
+  display: flex;
+  flex-flow: column;
+  justify-content: space-around;
+  align-items: flex-start;
+
   background-color: #f7f7f7 !important;
+  padding: 1rem !important;
 }
 
 #tagButton {

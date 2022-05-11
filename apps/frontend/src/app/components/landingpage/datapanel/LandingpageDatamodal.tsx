@@ -13,7 +13,7 @@ import { deepEqual } from "fast-equals";
 
 const LandingpageDatamodal = () => {
   const lessonContext = useLessonContext();
-  const { state, yml, setYml, updateYaml, updateLesson } = lessonContext;
+  const { state, yml, setYml, updateYaml } = lessonContext;
   const [checkBoxState, setCheckBoxState] = useState({});
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -143,14 +143,23 @@ const LandingpageDatamodal = () => {
         mouseEnterDelay={250}
         mouseLeaveDelay={250}
         trigger={
-          <Button
-            basic
-            onClick={() => setOpen(true)}
-            content="Oppgavedata"
-            id="tagButton"
-            size="medium"
-            icon="tags"
-          />
+          <div>
+            <Button
+              basic
+              onClick={() => setOpen(true)}
+              content="Oppgavedata"
+              id="landingpage_datamodal_trigger__big"
+              size="medium"
+              icon="tags"
+            />
+            <Button
+              basic
+              onClick={() => setOpen(true)}
+              id="landingpage_datamodal_trigger__small"
+              size="medium"
+              icon="tags"
+            />
+          </div>
         }
       />
       <Modal
@@ -165,42 +174,24 @@ const LandingpageDatamodal = () => {
         dimmer="inverted"
         className="landingpage_modal"
       >
-        <Modal.Header className="landingpage_modal">Oppgavedata</Modal.Header>
-        <Modal.Content className="landingpage_modal">
-          <div
-            style={{
-              display: "flex",
-              flexFlow: "row wrap",
-              justifyContent: "space-around",
-              marginBottom: "3vh",
-            }}
-          >
-            <CheckboxField
-              labelTitle={YML_TEXT.topic}
-              content={<TagsTopic data={checkBoxState} changeHandler={checboxHandler} />}
-            />
+        <Modal.Header className="landingpage_modal__header">Oppgavedata</Modal.Header>
+        <Modal.Content id="landingpage_modal__content">
+          <CheckboxField
+            labelTitle={YML_TEXT.topic}
+            content={<TagsTopic data={checkBoxState} changeHandler={checboxHandler} />}
+          />
 
-            <CheckboxField
-              labelTitle={YML_TEXT.subject}
-              content={<TagsSubject data={checkBoxState} changeHandler={checboxHandler} />}
-            />
-          </div>
+          <CheckboxField
+            labelTitle={YML_TEXT.subject}
+            content={<TagsSubject data={checkBoxState} changeHandler={checboxHandler} />}
+          />
 
-          <div
-            style={{
-              display: "flex",
-              flexFlow: "row wrap",
-              justifyContent: "space-around",
-              marginBottom: "3vh",
-            }}
-          >
-            <CheckboxField
-              labelTitle={YML_TEXT.grade}
-              content={<TagsGrade data={checkBoxState} changeHandler={checboxHandler} />}
-            />
+          <CheckboxField
+            labelTitle={YML_TEXT.grade}
+            content={<TagsGrade data={checkBoxState} changeHandler={checboxHandler} />}
+          />
 
-            <Levels changeHandler={dropdownHandler} data={yml} />
-          </div>
+          <Levels changeHandler={dropdownHandler} data={yml} />
 
           <License changeHandler={changeHandler} data={yml} />
         </Modal.Content>
