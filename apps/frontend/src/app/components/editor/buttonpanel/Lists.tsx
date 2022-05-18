@@ -32,7 +32,7 @@ const Lists: FC<ListsProps> = ({
   setUndoAndUndoPosition,
 }) => {
   return (
-    <>
+    <div className="lists_button_group">
       {Object.entries(config).map((element) => (
         <ButtonController
           key={element[1].slug}
@@ -57,7 +57,7 @@ const Lists: FC<ListsProps> = ({
           setUndoAndUndoPosition={setUndoAndUndoPosition}
         />
       ))}
-    </>
+    </div>
   );
 };
 

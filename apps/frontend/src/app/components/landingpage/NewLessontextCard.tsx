@@ -96,44 +96,26 @@ const NewLessontextCard = () => {
         }}
       >
         <Header>Opprett ny tekstfil</Header>
-        <Card
-          className="lessonCard"
-          style={{
-            width: "16em",
-            height: "15em",
-            margin: " 0 1vw 2vh 0",
-          }}
-        >
-          <Card.Content>
-            <Card.Content>
-              <div
-                onClick={() => setOpenNewLessontextModal(true)}
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  height: "110px",
-                }}
-              >
-                <Icon.Group>
-                  <Icon color="grey" name="file text outline" size="huge" />
-                </Icon.Group>
-              </div>
-            </Card.Content>
+        <Card className="new-lesson_card">
+          <div className="new-lesson_card__content">
+            <div
+              className="new-lesson_card__image"
+              onClick={() => setOpenNewLessontextModal(true)}
+              style={{}}
+            >
+              <Icon color="grey" name="file text outline" size="huge" />
+            </div>
+          </div>
 
-            <Card.Content>
-              <Divider />
-            </Card.Content>
-            <Card.Content extra>
-              <Button
-                onClick={() => setOpenNewLessontextModal(true)}
-                content="Ny tekstfil "
-                positive
-                icon="plus"
-                labelPosition="left"
-              />
-            </Card.Content>
-          </Card.Content>
+          <Divider />
+
+          <Button
+            onClick={() => setOpenNewLessontextModal(true)}
+            content="Ny tekstfil "
+            positive
+            icon="plus"
+            labelPosition="left"
+          />
         </Card>
       </div>
     </>

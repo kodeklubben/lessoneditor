@@ -1,20 +1,27 @@
 .navbar_container {
-  height: 7vh;
-  margin: 0 1vw 0 1vw;
+  height: 4rem;
+  margin: 0;
   padding: 0;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  box-shadow: 0px 0px 7px 0px lightgrey;
+  position: relative;
+  z-index: 30;
 }
 
 .navbar_image_container {
-  flex-basis: 33%;
   display: flex;
   justify-content: left;
   align-items: center;
+  cursor: pointer;
 }
 
-.navbar_logo {
+.navbar_logo__desktop {
+  display: none;
+}
+
+.navbar_logo__mobile {
   margin: 0;
   padding: 0;
   height: 100%;
@@ -26,14 +33,12 @@
 }
 
 .navbar_children_container {
-  flex-basis: 33%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .navbar_profilemenu_container {
-  flex-basis: 33%;
   display: flex;
   justify-content: right;
   align-items: center;
@@ -41,4 +46,17 @@
 
 .navbar_image:hover {
   cursor: pointer;
+}
+
+@media (min-width: 570px) {
+  .navbar_logo__desktop {
+    display: block;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: auto;
+  }
+  .navbar_logo__mobile {
+    display: none;
+  }
 }

@@ -1,3 +1,4 @@
+import "./checkboxfield.scss";
 import { Grid, Header, Segment } from "semantic-ui-react";
 import { FC, ReactChild } from "react";
 
@@ -8,10 +9,10 @@ interface CheckboxFieldProps {
 
 const CheckboxField: FC<CheckboxFieldProps> = ({ labelTitle, content }) => {
   return (
-    <label style={{ flex: "1", margin: "1vw" }}>
-      <Header as="h3">{labelTitle}</Header>
+    <div className={"checkboxfield__container " + labelTitle}>
+      <h3>{labelTitle}</h3>
       <div>{content}</div>
-    </label>
+    </div>
   );
 };
 

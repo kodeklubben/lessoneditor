@@ -1,72 +1,179 @@
 .buttonpanel {
-  flex: 1;
-  padding: 0 0.5em;
   border: 1px #b1daae;
-  border-style: solid solid hidden solid;
+  border-style: solid solid solid solid;
   border-radius: 5px;
-  width: 100vw;
+  width: 100%;
+  height: 4.2rem;
   max-width: 1920px;
-  margin: auto;
-}
 
-.buttonpanel_container {
-  margin: auto;
-}
+  .top_panel {
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+    .firstrow {
+      display: none;
 
-.sectiongroup {
-  display: flex;
-  flex-wrap: wrap;
-}
+      .settingspanel {
+        display: flex;
+        flex-flow: row;
+      }
+    }
+    .secondrow {
+      display: none;
+    }
 
-.firstrow {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}
+    .firstrow_mobile {
+      position: relative;
+      height: 100%;
+      display: flex;
+      justify-content: space-between;
+      flex-flow: row;
+      align-items: center;
+      .undo-redo_button_group {
+        button {
+          padding: 0 1rem;
+          vertical-align: top;
+        }
+        display: flex;
+        align-items: flex-end;
+      }
 
-.secondrow {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}
+      button,
+      .settingspanel {
+        height: 100%;
+      }
 
-.buttongroup {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}
+      .settingspanel {
+        display: flex;
+        flex-flow: row;
+      }
 
-.settingspanel {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-}
+      p {
+        position: absolute;
+        bottom: 0;
+        right: 1rem;
+        font-size: 0.7rem;
+      }
+    }
+  }
 
-.scratchMB_buttons {
-  display: flex;
-  flex-wrap: wrap;
-}
+  .bottom_panel {
+    display: flex;
+    flex-flow: column;
+    justify-content: space-between;
+    z-index: 10;
+    width: 100%;
+    height: fit-content;
+    background-color: #f7f7f7;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    padding: 0 0.5rem;
+    z-index: 20;
+    border: 1px #b1daae;
+    border-style: solid solid solid solid;
+    border-radius: 5px;
 
-.MBButton {
-  color: #fff !important;
-  height: 1em !important;
-  padding-bottom: 16px !important;
-  padding-top: 2px !important;
-  margin-top: 1px !important;
-  display: flex;
-  flex-wrap: wrap;
-}
+    .scratchmicrobit_row {
+      height: 0;
+      margin: 0;
+      &.active {
+        height: 1.5rem;
+        margin: 0.5rem 0 0 0;
+      }
+      display: flex;
+      flex-flow: row;
+      align-items: center;
+      justify-content: flex-start;
+      overflow-x: auto;
 
-.hyperlink_modal {
-  background-color: #eef7ee !important;
-}
+      &::-webkit-scrollbar {
+        display: none;
+      }
+      -ms-overflow-style: none; /* IE and Edge */
+      scrollbar-width: none; /* Firefox */
 
-#lang_dropdown {
-  min-height: auto !important;
-  height: 2.62em;
-}
+      button {
+        border-radius: 30px;
+        margin-right: 0.5rem;
+        white-space: nowrap;
+      }
+    }
+    .codebuttons_row {
+      height: 1.7rem;
+      display: flex;
+      flex-flow: row;
+      align-items: center;
+      justify-content: flex-start;
+      overflow-x: auto;
+      margin: 0.5rem 0;
+      &::-webkit-scrollbar {
+        display: none;
+      }
+      -ms-overflow-style: none; /* IE and Edge */
+      scrollbar-width: none; /* Firefox */
+      button {
+        margin-right: 0.5rem;
+      }
+    }
+    .textbuttons_row {
+      height: 3rem;
+      display: flex;
+      flex-flow: row;
+      align-items: center;
+      justify-content: space-between;
+      overflow-x: auto;
 
-#video_modal_label {
-  border-style: none;
-  background-color: #eef7ee !important;
+      button {
+        padding: 0 1.5rem;
+      }
+    }
+  }
+
+  @media (min-width: 900px) {
+    height: fit-content;
+    padding: 0 0 0.2rem 0;
+    .top_panel {
+      .firstrow_mobile {
+        display: none;
+      }
+      .firstrow {
+        display: flex;
+        justify-content: space-between;
+        .buttongroup {
+          display: flex;
+          height: 100%;
+          justify-content: space-between;
+          flex-flow: row;
+          align-items: center;
+          max-width: 60rem;
+        }
+        .settingspanel {
+          & button {
+            height: 4rem !important;
+          }
+        }
+      }
+      .secondrow {
+        display: flex;
+        justify-content: space-between;
+        padding: 0 1rem;
+        .sectiongroup {
+          display: flex;
+        }
+      }
+      .scratchmicrobit_row {
+        margin: 0.3rem 0 0 0;
+        padding: 0 1rem;
+        button {
+          height: 1.4rem;
+          padding: 0 0.5rem;
+          min-width: 5rem;
+        }
+      }
+    }
+    .bottom_panel {
+      display: none;
+    }
+  }
 }

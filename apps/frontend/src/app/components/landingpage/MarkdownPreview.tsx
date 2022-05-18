@@ -4,7 +4,7 @@ import axios from "axios";
 import { Button, Icon, Modal } from "semantic-ui-react";
 import { paths } from "@lessoneditor/contracts";
 import { useParams } from "react-router";
-import MDPreview from "../editor/MDPreview";
+import MDPreview from "../editor/MDPreviewArea";
 import { useLessonContext } from "../../contexts/LessonContext";
 
 type MarkdownPreviewProps = {
@@ -49,10 +49,16 @@ const MarkdownPreview: FC<MarkdownPreviewProps> = ({
       {text.length > 0 ? (
         <Modal open={showMDPreview} onClose={() => setShowMDPreview(false)} dimmer="inverted">
           <Modal.Content style={{ position: "relative" }}>
-            <MDPreview mdText={text} course={courseSlug} language={lang} />
+            <MDPreview mdText={text} course={courseSlug} language={lang} preview={true} />
             <Button
               onClick={() => setShowMDPreview(false)}
-              style={{ position: "absolute", background: "none", top: "0", right: "0" }}
+              style={{
+                position: "absolute",
+                background: "none",
+                top: "0",
+                right: "0",
+                zIndex: "30",
+              }}
               icon
             >
               <Icon size="huge" name="x" />

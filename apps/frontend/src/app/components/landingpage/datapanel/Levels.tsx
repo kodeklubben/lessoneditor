@@ -1,3 +1,4 @@
+import "./levels.scss";
 import { Dropdown, Header } from "semantic-ui-react";
 import { FORM_TEXT, levelOptions } from "../settingsFiles/languages/landingpage_NO";
 import { FC, SyntheticEvent } from "react";
@@ -10,8 +11,8 @@ interface LevelsProps {
 
 const Levels: FC<LevelsProps> = ({ changeHandler, data }) => {
   return (
-    <label style={{ flex: "1", margin: "1vw", minWidth: "45%" }}>
-      <Header as="h3">{FORM_TEXT.LEVEL.heading}</Header>
+    <div className="levels">
+      <h3>{FORM_TEXT.LEVEL.heading}</h3>
       <Dropdown
         placeholder="Velg Nivå"
         name="level"
@@ -23,7 +24,7 @@ const Levels: FC<LevelsProps> = ({ changeHandler, data }) => {
         options={levelOptions}
         label={FORM_TEXT.LEVEL.heading}
       />
-    </label>
+    </div>
   );
 };
 

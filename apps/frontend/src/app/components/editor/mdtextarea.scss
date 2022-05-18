@@ -1,0 +1,12 @@
+.text-area {
+  padding: 1rem;
+  width: 100%;
+  height: calc(100% - 2rem);
+  border-radius: 5px;
+  border-style: none;
+  outline: none;
+
+  @media (min-width: 900px) {
+    width: 49.5%;
+  }
+}

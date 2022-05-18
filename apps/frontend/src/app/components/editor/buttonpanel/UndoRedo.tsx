@@ -28,7 +28,7 @@ const UndoRedo: FC<UndoRedoProps> = ({
   setCursorPosition,
 }) => {
   return (
-    <>
+    <div className="undo-redo_button_group">
       {Object.entries(config).map((element, index) => (
         <ButtonController
           key={element[1].slug}
@@ -53,7 +53,7 @@ const UndoRedo: FC<UndoRedoProps> = ({
           pushRedoValue={pushRedoValue}
         />
       ))}
-    </>
+    </div>
   );
 };
 

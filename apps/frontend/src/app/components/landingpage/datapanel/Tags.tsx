@@ -1,3 +1,4 @@
+import "./tags.scss";
 import { FC, SyntheticEvent } from "react";
 import { Checkbox } from "semantic-ui-react";
 import { gradeSettings, subjectSettings, topicSettings } from "../settingsFiles/LESSONTAGSSETTINGS";
@@ -17,7 +18,7 @@ interface Tags {
 
 const CheckboxWrapper: FC<CheckboxWrapperProps> = ({ value, onCheck, data, name, subtag }) => {
   return (
-    <div style={{ display: "flex", flexFlow: "column", margin: "0 7em 0.2vh 0" }}>
+    <div className="checkbox_wrapper">
       <Checkbox
         label={name}
         type="checkbox"
@@ -34,16 +35,7 @@ const CheckboxWrapper: FC<CheckboxWrapperProps> = ({ value, onCheck, data, name,
 
 const TagsGrade: FC<Tags> = ({ changeHandler, data }) => {
   return (
-    <div
-      style={{
-        display: "flex",
-        flexFlow: "row wrap",
-        backgroundColor: "white",
-        padding: "0.5em",
-        border: "1px solid lightgrey",
-        borderRadius: "5px",
-      }}
-    >
+    <div className="tags_container">
       <div>
         {gradeSettings.slice(0, gradeSettings.length / 2 + 1).map((element) => (
           <CheckboxWrapper
@@ -75,16 +67,7 @@ const TagsGrade: FC<Tags> = ({ changeHandler, data }) => {
 
 const TagsSubject: FC<Tags> = ({ changeHandler, data }) => {
   return (
-    <div
-      style={{
-        display: "flex",
-        flexFlow: "row wrap",
-        backgroundColor: "white",
-        padding: "0.5em",
-        border: "1px solid lightgrey",
-        borderRadius: "5px",
-      }}
-    >
+    <div className="tags_container">
       <div>
         {subjectSettings.slice(0, subjectSettings.length / 2 + 1).map((element) => (
           <CheckboxWrapper
@@ -116,18 +99,9 @@ const TagsSubject: FC<Tags> = ({ changeHandler, data }) => {
 
 const TagsTopic: FC<Tags> = ({ changeHandler, data }) => {
   return (
-    <div
-      style={{
-        display: "flex",
-        flexFlow: "row wrap",
-        backgroundColor: "white",
-        padding: "0.5em",
-        border: "1px solid lightgrey",
-        borderRadius: "5px",
-      }}
-    >
+    <div className="tags_container">
       <div>
-        {topicSettings.slice(0, topicSettings.length / 2 + 1).map((element, index) => (
+        {topicSettings.slice(0, topicSettings.length / 2).map((element, index) => (
           <CheckboxWrapper
             key={element.value}
             name={element.name}
@@ -140,7 +114,7 @@ const TagsTopic: FC<Tags> = ({ changeHandler, data }) => {
       </div>
 
       <div>
-        {topicSettings.slice(topicSettings.length / 2 + 1).map((element, index) => (
+        {topicSettings.slice(topicSettings.length / 2).map((element, index) => (
           <CheckboxWrapper
             key={element.value}
             name={element.name}
