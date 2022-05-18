@@ -29,7 +29,7 @@ const Image: FC<ImageProps> = ({ editorRef, uploadImageRef }) => {
     return;
   };
   return (
-    <>
+    <div className="image_button_group">
       <RenderButtons
         isON={false}
         icon={config.image.icon}
@@ -38,7 +38,7 @@ const Image: FC<ImageProps> = ({ editorRef, uploadImageRef }) => {
         buttonSlug={config.image.slug}
         shortcutKey={config.image.shortcut}
       />
-    </>
+    </div>
   );
 };
 

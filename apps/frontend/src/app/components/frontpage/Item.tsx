@@ -46,57 +46,26 @@ const Item: React.FC<Props> = ({ lesson }) => {
           loading={loading}
         />
       )}
-      <div className="item_card" style={{ margin: "0 3.7em 2vh 0" }}>
-        <Card
-          style={{
-            border: "3px solid #0fbe7b",
-            borderRadius: "0px",
-            width: "16em",
-            height: "21em",
-          }}
-        >
-          <Card.Content onClick={() => navigateToHome(lesson.lessonId.toString())}>
-            <div
-              style={{
-                position: "relative",
-                height: "160px",
-                margin: "-1em -1em 0 -1em",
-              }}
-            >
-              <Image
-                src={previewImage[lesson.lessonId]}
-                size="medium"
-                bordered
-                rounded
-                style={{
-                  height: "100%",
-                  maxWidrg: "120px",
-                  overflow: "hidden",
-                  objectFit: "cover",
-                  objectPosition: "0 0",
-                }}
-              />
-            </div>
-            <Card.Content style={{ marginTop: "1em", position: "relative" }}>
+      <div className="card-item">
+        <Card className="card">
+          <Card.Content
+            className="card-content"
+            onClick={() => navigateToHome(lesson.lessonId.toString())}
+          >
+            <Image
+              className="card-content__image"
+              src={previewImage[lesson.lessonId]}
+              bordered
+              rounded
+            />
+
+            <Card.Content className="card-content__content">
               <Card.Header>
                 {lesson.lessonTitle ? lesson.lessonTitle : lesson.lessonSlug}
               </Card.Header>
               <Card.Meta>{lesson.courseTitle ? lesson.courseTitle : lesson.courseSlug}</Card.Meta>
               {lesson.submitted && (
-                <Popup
-                  trigger={
-                    <Icon
-                      name="check circle outline"
-                      color="blue"
-                      size="big"
-                      style={{
-                        position: "absolute",
-                        bottom: "0.7em",
-                        right: "-0.5em",
-                      }}
-                    ></Icon>
-                  }
-                >
+                <Popup trigger={<i className="check circle outline"></i>}>
                   <div>
                     <p>Denne oppgaven har blitt sendt inn til Lær Kidsa Koding</p>
                     <p>{`Dato: ${submitDate}`}</p>
@@ -106,8 +75,18 @@ const Item: React.FC<Props> = ({ lesson }) => {
             </Card.Content>
           </Card.Content>
 
-          <Card.Content extra>
+          <Card.Content className="extra_content">
             <Button
+              className="button-mobile"
+              icon
+              onClick={() => navigateToHome(lesson.lessonId.toString())}
+              positive
+            >
+              <Icon name="folder open" />
+            </Button>
+
+            <Button
+              className="button-desktop"
               icon
               labelPosition="left"
               onClick={() => navigateToHome(lesson.lessonId.toString())}
@@ -118,6 +97,7 @@ const Item: React.FC<Props> = ({ lesson }) => {
             </Button>
 
             <Button
+              className="delete-button"
               style={{ background: "none" }}
               icon
               onClick={() => {

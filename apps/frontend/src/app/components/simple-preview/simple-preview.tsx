@@ -1,5 +1,5 @@
 import "./simple-preview.scss";
-import MDPreview from "../editor/MDPreview";
+import MDPreview from "../editor/MDPreviewArea";
 import { useFileContext } from "../../contexts/FileContext";
 
 const SimplePreview = () => {
@@ -8,7 +8,7 @@ const SimplePreview = () => {
   return (
     <div className={"simple-preview"}>
       {typeof state.savedFileBody === "string" && (
-        <MDPreview mdText={state.savedFileBody} course={"python"} language={"nb"} />
+        <MDPreview mdText={state.savedFileBody} course={"python"} language={"nb"} preview={true} />
       )}
     </div>
   );

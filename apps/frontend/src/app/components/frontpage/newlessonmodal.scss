@@ -1,1 +1,32 @@
+.new-lesson-modal {
+  .content {
+    height: 24rem;
 
+    #skjema-for-oppretting-av-ny-oppgave {
+      height: 100%;
+      .new-lesson-modal-container {
+        height: 100%;
+        display: flex;
+        flex-flow: column;
+        justify-content: space-around;
+
+        .new-lesson-modal-container__title {
+          .new-lesson-modal-container__title-input {
+            width: 100%;
+          }
+        }
+
+        .new-lesson-modal-container__course {
+          margin: 0 0 1rem 0;
+        }
+
+        .new-lesson-modal-container__language {
+          margin: 0 0 1rem 0;
+          .new-lesson-modal-container__language-dropdown {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+}

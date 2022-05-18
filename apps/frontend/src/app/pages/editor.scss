@@ -1,0 +1,38 @@
+/* EDITOR */
+
+.editor_container {
+  display: flex;
+  flex-direction: column;
+  background-image: linear-gradient(#f7f7f7 90%, white);
+  height: calc(100% - 4rem);
+  max-width: 1920px;
+  margin: 0 auto;
+  position: relative;
+  overflow-y: hidden;
+
+  .editor-windows {
+    position: relative;
+    height: calc(100% - 3rem);
+    border: 1px #b1daae;
+    border-style: none solid none solid;
+    border-radius: 5px;
+  }
+
+  @media (min-width: 900px) {
+    overflow: inherit;
+    .editor-windows {
+      position: relative;
+      height: calc(100% - 3rem);
+      display: flex;
+      flex-flow: row;
+      justify-content: space-between;
+    }
+  }
+}
+
+// .text-editor-container {
+//   width: 100vw;
+//   max-width: 1920px;
+//   margin: auto;
+//   padding: 1em 0;
+// }

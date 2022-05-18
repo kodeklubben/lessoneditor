@@ -1,13 +1,13 @@
 import "./editor.scss";
 import { useRef, useState, FC, useEffect } from "react";
-import ButtonPanel from "./buttonpanel/ButtonPanel";
-import ImageUpload from "./ImageUpload";
-import MDPreview from "./MDPreview";
-import MDTextArea from "./MDTextArea";
-import { useFileContext } from "../../contexts/FileContext";
+import ButtonPanel from "../components/editor/buttonpanel/ButtonPanel";
+import ImageUpload from "../components/editor/ImageUpload";
+import MDPreviewArea from "../components/editor/MDPreviewArea";
+import MDTextArea from "../components/editor/MDTextArea";
+import { useFileContext } from "../contexts/FileContext";
 import { useParams, useLocation } from "react-router";
-import { useLessonContext } from "../../contexts/LessonContext";
-import Navbar from "../navbar/Navbar";
+import { useLessonContext } from "../contexts/LessonContext";
+import Navbar from "../components/navbar/Navbar";
 
 const Editor: FC = () => {
   const { lang } = useParams() as any;
@@ -33,6 +33,7 @@ const Editor: FC = () => {
     output: "",
     cursorInt: 0,
   });
+  const [preview, setPreview] = useState<boolean>(false);
 
   const location = useLocation();
 
@@ -141,16 +142,12 @@ const Editor: FC = () => {
             setCursorPosition={setCursorPosition}
           />
           <Navbar>
-            <h1 style={{ display: "inline" }}>{state.lesson.lessonTitle}</h1>
-            <h3 style={{ color: "silver", display: "inline" }}>{state.lesson.courseTitle}</h3>
+            <div>
+              <h1 style={{ display: "inline" }}>{state.lesson.lessonTitle}</h1>
+              <h3 style={{ color: "silver", display: "inline" }}>{state.lesson.courseTitle}</h3>
+            </div>
           </Navbar>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              backgroundImage: "linear-gradient(#f7f7f7 90%, white)",
-            }}
-          >
+          <div className="editor_container">
             <ButtonPanel
               buttonValues={buttonValues}
               course={state.lesson.courseSlug}
@@ -175,25 +172,31 @@ const Editor: FC = () => {
               setUndoAndUndoPosition={setUndoAndUndoPosition}
               openSettings={openSettings}
               setOpenSettings={setOpenSettings}
+              setPreview={setPreview}
             />
-            <div className="text-editor-container">
-              <div className="editor-windows">
-                <MDTextArea
-                  editorRef={editorRef}
-                  mdText={mdText}
-                  buttonValues={buttonValues}
-                  listButtonValues={listButtonValues}
-                  cursorPositionStart={cursorPositionStart}
-                  setCursorPosition={setCursorPosition}
-                  setMdText={setMdText}
-                  setButtonValues={setButtonValues}
-                  setCursor={setCursor}
-                  setUndoAndUndoPosition={setUndoAndUndoPosition}
-                  setRedoAndRedoPosition={setRedoAndRedoPosition}
-                  resetButtons={resetButtons}
-                />
-                <MDPreview mdText={mdText} course={state.lesson.courseSlug} language={language} />
-              </div>
+
+            <div className="editor-windows">
+              <MDTextArea
+                editorRef={editorRef}
+                mdText={mdText}
+                buttonValues={buttonValues}
+                listButtonValues={listButtonValues}
+                cursorPositionStart={cursorPositionStart}
+                setCursorPosition={setCursorPosition}
+                setMdText={setMdText}
+                setButtonValues={setButtonValues}
+                setCursor={setCursor}
+                setUndoAndUndoPosition={setUndoAndUndoPosition}
+                setRedoAndRedoPosition={setRedoAndRedoPosition}
+                resetButtons={resetButtons}
+              />
+
+              <MDPreviewArea
+                mdText={mdText}
+                course={state.lesson.courseSlug}
+                language={language}
+                preview={preview}
+              />
             </div>
           </div>
         </>

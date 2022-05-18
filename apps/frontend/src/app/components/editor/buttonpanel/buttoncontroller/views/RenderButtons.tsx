@@ -22,10 +22,14 @@ export const RenderButtons: FC<RenderButtonsProps> = ({
   style,
   imageurl,
 }) => {
+  const isTouchDevice = () => {
+    return "ontouchstart" in document.documentElement;
+  };
   return (
     <>
       <Popup
         content={title + " (" + shortcutKey + ")"}
+        disabled={isTouchDevice()}
         mouseEnterDelay={250}
         mouseLeaveDelay={250}
         trigger={
@@ -34,17 +38,9 @@ export const RenderButtons: FC<RenderButtonsProps> = ({
               style={
                 isON
                   ? {
-                      marginTop: "0.3em",
-                      paddingTop: "0.25em",
-                      paddingBottom: "0.25em",
-                      borderRadius: "10px",
                       backgroundColor: "#bbb",
                     }
                   : {
-                      marginTop: "0.3em",
-                      paddingTop: "0.25em",
-                      paddingBottom: "0.75em",
-                      borderRadius: "10px",
                       backgroundColor: "rgba(0, 0, 0, 0)",
                     }
               }

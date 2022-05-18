@@ -1,0 +1,104 @@
+.lesson_menu_card {
+  margin: 0 0 1rem 0;
+  padding: 2rem 0 0 0;
+  display: flex;
+  flex-flow: row !important;
+
+  .lesson_menu_card_content_container {
+    display: flex;
+    flex-flow: column;
+    .lesson_menu_card_content {
+      position: relative;
+
+      cursor: pointer;
+
+      &:hover {
+        box-shadow: 0px 0px 5px 2px lightgrey;
+      }
+
+      .lesson_menu_card_content__image {
+        max-height: 3.5rem;
+        width: 5rem;
+        overflow: hidden;
+        object-fit: cover;
+        object-position: 0 0;
+        border: 1px solid lightgray;
+      }
+      .image_flag {
+        width: 66%;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+      }
+    }
+
+    .content {
+      width: 5rem;
+      display: flex;
+      flex-flow: column;
+      justify-content: start;
+      align-items: start;
+    }
+  }
+
+  .text_item__lessontitle {
+    max-width: 10rem;
+    display: flex;
+    flex-flow: column;
+    align-items: flex-end;
+    h2 {
+      font-size: 0.8rem;
+      margin-left: 0.4rem;
+    }
+    h3 {
+      font-size: 0.7rem;
+      margin-left: 0.4rem;
+    }
+  }
+
+  .extra_content {
+    display: flex !important;
+    flex-flow: row nowrap;
+    justify-content: flex-end;
+    align-items: flex-start;
+    .text_item_button__mobile {
+      margin-top: 0.2rem;
+      font-size: 0.8rem;
+    }
+    .text_item_button__desktop {
+      display: none;
+    }
+  }
+
+  @media (min-width: 570px) {
+    .lesson_menu_card_content_container {
+      .lesson_menu_card_content {
+        .lesson_menu_card_content__image {
+          max-height: 4.5rem;
+        }
+      }
+    }
+
+    .extra_content {
+      .text_item_button__mobile {
+        display: none;
+      }
+      .text_item_button__desktop {
+        display: block;
+      }
+    }
+    .text_item__lessontitle {
+      h2 {
+        font-size: 1rem;
+      }
+      h3 {
+        font-size: 1rem;
+      }
+    }
+    .extra_content {
+      .text_item_button__mobile {
+        font-size: 1rem;
+      }
+    }
+  }
+}

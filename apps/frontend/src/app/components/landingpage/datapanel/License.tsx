@@ -1,3 +1,4 @@
+import "./license.scss";
 import { Header, Input } from "semantic-ui-react";
 import { FORM_TEXT } from "../settingsFiles/languages/landingpage_NO";
 import { FC, SyntheticEvent } from "react";
@@ -10,8 +11,8 @@ interface LicenseProps {
 
 const License: FC<LicenseProps> = ({ changeHandler, data }) => {
   return (
-    <div style={{ margin: "1vw" }}>
-      <Header as="h3" content={FORM_TEXT.LICENSE.heading} />
+    <div className="license">
+      <h3>{FORM_TEXT.LICENSE.heading} </h3>
       <Input
         autoComplete="off"
         type="text"

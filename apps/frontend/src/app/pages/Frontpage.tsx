@@ -1,11 +1,11 @@
-import "./overview.scss";
+import "./frontpage.scss";
 import React, { FC, useEffect, useState } from "react";
-import lkkLogo from "../../../assets/public/lkk_logo.png";
-import NewLessonModal from "./NewLessonModal";
-import ItemList from "./ItemList";
+import lkkLogo from "../../assets/public/lkk_logo.png";
+import NewLessonModal from "../components/frontpage/NewLessonModal";
+import ItemList from "../components/frontpage/ItemList";
 import { LessonDTO } from "@lessoneditor/contracts";
-import { useUserContext } from "../../contexts/UserContext";
-import Navbar from "../navbar/Navbar";
+import { useUserContext } from "../contexts/UserContext";
+import Navbar from "../components/navbar/Navbar";
 import {
   Button,
   Card,
@@ -26,7 +26,9 @@ const sortOptions = [
   { key: "is-submitted", text: "Sendt inn", value: "is-submitted" },
 ];
 
-const Overview: FC = () => {
+const lang_strings = { nb: {} };
+
+const frontpage: FC = () => {
   const { state } = useUserContext();
   const [openNewLessonModal, setOpenNewLessonModal] = useState<boolean>(false);
   const [openLessonModal, setOpenLessonModal] = useState<boolean>(false);
@@ -138,53 +140,25 @@ const Overview: FC = () => {
         </Modal>
       )}
       <Navbar />
-      <div className="overViewContainer">
-        <section className="overviewSection1">
-          <div className="overviewSection1_content">
-            <Header as={"h1"}>Lær Kidsa Kodings Tekstbehandler</Header>
-            <div
-              style={{
-                borderBottom: "5px solid",
-                borderBottomColor: "green",
-                margin: "0 0 6vh 0vh",
-                width: "50%",
-              }}
-            />
-            <div
-              style={{
-                display: "flex",
-                flexFlow: "row nowrap",
-                justifyContent: "start",
-                alignItems: "center",
-                overflowX: "auto",
-              }}
-            >
-              <div style={{ margin: "0 3vw 2vh 0" }}>
-                <Header as="h3" style={{ marginBottom: "1em" }}>
-                  Lag ny oppgave
-                </Header>
-                <div
-                  style={{ margin: "0", padding: "0" }}
-                  onClick={() => setOpenNewLessonModal(true)}
-                >
-                  <Card
-                    className="overview_Button"
-                    style={{
-                      width: "16em",
-                      height: "15em",
-                      padding: "0",
-                    }}
-                  >
-                    <Card.Content>
-                      <Card.Content
-                        style={{
-                          display: "flex",
-                          justifyContent: "center",
-                          alignItems: "center",
-                          margin: "2.4em",
-                        }}
-                      >
-                        <Icon.Group>
+      <div className="frontpage">
+        <section className="frontpage_section1">
+          <div className="frontpage_section1__container">
+            <header className="frontpage_section1__header">
+              <h1>
+                <span>Lær Kidsa Koding</span> <span className="subtitle">Tekstbehandler</span>
+              </h1>
+            </header>
+
+            <div className="frontpage_section1__cards">
+              <label>
+                <h3>Lag ny oppgave</h3>
+              </label>
+              <div className="card_container">
+                <div onClick={() => setOpenNewLessonModal(true)} className="card">
+                  <Card>
+                    <Card.Content className="card_content">
+                      <Card.Content>
+                        <Icon.Group className="card_image_height">
                           <Icon color="grey" name="file text outline" size="huge" />
                         </Icon.Group>
                       </Card.Content>
@@ -204,60 +178,13 @@ const Overview: FC = () => {
                   </Card>
                 </div>
               </div>
-              <div style={{ margin: "0 1vw 2vh 0" }}>
-                <h3 style={{ marginBottom: "1em", minWidth: "14em" }}>
-                  Lær Kidsa Kodings oppgavesamling
-                </h3>
-                <div style={{ margin: "0", padding: "0" }} onClick={() => setOpenLessonModal(true)}>
-                  <Card className="overview_Button" style={{ width: "16em", height: "15em" }}>
-                    <Card.Content>
-                      <Card.Content>
-                        <div
-                          style={{
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            height: "110px",
-                          }}
-                        >
-                          <Image.Group>
-                            <Image
-                              src={lkkLogo}
-                              style={{ height: "90px", marginBottom: "-1.5vh" }}
-                            />
-                          </Image.Group>
-                        </div>
-                      </Card.Content>
-
-                      <Card.Content>
-                        <Card.Header>
-                          <Divider />
-                        </Card.Header>
-                      </Card.Content>
-                      <Card.Content extra>
-                        <Button
-                          icon="folder open"
-                          labelPosition="left"
-                          positive
-                          content="Åpne"
-                          onClick={() => {
-                            setOpenLessonModal(true);
-                          }}
-                        />
-                      </Card.Content>
-                    </Card.Content>
-                  </Card>
-                </div>
-              </div>
             </div>
           </div>
         </section>
-        <section className="overviewSection2">
-          <div className="overviewSection2_content">
-            <div className="overviewSection2_header">
-              <Header as="h3" style={{ marginBottom: "2em" }}>
-                Mine oppgaver
-              </Header>
+        <section className="frontpage_section2">
+          <div className="frontpage_section2_container">
+            <div className="frontpage_section2_container__header">
+              <Header as="h3">Mine oppgaver</Header>
               <Dropdown
                 onChange={handleSortChange}
                 inline
@@ -268,9 +195,7 @@ const Overview: FC = () => {
             </div>
 
             {state.lessons.length > 0 ? (
-              <div>
-                <ItemList lessons={userLessons} />
-              </div>
+              <ItemList lessons={userLessons} />
             ) : (
               <Message compact>
                 <Message.Header>Du har ingen kurs</Message.Header>
@@ -284,4 +209,4 @@ const Overview: FC = () => {
     </>
   );
 };
-export default Overview;
+export default frontpage;

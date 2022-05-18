@@ -1,3 +1,4 @@
+import "./content.scss";
 import { SyntheticEvent, useState } from "react";
 import LessontextItems from "./LessonTextItems";
 import TeacherguideItems from "./TeacherguideItems";
@@ -15,8 +16,8 @@ const Content = () => {
 
   return (
     <>
-      <div style={{ maxWidth: "1200px", margin: "auto" }}>
-        <Menu style={{ overflow: "auto" }} secondary>
+      <div className="lessons_menu">
+        <Menu secondary className="lessons_menu__items">
           <Menu.Item
             name="Oppgavetekst"
             active={activeItem === "lessontext"}

@@ -1,7 +1,7 @@
-import Editor from "./editor/Editor";
+import Editor from "../pages/Editor";
 // import Landingpage from "./landingpage/Landingpage";
-import Landingpage from "./landingpage/Landingpage";
-import Overview from "./frontpage/Overview";
+import Landingpage from "../pages/Landingpage";
+import Overview from "../pages/Frontpage";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { LessonContextProvider } from "../contexts/LessonContext";
 import { UserContextProvider } from "../contexts/UserContext";

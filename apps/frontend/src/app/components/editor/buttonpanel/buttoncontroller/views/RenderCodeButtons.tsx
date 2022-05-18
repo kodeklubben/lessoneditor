@@ -20,10 +20,14 @@ export const RenderCodeButtons: FC<RenderCodeButtonsProps> = ({
   handleButtonClick,
   courseTitle,
 }) => {
+  const isTouchDevice = () => {
+    return "ontouchstart" in document.documentElement;
+  };
   return (
     <>
       <Popup
         content={title + " (" + shortcutKey + ")"}
+        disabled={isTouchDevice()}
         mouseEnterDelay={250}
         mouseLeaveDelay={250}
         trigger={

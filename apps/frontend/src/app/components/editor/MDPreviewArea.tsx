@@ -1,4 +1,5 @@
 import "./mdpreview.scss";
+import "./mdpreviewarea.scss";
 import { FC, useEffect, useState } from "react";
 import { renderMicrobit } from "../../utils/renderMicrobit";
 import { renderScratchBlocks } from "../../utils/renderScratchblocks";
@@ -11,11 +12,10 @@ interface MDPreviewProps {
   mdText: string;
   course: string;
   language: string;
+  preview: boolean;
 }
 
-let storeSVG = {};
-
-const MDPreview: FC<MDPreviewProps> = ({ mdText, course, language }) => {
+const MDPreviewArea: FC<MDPreviewProps> = ({ mdText, course, language, preview }) => {
   const { images } = useLessonContext();
 
   const [svgContent, setSvgContent] = useState<string>("");
@@ -75,21 +75,26 @@ const MDPreview: FC<MDPreviewProps> = ({ mdText, course, language }) => {
 
   if (course === "scratch" && parsedMDwithUpdatedImageURLS) {
     const lessonContent = renderScratchBlocks(svgContent);
-    return <div className="preview-area" dangerouslySetInnerHTML={{ __html: lessonContent }} />;
+    return (
+      <div
+        className={`preview-area ${preview ? "preview" : ""}`}
+        dangerouslySetInnerHTML={{ __html: lessonContent }}
+      />
+    );
   } else if (!parsedMDwithUpdatedImageURLS && mdText !== "") {
     return (
-      <div className="preview-area">
+      <div className={`preview-area ${preview ? "preview" : ""}`}>
         <ContentPlaceholder />
       </div>
     );
   } else {
     return (
       <div
-        className="preview-area"
+        className={`preview-area ${preview ? "preview" : ""}`}
         dangerouslySetInnerHTML={{ __html: parsedMDwithUpdatedImageURLS }}
       />
     );
   }
 };
 
-export default MDPreview;
+export default MDPreviewArea;

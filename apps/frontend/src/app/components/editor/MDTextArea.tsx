@@ -1,3 +1,4 @@
+import "./mdtextarea.scss";
 import { Dispatch, SetStateAction, ChangeEvent, MouseEvent, KeyboardEvent, FC, Ref } from "react";
 import ContentPlaceholder from "./ContentPlaceholder";
 import { listController, TABcontroller } from "./utils/mdTextAreaControllers";
