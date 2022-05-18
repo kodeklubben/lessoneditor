@@ -108,7 +108,7 @@ const Hyperlink: FC<HyperlinkProps> = ({
   };
 
   return (
-    <>
+    <div className="hyperlink_button_group">
       <RenderButtons
         isON={false}
         icon={config.hyperlink.icon}
@@ -164,7 +164,7 @@ const Hyperlink: FC<HyperlinkProps> = ({
           />
         </Modal.Actions>
       </Modal>
-    </>
+    </div>
   );
 };
 

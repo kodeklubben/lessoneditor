@@ -14,7 +14,8 @@
         border-bottom-color: green;
         margin: 0 0 1rem 0;
         width: 50%;
-        max-width: 36rem;
+
+        max-width: 26rem;
 
         h1 {
           span {
@@ -44,7 +45,7 @@
             width: 100%;
           }
           &:not(:first-child) {
-            margin: 2rem 0 0 0;
+            margin: 0.5rem 0 0 0;
           }
 
           display: flex;
@@ -78,7 +79,7 @@
               justify-content: space-between;
 
               .card_image_height {
-                height: 10rem;
+                height: 5rem;
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -129,30 +130,25 @@
     .frontpage_section1 {
       font-size: 1rem;
       padding: 3rem;
+
+      .frontpage_section1__container {
+        .frontpage_section1__cards {
+          .card_container {
+            .card {
+              .card_content {
+                .card_image_height {
+                  height: 10rem;
+                }
+              }
+            }
+          }
+        }
+      }
     }
 
     .frontpage_section2 {
       font-size: 1rem;
       padding: 3rem;
-    }
-  }
-
-  @media (min-width: 840px) {
-    .frontpage_section1 {
-      .frontpage_section1__container {
-        .frontpage_section1__header {
-          h1 {
-            span {
-              font-size: 2rem;
-            }
-            .subtitle {
-              font-size: 3rem;
-              color: grey;
-              line-height: 150%;
-            }
-          }
-        }
-      }
     }
   }
 }

@@ -101,7 +101,7 @@ const TagsTopic: FC<Tags> = ({ changeHandler, data }) => {
   return (
     <div className="tags_container">
       <div>
-        {topicSettings.slice(0, topicSettings.length / 2 + 1).map((element, index) => (
+        {topicSettings.slice(0, topicSettings.length / 2).map((element, index) => (
           <CheckboxWrapper
             key={element.value}
             name={element.name}
@@ -114,7 +114,7 @@ const TagsTopic: FC<Tags> = ({ changeHandler, data }) => {
       </div>
 
       <div>
-        {topicSettings.slice(topicSettings.length / 2 + 1).map((element, index) => (
+        {topicSettings.slice(topicSettings.length / 2).map((element, index) => (
           <CheckboxWrapper
             key={element.value}
             name={element.name}

@@ -11,7 +11,7 @@ interface LicenseProps {
 
 const License: FC<LicenseProps> = ({ changeHandler, data }) => {
   return (
-    <div className="license_container">
+    <div className="license">
       <h3>{FORM_TEXT.LICENSE.heading} </h3>
       <Input
         autoComplete="off"

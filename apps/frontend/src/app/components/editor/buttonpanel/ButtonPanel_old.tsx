@@ -12,7 +12,6 @@ import Lists from "./Lists";
 import Explorer from "./Explorer";
 import Sections from "./Sections";
 import CodeButtons from "./CodeButtons";
-import Preview from "./Preview";
 import MicrobitButtons from "./MicrobitButtons";
 import SratchButtons from "./ScratchButtons";
 import EditorDatamodal from "../datapanel/EditorDatamodal";
@@ -44,7 +43,6 @@ interface ButtonPanelProps {
   setUndoAndUndoPosition: (mdText: string, position: number) => void;
   openSettings: boolean;
   setOpenSettings: Dispatch<SetStateAction<boolean>>;
-  setPreview: Dispatch<SetStateAction<boolean>>;
 }
 
 const ButtonPanel: FC<ButtonPanelProps> = ({
@@ -71,12 +69,11 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
   setUndoAndUndoPosition,
   openSettings,
   setOpenSettings,
-  setPreview,
 }) => {
   return (
     <>
       <div className="buttonpanel">
-        <div className="top_panel">
+        <div className="buttonpanel_container">
           <div className="firstrow">
             <div className="buttongroup">
               <Emphasis
@@ -92,7 +89,7 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
                 setUndoAndUndoPosition={setUndoAndUndoPosition}
               />
 
-              <div style={{ marginRight: "3rem" }} />
+              <div style={{ marginRight: "3em" }} />
 
               <UndoRedo
                 editorRef={editorRef}
@@ -106,7 +103,7 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
                 pushRedoValue={pushRedoValue}
                 setCursorPosition={setCursorPosition}
               />
-              <div style={{ marginRight: "3rem" }} />
+              <div style={{ marginRight: "3em" }} />
               <Hyperlink
                 editorRef={editorRef}
                 mdText={mdText}
@@ -134,7 +131,7 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
                 setCursor={setCursor}
                 setUndoAndUndoPosition={setUndoAndUndoPosition}
               />
-              <div style={{ marginRight: "3rem" }} />
+              <div style={{ marginRight: "3em" }} />
               <Lists
                 editorRef={editorRef}
                 cursorPositionStart={cursorPositionStart}
@@ -151,6 +148,7 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
               {/* <div style={{ marginRight: "3em" }} />
             <Explorer /> */}
             </div>
+
             <div className="settingspanel">
               {/* <Languages saveEditorText={saveEditorText} setShowSpinner={setShowSpinner} /> */}
               <EditorDatamodal
@@ -196,7 +194,7 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
             </div>
             <Autosave mdText={mdText} />
           </div>
-          <div className="scratchmicrobit_row">
+          <div className="scratchMB_buttons">
             {course === "microbit" && (
               <MicrobitButtons
                 editorRef={editorRef}
@@ -225,112 +223,6 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
                 setUndoAndUndoPosition={setUndoAndUndoPosition}
               />
             )}
-          </div>
-          <div className="firstrow_mobile">
-            <UndoRedo
-              editorRef={editorRef}
-              mdText={mdText}
-              cursorPositionStart={cursorPositionStart}
-              undoCursorPosition={undoCursorPosition}
-              redoCursorPosition={redoCursorPosition}
-              setUndoCursorPosition={setUndoCursorPosition}
-              setRedoCursorPosition={setRedoCursorPosition}
-              pushUndoValue={pushUndoValue}
-              pushRedoValue={pushRedoValue}
-              setCursorPosition={setCursorPosition}
-            />
-
-            <div className="settingspanel">
-              {/* <Languages saveEditorText={saveEditorText} setShowSpinner={setShowSpinner} /> */}
-              <EditorDatamodal
-                courseTitle={courseTitle}
-                lessonTitle={lessonTitle}
-                openSettings={openSettings}
-                setOpenSettings={setOpenSettings}
-              />
-              <SubmitButton mdText={mdText} />
-            </div>
-
-            <Autosave mdText={mdText} />
-          </div>
-        </div>
-        <div className="bottom_panel">
-          <div
-            className={`scratchmicrobit_row ${
-              course === "microbit" || course === "scratch" ? "active" : ""
-            }`}
-          >
-            {course === "microbit" && (
-              <MicrobitButtons
-                editorRef={editorRef}
-                cursorPositionStart={cursorPositionStart}
-                cursorPositionEnd={cursorPositionEnd}
-                mdText={mdText}
-                buttonValues={buttonValues}
-                setMdText={setMdText}
-                setCursorPosition={setCursorPosition}
-                setCursor={setCursor}
-                setButtonValues={setButtonValues}
-                setUndoAndUndoPosition={setUndoAndUndoPosition}
-              />
-            )}
-            {course === "scratch" && (
-              <SratchButtons
-                editorRef={editorRef}
-                cursorPositionStart={cursorPositionStart}
-                cursorPositionEnd={cursorPositionEnd}
-                mdText={mdText}
-                buttonValues={buttonValues}
-                setMdText={setMdText}
-                setCursorPosition={setCursorPosition}
-                setCursor={setCursor}
-                setButtonValues={setButtonValues}
-                setUndoAndUndoPosition={setUndoAndUndoPosition}
-              />
-            )}
-          </div>
-          <div className="codebuttons_row">
-            <Sections
-              editorRef={editorRef}
-              cursorPositionStart={cursorPositionStart}
-              cursorPositionEnd={cursorPositionEnd}
-              mdText={mdText}
-              buttonValues={buttonValues}
-              setMdText={setMdText}
-              setCursorPosition={setCursorPosition}
-              setCursor={setCursor}
-              setButtonValues={setButtonValues}
-              setUndoAndUndoPosition={setUndoAndUndoPosition}
-            />
-            <CodeButtons
-              editorRef={editorRef}
-              mdText={mdText}
-              cursorPositionStart={cursorPositionStart}
-              cursorPositionEnd={cursorPositionEnd}
-              buttonValues={buttonValues}
-              setMdText={setMdText}
-              setCursorPosition={setCursorPosition}
-              setCursor={setCursor}
-              setButtonValues={setButtonValues}
-              course={course}
-              courseTitle={courseTitle}
-              setUndoAndUndoPosition={setUndoAndUndoPosition}
-            />
-          </div>
-          <div className="textbuttons_row">
-            <Emphasis
-              editorRef={editorRef}
-              mdText={mdText}
-              buttonValues={buttonValues}
-              cursorPositionStart={cursorPositionStart}
-              cursorPositionEnd={cursorPositionEnd}
-              setMdText={setMdText}
-              setCursorPosition={setCursorPosition}
-              setCursor={setCursor}
-              setButtonValues={setButtonValues}
-              setUndoAndUndoPosition={setUndoAndUndoPosition}
-            />
-            <Preview editorRef={editorRef} setPreview={setPreview} />
           </div>
         </div>
       </div>

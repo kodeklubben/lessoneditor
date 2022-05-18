@@ -136,10 +136,15 @@ const LandingpageDatamodal = () => {
     }));
   };
 
+  const isTouchDevice = () => {
+    return "ontouchstart" in document.documentElement;
+  };
+
   return (
     <>
       <Popup
         content={"Endre prosjektdata"}
+        disabled={isTouchDevice()}
         mouseEnterDelay={250}
         mouseLeaveDelay={250}
         trigger={
@@ -191,9 +196,10 @@ const LandingpageDatamodal = () => {
             content={<TagsGrade data={checkBoxState} changeHandler={checboxHandler} />}
           />
 
-          <Levels changeHandler={dropdownHandler} data={yml} />
-
-          <License changeHandler={changeHandler} data={yml} />
+          <div className="form_container">
+            <Levels changeHandler={dropdownHandler} data={yml} />
+            <License changeHandler={changeHandler} data={yml} />
+          </div>
         </Modal.Content>
 
         <Modal.Actions className="landingpage_modal">

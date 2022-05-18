@@ -15,3 +15,10 @@
     min-width: 9rem;
   }
 }
+
+@media (min-width: 678px) {
+  .tags_container {
+    min-height: 15rem;
+    padding: 1rem 0;
+  }
+}

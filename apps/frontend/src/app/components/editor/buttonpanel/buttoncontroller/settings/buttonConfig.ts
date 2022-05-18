@@ -44,6 +44,7 @@ const KEY_COMBINATIONS = {
     codeblock: [SHORTCUTKEY, "+", "k"].join(""),
     preview: [SHORTCUTKEY, "+", SHORTCUTKEY2, "+", "y"].join(""),
   },
+  preview: { preview: [SHORTCUTKEY, "+", SHORTCUTKEY2 + "o"].join("") },
 };
 
 const emphasis = {
@@ -126,17 +127,17 @@ const media = {
   },
 };
 
-// const preview = {
-//   preview: {
-//     slug: "preview",
-//     icon: "eye",
-//     output: "",
-//     title: BUTTON_TITLE.preview,
-//     cursorIntON: 0,
-//     cursorIntOFF: 0,
-//     shortcut: KEY_COMBINATIONS.preview,
-//   },
-// };
+const preview = {
+  preview: {
+    slug: "preview",
+    icon: "eye",
+    output: "",
+    title: BUTTON_TITLE.preview,
+    cursorIntON: 0,
+    cursorIntOFF: 0,
+    shortcut: KEY_COMBINATIONS.preview.preview,
+  },
+};
 
 const lists = {
   listUl: {
@@ -232,6 +233,7 @@ const sections = {
       border: " 2px solid black",
       borderRadius: "10px",
       padding: "8px",
+      whiteSpace: "nowrap",
     },
     imageurl: "assets/public/sectionSVG/check.svg",
   },
@@ -250,6 +252,7 @@ const sections = {
       borderRadius: "10px",
       padding: "7px",
       fontWeigth: "bold",
+      whiteSpace: "nowrap",
     },
     imageurl: null,
   },
@@ -268,6 +271,7 @@ const sections = {
       color: "rgb(54, 161, 55)",
       background: "#fff",
       padding: "7px",
+      whiteSpace: "nowrap",
     },
     imageurl: "assets/public/sectionSVG/flag.svg",
   },
@@ -285,6 +289,7 @@ const sections = {
       background: "#00b1da",
       padding: "10px",
       borderRadius: "10px",
+      whiteSpace: "nowrap",
     },
     imageurl: null,
   },
@@ -302,6 +307,7 @@ const sections = {
       background: "#abdbea",
       borderRadius: "10px",
       padding: "10px",
+      whiteSpace: "nowrap",
     },
     imageurl: null,
   },
@@ -320,6 +326,7 @@ const sections = {
       borderRadius: "10px",
       padding: "7px",
       border: "3px solid rgb(36, 90, 154)",
+      whiteSpace: "nowrap",
     },
     imageurl: "assets/public/sectionSVG/save.svg",
   },
@@ -342,6 +349,7 @@ const codebuttons = {
       border: "3px solid #ccc",
       borderRadius: "10px",
       fontWeigth: "normal",
+      whiteSpace: "nowrap",
     },
   },
   inline: {
@@ -360,6 +368,7 @@ const codebuttons = {
       border: "3px solid #ccc",
       borderRadius: "10px",
       fontWeigth: "normal",
+      whiteSpace: "nowrap",
     },
   },
 };
@@ -373,6 +382,7 @@ export {
   fileExplorer,
   sections,
   codebuttons,
+  preview,
   KEY_COMBINATIONS,
   SHORTCUTKEY,
   SHORTCUTKEY2,

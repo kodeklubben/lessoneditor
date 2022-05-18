@@ -17,24 +17,23 @@ const Landingpage = () => {
     <>
       <Navbar />
       <div className="landingpage_container">
-        <section className="landingpage_section1">
-          <div className="landingpage_datamodal_button">
-            <LandingpageDatamodal />
-          </div>
-
-          <div className="landingpage_section1_content">
+        <section className="landingpage_actions">
+          <div className="landingpage_actions__container">
+            <div className="landingpage_datamodal_button">
+              <LandingpageDatamodal />
+            </div>
             <CourseInfo
               lessonTitle={lessonTitle}
               courseTitle={courseTitle}
               isSubmitted={submitted}
             />
-            <div className="landingpage_cardsection">
+            <div className="landingpage_actions">
               <NewLessontext />
               <SubmitLesson />
             </div>
           </div>
         </section>
-        <section className="landingpage_section2">
+        <section className="landingpage_lessons-menu">
           <Content />
         </section>
       </div>

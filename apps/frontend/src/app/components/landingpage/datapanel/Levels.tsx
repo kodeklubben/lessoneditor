@@ -11,7 +11,7 @@ interface LevelsProps {
 
 const Levels: FC<LevelsProps> = ({ changeHandler, data }) => {
   return (
-    <div className="levels_container">
+    <div className="levels">
       <h3>{FORM_TEXT.LEVEL.heading}</h3>
       <Dropdown
         placeholder="Velg Nivå"

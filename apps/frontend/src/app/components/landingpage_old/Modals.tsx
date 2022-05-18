@@ -1,6 +1,6 @@
 import { useState, ReactNode } from "react";
 import { Modal, Image } from "semantic-ui-react";
-import MDPreview from "../editor/MDPreview";
+import MDPreview from "../editor/MDPreviewArea";
 
 export const MdPreviewModal = (
   language: string,
@@ -18,7 +18,7 @@ export const MdPreviewModal = (
       open={open}
       trigger={component}
     >
-      <MDPreview mdText={mdText} course={course} language={language} />
+      <MDPreview mdText={mdText} course={course} language={language} preview={false} />
     </Modal>
   );
 };

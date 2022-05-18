@@ -9,7 +9,7 @@ interface CheckboxFieldProps {
 
 const CheckboxField: FC<CheckboxFieldProps> = ({ labelTitle, content }) => {
   return (
-    <div className="checkboxfield__container">
+    <div className={"checkboxfield__container " + labelTitle}>
       <h3>{labelTitle}</h3>
       <div>{content}</div>
     </div>

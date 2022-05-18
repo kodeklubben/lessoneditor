@@ -28,7 +28,7 @@ const Emphasis: FC<EmphasisProps> = ({
   setUndoAndUndoPosition,
 }) => {
   return (
-    <>
+    <div className="emphasis_button_group">
       {Object.entries(config).map((element) => {
         return (
           <ButtonController
@@ -53,7 +53,7 @@ const Emphasis: FC<EmphasisProps> = ({
           />
         );
       })}
-    </>
+    </div>
   );
 };
 

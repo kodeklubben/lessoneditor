@@ -88,11 +88,10 @@ const EditorDatamodal: FC<EditorDatamodalProps> = ({
         trigger={
           <Button
             basic
-            style={{ height: "2em", padding: "0 1em 0 1em", margin: "0" }}
+            style={{ height: "3rem", padding: "0 1em 0 1em", margin: "0" }}
             id="next"
             size="big"
             icon="address card"
-            content="Oppgavedata"
             onClick={() => setOpenSettings(true)}
           />
         }

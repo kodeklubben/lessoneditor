@@ -91,7 +91,7 @@ const Video: FC<VideoProps> = ({
   };
 
   return (
-    <>
+    <div className="video_button_group">
       <RenderButtons
         isON={false}
         icon={config.video.icon}
@@ -163,7 +163,7 @@ const Video: FC<VideoProps> = ({
           />
         </Modal.Actions>
       </Modal>
-    </>
+    </div>
   );
 };
 

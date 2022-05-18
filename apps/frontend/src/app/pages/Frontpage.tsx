@@ -178,39 +178,6 @@ const frontpage: FC = () => {
                   </Card>
                 </div>
               </div>
-              {/* <div className="card_container">
-                <label>
-                  <h3>Lær Kidsa Kodings oppgavesamling</h3>
-                </label>
-                <div onClick={() => setOpenLessonModal(true)} className="card">
-                  <Card>
-                    <Card.Content className="card_content">
-                      <Card.Content>
-                        <Image.Group className="set_cardimage_height">
-                          <Image src={lkkLogo} />
-                        </Image.Group>
-                      </Card.Content>
-
-                      <Card.Content>
-                        <Card.Header>
-                          <Divider />
-                        </Card.Header>
-                      </Card.Content>
-                      <Card.Content extra>
-                        <Button
-                          icon="folder open"
-                          labelPosition="left"
-                          positive
-                          content="Åpne"
-                          onClick={() => {
-                            setOpenLessonModal(true);
-                          }}
-                        />
-                      </Card.Content>
-                    </Card.Content>
-                  </Card>
-                </div>
-              </div> */}
             </div>
           </div>
         </section>

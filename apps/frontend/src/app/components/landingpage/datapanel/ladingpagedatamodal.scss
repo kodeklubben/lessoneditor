@@ -2,19 +2,35 @@
   display: none;
 }
 
-#landingpage_datamodal_trigger__big {
-}
-
 #landingpage_modal__content {
   display: flex;
-  flex-flow: column;
+  flex-flow: row wrap;
   justify-content: space-around;
   align-items: flex-start;
 
   background-color: #f7f7f7 !important;
   padding: 1rem !important;
+
+  .form_container {
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: stretch;
+    width: 100%;
+  }
 }
 
 #tagButton {
   background-color: white !important;
+}
+
+@media (min-width: 678px) {
+  #landingpage_modal__content {
+    justify-content: space-between;
+    padding: 2rem !important;
+
+    .form_container {
+      width: 45%;
+    }
+  }
 }

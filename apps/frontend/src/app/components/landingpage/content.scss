@@ -1,0 +1,22 @@
+.lessons_menu {
+  max-width: 1200px;
+  margin: auto;
+  padding: 1rem;
+
+  .lessons_menu__items {
+    justify-content: flex-start;
+    a {
+      font-size: 0.9rem;
+    }
+  }
+
+  @media (min-width: 570px) {
+    .lessons_menu__items {
+      a {
+        font-size: 1rem;
+      }
+    }
+
+    padding: 3rem;
+  }
+}

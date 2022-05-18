@@ -18,10 +18,14 @@ export const RenderMicroScratchButtons: FC<RenderMicroScratchButtonsProps> = ({
   shortcutKey,
   color,
 }) => {
+  const isTouchDevice = () => {
+    return "ontouchstart" in document.documentElement;
+  };
   return (
     <>
       <Popup
         content={title + " (" + shortcutKey + ")"}
+        disabled={isTouchDevice()}
         mouseEnterDelay={250}
         mouseLeaveDelay={250}
         trigger={

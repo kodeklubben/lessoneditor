@@ -1,0 +1,72 @@
+.buttonpanel {
+  flex: 1;
+  padding: 0 0.5em;
+  border: 1px #b1daae;
+  border-style: solid solid hidden solid;
+  border-radius: 5px;
+  width: 100vw;
+  max-width: 1920px;
+  margin: auto;
+}
+
+.buttonpanel_container {
+  margin: auto;
+}
+
+.sectiongroup {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.firstrow {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.secondrow {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.buttongroup {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.settingspanel {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.scratchMB_buttons {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.MBButton {
+  color: #fff !important;
+  height: 1em !important;
+  padding-bottom: 16px !important;
+  padding-top: 2px !important;
+  margin-top: 1px !important;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.hyperlink_modal {
+  background-color: #eef7ee !important;
+}
+
+#lang_dropdown {
+  min-height: auto !important;
+  height: 2.62em;
+}
+
+#video_modal_label {
+  border-style: none;
+  background-color: #eef7ee !important;
+}

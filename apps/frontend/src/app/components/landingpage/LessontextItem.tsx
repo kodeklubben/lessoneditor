@@ -1,3 +1,4 @@
+import "./textitem.scss";
 import { useNavigate } from "react-router";
 import { Button, Card, Item, Image, Divider, Icon } from "semantic-ui-react";
 import { FC, useState, useEffect } from "react";
@@ -54,73 +55,47 @@ const LessontextItem: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug, 
           loading={loading}
         />
       )}
-      <Item style={{ marginBottom: "1em", paddingTop: "2em" }}>
-        <div style={{ display: "flex", flexDirection: "row" }}>
+      <Item className="lesson_menu_card">
+        <div className="lesson_menu_card_content_container">
           <Item.Content
+            className="lesson_menu_card_content"
             onClick={() => setShowMDPreview((prevValue) => !prevValue)}
-            className="landingpage_item_image"
-            style={{ position: "relative" }}
           >
             <Item.Image
+              className="lesson_menu_card_content__image"
               src={previewImage[lessonId]}
               size="tiny"
               alt="thumbUrl"
               rounded
               bordered
-              style={{
-                maxHeight: "7em",
-                overflow: "hidden",
-                objectFit: "cover",
-                objectPosition: "0 0",
-                border: "1px solid lightgray",
-              }}
             />
 
-            {language ? (
-              <Image
-                style={{
-                  width: "66%",
-                  position: "absolute",
-                  left: "0",
-                  bottom: "0.4em",
-                }}
-                src={languageImage}
-                alt={""}
-              />
-            ) : (
-              ""
-            )}
+            {language ? <Image className="image_flag" src={languageImage} alt={""} /> : ""}
           </Item.Content>
-
-          <Item.Content
-            style={{
-              display: "flex",
-              flexFlow: "column",
-              justifyContent: "start",
-              alignItems: "start",
-              margin: "1em",
-            }}
-          >
-            {/* <Item.Header>
-              <h3>Tittel: {lessonTitle}</h3>
-            </Item.Header> */}
+        </div>
+        <div className="text_item__lessontitle">
+          <Item.Header>
+            <h2>{`Tittel: ${lessonTitle}`}</h2>
+          </Item.Header>
+          <Item.Content>
             <Item.Meta>
               <h3>Språk: {languageText}</h3>
             </Item.Meta>
           </Item.Content>
         </div>
-        <Item.Content
-          style={{
-            display: "flex",
-            flexFlow: "row nowrap",
-            justifyContent: "flex-end",
-            alignItems: "center",
-            margin: "1em",
-          }}
-        >
+        <Item.Content className="extra_content">
           <Button
+            className="text_item_button__mobile"
             onClick={() => navigateToEditor(lessonId, lessonSlug, language)}
-            content={"Rediger Tekst"}
+            icon="pencil"
+            positive
+          />
+          <Button
+            className="text_item_button__desktop"
+            onClick={() => navigateToEditor(lessonId, lessonSlug, language)}
+            icon="pencil"
+            labelPosition="left"
+            content={"Rediger"}
             positive
           />
           <Button style={{ background: "none" }} icon onClick={() => setOpenDeleteContent(true)}>

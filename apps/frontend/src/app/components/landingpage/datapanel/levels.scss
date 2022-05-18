@@ -1,4 +1,10 @@
-.levels_container {
+.levels {
   margin: 0 0 2rem 0;
   width: 100%;
+
+  & {
+    .visible.menu.transition {
+      min-height: 11rem;
+    }
+  }
 }

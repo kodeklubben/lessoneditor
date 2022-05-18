@@ -24,7 +24,7 @@ const SubmitButton: FC<SubmitButtonProps> = ({ mdText }) => {
   };
 
   return (
-    <>
+    <div className="submit-button_button_group">
       <Popup
         content={"Til prosjektoversikt"}
         mouseEnterDelay={250}
@@ -32,8 +32,8 @@ const SubmitButton: FC<SubmitButtonProps> = ({ mdText }) => {
         trigger={
           <Button
             style={{
-              height: "2em",
-              marginRight: "-0.5em",
+              height: "3rem",
+              marginRight: "0",
               padding: "0 1em 0 1em",
             }}
             basic
@@ -44,7 +44,7 @@ const SubmitButton: FC<SubmitButtonProps> = ({ mdText }) => {
           />
         }
       />
-    </>
+    </div>
   );
 };
 

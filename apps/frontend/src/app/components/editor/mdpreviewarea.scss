@@ -1,0 +1,30 @@
+.preview-area {
+  display: none;
+  &.preview {
+    display: block;
+    width: 100%;
+  }
+  padding: 1rem;
+  border-radius: 5px;
+  background-color: white;
+  overflow-y: auto;
+  height: calc(100% - 2rem);
+  position: absolute;
+  z-index: 10;
+  left: 0;
+  top: 0;
+
+  @media (min-width: 900px) {
+    position: inherit;
+    width: 49.5%;
+    display: block;
+
+    &.preview {
+      width: 100%;
+    }
+
+    & button {
+      z-index: 30;
+    }
+  }
+}

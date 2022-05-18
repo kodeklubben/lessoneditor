@@ -4,10 +4,10 @@
   flex-flow: row wrap;
   align-items: center;
   justify-content: space-between;
-  margin: 2rem 0 0 0;
+  margin: 0.5rem 0 0 0;
 
   .card-item {
-    width: 42vw;
+    width: 43vw;
     margin: 0 1.81vw 2rem 0;
 
     .card {
@@ -139,6 +139,7 @@
     .card-item {
       width: 14rem;
       margin: 0 2.743rem 2rem 0;
+
       .card {
         .card-content {
           .card-content__image {
