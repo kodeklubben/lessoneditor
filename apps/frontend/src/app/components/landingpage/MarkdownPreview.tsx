@@ -1,3 +1,4 @@
+import "./markdownpreview.scss";
 import React, { FC, useEffect, useState } from "react";
 import { FileDTO, HeaderData, UpdatedFileDTO } from "@lessoneditor/contracts";
 import axios from "axios";
@@ -47,20 +48,15 @@ const MarkdownPreview: FC<MarkdownPreviewProps> = ({
   return (
     <>
       {text.length > 0 ? (
-        <Modal open={showMDPreview} onClose={() => setShowMDPreview(false)} dimmer="inverted">
-          <Modal.Content style={{ position: "relative" }}>
+        <Modal
+          className="markdown-preview--modal"
+          open={showMDPreview}
+          onClose={() => setShowMDPreview(false)}
+          dimmer="inverted"
+        >
+          <Modal.Content className="markdown-preview--content">
             <MDPreview mdText={text} course={courseSlug} language={lang} preview={true} />
-            <Button
-              onClick={() => setShowMDPreview(false)}
-              style={{
-                position: "absolute",
-                background: "none",
-                top: "0",
-                right: "0",
-                zIndex: "30",
-              }}
-              icon
-            >
+            <Button onClick={() => setShowMDPreview(false)} icon>
               <Icon size="huge" name="x" />
             </Button>
           </Modal.Content>

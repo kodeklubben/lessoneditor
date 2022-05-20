@@ -1,6 +1,9 @@
 .all-files--container {
   display: flex;
   flex-direction: row !important;
+  h3 {
+    font-size: 1rem;
+  }
 
   .all-files--content {
     display: flex;
