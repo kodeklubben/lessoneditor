@@ -22,6 +22,10 @@
       display: none;
     }
 
+    .scratchmicrobit_row {
+      display: none;
+    }
+
     .firstrow_mobile {
       position: relative;
       height: 100%;
@@ -57,80 +61,7 @@
     }
   }
 
-  .bottom_panel {
-    display: flex;
-    flex-flow: column;
-    justify-content: space-between;
-    z-index: 10;
-    width: 100%;
-    height: fit-content;
-    background-color: #f7f7f7;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    padding: 0 0.5rem;
-    z-index: 20;
-    border: 1px #b1daae;
-    border-style: solid solid solid solid;
-    border-radius: 5px;
-
-    .scratchmicrobit_row {
-      height: 0;
-      margin: 0;
-      &.active {
-        height: 1.5rem;
-        margin: 0.5rem 0 0 0;
-      }
-      display: flex;
-      flex-flow: row;
-      align-items: center;
-      justify-content: flex-start;
-      overflow-x: auto;
-
-      &::-webkit-scrollbar {
-        display: none;
-      }
-      -ms-overflow-style: none; /* IE and Edge */
-      scrollbar-width: none; /* Firefox */
-
-      button {
-        border-radius: 30px;
-        margin-right: 0.5rem;
-        white-space: nowrap;
-      }
-    }
-    .codebuttons_row {
-      height: 1.7rem;
-      display: flex;
-      flex-flow: row;
-      align-items: center;
-      justify-content: flex-start;
-      overflow-x: auto;
-      margin: 0.5rem 0;
-      &::-webkit-scrollbar {
-        display: none;
-      }
-      -ms-overflow-style: none; /* IE and Edge */
-      scrollbar-width: none; /* Firefox */
-      button {
-        margin-right: 0.5rem;
-      }
-    }
-    .textbuttons_row {
-      height: 3rem;
-      display: flex;
-      flex-flow: row;
-      align-items: center;
-      justify-content: space-between;
-      overflow-x: auto;
-
-      button {
-        padding: 0 1.5rem;
-      }
-    }
-  }
-
-  @media (min-width: 900px) {
+  @media (min-width: 920px) {
     height: fit-content;
     padding: 0 0 0.2rem 0;
     .top_panel {
@@ -163,17 +94,17 @@
         }
       }
       .scratchmicrobit_row {
+        display: flex;
         margin: 0.3rem 0 0 0;
         padding: 0 1rem;
         button {
           height: 1.4rem;
           padding: 0 0.5rem;
-          min-width: 5rem;
+          min-width: 1rem;
+          color: #f7f7f7;
+          font-size: 0.731rem;
         }
       }
-    }
-    .bottom_panel {
-      display: none;
     }
   }
 }

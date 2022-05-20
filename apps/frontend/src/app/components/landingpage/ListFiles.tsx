@@ -1,3 +1,4 @@
+import "./listfiles.scss";
 import { FC, useEffect, useState } from "react";
 import { Item, Button, Modal, Icon, Image, Header } from "semantic-ui-react";
 import axios from "axios";
@@ -117,8 +118,8 @@ const ListFiles: FC<ListFilesProps> = ({ item, lessonId }) => {
           loading={loading}
         />
       )}
-      <Item style={{ marginBottom: "1em", paddingTop: "2em" }}>
-        <div style={{ display: "flex", flexDirection: "row" }}>
+      <Item className="all-files--container">
+        <div className="all-files--content">
           <Item.Content
             onClick={
               ext == "md"
@@ -131,10 +132,10 @@ const ListFiles: FC<ListFilesProps> = ({ item, lessonId }) => {
                     console.log("noPreviewContent");
                   }
             }
-            className="landingpage_item_image"
-            style={{ position: "relative" }}
+            className="all-files--image"
           >
             <Item.Image
+              className="_image"
               src={
                 ext === "md" ? previewImage[lessonId] : isImage ? images[item] : placeholderImage
               }
@@ -142,26 +143,10 @@ const ListFiles: FC<ListFilesProps> = ({ item, lessonId }) => {
               alt="thumbUrl"
               rounded
               bordered
-              style={{
-                maxHeight: "7em",
-                overflow: "hidden",
-                objectFit: "cover",
-                objectPosition: "0 0",
-                border: "1px solid lightgray",
-              }}
             />
 
             {language ? (
-              <Image
-                style={{
-                  width: "66%",
-                  position: "absolute",
-                  left: "0",
-                  bottom: "0.4em",
-                }}
-                src={languageImage}
-                alt={""}
-              />
+              <Image className="all-files--language-image" src={languageImage} alt={""} />
             ) : (
               ""
             )}
