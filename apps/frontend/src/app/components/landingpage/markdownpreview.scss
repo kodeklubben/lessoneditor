@@ -1,0 +1,15 @@
+.markdown-preview--modal {
+  height: 93%;
+  .markdown-preview--content {
+    position: relative;
+    height: 100%;
+
+    button {
+      position: absolute;
+      background: none;
+      top: 0;
+      right: 0;
+      z-index: 30;
+    }
+  }
+}
