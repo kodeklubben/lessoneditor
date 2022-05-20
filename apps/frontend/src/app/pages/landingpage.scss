@@ -9,7 +9,7 @@
     .landingpage_actions__container {
       position: relative;
       max-width: 1200px;
-      padding: 1rem;
+      padding: 1rem 1rem 1rem 1rem;
       display: flex;
       flex-flow: column;
       justify-content: space-between;
@@ -23,14 +23,14 @@
       }
 
       .landingpage_actions {
+        padding-top: 2.5rem;
         display: flex;
         flex-flow: row nowrap;
         justify-content: space-between;
         align-items: center;
         height: 100%;
         width: 100%;
-        max-width: 30rem;
-        margin: 2rem 0;
+        max-width: 23rem;
       }
     }
   }
@@ -39,9 +39,14 @@
     font-size: 1rem;
     .landingpage_actions {
       .landingpage_actions__container {
-        padding: 3rem;
+        padding: 8rem 3rem 3rem 3rem;
+        flex-flow: row;
         .landingpage_datamodal_button {
           margin: 3rem;
+        }
+
+        .landingpage_actions {
+          padding-top: 0rem;
         }
       }
     }

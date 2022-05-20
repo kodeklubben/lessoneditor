@@ -1,0 +1,28 @@
+.all-files--container {
+  display: flex;
+  flex-direction: row !important;
+
+  .all-files--content {
+    display: flex;
+    flex-flow: row;
+
+    .all-files--image {
+      position: relative;
+      height: 100%;
+      ._image {
+        max-height: 4.5rem;
+        width: 5rem;
+        overflow: hidden;
+        object-fit: cover;
+        object-position: 0 0;
+        border: 1px solid lightgray;
+      }
+      .all-files--language-image {
+        width: 66%;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+      }
+    }
+  }
+}

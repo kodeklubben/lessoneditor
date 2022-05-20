@@ -8,6 +8,8 @@ import { useFileContext } from "../contexts/FileContext";
 import { useParams, useLocation } from "react-router";
 import { useLessonContext } from "../contexts/LessonContext";
 import Navbar from "../components/navbar/Navbar";
+import { Button } from "semantic-ui-react";
+import ButtonPanel_SmallDevices from "../components/editor/buttonpanel/ButtonPanel_SmallDevices";
 
 const Editor: FC = () => {
   const { lang } = useParams() as any;
@@ -172,7 +174,6 @@ const Editor: FC = () => {
               setUndoAndUndoPosition={setUndoAndUndoPosition}
               openSettings={openSettings}
               setOpenSettings={setOpenSettings}
-              setPreview={setPreview}
             />
 
             <div className="editor-windows">
@@ -198,6 +199,21 @@ const Editor: FC = () => {
                 preview={preview}
               />
             </div>
+            <ButtonPanel_SmallDevices
+              buttonValues={buttonValues}
+              course={state.lesson.courseSlug}
+              courseTitle={state.lesson.courseTitle}
+              cursorPositionStart={cursorPositionStart}
+              cursorPositionEnd={cursorPositionEnd}
+              editorRef={editorRef}
+              mdText={mdText}
+              setButtonValues={setButtonValues}
+              setCursor={setCursor}
+              setCursorPosition={setCursorPosition}
+              setMdText={setMdText}
+              setUndoAndUndoPosition={setUndoAndUndoPosition}
+              setPreview={setPreview}
+            />
           </div>
         </>
       )}
