@@ -1,0 +1,26 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:14.1-alpine
+    environment:
+      POSTGRES_USER: orm-user
+      POSTGRES_PASSWORD: testing
+      POSTGRES_DB: lesson-editor
+    volumes:
+      - ./postgres:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  pgadmin:
+    container_name: pgadmin_container
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@pgadmin.com
+      PGADMIN_DEFAULT_PASSWORD: s3cr3t
+    volumes:
+      - ./pgadmin:/var/lib/pgadmin
+
+    ports:
+      - "8081:80"
+    restart: always

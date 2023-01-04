@@ -13,7 +13,11 @@ import { Session } from "./session/session.entity";
 import { Connection } from "typeorm";
 import { TypeormStore } from "connect-typeorm";
 import * as passport from "passport";
-import * as cookieParser from 'cookie-parser';
+import * as cookieParser from "cookie-parser";
+import * as dotenv from "dotenv";
+dotenv.config();
+
+console.log("process.env.GITHUB_CLIENT_ID", process.env.GITHUB_CLIENT_ID);
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

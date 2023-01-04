@@ -3,17 +3,7 @@ entrypoint: node dist/apps/nestbackend/apps/nestbackend/src/main.js
 
 env_variables:
   GITHUB_CLIENT_ID: "e880a288499ff2a0599c"
-  COOKIE_SECRET: "ZPnm=2CO3pRIXQb"
-  GITHUB_CLIENT_SECRET: "57ad83b9a6a6bf48e5e95fa518178ee152d38c8f"
   GITHUB_CALLBACK_URL: "https://lessoneditor.ew.r.appspot.com/api/auth/callback"
   GITHUB_LESSON_REPO: "oppgaver"
   GITHUB_LESSON_REPO_OWNER: "kodeklubben"
   THUMB_SERVICE_URL: "https://europe-west1-lessoneditor.cloudfunctions.net/thumbnailer"
-  TYPEORM_CONNECTION: postgres
-  TYPEORM_HOST: /cloudsql/lessoneditor:europe-west1:lesson-editor
-  TYPEORM_USERNAME: appengine
-  TYPEORM_PASSWORD: appengine
-  TYPEORM_DATABASE: lessoneditor
-  TYPEORM_PORT: 5432
-  TYPEORM_SYNCHRONIZE: false
-  TYPEORM_ENTITIES: dist/**/*.entity.js
