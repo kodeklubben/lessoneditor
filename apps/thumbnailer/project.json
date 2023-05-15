@@ -5,7 +5,7 @@
   "projectType": "application",
   "targets": {
     "build": {
-      "executor": "@nx/workspace:run-commands",
+      "executor": "@nx/nx:run-commands",
       "options": {
         "parallel": false,
         "commands": [
@@ -19,7 +19,7 @@
       }
     },
     "build-app": {
-      "executor": "@nrwl/node:build",
+      "executor": "@nx/node:build",
       "outputs": [
         "{options.outputPath}"
       ],
@@ -43,7 +43,7 @@
       }
     },
     "serve": {
-      "executor": "@nx/workspace:run-commands",
+      "executor": "@nx/nx:run-commands",
       "options": {
         "buildTarget": "thumbnailer:build",
         "parallel": false,
@@ -58,7 +58,7 @@
       }
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "options": {
         "lintFilePatterns": [
           "apps/thumbnailer/**/*.ts"
@@ -66,7 +66,7 @@
       }
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
+      "executor": "@nx/jest:jest",
       "outputs": [
         "coverage/apps/thumbnailer"
       ],
