@@ -19,7 +19,7 @@
       }
     },
     "build-app": {
-      "executor": "@nx/node:build",
+      "executor": "@nx/node:webpack",
       "outputs": [
         "{options.outputPath}"
       ],
