@@ -5,7 +5,7 @@
   "projectType": "application",
   "targets": {
     "build": {
-      "executor": "@nx/nx:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "parallel": false,
         "commands": [
@@ -43,7 +43,7 @@
       }
     },
     "serve": {
-      "executor": "@nx/nx:run-commands",
+      "executor": "nx:run-commands",
       "options": {
         "buildTarget": "thumbnailer:build",
         "parallel": false,

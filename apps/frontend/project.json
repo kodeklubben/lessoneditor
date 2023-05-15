@@ -5,7 +5,7 @@
   "projectType": "application",
   "targets": {
     "build": {
-      "executor": "@nx/web:webpack",
+      "executor": "@nrwl/web:webpack",
       "outputs": [
         "{options.outputPath}"
       ],
