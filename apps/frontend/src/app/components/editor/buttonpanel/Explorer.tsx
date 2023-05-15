@@ -24,7 +24,7 @@ const Explorer: FC = () => {
       event.preventDefault();
       handleButtonClick();
     },
-    { enableOnTags: ["TEXTAREA"], keydown: true }
+    { enableOnFormTags: ["TEXTAREA"], keydown: true }
   );
 
   const handleButtonClick = () => {

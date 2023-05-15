@@ -21,7 +21,7 @@ const Preview: FC<PreviewProps> = ({ editorRef, setPreview }) => {
 
       handleButtonClick();
     },
-    { enableOnTags: ["TEXTAREA"], keydown: true }
+    { enableOnFormTags: ["TEXTAREA"], keydown: true }
   );
   const handleButtonClick = () => {
     editorRef.current ? editorRef.current.focus() : "";

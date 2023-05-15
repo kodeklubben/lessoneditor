@@ -51,7 +51,7 @@ const Video: FC<VideoProps> = ({
       handleButtonClick();
       return false;
     },
-    { enableOnTags: ["TEXTAREA"], keydown: true }
+    { enableOnFormTags: ["TEXTAREA"], keydown: true }
   );
 
   const handleButtonClick = () => {
