@@ -51,19 +51,23 @@
       }
     },
     "serve": {
-      "executor": "@nx/js:node",
+      "executor": "@nx/webpack:dev-server",
+      "defaultConfiguration": "development",
       "options": {
         "buildTarget": "frontend:build",
         "hmr": true,
         "proxyConfig": "apps/frontend/proxy.conf.json"
       },
       "configurations": {
+        "development": {
+          "buildTarget": "frontend:build:development",
+          },
         "production": {
           "buildTarget": "frontend:build:production",
           "hmr": false
         }
       }
-    },
+    },    
     "lint": {
       "executor": "@nx/linter:eslint",
       "options": {

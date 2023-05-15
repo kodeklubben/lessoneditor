@@ -6,7 +6,11 @@ import { useUserContext } from "../../contexts/UserContext";
 import logo from "../../../../src/assets/public/lav_logo.jpg";
 import logo_mobile from "../../../../src/assets/public/lkk_logo.png";
 
-const Navbar: FC = (props) => {
+interface InputProps {
+	children?: React.ReactElement;
+}
+
+const Navbar: FC<InputProps> = ({ children }) => {
   const { state: userState } = useUserContext();
   const navigate = useNavigate();
 
@@ -20,7 +24,7 @@ const Navbar: FC = (props) => {
         <img className="navbar_logo__desktop" src={logo}></img>
         <img className="navbar_logo__mobile" src={logo_mobile}></img>
       </div>
-      <div className="navbar_children_container">{props.children}</div>
+      <div className="navbar_children_container">{children}</div>
       <div className="navbar_profilemenu_container">
         <ProfileMenu
           name={userState.user!.name || userState.user!.username}
