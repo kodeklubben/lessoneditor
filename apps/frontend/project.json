@@ -5,7 +5,7 @@
   "projectType": "application",
   "targets": {
     "build": {
-      "executor": "@nrwl/web:file-server",
+      "executor": "@nx/webpack:webpack",
       "outputs": [
         "{options.outputPath}"
       ],
@@ -51,7 +51,7 @@
       }
     },
     "serve": {
-      "executor": "@nx/web:file-server",
+      "executor": "@nx/js:node",
       "options": {
         "buildTarget": "frontend:build",
         "hmr": true,
