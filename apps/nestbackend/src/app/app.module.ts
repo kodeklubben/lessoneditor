@@ -1,6 +1,6 @@
 import { Module, CacheModule, forwardRef } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
-  import { TypeOrmModule } from "@nestjs/typeorm";
+import { TypeOrmModule } from "@nestjs/typeorm";
 // import { User, UserModule } from '@lessoneditor/user';
 // import { Lesson, LessonModule } from "@lessoneditor/lesson";
 import { AuthGuard, PassportModule } from "@nestjs/passport";
@@ -9,8 +9,11 @@ import { UserModule } from "../user/user.module";
 import { LessonModule } from "../lesson/lesson.module";
 import { AuthModule } from "../auth/auth.module";
 import { LoginGuard } from "../auth/login.guard";
-import { join } from 'path';
-import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from "path";
+import { ServeStaticModule } from "@nestjs/serve-static";
+import { User } from "../user/user.entity";
+import { Lesson, FileStore } from "../lesson/lesson.entity";
+import { Session } from "../session/session.entity";
 
 @Module({
   imports: [
@@ -20,11 +23,21 @@ import { ServeStaticModule } from '@nestjs/serve-static';
       ttl: 0, // do not expire
     }),
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '../../../../../frontend'),
-      exclude: ['/api*'],
-      
+      rootPath: join(__dirname, "../../../../../frontend"),
+      exclude: ["/api*"],
     }),
-    TypeOrmModule.forRoot(),
+    TypeOrmModule.forRoot({
+      type: "postgres",
+      host: "localhost",
+      port: 5432,
+      username: "orm-user",
+      database: "lesson-editor",
+      password: "testing",
+      synchronize: true,
+      logging: false,
+      entities: [User, Lesson, FileStore, Session],
+      migrations: [],
+    }),
     forwardRef(() => UserModule),
     AuthModule,
     UserModule,
