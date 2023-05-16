@@ -8,23 +8,23 @@ The goal of this project is to create a web application that enables teachers to
 
 1. Install Node Version Manager from [here](https://github.com/nvm-sh/nvm).
 
-2. In your project's root directory, run `nvm use` to install the correct Node version for this project (The version number can be found in the `.nvmrc` file).
+2. In your project's root directory, run `nvm use` to install the correct Node version for this project (Current project is dependent on NodeJS v16).
 
 3. Run `npm install` to install all necessary dependencies.
 
 4. [Set up your Development Environment](#setup-dev-environment).
 
-5. Install and run Docker-Desktop.
+5. Install and run [Docker-Desktop](https://www.docker.com/products/docker-desktop/).
 
 6. Execute `docker-compose up --build` to run database containers.
 
-7. Build the backend with `npm run build-nestbackend`.
+7. Run `npm run build-all` to build frontend, contracts and thumbnailer in to the dist-folder.
 
-8. Start the backend with `npm run start-nestbackend`.
+8. Build the backend with `npm run build-nestbackend`.
 
-9. Run `npm run build-all` to build frontend and thumbnailer in to the dist-folder.
+9. Start the backend with `npm run start-nestbackend`.
 
-10. Start the frontend with `npm start`.
+10. Start the frontend and thumbnailer with `npm start`.
 
 11. Open [http://localhost:4200/](http://localhost:4200) in your browser! Happy coding!
 
@@ -46,7 +46,7 @@ Nestbackend manages server services, database management, and communication with
 
 ### Setup Dev Environment:
 
-1. Create new OAuth app on Github [here](`https://github.com/settings/developers`)
+1. Create new OAuth app on Github [here](https://github.com/settings/developers)
 2. Create a `.env` file in the root directory.
 3. Populate the `.env` file with environment variables as shown below:
 
