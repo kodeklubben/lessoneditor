@@ -21,7 +21,7 @@ const Image: FC<ImageProps> = ({ editorRef, uploadImageRef }) => {
 
       handleButtonClick();
     },
-    { enableOnTags: ["TEXTAREA"], keydown: true }
+    { enableOnFormTags: ["TEXTAREA"], keydown: true }
   );
   const handleButtonClick = () => {
     uploadImageRef.current ? uploadImageRef.current.click() : "";

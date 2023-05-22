@@ -1,21 +1,29 @@
 {
-  "root": "apps/frontend",
+  "name": "frontend",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/frontend/src",
   "projectType": "application",
   "targets": {
     "build": {
-      "executor": "@nrwl/web:webpack",
-      "outputs": ["{options.outputPath}"],
+      "executor": "@nx/webpack:webpack",
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/frontend",
         "index": "apps/frontend/src/index.html",
         "main": "apps/frontend/src/main.tsx",
         "polyfills": "apps/frontend/src/polyfills.ts",
         "tsConfig": "apps/frontend/tsconfig.app.json",
-        "assets": ["apps/frontend/src/favicon.ico", "apps/frontend/src/assets"],
-        "styles": ["apps/frontend/src/styles.scss"],
+        "assets": [
+          "apps/frontend/src/favicon.ico",
+          "apps/frontend/src/assets"
+        ],
+        "styles": [
+          "apps/frontend/src/styles.scss"
+        ],
         "scripts": [],
-        "webpackConfig": "@nrwl/react/plugins/webpack"
+        "webpackConfig": "@nx/react/plugins/webpack"
       },
       "configurations": {
         "production": {
@@ -43,28 +51,36 @@
       }
     },
     "serve": {
-      "executor": "@nrwl/web:dev-server",
+      "executor": "@nx/webpack:dev-server",
+      "defaultConfiguration": "development",
       "options": {
         "buildTarget": "frontend:build",
         "hmr": true,
         "proxyConfig": "apps/frontend/proxy.conf.json"
       },
       "configurations": {
+        "development": {
+          "buildTarget": "frontend:build:development"
+          },
         "production": {
           "buildTarget": "frontend:build:production",
           "hmr": false
         }
       }
-    },
+    },    
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "options": {
-        "lintFilePatterns": ["apps/frontend/**/*.{ts,tsx,js,jsx}"]
+        "lintFilePatterns": [
+          "apps/frontend/**/*.{ts,tsx,js,jsx}"
+        ]
       }
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/frontend"],
+      "executor": "@nx/jest:jest",
+      "outputs": [
+        "coverage/apps/frontend"
+      ],
       "options": {
         "jestConfig": "apps/frontend/jest.config.js",
         "passWithNoTests": true

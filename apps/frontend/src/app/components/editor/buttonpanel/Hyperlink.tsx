@@ -51,7 +51,7 @@ const Hyperlink: FC<HyperlinkProps> = ({
       event.preventDefault();
       handleButtonClick();
     },
-    { enableOnTags: ["TEXTAREA"], keydown: true }
+    { enableOnFormTags: ["TEXTAREA"], keydown: true }
   );
 
   const handleButtonClick = () => {
