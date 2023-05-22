@@ -60,7 +60,7 @@
       },
       "configurations": {
         "development": {
-          "buildTarget": "frontend:build:development",
+          "buildTarget": "frontend:build:development"
           },
         "production": {
           "buildTarget": "frontend:build:production",
