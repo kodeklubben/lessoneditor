@@ -32,7 +32,13 @@ export class AuthController {
     try
     {
       this.cacheManager.del((req.user as UserDTO).userId.toString());
-      req.logOut()
+      req.logOut(
+        function(err) {
+          if (err) {
+            return err;
+          }
+        }
+      )
       res.clearCookie("access_token")
       
       res.redirect("/logout");

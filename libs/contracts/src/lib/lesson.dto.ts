@@ -25,8 +25,8 @@ export interface LessonDTO {
 }
 
 export interface ShareLessonDTO {
-  invitationToUserId: string;
-  invitationByUserId: string;
+  invitationToUserId: number;
+  invitationByUserId: number;
 }
 
 export interface NewLessonDTO {
