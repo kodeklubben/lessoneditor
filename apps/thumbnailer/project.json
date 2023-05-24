@@ -24,6 +24,8 @@
         "{options.outputPath}"
       ],
       "options": {
+        "target": "node",
+        "compiler": "tsc",
         "outputPath": "dist/apps/thumbnailer",
         "main": "apps/thumbnailer/src/function.ts",
         "tsConfig": "apps/thumbnailer/tsconfig.app.json"
