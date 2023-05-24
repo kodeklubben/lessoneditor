@@ -50,6 +50,7 @@
     "@nx/webpack": "16.2.2",
     "@octokit/openapi-types": "^17.1.2",
     "@octokit/rest": "^19.0.7",
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.5.10",
     "axios": "^1.4.0",
     "blob-util": "^2.0.2",
     "cache-manager": "^5.2.1",
@@ -78,6 +79,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hotkeys-hook": "^4.4.0",
+    "react-refresh": "^0.14.0",
     "react-router": "^6.11.1",
     "react-router-dom": "^6.11.1",
     "react-test-renderer": "^18.2.0",
@@ -150,4 +152,3 @@
     "*.format:write": "prettier --write"
   }
 }
-
