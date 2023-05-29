@@ -10,7 +10,7 @@
     "affected:libs": "nx affected:libs",
     "affected:lint": "nx affected:lint",
     "affected:test": "nx affected:test",
-    "build-all": "nx run-many --target=build --all",
+    "build-all": "nx run-many --target=build --all --verbose",
     "build-dev": "nx build-dev backend",
     "dep-graph": "nx dep-graph",
     "format": "nx format:write",

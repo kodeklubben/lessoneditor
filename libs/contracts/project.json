@@ -6,38 +6,17 @@
   "targets": {
     "lint": {
       "executor": "@nx/linter:eslint",
-      "outputs": [
-        "{options.outputFile}"
-      ],
+      "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": [
-          "libs/contracts/**/*.ts"
-        ]
+        "lintFilePatterns": ["libs/contracts/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": [
-        "coverage/libs/contracts"
-      ],
+      "outputs": ["coverage/libs/contracts"],
       "options": {
         "jestConfig": "libs/contracts/jest.config.js",
         "passWithNoTests": true
-      }
-    },
-    "build": {
-      "executor": "@nx/node:package",
-      "outputs": [
-        "{options.outputPath}"
-      ],
-      "options": {
-        "outputPath": "dist/libs/contracts",
-        "tsConfig": "libs/contracts/tsconfig.lib.json",
-        "packageJson": "libs/contracts/package.json",
-        "main": "libs/contracts/src/index.ts",
-        "assets": [
-          "libs/contracts/*.md"
-        ]
       }
     }
   },

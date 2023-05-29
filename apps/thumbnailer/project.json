@@ -11,7 +11,7 @@
     "test": {
       "executor": "@nrwl/jest:jest",
       "options": {
-        "jestConfig": "apps/thumbnailer/jest.config.ts",
+        "jestConfig": "apps/thumbnailer/jest.config.js",
         "passWithNoTests": true
       }
     },

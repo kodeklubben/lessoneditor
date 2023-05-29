@@ -23,9 +23,7 @@ jobs:
           node-version: "16"
       - run: npm install
       - run: npm run test-all
-      - run: npm run test-backend
       - run: npm run build-all
-      - run: npm run build-backend
       - name: Caching Dist Folder
         uses: actions/cache@v2
         with:
@@ -34,7 +32,7 @@ jobs:
 
   deply_db:
     name: Deploy to Cloud SQL Postgres
-    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    if: github.ref == 'refs/heads/main_disabled' && github.event_name != 'pull_request'
     timeout-minutes: 5
     needs: test
     runs-on: ubuntu-latest
@@ -79,7 +77,7 @@ jobs:
   deploy:
     timeout-minutes: 9
     needs: test
-    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    if: github.ref == 'refs/heads/main_disabled' && github.event_name != 'pull_request'
     name: Deploy to Google App Engine
     runs-on: ubuntu-latest
     steps:
