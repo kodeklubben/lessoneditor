@@ -1,5 +1,5 @@
 import "./buttonpanel_smalldevices.scss";
-import { Dispatch, SetStateAction, FC, RefObject } from "react";
+import { Dispatch, FC, RefObject, SetStateAction } from "react";
 import Emphasis from "./Emphasis";
 import Sections from "./Sections";
 import CodeButtons from "./CodeButtons";

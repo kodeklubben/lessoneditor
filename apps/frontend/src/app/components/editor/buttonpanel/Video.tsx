@@ -1,4 +1,4 @@
-import { FC, useState, RefObject } from "react";
+import { FC, RefObject, useState } from "react";
 import { RenderButtons } from "./buttoncontroller/views/RenderButtons";
 import { useHotkeys } from "react-hotkeys-hook";
 import { KEY_COMBINATIONS as KEY, media as config } from "./buttoncontroller/settings/buttonConfig";
@@ -51,7 +51,7 @@ const Video: FC<VideoProps> = ({
       handleButtonClick();
       return false;
     },
-    { enableOnTags: ["TEXTAREA"], keydown: true }
+    {}
   );
 
   const handleButtonClick = () => {

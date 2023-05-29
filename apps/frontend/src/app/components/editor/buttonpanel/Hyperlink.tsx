@@ -1,4 +1,4 @@
-import { FC, useState, RefObject } from "react";
+import { FC, RefObject, useState } from "react";
 import { RenderButtons } from "./buttoncontroller/views/RenderButtons";
 import { useHotkeys } from "react-hotkeys-hook";
 import {
@@ -51,7 +51,7 @@ const Hyperlink: FC<HyperlinkProps> = ({
       event.preventDefault();
       handleButtonClick();
     },
-    { enableOnTags: ["TEXTAREA"], keydown: true }
+    {}
   );
 
   const handleButtonClick = () => {

@@ -1,0 +1,8 @@
+{
+  "name": "thumbnailer",
+  "version": "0.0.1",
+  "dependencies": {
+    "puppeteer": "^20.4.0",
+    "tslib": "^2.5.2"
+  }
+}

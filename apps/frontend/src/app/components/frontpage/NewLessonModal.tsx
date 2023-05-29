@@ -1,22 +1,24 @@
 import "./newlessonmodal.scss";
 
-import { FC, SyntheticEvent, useState, Dispatch, SetStateAction, useEffect } from "react";
+import { Dispatch, FC, SetStateAction, SyntheticEvent, useState } from "react";
 import slugify from "slugify";
 import { COURSESLIST, LANGUAGEOPTIONS } from "./settings/newLessonOptions";
 import { useUserContext } from "../../contexts/UserContext";
-import { useNavigate } from "react-router";
-import { Button, Input, Modal, Dropdown } from "semantic-ui-react";
-
-// import ShowSpinner from "../ShowSpinner";
+import { Button, Dropdown, Input, Modal } from "semantic-ui-react";
 
 interface NewLessonModalProps {
   openNewLessonModal: boolean;
   setOpenNewLessonModal: Dispatch<SetStateAction<boolean>>;
+  navigateToEditor: (lessonId: number, lessonSlug: string, language: string) => void;
 }
 
-const NewLessonModal: FC<NewLessonModalProps> = ({ openNewLessonModal, setOpenNewLessonModal }) => {
+export const NewLessonModal: FC<NewLessonModalProps> = ({
+  openNewLessonModal,
+  setOpenNewLessonModal,
+  navigateToEditor,
+}) => {
   const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+
   const { addLesson } = useUserContext();
   const defaultState = {
     lessonTitle: "",
@@ -55,10 +57,7 @@ const NewLessonModal: FC<NewLessonModalProps> = ({ openNewLessonModal, setOpenNe
     setIsEmptyField(false);
     setOpenNewLessonModal(false);
   };
-  const navigateToEditor = (lessonId: number, lessonSlug: string) => {
-    const target = ["/editor", lessonId, lessonSlug, `${lessonData.language}?init`].join("/");
-    navigate({ pathname: target });
-  };
+
   const onSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     setLoading(true);
@@ -77,7 +76,7 @@ const NewLessonModal: FC<NewLessonModalProps> = ({ openNewLessonModal, setOpenNe
       language
     );
     if (lessonId) {
-      navigateToEditor(lessonId, lesson.slug);
+      navigateToEditor(lessonId, lesson.slug, lessonData.language);
     }
 
     setLoading(false);
@@ -180,5 +179,3 @@ const NewLessonModal: FC<NewLessonModalProps> = ({ openNewLessonModal, setOpenNe
     </>
   );
 };
-
-export default NewLessonModal;

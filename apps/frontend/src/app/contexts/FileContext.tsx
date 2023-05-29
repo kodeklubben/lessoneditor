@@ -1,8 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useParams } from "react-router-dom";
 import axios from "axios";
-import { FileDTO, HeaderData, UpdatedFileDTO } from "@lessoneditor/contracts";
-import { paths } from "@lessoneditor/contracts";
+import { FileDTO, HeaderData, paths, UpdatedFileDTO } from "@lessoneditor/contracts";
 import {
   FileContextModel,
   FileContextState,
@@ -19,6 +18,7 @@ const FileContextProvider = (props: any) => {
   const [fileContextState, setFileContextState] =
     useState<FileContextState>(initialFileContextState);
   const { lessonId, file, lang } = useParams() as any;
+
   const [savedFileBody, setSavedFileBody] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -136,6 +136,7 @@ const FileContextProvider = (props: any) => {
   if (context.state.savedFileBody || context.state.savedFileBody === "") {
     return <FileContext.Provider value={context}>{props.children}</FileContext.Provider>;
   } else {
+    console.log(context.state);
     return <ShowSpinner />;
   }
 };

@@ -1,6 +1,6 @@
 import "./lessoncard.scss";
-import React, { useState, useEffect } from "react";
-import { Card, Divider, Icon, Button, Header } from "semantic-ui-react";
+import React, { useEffect, useState } from "react";
+import { Button, Card, Divider, Header, Icon } from "semantic-ui-react";
 import { filenameParser } from "../../utils/filename-parser";
 import { LANGUAGEOPTIONS } from "../frontpage/settings/newLessonOptions";
 import { useLessonContext } from "../../contexts/LessonContext";

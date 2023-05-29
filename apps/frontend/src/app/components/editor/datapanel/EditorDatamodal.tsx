@@ -1,13 +1,12 @@
 import "./editordatamodal.scss";
-import { Dispatch, SetStateAction, SyntheticEvent, FC, useEffect, useRef } from "react";
-import { LANGUAGEOPTIONS } from "../../frontpage/settings/newLessonOptions";
-import { useParams } from "react-router";
-import { useState } from "react";
+import { Dispatch, FC, SetStateAction, SyntheticEvent, useEffect, useRef, useState } from "react";
+import { useParams } from "react-router-dom";
 import { Button, Header, Input, Modal, Popup } from "semantic-ui-react";
 import MultiInput from "./MultiInput";
 import { FORM_TEXT } from "./settings/landingpage_NO";
 import { useFileContext } from "../../../contexts/FileContext";
 import { shallowEqual } from "fast-equals";
+import { getLangName } from "../../frontpage/settings/utils";
 
 interface EditorDatamodalProps {
   courseTitle: string;
@@ -16,7 +15,7 @@ interface EditorDatamodalProps {
   setOpenSettings: Dispatch<SetStateAction<boolean>>;
 }
 
-const EditorDatamodal: FC<EditorDatamodalProps> = ({
+export const EditorDatamodal: FC<EditorDatamodalProps> = ({
   courseTitle,
   lessonTitle,
   openSettings,
@@ -28,25 +27,11 @@ const EditorDatamodal: FC<EditorDatamodalProps> = ({
 
   const prevData = useRef<any>(null);
 
-  // useEffect(() => {
-  //   if (state.headerData.author && state.headerData.title) {
-  //     setFileContextState((s) => {
-  //       return {
-  //         ...s,
-  //         headerData: {
-  //           ...s.headerData,
-  //           err: "",
-  //         },
-  //       };
-  //     });
-  //   }
-  // }, [state.headerData.author, state.headerData.title]);
-
   useEffect(() => {
     prevData.current = { ...state };
   }, [openSettings]);
 
-  const languageName = LANGUAGEOPTIONS.filter((item) => item.value === lang)[0].text;
+  const languageName = getLangName(lang);
 
   const changeHandler = (event: SyntheticEvent, data: Record<string, string>) => {
     const { name, value } = data;
@@ -205,5 +190,3 @@ const EditorDatamodal: FC<EditorDatamodalProps> = ({
     </>
   );
 };
-
-export default EditorDatamodal;

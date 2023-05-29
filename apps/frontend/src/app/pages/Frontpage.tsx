@@ -1,23 +1,11 @@
 import "./frontpage.scss";
 import React, { FC, useEffect, useState } from "react";
-import lkkLogo from "../../assets/public/lkk_logo.png";
-import NewLessonModal from "../components/frontpage/NewLessonModal";
+import { NewLessonModal } from "../components/frontpage/NewLessonModal";
 import ItemList from "../components/frontpage/ItemList";
-import { LessonDTO } from "@lessoneditor/contracts";
 import { useUserContext } from "../contexts/UserContext";
-import Navbar from "../components/navbar/Navbar";
-import {
-  Button,
-  Card,
-  Divider,
-  Header,
-  Icon,
-  Message,
-  Placeholder,
-  Image,
-  Dropdown,
-  Modal,
-} from "semantic-ui-react";
+import { Navbar } from "../components/navbar/Navbar";
+import { Button, Card, Divider, Dropdown, Header, Icon, Message, Modal } from "semantic-ui-react";
+import { useNavigate } from "react-router-dom";
 
 const sortOptions = [
   { key: "date-modified", text: "Sist endret", value: "date-modified" },
@@ -26,9 +14,7 @@ const sortOptions = [
   { key: "is-submitted", text: "Sendt inn", value: "is-submitted" },
 ];
 
-const lang_strings = { nb: {} };
-
-const frontpage: FC = () => {
+export const FrontPage: FC = () => {
   const { state } = useUserContext();
   const [openNewLessonModal, setOpenNewLessonModal] = useState<boolean>(false);
   const [openLessonModal, setOpenLessonModal] = useState<boolean>(false);
@@ -91,28 +77,12 @@ const frontpage: FC = () => {
         break;
     }
   };
-
-  const cardPlaceholder = (key: number) => {
-    return (
-      <Card key={key}>
-        <Placeholder>
-          <Placeholder.Image square />
-        </Placeholder>
-
-        <Card.Content>
-          <Placeholder>
-            <Placeholder.Header>
-              <Placeholder.Line length="very short" />
-              <Placeholder.Line length="medium" />
-            </Placeholder.Header>
-            <Placeholder.Paragraph>
-              <Placeholder.Line length="short" />
-            </Placeholder.Paragraph>
-          </Placeholder>
-        </Card.Content>
-        <Card.Content extra></Card.Content>
-      </Card>
-    );
+  const navigate = useNavigate();
+  const navigateToEditor = (lessonId: number, lessonSlug: string, language: string) => {
+    navigate({
+      pathname: ["", "editor", lessonId, lessonSlug, language].join("/"),
+      search: "?init",
+    });
   };
 
   return (
@@ -170,6 +140,7 @@ const frontpage: FC = () => {
                       </Card.Content>
                       <Card.Content extra>
                         <NewLessonModal
+                          navigateToEditor={navigateToEditor}
                           openNewLessonModal={openNewLessonModal}
                           setOpenNewLessonModal={setOpenNewLessonModal}
                         />
@@ -209,4 +180,3 @@ const frontpage: FC = () => {
     </>
   );
 };
-export default frontpage;

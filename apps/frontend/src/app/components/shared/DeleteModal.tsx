@@ -1,6 +1,5 @@
-import React, { FC, useState } from "react";
-import { Modal, Button, Header } from "semantic-ui-react";
-import { useUserContext } from "../../contexts/UserContext";
+import React, { FC } from "react";
+import { Button, Header, Modal } from "semantic-ui-react";
 
 const DeleteModal: FC<{
   setOpenDeleteContent: React.Dispatch<React.SetStateAction<boolean>>;

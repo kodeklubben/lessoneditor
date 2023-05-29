@@ -1,11 +1,10 @@
-import React, { Dispatch, FC, SetStateAction, useContext, useEffect, useState } from "react";
-import { useParams } from "react-router";
+import React, { useContext, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 
-import { NewLessonDTO, LessonDTO, FileDTO, YamlContent } from "@lessoneditor/contracts";
-import { LessonContextState, LessonContextModel } from "./lessonContext.functions";
+import { FileDTO, LessonDTO, NewLessonDTO, paths, YamlContent } from "@lessoneditor/contracts";
+import { LessonContextModel, LessonContextState } from "./lessonContext.functions";
 import ShowSpinner from "../components/ShowSpinner";
-import { paths } from "@lessoneditor/contracts";
 import { useUserContext } from "./UserContext";
 import { base64StringToBlob, createObjectURL } from "blob-util";
 import yaml from "js-yaml";
@@ -15,7 +14,6 @@ const LessonContext = React.createContext<LessonContextModel>({} as LessonContex
 export const LessonContextProvider = (props: any) => {
   const { state } = useUserContext();
   const { lessonId } = useParams() as any;
-
   const [lesson, setLesson] = useState<LessonDTO | undefined>(undefined);
   const [files, setFiles] = useState<string[]>([]);
   const [images, setImages] = useState({});
@@ -70,7 +68,6 @@ export const LessonContextProvider = (props: any) => {
     const fileNames = await axios.get<string[]>(
       paths.LESSON_FILENAMES.replace(":lessonId", lessonId)
     );
-
 
     return fileNames.data;
   };

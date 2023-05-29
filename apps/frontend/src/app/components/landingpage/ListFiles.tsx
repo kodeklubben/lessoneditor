@@ -1,6 +1,6 @@
 import "./listfiles.scss";
 import { FC, useEffect, useState } from "react";
-import { Item, Button, Modal, Icon, Image, Header } from "semantic-ui-react";
+import { Button, Icon, Image, Item, Modal } from "semantic-ui-react";
 import axios from "axios";
 import { paths } from "@lessoneditor/contracts";
 import { LANGUAGEOPTIONS } from "../frontpage/settings/newLessonOptions";

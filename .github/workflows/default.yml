@@ -23,9 +23,9 @@ jobs:
           node-version: "16"
       - run: npm install
       - run: npm run test-all
-      - run: npm run test-nestbackend
+      - run: npm run test-backend
       - run: npm run build-all
-      - run: npm run build-nestbackend
+      - run: npm run build-backend
       - name: Caching Dist Folder
         uses: actions/cache@v2
         with:
@@ -74,7 +74,7 @@ jobs:
           TYPEORM_SYNCHRONIZE: false
           TYPEORM_MIGRATIONS: db/migration/**/*.ts
           TYPEORM_MIGRATIONS_DIR: db/migration
-          TYPEORM_ENTITIES: apps/nestbackend/src/user/user.entity.ts,apps/nestbackend/src/lesson/lesson.entity.ts,apps/nestbackend/src/session/session.entity.ts
+          TYPEORM_ENTITIES: apps/backend/src/user/user.entity.ts,apps/backend/src/lesson/lesson.entity.ts,apps/backend/src/session/session.entity.ts
 
   deploy:
     timeout-minutes: 9

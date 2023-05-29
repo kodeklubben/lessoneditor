@@ -1,9 +1,7 @@
-import React, { useContext, useEffect, useState, FC } from "react";
-import { useLocation } from "react-router";
+import React, { useContext, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import axios from "axios";
-import { paths } from "@lessoneditor/contracts";
-import { LessonDTO, NewLessonDTO } from "@lessoneditor/contracts";
-import { UserDTO } from "@lessoneditor/contracts";
+import { LessonDTO, NewLessonDTO, paths, UserDTO } from "@lessoneditor/contracts";
 
 import {
   initialUserContextState,
@@ -28,6 +26,7 @@ export const UserContextProvider = (props: any) => {
       try {
         setLoading(true);
         const userRes = await axios.get<UserDTO>(paths.USER);
+
         const userLessonsRes = await axios.get<LessonDTO[]>(
           paths.USER_LESSONS.replace(":userId", userRes.data.userId.toString())
         );
@@ -56,8 +55,8 @@ export const UserContextProvider = (props: any) => {
         setUserContextState((s) => ({ ...s, loggedIn: true }));
         setLoading(false);
       } catch (error: any) {
-        console.log("error");
-        window.location.href = "/api/auth/login/";
+        console.error(error.message);
+        //window.location.href = "/api/auth/login/";
       }
     }
     fetchData();

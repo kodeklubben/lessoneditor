@@ -1,6 +1,4 @@
-import { UserDTO } from "@lessoneditor/contracts";
-import { LessonDTO } from "@lessoneditor/contracts";
-import { Dispatch, SetStateAction } from "react";
+import { LessonDTO, UserDTO } from "@lessoneditor/contracts";
 
 export interface UserContextState {
   user: UserDTO | undefined;

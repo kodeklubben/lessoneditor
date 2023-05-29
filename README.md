@@ -73,3 +73,12 @@ DB_ENTITIES=app/nestbackend/src/*/*.entity.ts
 
 - Install Docker
 - Run `docker-compose up --build` in the root directory to start the database
+
+
+## Updates 2023
+
+Removing static serving. Instead we should run frontend with a proxy to backend. In the environment files will be served by
+appengine. So we really don't need to serve anything statically from the backend.
+
+
+## creating migrations

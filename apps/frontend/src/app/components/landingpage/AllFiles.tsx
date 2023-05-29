@@ -1,7 +1,7 @@
 import { useLessonContext } from "../../contexts/LessonContext";
 import ListFiles from "./ListFiles";
-import { Button, Card, Item, Image, Divider, Icon, Message } from "semantic-ui-react";
-import { FC, useState, useEffect } from "react";
+import { Item, Message } from "semantic-ui-react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 
 const AllFiles = () => {

@@ -1,5 +1,4 @@
 import "./checkboxfield.scss";
-import { Grid, Header, Segment } from "semantic-ui-react";
 import { FC, ReactChild } from "react";
 
 interface CheckboxFieldProps {
