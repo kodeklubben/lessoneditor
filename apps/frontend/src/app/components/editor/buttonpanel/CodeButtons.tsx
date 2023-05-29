@@ -1,8 +1,5 @@
 import { ButtonController } from "./buttoncontroller/ButtonController";
-import {
-  codebuttons as config,
-  KEY_COMBINATIONS as KEY,
-} from "./buttoncontroller/settings/buttonConfig";
+import { codebuttons as config } from "./buttoncontroller/settings/buttonConfig";
 import { FC, RefObject } from "react";
 
 export interface CodeButtonsProps {

@@ -1,43 +1,17 @@
 version: "3.8"
 
 services:
-  # frontend:
-  #   build:
-  #     context: .
-  #     dockerfile: Dockerfile
-  #   ports:
-  #     - "4200:4200"
-  #     - "3012:3012"
-  #     - "3333:3333"
-  #     - "8080:8080"
-  #   depends_on:
-  #     - postgres
 
   postgres:
-    image: postgres:15-alpine
+    image: postgres:alpine
     environment:
-      POSTGRES_USER: orm-user
-      POSTGRES_PASSWORD: testing
-      POSTGRES_DB: lesson-editor
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     ports:
-      - "5432:5432"
-
-  pgadmin:
-    container_name: pgadmin_container
-    image: dpage/pgadmin4:latest
-    depends_on:
-      - postgres
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@pgadmin.com
-      PGADMIN_DEFAULT_PASSWORD: s3cr3t
-    volumes:
-      - pgadmin_data:/var/lib/pgadmin
-    ports:
-      - "8081:80"
-    restart: always
+      - "${POSTGRES_PORT}:5432"
 
 volumes:
   postgres_data:
-  pgadmin_data:

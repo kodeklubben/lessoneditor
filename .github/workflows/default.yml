@@ -23,9 +23,7 @@ jobs:
           node-version: "16"
       - run: npm install
       - run: npm run test-all
-      - run: npm run test-nestbackend
       - run: npm run build-all
-      - run: npm run build-nestbackend
       - name: Caching Dist Folder
         uses: actions/cache@v2
         with:
@@ -34,7 +32,7 @@ jobs:
 
   deply_db:
     name: Deploy to Cloud SQL Postgres
-    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    if: github.ref == 'refs/heads/main_disabled' && github.event_name != 'pull_request'
     timeout-minutes: 5
     needs: test
     runs-on: ubuntu-latest
@@ -74,12 +72,12 @@ jobs:
           TYPEORM_SYNCHRONIZE: false
           TYPEORM_MIGRATIONS: db/migration/**/*.ts
           TYPEORM_MIGRATIONS_DIR: db/migration
-          TYPEORM_ENTITIES: apps/nestbackend/src/user/user.entity.ts,apps/nestbackend/src/lesson/lesson.entity.ts,apps/nestbackend/src/session/session.entity.ts
+          TYPEORM_ENTITIES: apps/backend/src/user/user.entity.ts,apps/backend/src/lesson/lesson.entity.ts,apps/backend/src/session/session.entity.ts
 
   deploy:
     timeout-minutes: 9
     needs: test
-    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    if: github.ref == 'refs/heads/main_disabled' && github.event_name != 'pull_request'
     name: Deploy to Google App Engine
     runs-on: ubuntu-latest
     steps:

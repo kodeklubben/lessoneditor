@@ -1,9 +1,6 @@
 import { ButtonController } from "./buttoncontroller/ButtonController";
 
-import {
-  KEY_COMBINATIONS_SCRATCH as KEY,
-  scratchbuttons as config,
-} from "./buttoncontroller/settings/microbitAndScratchButtonConfig";
+import { scratchbuttons as config } from "./buttoncontroller/settings/microbitAndScratchButtonConfig";
 import { FC, RefObject } from "react";
 
 interface ScratchButtonsProps {

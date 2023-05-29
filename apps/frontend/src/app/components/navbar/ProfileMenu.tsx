@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Image, Icon, Button, Popup } from "semantic-ui-react";
+import { Button, Icon, Image, Popup } from "semantic-ui-react";
 import { useUserContext } from "../../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 

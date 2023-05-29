@@ -1,20 +1,17 @@
 import "./buttonpanel.scss";
-import { Dispatch, SetStateAction, FC, RefObject } from "react";
+import { Dispatch, FC, RefObject, SetStateAction } from "react";
 import Autosave from "../Autosave";
 import Emphasis from "./Emphasis";
 import UndoRedo from "./UndoRedo";
 import Hyperlink from "./Hyperlink";
 import Image from "./Image";
 import Video from "./Video";
-import Languages from "./Languages";
 import Lists from "./Lists";
-import Explorer from "./Explorer";
 import Sections from "./Sections";
 import CodeButtons from "./CodeButtons";
-import Preview from "./Preview";
 import MicrobitButtons from "./MicrobitButtons";
 import SratchButtons from "./ScratchButtons";
-import EditorDatamodal from "../datapanel/EditorDatamodal";
+import { EditorDatamodal } from "../datapanel/EditorDatamodal";
 import SubmitButton from "./SubmitButton";
 
 interface ButtonPanelProps {

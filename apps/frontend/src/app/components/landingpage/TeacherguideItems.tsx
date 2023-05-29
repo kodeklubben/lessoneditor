@@ -1,7 +1,6 @@
-import React, { FC, SyntheticEvent, useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { useLessonContext } from "../../contexts/LessonContext";
-import LessontextItem from "./LessontextItem";
 import axios from "axios";
 import { paths } from "@lessoneditor/contracts";
 import { LANGUAGEOPTIONS } from "../frontpage/settings/newLessonOptions";

@@ -9,7 +9,7 @@ import {
 import ListFiles from "../../shared/ListFiles";
 import { useLessonContext } from "../../../contexts/LessonContext";
 
-import { Modal, Container } from "semantic-ui-react";
+import { Container, Modal } from "semantic-ui-react";
 
 const Explorer: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -24,7 +24,7 @@ const Explorer: FC = () => {
       event.preventDefault();
       handleButtonClick();
     },
-    { enableOnTags: ["TEXTAREA"], keydown: true }
+    {}
   );
 
   const handleButtonClick = () => {

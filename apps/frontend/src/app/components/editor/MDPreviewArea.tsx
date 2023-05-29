@@ -6,7 +6,6 @@ import { renderScratchBlocks } from "../../utils/renderScratchblocks";
 import { mdParser } from "../../utils/mdParser";
 import { useLessonContext } from "../../contexts/LessonContext";
 import ContentPlaceholder from "./ContentPlaceholder";
-import md5 from "crypto-js/md5";
 
 interface MDPreviewProps {
   mdText: string;

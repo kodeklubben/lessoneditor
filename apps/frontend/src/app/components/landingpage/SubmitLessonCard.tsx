@@ -1,6 +1,6 @@
 import "./lessoncard.scss";
 import React, { useState } from "react";
-import { Card, Divider, Button, Header, Image, Icon } from "semantic-ui-react";
+import { Button, Card, Divider, Header, Image } from "semantic-ui-react";
 import { useParams } from "react-router";
 import { useUserContext } from "../../contexts/UserContext";
 import SubmitlessonModal from "./SubmitLessonModal";

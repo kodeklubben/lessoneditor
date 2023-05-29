@@ -1,14 +1,13 @@
 import "./editor.scss";
-import { useRef, useState, FC, useEffect } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import ButtonPanel from "../components/editor/buttonpanel/ButtonPanel";
 import ImageUpload from "../components/editor/ImageUpload";
 import MDPreviewArea from "../components/editor/MDPreviewArea";
 import MDTextArea from "../components/editor/MDTextArea";
 import { useFileContext } from "../contexts/FileContext";
-import { useParams, useLocation } from "react-router";
+import { useLocation, useParams } from "react-router-dom";
 import { useLessonContext } from "../contexts/LessonContext";
-import Navbar from "../components/navbar/Navbar";
-import { Button } from "semantic-ui-react";
+import { Navbar } from "../components/navbar/Navbar";
 import ButtonPanel_SmallDevices from "../components/editor/buttonpanel/ButtonPanel_SmallDevices";
 
 const Editor: FC = () => {

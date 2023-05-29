@@ -1,0 +1,59 @@
+{
+  "name": "thumbnailer",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/thumbnailer/src",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {}
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "options": {
+        "jestConfig": "apps/thumbnailer/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "build": {
+      "executor": "@nx-extend/gcp-functions:build",
+      "options": {
+        "generateLockFile": true,
+        "outputPath": "dist/apps/thumbnailer",
+        "main": "apps/thumbnailer/src/function.ts",
+        "tsConfig": "apps/thumbnailer/tsconfig.app.json",
+        "assets": []
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": false,
+          "inspect": false
+        }
+      }
+    },
+    "deploy": {
+      "executor": "@nx-extend/gcp-functions:deploy",
+      "options": {
+        "functionName": "thumbnailer",
+        "envVarsFile": "apps/thumbnailer/src/environments/production.yaml"
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "buildTarget": "thumbnailer:build",
+        "parallel": false,
+        "commands": [
+          {
+            "command": "nx build thumbnailer"
+          },
+          {
+            "command": "functions-framework --target=thumbnailer --port=3012 --source=dist/apps/thumbnailer/main.js"
+          }
+        ]
+      }
+    }
+  },
+  "tags": []
+}

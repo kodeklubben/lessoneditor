@@ -1,13 +1,10 @@
-import { FC, Dispatch, SetStateAction, useState, Ref } from "react";
+import { Dispatch, FC, Ref, SetStateAction, useState } from "react";
 import ShowSpinner from "../ShowSpinner";
-import { useParams } from "react-router";
-import { Modal, Button, Header } from "semantic-ui-react";
-import { read } from "fs";
-import { paths } from "@lessoneditor/contracts";
+import { Button, Header, Modal } from "semantic-ui-react";
+import { NewFileDTO, paths } from "@lessoneditor/contracts";
 import axios from "axios";
-import { NewFileDTO } from "@lessoneditor/contracts";
 import { useLessonContext } from "../../contexts/LessonContext";
-import { base64StringToBlob, createObjectURL, blobToBase64String } from "blob-util";
+import { base64StringToBlob, blobToBase64String, createObjectURL } from "blob-util";
 import slugify from "slugify";
 import Compressor from "compressorjs";
 

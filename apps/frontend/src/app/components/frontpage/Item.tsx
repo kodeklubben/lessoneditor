@@ -1,8 +1,7 @@
 import "./item.scss";
 import { LessonDTO } from "@lessoneditor/contracts";
 import React, { useState } from "react";
-import { Button, Card, Image, Icon, Popup, Placeholder } from "semantic-ui-react";
-import lkkLogo from "../../../assets/public/lkk_logo.png";
+import { Button, Card, Icon, Image, Popup } from "semantic-ui-react";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../../contexts/UserContext";
 

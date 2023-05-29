@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { SAVED, SAVING } from "./settingsFiles/languages/editor_NO";
 import { useFileContext } from "../../contexts/FileContext";
 

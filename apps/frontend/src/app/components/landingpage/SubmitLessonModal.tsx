@@ -1,4 +1,4 @@
-import { Button, Modal, Header, Form, TextArea, Label, Message } from "semantic-ui-react";
+import { Button, Header, Modal } from "semantic-ui-react";
 import { FC, useState } from "react";
 
 import { paths } from "@lessoneditor/contracts";

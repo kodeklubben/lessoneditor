@@ -1,4 +1,4 @@
-import { Button, Modal, Header, Dropdown, Radio } from "semantic-ui-react";
+import { Button, Dropdown, Header, Modal, Radio } from "semantic-ui-react";
 import { FC, SyntheticEvent, useState } from "react";
 import { useNavigate } from "react-router";
 import { useUserContext } from "../../contexts/UserContext";

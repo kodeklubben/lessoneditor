@@ -5,7 +5,7 @@ export const paths = {
   DISPLAY_FILE: "/api/display/:lessonId/:file",
   FILE: "/file/*",
   LESSON: "/api/lesson/:lessonId",
-  LESSON_FILENAMES: "/api/lesson/:lessonId/fileNames",
+  LESSON_FILENAMES: "/api/lesson/:lessonId/filenames",
   LESSON_DATA: "/api/lesson/:lessonId/data/:filename",
   LESSON_FILES: "/api/lesson/:lessonId/files",
   LESSON_FILE: "api/lesson/:lessonId/files/:fileName",

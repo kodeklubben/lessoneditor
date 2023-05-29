@@ -1,4 +1,4 @@
-import { Loader, Dimmer } from "semantic-ui-react";
+import { Dimmer, Loader } from "semantic-ui-react";
 
 const languages = {
   nb: "Vennligst vent",

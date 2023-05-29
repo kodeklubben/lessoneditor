@@ -12,35 +12,6 @@ Several quick start options are available:
 - Install all dependencies with [npm](https://www.npmjs.com/) `npm install`
 - Start the application with `npm start`
 
-# Directory structure
-
-```bash
-├───public
-├───src
-│   ├───actions
-│   ├───api
-│   ├───components
-│   │   ├───frontPageComponents
-│   │   ├───lessonForm
-│   │   │   └───settingsFiles
-│   │   │       └───languages
-│   │   ├───mdPreviewComponents
-│   │   │   └───settingsFiles
-│   │   ├───mdTextEditor
-│   │   │   ├───editor
-│   │   │   │   └───controlpanel
-│   │   │   │       └───components
-│   │   │   ├───mdPreview
-│   │   │   └───settingsFiles
-│   │   │       └───languages
-│   │   ├───mypage
-│   │   └───YAMLComponents
-│   │       └───settingsFiles
-│   ├───reducers
-│   └───utils
-│       └───markdown-it-plugins
-└───test
-```
 
 # Running documentation locally
 
