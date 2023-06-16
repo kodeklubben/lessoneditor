@@ -37,6 +37,8 @@ const Editor: FC = () => {
   });
   const [preview, setPreview] = useState<boolean>(false);
 
+  const [lineNumber, setLineNumber] = useState<number>(0);
+
   const location = useLocation();
 
   const editorRef = useRef<HTMLTextAreaElement>(null);
@@ -190,6 +192,8 @@ const Editor: FC = () => {
                 setUndoAndUndoPosition={setUndoAndUndoPosition}
                 setRedoAndRedoPosition={setRedoAndRedoPosition}
                 resetButtons={resetButtons}
+                lineNumber={lineNumber}
+                setLineNumber={setLineNumber}
               />
 
               <MDPreviewArea
@@ -197,6 +201,7 @@ const Editor: FC = () => {
                 course={state.lesson.courseSlug}
                 language={language}
                 preview={preview}
+                lineNumber={lineNumber}
               />
             </div>
             <ButtonPanel_SmallDevices
