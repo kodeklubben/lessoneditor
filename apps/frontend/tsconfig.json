@@ -9,10 +9,11 @@
     "strict": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "composite": true
   },
   "files": [],
-  "include": ["src/**/*","../../custom.d.ts"],
+  "include": ["src/**/*", "../../custom.d.ts"],
   "references": [
     {
       "path": "./tsconfig.app.json"

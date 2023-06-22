@@ -29,7 +29,6 @@ const SubmitLessonCard = () => {
             <div className="new-lesson_card__image" onClick={onSubmit}>
               <Image
                 style={{
-                  position: "absolute",
                   height: "5rem",
                   objectFit: "cover",
                   objectPosition: "0 0",

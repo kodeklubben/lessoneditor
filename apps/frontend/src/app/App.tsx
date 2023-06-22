@@ -1,13 +1,13 @@
-import Editor from "../pages/Editor";
+import Editor from "./pages/Editor";
 // import Landingpage from "./landingpage/Landingpage";
-import Landingpage from "../pages/Landingpage";
-import Overview from "../pages/Frontpage";
+import Landingpage from "./pages/Landingpage";
+import Overview from "./pages/Frontpage";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { LessonContextProvider } from "../contexts/LessonContext";
-import { UserContextProvider } from "../contexts/UserContext";
-import { FileContextProvider } from "../contexts/FileContext";
-import Logout from "../components/shared/Logout";
-import SimplePreview from "./simple-preview/simple-preview";
+import { LessonContextProvider } from "./contexts/LessonContext";
+import { UserContextProvider } from "./contexts/UserContext";
+import { FileContextProvider } from "./contexts/FileContext";
+import Logout from "./components/shared/Logout";
+import SimplePreview from "./components/simple-preview/simple-preview";
 
 const App = () => {
   return (
@@ -22,15 +22,6 @@ const App = () => {
           }
         />
 
-        {/* <Route
-          path="/landingpage"
-          element={
-            <UserContextProvider>
-              <Landingpage />
-            </UserContextProvider>
-          }
-        /> */}
-
         <Route
           path="/landingpage/:lessonId/"
           element={
@@ -41,15 +32,6 @@ const App = () => {
             </UserContextProvider>
           }
         />
-
-        {/* <Route
-          path="/editor/:language"
-          element={
-            <UserContextProvider>
-              <Editor />
-            </UserContextProvider>
-          }
-        /> */}
 
         <Route
           path="/editor/:lessonId/:file/:lang"
@@ -76,9 +58,8 @@ const App = () => {
             </UserContextProvider>
           }
         />
-
-        <Route path="*" element={<h1>PAGE NOT FOUND</h1>} />
         <Route path="/logout" element={<Logout></Logout>} />
+        <Route path="*" element={<h1>PAGE NOT FOUND</h1>} />
       </Routes>
     </BrowserRouter>
   );

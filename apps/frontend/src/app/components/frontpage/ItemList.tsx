@@ -1,4 +1,3 @@
-import { Card } from "semantic-ui-react";
 import { LessonDTO } from "@lessoneditor/contracts";
 import { FC } from "react";
 import Item from "./Item";

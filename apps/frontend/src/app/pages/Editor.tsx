@@ -8,7 +8,7 @@ import { useFileContext } from "../contexts/FileContext";
 import { useParams, useLocation } from "react-router";
 import { useLessonContext } from "../contexts/LessonContext";
 import Navbar from "../components/navbar/Navbar";
-import { Button } from "semantic-ui-react";
+
 import ButtonPanel_SmallDevices from "../components/editor/buttonpanel/ButtonPanel_SmallDevices";
 
 const Editor: FC = () => {
