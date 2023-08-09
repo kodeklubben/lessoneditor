@@ -225,7 +225,7 @@ export const ButtonController: FC<ButtonControllerProps> = ({
       event.preventDefault();
       set(buttonSlug);
     },
-    { enableOnTags: ["TEXTAREA"], keydown: true },
+    { enableOnFormTags: ["TEXTAREA"], keydown: true },
     [toggleButton, setButton]
   );
 

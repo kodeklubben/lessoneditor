@@ -17,12 +17,16 @@ import * as cookieParser from "cookie-parser";
 import * as dotenv from "dotenv";
 dotenv.config();
 
-console.log("process.env.GITHUB_CLIENT_ID", process.env.GITHUB_CLIENT_ID);
+console.log("process.env.GITHUB_CLIENT_ID", process?.env?.GITHUB_CLIENT_ID);
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const sessionRepsitory = app.get(Connection).getRepository(Session);
-  app.enableCors();
+  app.enableCors({
+    origin: true, // or specify the allowed origins
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    credentials: true,
+  });
 
   app.use(bodyParser.json({ limit: "50mb" }));
   app.use(

@@ -1,4 +1,5 @@
-import { Module, CacheModule, forwardRef } from "@nestjs/common";
+import { Module, forwardRef } from "@nestjs/common";
+import { CacheModule } from "@nestjs/cache-manager";
 import { HttpModule } from "@nestjs/axios";
 import { AuthService } from "./auth.service";
 import { AuthController } from "./auth.controller";

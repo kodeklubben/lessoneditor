@@ -1,4 +1,5 @@
-import { Module, CacheModule, forwardRef } from "@nestjs/common";
+import { Module, forwardRef } from "@nestjs/common";
+import { CacheModule } from "@nestjs/cache-manager";
 import { ConfigModule } from "@nestjs/config";
 import { TypeOrmModule } from "@nestjs/typeorm";
 // import { User, UserModule } from '@lessoneditor/user';

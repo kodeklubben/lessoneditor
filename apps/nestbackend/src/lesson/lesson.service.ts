@@ -46,7 +46,10 @@ export class LessonService {
   }
 
   async getLesson(lessonId: number): Promise<Lesson> {
-    const lesson = await this.lessonRepository.findOne(lessonId, { relations: ["files"] });
+    const lesson = await this.lessonRepository.findOne({
+      where: { lessonId },
+      relations: ["files"],
+    });
     if (lesson == null) {
       throw new HttpException("Lesson does not exist", HttpStatus.NOT_FOUND);
     }
@@ -59,18 +62,22 @@ export class LessonService {
     return fileNames;
   }
 
-  async addLessonUser(lessonid: number, shareLesson: ShareLessonDTO): Promise<void> {
-    const invitedByUser = await this.userRepository.findOne(shareLesson.invitationByUserId);
+  async addLessonUser(lessonId: number, shareLesson: ShareLessonDTO): Promise<void> {
+    const invitedByUser = await this.userRepository.findOne({
+      where: { userId: Number(shareLesson.invitationByUserId) },
+    });
     if (!invitedByUser) {
       throw new HttpException("User does not exist", HttpStatus.NOT_FOUND);
     }
-    const invitedToUser = await this.userRepository.findOne(shareLesson.invitationToUserId, {
+    const invitedToUser = await this.userRepository.findOne({
+      where: { userId: Number(shareLesson.invitationToUserId) },
       relations: ["lessons"],
     });
+
     if (!invitedToUser) {
       throw new HttpException("User does not exist", HttpStatus.NOT_FOUND);
     }
-    const lesson = await this.lessonRepository.findOne(lessonid);
+    const lesson = await this.lessonRepository.findOne({ where: { lessonId } });
     if (!lesson) {
       throw new HttpException("Lesson does not exist", HttpStatus.NOT_FOUND);
     }
@@ -97,7 +104,7 @@ export class LessonService {
   }
 
   async addLessonFile(lessonId: number, newFile: NewFileDTO, request: Request): Promise<number> {
-    const lesson = await this.lessonRepository.findOne(lessonId);
+    const lesson = await this.lessonRepository.findOne({ where: { lessonId } });
     const file = new FileStore();
     const user = request.user as User;
     file.filename = newFile.filename;
@@ -135,7 +142,7 @@ export class LessonService {
     if (!file) {
       throw new HttpException("File does not exist", HttpStatus.NOT_FOUND);
     }
-    const updatedByUser = await this.userRepository.findOne(updatedByUserId);
+    const updatedByUser = await this.userRepository.findOne({ where: { userId: updatedByUserId } });
     if (!updatedByUser) {
       throw new HttpException("User does not exist", HttpStatus.NOT_FOUND);
     }

@@ -1,12 +1,12 @@
 import "./navbar.scss";
-import { FC } from "react";
+import { FC, ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import ProfileMenu from "./ProfileMenu";
 import { useUserContext } from "../../contexts/UserContext";
 import logo from "../../../../src/assets/public/lav_logo.jpg";
 import logo_mobile from "../../../../src/assets/public/lkk_logo.png";
 
-const Navbar: FC = ({ children }) => {
+const Navbar: FC<{ children?: ReactNode }> = ({ children }) => {
   const { state: userState } = useUserContext();
   const navigate = useNavigate();
 

@@ -1,4 +1,5 @@
-import { ExecutionContext, Injectable, Inject, CACHE_MANAGER } from "@nestjs/common";
+import { ExecutionContext, Injectable, Inject } from "@nestjs/common";
+import { CACHE_MANAGER } from "@nestjs/cache-manager";
 import { AuthGuard } from "@nestjs/passport";
 import { Express, Request, Response } from "express";
 import { verify } from "jsonwebtoken";
@@ -8,7 +9,7 @@ import { User } from "../user/user.entity";
 
 @Injectable()
 export class LoginGuard extends AuthGuard("github") {
-  constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache){
+  constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {
     super();
   }
   async canActivate(context: ExecutionContext) {
@@ -35,13 +36,13 @@ export class LoginGuard extends AuthGuard("github") {
         const result = (await super.canActivate(context)) as boolean;
         await super.logIn(request);
         //store the accesstoken in an http-only cookie
-        const user = request.user
+        const user = request.user;
         const accessToken = await this.cacheManager.get((request.user as User).userId.toString());
-        response.cookie('access_token', accessToken, {
+        response.cookie("access_token", accessToken, {
           httpOnly: true,
           domain: process.env.LESSON_EDITOR_DOMAIN, // your domain here!
           expires: new Date(Date.now() + 1000 * 60 * 60 * 24),
-        })
+        });
         return result;
       } else {
         return true;

@@ -15,7 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@lessoneditor/contracts": ["dist/libs/contracts/src/index.d.ts"],
+      "@lessoneditor/contracts": ["libs/contracts/src/index.ts"],
       "@libs/*": ["libs/*"],
       "libtest": ["libs/libtest/src/index.ts"]
     }

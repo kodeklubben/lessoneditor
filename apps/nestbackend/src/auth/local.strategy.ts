@@ -8,7 +8,8 @@ import { UserDTO } from "@lessoneditor/contracts";
 import { lastValueFrom } from "rxjs";
 import { AxiosResponse } from "axios";
 import { HttpService } from "@nestjs/axios";
-import { Inject, CACHE_MANAGER } from "@nestjs/common";
+import { Inject } from "@nestjs/common";
+import { CACHE_MANAGER } from "@nestjs/cache-manager";
 import { Cache } from "cache-manager";
 import { User } from "../user/user.entity";
 

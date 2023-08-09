@@ -29,7 +29,7 @@ export class UserService {
   }
 
   async getUser(userId: number): Promise<User> {
-    const user = await this.userRepository.findOne(userId, { relations: ["lessons"] });
+    const user = await this.userRepository.findOne({ where: { userId }, relations: ["lessons"] });
     if (!user) {
       throw new HttpException("User does not exist", HttpStatus.NOT_FOUND);
     }
@@ -72,7 +72,7 @@ export class UserService {
   }
 
   async addUserLesson(userId: number, lesson: NewLessonDTO, request: Request): Promise<number> {
-    const user = await this.userRepository.findOne(userId, { relations: ["lessons"] });
+    const user = await this.userRepository.findOne({ where: { userId }, relations: ["lessons"] });
     if (!user) {
       throw new HttpException("User does not exist", HttpStatus.NOT_FOUND);
     }
@@ -177,7 +177,10 @@ export class UserService {
     if (!isAssignedLesson) {
       throw new HttpException("Lesson is not assigned user", HttpStatus.NOT_FOUND);
     }
-    const lesson = await this.lessonRepository.findOne(lessonId, { relations: ["files"] });
+    const lesson = await this.lessonRepository.findOne({
+      where: { lessonId },
+      relations: ["files"],
+    });
     // if (regenThumb) {
     //   const previewFile = lesson.files.find((file) => file.filename == "preview");
     //   if (!previewFile) {
@@ -201,7 +204,10 @@ export class UserService {
 
   async deleteUserLesson(userId: number, lessonId: number): Promise<Lesson> {
     const user = await this.getUser(userId);
-    const lesson = await this.lessonRepository.findOne(lessonId, { relations: ["files"] });
+    const lesson = await this.lessonRepository.findOne({
+      where: { lessonId },
+      relations: ["files"],
+    });
 
     if (!lesson) {
       throw new HttpException("Lesson does not exist", HttpStatus.NOT_FOUND);
