@@ -7,28 +7,19 @@ import { Logger } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import * as bodyParser from "body-parser";
 import { AppModule } from "./app/app.module";
-import * as Express from "express";
+import { DataSource } from "typeorm";
 import * as ExpressSession from "express-session";
 import { Session } from "./session/session.entity";
-import { Connection } from "typeorm";
 import { TypeormStore } from "connect-typeorm";
 import * as passport from "passport";
 import * as cookieParser from "cookie-parser";
-import * as dotenv from "dotenv";
-dotenv.config();
 
 console.log("process.env.GITHUB_CLIENT_ID", process?.env?.GITHUB_CLIENT_ID);
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const sessionRepsitory = app.get(Connection).getRepository(Session);
-  app.enableCors({
-    origin: true, // or specify the allowed origins
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    credentials: true,
-  });
 
-  app.use(bodyParser.json({ limit: "50mb" }));
+  const sessionRepository = app.get(DataSource).getRepository(Session);
   app.use(
     ExpressSession({
       resave: false,
@@ -36,18 +27,22 @@ async function bootstrap() {
       store: new TypeormStore({
         cleanupLimit: 2,
         limitSubquery: false,
-        ttl: 86400,
-      }).connect(sessionRepsitory),
-      secret: "keyboard cat",
+        ttl: 86400, // 24 hours
+      }).connect(sessionRepository),
+      secret: process.env.SESSION_SECRET || "keyboard cat", // Make sure to use a strong secret
     })
   );
+  app.enableCors({ origin: true, methods: "GET,HEAD,PUT,PATCH,POST,DELETE", credentials: true });
+  app.use(bodyParser.json({ limit: "50mb" }));
 
   app.use(passport.initialize());
   app.use(passport.session());
   app.use(cookieParser(process.env.COOKIE_SECRET));
+
   const globalPrefix = "api";
   app.setGlobalPrefix(globalPrefix);
   const port = process.env.PORT || 8080;
+
   await app.listen(port, () => {
     Logger.log("Listening at http://localhost:" + port + "/" + globalPrefix);
   });

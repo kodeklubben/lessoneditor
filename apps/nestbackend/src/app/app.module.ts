@@ -18,7 +18,7 @@ import { Session } from "../session/session.entity";
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ envFilePath: ".local.env" }),
+    ConfigModule.forRoot({ isGlobal: true, cache: true }),
     CacheModule.register({
       isGlobal: true,
       ttl: 0, // do not expire
@@ -37,7 +37,7 @@ import { Session } from "../session/session.entity";
       synchronize: true,
       logging: false,
       entities: [User, Lesson, FileStore, Session],
-      migrations: [],
+      migrations: ["db/migrations/*.ts"],
     }),
     forwardRef(() => UserModule),
     AuthModule,

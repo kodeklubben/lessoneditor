@@ -59,13 +59,10 @@ const NewLessonModal: FC<NewLessonModalProps> = ({ openNewLessonModal, setOpenNe
     setOpenNewLessonModal(false);
   };
 
-  React.useEffect(() => {
-    console.log({ openNewLessonModal });
-  }, [openNewLessonModal]);
-
   const navigateToEditor = (lessonId: number, lessonSlug: string) => {
-    const target = ["/editor", lessonId, lessonSlug, `${lessonData.language}?init`].join("/");
-    navigate({ pathname: target });
+    const target = ["/editor", lessonId, lessonSlug, `${lessonData.language}`].join("/");
+    const search = "?init";
+    navigate({ pathname: target, search: search });
   };
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

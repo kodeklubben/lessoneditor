@@ -12,5 +12,5 @@ module.exports = {
     "apps/nestbackend/src/lesson/lesson.entity.ts",
     "apps/nestbackend/src/session/session.entity.ts",
   ],
-  migrations: [],
+  migrations: ["db/migrations/*.ts"],
 };
