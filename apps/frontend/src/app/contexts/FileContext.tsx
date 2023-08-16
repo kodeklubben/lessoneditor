@@ -29,7 +29,7 @@ const FileContextProvider = (props: any) => {
         const filename =
           lang === "nb" ? file : typeof lang !== "undefined" ? `${file}_${lang}` : file;
         const result = await axios.get<FileDTO<string>>(
-          paths.LESSON_FILE.replace(":lessonId", lessonId).replace(":fileName", filename)
+          paths.LESSON_FILE.replace(":lessonId", lessonId).replace(":filename", filename)
         );
         const [_, header, body] = result.data.content.split(separator);
 
@@ -66,7 +66,7 @@ const FileContextProvider = (props: any) => {
       const filename = lang === "nb" ? file : `${file}_${lang}`;
       const newFile = await axios.put<FileDTO<UpdatedFileDTO>>(
         paths.LESSON_FILE_UPDATE.replace(":lessonId", lessonId.toString()).replace(
-          ":fileName",
+          ":filename",
           filename
         ),
         updatedFile
@@ -98,14 +98,14 @@ const FileContextProvider = (props: any) => {
       const filename = lang === "nb" ? file : `${file}_${lang}`;
       const uploadedFile = await axios.put<FileDTO<string>>(
         paths.LESSON_FILE_UPDATE.replace(":lessonId", lessonId.toString()).replace(
-          ":fileName",
+          ":filename",
           filename
         ),
         updatedFile
       );
       const isThumbUpdated = await axios.put<boolean>(
         paths.LESSON_FILE_UPDATE_THUMB.replace(":lessonId", lessonId.toString()).replace(
-          ":fileName",
+          ":filename",
           filename
         )
       );

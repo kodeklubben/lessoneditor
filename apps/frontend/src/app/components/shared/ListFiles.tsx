@@ -19,7 +19,7 @@ const ListFiles: FC<ListFilesProps> = ({ list, lessonId }) => {
     try {
       const isDeleted = await axios.delete(
         paths.LESSON_FILE_DELETE.replace(":lessonId", lessonId.toString())
-          .replace(":fileName", filename)
+          .replace(":filename", filename)
           .replace(":ext", ext)
       );
       if (isDeleted.data === 1) {

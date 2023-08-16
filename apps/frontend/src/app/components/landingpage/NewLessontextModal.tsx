@@ -26,8 +26,8 @@ const filenames: FilenameBuilders = {
   teacherguide: (lang: string) => (lang === "nb" ? "README" : `README_${lang}`),
 };
 
-const replaceAPIPath = (lessonId: string, fileName: string) =>
-  paths.LESSON_FILE.replace(":lessonId", String(lessonId)).replace(":fileName", fileName);
+const replaceAPIPath = (lessonId: string, filename: string) =>
+  paths.LESSON_FILE.replace(":lessonId", String(lessonId)).replace(":filename", filename);
 
 const getFilename = (textMode: TextMode, lang: string, slug?: string) => {
   if (textMode === "teacherguide") return filenames[textMode](lang);

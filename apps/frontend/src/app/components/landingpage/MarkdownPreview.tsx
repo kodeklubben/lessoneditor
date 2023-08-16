@@ -32,7 +32,7 @@ const MarkdownPreview: FC<MarkdownPreviewProps> = ({
       console.log(filename);
       try {
         const result = await axios.get<FileDTO<string>>(
-          paths.LESSON_FILE.replace(":lessonId", lessonId).replace(":fileName", filename)
+          paths.LESSON_FILE.replace(":lessonId", lessonId).replace(":filename", filename)
         );
         const [_, header, body] = result.data.content.split(separator);
 

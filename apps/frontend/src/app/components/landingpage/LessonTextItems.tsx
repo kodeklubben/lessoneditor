@@ -53,7 +53,7 @@ const LessontextItems = () => {
       const files = await fetchFileList();
       await axios.delete(
         paths.LESSON_FILE_DELETE.replace(":lessonId", lessonId.toString())
-          .replace(":fileName", filename)
+          .replace(":filename", filename)
           .replace(":ext", ext)
       );
 

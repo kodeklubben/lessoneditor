@@ -44,7 +44,7 @@ export class LessonController {
   }
 
   @UseGuards(LoginGuard)
-  @Get(":lessonId/fileNames")
+  @Get(":lessonId/filenames")
   async GetLessonFileNames(@Param() params): Promise<string[]> {
     return await this.lessonService.getLessonFileNames(params.lessonId);
   }
@@ -89,18 +89,18 @@ export class LessonController {
   // }
 
   @UseGuards(LoginGuard)
-  @Get(":lessonId/files/:fileName")
-  async GetLessonFile(@Res() res, @Param("lessonId") lessonId, @Param("fileName") fileName) {
+  @Get(":lessonId/files/:filename")
+  async GetLessonFile(@Res() res, @Param("lessonId") lessonId, @Param("filename") filename) {
     try {
       const { lesson, content, ...fileProps } = await this.lessonService.getLessonFile(
         lessonId,
-        fileName
+        filename
       );
 
       if ([".jpg", ".jpeg", ".gif", ".png"].includes(fileProps.ext)) {
         return res.end(content.toString("base64"));
       }
-      if (fileName == "lesson") {
+      if (filename == "lesson") {
         const fileDTO: FileDTO<string> = {
           ...fileProps,
           content: JSON.parse(content.toString()),
@@ -132,18 +132,18 @@ export class LessonController {
   }
 
   @UseGuards(LoginGuard)
-  @Put(":lessonId/files/:fileName")
+  @Put(":lessonId/files/:filename")
   async UpdateLessonFile(
     @Req() req,
     @Param("lessonId") lessonId,
-    @Param("fileName") fileName,
+    @Param("filename") filename,
     @Body() updatedFile: UpdatedFileDTO
   ): Promise<FileDTO<string>> {
     const { lesson, content, ...fileProps } = await this.lessonService.updateLessonFile(
       lessonId,
-      fileName,
+      filename,
       req.user.userId,
-      fileName === "lesson" ? JSON.stringify(updatedFile.content) : updatedFile.content,
+      filename === "lesson" ? JSON.stringify(updatedFile.content) : updatedFile.content,
       req
     );
     const newFile: FileDTO<string> = {
@@ -154,26 +154,26 @@ export class LessonController {
   }
 
   @UseGuards(LoginGuard)
-  @Put(":lessonId/files/:fileName/updateThumbnail")
+  @Put(":lessonId/files/:filename/updateThumbnail")
   async UpdateThumbnail(
     @Req() req,
     @Param("lessonId") lessonId,
-    @Param("fileName") fileName
+    @Param("filename") filename
   ): Promise<any> {
-    const isThumbUpdated = await this.lessonService.updateThumbnail(lessonId, fileName, req);
+    const isThumbUpdated = await this.lessonService.updateThumbnail(lessonId, filename, req);
 
     return isThumbUpdated;
   }
 
   @UseGuards(LoginGuard)
-  @Delete(":lessonId/files/:fileName/:ext")
+  @Delete(":lessonId/files/:filename/:ext")
   async DeleteLessonFile(
     @Req() req,
     @Param("lessonId") lessonId,
-    @Param("fileName") fileName,
+    @Param("filename") filename,
     @Param("ext") ext
   ): Promise<any> {
-    const deleteRes = await this.lessonService.deleteLessonFile(lessonId, fileName, ext, req);
+    const deleteRes = await this.lessonService.deleteLessonFile(lessonId, filename, ext, req);
     return deleteRes;
   }
 }

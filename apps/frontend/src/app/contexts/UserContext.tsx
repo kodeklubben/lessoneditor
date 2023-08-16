@@ -33,7 +33,7 @@ export const UserContextProvider = (props: any) => {
           const lessonId = lesson.lessonId.toString();
           const file = await axios.get(
             paths.LESSON_FILE.replace(":lessonId", lessonId)
-              .replace(":fileName", "preview")
+              .replace(":filename", "preview")
               .replace(":ext", ".png")
           );
 

@@ -58,8 +58,8 @@ export class LessonService {
 
   async getLessonFileNames(lessonId: number): Promise<string[]> {
     const lesson = await this.getLesson(lessonId);
-    const fileNames: string[] = lesson.files.map((file) => file.filename + file.ext);
-    return fileNames;
+    const filenames: string[] = lesson.files.map((file) => file.filename + file.ext);
+    return filenames;
   }
 
   async addLessonUser(lessonId: number, shareLesson: ShareLessonDTO): Promise<void> {
@@ -131,14 +131,14 @@ export class LessonService {
 
   async updateLessonFile(
     lessonId: number,
-    fileName: string,
+    filename: string,
     updatedByUserId: number,
     fileContent: string,
     request: Request
   ): Promise<FileStore> {
     const lesson = await this.getLesson(lessonId);
     lesson.updated_at = new Date();
-    const file = lesson.files.find((file) => file.filename == fileName);
+    const file = lesson.files.find((file) => file.filename == filename);
     if (!file) {
       throw new HttpException("File does not exist", HttpStatus.NOT_FOUND);
     }
@@ -151,7 +151,7 @@ export class LessonService {
 
     // if (updateThumb) {
     //   console.log("thumbUpdated");
-    //   const thumbImage = await this.thumbService.getThumb(lessonId, fileName, request);
+    //   const thumbImage = await this.thumbService.getThumb(lessonId, filename, request);
     //   const previewFile = lesson.files.find((file) => file.filename == "preview");
     //   previewFile.content = Buffer.from(thumbImage);
     // }
@@ -160,18 +160,18 @@ export class LessonService {
     return file;
   }
 
-  async updateThumbnail(lessonId, fileName, request): Promise<any> {
+  async updateThumbnail(lessonId, filename, request): Promise<any> {
     const lesson = await this.getLesson(lessonId);
-    const thumbImage = await this.thumbService.getThumb(lessonId, fileName, request);
+    const thumbImage = await this.thumbService.getThumb(lessonId, filename, request);
     const previewFile = lesson.files.find((file) => file.filename == "preview");
     previewFile.content = Buffer.from(thumbImage);
     const savedLesson = await this.lessonRepository.save(lesson);
     return true;
   }
 
-  async deleteLessonFile(lessonId: number, fileName: string, ext: string, request: Request) {
+  async deleteLessonFile(lessonId: number, filename: string, ext: string, request: Request) {
     const lesson = await this.getLesson(lessonId);
-    const file = lesson.files.find((file) => file.filename === fileName && file.ext === `.${ext}`);
+    const file = lesson.files.find((file) => file.filename === filename && file.ext === `.${ext}`);
 
     if (!file) {
       throw new HttpException("File does not exist", HttpStatus.NOT_FOUND);
