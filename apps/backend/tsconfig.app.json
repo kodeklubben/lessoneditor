@@ -1,7 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../dist/apps/nestbackend",
+    "outDir": "../../dist/apps/backend",
     "module": "commonjs",
     "types": ["node"],
     "emitDecoratorMetadata": true,

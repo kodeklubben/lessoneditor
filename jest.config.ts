@@ -3,7 +3,7 @@ module.exports = {
     "<rootDir>/apps/frontend",
     "<rootDir>/apps/backend",
     "<rootDir>/apps/thumbnailer",
-    "<rootDir>/apps/nestbackend",
+    "<rootDir>/apps/backend",
     "<rootDir>/libs/user",
     "<rootDir>/libs/lessn",
     "<rootDir>/libs/lesson",

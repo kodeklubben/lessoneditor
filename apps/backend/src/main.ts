@@ -25,11 +25,11 @@ async function bootstrap() {
     ExpressSession({
       resave: false,
       saveUninitialized: false,
-      store: new TypeormStore({
-        cleanupLimit: 2,
-        limitSubquery: false,
-        ttl: 86400, // 24 hours
-      }).connect(sessionRepository),
+      // store: new TypeormStore({
+      //   cleanupLimit: 2,
+      //   limitSubquery: false,
+      //   ttl: 86400, // 24 hours
+      // }).connect(sessionRepository),
       secret: process.env.SESSION_SECRET || "keyboard cat", // Make sure to use a strong secret
     })
   );

@@ -18,15 +18,17 @@ The goal of this project is to create a web application that enables teachers to
 
 6. Execute `docker-compose up --build` to run database containers.
 
-7. Run `npm run build-all` to build frontend, contracts and thumbnailer in to the dist-folder.
+7. Run `npm run migration:run` to setup db tables
 
-8. Build the backend with `npm run build-nestbackend`.
+8. Run `npm run build-all` to build frontend, contracts and thumbnailer in to the dist-folder.
 
-9. Start the backend with `npm run start-nestbackend`.
+9. Build the backend with `npm run build-backend`.
 
-10. Start the frontend and thumbnailer with `npm start`.
+10. Start the backend with `npm run start-backend`.
 
-11. Open [http://localhost:4200/](http://localhost:4200) in your browser! Happy coding!
+11. Start the frontend and thumbnailer with `npm start`.
+
+12. Open [http://localhost:4200/](http://localhost:4200) in your browser! Happy coding!
 
 ## Project Structure
 
@@ -40,9 +42,9 @@ The frontend is written in ReactJS and uses Semantic UI React for theming. We al
 
 Thumbnailer is a utility service that captures screenshots of lessons every time a lesson is saved. It uses Puppeteer to accomplish this.
 
-## Nestbackend
+## Backend
 
-Nestbackend manages server services, database management, and communication with Github.
+Backend manages server services, database management, and communication with Github.
 
 ### Setup Dev Environment:
 
@@ -55,18 +57,17 @@ GITHUB_CLIENT_ID= your client ID
 GITHUB_CLIENT_SECRET= your client secret
 GITHUB_CALLBACK_URL= your callback url. ex: http://localhost:4200/api/auth/callback
 THUMB_SERVICE_URL= your thumbnailer url. ex: http://localhost:3012
-GITHUB_LESSON_REPO_OWNER= your gitname
-GITHUB_LESSON_REPO= your lesson_repo name ex "oppgaver"
+GITHUB_LESSON_REPO_OWNER=kodeklubben  //this is the github owner from whom we are going to fork a repo
+GITHUB_LESSON_REPO= oppgaver  //this is the repo we are going to fork, to make pullrequest from
 
-TYPEORM_CONNECTION=postgres
-TYPEORM_HOST=localhost
-TYPEORM_USERNAME=orm-user
-TYPEORM_PASSWORD=testing
-TYPEORM_DATABASE=lesson-editor
-TYPEORM_PORT=5432
-DB_SYNCHRONIZE=false
-DB_LOGGING=true
-DB_ENTITIES=app/nestbackend/src/*/*.entity.ts
+COOKIE_SECRET=secret
+SESSION_SECRET=s3cr3t
+
+ENABLE_PULLREQUESTS=true/false   // to disable pullrequests of submitted lesson - for testing purpose
+
+POSTGRES_USER= your postgres uysername
+POSTGRES_PASSWORD= your postgres password
+POSTGRES_DB= your postgres db name
 ```
 
 ## Database

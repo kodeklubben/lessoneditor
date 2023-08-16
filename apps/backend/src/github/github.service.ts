@@ -30,14 +30,22 @@ export class GithubService {
     lesson: Lesson,
     submitMessage: { message: string }
   ) {
+    console.log({
+      user,
+      accessToken,
+      lesson,
+
+      submitMessage,
+    });
     try {
-      const accessToken = await this.cacheManager.get(user.userId.toString());
+      // const accessToken = await this.cacheManager.get(user.userId.toString());
       this.octokit = new Octokit({ auth: accessToken });
     } catch (error) {
       console.error(error);
     }
-
+    console.log("octokit");
     const { owner, repo, status } = await this.createFork(user);
+    console.log("owner, repo, status", owner, repo, status);
     if (status !== 202) {
       return status;
     }
@@ -132,23 +140,30 @@ export class GithubService {
       const response = await this.octokit.request("GET /users/{username}/repos", {
         username: user.username,
       });
+
       const alreadyForked = response.data.find(
         (item) =>
           item.fork &&
-          item.owner.login == process.env.GITHUB_LESSON_REPO_OWNER &&
-          item.name == process.env.GITHUB_LESSON_REPO
+          item.owner.login === process.env.GITHUB_LESSON_REPO_OWNER &&
+          item.name === process.env.GITHUB_LESSON_REPO
       );
+
       if (alreadyForked) {
+        console.log("Repository already forked. Using the existing fork.");
         return {
-          status: true,
-          owner: process.env.GITHUB_LESSON_REPO_OWNER,
-          repo: process.env.GITHUB_LESSON_REPO,
+          status: 201, // This status indicates that the fork already exists.
+          owner: alreadyForked.owner.login,
+          repo: alreadyForked.name,
         };
       } else {
         const forkResponse = await this.octokit.repos.createFork({
           owner: process.env.GITHUB_LESSON_REPO_OWNER,
           repo: process.env.GITHUB_LESSON_REPO,
         });
+
+        // Adding a delay to ensure fork is ready for subsequent operations.
+        await new Promise((resolve) => setTimeout(resolve, 5000));
+
         return {
           status: forkResponse.status,
           owner: forkResponse.data.owner.login,
@@ -156,7 +171,8 @@ export class GithubService {
         };
       }
     } catch (error) {
-      console.error(error);
+      console.error("Error creating fork:", error);
+      throw error; // Throw the error to be handled by the caller or higher-level error handler.
     }
   }
 
@@ -294,6 +310,12 @@ export class GithubService {
   }
 
   async createPullRequest(username, title, branch, body) {
+    const enabledPullRequests = process.env.ENABLE_PULL_REQUESTS === "true";
+
+    if (!enabledPullRequests) {
+      console.log("Pull requests are disabled.");
+      return null;
+    }
     try {
       console.log("Creating pull request.");
       return await this.octokit.pulls.create({

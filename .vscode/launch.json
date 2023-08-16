@@ -12,30 +12,30 @@
     //   "webRoot": "${workspaceFolder}/apps/frontend/"
     // }
     {
-      "name": "Debug nestbackend node",
+      "name": "Debug backend node",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/dist/apps/nestbackend/apps/nestbackend/src/main.js"
+      "program": "${workspaceFolder}/dist/apps/backend/apps/backend/src/main.js"
     }
     //     {
     //   "name": "Attach to Process",
     //   "type": "node",
     //   "request": "attach",
     //   "port": 9229,
-    //   "outFiles": ["${workspaceFolder}/dist/apps/nestbackend/**"]
+    //   "outFiles": ["${workspaceFolder}/dist/apps/backend/**"]
     // },
 
     //     {
-    //     "name": "Debg nestbackend",
+    //     "name": "Debg backend",
     //     "type": "node",
     //     "request": "launch",
-    //     "args": ["${workspaceRoot}/apps/nestbackend/src/main.ts"],
+    //     "args": ["${workspaceRoot}/apps/backend/src/main.ts"],
     //     "runtimeArgs": ["--require", "ts-node/register"],
     //     "sourceMaps": true,
     //     "cwd": "${workspaceRoot}",
     //     "protocol": "inspector",
     //     "env": {
-    //       "TS_NODE_PROJECT": "${workspaceRoot}/apps/nestbackend/tsconfig.app.json", // Specify the tsconfig to use. See content of it below.
+    //       "TS_NODE_PROJECT": "${workspaceRoot}/apps/backend/tsconfig.app.json", // Specify the tsconfig to use. See content of it below.
     //       "IS_DEBUG_MODE": "true",
     //       "GITHUB_CLIENT_ID": "0a838d7f4cd79f2005b6",
     //       "GITHUB_CLIENT_SECRET": "6e1f0cdb26e59eb7ccfc9cc0bcd00a3524ab65ee",

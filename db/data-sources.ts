@@ -10,8 +10,8 @@ export const dataSourceOptions: DataSourceOptions = {
   password: "testing",
   synchronize: false,
   logging: false,
-  entities: ["dist/apps/nestbackend/**/*.entity.js"],
-  migrations: ["dist/apps/nestbackend/db/migrations/*.js"],
+  entities: ["dist/apps/backend/**/*.entity.js"],
+  migrations: ["dist/apps/backend/db/migrations/*.js"],
 };
 
 const dataSource = new DataSource(dataSourceOptions);

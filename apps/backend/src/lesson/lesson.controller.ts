@@ -53,6 +53,10 @@ export class LessonController {
   @Post(":lessonId/submit")
   async SubmitLesson(@Req() req: Request, @Param() params, @Body() submitMessage) {
     const accessToken: string = req.cookies["access_token"];
+    // console.log("accessToken", accessToken);
+    // console.log("submitMessage", submitMessage);
+    // console.log("params", params);
+    // console.log("req.user", req.user);
     await this.lessonService.submitLesson(
       req.user as User,
       accessToken,
