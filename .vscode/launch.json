@@ -15,22 +15,7 @@
       "name": "Debug nestbackend node",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/dist/apps/nestbackend/apps/nestbackend/src/main.js",
-      "env": {
-        "GITHUB_CLIENT_ID": "0a838d7f4cd79f2005b6",
-        "GITHUB_CALLBACK_URL": "http://localhost:8080/api/auth/callback",
-        "THUMB_SERVICE_URL": "http://localhost:3012/",
-        "GITHUB_LESSON_REPO_OWNER": "kodeklubben",
-        "GITHUB_LESSON_REPO": "oppgaver",
-        "TYPEORM_CONNECTION": "postgres",
-        "TYPEORM_HOST": "host.docker.internal",
-        "TYPEORM_USERNAME": "orm-user",
-        "TYPEORM_PASSWORD": "testing",
-        "TYPEORM_DATABASE": "lesson-editor",
-        "TYPEORM_PORT": "5432",
-        "TYPEORM_SYNCHRONIZE": "false",
-        "TYPEORM_ENTITIES": "dist/**/*.entity.js"
-      }
+      "program": "${workspaceFolder}/dist/apps/nestbackend/apps/nestbackend/src/main.js"
     }
     //     {
     //   "name": "Attach to Process",

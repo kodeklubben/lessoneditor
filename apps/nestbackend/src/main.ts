@@ -18,8 +18,9 @@ console.log("process.env.GITHUB_CLIENT_ID", process?.env?.GITHUB_CLIENT_ID);
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-
+  app.use(cookieParser(process.env.COOKIE_SECRET));
   const sessionRepository = app.get(DataSource).getRepository(Session);
+
   app.use(
     ExpressSession({
       resave: false,
@@ -37,7 +38,6 @@ async function bootstrap() {
 
   app.use(passport.initialize());
   app.use(passport.session());
-  app.use(cookieParser(process.env.COOKIE_SECRET));
 
   const globalPrefix = "api";
   app.setGlobalPrefix(globalPrefix);

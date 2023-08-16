@@ -20,9 +20,7 @@
     },
     "build-app": {
       "executor": "@nrwl/webpack:webpack",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/thumbnailer",
         "main": "apps/thumbnailer/src/function.ts",
@@ -62,16 +60,12 @@
     "lint": {
       "executor": "@nx/linter:eslint",
       "options": {
-        "lintFilePatterns": [
-          "apps/thumbnailer/**/*.ts"
-        ]
+        "lintFilePatterns": ["apps/thumbnailer/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": [
-        "{workspaceRoot}/coverage/apps/thumbnailer"
-      ],
+      "outputs": ["{workspaceRoot}/coverage/apps/thumbnailer"],
       "options": {
         "jestConfig": "apps/thumbnailer/jest.config.ts",
         "passWithNoTests": true

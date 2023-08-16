@@ -12,9 +12,7 @@ import { AuthModule } from "../auth/auth.module";
 import { LoginGuard } from "../auth/login.guard";
 import { join } from "path";
 import { ServeStaticModule } from "@nestjs/serve-static";
-import { User } from "../user/user.entity";
-import { Lesson, FileStore } from "../lesson/lesson.entity";
-import { Session } from "../session/session.entity";
+import { dataSourceOptions } from "../../../../db/data-sources";
 
 @Module({
   imports: [
@@ -27,18 +25,7 @@ import { Session } from "../session/session.entity";
       rootPath: join(__dirname, "../../../../../frontend"),
       exclude: ["/api*"],
     }),
-    TypeOrmModule.forRoot({
-      type: "postgres",
-      host: "localhost",
-      port: 5432,
-      username: "orm-user",
-      database: "lesson-editor",
-      password: "testing",
-      synchronize: true,
-      logging: false,
-      entities: [User, Lesson, FileStore, Session],
-      migrations: ["db/migrations/*.ts"],
-    }),
+    TypeOrmModule.forRoot(dataSourceOptions),
     forwardRef(() => UserModule),
     AuthModule,
     UserModule,
