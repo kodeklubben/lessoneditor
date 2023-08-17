@@ -60,8 +60,21 @@ jobs:
       - run: npm ci
       - run: npm run build-backend
 
+      - name: Install PostgreSQL client
+        run: sudo apt-get install -y postgresql-client
+
       - name: Install Cloud SQL Auth Proxy
         run: wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql_proxy && chmod +x cloud_sql_proxy
+
+      - name: Create PostgreSQL database if not exists
+        run: |
+          PGPASSWORD=$TYPEORM_PASSWORD psql -h $TYPEORM_HOST -U $TYPEORM_USERNAME -p $TYPEORM_PORT -t -c "SELECT 1 FROM pg_database WHERE datname='$TYPEORM_DATABASE'" | grep -q 1 || PGPASSWORD=$TYPEORM_PASSWORD psql -h $TYPEORM_HOST -U $TYPEORM_USERNAME -p $TYPEORM_PORT -c "CREATE DATABASE $TYPEORM_DATABASE"
+        env:
+          TYPEORM_HOST: 127.0.0.1
+          TYPEORM_PORT: 5432
+          TYPEORM_USERNAME: postgres
+          TYPEORM_PASSWORD: pai_kjelke_bever
+          TYPEORM_DATABASE: lesson-editor
 
       - name: Start Cloud SQL Proxy
         run: |
@@ -80,7 +93,7 @@ jobs:
           TYPEORM_SYNCHRONIZE: false
           TYPEORM_MIGRATIONS: db/migrations/**/*.ts
           TYPEORM_MIGRATIONS_DIR: db/migrations
-          TYPEORM_ENTITIES: apps/backend/src/**/*.entity.ts
+          TYPEORM_ENTITIES: apps/backend/src/**/*..entity.ts
 
   # deploy:
   #   permissions:
