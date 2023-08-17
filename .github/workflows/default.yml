@@ -82,8 +82,6 @@ jobs:
           TYPEORM_MIGRATIONS_DIR: db/migrations
           TYPEORM_ENTITIES: apps/backend/src/**/*.entity.ts
 
-      - run: sudo lsof -i:5432
-
   # deploy:
   #   permissions:
   #     contents: "read"

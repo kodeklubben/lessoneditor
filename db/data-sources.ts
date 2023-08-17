@@ -5,7 +5,7 @@ export const dataSourceOptions: DataSourceOptions = {
   type: "postgres",
   host: "127.0.0.1",
   port: 5432,
-  username: "orm-user",
+  username: "postgres",
   database: "lesson-editor",
   password: "pai_kjelke_bever",
   synchronize: false,
