@@ -67,15 +67,9 @@ jobs:
         run: wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql_proxy && chmod +x cloud_sql_proxy
 
       - name: Start Cloud SQL Proxy
-        run: ./cloud_sql_proxy -instances=erik-lessoneditor:europe-north1:lesson-editor=tcp:5432 -credential_file=credentials.json &
+        run: ./cloud_sql_proxy -instances=erik-lessoneditor:europe-north1:lesson-editor=tcp:5432 -credential_file=credentials.json & sleep 2) && npm run typeorm migration:run
         env:
           CREDENTIALS: ${{ secrets.SERVICE_ACCOUNT }}
-
-      - run: sudo lsof -i:5432
-
-      - name: Run Migrations
-        run: (./cloud_sql_proxy -instances=erik-lessoneditor:europe-north1:lesson-editor=tcp:5432 -credential_file=credentials.json & sleep 2) && npm run typeorm migration:run
-        env:
           TYPEORM_CONNECTION: postgres
           TYPEORM_HOST: 127.0.0.1
           TYPEORM_USERNAME: postgres
@@ -83,9 +77,11 @@ jobs:
           TYPEORM_DATABASE: lesson-editor
           TYPEORM_PORT: 5432
           TYPEORM_SYNCHRONIZE: false
-          TYPEORM_MIGRATIONS: db/migration/**/*.ts
-          TYPEORM_MIGRATIONS_DIR: db/migration
-          TYPEORM_ENTITIES: apps/backend/src/user/user.entity.ts,apps/backend/src/lesson/lesson.entity.ts,apps/backend/src/session/session.entity.ts
+          TYPEORM_MIGRATIONS: db/migrations/**/*.ts
+          TYPEORM_MIGRATIONS_DIR: db/migrations
+          TYPEORM_ENTITIES: apps/backend/src/**/*.entity.ts
+
+      - run: sudo lsof -i:5432
 
   # deploy:
   #   permissions:
