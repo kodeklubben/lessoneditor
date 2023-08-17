@@ -60,6 +60,8 @@ jobs:
       - run: npm ci
       - run: npm run build-backend
 
+      - run: psql -h 127.0.0.1 -U postgres -d pai_kjelke_bever -c '\l'
+
       - name: Install Cloud SQL Auth Proxy
         run: wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql_proxy && chmod +x cloud_sql_proxy
 
