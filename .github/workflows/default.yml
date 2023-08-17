@@ -9,112 +9,109 @@ on:
       - main
 
 jobs:
-  test:
-    name: Run Test and Build Apps
-    timeout-minutes: 3
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      - uses: actions/setup-node@v3
-        with:
-          node-version: "18"
-
-      - run: npm ci
-
-      - name: Cache Node Modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: npm-deps-${{ hashFiles('package-lock.json') }}
-
-      - run: npm run test-all
-
-      - run: npm run build-all
-
-      - name: Cache Dist Folder
-        uses: actions/cache@v3
-        with:
-          path: ./dist
-          key: cache-dist-${{ github.sha }}
-
-  # deploy_db:
-  #   name: Deploy to Cloud SQL Postgres
-  #   if: github.ref == 'refs/heads/main'
-  #   timeout-minutes: 5
-  #   needs: test
+  # test:
+  #   name: Run Test and Build Apps
+  #   timeout-minutes: 3
   #   runs-on: ubuntu-latest
   #   steps:
   #     - name: Checkout Code
-  #       uses: actions/checkout@v2
+  #       uses: actions/checkout@v3
 
-  #     # Since we're using the same node version, cached node modules will be reused
-  #     - name: Setup Node.js
-  #       uses: actions/setup-node@v2
+  #     - uses: actions/setup-node@v3
   #       with:
   #         node-version: "18"
 
-  #     - name: Install Cloud SQL Auth Proxy
-  #       run: wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql_proxy && chmod +x cloud_sql_proxy
-
-  #     - name: Setup GCloud
-  #       uses: actions-hub/gcloud@master
-  #       env:
-  #         PROJECT_ID: erik-lessoneditor
-  #         APPLICATION_CREDENTIALS: ${{ secrets.SERVICE_ACCOUNT }}
-  #       with:
-  #         args: info
-
-  #     - name: Authenticate with GCloud and set token
-  #       run: |
-  #         echo ${{ secrets.SERVICE_ACCOUNT }} > credentials.json
-  #         gcloud auth activate-service-account gae-deploy@erik-lessoneditor.iam.gserviceaccount.com --key-file=credentials.json
-  #         echo "ACCESS_TOKEN=$(gcloud auth print-access-token)" >> $GITHUB_ENV
-
   #     - run: npm ci
-  #     - run: npm install -g ts-node
 
-  #     - name: Run Migrations
-  #       run: (./cloud_sql_proxy -instances=erik-lessoneditor:europe-north1:lesson-editor=tcp:5432 -credential_file=credentials.json & sleep 2) && ts-node -P tsconfig.node.json ./node_modules/typeorm/cli.js migration:run
-  #       env:
-  #         TYPEORM_CONNECTION: postgres
-  #         TYPEORM_HOST: localhost
-  #         TYPEORM_USERNAME: gae-deploy@erik-lessoneditor.iam
-  #         TYPEORM_PASSWORD: ${{ env.ACCESS_TOKEN }}
-  #         TYPEORM_DATABASE: lessoneditor
-  #         TYPEORM_PORT: 5432
-  #         TYPEORM_SYNCHRONIZE: false
-  #         TYPEORM_MIGRATIONS: db/migration/**/*.ts
-  #         TYPEORM_MIGRATIONS_DIR: db/migration
-  #         TYPEORM_ENTITIES: apps/backend/src/user/user.entity.ts,apps/backend/src/lesson/lesson.entity.ts,apps/backend/src/session/session.entity.ts
+  #     - name: Cache Node Modules
+  #       uses: actions/cache@v3
+  #       with:
+  #         path: node_modules
+  #         key: npm-deps-${{ hashFiles('package-lock.json') }}
 
-  deploy:
-    permissions:
-      contents: "read"
-      id-token: "write"
-    timeout-minutes: 9
-    needs: test
+  #     - run: npm run test-all
+
+  #     - run: npm run build-all
+
+  #     - name: Cache Dist Folder
+  #       uses: actions/cache@v3
+  #       with:
+  #         path: ./dist
+  #         key: cache-dist-${{ github.sha }}
+
+  deploy_db:
+    name: Deploy to Cloud SQL Postgres
     if: github.ref == 'refs/heads/main'
-    name: Deploy to Google App Engine
+    timeout-minutes: 5
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
-      - name: Restoring Dist Folder
-        uses: actions/cache@v3
-        with:
-          path: ./dist
-          key: cache-dist-${{ github.sha }}
 
-      - id: "auth"
-        name: "Authenticate to Google Cloud"
-        uses: "google-github-actions/auth@v1"
+      # Since we're using the same node version, cached node modules will be reused
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
         with:
-          credentials_json: "${{ secrets.SERVICE_ACCOUNT }}"
+          node-version: "18"
 
-      - id: "deploy"
-        uses: "google-github-actions/deploy-appengine@v1"
+      - name: Install Cloud SQL Auth Proxy
+        run: wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql_proxy && chmod +x cloud_sql_proxy
+
+      - name: Setup GCloud
+        uses: actions-hub/gcloud@master
+        env:
+          PROJECT_ID: erik-lessoneditor
+          APPLICATION_CREDENTIALS: ${{ secrets.SERVICE_ACCOUNT }}
         with:
-          project_id: "erik-lessoneditor"
+          args: info
+
+      - run: 'echo "$SSH_KEY" > credentials.json'
+        env:
+          SSH_KEY: ${{ secrets.SERVICE_ACCOUNT }}
+
+      - run: npm ci
+      - run: npm install -g ts-node
+
+      - name: Run Migrations
+        run: (./cloud_sql_proxy -instances=erik-lessoneditor:europe-north1:lesson-editor=tcp:5432 -credential_file=credentials.json & sleep 2) && npm run typeorm migration:run
+        env:
+          TYPEORM_CONNECTION: postgres
+          TYPEORM_HOST: localhost
+          TYPEORM_USERNAME: gae-deploy@erik-lessoneditor.iam
+          TYPEORM_PASSWORD: ${{ env.ACCESS_TOKEN }}
+          TYPEORM_DATABASE: lessoneditor
+          TYPEORM_PORT: 5432
+          TYPEORM_SYNCHRONIZE: false
+          TYPEORM_MIGRATIONS: db/migration/**/*.ts
+          TYPEORM_MIGRATIONS_DIR: db/migration
+          TYPEORM_ENTITIES: apps/backend/src/user/user.entity.ts,apps/backend/src/lesson/lesson.entity.ts,apps/backend/src/session/session.entity.ts
+
+  # deploy:
+  #   permissions:
+  #     contents: "read"
+  #     id-token: "write"
+  #   timeout-minutes: 9
+  #   needs: test
+  #   if: github.ref == 'refs/heads/main'
+  #   name: Deploy to Google App Engine
+  #   runs-on: ubuntu-latest
+
+  #   steps:
+  #     - name: Checkout Code
+  #       uses: actions/checkout@v3
+  #     - name: Restoring Dist Folder
+  #       uses: actions/cache@v3
+  #       with:
+  #         path: ./dist
+  #         key: cache-dist-${{ github.sha }}
+
+  #     - id: "auth"
+  #       name: "Authenticate to Google Cloud"
+  #       uses: "google-github-actions/auth@v1"
+  #       with:
+  #         credentials_json: "${{ secrets.SERVICE_ACCOUNT }}"
+
+  #     - id: "deploy"
+  #       uses: "google-github-actions/deploy-appengine@v1"
+  #       with:
+  #         project_id: "erik-lessoneditor"
