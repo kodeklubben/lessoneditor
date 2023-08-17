@@ -18,15 +18,21 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - uses: actions/setup-node@v2
+      - name: Setup NodeJS
+        uses: actions/setup-node@v2
         with:
           node-version: "18"
-      - run: npm install
-      - run: npm run test-all
-      - run: npm run test-backend
-      - run: npm run build-all
-      - run: npm run build-backend
-      - name: Caching Dist Folder
+      - name: Install Dependencies
+        run: npm install
+      - name: Run All Tests
+        run: npm run test-all
+      - name: Run Backend Tests
+        run: npm run test-backend
+      - name: Build All Components
+        run: npm run build-all
+      - name: Build Backend Components
+        run: npm run build-backend
+      - name: Cache Compiled Output
         uses: actions/cache@v2
         with:
           path: ./dist
@@ -43,43 +49,36 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: "18"
-
-      - name: Install Dependencies
-        run: npm ci
-
       - name: Install Cloud SQL Auth Proxy
         run: |
+          echo "Downloading Cloud SQL Auth Proxy..."
           wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql_proxy
           chmod +x cloud_sql_proxy
-
       - name: Setup Google Cloud SDK
-        uses: actions-hub/gcloud@master # Use specific version or commit hash
+        uses: actions-hub/gcloud@master
         env:
           PROJECT_ID: erik-lessoneditor
           APPLICATION_CREDENTIALS: ${{ secrets.SERVICE_ACCOUNT }}
         with:
           args: info
-
       - name: Decode and Set Up Service Account
         run: |
-          echo ${{ secrets.SERVICE_ACCOUNT }} | base64 --decode > credentials.json
+          echo "Decoding Service Account..."
+          echo '${{ secrets.SERVICE_ACCOUNT }}' | base64 --decode > credentials.json
           chmod 600 credentials.json
-
       - name: Authenticate with gcloud
-        run: gcloud auth activate-service-account gae-deploy@erik-lessoneditor.iam.gserviceaccount.com --key-file=credentials.json
-
+        run: |
+          echo "Authenticating with gcloud..."
+          gcloud auth activate-service-account gae-deploy@erik-lessoneditor.iam.gserviceaccount.com --key-file=credentials.json
       - name: Get and Store Access Token
         run: |
+          echo "Fetching access token..."
           ACCESS_TOKEN=$(gcloud auth print-access-token)
           echo "ACCESS_TOKEN=${ACCESS_TOKEN}" >> $GITHUB_ENV
-
       - name: Run Migrations
-        run: (./cloud_sql_proxy -instances=erik-lessoneditor:europe-north1:lesson-editor=tcp:5432 -credential_file=credentials.json & sleep 2) && typeorm -d dist/apps/backend/db/data-sources.js -- migration:run
+        run: |
+          echo "Running migrations..."
+          (./cloud_sql_proxy -instances=erik-lessoneditor:europe-north1:lesson-editor=tcp:5432 -credential_file=credentials.json & sleep 2) && typeorm -d dist/apps/backend/db/data-sources.js -- migration:run
         env:
           TYPEORM_CONNECTION: postgres
           TYPEORM_HOST: localhost
@@ -101,26 +100,22 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
-
       - name: Log Current Directory
         run: |
           echo "Current Directory:"
           pwd
           echo "Directory Contents:"
           ls -al
-
-      - name: Restoring Dist Folder
+      - name: Restore Cached Output
         uses: actions/cache@v2
         with:
           path: ./dist
           key: cache-dist-${{ github.sha }}
-
       - id: "auth"
         uses: "google-github-actions/auth@v0.4.1"
         with:
           credentials_json: "${{ secrets.SERVICE_ACCOUNT }}"
-
-      - name: deploy
+      - name: Deploy to App Engine
         uses: google-github-actions/deploy-appengine@v1
         with:
           project_id: "erik-lessoneditor"
