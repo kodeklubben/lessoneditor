@@ -69,7 +69,7 @@ jobs:
 
       - name: Authenticate with GCloud and set token
         run: |
-          echo ${{ secrets.SERVICE_ACCOUNT }} | base64 --decode > credentials.json
+          echo ${{ secrets.SERVICE_ACCOUNT }} > credentials.json
           gcloud auth activate-service-account gae-deploy@erik-lessoneditor.iam.gserviceaccount.com --key-file=credentials.json
           echo "ACCESS_TOKEN=$(gcloud auth print-access-token)" >> $GITHUB_ENV
 
