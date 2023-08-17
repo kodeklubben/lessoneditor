@@ -79,7 +79,7 @@ jobs:
           echo "ACCESS_TOKEN=${ACCESS_TOKEN}" >> $GITHUB_ENV
 
       - name: Run Migrations
-        run: (./cloud_sql_proxy -instances=erik-lessoneditor:europe-west1:lesson-editor=tcp:5432 -credential_file=credentials.json & sleep 2) && typeorm -d dist/apps/backend/db/data-sources.js -- migration:run
+        run: (./cloud_sql_proxy -instances=erik-lessoneditor:europe-north1:lesson-editor=tcp:5432 -credential_file=credentials.json & sleep 2) && typeorm -d dist/apps/backend/db/data-sources.js -- migration:run
         env:
           TYPEORM_CONNECTION: postgres
           TYPEORM_HOST: localhost
@@ -101,15 +101,25 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
+
+      - name: Log Current Directory
+        run: |
+          echo "Current Directory:"
+          pwd
+          echo "Directory Contents:"
+          ls -al
+
       - name: Restoring Dist Folder
         uses: actions/cache@v2
         with:
           path: ./dist
           key: cache-dist-${{ github.sha }}
+
       - id: "auth"
         uses: "google-github-actions/auth@v0.4.1"
         with:
           credentials_json: "${{ secrets.SERVICE_ACCOUNT }}"
+
       - name: deploy
         uses: google-github-actions/deploy-appengine@v1
         with:
