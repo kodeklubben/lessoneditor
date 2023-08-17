@@ -1,5 +1,5 @@
 import "./levels.scss";
-import { Dropdown, Header } from "semantic-ui-react";
+import { Dropdown } from "semantic-ui-react";
 import { FORM_TEXT, levelOptions } from "../settingsFiles/languages/landingpage_NO";
 import { FC, SyntheticEvent } from "react";
 import { YamlContent } from "@lessoneditor/contracts";

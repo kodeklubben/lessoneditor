@@ -1,5 +1,5 @@
 import "./license.scss";
-import { Header, Input } from "semantic-ui-react";
+import { Input } from "semantic-ui-react";
 import { FORM_TEXT } from "../settingsFiles/languages/landingpage_NO";
 import { FC, SyntheticEvent } from "react";
 import { YamlContent } from "@lessoneditor/contracts";

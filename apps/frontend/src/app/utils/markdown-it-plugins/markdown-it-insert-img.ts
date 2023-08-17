@@ -9,6 +9,7 @@ export function insertImg(md: { core: { ruler: string[] } }) {
       t.block = true;
       t.attrSet("src", src);
       t.attrSet("alt", alt);
+      t.attrSet("loading", "lazy");
       return t;
     }
 
@@ -16,11 +17,7 @@ export function insertImg(md: { core: { ruler: string[] } }) {
     "flag" as class name, insert corresponding img.*/
     for (let i = 0; i < state.tokens.length; i++) {
       const token = state.tokens[i];
-      if (
-        token.tag !== "section" &&
-        token.attrs !== null &&
-        token.attrs[0].includes("check")
-      ) {
+      if (token.tag !== "section" && token.attrs !== null && token.attrs[0].includes("check")) {
         tokens.push(token);
         tokens.push(openImg("assets/public/sectionSVG/check.svg", "check"));
       } else if (

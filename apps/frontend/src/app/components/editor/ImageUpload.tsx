@@ -1,8 +1,6 @@
 import { FC, Dispatch, SetStateAction, useState, Ref } from "react";
 import ShowSpinner from "../ShowSpinner";
-import { useParams } from "react-router";
 import { Modal, Button, Header } from "semantic-ui-react";
-import { read } from "fs";
 import { paths } from "@lessoneditor/contracts";
 import axios from "axios";
 import { NewFileDTO } from "@lessoneditor/contracts";
@@ -17,7 +15,7 @@ const imageSizeErrorMessage = "Bildet kan ikke være over 5mb";
 interface ImageUploadProps {
   uploadImageRef: Ref<HTMLInputElement>;
   mdText: string;
-  pushUndoValue: (mdText: string, cursorPositionStart: number) => void;
+  pushUndoValue?: (mdText: string, cursorPositionStart: number) => void;
   cursorPositionStart: number;
   cursorPositionEnd: number;
   setMdText: Dispatch<SetStateAction<string>>;
@@ -28,7 +26,6 @@ interface ImageUploadProps {
 const ImageUpload: FC<ImageUploadProps> = ({
   uploadImageRef,
   mdText,
-  pushUndoValue,
   cursorPositionStart,
   cursorPositionEnd,
   setMdText,

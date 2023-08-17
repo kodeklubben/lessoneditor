@@ -1,7 +1,7 @@
 import "./ladingpagedatamodal.scss";
 import { SyntheticEvent, useEffect, useState, useRef } from "react";
 import { useParams } from "react-router";
-import { Button, Grid, Modal, Popup } from "semantic-ui-react";
+import { Button, Modal, Popup } from "semantic-ui-react";
 import { TagsGrade, TagsSubject, TagsTopic } from "./Tags";
 import CheckboxField from "./CheckboxField";
 

@@ -18,7 +18,7 @@ The goal of this project is to create a web application that enables teachers to
 
 6. Execute `docker-compose up --build` to run database containers.
 
-7. Run `npm run migration:run` to setup db tables
+7. If first time DB is running, it needs to generate tables. Run `npm run migration:run` to setup db tables
 
 8. Run `npm run build-all` to build frontend, contracts and thumbnailer in to the dist-folder.
 
@@ -73,4 +73,7 @@ POSTGRES_DB= your postgres db name
 ## Database
 
 - Install Docker
-- Run `docker-compose up --build` in the root directory to start the database
+- Run `docker-compose up --build` in the root directory to start the database## To create new migrations
+
+- Rememer to create migrations if tables has changes.
+- Remeber to run migrations when DB is running the first time

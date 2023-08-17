@@ -1,5 +1,5 @@
 import "./content.scss";
-import { SyntheticEvent, useState } from "react";
+import { useState } from "react";
 import LessontextItems from "./LessonTextItems";
 import TeacherguideItems from "./TeacherguideItems";
 import AllFiles from "../landingpage/AllFiles";

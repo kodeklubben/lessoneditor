@@ -1,7 +1,7 @@
 import "./textitem.scss";
 import { useNavigate } from "react-router";
-import { Button, Card, Item, Image, Divider, Icon, Modal } from "semantic-ui-react";
-import { FC, useState, useEffect } from "react";
+import { Button, Item, Image, Icon } from "semantic-ui-react";
+import { FC, useState } from "react";
 import { LANGUAGEOPTIONS } from "../frontpage/settings/newLessonOptions";
 import { useUserContext } from "../../contexts/UserContext";
 
