@@ -18,29 +18,21 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: Setup NodeJS
-        uses: actions/setup-node@v2
+      - uses: actions/setup-node@v2
         with:
-          node-version: "18"
-      - name: Install Dependencies
-        run: npm install
-      - name: Run All Tests
-        run: npm run test-all
-      - name: Run Backend Tests
-        run: npm run test-backend
-      - name: Build All Components
-        run: npm run build-all
-      - name: Build Backend Components
-        run: npm run build-backend
-      - name: Cache Compiled Output
+          node-version: "16"
+      - run: npm install
+      - run: npm run test-all
+      - run: npm run build-all
+      - name: Caching Dist Folder
         uses: actions/cache@v2
         with:
           path: ./dist
           key: cache-dist-${{ github.sha }}
 
-  deploy_db:
+  deply_db:
     name: Deploy to Cloud SQL Postgres
-    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    if: github.ref == 'refs/heads/main_disabled' && github.event_name != 'pull_request'
     timeout-minutes: 5
     needs: test
     runs-on: ubuntu-latest
@@ -49,42 +41,33 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      - name: Install Cloud SQL Auth Proxy
-        run: |
-          echo "Downloading Cloud SQL Auth Proxy..."
-          wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql_proxy
-          chmod +x cloud_sql_proxy
-      - name: Setup Google Cloud SDK
-        uses: actions-hub/gcloud@master
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "16"
+      - run: npm install
+      - name: install cloud sql auth proxy
+        run: wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql_proxy && chmod +x cloud_sql_proxy
+      - uses: actions-hub/gcloud@master
         env:
-          PROJECT_ID: erik-lessoneditor
+          PROJECT_ID: lessoneditor
           APPLICATION_CREDENTIALS: ${{ secrets.SERVICE_ACCOUNT }}
         with:
           args: info
-      - name: Decode and Set Up Service Account
-        run: |
-          echo "Decoding Service Account..."
-          echo '${{ secrets.SERVICE_ACCOUNT }}' | base64 --decode > credentials.json
-          chmod 600 credentials.json
-      - name: Authenticate with gcloud
-        run: |
-          echo "Authenticating with gcloud..."
-          gcloud auth activate-service-account gae-deploy@erik-lessoneditor.iam.gserviceaccount.com --key-file=credentials.json
-      - name: Get and Store Access Token
-        run: |
-          echo "Fetching access token..."
-          ACCESS_TOKEN=$(gcloud auth print-access-token)
-          echo "ACCESS_TOKEN=${ACCESS_TOKEN}" >> $GITHUB_ENV
-      - name: Run Migrations
-        run: |
-          echo "Running migrations..."
-          (./cloud_sql_proxy -instances=erik-lessoneditor:europe-north1:lesson-editor=tcp:5432 -credential_file=credentials.json & sleep 2) && typeorm -d dist/apps/backend/db/data-sources.js -- migration:run
+      - name: fetch access token
+        run: echo ${{ secrets.SERVICE_ACCOUNT }} | base64 --decode > credentials.json
+      - run: gcloud auth activate-service-account github-actions@lessoneditor.iam.gserviceaccount.com --key-file=credentials.json
+      - run: gcloud auth print-access-token
+      - run: ACCESS_TOKEN=$(gcloud auth print-access-token); echo "ACCESS_TOKEN=${ACCESS_TOKEN}" >> $GITHUB_ENV
+      - run: npm ci --ignore-scripts --no-optional --prefer-offline --no-audit
+      - run: npm install -g ts-node
+      - name: run migrations
+        run: (./cloud_sql_proxy -instances=lessoneditor:europe-west1:lesson-editor=tcp:5432 -credential_file=credentials.json & sleep 2) && ts-node -P tsconfig.node.json ./node_modules/typeorm/cli.js migration:run
         env:
           TYPEORM_CONNECTION: postgres
           TYPEORM_HOST: localhost
-          TYPEORM_USERNAME: gae-deploy@erik-lessoneditor.iam
+          TYPEORM_USERNAME: github-actions@lessoneditor.iam
           TYPEORM_PASSWORD: ${{ env.ACCESS_TOKEN }}
-          TYPEORM_DATABASE: erik-lessoneditor
+          TYPEORM_DATABASE: lessoneditor
           TYPEORM_PORT: 5432
           TYPEORM_SYNCHRONIZE: false
           TYPEORM_MIGRATIONS: db/migration/**/*.ts
@@ -94,29 +77,20 @@ jobs:
   deploy:
     timeout-minutes: 9
     needs: test
-    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    if: github.ref == 'refs/heads/main_disabled' && github.event_name != 'pull_request'
     name: Deploy to Google App Engine
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
-      - name: Log Current Directory
-        run: |
-          echo "Current Directory:"
-          pwd
-          echo "Directory Contents:"
-          ls -al
-      - name: Restore Cached Output
+      - name: Restoring Dist Folder
         uses: actions/cache@v2
         with:
           path: ./dist
           key: cache-dist-${{ github.sha }}
-      - name: Set up Google Cloud SDK
-        uses: google-github-actions/setup-gcloud@master
+      - id: "auth"
+        uses: "google-github-actions/auth@v0.4.1"
         with:
-          service_account_key: ${{ secrets.SERVICE_ACCOUNT }}
-          project_id: erik-lessoneditor
-          export_default_credentials: true
-      - name: Deploy to App Engine
-        run: |
-          gcloud app deploy app.yaml --quiet
+          credentials_json: "${{ secrets.SERVICE_ACCOUNT }}"
+      - name: deploy
+        uses: google-github-actions/deploy-appengine@main
