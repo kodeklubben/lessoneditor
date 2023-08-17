@@ -54,32 +54,25 @@ jobs:
         with:
           node-version: "18"
 
+      - run: npm ci
+      # - run: npm install -g ts-node
+
       - name: Install Cloud SQL Auth Proxy
         run: wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql_proxy && chmod +x cloud_sql_proxy
 
-      - name: Setup GCloud
-        uses: actions-hub/gcloud@master
+      - name: Start Cloud SQL Proxy
+        run: ./cloud_sql_proxy -instances=YOUR_CLOUD_SQL_CONNECTION_NAME=tcp:5432 -credential_file=credentials.json &
         env:
-          PROJECT_ID: erik-lessoneditor
-          APPLICATION_CREDENTIALS: ${{ secrets.SERVICE_ACCOUNT }}
-        with:
-          args: info
-
-      - run: 'echo "$SSH_KEY" > credentials.json'
-        env:
-          SSH_KEY: ${{ secrets.SERVICE_ACCOUNT }}
-
-      - run: npm ci
-      - run: npm install -g ts-node
+          CREDENTIALS: ${{ secrets.SERVICE_ACCOUNT }}
 
       - name: Run Migrations
         run: (./cloud_sql_proxy -instances=erik-lessoneditor:europe-north1:lesson-editor=tcp:5432 -credential_file=credentials.json & sleep 2) && npm run typeorm migration:run
         env:
           TYPEORM_CONNECTION: postgres
           TYPEORM_HOST: localhost
-          TYPEORM_USERNAME: gae-deploy@erik-lessoneditor.iam
-          TYPEORM_PASSWORD: ${{ env.ACCESS_TOKEN }}
-          TYPEORM_DATABASE: lessoneditor
+          TYPEORM_USERNAME: postgres
+          TYPEORM_PASSWORD: pai_kjelke_bever
+          TYPEORM_DATABASE: lesson-editor
           TYPEORM_PORT: 5432
           TYPEORM_SYNCHRONIZE: false
           TYPEORM_MIGRATIONS: db/migration/**/*.ts
