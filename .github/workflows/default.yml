@@ -20,7 +20,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v2
         with:
-          node-version: "16"
+          node-version: "18"
       - run: npm install
       - run: npm run test-all
       - run: npm run build-all
@@ -43,29 +43,29 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v2
         with:
-          node-version: "16"
+          node-version: "18"
       - run: npm install
       - name: install cloud sql auth proxy
         run: wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql_proxy && chmod +x cloud_sql_proxy
       - uses: actions-hub/gcloud@master
         env:
-          PROJECT_ID: lessoneditor
+          PROJECT_ID: erik-lessoneditor
           APPLICATION_CREDENTIALS: ${{ secrets.SERVICE_ACCOUNT }}
         with:
           args: info
       - name: fetch access token
         run: echo ${{ secrets.SERVICE_ACCOUNT }} | base64 --decode > credentials.json
-      - run: gcloud auth activate-service-account github-actions@lessoneditor.iam.gserviceaccount.com --key-file=credentials.json
+      - run: gcloud auth activate-service-account gae-deploy@erik-lessoneditor.iam.gserviceaccount.com --key-file=credentials.json
       - run: gcloud auth print-access-token
       - run: ACCESS_TOKEN=$(gcloud auth print-access-token); echo "ACCESS_TOKEN=${ACCESS_TOKEN}" >> $GITHUB_ENV
       - run: npm ci --ignore-scripts --no-optional --prefer-offline --no-audit
       - run: npm install -g ts-node
       - name: run migrations
-        run: (./cloud_sql_proxy -instances=lessoneditor:europe-west1:lesson-editor=tcp:5432 -credential_file=credentials.json & sleep 2) && ts-node -P tsconfig.node.json ./node_modules/typeorm/cli.js migration:run
+        run: (./cloud_sql_proxy -instances=erik-lessoneditor:europe-north1:lesson-editor=tcp:5432 -credential_file=credentials.json & sleep 2) && ts-node -P tsconfig.node.json ./node_modules/typeorm/cli.js migration:run
         env:
           TYPEORM_CONNECTION: postgres
           TYPEORM_HOST: localhost
-          TYPEORM_USERNAME: github-actions@lessoneditor.iam
+          TYPEORM_USERNAME: gae-deploy@erik-lessoneditor.iam
           TYPEORM_PASSWORD: ${{ env.ACCESS_TOKEN }}
           TYPEORM_DATABASE: lessoneditor
           TYPEORM_PORT: 5432
