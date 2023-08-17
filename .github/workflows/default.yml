@@ -71,11 +71,13 @@ jobs:
         env:
           CREDENTIALS: ${{ secrets.SERVICE_ACCOUNT }}
 
+      - run: sudo lsof -i:5432
+
       - name: Run Migrations
         run: (./cloud_sql_proxy -instances=erik-lessoneditor:europe-north1:lesson-editor=tcp:5432 -credential_file=credentials.json & sleep 2) && npm run typeorm migration:run
         env:
           TYPEORM_CONNECTION: postgres
-          TYPEORM_HOST: localhost
+          TYPEORM_HOST: 127.0.0.1
           TYPEORM_USERNAME: postgres
           TYPEORM_PASSWORD: pai_kjelke_bever
           TYPEORM_DATABASE: lesson-editor
