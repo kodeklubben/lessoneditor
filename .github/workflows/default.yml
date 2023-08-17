@@ -32,7 +32,8 @@ jobs:
 
   deply_db:
     name: Deploy to Cloud SQL Postgres
-    if: github.ref == 'refs/heads/main_disabled' && github.event_name != 'pull_request'
+    if: github.ref == 'refs/heads/main'
+
     timeout-minutes: 5
     needs: test
     runs-on: ubuntu-latest
@@ -77,7 +78,8 @@ jobs:
   deploy:
     timeout-minutes: 9
     needs: test
-    if: github.ref == 'refs/heads/main_disabled' && github.event_name != 'pull_request'
+    if: github.ref == 'refs/heads/main'
+
     name: Deploy to Google App Engine
     runs-on: ubuntu-latest
     steps:
