@@ -67,7 +67,7 @@ jobs:
         run: wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql_proxy && chmod +x cloud_sql_proxy
 
       - name: Start Cloud SQL Proxy
-        run: ./cloud_sql_proxy -instances=erik-lessoneditor:europe-north1:lesson-editor=tcp:5432 -credential_file=credentials.json & sleep 2) && npm run typeorm migration:run
+        run: ./cloud_sql_proxy -instances=erik-lessoneditor:europe-north1:lesson-editor=tcp:5432 -credential_file=credentials.json & sleep 2 && npm run typeorm migration:run
         env:
           CREDENTIALS: ${{ secrets.SERVICE_ACCOUNT }}
           TYPEORM_CONNECTION: postgres
