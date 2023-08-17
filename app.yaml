@@ -1,5 +1,5 @@
-runtime: nodejs16
-entrypoint: node dist/apps/backend/apps/backend/src/main.js
+runtime: nodejs18
+entrypoint: node dist/apps/backend/main.js
 
 env_variables:
   GITHUB_CLIENT_ID: "e880a288499ff2a0599c"
