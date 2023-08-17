@@ -57,7 +57,7 @@ jobs:
           args: info
       - name: fetch access token
         run: echo ${{ secrets.SERVICE_ACCOUNT }} | base64 --decode > credentials.json
-      - run: gcloud auth activate-service-account github-actions@erik-lessoneditor.iam.gserviceaccount.com --key-file=credentials.json
+      - run: gcloud auth activate-service-account gae-deploy@erik-lessoneditor.iam.gserviceaccount.com --key-file=credentials.json
       - run: gcloud auth print-access-token
       - run: ACCESS_TOKEN=$(gcloud auth print-access-token); echo "ACCESS_TOKEN=${ACCESS_TOKEN}" >> $GITHUB_ENV
 
@@ -66,7 +66,7 @@ jobs:
         env:
           TYPEORM_CONNECTION: postgres
           TYPEORM_HOST: localhost
-          TYPEORM_USERNAME: github-actions@erik-lessoneditor.iam
+          TYPEORM_USERNAME: gae-deploy@erik-lessoneditor.iam
           TYPEORM_PASSWORD: ${{ env.ACCESS_TOKEN }}
           TYPEORM_DATABASE: erik-lessoneditor
           TYPEORM_PORT: 5432
@@ -94,6 +94,6 @@ jobs:
         with:
           credentials_json: "${{ secrets.SERVICE_ACCOUNT }}"
       - name: deploy
-        uses: google-github-actions/deploy-appengine@main
+        uses: google-github-actions/deploy-appengine@v1
         with:
           project_id: "erik-lessoneditor"
