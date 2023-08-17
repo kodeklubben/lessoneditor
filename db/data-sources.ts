@@ -7,7 +7,7 @@ export const dataSourceOptions: DataSourceOptions = {
   port: 5432,
   username: "orm-user",
   database: "lesson-editor",
-  password: "testing",
+  password: "pai_kjelke_bever",
   synchronize: false,
   logging: false,
   entities: ["dist/apps/backend/**/*.entity.js"],
