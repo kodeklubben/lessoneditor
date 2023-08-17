@@ -9,35 +9,35 @@ on:
       - main
 
 jobs:
-  # test:
-  #   name: Run Test and Build Apps
-  #   timeout-minutes: 3
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: Checkout Code
-  #       uses: actions/checkout@v3
+  test:
+    name: Run Test and Build Apps
+    timeout-minutes: 3
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
 
-  #     - uses: actions/setup-node@v3
-  #       with:
-  #         node-version: "18"
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18"
 
-  #     - run: npm ci
+      - run: npm ci
 
-  #     - name: Cache Node Modules
-  #       uses: actions/cache@v3
-  #       with:
-  #         path: node_modules
-  #         key: npm-deps-${{ hashFiles('package-lock.json') }}
+      - name: Cache Node Modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: npm-deps-${{ hashFiles('package-lock.json') }}
 
-  #     - run: npm run test-all
+      - run: npm run test-all
 
-  #     - run: npm run build-all
+      - run: npm run build-all
 
-  #     - name: Cache Dist Folder
-  #       uses: actions/cache@v3
-  #       with:
-  #         path: ./dist
-  #         key: cache-dist-${{ github.sha }}
+      - name: Cache Dist Folder
+        uses: actions/cache@v3
+        with:
+          path: ./dist
+          key: cache-dist-${{ github.sha }}
 
   deploy_db:
     name: Deploy to Cloud SQL Postgres
@@ -82,32 +82,32 @@ jobs:
           TYPEORM_MIGRATIONS_DIR: db/migrations
           TYPEORM_ENTITIES: apps/backend/src/**/*.entity.ts
 
-  # deploy:
-  #   permissions:
-  #     contents: "read"
-  #     id-token: "write"
-  #   timeout-minutes: 9
-  #   needs: test
-  #   if: github.ref == 'refs/heads/main'
-  #   name: Deploy to Google App Engine
-  #   runs-on: ubuntu-latest
+  deploy:
+    permissions:
+      contents: "read"
+      id-token: "write"
+    timeout-minutes: 9
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    name: Deploy to Google App Engine
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #     - name: Checkout Code
-  #       uses: actions/checkout@v3
-  #     - name: Restoring Dist Folder
-  #       uses: actions/cache@v3
-  #       with:
-  #         path: ./dist
-  #         key: cache-dist-${{ github.sha }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+      - name: Restoring Dist Folder
+        uses: actions/cache@v3
+        with:
+          path: ./dist
+          key: cache-dist-${{ github.sha }}
 
-  #     - id: "auth"
-  #       name: "Authenticate to Google Cloud"
-  #       uses: "google-github-actions/auth@v1"
-  #       with:
-  #         credentials_json: "${{ secrets.SERVICE_ACCOUNT }}"
+      - id: "auth"
+        name: "Authenticate to Google Cloud"
+        uses: "google-github-actions/auth@v1"
+        with:
+          credentials_json: "${{ secrets.SERVICE_ACCOUNT }}"
 
-  #     - id: "deploy"
-  #       uses: "google-github-actions/deploy-appengine@v1"
-  #       with:
-  #         project_id: "erik-lessoneditor"
+      - id: "deploy"
+        uses: "google-github-actions/deploy-appengine@v1"
+        with:
+          project_id: "erik-lessoneditor"
