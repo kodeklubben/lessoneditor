@@ -9,37 +9,6 @@ on:
       - main
 
 jobs:
-  test:
-    name: Run Test and Build Apps
-    timeout-minutes: 3
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: "18"
-
-      - name: Cache Node Modules
-        uses: actions/cache@v2
-        with:
-          path: node_modules
-          key: npm-deps-${{ hashFiles('package-lock.json') }}
-
-      - run: npm install
-
-      - run: npm run test-all
-
-      - run: npm run build-all
-
-      - name: Cache Dist Folder
-        uses: actions/cache@v2
-        with:
-          path: ./dist
-          key: cache-dist-${{ github.sha }}
-
   # deploy_db:
   #   name: Deploy to Cloud SQL Postgres
   #   if: github.ref == 'refs/heads/main'
@@ -102,6 +71,26 @@ jobs:
 
     steps:
       - uses: "actions/checkout@v3"
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      # - name: Cache Node Modules
+      #   uses: actions/cache@v2
+      #   with:
+      #     path: node_modules
+      #     key: npm-deps-${{ hashFiles('package-lock.json') }}
+
+      - run: npm ci
+
+      - run: npm run test-all
+
+      - run: npm run test-backend
+
+      - run: npm run build-all
+
+      - run: npm run build-backend
 
       - id: "auth"
         name: "Authenticate to Google Cloud"
