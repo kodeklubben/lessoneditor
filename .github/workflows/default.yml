@@ -48,7 +48,6 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      # Since we're using the same node version, cached node modules will be reused
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
@@ -59,17 +58,19 @@ jobs:
           SSH_KEY: ${{ secrets.SERVICE_ACCOUNT }}
 
       - run: npm ci
-
       - run: npm run build-backend
-      # - run: npm install -g ts-node
 
       - name: Install Cloud SQL Auth Proxy
         run: wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql_proxy && chmod +x cloud_sql_proxy
 
       - name: Start Cloud SQL Proxy
-        run: ./cloud_sql_proxy -instances=erik-lessoneditor:europe-north1:lesson-editor=tcp:5432 -credential_file=credentials.json & sleep 2 && npm run typeorm migration:run
+        run: |
+          ./cloud_sql_proxy -instances=erik-lessoneditor:europe-north1:lesson-editor=tcp:5432 -credential_file=credentials.json &
+          PROXY_PID=$!
+          sleep 10
+          npm run typeorm migration:run
+          kill $PROXY_PID
         env:
-          CREDENTIALS: ${{ secrets.SERVICE_ACCOUNT }}
           TYPEORM_CONNECTION: postgres
           TYPEORM_HOST: 127.0.0.1
           TYPEORM_USERNAME: postgres
