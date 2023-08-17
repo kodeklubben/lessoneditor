@@ -88,6 +88,8 @@ jobs:
 
       - run: npm run test-backend
 
+      - run: npm run build
+
       - run: npm run build-all
 
       - run: npm run build-backend
