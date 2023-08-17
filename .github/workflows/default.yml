@@ -54,6 +54,10 @@ jobs:
         with:
           node-version: "18"
 
+      - run: 'echo "$SSH_KEY" > credentials.json'
+        env:
+          SSH_KEY: ${{ secrets.SERVICE_ACCOUNT }}
+
       - run: npm ci
 
       - run: npm run build-backend
