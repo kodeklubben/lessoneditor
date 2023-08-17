@@ -16,6 +16,7 @@
     "build-all": "nx run-many --target=build --all",
     "build-backend": "tsc --p apps/backend/tsconfig.app.json",
     "build-dev": "nx build-dev backend",
+    "gcp-build": "",
     "build": "(tsc --p apps/backend/tsconfig.app.json) && (nx build)",
     "dep-graph": "nx dep-graph",
     "format:check": "nx format:check",
