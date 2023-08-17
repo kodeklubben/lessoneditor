@@ -1,5 +1,5 @@
 runtime: nodejs18
-entrypoint: node dist/apps/backend/apps/backend/src/main.js
+entrypoint: node dist/apps/backend/main.js
 
 build_env_variables:
   GOOGLE_NODE_RUN_SCRIPTS: ""
