@@ -3,15 +3,15 @@ import { DataSource, DataSourceOptions } from "typeorm";
 
 export const dataSourceOptions: DataSourceOptions = {
   type: "postgres",
-  host: "127.0.0.1",
-  port: 5432,
-  username: "postgres",
-  database: "lesson-editor",
-  password: "pai_kjelke_bever",
-  synchronize: false,
+  host: process.env.POSTGRES_HOST || "127.0.0.1",
+  port: Number(process.env.POSTGRES_PORT) || 5432,
+  username: process.env.POSTGRES_USER || "orm-user",
+  database: process.env.POSTGRES_DB || "lesson-editor",
+  password: process.env.POSTGRES_PASSWORD || "pai_kjelke_bever",
+  synchronize: process.env.POSTGRES_SYNCHRONIZE === "true",
   logging: false,
-  entities: ["dist/apps/backend/**/*.entity.js"],
-  migrations: ["dist/apps/backend/db/migrations/*.js"],
+  entities: [String(process.env.POSTGRES_ENTITIES || "dist/apps/backend/**/*.entity.js")],
+  migrations: [String(process.env.POSTGRES_MIGRATIONS || "dist/apps/backend/db/migrations/*.js")],
 };
 
 const dataSource = new DataSource(dataSourceOptions);

@@ -40,9 +40,13 @@ jobs:
           key: cache-dist-${{ github.sha }}
 
   deploy_db:
+    permissions:
+      contents: "read"
+      id-token: "write"
+    timeout-minutes: 9
+    needs: test
     name: Deploy to Cloud SQL Postgres
     if: github.ref == 'refs/heads/main'
-    timeout-minutes: 5
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -71,16 +75,15 @@ jobs:
           npm run typeorm migration:run
           kill $PROXY_PID
         env:
-          TYPEORM_CONNECTION: postgres
-          TYPEORM_HOST: 127.0.0.1
-          TYPEORM_USERNAME: postgres
-          TYPEORM_PASSWORD: pai_kjelke_bever
-          TYPEORM_DATABASE: lesson-editor
-          TYPEORM_PORT: 5432
-          TYPEORM_SYNCHRONIZE: false
-          TYPEORM_MIGRATIONS: db/migrations/**/*.ts
-          TYPEORM_MIGRATIONS_DIR: db/migrations
-          TYPEORM_ENTITIES: apps/backend/src/**/*.entity.ts
+          POSTGRES_CONNECTION: postgres
+          POSTGRES_HOST: 127.0.0.1
+          POSTGRES_USERNAME: postgres
+          POSTGRES_PASSWORD: pai_kjelke_bever
+          POSTGRES_DATABASE: lesson-editor
+          POSTGRES_PORT: 5432
+          POSTGRES_SYNCHRONIZE: false
+          POSTGRES_MIGRATIONS: db/migrations/**/*.ts
+          POSTGRES_ENTITIES: apps/backend/src/**/*.entity.ts
 
   deploy:
     permissions:
