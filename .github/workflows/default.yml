@@ -58,7 +58,7 @@ jobs:
           chmod +x cloud_sql_proxy
 
       - name: Setup Google Cloud SDK
-        uses: actions-hub/gcloud@<specific-version-or-commit-hash> # Use specific version or commit hash
+        uses: actions-hub/gcloud@v1.0.1 # Use specific version or commit hash
         env:
           PROJECT_ID: erik-lessoneditor
           APPLICATION_CREDENTIALS: ${{ secrets.SERVICE_ACCOUNT }}
