@@ -77,9 +77,9 @@ jobs:
         env:
           POSTGRES_CONNECTION: postgres
           POSTGRES_HOST: 127.0.0.1
-          POSTGRES_USERNAME: postgres
+          POSTGRES_USER: postgres
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          POSTGRES_DATABASE: lesson-editor
+          POSTGRES_DB: lesson-editor
           POSTGRES_PORT: 5432
           POSTGRES_SYNCHRONIZE: false
           POSTGRES_MIGRATIONS: db/migrations/**/*.ts
