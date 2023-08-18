@@ -10,7 +10,6 @@ import { AppModule } from "./app/app.module";
 import { DataSource } from "typeorm";
 import * as ExpressSession from "express-session";
 import { Session } from "./session/session.entity";
-import { TypeormStore } from "connect-typeorm";
 import * as passport from "passport";
 import * as cookieParser from "cookie-parser";
 
@@ -23,7 +22,7 @@ async function getSecret(secretName: string): Promise<string> {
     name: `projects/erik-lessoneditor/secrets/${secretName}/versions/latest`,
   });
 
-  return version.payload.data.toString();
+  return String(version.payload.data).trim();
 }
 
 async function loadSecrets() {
