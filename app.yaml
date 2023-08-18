@@ -1,12 +1,20 @@
 runtime: nodejs18
-entrypoint: node dist/apps/backend/main.js
+entrypoint: node dist/apps/backend/apps/backend/src/main.js
 
-build_env_variables:
-  GOOGLE_NODE_RUN_SCRIPTS: ""
 env_variables:
   GITHUB_CLIENT_ID: "8750d9e11ce9c07846fd"
-  GITHUB_CALLBACK_URL: "https://erik-lessoneditor.nw.r.appspot.com//api/auth/callback"
+  GITHUB_CLIENT_SECRET: "56e59aa22551b69e367be149b5bd2fb400f260fd"
+  GITHUB_CALLBACK_URL: "https://erik-lessoneditor.nw.r.appspot.com/api/auth/callback"
   GITHUB_LESSON_REPO: "oppgaver"
   GITHUB_LESSON_REPO_OWNER: "kodeklubben"
-  THUMB_SERVICE_URL: "https://europe-west1-lessoneditor.cloudfunctions.net/thumbnailer"
-  POSTGRES_HOST: "erik-lessoneditor:europe-north1:lesson-editor"
+  THUMB_SERVICE_URL: "https://europe-west1-erik-lessoneditor.cloudfunctions.net/thumbnailer"
+
+  DISABLE_PULL_REQUESTS: "false"
+
+  POSTGRES_HOST: "/cloudsql/erik-lessoneditor:europe-north1:lesson-editor"
+  POSTGRES_USER: "postgres"
+  POSTGRES_PASSWORD: "pai_kjelke_bever"
+  POSTGRES_DB: "lesson-editor"
+  POSTGRES_PORT: "5432"
+  POSTGRES_ENTITIES: "dist/apps/backend/**/*.entity.js"
+  POSTGRES_MIGRATIONS: "dist/apps/backend/db/migrations/*.js"
