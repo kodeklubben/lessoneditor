@@ -78,7 +78,7 @@ jobs:
           POSTGRES_CONNECTION: postgres
           POSTGRES_HOST: 127.0.0.1
           POSTGRES_USERNAME: postgres
-          POSTGRES_PASSWORD: pai_kjelke_bever
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
           POSTGRES_DATABASE: lesson-editor
           POSTGRES_PORT: 5432
           POSTGRES_SYNCHRONIZE: false
