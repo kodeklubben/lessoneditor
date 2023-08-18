@@ -33,9 +33,6 @@ async function loadSecrets() {
 }
 
 async function bootstrap() {
-  if (process.env.NODE_ENV === "production") {
-    await loadSecrets();
-  }
   Logger.log("process.env.GITHUB_CLIENT_SECRET", process?.env?.GITHUB_CLIENT_SECRET);
   Logger.log("process.env.POSTRES_PASSWORD", process?.env?.POSTGRES_PASSWORD);
   const app = await NestFactory.create(AppModule);
@@ -67,6 +64,10 @@ async function bootstrap() {
   await app.listen(port, () => {
     Logger.log("Listening at http://localhost:" + port + "/" + globalPrefix);
   });
+
+  if (process.env.NODE_ENV === "production") {
+    await loadSecrets();
+  }
 }
 
 bootstrap();
