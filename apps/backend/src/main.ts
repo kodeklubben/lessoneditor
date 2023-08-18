@@ -2,7 +2,7 @@
  * This is not a production server yet!
  * This is only a minimal backend to get started.
  */
-
+import { SecretManagerServiceClient } from "@google-cloud/secret-manager";
 import { Logger } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import * as bodyParser from "body-parser";
@@ -16,7 +16,29 @@ import * as cookieParser from "cookie-parser";
 
 console.log("process.env.GITHUB_CLIENT_ID", process?.env?.GITHUB_CLIENT_ID);
 
+const secretClient = new SecretManagerServiceClient();
+
+async function getSecret(secretName: string): Promise<string> {
+  const [version] = await secretClient.accessSecretVersion({
+    name: `projects/erik-lessoneditor/secrets/${secretName}/versions/latest`,
+  });
+
+  return version.payload.data.toString();
+}
+
+async function loadSecrets() {
+  // Du kan erstatte 'GITHUB_CLIENT_ID' med navnet på din hemmelighet i Secret Manager
+  process.env.GITHUB_CLIENT_SECRET = await getSecret("GITHUB_CLIENT_SECRET");
+  process.env.POSTGRES_PASSWORD = await getSecret("POSTGRES_PASSWORD");
+  // Last inn flere hemmeligheter her om nødvendig
+}
+
 async function bootstrap() {
+  if (process.env.NODE_ENV === "production") {
+    await loadSecrets();
+  }
+  Logger.log("process.env.GITHUB_CLIENT_SECRET", process?.env?.GITHUB_CLIENT_SECRET);
+  Logger.log("process.env.POSTRES_PASSWORD", process?.env?.POSTGRES_PASSWORD);
   const app = await NestFactory.create(AppModule);
   app.use(cookieParser(process.env.COOKIE_SECRET));
   const sessionRepository = app.get(DataSource).getRepository(Session);
