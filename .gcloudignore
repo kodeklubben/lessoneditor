@@ -6,7 +6,10 @@
 # For more information, run:
 #   $ gcloud topic gcloudignore
 #
-/*
-!dist/
-!.env
-!package.json
+# /*
+# !dist/
+.env
+node_modules/
+dist/
+.git/
+# !package.json

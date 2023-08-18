@@ -310,9 +310,9 @@ export class GithubService {
   }
 
   async createPullRequest(username, title, branch, body) {
-    const enabledPullRequests = process.env.ENABLE_PULL_REQUESTS === "true";
+    const disablePullRequests = process.env.DISABLE_PULL_REQUESTS === "true";
 
-    if (!enabledPullRequests) {
+    if (disablePullRequests) {
       console.log("Pull requests are disabled.");
       return null;
     }
