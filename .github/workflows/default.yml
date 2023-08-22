@@ -111,6 +111,7 @@ jobs:
         env:
           CLIENT_ID: ${{ env.CLIENT_ID }}
           CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         with:
           app_yaml_path: "./app.yaml"
       - id: "auth"
