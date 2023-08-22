@@ -38,7 +38,7 @@
     "test-all": "nx run-many --target=test --all",
     "test-backend": "jest -c apps/backend/jest.config.js",
     "test": "nx test",
-    "typeorm": "npm run build-backend && npx typeorm -d dist/apps/backend/db/data-sources.js",
+    "typeorm": "npx typeorm -d dist/apps/backend/db/data-sources.js",
     "update": "nx migrate latest",
     "workspace-generator": "nx workspace-generator"
   },
