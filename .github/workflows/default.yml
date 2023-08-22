@@ -82,8 +82,8 @@ jobs:
           POSTGRES_DB: lesson-editor
           POSTGRES_PORT: 5432
           POSTGRES_SYNCHRONIZE: false
-          POSTGRES_MIGRATIONS: dist/db/migrations/**/*.ts
-          POSTGRES_ENTITIES: dist/apps/backend/src/**/*.entity.ts
+          POSTGRES_MIGRATIONS: dist/db/migrations/**/*.js
+          POSTGRES_ENTITIES: dist/apps/backend/src/**/*.entity.js
 
   deploy:
     permissions:
