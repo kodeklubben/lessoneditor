@@ -107,13 +107,6 @@ jobs:
         with:
           path: ./dist
           key: cache-dist-${{ github.sha }}
-      - uses: 73h/gae-app-yaml-replace-env-variables@v0.3.0
-        env:
-          GITHUB_CLIENT_ID: ${{ env.CLIENT_ID }}
-          GITHUB_CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-        with:
-          app_yaml_path: "./app.yaml"
       - id: "auth"
         name: "Authenticate to Google Cloud"
         uses: "google-github-actions/auth@v1"
@@ -123,4 +116,10 @@ jobs:
       - id: "deploy"
         uses: "google-github-actions/deploy-appengine@v1"
         with:
+          build_env_vars: |-
+            POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+            GITHUB_CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+            GITHUB_CLIENT_ID: ${{ env.CLIENT_ID }}
+            GITHUB_CALLBACK_URL: ${{ env.CALLBACK_URL }}
+            THUMB_SERVICE_URL: ${{ env.THUMB_SERVICE_URL }}
           project_id: "erik-lessoneditor"

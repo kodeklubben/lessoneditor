@@ -2,10 +2,8 @@ runtime: nodejs18
 entrypoint: node dist/apps/backend/apps/backend/src/main.js
 
 env_variables:
-  GITHUB_CALLBACK_URL: "https://erik-lessoneditor.nw.r.appspot.com/api/auth/callback"
   GITHUB_LESSON_REPO: "oppgaver"
   GITHUB_LESSON_REPO_OWNER: "kodeklubben"
-  THUMB_SERVICE_URL: "https://europe-west1-erik-lessoneditor.cloudfunctions.net/thumbnailer"
 
   DISABLE_PULL_REQUESTS: "false"
 
