@@ -62,7 +62,11 @@ jobs:
           SSH_KEY: ${{ secrets.SERVICE_ACCOUNT }}
 
       - run: npm ci
-      - run: npm run build-backend
+      - name: Restoring Dist Folder
+        uses: actions/cache@v3
+        with:
+          path: ./dist
+          key: cache-dist-${{ github.sha }}
 
       - name: Install Cloud SQL Auth Proxy
         run: wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql_proxy && chmod +x cloud_sql_proxy
@@ -103,7 +107,12 @@ jobs:
         with:
           path: ./dist
           key: cache-dist-${{ github.sha }}
-
+      - uses: 73h/gae-app-yaml-replace-env-variables@v0.3.0
+        env:
+          CLIENT_ID: ${{ env.CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+        with:
+          app_yaml_path: "./app.yaml"
       - id: "auth"
         name: "Authenticate to Google Cloud"
         uses: "google-github-actions/auth@v1"

@@ -2,7 +2,6 @@ runtime: nodejs18
 entrypoint: node dist/apps/backend/apps/backend/src/main.js
 
 env_variables:
-  GITHUB_CLIENT_ID: "8750d9e11ce9c07846fd"
   GITHUB_CALLBACK_URL: "https://erik-lessoneditor.nw.r.appspot.com/api/auth/callback"
   GITHUB_LESSON_REPO: "oppgaver"
   GITHUB_LESSON_REPO_OWNER: "kodeklubben"
