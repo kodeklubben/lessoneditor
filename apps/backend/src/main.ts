@@ -2,7 +2,6 @@
  * This is not a production server yet!
  * This is only a minimal backend to get started.
  */
-import { SecretManagerServiceClient } from "@google-cloud/secret-manager";
 import { Logger } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import * as bodyParser from "body-parser";
