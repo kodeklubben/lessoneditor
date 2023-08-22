@@ -78,12 +78,12 @@ jobs:
           POSTGRES_CONNECTION: postgres
           POSTGRES_HOST: 127.0.0.1
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_PASSWORD: pai-kjelke-bever
           POSTGRES_DB: lesson-editor
           POSTGRES_PORT: 5432
           POSTGRES_SYNCHRONIZE: false
-          POSTGRES_MIGRATIONS: db/migrations/**/*.ts
-          POSTGRES_ENTITIES: apps/backend/src/**/*.entity.ts
+          POSTGRES_MIGRATIONS: dist/db/migrations/**/*.ts
+          POSTGRES_ENTITIES: dist/apps/backend/src/**/*.entity.ts
 
   deploy:
     permissions:
@@ -113,9 +113,9 @@ jobs:
         uses: "google-github-actions/deploy-appengine@v1"
         with:
           env_vars: |
-            POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
-            GITHUB_CLIENT_SECRET=${{ secrets.CLIENT_SECRET }}
-            GITHUB_CLIENT_ID=${{ vars.CLIENT_ID }}
-            GITHUB_CALLBACK_URL=${{ vars.CALLBACK_URL }}
-            THUMB_SERVICE_URL=${{ vars.THUMB_SERVICE_URL }}
+            POSTGRES_PASSWORD=pai-kjelke-bever
+            GITHUB_CLIENT_SECRET=4300bdc8a4f79bec5488874eae1c676056332dff
+            GITHUB_CLIENT_ID=29df9fe87b3b11799c63
+            GITHUB_CALLBACK_URL=https://erik-lessoneditor.nw.r.appspot.com/api/auth/callback
+            THUMB_SERVICE_URL=https://europe-west1-erik-lessoneditor.cloudfunctions.net/thumbnailer
           project_id: "erik-lessoneditor"
