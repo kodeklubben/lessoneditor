@@ -7,6 +7,12 @@ env_variables:
 
   DISABLE_PULL_REQUESTS: "false"
 
+  POSTGRES_PASSWORD: pai_kjelke_bever
+  GITHUB_CLIENT_SECRET: 4300bdc8a4f79bec5488874eae1c676056332dff
+  GITHUB_CLIENT_ID: 29df9fe87b3b11799c63
+  GITHUB_CALLBACK_URL: https://erik-lessoneditor.nw.r.appspot.com/api/auth/callback
+  THUMB_SERVICE_URL: https://europe-west1-erik-lessoneditor.cloudfunctions.net/thumbnailer
+
   POSTGRES_HOST: "/cloudsql/erik-lessoneditor:europe-north1:lesson-editor"
   POSTGRES_USER: "postgres"
   POSTGRES_DB: "lesson-editor"
