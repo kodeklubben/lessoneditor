@@ -78,7 +78,7 @@ jobs:
           POSTGRES_CONNECTION: postgres
           POSTGRES_HOST: 127.0.0.1
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: pai-kjelke-bever
+          POSTGRES_PASSWORD: pai_kjelke_bever
           POSTGRES_DB: lesson-editor
           POSTGRES_PORT: 5432
           POSTGRES_SYNCHRONIZE: false
@@ -113,7 +113,7 @@ jobs:
         uses: "google-github-actions/deploy-appengine@v1"
         with:
           env_vars: |
-            POSTGRES_PASSWORD=pai-kjelke-bever
+            POSTGRES_PASSWORD=pai_kjelke_bever
             GITHUB_CLIENT_SECRET=4300bdc8a4f79bec5488874eae1c676056332dff
             GITHUB_CLIENT_ID=29df9fe87b3b11799c63
             GITHUB_CALLBACK_URL=https://erik-lessoneditor.nw.r.appspot.com/api/auth/callback
