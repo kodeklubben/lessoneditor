@@ -109,8 +109,8 @@ jobs:
           key: cache-dist-${{ github.sha }}
       - uses: 73h/gae-app-yaml-replace-env-variables@v0.3.0
         env:
-          CLIENT_ID: ${{ env.CLIENT_ID }}
-          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+          GITHUB_CLIENT_ID: ${{ env.CLIENT_ID }}
+          GITHUB_CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
           POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
         with:
           app_yaml_path: "./app.yaml"
