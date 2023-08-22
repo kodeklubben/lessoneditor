@@ -62,11 +62,7 @@ jobs:
           SSH_KEY: ${{ secrets.SERVICE_ACCOUNT }}
 
       - run: npm ci
-      - name: Restoring Dist Folder
-        uses: actions/cache@v3
-        with:
-          path: ./dist
-          key: cache-dist-${{ github.sha }}
+      - run: npm run build-backend
 
       - name: Install Cloud SQL Auth Proxy
         run: wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql_proxy && chmod +x cloud_sql_proxy
@@ -79,15 +75,16 @@ jobs:
           npm run typeorm migration:run
           kill $PROXY_PID
         env:
-          POSTGRES_CONNECTION: postgres
-          POSTGRES_HOST: 127.0.0.1
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-          POSTGRES_DB: lesson-editor
-          POSTGRES_PORT: 5432
-          POSTGRES_SYNCHRONIZE: false
-          POSTGRES_MIGRATIONS: db/migrations/**/*.ts
-          POSTGRES_ENTITIES: apps/backend/src/**/*.entity.ts
+          TYPEORM_CONNECTION: postgres
+          TYPEORM_HOST: 127.0.0.1
+          TYPEORM_USERNAME: postgres
+          TYPEORM_PASSWORD: pai_kjelke_bever
+          TYPEORM_DATABASE: lesson-editor
+          TYPEORM_PORT: 5432
+          TYPEORM_SYNCHRONIZE: false
+          TYPEORM_MIGRATIONS: db/migrations/**/*.ts
+          TYPEORM_MIGRATIONS_DIR: db/migrations
+          TYPEORM_ENTITIES: apps/backend/src/**/*.entity.ts
 
   deploy:
     permissions:
@@ -117,9 +114,9 @@ jobs:
         uses: "google-github-actions/deploy-appengine@v1"
         with:
           build_env_vars: |-
-            POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-            GITHUB_CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-            GITHUB_CLIENT_ID: ${{ env.CLIENT_ID }}
-            GITHUB_CALLBACK_URL: ${{ env.CALLBACK_URL }}
-            THUMB_SERVICE_URL: ${{ env.THUMB_SERVICE_URL }}
+            POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+            GITHUB_CLIENT_SECRET=${{ secrets.CLIENT_SECRET }}
+            GITHUB_CLIENT_ID=${{ env.CLIENT_ID }}
+            GITHUB_CALLBACK_URL=${{ env.CALLBACK_URL }}
+            THUMB_SERVICE_URL=${{ env.THUMB_SERVICE_URL }}
           project_id: "erik-lessoneditor"
