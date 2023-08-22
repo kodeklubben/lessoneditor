@@ -15,23 +15,6 @@ import * as cookieParser from "cookie-parser";
 
 console.log("process.env.GITHUB_CLIENT_ID", process?.env?.GITHUB_CLIENT_ID);
 
-const secretClient = new SecretManagerServiceClient();
-
-async function getSecret(secretName: string): Promise<string> {
-  const [version] = await secretClient.accessSecretVersion({
-    name: `projects/erik-lessoneditor/secrets/${secretName}/versions/latest`,
-  });
-
-  return String(version.payload.data).trim();
-}
-
-async function loadSecrets() {
-  // Du kan erstatte 'GITHUB_CLIENT_ID' med navnet på din hemmelighet i Secret Manager
-  process.env.GITHUB_CLIENT_SECRET = await getSecret("GITHUB_CLIENT_SECRET");
-  process.env.POSTGRES_PASSWORD = await getSecret("POSTGRES_PASSWORD");
-  // Last inn flere hemmeligheter her om nødvendig
-}
-
 async function bootstrap() {
   Logger.log("process.env.GITHUB_CLIENT_SECRET", process?.env?.GITHUB_CLIENT_SECRET);
   Logger.log("process.env.POSTRES_PASSWORD", process?.env?.POSTGRES_PASSWORD);
@@ -64,10 +47,6 @@ async function bootstrap() {
   await app.listen(port, () => {
     Logger.log("Listening at http://localhost:" + port + "/" + globalPrefix);
   });
-
-  if (process.env.NODE_ENV === "production") {
-    await loadSecrets();
-  }
 }
 
 bootstrap();

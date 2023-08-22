@@ -45,7 +45,6 @@
   "private": true,
   "dependencies": {
     "@google-cloud/functions-framework": "^3.3.0",
-    "@google-cloud/secret-manager": "^5.0.0",
     "@nestjs/axios": "^3.0.0",
     "@nestjs/cache-manager": "^2.1.0",
     "@nestjs/common": "10.2.1",
