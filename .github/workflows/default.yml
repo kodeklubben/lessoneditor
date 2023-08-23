@@ -93,8 +93,23 @@ jobs:
     if: github.ref == 'refs/heads/main'
     name: Deploy to Google App Engine
     runs-on: ubuntu-latest
+    env:
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      POSTGRES_HOST: ${{ vars.POSTGRES_HOST }}
+      GH_CLIENT_ID: ${{ vars.GH_CLIENT_ID }}
+      GH_CLIENT_SECRET: ${{ secrets.GH_CLIENT_SECRET }}
+      GH_CALLBACK_URL: ${{ vars.GH_CALLBACK_URL }}
+      THUMB_SERVICE_URL: ${{ vars.THUMB_SERVICE_URL }}
 
     steps:
+      - name: "Echo variables"
+        run: |
+          echo "${{env.POSTGRES_PASSWORD}}"
+          echo "${{env.GH_CLIENT_SECRET}}"
+          echo "${{env.POSTGRES_HOST}}"
+          echo "${{env.GH_CLIENT_ID}}"
+          echo "${{env.GH_CALLBACK_URL}}"
+          echo "${{env.THUMB_SERVICE_URL}}"
       - name: Checkout Code
         uses: actions/checkout@v3
       - name: Restoring Dist Folder
@@ -112,11 +127,11 @@ jobs:
         uses: "google-github-actions/deploy-appengine@v1"
         with:
           env_vars: |
-            POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
-            GH_CLIENT_SECRET=${{ secrets.GH_CLIENT_SECRET }}
-            POSTGRES_HOST="${{ vars.POSTGRES_HOST }}"
-            GH_CLIENT_ID=${{ vars.GH_CLIENT_ID }}
-            GH_CALLBACK_URL=${{ vars.GH_CALLBACK_URL }}
-            THUMB_SERVICE_URL=${{ vars.THUMB_SERVICE_URL }}
+            POSTGRES_PASSWORD="${{ env.POSTGRES_PASSWORD }}""
+            GH_CLIENT_SECRET="${{ env.GH_CLIENT_SECRET }}"
+            POSTGRES_HOST="${{ env.POSTGRES_HOST }}"
+            GH_CLIENT_ID="${{ env.GH_CLIENT_ID }}"
+            GH_CALLBACK_URL="${{ env.GH_CALLBACK_URL }}"
+            THUMB_SERVICE_URL="${{ env.THUMB_SERVICE_URL }}"
 
           project_id: "erik-lessoneditor"
