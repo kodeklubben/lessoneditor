@@ -117,7 +117,7 @@ jobs:
             POSTGRES_HOST=/cloudsql/lessoneditor:europe-west1:lesson-editor
             POSTGRES_DB=lessoneditor
             GH_CLIENT_ID=29df9fe87b3b11799c63
-            GH_CALLBACK_URL=https://https://lessoneditor.ew.r.appspot.com/api/auth/callback
+            GH_CALLBACK_URL=https://lessoneditor.ew.r.appspot.com/api/auth/callback
             THUMB_SERVICE_URL=https://europe-west1-lessoneditor.cloudfunctions.net/thumbnailer
             GH_LESSON_REPO=oppgaver
             GH_LESSON_REPO_OWNER=kodeklubben
