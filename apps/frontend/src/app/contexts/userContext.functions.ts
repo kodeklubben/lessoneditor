@@ -1,6 +1,5 @@
 import { UserDTO } from "@lessoneditor/contracts";
 import { LessonDTO } from "@lessoneditor/contracts";
-import { Dispatch, SetStateAction } from "react";
 
 export interface UserContextState {
   user: UserDTO | undefined;

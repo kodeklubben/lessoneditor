@@ -1,7 +1,7 @@
 import { ExecutionContext, Injectable, Inject } from "@nestjs/common";
 import { CACHE_MANAGER } from "@nestjs/cache-manager";
 import { AuthGuard } from "@nestjs/passport";
-import { Express, Request, Response } from "express";
+import { Request, Response } from "express";
 import { verify } from "jsonwebtoken";
 import { UserDTO } from "@lessoneditor/contracts";
 import { Cache } from "cache-manager";

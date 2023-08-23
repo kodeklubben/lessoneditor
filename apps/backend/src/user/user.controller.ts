@@ -14,7 +14,6 @@ import {
 import { UserService } from "./user.service";
 import { LessonDTO, NewLessonDTO } from "@lessoneditor/contracts";
 import { UserDTO } from "@lessoneditor/contracts";
-import { query } from "express";
 import { LoginGuard } from "../auth/login.guard";
 
 @Controller("user")

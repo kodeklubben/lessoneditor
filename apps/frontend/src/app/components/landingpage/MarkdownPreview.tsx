@@ -1,6 +1,6 @@
 import "./markdownpreview.scss";
 import React, { FC, useEffect, useState } from "react";
-import { FileDTO, HeaderData, UpdatedFileDTO } from "@lessoneditor/contracts";
+import { FileDTO } from "@lessoneditor/contracts";
 import axios from "axios";
 import { Button, Icon, Modal } from "semantic-ui-react";
 import { paths } from "@lessoneditor/contracts";

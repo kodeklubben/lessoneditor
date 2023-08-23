@@ -1,5 +1,4 @@
-import { Injectable, Scope, Inject, HttpException, HttpStatus } from "@nestjs/common";
-import { REQUEST } from "@nestjs/core";
+import { Injectable } from "@nestjs/common";
 import { HttpService } from "@nestjs/axios";
 import { AxiosResponse } from "axios";
 import * as jwt from "jsonwebtoken";

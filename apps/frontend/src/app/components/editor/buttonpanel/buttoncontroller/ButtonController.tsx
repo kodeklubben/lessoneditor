@@ -1,8 +1,7 @@
 import { FC, RefObject, Dispatch, SetStateAction, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import { buttonAction } from "./utils/buttonMethods";
-import { DEFAULT_TEXT } from "./settings/buttonConfig";
-import { codebuttons, sections } from "./settings/buttonConfig";
+import { codebuttons } from "./settings/buttonConfig";
 import { microbitbuttons, scratchbuttons } from "./settings/microbitAndScratchButtonConfig";
 import { RenderButtons } from "./views/RenderButtons";
 import { RenderMicroScratchButtons } from "./views/RenderMicroScratchButtons";

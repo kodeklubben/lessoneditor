@@ -2,10 +2,9 @@ import { Button, Modal, Header, Dropdown, Radio } from "semantic-ui-react";
 import { FC, SyntheticEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { useUserContext } from "../../contexts/UserContext";
-
 import { useLessonContext } from "../../contexts/LessonContext";
 import * as yaml from "js-yaml";
-import { FileDTO, HeaderData, NewFileDTO, paths } from "@lessoneditor/contracts";
+import { FileDTO, paths } from "@lessoneditor/contracts";
 import { lessonGuideDefaultText } from "./settingsFiles/defaultTexts";
 import axios from "axios";
 import insertMetaDataInTeacherGuide from "./utils/insertMetaDataInTeacherGuide";

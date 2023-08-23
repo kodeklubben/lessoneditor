@@ -1,15 +1,12 @@
-import { Injectable, HttpException, HttpStatus, flatten } from "@nestjs/common";
+import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
 import { Lesson, FileStore } from "./lesson.entity";
 import { User } from "../user/user.entity";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository, Transaction } from "typeorm";
-import { LessonFilterDTO, NewFileDTO, NewLessonDTO, ShareLessonDTO } from "@lessoneditor/contracts";
+import { Repository } from "typeorm";
+import { NewFileDTO, ShareLessonDTO } from "@lessoneditor/contracts";
 import { GithubService } from "../github/github.service";
-import * as fs from "fs";
 import { ThumbService } from "../thumb/thumb.service";
 import { Request } from "express";
-import * as yaml from "js-yaml";
-import { text } from "stream/consumers";
 
 @Injectable()
 export class LessonService {

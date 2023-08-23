@@ -1,12 +1,11 @@
 import { Strategy } from "passport-oauth2";
 import { PassportStrategy } from "@nestjs/passport";
-import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { stringify } from "querystring";
 import { UserService } from "../user/user.service";
 import { UserDTO } from "@lessoneditor/contracts";
 import { lastValueFrom } from "rxjs";
-import { AxiosResponse } from "axios";
 import { HttpService } from "@nestjs/axios";
 import { Inject } from "@nestjs/common";
 import { CACHE_MANAGER } from "@nestjs/cache-manager";

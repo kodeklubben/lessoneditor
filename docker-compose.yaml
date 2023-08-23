@@ -13,20 +13,5 @@ services:
     ports:
       - "5432:5432"
 
-  # pgadmin:
-  #   container_name: pgadmin_container
-  #   image: dpage/pgadmin4:latest
-  #   depends_on:
-  #     - postgres
-  #   environment:
-  #     PGADMIN_DEFAULT_EMAIL: admin@pgadmin.com
-  #     PGADMIN_DEFAULT_PASSWORD: s3cr3t
-  #   volumes:
-  #     - pgadmin_data:/var/lib/pgadmin
-  #   ports:
-  #     - "8081:80"
-  #   restart: always
-
 volumes:
   postgres_data:
-  # pgadmin_data:

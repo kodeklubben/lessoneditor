@@ -1,5 +1,4 @@
 import "./landingpage.scss";
-import { Header } from "semantic-ui-react";
 import Navbar from "../components/navbar/Navbar";
 import NewLessontext from "../components/landingpage/NewLessontext";
 import SubmitLesson from "../components/landingpage/SubmitLesson";

@@ -1,10 +1,8 @@
 import { Controller, UseGuards, Get, Res, Req, Post } from "@nestjs/common";
-import { LockNotSupportedOnGivenDriverError } from "typeorm";
 import { AuthService } from "./auth.service";
-import { AuthGuard } from "@nestjs/passport";
 import { LoginGuard } from "./login.guard";
 import { Request, Response } from "express";
-import { Injectable, Inject } from "@nestjs/common";
+import { Inject } from "@nestjs/common";
 import { CACHE_MANAGER } from "@nestjs/cache-manager";
 import { Cache } from "cache-manager";
 import { UserDTO } from "@lessoneditor/contracts";

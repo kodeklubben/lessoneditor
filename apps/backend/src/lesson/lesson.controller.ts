@@ -8,27 +8,13 @@ import {
   Put,
   Req,
   Res,
-  UseInterceptors,
-  UploadedFile,
   Delete,
 } from "@nestjs/common";
-import { ExpressAdapter, FileInterceptor, MulterModule } from "@nestjs/platform-express";
 import { LessonService } from "./lesson.service";
-import {
-  LessonDTO,
-  FileDTO,
-  LessonFilterDTO,
-  ShareLessonDTO,
-  NewFileDTO,
-} from "@lessoneditor/contracts";
+import { LessonDTO, FileDTO, ShareLessonDTO, NewFileDTO } from "@lessoneditor/contracts";
 import { UserDTO } from "@lessoneditor/contracts";
-import { AuthGuard } from "@nestjs/passport";
-import { fileURLToPath } from "url";
 import { LoginGuard } from "../auth/login.guard";
-import { Multer } from "multer";
-import { Readable } from "stream";
-import * as fs from "fs";
-import { UpdatedFileDTO, YamlContent } from "@lessoneditor/contracts";
+import { UpdatedFileDTO } from "@lessoneditor/contracts";
 import { Request } from "express";
 import { User } from "../user/user.entity";
 

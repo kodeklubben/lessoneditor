@@ -1,16 +1,14 @@
 import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Connection, Repository } from "typeorm";
+import { Repository } from "typeorm";
 import { UserDTO } from "@lessoneditor/contracts";
 import { User } from "./user.entity";
-import { LessonDTO, NewLessonDTO, YamlContent, HeaderData } from "@lessoneditor/contracts";
+import { NewLessonDTO, YamlContent, HeaderData } from "@lessoneditor/contracts";
 import { FileStore, Lesson } from "../lesson/lesson.entity";
 import { ThumbService } from "../thumb/thumb.service";
 import { Request } from "express";
-import { GRADE, SUBJECT, TOPIC, oppgaveMal, imageTemplate } from "./fileTemplates";
-import * as fs from "fs";
+import { oppgaveMal, imageTemplate } from "./fileTemplates";
 import * as yaml from "js-yaml";
-import { FilesInterceptor } from "@nestjs/platform-express";
 
 @Injectable()
 export class UserService {
