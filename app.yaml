@@ -1,14 +1,2 @@
 runtime: nodejs18
 entrypoint: node dist/apps/backend/apps/backend/src/main.js
-
-env_variables:
-  GH_LESSON_REPO: "oppgaver"
-  GH_LESSON_REPO_OWNER: "kodeklubben"
-
-  DISABLE_PULL_REQUESTS: "false"
-
-  POSTGRES_USER: "postgres"
-  POSTGRES_DB: "lesson-editor"
-  POSTGRES_PORT: "5432"
-  POSTGRES_ENTITIES: "dist/apps/backend/**/*.entity.js"
-  POSTGRES_MIGRATIONS: "dist/apps/backend/db/migrations/*.js"

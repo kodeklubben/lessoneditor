@@ -93,13 +93,6 @@ jobs:
     if: github.ref == 'refs/heads/main'
     name: Deploy to Google App Engine
     runs-on: ubuntu-latest
-    env:
-      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-      POSTGRES_HOST: ${{ vars.POSTGRES_HOST }}
-      GH_CLIENT_ID: ${{ vars.GH_CLIENT_ID }}
-      GH_CLIENT_SECRET: ${{ secrets.GH_CLIENT_SECRET }}
-      GH_CALLBACK_URL: ${{ vars.GH_CALLBACK_URL }}
-      THUMB_SERVICE_URL: ${{ vars.THUMB_SERVICE_URL }}
 
     steps:
       - name: Checkout Code
@@ -121,9 +114,17 @@ jobs:
           env_vars: |
             POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
             GH_CLIENT_SECRET=${{ secrets.GH_CLIENT_SECRET }}
-            POSTGRES_HOST=${{ env.POSTGRES_HOST }}
-            GH_CLIENT_ID=${{ env.GH_CLIENT_ID }}
-            GH_CALLBACK_URL=${{ env.GH_CALLBACK_URL }}
-            THUMB_SERVICE_URL=${{ env.THUMB_SERVICE_URL }}
+            POSTGRES_HOST=/cloudsql/lessoneditor:europe-west1:lesson-editor
+            POSTGRES_DB=lessoneditor
+            GH_CLIENT_ID=29df9fe87b3b11799c63
+            GH_CALLBACK_URL=https://erik-lessoneditor.nw.r.appspot.com/api/auth/callback
+            THUMB_SERVICE_URL=https://europe-west1-lessoneditor.cloudfunctions.net/thumbnailer
+            GH_LESSON_REPO=oppgaver
+            GH_LESSON_REPO_OWNER=kodeklubben
+            DISABLE_PULL_REQUESTS=false
+            POSTGRES_USER=postgres
+            POSTGRES_PORT=5432
+            POSTGRES_ENTITIES=dist/apps/backend/**/*.entity.js
+            POSTGRES_MIGRATIONS=dist/apps/backend/db/migrations/*.js
 
           project_id: "erik-lessoneditor"
