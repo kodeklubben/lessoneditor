@@ -37,14 +37,21 @@ Create and edit lessons for the [Lær Kidsa Koding (LKK)](https://kidsakoder.no)
    GH_LESSON_REPO_OWNER=<"Oppgaver"-Repo_owner> (this should be "kodeklubben" in production, but you can use your github name if you have made a fork of https://github.com/kodeklubben/oppgaver and want to test submitting to it instead.)
    GH_LESSON_REPO=oppgaver (name of oppgaver repo)
 
-   COOKIE_SECRET=<Your_Cookie_Secret> (e.g. "s3cr3ts")
-   SESSION_SECRET=<Your_Session_Secret> (e.g. "s3cr3ts")
-
-   DISABLE_PULLREQUESTS=true/false // Use 'true' to disable pull requests for submitted lessons during testing
-
    POSTGRES_USER=<Your_Postgres_Username>
    POSTGRES_PASSWORD=<Your_Postgres_Password>
    POSTGRES_DB=<Your_Postgres_DB_Name>
+
+   POSTGRES_HOST=localhost
+   POSTGRES_PORT=5432
+   POSTGRES_SYNCHRONIZE=false
+   POSTGRES_ENTITIES=dist/apps/backend/**/*.entity.js (must use build files in dev)
+   POSTGRES_MIGRATIONS=dist/apps/backend/db/migrations/*.js (must use build files in dev)
+
+
+   COOKIE_SECRET=<Your_Cookie_Secret> (e.g. "s3cr3ts" )
+   SESSION_SECRET=<Your_Session_Secret> (e.g. "s3cr3ts")
+
+   DISABLE_PULLREQUESTS=false (Use 'true' to disable pull requests for submitted lessons during testing)
    ```
 
 ## 📦 Dependencies Overview
