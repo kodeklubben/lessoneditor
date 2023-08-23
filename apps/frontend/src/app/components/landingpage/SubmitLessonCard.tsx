@@ -1,6 +1,6 @@
 import "./lessoncard.scss";
 import React, { useState } from "react";
-import { Button, Card, Divider, Header, Image } from "semantic-ui-react";
+import { Card, Divider, Button, Header, Image, Icon } from "semantic-ui-react";
 import { useParams } from "react-router";
 import { useUserContext } from "../../contexts/UserContext";
 import SubmitlessonModal from "./SubmitLessonModal";
@@ -29,7 +29,6 @@ const SubmitLessonCard = () => {
             <div className="new-lesson_card__image" onClick={onSubmit}>
               <Image
                 style={{
-                  position: "absolute",
                   height: "5rem",
                   objectFit: "cover",
                   objectPosition: "0 0",

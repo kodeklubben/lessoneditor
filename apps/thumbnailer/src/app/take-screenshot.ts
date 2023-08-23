@@ -1,6 +1,5 @@
 import * as puppeteer from "puppeteer";
 import { Browser } from "puppeteer";
-import { ParsedQs } from "qs";
 import logger from "./logger";
 
 let browser: Browser;
@@ -18,7 +17,7 @@ const takeScreenshot = async (url, token, waitForSelector?) => {
   if (!browser) {
     logger.info("Creating a new browser", metadata);
     browser = await puppeteer.launch({
-      headless: true,
+      headless: "new",
       args: [
         "--no-sandbox",
         "--disable-setuid-sandbox",

@@ -1,4 +1,5 @@
-import { LessonDTO, UserDTO } from "@lessoneditor/contracts";
+import { UserDTO } from "@lessoneditor/contracts";
+import { LessonDTO } from "@lessoneditor/contracts";
 
 export interface UserContextState {
   user: UserDTO | undefined;

@@ -1,9 +1,2 @@
-runtime: nodejs16
+runtime: nodejs18
 entrypoint: node dist/apps/backend/apps/backend/src/main.js
-
-env_variables:
-  GITHUB_CLIENT_ID: "e880a288499ff2a0599c"
-  GITHUB_CALLBACK_URL: "https://lessoneditor.ew.r.appspot.com/api/auth/callback"
-  GITHUB_LESSON_REPO: "oppgaver"
-  GITHUB_LESSON_REPO_OWNER: "kodeklubben"
-  THUMB_SERVICE_URL: "https://europe-west1-lessoneditor.cloudfunctions.net/thumbnailer"

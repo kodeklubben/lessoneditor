@@ -1,4 +1,7 @@
-const Logout : React.FC = () =>
+import react from "react"
+
+
+const Logout : React.FC = () => 
 {
     return (
         <div>
@@ -6,6 +9,6 @@ const Logout : React.FC = () =>
         </div>
 
     )
-}
+} 
 
 export default Logout;

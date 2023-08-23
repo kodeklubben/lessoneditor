@@ -1,9 +1,9 @@
 import "./checkboxfield.scss";
-import { FC, ReactChild } from "react";
+import { FC, ReactNode } from "react";
 
 interface CheckboxFieldProps {
   labelTitle: string;
-  content: ReactChild;
+  content: ReactNode;
 }
 
 const CheckboxField: FC<CheckboxFieldProps> = ({ labelTitle, content }) => {

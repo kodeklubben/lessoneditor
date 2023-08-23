@@ -1,7 +1,7 @@
 import "./item.scss";
 import { LessonDTO } from "@lessoneditor/contracts";
 import React, { useState } from "react";
-import { Button, Card, Icon, Image, Popup } from "semantic-ui-react";
+import { Button, Card, Image, Icon, Popup } from "semantic-ui-react";
 import { useNavigate } from "react-router-dom";
 import { useUserContext } from "../../contexts/UserContext";
 

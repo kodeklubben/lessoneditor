@@ -1,6 +1,7 @@
 import { ButtonController } from "./buttoncontroller/ButtonController";
-import { FC, RefObject } from "react";
+import { RefObject } from "react";
 import { sections as config } from "./buttoncontroller/settings/buttonConfig";
+import { FC } from "react";
 
 interface SectionsProps {
   editorRef: RefObject<HTMLTextAreaElement>;

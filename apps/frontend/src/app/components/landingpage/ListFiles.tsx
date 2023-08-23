@@ -1,6 +1,6 @@
 import "./listfiles.scss";
 import { FC, useEffect, useState } from "react";
-import { Button, Icon, Image, Item, Modal } from "semantic-ui-react";
+import { Item, Button, Modal, Icon, Image } from "semantic-ui-react";
 import axios from "axios";
 import { paths } from "@lessoneditor/contracts";
 import { LANGUAGEOPTIONS } from "../frontpage/settings/newLessonOptions";
@@ -54,7 +54,7 @@ const ListFiles: FC<ListFilesProps> = ({ item, lessonId }) => {
     try {
       const isDeleted = await axios.delete(
         paths.LESSON_FILE_DELETE.replace(":lessonId", lessonId.toString())
-          .replace(":fileName", filename)
+          .replace(":filename", filename)
           .replace(":ext", ext)
       );
       if (isDeleted.data === 1) {
@@ -70,7 +70,7 @@ const ListFiles: FC<ListFilesProps> = ({ item, lessonId }) => {
   const getFile = async () => {
     try {
       const res = await axios.get(
-        paths.LESSON_FILE.replace(":lessonId", lessonId.toString()).replace(":fileName", filename)
+        paths.LESSON_FILE.replace(":lessonId", lessonId.toString()).replace(":filename", filename)
       );
     } catch (e) {
       console.log(e);

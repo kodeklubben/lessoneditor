@@ -2,7 +2,6 @@ import {
   Body,
   Controller,
   Delete,
-  ForbiddenException,
   Get,
   Param,
   Post,
@@ -10,9 +9,11 @@ import {
   Query,
   Req,
   UseGuards,
+  ForbiddenException,
 } from "@nestjs/common";
 import { UserService } from "./user.service";
-import { LessonDTO, NewLessonDTO, UserDTO } from "@lessoneditor/contracts";
+import { LessonDTO, NewLessonDTO } from "@lessoneditor/contracts";
+import { UserDTO } from "@lessoneditor/contracts";
 import { LoginGuard } from "../auth/login.guard";
 
 @Controller("user")
@@ -22,7 +23,8 @@ export class UserController {
   @UseGuards(LoginGuard)
   @Get(":userId/lessons")
   async GetUserLessons(@Param() params): Promise<LessonDTO[]> {
-    return await this.userService.getUserLessons(params.userId);
+    const { lessons, ...userDTO } = await this.userService.getUserLessons(params.userId);
+    return lessons;
   }
 
   @UseGuards(LoginGuard)
@@ -49,7 +51,14 @@ export class UserController {
     @Query("regenThumb") regenThumb: boolean,
     @Body() updatedLesson: LessonDTO
   ): Promise<LessonDTO> {
-    return await this.userService.updateUserLesson(userId, lessonId, regenThumb, updatedLesson);
+    const { users, files, ...updatedLessonDTO } = await this.userService.updateUserLesson(
+      userId,
+      lessonId,
+      regenThumb,
+      updatedLesson,
+      req
+    );
+    return updatedLessonDTO;
   }
 
   @UseGuards(LoginGuard)
@@ -58,7 +67,11 @@ export class UserController {
     @Param("userId") userId,
     @Param("lessonId") lessonId,
     @Query() queryParams
-  ): Promise<boolean> {
-    return await this.userService.deleteUserLesson(userId, lessonId);
+  ): Promise<LessonDTO> {
+    const { users, files, ...deletedLessonDTO } = await this.userService.deleteUserLesson(
+      userId,
+      lessonId
+    );
+    return deletedLessonDTO;
   }
 }

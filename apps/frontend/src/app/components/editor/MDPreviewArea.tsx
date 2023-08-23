@@ -12,14 +12,34 @@ interface MDPreviewProps {
   course: string;
   language: string;
   preview: boolean;
+  lineNumber?: number;
 }
 
-const MDPreviewArea: FC<MDPreviewProps> = ({ mdText, course, language, preview }) => {
+const MDPreviewArea: FC<MDPreviewProps> = ({ mdText, course, language, preview, lineNumber }) => {
   const { images } = useLessonContext();
 
   const [svgContent, setSvgContent] = useState<string>("");
 
   const [parsedMDwithUpdatedImageURLS, setParsedMDwithUpdatedImageURLS] = useState<string>("");
+
+  useEffect(() => {
+    function scrollToLine(lineNumber: number) {
+      const element = document.getElementById(`line-${lineNumber}`);
+      if (element) {
+        const container = document.querySelector(".preview-area");
+        if (container) {
+          const containerHeight = container.clientHeight;
+          const elementHeight = element.clientHeight;
+          //@ts-ignore
+          const elementTop = element.offsetTop - container.offsetTop;
+          const scrollPosition = elementTop - containerHeight / 2 + elementHeight / 2;
+          // @ts-ignore
+          container.scrollTo({ top: scrollPosition, behavior: "smooth" });
+        }
+      }
+    }
+    scrollToLine(lineNumber! - 1 ?? 0);
+  }, [lineNumber]);
 
   useEffect(() => {
     function replaceImageUrlWithBlobUrl(markdownContent: any) {

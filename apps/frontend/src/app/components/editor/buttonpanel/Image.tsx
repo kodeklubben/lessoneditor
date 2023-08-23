@@ -2,7 +2,7 @@ import { RenderButtons } from "./buttoncontroller/views/RenderButtons";
 
 import { useHotkeys } from "react-hotkeys-hook";
 
-import { KEY_COMBINATIONS as KEY, media as config } from "./buttoncontroller/settings/buttonConfig";
+import { media as config, KEY_COMBINATIONS as KEY } from "./buttoncontroller/settings/buttonConfig";
 import { FC, RefObject } from "react";
 
 interface ImageProps {
@@ -21,7 +21,7 @@ const Image: FC<ImageProps> = ({ editorRef, uploadImageRef }) => {
 
       handleButtonClick();
     },
-    {}
+    { enableOnFormTags: ["TEXTAREA"], keydown: true }
   );
   const handleButtonClick = () => {
     uploadImageRef.current ? uploadImageRef.current.click() : "";

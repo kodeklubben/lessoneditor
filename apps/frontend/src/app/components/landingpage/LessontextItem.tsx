@@ -1,6 +1,6 @@
 import "./textitem.scss";
 import { useNavigate } from "react-router";
-import { Button, Icon, Image, Item } from "semantic-ui-react";
+import { Button, Item, Image, Icon } from "semantic-ui-react";
 import { FC, useState } from "react";
 import { LANGUAGEOPTIONS } from "../frontpage/settings/newLessonOptions";
 import { useUserContext } from "../../contexts/UserContext";
@@ -55,6 +55,7 @@ const LessontextItem: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug, 
           loading={loading}
         />
       )}
+
       <Item className="lesson_menu_card">
         <div className="lesson_menu_card_content_container">
           <Item.Content

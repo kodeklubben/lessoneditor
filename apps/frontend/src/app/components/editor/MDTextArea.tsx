@@ -1,5 +1,5 @@
 import "./mdtextarea.scss";
-import { ChangeEvent, Dispatch, FC, KeyboardEvent, MouseEvent, Ref, SetStateAction } from "react";
+import { Dispatch, SetStateAction, ChangeEvent, MouseEvent, KeyboardEvent, FC, Ref } from "react";
 import ContentPlaceholder from "./ContentPlaceholder";
 import { listController, TABcontroller } from "./utils/mdTextAreaControllers";
 
@@ -12,6 +12,7 @@ interface MDTextAreaProps {
     output: string;
     cursorInt: number;
   };
+  lineNumber: number;
   cursorPositionStart: number;
   setCursorPosition: (positionStart: number, positionEnd: number) => void;
   setMdText: Dispatch<SetStateAction<string>>;
@@ -20,6 +21,7 @@ interface MDTextAreaProps {
   setUndoAndUndoPosition: (mdText: string, position: number) => void;
   setRedoAndRedoPosition: (mdText: string, position: number) => void;
   resetButtons: () => void;
+  setLineNumber: Dispatch<SetStateAction<number>>;
 }
 
 const MDTextArea: FC<MDTextAreaProps> = ({
@@ -27,11 +29,13 @@ const MDTextArea: FC<MDTextAreaProps> = ({
   mdText,
   buttonValues,
   listButtonValues,
+  lineNumber,
   cursorPositionStart,
   setCursorPosition,
   setMdText,
   setButtonValues,
   setCursor,
+  setLineNumber,
   setUndoAndUndoPosition,
   setRedoAndRedoPosition,
   resetButtons,
@@ -47,8 +51,24 @@ const MDTextArea: FC<MDTextAreaProps> = ({
     }
   };
 
+  function getLineNumber(text: string, cursorPosition: number) {
+    const lines = text.split("\n");
+    let pos = 0;
+
+    for (let i = 0; i < lines.length; i++) {
+      pos += lines[i].length + 1; // +1 for the '\n' character
+      if (pos >= cursorPosition) return i + 1; // +1 because line numbers start from 1
+    }
+
+    return -1; // return -1 if no line found (should not happen)
+  }
+
   const onTextareaSelect = (event: ChangeEvent<HTMLTextAreaElement>) => {
     const start = event.target.selectionStart;
+    const lineNumber = getLineNumber(mdText, start);
+
+    setLineNumber(lineNumber);
+    // const start = event.target.selectionStart;
     const end = event.target.selectionEnd;
     setCursor(start, end);
   };

@@ -1,5 +1,5 @@
 import { UserService } from "../user/user.service";
-import { UserEntity } from "../user/user.entity";
+import { User } from "../user/user.entity";
 import { PassportSerializer } from "@nestjs/passport";
 import { Injectable } from "@nestjs/common";
 
@@ -9,7 +9,7 @@ export class GithubSerializer extends PassportSerializer {
     super();
   }
 
-  serializeUser(user: UserEntity, done: CallableFunction) {
+  serializeUser(user: User, done: CallableFunction) {
     done(null, user.userId);
   }
 

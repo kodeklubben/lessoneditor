@@ -1,6 +1,7 @@
 import { headerSections } from "./markdown-it-plugins/markdown-it-header-sections";
 import { insertImg } from "./markdown-it-plugins/markdown-it-insert-img";
 import { generateChecklist } from "./markdown-it-plugins/markdown-it-checklist";
+import { markdownItLineNumber } from "./markdown-it-plugins/markdown-it-line-number";
 
 const hljs = require("highlight.js");
 const emoji = require("markdown-it-emoji");
@@ -8,7 +9,7 @@ const markdownCustomContainer = require("markdown-it-container");
 
 const md = require("markdown-it")({
   html: false,
-  breaks: true,
+  breaks: false,
   langPrefix: "",
   highlight: function (str: any, lang: any) {
     if (lang && hljs.getLanguage(lang)) {
@@ -56,7 +57,8 @@ const md = require("markdown-it")({
         return "</div>";
       }
     },
-  });
+  })
+  .use(markdownItLineNumber);
 
 // @ts-ignore
 function getVideoIframeMarkup(url: { url: any }) {

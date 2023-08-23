@@ -2,6 +2,8 @@ import nbFlag from "../../../../assets/public/languagesFlag/flag_nb.svg";
 import nnFlag from "../../../../assets/public/languagesFlag/flag_nn.svg";
 import enFlag from "../../../../assets/public/languagesFlag/flag_en.svg";
 import isFlag from "../../../../assets/public/languagesFlag/flag_is.svg";
+import frFlag from "../../../../assets/public/languagesFlag/flag_fr.svg";
+import samFlag from "../../../../assets/public/languagesFlag/flag_sam.svg";
 
 export const LANGUAGEOPTIONS: Record<string, any>[] = [
   {
@@ -17,6 +19,12 @@ export const LANGUAGEOPTIONS: Record<string, any>[] = [
     image: { avatar: true, src: nnFlag },
   },
   {
+    key: "sam",
+    text: "Samisk",
+    value: "sam",
+    image: { avatar: true, src: samFlag },
+  },
+  {
     key: "en",
     text: "Engelsk",
     value: "en",
@@ -27,6 +35,12 @@ export const LANGUAGEOPTIONS: Record<string, any>[] = [
     text: "Islandsk",
     value: "is",
     image: { avatar: true, src: isFlag },
+  },
+  {
+    key: "fr",
+    text: "Fransk",
+    value: "fr",
+    image: { avatar: true, src: frFlag },
   },
 ];
 

@@ -1,37 +1,38 @@
 import "./newlessonmodal.scss";
-
-import { Dispatch, FC, SetStateAction, SyntheticEvent, useState } from "react";
+import React, { Dispatch, FC, SetStateAction, SyntheticEvent, useState } from "react";
 import slugify from "slugify";
 import { COURSESLIST, LANGUAGEOPTIONS } from "./settings/newLessonOptions";
 import { useUserContext } from "../../contexts/UserContext";
-import { Button, Dropdown, Input, Modal } from "semantic-ui-react";
+import { useNavigate } from "react-router";
+import { Button, Input, Modal, Dropdown } from "semantic-ui-react";
 
 interface NewLessonModalProps {
   openNewLessonModal: boolean;
   setOpenNewLessonModal: Dispatch<SetStateAction<boolean>>;
-  navigateToEditor: (lessonId: number, lessonSlug: string, language: string) => void;
 }
 
-export const NewLessonModal: FC<NewLessonModalProps> = ({
-  openNewLessonModal,
-  setOpenNewLessonModal,
-  navigateToEditor,
-}) => {
-  const [loading, setLoading] = useState(false);
+interface LessonData {
+  lessonTitle: string;
+  language: string;
+  courses: Array<{ key: string; text: string; value: string }>;
+  course: string;
+}
 
+const NewLessonModal: FC<NewLessonModalProps> = ({ openNewLessonModal, setOpenNewLessonModal }) => {
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   const { addLesson } = useUserContext();
-  const defaultState = {
+  const defaultState: LessonData = {
     lessonTitle: "",
     language: LANGUAGEOPTIONS[0].value,
     courses: COURSESLIST,
     course: COURSESLIST[0].value,
   };
-  const [lessonData, setLessonData] = useState(defaultState);
+  const [lessonData, setLessonData] = useState<LessonData>(defaultState);
   const [openNewCourseModal, setOpenNewCourseModal] = useState(false);
   const [isEmptyField, setIsEmptyField] = useState(false);
 
   const errorMessage = "Oppgavetittel må være satt";
-
   const onChange = (e: SyntheticEvent, { name, value }: Record<string, string>) => {
     setLessonData((prevValues) => ({ ...prevValues, [name]: value }));
   };
@@ -58,7 +59,12 @@ export const NewLessonModal: FC<NewLessonModalProps> = ({
     setOpenNewLessonModal(false);
   };
 
-  const onSubmit = async (e: { preventDefault: () => void }) => {
+  const navigateToEditor = (lessonId: number, lessonSlug: string) => {
+    const target = ["/editor", lessonId, lessonSlug, `${lessonData.language}`].join("/");
+    const search = "?init";
+    navigate({ pathname: target, search: search });
+  };
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     const { course, lessonTitle, language } = lessonData;
@@ -67,19 +73,23 @@ export const NewLessonModal: FC<NewLessonModalProps> = ({
       title: lessonTitle,
       slug: slugify(lessonTitle, { lower: true, strict: true }),
     };
-    const courseTitleFromSlug = COURSESLIST.find(({ value }) => value === course);
-    const lessonId = await addLesson(
-      course,
-      courseTitleFromSlug?.text,
-      lesson.slug,
-      lesson.title,
-      language
-    );
-    if (lessonId) {
-      navigateToEditor(lessonId, lesson.slug, lessonData.language);
+    const courseTitleFromSlug = lessonData.courses.find(({ value }) => value === course);
+    try {
+      const lessonId = await addLesson(
+        course,
+        courseTitleFromSlug?.text || "",
+        lesson.slug,
+        lesson.title,
+        language
+      );
+      if (lessonId) {
+        navigateToEditor(lessonId, lesson.slug);
+      }
+    } catch (error) {
+      console.error("Error while adding a lesson:", error);
+    } finally {
+      setLoading(false);
     }
-
-    setLoading(false);
   };
 
   return (
@@ -91,7 +101,6 @@ export const NewLessonModal: FC<NewLessonModalProps> = ({
         content="Kurset vil bli opprettet når moderatorer har gått gjennom innleveringen"
         actions={[{ key: "Ok", content: "Ok", positive: true }]}
       />
-
       <Modal
         className="new-lesson-modal"
         closeOnDimmerClick={!loading}
@@ -126,6 +135,7 @@ export const NewLessonModal: FC<NewLessonModalProps> = ({
                   )}
                 </label>
               </div>
+
               <div className="new-lesson-modal-container__course">
                 Kurs:
                 <br />
@@ -163,7 +173,7 @@ export const NewLessonModal: FC<NewLessonModalProps> = ({
           </form>
         </Modal.Content>
         <Modal.Actions className="newLessonModal">
-          {/* <Button disabled={loading} onClick={closeModal} content="Avbryt" /> */}
+          <Button disabled={loading} onClick={closeModal} content="Avbryt" />
           <Button
             loading={loading}
             form={"skjema-for-oppretting-av-ny-oppgave"}
@@ -179,3 +189,5 @@ export const NewLessonModal: FC<NewLessonModalProps> = ({
     </>
   );
 };
+
+export default NewLessonModal;

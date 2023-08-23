@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { Button, Header, Modal } from "semantic-ui-react";
+import { Modal, Button, Header } from "semantic-ui-react";
 
 const DeleteModal: FC<{
   setOpenDeleteContent: React.Dispatch<React.SetStateAction<boolean>>;

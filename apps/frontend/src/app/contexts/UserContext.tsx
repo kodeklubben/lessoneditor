@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
 import axios from "axios";
-import { LessonDTO, NewLessonDTO, paths, UserDTO } from "@lessoneditor/contracts";
+import { paths } from "@lessoneditor/contracts";
+import { LessonDTO, NewLessonDTO } from "@lessoneditor/contracts";
+import { UserDTO } from "@lessoneditor/contracts";
 
 import {
   initialUserContextState,
@@ -19,14 +20,11 @@ export const UserContextProvider = (props: any) => {
   const [loading, setLoading] = useState<boolean>(true);
   const [previewImage, setPreviewImages] = useState({});
 
-  const location = useLocation();
-
   useEffect(() => {
     async function fetchData() {
       try {
         setLoading(true);
         const userRes = await axios.get<UserDTO>(paths.USER);
-
         const userLessonsRes = await axios.get<LessonDTO[]>(
           paths.USER_LESSONS.replace(":userId", userRes.data.userId.toString())
         );
@@ -35,7 +33,7 @@ export const UserContextProvider = (props: any) => {
           const lessonId = lesson.lessonId.toString();
           const file = await axios.get(
             paths.LESSON_FILE.replace(":lessonId", lessonId)
-              .replace(":fileName", "preview")
+              .replace(":filename", "preview")
               .replace(":ext", ".png")
           );
 
@@ -50,17 +48,17 @@ export const UserContextProvider = (props: any) => {
             ...s,
             user: userRes.data,
             lessons: userLessonsRes.data,
+            loggedIn: true,
           };
         });
-        setUserContextState((s) => ({ ...s, loggedIn: true }));
         setLoading(false);
       } catch (error: any) {
-        console.error(error.message);
-        //window.location.href = "/api/auth/login/";
+        console.log("error");
+        window.location.href = "/api/auth/login/";
       }
     }
     fetchData();
-  }, [location]);
+  }, []);
 
   const getLesson = (lessonId: number): LessonDTO | undefined => {
     return userContexState.lessons?.find((item: LessonDTO) => item.lessonId === lessonId);

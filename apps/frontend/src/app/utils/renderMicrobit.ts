@@ -25,6 +25,7 @@ const renderSpinner = () => {
     img.className = "spinner";
     img.src = "../../assets/public/spinner.gif";
     img.alt = "Spinner";
+    img.loading = "lazy";
     img.width = 100;
     img.height = 100;
 

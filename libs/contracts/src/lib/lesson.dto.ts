@@ -1,15 +1,26 @@
 export interface LessonDTO {
   lessonId: number;
+
   lessonSlug: string;
+
   lessonTitle: string;
+
   courseSlug: string;
+
   courseTitle: string;
+
   submitted: boolean;
+
   submitted_at: Date;
+
   created_by: string;
+
   updated_by: string;
+
   created_at: Date;
+
   updated_at: Date;
+
   language?: string;
 }
 
@@ -20,9 +31,13 @@ export interface ShareLessonDTO {
 
 export interface NewLessonDTO {
   lessonSlug: string;
+
   lessonTitle: string;
+
   courseSlug: string;
+
   courseTitle: string;
+
   language?: string;
 }
 
@@ -34,12 +49,19 @@ export interface YamlContent {
 
 export interface FileDTO<T> {
   fileId: number;
+
   filename: string;
+
   ext: string;
+
   content: T;
+
   created_by?: string;
+
   updated_by?: string;
+
   created_at?: Date;
+
   updated_at?: Date;
 }
 

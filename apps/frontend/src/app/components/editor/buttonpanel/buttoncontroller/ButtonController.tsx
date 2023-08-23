@@ -1,4 +1,4 @@
-import React, { Dispatch, FC, RefObject, SetStateAction, useState } from "react";
+import { FC, RefObject, Dispatch, SetStateAction, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
 import { buttonAction } from "./utils/buttonMethods";
 import { codebuttons } from "./settings/buttonConfig";
@@ -224,7 +224,7 @@ export const ButtonController: FC<ButtonControllerProps> = ({
       event.preventDefault();
       set(buttonSlug);
     },
-    {},
+    { enableOnFormTags: ["TEXTAREA"], keydown: true },
     [toggleButton, setButton]
   );
 

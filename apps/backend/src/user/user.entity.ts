@@ -1,7 +1,8 @@
-import { Column, Entity, PrimaryColumn } from "typeorm";
+import { Entity, Column, PrimaryColumn, ManyToMany, JoinTable } from "typeorm";
+import { Lesson } from "../lesson/lesson.entity";
 
-@Entity("user")
-export class UserEntity {
+@Entity()
+export class User {
   @PrimaryColumn()
   userId: number;
 
@@ -16,4 +17,8 @@ export class UserEntity {
 
   @Column({ nullable: true })
   photo: string;
+
+  @ManyToMany((type) => Lesson, (lesson) => lesson.users)
+  @JoinTable()
+  lessons: Lesson[];
 }

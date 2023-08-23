@@ -9,7 +9,7 @@ import {
 import ListFiles from "../../shared/ListFiles";
 import { useLessonContext } from "../../../contexts/LessonContext";
 
-import { Container, Modal } from "semantic-ui-react";
+import { Modal, Container } from "semantic-ui-react";
 
 const Explorer: FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -24,7 +24,7 @@ const Explorer: FC = () => {
       event.preventDefault();
       handleButtonClick();
     },
-    {}
+    { enableOnFormTags: ["TEXTAREA"], keydown: true }
   );
 
   const handleButtonClick = () => {
@@ -55,7 +55,7 @@ const Explorer: FC = () => {
           <ListFiles
             list={
               state.files?.length > 0
-                ? state.files?.filter((fileName: string) => !filterItems.includes(fileName))
+                ? state.files?.filter((filename: string) => !filterItems.includes(filename))
                 : ["No files found"]
             }
             lessonId={lessonId}

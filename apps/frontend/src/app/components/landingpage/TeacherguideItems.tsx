@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { useLessonContext } from "../../contexts/LessonContext";
 import axios from "axios";
@@ -53,7 +53,7 @@ const TeacherguideItems = () => {
       const files = await fetchFileList();
       await axios.delete(
         paths.LESSON_FILE_DELETE.replace(":lessonId", lessonId.toString())
-          .replace(":fileName", filename)
+          .replace(":filename", filename)
           .replace(":ext", ext)
       );
 

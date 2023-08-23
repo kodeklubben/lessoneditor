@@ -1,42 +1,41 @@
-import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { In, Repository } from "typeorm";
-import { HeaderData, NewLessonDTO, UserDTO, YamlContent } from "@lessoneditor/contracts";
-import { UserEntity } from "./user.entity";
-import { LessonEntity } from "../lesson/lesson.entity";
+import { Repository } from "typeorm";
+import { UserDTO } from "@lessoneditor/contracts";
+import { User } from "./user.entity";
+import { NewLessonDTO, YamlContent, HeaderData } from "@lessoneditor/contracts";
+import { FileStore, Lesson } from "../lesson/lesson.entity";
+import { ThumbService } from "../thumb/thumb.service";
 import { Request } from "express";
-import { imageTemplate, oppgaveMal } from "./fileTemplates";
+import { oppgaveMal, imageTemplate } from "./fileTemplates";
 import * as yaml from "js-yaml";
-import { LessonFileEntity } from "../lesson/lesson-file.entity";
-import { UserLessonsEntity } from "./user-lessons.entity";
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(LessonEntity)
-    private lessonRepository: Repository<LessonEntity>,
-
-    @InjectRepository(UserEntity)
-    private userRepository: Repository<UserEntity>,
-
-    @InjectRepository(LessonFileEntity)
-    private fileRepository: Repository<LessonFileEntity>,
-
-    @InjectRepository(UserLessonsEntity)
-    private userLessonRepository: Repository<UserLessonsEntity>
+    @InjectRepository(Lesson)
+    private lessonRepository: Repository<Lesson>,
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
+    @InjectRepository(FileStore)
+    private fileStoreRepository: Repository<FileStore>,
+    private thumbService: ThumbService
   ) {}
 
-  async getUser(userId: number): Promise<UserEntity> {
-    this.userRepository.metadata;
-    const user = await this.userRepository.findOneBy({ userId });
+  async getUsers(): Promise<User[]> {
+    return await this.userRepository.find();
+  }
+
+  async getUser(userId: number): Promise<User> {
+    const user = await this.userRepository.findOne({ where: { userId }, relations: ["lessons"] });
     if (!user) {
       throw new HttpException("User does not exist", HttpStatus.NOT_FOUND);
     }
     return user;
   }
 
-  async addUser(newUser: UserDTO): Promise<UserEntity> {
-    const user = new UserEntity();
+  async addUser(newUser: UserDTO): Promise<User> {
+    const user = new User();
     user.userId = newUser.userId;
     user.email = newUser.email;
     user.username = newUser.username;
@@ -50,7 +49,7 @@ export class UserService {
     }
   }
 
-  async updateUser(newUser: UserDTO, userId: number): Promise<UserEntity> {
+  async updateUser(newUser: UserDTO, userId: number): Promise<User> {
     const user = await this.getUser(userId);
     user.userId = newUser.userId;
     user.email = newUser.email;
@@ -65,25 +64,20 @@ export class UserService {
     }
   }
 
-  async getUserLessons(userId: number): Promise<LessonEntity[]> {
-    const userLessonRows = await this.userLessonRepository.findBy({
-      userUserId: userId,
-    });
-    const lessonIds = userLessonRows.map((row) => row.lessonLessonsId);
-    return await this.lessonRepository.findBy({
-      lessonId: In(lessonIds),
-    });
+  async getUserLessons(userId: number): Promise<User> {
+    const user = await this.getUser(userId);
+    return user;
   }
 
   async addUserLesson(userId: number, lesson: NewLessonDTO, request: Request): Promise<number> {
-    const user = await this.userRepository.findOneBy({ userId });
+    const user = await this.userRepository.findOne({ where: { userId }, relations: ["lessons"] });
     if (!user) {
       throw new HttpException("User does not exist", HttpStatus.NOT_FOUND);
     }
 
-    const files: LessonFileEntity[] = [];
+    const files: FileStore[] = [];
 
-    const newLesson = new LessonEntity();
+    const newLesson = new Lesson();
     newLesson.lessonTitle = lesson.lessonTitle;
     newLesson.lessonSlug = lesson.lessonSlug;
     newLesson.courseSlug = lesson.courseSlug;
@@ -95,7 +89,7 @@ export class UserService {
     newLesson.created_at = new Date();
 
     const savedLesson = await this.lessonRepository.save(newLesson);
-    const emptyYamlFile = new LessonFileEntity();
+    const emptyYamlFile = new FileStore();
     emptyYamlFile.filename = "lesson";
     const jsonContent: YamlContent = {
       level: 1,
@@ -106,7 +100,7 @@ export class UserService {
     emptyYamlFile.ext = ".yml";
     emptyYamlFile.updated_by = user.username;
     emptyYamlFile.created_by = user.username;
-    emptyYamlFile.lessonLessonId = savedLesson.lessonId;
+    emptyYamlFile.lesson = savedLesson;
 
     const header: HeaderData = {
       title: lesson.lessonTitle,
@@ -118,63 +112,81 @@ export class UserService {
     };
 
     const rawBody = "---\n" + yaml.dump(header) + "---\n" + oppgaveMal;
-    const emptyMdFile = new LessonFileEntity();
+    const emptyMdFile = new FileStore();
     emptyMdFile.content = Buffer.from(rawBody);
     emptyMdFile.ext = ".md";
     emptyMdFile.filename =
       lesson.language === "nb" ? lesson.lessonSlug : `${lesson.lessonSlug}_${lesson.language}`;
     emptyMdFile.updated_by = user.username;
     emptyMdFile.created_by = user.username;
-    emptyMdFile.lessonLessonId = savedLesson.lessonId;
+    emptyMdFile.lesson = savedLesson;
 
-    const templateImage = new LessonFileEntity();
+    const templateImage = new FileStore();
     templateImage.content = Buffer.from(imageTemplate, "base64");
     templateImage.ext = ".png";
     templateImage.filename = "image_rT34Yx";
     templateImage.updated_by = user.username;
     templateImage.created_by = user.username;
-    templateImage.lessonLessonId = savedLesson.lessonId;
+    templateImage.lesson = savedLesson;
+
+    // newLesson.files
+    //   ? newLesson.files.push(defaultReadMeFile, emptyMdFile, emptyYamlFile, templateImage)
+    //   : (newLesson.files = [defaultReadMeFile, emptyMdFile, emptyYamlFile, templateImage]);
 
     files.push(emptyMdFile, emptyYamlFile, templateImage);
+    user.lessons ? user.lessons.push(savedLesson) : (user.lessons = [savedLesson]);
 
-    const promises: Promise<LessonFileEntity>[] = files.map((file) =>
-      this.fileRepository.save(file)
-    );
+    const promises: Promise<FileStore>[] = [];
+    files.map((file) => {
+      promises.push(this.fileStoreRepository.save(file));
+    });
     await Promise.all(promises);
     const savedUser = await this.userRepository.save(user);
 
     try {
-      const previewPngFile = new LessonFileEntity();
+      // const thumbImage = await this.thumbService.getThumb(
+      //   savedLesson.lessonId,
+      //   savedLesson.lessonSlug,
+      //   request
+      // );
+      const previewPngFile = new FileStore();
       previewPngFile.content = Buffer.from(" ");
       previewPngFile.ext = ".png";
       previewPngFile.filename = "preview";
       previewPngFile.updated_by = user.username;
       previewPngFile.created_by = user.username;
-      previewPngFile.lessonLessonId = savedLesson.lessonId;
+      previewPngFile.lesson = savedLesson;
 
-      await this.fileRepository.save(previewPngFile);
+      await this.fileStoreRepository.save(previewPngFile);
     } catch (error) {
       console.error(error.message);
     }
     return savedLesson.lessonId;
   }
-
   async updateUserLesson(
     userId: number,
     lessonId: number,
     regenThumb: boolean,
-    updatedLesson: NewLessonDTO
-  ): Promise<LessonEntity> {
+    updatedLesson: NewLessonDTO,
+    request: Request
+  ): Promise<Lesson> {
     const user = await this.getUser(userId);
-    const isAssignedLesson = await this.userLessonRepository.countBy({
-      userUserId: userId,
-      lessonLessonsId: lessonId,
-    });
-    if (isAssignedLesson !== 1) {
+    const isAssignedLesson = user.lessons.find((lesson) => lesson.lessonId == lessonId);
+    if (!isAssignedLesson) {
       throw new HttpException("Lesson is not assigned user", HttpStatus.NOT_FOUND);
     }
-    const lesson = await this.lessonRepository.findOneBy({ lessonId });
-
+    const lesson = await this.lessonRepository.findOne({
+      where: { lessonId },
+      relations: ["files"],
+    });
+    // if (regenThumb) {
+    //   const previewFile = lesson.files.find((file) => file.filename == "preview");
+    //   if (!previewFile) {
+    //     throw new HttpException("Preview file not found", HttpStatus.NOT_FOUND);
+    //   }
+    //   const thumbImage = await this.thumbService.getThumb(lessonId, lesson.lessonSlug, request);
+    //   previewFile.content = Buffer.from(thumbImage);
+    // }
     lesson.lessonTitle = updatedLesson.lessonTitle;
     lesson.lessonSlug = updatedLesson.lessonSlug;
     lesson.courseSlug = updatedLesson.courseSlug;
@@ -183,27 +195,49 @@ export class UserService {
     lesson.updated_at = new Date();
 
     const savedUser = await this.userRepository.save(user);
-    return await this.lessonRepository.save(lesson);
+    const savedLesson = await this.lessonRepository.save(lesson);
+
+    return savedLesson;
   }
 
-  async deleteUserLesson(userId: number, lessonId: number): Promise<boolean> {
+  async deleteUserLesson(userId: number, lessonId: number): Promise<Lesson> {
     const user = await this.getUser(userId);
-    const lesson = await this.lessonRepository.findOneBy({ lessonId });
+    const lesson = await this.lessonRepository.findOne({
+      where: { lessonId },
+      relations: ["files"],
+    });
 
     if (!lesson) {
       throw new HttpException("Lesson does not exist", HttpStatus.NOT_FOUND);
     }
     //You can only delete the items you have self created
-    if (lesson.created_by !== user.username) {
+    if (!(lesson.created_by == user.username)) {
       throw new HttpException("Lesson can only be deleted by creator", HttpStatus.FORBIDDEN);
     }
-    await this.fileRepository.delete({
-      lessonLessonId: lessonId,
+    const promises: Promise<FileStore>[] = [];
+    lesson.files.map((file) => {
+      promises.push(this.fileStoreRepository.remove(file));
     });
-
-    await this.lessonRepository.delete({
-      lessonId: lessonId,
-    });
-    return true;
+    await Promise.all(promises);
+    user.lessons = user.lessons.filter((lesson) => lesson.lessonId != lessonId);
+    await this.userRepository.save(user);
+    return await this.lessonRepository.remove(lesson);
   }
+
+  // insertMetaData(ymlData: YamlContent) {
+  //   const subject = ymlData.tags.subject.map((element) => {
+  //     return SUBJECT[element];
+  //   });
+  //   const topic = ymlData.tags.topic.map((element) => {
+  //     return TOPIC[element];
+  //   });
+  //   const grade = ymlData.tags.grade.map((element) => {
+  //     return GRADE[element];
+  //   });
+
+  //   let veiledningWithData = oppgaveMal.replace(/{subject}/, subject.join(", "));
+  //   veiledningWithData = veiledningWithData.replace(/{topic}/, topic.join(", "));
+  //   veiledningWithData = veiledningWithData.replace(/{grade}/, grade.join(", "));
+  //   return veiledningWithData;
+  // }
 }

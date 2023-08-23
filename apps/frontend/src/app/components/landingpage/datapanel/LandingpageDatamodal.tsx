@@ -1,5 +1,5 @@
 import "./ladingpagedatamodal.scss";
-import { SyntheticEvent, useEffect, useRef, useState } from "react";
+import { SyntheticEvent, useEffect, useState, useRef } from "react";
 import { useParams } from "react-router";
 import { Button, Modal, Popup } from "semantic-ui-react";
 import { TagsGrade, TagsSubject, TagsTopic } from "./Tags";

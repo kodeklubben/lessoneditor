@@ -1,12 +1,13 @@
-import { CACHE_MANAGER, Inject, Injectable } from "@nestjs/common";
+import { Injectable, Inject } from "@nestjs/common";
+import { CACHE_MANAGER } from "@nestjs/cache-manager";
 import { Cache } from "cache-manager";
 import { Octokit, RestEndpointMethodTypes } from "@octokit/rest";
+import {} from "@octokit/core";
 import { components } from "@octokit/openapi-types";
-import { LessonEntity } from "../lesson/lesson.entity";
-import { UserEntity } from "../user/user.entity";
+import { Lesson } from "../lesson/lesson.entity";
+import { User } from "../user/user.entity";
 import axios from "axios";
 import * as yaml from "js-yaml";
-import { LessonFileEntity } from "../lesson/lesson-file.entity";
 
 interface UploadObject {
   path: string;
@@ -24,29 +25,36 @@ export class GithubService {
   constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {}
 
   async submitLesson(
-    user: UserEntity,
+    user: User,
     accessToken: string,
-    lesson: LessonEntity,
-    files: LessonFileEntity[],
+    lesson: Lesson,
     submitMessage: { message: string }
   ) {
+    console.log({
+      user,
+      accessToken,
+      lesson,
+
+      submitMessage,
+    });
     try {
-      const accessToken = await this.cacheManager.get(user.userId.toString());
+      // const accessToken = await this.cacheManager.get(user.userId.toString());
       this.octokit = new Octokit({ auth: accessToken });
     } catch (error) {
       console.error(error);
     }
-
+    console.log("octokit");
     const { owner, repo, status } = await this.createFork(user);
+    console.log("owner, repo, status", owner, repo, status);
     if (status !== 202) {
       return status;
     }
-    if (!files) {
+    if (!lesson.files) {
       console.warn("No lesson data files");
       return null;
     }
 
-    const files2 = files.map((file) => {
+    const formatLessonData = lesson.files.map((file) => {
       if (file.ext === ".yml") {
         const newContent = yaml.dump(JSON.parse(file.content.toString()));
         return { ...file, content: Buffer.from(newContent, "utf-8") };
@@ -74,10 +82,12 @@ export class GithubService {
         return file;
       }
     });
+
+    lesson.files = formatLessonData;
     const lessonPath = ["src", lesson.courseSlug, lesson.lessonSlug].join("/");
 
     const filesToUpload: UploadObject[] = [];
-    files2.forEach((file) => {
+    lesson.files.forEach((file) => {
       const path = [lessonPath, file.filename + file.ext].join("/");
       if (file.ext === ".yml") {
         filesToUpload.push({
@@ -125,28 +135,35 @@ export class GithubService {
     }
   }
 
-  async createFork(user: UserEntity) {
+  async createFork(user: User) {
     try {
       const response = await this.octokit.request("GET /users/{username}/repos", {
         username: user.username,
       });
+
       const alreadyForked = response.data.find(
         (item) =>
           item.fork &&
-          item.owner.login == process.env.GITHUB_LESSON_REPO_OWNER &&
-          item.name == process.env.GITHUB_LESSON_REPO
+          item.owner.login === process.env.GH_LESSON_REPO_OWNER &&
+          item.name === process.env.GH_LESSON_REPO
       );
+
       if (alreadyForked) {
+        console.log("Repository already forked. Using the existing fork.");
         return {
-          status: true,
-          owner: process.env.GITHUB_LESSON_REPO_OWNER,
-          repo: process.env.GITHUB_LESSON_REPO,
+          status: 201, // This status indicates that the fork already exists.
+          owner: alreadyForked.owner.login,
+          repo: alreadyForked.name,
         };
       } else {
         const forkResponse = await this.octokit.repos.createFork({
-          owner: process.env.GITHUB_LESSON_REPO_OWNER,
-          repo: process.env.GITHUB_LESSON_REPO,
+          owner: process.env.GH_LESSON_REPO_OWNER,
+          repo: process.env.GH_LESSON_REPO,
         });
+
+        // Adding a delay to ensure fork is ready for subsequent operations.
+        await new Promise((resolve) => setTimeout(resolve, 5000));
+
         return {
           status: forkResponse.status,
           owner: forkResponse.data.owner.login,
@@ -154,7 +171,8 @@ export class GithubService {
         };
       }
     } catch (error) {
-      console.error(error);
+      console.error("Error creating fork:", error);
+      throw error; // Throw the error to be handled by the caller or higher-level error handler.
     }
   }
 
@@ -292,11 +310,17 @@ export class GithubService {
   }
 
   async createPullRequest(username, title, branch, body) {
+    const disablePullRequests = process.env.DISABLE_PULL_REQUESTS === "true";
+
+    if (disablePullRequests) {
+      console.log("Pull requests are disabled.");
+      return null;
+    }
     try {
       console.log("Creating pull request.");
       return await this.octokit.pulls.create({
-        owner: process.env.GITHUB_LESSON_REPO_OWNER,
-        repo: process.env.GITHUB_LESSON_REPO,
+        owner: process.env.GH_LESSON_REPO_OWNER,
+        repo: process.env.GH_LESSON_REPO,
         title: title, // title of PR
         head: `${username}:${branch}`,
         base: "master",

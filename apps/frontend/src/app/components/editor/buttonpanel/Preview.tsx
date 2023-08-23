@@ -3,8 +3,8 @@ import { RenderButtons } from "./buttoncontroller/views/RenderButtons";
 import { useHotkeys } from "react-hotkeys-hook";
 
 import {
-  KEY_COMBINATIONS as KEY,
   preview as config,
+  KEY_COMBINATIONS as KEY,
 } from "./buttoncontroller/settings/buttonConfig";
 import { Dispatch, FC, RefObject, SetStateAction } from "react";
 
@@ -21,7 +21,7 @@ const Preview: FC<PreviewProps> = ({ editorRef, setPreview }) => {
 
       handleButtonClick();
     },
-    {}
+    { enableOnFormTags: ["TEXTAREA"], keydown: true }
   );
   const handleButtonClick = () => {
     editorRef.current ? editorRef.current.focus() : "";

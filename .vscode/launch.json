@@ -4,78 +4,11 @@
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
-    // {
-    //   "type": "pwa-chrome",
-    //   "request": "launch",
-    //   "name": "Launch Chrome against localhost",
-    //   "url": "http://localhost:4200",
-    //   "webRoot": "${workspaceFolder}/apps/frontend/"
-    // }
     {
-      "name": "Debug nestbackend node",
+      "name": "Debug backend node",
       "type": "node",
       "request": "launch",
-      "program": "${workspaceFolder}/dist/apps/nestbackend/apps/nestbackend/src/main.js",
-      "env": {
-        "GITHUB_CLIENT_ID": "0a838d7f4cd79f2005b6",
-        "GITHUB_CALLBACK_URL": "http://localhost:8080/api/auth/callback",
-        "THUMB_SERVICE_URL": "http://localhost:3012/",
-        "GITHUB_LESSON_REPO_OWNER": "kodeklubben",
-        "GITHUB_LESSON_REPO": "oppgaver",
-        "TYPEORM_CONNECTION": "postgres",
-        "TYPEORM_HOST": "host.docker.internal",
-        "TYPEORM_USERNAME": "orm-user",
-        "TYPEORM_PASSWORD": "testing",
-        "TYPEORM_DATABASE": "lesson-editor",
-        "TYPEORM_PORT": "5432",
-        "TYPEORM_SYNCHRONIZE": "false",
-        "TYPEORM_ENTITIES": "dist/**/*.entity.js"
-      }
+      "program": "${workspaceFolder}/dist/apps/backend/apps/backend/src/main.js"
     }
-    //     {
-    //   "name": "Attach to Process",
-    //   "type": "node",
-    //   "request": "attach",
-    //   "port": 9229,
-    //   "outFiles": ["${workspaceFolder}/dist/apps/nestbackend/**"]
-    // },
-
-    //     {
-    //     "name": "Debg nestbackend",
-    //     "type": "node",
-    //     "request": "launch",
-    //     "args": ["${workspaceRoot}/apps/nestbackend/src/main.ts"],
-    //     "runtimeArgs": ["--require", "ts-node/register"],
-    //     "sourceMaps": true,
-    //     "cwd": "${workspaceRoot}",
-    //     "protocol": "inspector",
-    //     "env": {
-    //       "TS_NODE_PROJECT": "${workspaceRoot}/apps/nestbackend/tsconfig.app.json", // Specify the tsconfig to use. See content of it below.
-    //       "IS_DEBUG_MODE": "true",
-    //       "GITHUB_CLIENT_ID": "0a838d7f4cd79f2005b6",
-    //       "GITHUB_CLIENT_SECRET": "6e1f0cdb26e59eb7ccfc9cc0bcd00a3524ab65ee",
-    //       "GITHUB_CALLBACK_URL": "http://localhost:4200/api/auth/callback",
-    //       "THUMB_SERVICE_URL": "http://localhost:3012/",
-    //       "GITHUB_LESSON_REPO_OWNER": "kodeklubben",
-    //       "GITHUB_LESSON_REPO": "oppgaver"
-
-    //   }
-    // },
-    //   {
-    //     "name": "Debg thumbnailer",
-    //     "type": "node",
-    //     "request": "launch",
-    //     "args": ["${workspaceRoot}/node_modules/@google-cloud/functions-framework", "--target=thumbnailer", "--port=8090"],
-    //     "runtimeArgs": ["--require", "ts-node/register"],
-    //     "sourceMaps": true,
-    //     "cwd": "${workspaceRoot}",
-    //     "protocol": "inspector",
-    //     "env": {
-    //       "TS_NODE_PROJECT": "${workspaceRoot}/apps/thumbnailer/tsconfig.app.json", // Specify the tsconfig to use. See content of it below.
-    //       "IS_DEBUG_MODE": "true",
-    //   },
-    // }
   ]
 }
-
-//http://localhost:3012/

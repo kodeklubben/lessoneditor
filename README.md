@@ -1,84 +1,68 @@
-# Lesson Editor: Web Application for LKK
+# Lesson Editor for LKK 🚀
 
-## Project Overview
+Create and edit lessons for the [Lær Kidsa Koding (LKK)](https://kidsakoder.no) website without any Git hassles!
 
-The goal of this project is to create a web application that enables teachers to effortlessly create and edit lessons for the Lær Kidsa Koding (LKK) website, kidsakoder.no. Our minimal requirement is a basic, functioning application that doesn't require teachers to have any knowledge of Git when editing or creating exercises for the LKK website.
+## 📌 Features
 
-## Getting Started
+- **Frontend**: Developed using ReactJS with Semantic UI React theming.
+- **Backend**: Manages server services, database, and GitHub communication.
+- **Thumbnailer**: Captures screenshots of lessons when saved using Puppeteer.
 
-1. Install Node Version Manager from [here](https://github.com/nvm-sh/nvm).
+## 🚀 Quick Start
 
-2. In your project's root directory, run `nvm use` to install the correct Node version for this project (Current project is dependent on NodeJS v16).
+1. **Prerequisites**: Install [Node Version Manager](https://github.com/nvm-sh/nvm) and [Docker-Desktop](https://www.docker.com/products/docker-desktop/).
+2. **Node Version**: Ensure NodeJS is installed using `nvm use` (correct version in ./.nvmrc).
+3. **Setup**: Install the required dependencies using `npm install`.
+4. **Database**: Set up the database by executing `docker-compose up --build`.
+   - If running the DB for the first time, set up tables using `npm run migration:run`.
+5. **Build**:
+   - Frontend, contracts, and thumbnailer: `npm run build-all`.
+   - Backend: `npm run build-backend`.
+6. **Run**:
 
-3. Run `npm install` to install all necessary dependencies.
+   - Backend: `npm run start-backend`.
+   - Frontend & Thumbnailer: `npm start`.
 
-4. [Set up your Development Environment](#setup-dev-environment).
+7. **Development Setup**: Before accessing the application, ensure you've followed the [Development Setup](#-development-setup) to configure your environment properly.
 
-5. Install and run [Docker-Desktop](https://www.docker.com/products/docker-desktop/).
+8. 🌍 **Access**: Open [http://localhost:4200/](http://localhost:4200) and start editing!
 
-6. Execute `docker-compose up --build` to run database containers.
+## 🛠 Development Setup
 
-7. Run `npm run build-all` to build frontend, contracts and thumbnailer in to the dist-folder.
+1. Create a new OAuth app on [GitHub](https://github.com/settings/developers).
+2. Create a `.env` file in the project's root and populate with necessary values:
 
-8. Build the backend with `npm run build-nestbackend`.
+   ```bash
+   GH_CLIENT_ID=<Your_GitHub_Client_ID>
+   GH_CLIENT_SECRET=<Your_GitHub_Client_Secret>
+   GH_CALLBACK_URL=<Your_Callback_URL> (e.g., http://localhost:4200/api/auth/callback)
+   THUMB_SERVICE_URL=<Your_Thumbnail_Service_URL> (e.g., http://localhost:3012)
+   GH_LESSON_REPO_OWNER=kodeklubben
+   GH_LESSON_REPO=oppgaver
 
-9. Start the backend with `npm run start-nestbackend`.
+   COOKIE_SECRET=<Your_Cookie_Secret>
+   SESSION_SECRET=<Your_Session_Secret>
 
-10. Start the frontend and thumbnailer with `npm start`.
+   DISABLE_PULLREQUESTS=true/false // Use 'true' to disable pull requests for submitted lessons during testing
 
-11. Open [http://localhost:4200/](http://localhost:4200) in your browser! Happy coding!
+   POSTGRES_USER=<Your_Postgres_Username>
+   POSTGRES_PASSWORD=<Your_Postgres_Password>
+   POSTGRES_DB=<Your_Postgres_DB_Name>
+   ```
 
-## Project Structure
+## 📦 Dependencies Overview
 
-The project is divided into three parts: the client, thumbnailer function, and server. The server handles REST API implementations needed for frontend data handling. The client includes frontend user actions such as creating new lessons, browsing user-created lessons, and editing existing lessons. The thumbnailer snaps screenshots of lessons using Puppeteer.
+- **Main Framework**: The project is built with `React` and `NestJS`.
+- **Database**: We use `TypeORMM` with a PostgreSQL database.
+- **UI Library**: The frontend UI is enhanced using `Semantic UI React`.
+- **Utility Services**: For screenshots, we use `Puppeteer`.
 
-## Frontend
+You can refer to the `package.json` file for the complete list and versions of dependencies and scripts.
 
-The frontend is written in ReactJS and uses Semantic UI React for theming. We also utilize markdown-it for parsing markdown plaintext to HTML in real-time.
+## 🤝 Contribution
 
-## Thumbnailer (The Lessoneditor Thumbnail Service)
+Feel free to submit pull requests, create issues, and enhance the application. Every contribution is valued!
 
-Thumbnailer is a utility service that captures screenshots of lessons every time a lesson is saved. It uses Puppeteer to accomplish this.
+## 🔐 License
 
-## Nestbackend
-
-Nestbackend manages server services, database management, and communication with Github.
-
-### Setup Dev Environment:
-
-1. Create new OAuth app on Github [here](https://github.com/settings/developers)
-2. Create a `.env` file in the root directory.
-3. Populate the `.env` file with environment variables as shown below:
-
-```
-GITHUB_CLIENT_ID= your client ID
-GITHUB_CLIENT_SECRET= your client secret
-GITHUB_CALLBACK_URL= your callback url. ex: http://localhost:4200/api/auth/callback
-THUMB_SERVICE_URL= your thumbnailer url. ex: http://localhost:3012
-GITHUB_LESSON_REPO_OWNER= your gitname
-GITHUB_LESSON_REPO= your lesson_repo name ex "oppgaver"
-
-TYPEORM_CONNECTION=postgres
-TYPEORM_HOST=localhost
-TYPEORM_USERNAME=orm-user
-TYPEORM_PASSWORD=testing
-TYPEORM_DATABASE=lesson-editor
-TYPEORM_PORT=5432
-DB_SYNCHRONIZE=false
-DB_LOGGING=true
-DB_ENTITIES=app/nestbackend/src/*/*.entity.ts
-```
-
-## Database
-
-- Install Docker
-- Run `docker-compose up --build` in the root directory to start the database
-
-
-## Updates 2023
-
-Removing static serving. Instead we should run frontend with a proxy to backend. In the environment files will be served by
-appengine. So we really don't need to serve anything statically from the backend.
-
-
-## creating migrations
+This project is licensed under the MIT License.

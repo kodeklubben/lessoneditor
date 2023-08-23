@@ -1,10 +1,11 @@
-import { Dispatch, FC, Ref, SetStateAction, useState } from "react";
+import { FC, Dispatch, SetStateAction, useState, Ref } from "react";
 import ShowSpinner from "../ShowSpinner";
-import { Button, Header, Modal } from "semantic-ui-react";
-import { NewFileDTO, paths } from "@lessoneditor/contracts";
+import { Modal, Button, Header } from "semantic-ui-react";
+import { paths } from "@lessoneditor/contracts";
 import axios from "axios";
+import { NewFileDTO } from "@lessoneditor/contracts";
 import { useLessonContext } from "../../contexts/LessonContext";
-import { base64StringToBlob, blobToBase64String, createObjectURL } from "blob-util";
+import { base64StringToBlob, createObjectURL, blobToBase64String } from "blob-util";
 import slugify from "slugify";
 import Compressor from "compressorjs";
 
@@ -14,7 +15,7 @@ const imageSizeErrorMessage = "Bildet kan ikke være over 5mb";
 interface ImageUploadProps {
   uploadImageRef: Ref<HTMLInputElement>;
   mdText: string;
-  pushUndoValue: (mdText: string, cursorPositionStart: number) => void;
+  pushUndoValue?: (mdText: string, cursorPositionStart: number) => void;
   cursorPositionStart: number;
   cursorPositionEnd: number;
   setMdText: Dispatch<SetStateAction<string>>;
@@ -25,7 +26,6 @@ interface ImageUploadProps {
 const ImageUpload: FC<ImageUploadProps> = ({
   uploadImageRef,
   mdText,
-  pushUndoValue,
   cursorPositionStart,
   cursorPositionEnd,
   setMdText,

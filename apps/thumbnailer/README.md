@@ -1,6 +1,7 @@
 // https://cloudfunction-fu.google.com/thumb?url=dfsa&token=xyz
 
 ## Deploy
+
 Deployment is not automated.
 
 To deploy the app to Google Cloud Functions first be sure to be logged into Google Cloud.
@@ -9,6 +10,7 @@ To deploy the app to Google Cloud Functions first be sure to be logged into Goog
 First build the code with `npm run build thumbnailer`
 
 Then run the deploy-command from the root of the project:
+
 ```
 gcloud functions deploy thumbnailer \
     --region=europe-west1 \

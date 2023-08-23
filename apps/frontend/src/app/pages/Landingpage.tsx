@@ -1,5 +1,5 @@
 import "./landingpage.scss";
-import { Navbar } from "../components/navbar/Navbar";
+import Navbar from "../components/navbar/Navbar";
 import NewLessontext from "../components/landingpage/NewLessontext";
 import SubmitLesson from "../components/landingpage/SubmitLesson";
 import CourseInfo from "../components/landingpage/CourseInfo";

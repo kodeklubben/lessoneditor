@@ -1,17 +1,16 @@
-import { forwardRef, Module } from "@nestjs/common";
+import { Module, forwardRef } from "@nestjs/common";
 import { LessonController } from "./lesson.controller";
 import { LessonService } from "./lesson.service";
 import { TypeOrmModule } from "@nestjs/typeorm";
-import { LessonEntity } from "./lesson.entity";
+import { Lesson } from "./lesson.entity";
 import { UserModule } from "../user/user.module";
 import { GithubModule } from "../github/github.module";
 import { ThumbModule } from "../thumb/thumb.module";
-import { LessonFileEntity } from "./lesson-file.entity";
-import { UserLessonsEntity } from "../user/user-lessons.entity";
+import { FileStore } from "./lesson.entity";
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([LessonEntity, LessonFileEntity, UserLessonsEntity]),
+    TypeOrmModule.forFeature([Lesson, FileStore]),
     forwardRef(() => UserModule),
     GithubModule,
     ThumbModule,

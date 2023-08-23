@@ -1,28 +1,22 @@
 import {
-  Body,
   Controller,
-  Delete,
   Get,
   Param,
+  UseGuards,
   Post,
+  Body,
   Put,
   Req,
   Res,
-  UseGuards,
+  Delete,
 } from "@nestjs/common";
 import { LessonService } from "./lesson.service";
-import {
-  FileDTO,
-  LessonDTO,
-  NewFileDTO,
-  ShareLessonDTO,
-  UpdatedFileDTO,
-  UserDTO,
-} from "@lessoneditor/contracts";
+import { LessonDTO, FileDTO, ShareLessonDTO, NewFileDTO } from "@lessoneditor/contracts";
+import { UserDTO } from "@lessoneditor/contracts";
 import { LoginGuard } from "../auth/login.guard";
+import { UpdatedFileDTO } from "@lessoneditor/contracts";
 import { Request } from "express";
-import { UserEntity } from "../user/user.entity";
-import { LessonFileEntity } from "./lesson-file.entity";
+import { User } from "../user/user.entity";
 
 @Controller("lesson")
 export class LessonController {
@@ -31,7 +25,8 @@ export class LessonController {
   @UseGuards(LoginGuard)
   @Get(":lessonId")
   async GetLesson(@Param() params): Promise<LessonDTO> {
-    return await this.lessonService.getLesson(params.lessonId);
+    const { users, files, ...lessonDTO } = await this.lessonService.getLesson(params.lessonId);
+    return lessonDTO;
   }
 
   @UseGuards(LoginGuard)
@@ -44,8 +39,12 @@ export class LessonController {
   @Post(":lessonId/submit")
   async SubmitLesson(@Req() req: Request, @Param() params, @Body() submitMessage) {
     const accessToken: string = req.cookies["access_token"];
+    // console.log("accessToken", accessToken);
+    // console.log("submitMessage", submitMessage);
+    // console.log("params", params);
+    // console.log("req.user", req.user);
     await this.lessonService.submitLesson(
-      req.user as UserEntity,
+      req.user as User,
       accessToken,
       params.lessonId,
       submitMessage
@@ -54,36 +53,49 @@ export class LessonController {
 
   @UseGuards(LoginGuard)
   @Get(":lessonId/users")
-  async GetLessonUsers(@Param("lessonId") lessonId): Promise<UserDTO[]> {
-    const userEntities = await this.lessonService.getLessonUsers(lessonId);
-    return userEntities.map(function (userEntity) {
-      const { ...userDTO } = userEntity;
+  async GetLessonUsers(@Param() params): Promise<UserDTO[]> {
+    const { users, files, ...lessonDTO } = await this.lessonService.getLesson(params.lessonId);
+    const userArray: UserDTO[] = users.map(function (user) {
+      const { lessons, ...userDTO } = user;
       return userDTO;
     });
+    return userArray;
   }
 
+  // @UseGuards(LoginGuard)
+  // @Get(':lessonId/files')
+  // async GetLessonFiles(@Param() params): Promise<FileDTO<Buffer>[]>
+  // {
+  //   const {users, files, ...lessonDTO} = await this.lessonService.getLesson(params.lessonId)
+  //   const filesArray: FileDTO<Buffer>[] = files.map(function(file){
+  //     const {content, ...fileProps} = file
+  //     return new StreamableFile(file)
+  //   })
+  //   return filesArray
+  // }
+
   @UseGuards(LoginGuard)
-  @Get(":lessonId/files/:fileName")
-  async GetLessonFile(@Res() res, @Param("lessonId") lessonId, @Param("fileName") fileName) {
+  @Get(":lessonId/files/:filename")
+  async GetLessonFile(@Res() res, @Param("lessonId") lessonId, @Param("filename") filename) {
     try {
-      const lessonFile: LessonFileEntity = await this.lessonService.getLessonFile(
+      const { lesson, content, ...fileProps } = await this.lessonService.getLessonFile(
         lessonId,
-        fileName
+        filename
       );
 
-      if ([".jpg", ".jpeg", ".gif", ".png"].includes(lessonFile.ext)) {
-        return res.end(lessonFile.content.toString("base64"));
+      if ([".jpg", ".jpeg", ".gif", ".png"].includes(fileProps.ext)) {
+        return res.end(content.toString("base64"));
       }
-      if (fileName == "lesson") {
+      if (filename == "lesson") {
         const fileDTO: FileDTO<string> = {
-          ...lessonFile,
-          content: JSON.parse(lessonFile.content.toString()),
+          ...fileProps,
+          content: JSON.parse(content.toString()),
         };
         return res.send(fileDTO);
       } else {
         const fileDTO: FileDTO<string> = {
-          ...lessonFile,
-          content: lessonFile.content.toString("utf-8"),
+          ...fileProps,
+          content: content.toString("utf-8"),
         };
         return res.send(fileDTO);
       }
@@ -101,48 +113,53 @@ export class LessonController {
   @UseGuards(LoginGuard)
   @Post(":lessonId/files")
   async AddLessonFile(@Req() req, @Param() params, @Body() newFile: NewFileDTO): Promise<number> {
-    return await this.lessonService.addLessonFile(params.lessonId, newFile, req);
+    const addFileRes = await this.lessonService.addLessonFile(params.lessonId, newFile, req);
+    return addFileRes;
   }
 
   @UseGuards(LoginGuard)
-  @Put(":lessonId/files/:fileName")
+  @Put(":lessonId/files/:filename")
   async UpdateLessonFile(
     @Req() req,
     @Param("lessonId") lessonId,
-    @Param("fileName") fileName,
+    @Param("filename") filename,
     @Body() updatedFile: UpdatedFileDTO
   ): Promise<FileDTO<string>> {
-    const { lessonLessonId, content, ...fileProps } = await this.lessonService.updateLessonFile(
+    const { lesson, content, ...fileProps } = await this.lessonService.updateLessonFile(
       lessonId,
-      fileName,
+      filename,
       req.user.userId,
-      fileName === "lesson" ? JSON.stringify(updatedFile.content) : updatedFile.content,
+      filename === "lesson" ? JSON.stringify(updatedFile.content) : updatedFile.content,
       req
     );
-    return {
+    const newFile: FileDTO<string> = {
       ...fileProps,
       content: content.toString("utf-8"),
     };
+    return newFile;
   }
 
   @UseGuards(LoginGuard)
-  @Put(":lessonId/files/:fileName/updateThumbnail")
+  @Put(":lessonId/files/:filename/updateThumbnail")
   async UpdateThumbnail(
     @Req() req,
     @Param("lessonId") lessonId,
-    @Param("fileName") fileName
+    @Param("filename") filename
   ): Promise<any> {
-    return await this.lessonService.updateThumbnail(lessonId, fileName, req);
+    const isThumbUpdated = await this.lessonService.updateThumbnail(lessonId, filename, req);
+
+    return isThumbUpdated;
   }
 
   @UseGuards(LoginGuard)
-  @Delete(":lessonId/files/:fileName/:ext")
+  @Delete(":lessonId/files/:filename/:ext")
   async DeleteLessonFile(
     @Req() req,
     @Param("lessonId") lessonId,
-    @Param("fileName") fileName,
+    @Param("filename") filename,
     @Param("ext") ext
   ): Promise<any> {
-    return await this.lessonService.deleteLessonFile(lessonId, fileName, ext, req);
+    const deleteRes = await this.lessonService.deleteLessonFile(lessonId, filename, ext, req);
+    return deleteRes;
   }
 }

@@ -1,13 +1,17 @@
 import {
-  Column,
-  CreateDateColumn,
   Entity,
+  Column,
   PrimaryGeneratedColumn,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+  CreateDateColumn,
   UpdateDateColumn,
 } from "typeorm";
+import { User } from "../user/user.entity";
 
-@Entity("lesson")
-export class LessonEntity {
+@Entity()
+export class Lesson {
   @PrimaryGeneratedColumn()
   lessonId: number;
 
@@ -40,4 +44,42 @@ export class LessonEntity {
 
   @UpdateDateColumn()
   updated_at: Date;
+
+  @OneToMany((type) => FileStore, (file) => file.lesson, {
+    cascade: true,
+  })
+  files: FileStore[];
+
+  @ManyToMany((type) => User, (user) => user.lessons)
+  users: User[];
+}
+
+@Entity()
+export class FileStore {
+  @PrimaryGeneratedColumn()
+  fileId: number;
+
+  @Column()
+  filename: string;
+
+  @Column()
+  ext: string;
+
+  @Column("bytea")
+  content: Buffer;
+
+  @Column()
+  created_by: string;
+
+  @Column()
+  updated_by: string;
+
+  @CreateDateColumn()
+  created_at: Date;
+
+  @UpdateDateColumn()
+  updated_at: Date;
+
+  @ManyToOne((type) => Lesson, (lesson) => lesson.files, { onDelete: "CASCADE" })
+  lesson: Lesson;
 }

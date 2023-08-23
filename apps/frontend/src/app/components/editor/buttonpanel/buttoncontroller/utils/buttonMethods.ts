@@ -1,4 +1,4 @@
-import { codebuttons, DEFAULT_TEXT, emphasis } from "../settings/buttonConfig";
+import { emphasis, codebuttons, DEFAULT_TEXT } from "../settings/buttonConfig";
 import { microbitbuttons, scratchbuttons } from "../settings/microbitAndScratchButtonConfig";
 
 const ifNewLine = (mdText: string, cursorPositionStart: number) => {

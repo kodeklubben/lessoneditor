@@ -1,4 +1,4 @@
-import { FC } from "react";
+import React, { FC } from "react";
 import { Button, Divider, Icon, Placeholder } from "semantic-ui-react";
 import axios from "axios";
 import { paths } from "@lessoneditor/contracts";
@@ -19,7 +19,7 @@ const ListFiles: FC<ListFilesProps> = ({ list, lessonId }) => {
     try {
       const isDeleted = await axios.delete(
         paths.LESSON_FILE_DELETE.replace(":lessonId", lessonId.toString())
-          .replace(":fileName", filename)
+          .replace(":filename", filename)
           .replace(":ext", ext)
       );
       if (isDeleted.data === 1) {

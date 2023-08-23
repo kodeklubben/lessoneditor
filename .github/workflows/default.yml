@@ -15,82 +15,116 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
         with:
-          fetch-depth: 0
-      - uses: actions/setup-node@v2
+          node-version: "18"
+
+      - run: npm ci
+
+      - name: Cache Node Modules
+        uses: actions/cache@v3
         with:
-          node-version: "16"
-      - run: npm install
+          path: node_modules
+          key: npm-deps-${{ hashFiles('package-lock.json') }}
+
       - run: npm run test-all
+
       - run: npm run build-all
-      - name: Caching Dist Folder
-        uses: actions/cache@v2
+
+      - name: Cache Dist Folder
+        uses: actions/cache@v3
         with:
           path: ./dist
           key: cache-dist-${{ github.sha }}
 
-  deply_db:
-    name: Deploy to Cloud SQL Postgres
-    if: github.ref == 'refs/heads/main_disabled' && github.event_name != 'pull_request'
-    timeout-minutes: 5
-    needs: test
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-node@v2
-        with:
-          node-version: "16"
-      - run: npm install
-      - name: install cloud sql auth proxy
-        run: wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql_proxy && chmod +x cloud_sql_proxy
-      - uses: actions-hub/gcloud@master
-        env:
-          PROJECT_ID: lessoneditor
-          APPLICATION_CREDENTIALS: ${{ secrets.SERVICE_ACCOUNT }}
-        with:
-          args: info
-      - name: fetch access token
-        run: echo ${{ secrets.SERVICE_ACCOUNT }} | base64 --decode > credentials.json
-      - run: gcloud auth activate-service-account github-actions@lessoneditor.iam.gserviceaccount.com --key-file=credentials.json
-      - run: gcloud auth print-access-token
-      - run: ACCESS_TOKEN=$(gcloud auth print-access-token); echo "ACCESS_TOKEN=${ACCESS_TOKEN}" >> $GITHUB_ENV
-      - run: npm ci --ignore-scripts --no-optional --prefer-offline --no-audit
-      - run: npm install -g ts-node
-      - name: run migrations
-        run: (./cloud_sql_proxy -instances=lessoneditor:europe-west1:lesson-editor=tcp:5432 -credential_file=credentials.json & sleep 2) && ts-node -P tsconfig.node.json ./node_modules/typeorm/cli.js migration:run
-        env:
-          TYPEORM_CONNECTION: postgres
-          TYPEORM_HOST: localhost
-          TYPEORM_USERNAME: github-actions@lessoneditor.iam
-          TYPEORM_PASSWORD: ${{ env.ACCESS_TOKEN }}
-          TYPEORM_DATABASE: lessoneditor
-          TYPEORM_PORT: 5432
-          TYPEORM_SYNCHRONIZE: false
-          TYPEORM_MIGRATIONS: db/migration/**/*.ts
-          TYPEORM_MIGRATIONS_DIR: db/migration
-          TYPEORM_ENTITIES: apps/backend/src/user/user.entity.ts,apps/backend/src/lesson/lesson.entity.ts,apps/backend/src/session/session.entity.ts
-
-  deploy:
+  deploy_db:
+    permissions:
+      contents: "read"
+      id-token: "write"
     timeout-minutes: 9
     needs: test
-    if: github.ref == 'refs/heads/main_disabled' && github.event_name != 'pull_request'
-    name: Deploy to Google App Engine
+    name: Deploy to Cloud SQL Postgres
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - run: 'echo "$SSH_KEY" > credentials.json'
+        env:
+          SSH_KEY: ${{ secrets.SERVICE_ACCOUNT }}
+
+      - run: npm ci
+
+      - name: Install Cloud SQL Auth Proxy
+        run: wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql_proxy && chmod +x cloud_sql_proxy
+
+      - name: Start Cloud SQL Proxy
+        run: |
+          ./cloud_sql_proxy -instances=erik-lessoneditor:europe-north1:lesson-editor=tcp:5432 -credential_file=credentials.json &
+          PROXY_PID=$!
+          sleep 10
+          npm run migration:run
+          kill $PROXY_PID
+        env:
+          POSTGRES_CONNECTION: postgres
+          POSTGRES_HOST: 127.0.0.1
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: lesson-editor
+          POSTGRES_PORT: 5432
+          POSTGRES_SYNCHRONIZE: false
+          POSTGRES_MIGRATIONS: dist/apps/backend/db/migrations/*.js
+          POSTGRES_ENTITIES: dist/apps/backend/**/*.entity.js
+
+  deploy:
+    permissions:
+      contents: "read"
+      id-token: "write"
+    timeout-minutes: 9
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    name: Deploy to Google App Engine
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
       - name: Restoring Dist Folder
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ./dist
-          key: cache-dist-${{ github.sha }}
+          key: cache-dist-"${{ github.sha }}"
       - id: "auth"
-        uses: "google-github-actions/auth@v0.4.1"
+        name: "Authenticate to Google Cloud"
+        uses: "google-github-actions/auth@v1"
         with:
-          credentials_json: "${{ secrets.FRUITYLOOPS }}"
-      - name: deploy
-        uses: google-github-actions/deploy-appengine@main
+          credentials_json: "${{ secrets.SERVICE_ACCOUNT }}"
+
+      - id: "deploy"
+        uses: "google-github-actions/deploy-appengine@v1"
+        with:
+          env_vars: |
+            POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+            GH_CLIENT_SECRET=${{ secrets.GH_CLIENT_SECRET }}
+            POSTGRES_HOST=/cloudsql/lessoneditor:europe-west1:lesson-editor
+            POSTGRES_DB=lessoneditor
+            GH_CLIENT_ID=29df9fe87b3b11799c63
+            GH_CALLBACK_URL=https://erik-lessoneditor.nw.r.appspot.com/api/auth/callback
+            THUMB_SERVICE_URL=https://europe-west1-lessoneditor.cloudfunctions.net/thumbnailer
+            GH_LESSON_REPO=oppgaver
+            GH_LESSON_REPO_OWNER=kodeklubben
+            DISABLE_PULL_REQUESTS=false
+            POSTGRES_USER=postgres
+            POSTGRES_PORT=5432
+            POSTGRES_ENTITIES=dist/apps/backend/**/*.entity.js
+            POSTGRES_MIGRATIONS=dist/apps/backend/db/migrations/*.js
+
+          project_id: "erik-lessoneditor"

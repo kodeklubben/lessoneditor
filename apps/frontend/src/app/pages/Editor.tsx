@@ -1,13 +1,14 @@
 import "./editor.scss";
-import React, { FC, useEffect, useRef, useState } from "react";
+import { useRef, useState, FC, useEffect } from "react";
 import ButtonPanel from "../components/editor/buttonpanel/ButtonPanel";
 import ImageUpload from "../components/editor/ImageUpload";
 import MDPreviewArea from "../components/editor/MDPreviewArea";
 import MDTextArea from "../components/editor/MDTextArea";
 import { useFileContext } from "../contexts/FileContext";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router";
 import { useLessonContext } from "../contexts/LessonContext";
-import { Navbar } from "../components/navbar/Navbar";
+import Navbar from "../components/navbar/Navbar";
+
 import ButtonPanel_SmallDevices from "../components/editor/buttonpanel/ButtonPanel_SmallDevices";
 
 const Editor: FC = () => {
@@ -35,6 +36,8 @@ const Editor: FC = () => {
     cursorInt: 0,
   });
   const [preview, setPreview] = useState<boolean>(false);
+
+  const [lineNumber, setLineNumber] = useState<number>(0);
 
   const location = useLocation();
 
@@ -189,6 +192,8 @@ const Editor: FC = () => {
                 setUndoAndUndoPosition={setUndoAndUndoPosition}
                 setRedoAndRedoPosition={setRedoAndRedoPosition}
                 resetButtons={resetButtons}
+                lineNumber={lineNumber}
+                setLineNumber={setLineNumber}
               />
 
               <MDPreviewArea
@@ -196,6 +201,7 @@ const Editor: FC = () => {
                 course={state.lesson.courseSlug}
                 language={language}
                 preview={preview}
+                lineNumber={lineNumber}
               />
             </div>
             <ButtonPanel_SmallDevices

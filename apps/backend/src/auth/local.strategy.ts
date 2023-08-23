@@ -1,14 +1,16 @@
 import { Strategy } from "passport-oauth2";
 import { PassportStrategy } from "@nestjs/passport";
-import { CACHE_MANAGER, Inject, Injectable } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { stringify } from "querystring";
 import { UserService } from "../user/user.service";
 import { UserDTO } from "@lessoneditor/contracts";
 import { lastValueFrom } from "rxjs";
 import { HttpService } from "@nestjs/axios";
+import { Inject } from "@nestjs/common";
+import { CACHE_MANAGER } from "@nestjs/cache-manager";
 import { Cache } from "cache-manager";
-import { UserEntity } from "../user/user.entity";
+import { User } from "../user/user.entity";
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy, "github") {
@@ -22,15 +24,15 @@ export class LocalStrategy extends PassportStrategy(Strategy, "github") {
   ) {
     super({
       authorizationURL: `https://github.com/login/oauth/authorize?${stringify({
-        client_id: process.env.GITHUB_CLIENT_ID,
-        redirect_uri: process.env.GITHUB_CALLBACK_URL,
+        client_id: process.env.GH_CLIENT_ID,
+        redirect_uri: process.env.GH_CALLBACK_URL,
         response_type: "code",
         scope: "repo",
       })}`,
       tokenURL: "https://github.com/login/oauth/access_token",
-      clientID: process.env.GITHUB_CLIENT_ID,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      callbackURL: process.env.GITHUB_CALLBACK_URL,
+      clientID: process.env.GH_CLIENT_ID,
+      clientSecret: process.env.GH_CLIENT_SECRET,
+      callbackURL: process.env.GH_CALLBACK_URL,
       scope: null,
     });
   }
@@ -40,10 +42,10 @@ export class LocalStrategy extends PassportStrategy(Strategy, "github") {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
     const response: any = await lastValueFrom(this.axiosResponse$);
-    let user: UserEntity;
+    let user: User;
     try {
       user = await this.userService.getUser(response.data.id);
-
+      const { lessons, ...storedUser } = user;
       const newUserDTO: UserDTO = {
         userId: response.data.id,
         name: response.data.name,
@@ -52,8 +54,8 @@ export class LocalStrategy extends PassportStrategy(Strategy, "github") {
         photo: response.data.avatar_url,
       };
 
-      if (!this.shallowEqual(user, newUserDTO)) {
-        user = await this.userService.updateUser(newUserDTO, user.userId);
+      if (!this.shallowEqual(storedUser, newUserDTO)) {
+        user = await this.userService.updateUser(newUserDTO, storedUser.userId);
       }
     } catch (error) {
       const newUserDTO: UserDTO = {
@@ -65,7 +67,7 @@ export class LocalStrategy extends PassportStrategy(Strategy, "github") {
       };
       user = await this.userService.addUser(newUserDTO);
     }
-    await this.cacheManager.set(user.userId.toString(), accessToken);
+    this.cacheManager.set(user.userId.toString(), accessToken);
     return user;
   }
 

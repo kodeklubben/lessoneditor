@@ -5,6 +5,8 @@
   border-radius: 5px;
   border-style: none;
   outline: none;
+  height: 100vh;
+  max-height: calc(100vh - 13rem);
 
   @media (min-width: 900px) {
     width: 49.5%;

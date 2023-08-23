@@ -1,42 +1,45 @@
 {
   "name": "thumbnailer",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "projectType": "application",
   "sourceRoot": "apps/thumbnailer/src",
+  "projectType": "application",
   "targets": {
-    "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "options": {}
-    },
-    "test": {
-      "executor": "@nrwl/jest:jest",
+    "build": {
+      "executor": "nx:run-commands",
       "options": {
-        "jestConfig": "apps/thumbnailer/jest.config.js",
-        "passWithNoTests": true
+        "parallel": false,
+        "commands": [
+          {
+            "command": "nx build-app thumbnailer"
+          },
+          {
+            "command": "node ./apps/thumbnailer/build.js"
+          }
+        ]
       }
     },
-    "build": {
-      "executor": "@nx-extend/gcp-functions:build",
+    "build-app": {
+      "executor": "@nrwl/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
       "options": {
-        "generateLockFile": true,
         "outputPath": "dist/apps/thumbnailer",
         "main": "apps/thumbnailer/src/function.ts",
         "tsConfig": "apps/thumbnailer/tsconfig.app.json",
-        "assets": []
+        "compiler": "tsc",
+        "target": "node"
       },
       "configurations": {
         "production": {
           "optimization": true,
-          "extractLicenses": false,
-          "inspect": false
+          "extractLicenses": true,
+          "inspect": false,
+          "fileReplacements": [
+            {
+              "replace": "apps/thumbnailer/src/environments/environment.ts",
+              "with": "apps/thumbnailer/src/environments/environment.prod.ts"
+            }
+          ]
         }
-      }
-    },
-    "deploy": {
-      "executor": "@nx-extend/gcp-functions:deploy",
-      "options": {
-        "functionName": "thumbnailer",
-        "envVarsFile": "apps/thumbnailer/src/environments/production.yaml"
       }
     },
     "serve": {
@@ -46,12 +49,26 @@
         "parallel": false,
         "commands": [
           {
-            "command": "nx build thumbnailer"
+            "command": "nx build-app thumbnailer"
           },
           {
             "command": "functions-framework --target=thumbnailer --port=3012 --source=dist/apps/thumbnailer/main.js"
           }
         ]
+      }
+    },
+    "lint": {
+      "executor": "@nx/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["apps/thumbnailer/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/apps/thumbnailer"],
+      "options": {
+        "jestConfig": "apps/thumbnailer/jest.config.ts",
+        "passWithNoTests": true
       }
     }
   },

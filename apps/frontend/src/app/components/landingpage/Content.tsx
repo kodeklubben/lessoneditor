@@ -1,18 +1,12 @@
 import "./content.scss";
-import { SyntheticEvent, useState } from "react";
+import { useState } from "react";
 import LessontextItems from "./LessonTextItems";
 import TeacherguideItems from "./TeacherguideItems";
 import AllFiles from "../landingpage/AllFiles";
 import { Menu } from "semantic-ui-react";
-import { useParams } from "react-router";
 
 const Content = () => {
-  const { mode } = useParams() as any;
   const [activeItem, setActiveItem] = useState("lessontext");
-
-  const handleItemClick = (e: SyntheticEvent) => {
-    console.log(e);
-  };
 
   return (
     <>

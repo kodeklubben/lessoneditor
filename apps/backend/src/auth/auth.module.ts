@@ -15,7 +15,7 @@ import { GithubSerializer } from "./local.serializer";
     HttpModule,
     PassportModule,
     JwtModule.register({
-      secret: process.env.GITHUB_CLIENT_SECRET,
+      secret: process.env.GH_CLIENT_SECRET,
       signOptions: { expiresIn: "60s" },
     }),
   ],
