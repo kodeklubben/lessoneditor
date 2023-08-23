@@ -127,7 +127,7 @@ jobs:
         uses: "google-github-actions/deploy-appengine@v1"
         with:
           env_vars: |
-            POSTGRES_PASSWORD=${{ env.POSTGRES_PASSWORD }}"
+            POSTGRES_PASSWORD=${{ env.POSTGRES_PASSWORD }}
             GH_CLIENT_SECRET="${{ env.GH_CLIENT_SECRET }}"
             POSTGRES_HOST=${{ env.POSTGRES_HOST }}
             GH_CLIENT_ID=${{ env.GH_CLIENT_ID }}
