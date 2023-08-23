@@ -60,7 +60,7 @@ export class LoginGuard extends AuthGuard("github") {
 
 const verifyJwtToken = (token) => {
   try {
-    const decoded = verify(token, process.env.GITHUB_CLIENT_SECRET);
+    const decoded = verify(token, process.env.GH_CLIENT_SECRET);
     return {
       valid: true,
       data: decoded,

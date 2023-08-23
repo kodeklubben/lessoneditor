@@ -24,15 +24,15 @@ export class LocalStrategy extends PassportStrategy(Strategy, "github") {
   ) {
     super({
       authorizationURL: `https://github.com/login/oauth/authorize?${stringify({
-        client_id: process.env.GITHUB_CLIENT_ID,
-        redirect_uri: process.env.GITHUB_CALLBACK_URL,
+        client_id: process.env.GH_CLIENT_ID,
+        redirect_uri: process.env.GH_CALLBACK_URL,
         response_type: "code",
         scope: "repo",
       })}`,
       tokenURL: "https://github.com/login/oauth/access_token",
-      clientID: process.env.GITHUB_CLIENT_ID,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET,
-      callbackURL: process.env.GITHUB_CALLBACK_URL,
+      clientID: process.env.GH_CLIENT_ID,
+      clientSecret: process.env.GH_CLIENT_SECRET,
+      callbackURL: process.env.GH_CALLBACK_URL,
       scope: null,
     });
   }

@@ -2,8 +2,8 @@ runtime: nodejs18
 entrypoint: node dist/apps/backend/apps/backend/src/main.js
 
 env_variables:
-  GITHUB_LESSON_REPO: "oppgaver"
-  GITHUB_LESSON_REPO_OWNER: "kodeklubben"
+  GH_LESSON_REPO: "oppgaver"
+  GH_LESSON_REPO_OWNER: "kodeklubben"
 
   DISABLE_PULL_REQUESTS: "false"
 

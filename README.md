@@ -33,12 +33,12 @@ Create and edit lessons for the [Lær Kidsa Koding (LKK)](https://kidsakoder.no)
 2. Create a `.env` file in the project's root and populate with necessary values:
 
    ```bash
-   GITHUB_CLIENT_ID=<Your_GitHub_Client_ID>
-   GITHUB_CLIENT_SECRET=<Your_GitHub_Client_Secret>
-   GITHUB_CALLBACK_URL=<Your_Callback_URL> (e.g., http://localhost:4200/api/auth/callback)
+   GH_CLIENT_ID=<Your_GitHub_Client_ID>
+   GH_CLIENT_SECRET=<Your_GitHub_Client_Secret>
+   GH_CALLBACK_URL=<Your_Callback_URL> (e.g., http://localhost:4200/api/auth/callback)
    THUMB_SERVICE_URL=<Your_Thumbnail_Service_URL> (e.g., http://localhost:3012)
-   GITHUB_LESSON_REPO_OWNER=kodeklubben
-   GITHUB_LESSON_REPO=oppgaver
+   GH_LESSON_REPO_OWNER=kodeklubben
+   GH_LESSON_REPO=oppgaver
 
    COOKIE_SECRET=<Your_Cookie_Secret>
    SESSION_SECRET=<Your_Session_Secret>

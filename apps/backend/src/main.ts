@@ -12,11 +12,9 @@ import { Session } from "./session/session.entity";
 import * as passport from "passport";
 import * as cookieParser from "cookie-parser";
 
-console.log("process.env.GITHUB_CLIENT_ID", process?.env?.GITHUB_CLIENT_ID);
+console.log("process.env.GH_CLIENT_ID", process?.env?.GH_CLIENT_ID);
 
 async function bootstrap() {
-  Logger.log("process.env.GITHUB_CLIENT_SECRET", process?.env?.GITHUB_CLIENT_SECRET);
-  Logger.log("process.env.POSTRES_PASSWORD", process?.env?.POSTGRES_PASSWORD);
   const app = await NestFactory.create(AppModule);
   app.use(cookieParser(process.env.COOKIE_SECRET));
   const sessionRepository = app.get(DataSource).getRepository(Session);

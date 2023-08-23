@@ -144,8 +144,8 @@ export class GithubService {
       const alreadyForked = response.data.find(
         (item) =>
           item.fork &&
-          item.owner.login === process.env.GITHUB_LESSON_REPO_OWNER &&
-          item.name === process.env.GITHUB_LESSON_REPO
+          item.owner.login === process.env.GH_LESSON_REPO_OWNER &&
+          item.name === process.env.GH_LESSON_REPO
       );
 
       if (alreadyForked) {
@@ -157,8 +157,8 @@ export class GithubService {
         };
       } else {
         const forkResponse = await this.octokit.repos.createFork({
-          owner: process.env.GITHUB_LESSON_REPO_OWNER,
-          repo: process.env.GITHUB_LESSON_REPO,
+          owner: process.env.GH_LESSON_REPO_OWNER,
+          repo: process.env.GH_LESSON_REPO,
         });
 
         // Adding a delay to ensure fork is ready for subsequent operations.
@@ -319,8 +319,8 @@ export class GithubService {
     try {
       console.log("Creating pull request.");
       return await this.octokit.pulls.create({
-        owner: process.env.GITHUB_LESSON_REPO_OWNER,
-        repo: process.env.GITHUB_LESSON_REPO,
+        owner: process.env.GH_LESSON_REPO_OWNER,
+        repo: process.env.GH_LESSON_REPO,
         title: title, // title of PR
         head: `${username}:${branch}`,
         base: "master",

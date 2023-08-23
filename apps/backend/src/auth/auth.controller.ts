@@ -16,14 +16,7 @@ export class AuthController {
 
   @UseGuards(LoginGuard)
   @Get("login")
-  async login(@Res() res) {
-    // const authorizationURL = `https://github.com/login/oauth/authorize?${ stringify({
-    //     client_id    : process.env.GITHUB_CLIENT_ID,
-    //     redirect_uri :  process.env.GITHUB_CALLBACK_URL,
-    //     response_type: 'code'
-    // }) }`
-    // return res.redirect(authorizationURL);
-  }
+  async login(@Res() res) {}
 
   @UseGuards(LoginGuard)
   @Post("logout")
