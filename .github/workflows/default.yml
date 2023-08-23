@@ -113,10 +113,10 @@ jobs:
         with:
           env_vars: |
             POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
-            POSTGRES_HOST=${{ env.POSTGRES_HOST }}
+            POSTGRES_HOST=$POSTGRES_HOST
             GITHUB_CLIENT_SECRET=${{ secrets.CLIENT_SECRET }}}
-            GITHUB_CLIENT_ID=${{ env.CLIENT_ID }}
-            GITHUB_CALLBACK_URL=${{ env.CALLBACK_URL }}
-            THUMB_SERVICE_URL=${{ env.THUMB_SERVICE_URL }}
+            GITHUB_CLIENT_ID=${{ vars.CLIENT_ID }}
+            GITHUB_CALLBACK_URL=${{ vars.CALLBACK_URL }}
+            THUMB_SERVICE_URL=${{ vars.THUMB_SERVICE_URL }}
 
           project_id: "erik-lessoneditor"
