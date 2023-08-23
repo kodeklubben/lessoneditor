@@ -113,10 +113,10 @@ jobs:
         with:
           env_vars: |
             POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
-            ${{ vars.POSTGRES_HOST }}
-            GH_CLIENT_SECRET=${{ secrets.CLIENT_SECRET }}}
-            ${{ vars.CLIENT_ID }}
-            ${{ vars.CALLBACK_URL }}
-            ${{ vars.THUMB_SERVICE_URL }}
+            POSTGRES_HOST=${{ vars.POSTGRES_HOST }}
+            GH_CLIENT_SECRET=${{ secrets.GH_CLIENT_SECRET }}
+            GH_CLIENT_ID=${{ vars.GH_CLIENT_ID }}
+            GH_CALLBACK_URL=${{ vars.GH_CALLBACK_URL }}
+            THUMB_SERVICE_URL=${{ vars.THUMB_SERVICE_URL }}
 
           project_id: "erik-lessoneditor"
