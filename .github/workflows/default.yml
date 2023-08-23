@@ -102,14 +102,6 @@ jobs:
       THUMB_SERVICE_URL: ${{ vars.THUMB_SERVICE_URL }}
 
     steps:
-      - name: "Echo variables"
-        run: |
-          echo "${{env.POSTGRES_PASSWORD}}"
-          echo "${{env.GH_CLIENT_SECRET}}"
-          echo "${{env.POSTGRES_HOST}}"
-          echo "${{env.GH_CLIENT_ID}}"
-          echo "${{env.GH_CALLBACK_URL}}"
-          echo "${{env.THUMB_SERVICE_URL}}"
       - name: Checkout Code
         uses: actions/checkout@v3
       - name: Restoring Dist Folder
