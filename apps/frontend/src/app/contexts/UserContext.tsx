@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import { useLocation } from "react-router";
 import axios from "axios";
 import { paths } from "@lessoneditor/contracts";
 import { LessonDTO, NewLessonDTO } from "@lessoneditor/contracts";
@@ -19,6 +20,7 @@ export const UserContextProvider = (props: any) => {
     useState<UserContextState>(initialUserContextState);
   const [loading, setLoading] = useState<boolean>(true);
   const [previewImage, setPreviewImages] = useState({});
+  const location = useLocation();
 
   useEffect(() => {
     async function fetchData() {
@@ -54,11 +56,11 @@ export const UserContextProvider = (props: any) => {
         setLoading(false);
       } catch (error: any) {
         console.log("error");
-        window.location.href = "/api/auth/login/";
+        // window.location.href = "/api/auth/login/";
       }
     }
     fetchData();
-  }, []);
+  }, [location]);
 
   const getLesson = (lessonId: number): LessonDTO | undefined => {
     return userContexState.lessons?.find((item: LessonDTO) => item.lessonId === lessonId);

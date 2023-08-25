@@ -1,16 +1,43 @@
 /* EDITOR */
 
+.navbar_title {
+  display: flex;
+  width: fit-content;
+  gap: 1rem;
+  align-items: baseline;
+
+  h1 {
+    margin: 0;
+    padding: 0;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #000000;
+  }
+  h3 {
+    margin: 0;
+    padding: 0;
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: #4a4a4a;
+  }
+}
+
 .editor_container {
   display: flex;
   flex-direction: column;
   background-image: linear-gradient(#f7f7f7 90%, white);
   max-width: 1920px;
   margin: 0 auto;
-  position: relative;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  top: 4rem;
   overflow-y: hidden;
 
   .editor-windows {
     position: relative;
+    height: 100%;
     border: 1px #b1daae;
     border-style: none solid none solid;
     border-radius: 5px;
@@ -18,10 +45,10 @@
 
   @media (min-width: 900px) {
     .editor-windows {
-      position: relative;
       display: flex;
       flex-flow: row;
       justify-content: space-between;
+      height: calc(100vh - 4rem - 7rem);
     }
   }
 }

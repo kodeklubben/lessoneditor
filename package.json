@@ -92,7 +92,7 @@
     "rxjs": "^7.8.1",
     "scratchblocks": "^3.6.3",
     "semantic-ui-css": "^2.5.0",
-    "semantic-ui-react": "^2.1.4",
+    "semantic-ui-react": "^3.0.0-beta.0",
     "slugify": "^1.6.6",
     "typeorm": "^0.3.17",
     "typescript": "5.1.6"

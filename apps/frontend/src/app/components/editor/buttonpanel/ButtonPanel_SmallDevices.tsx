@@ -42,11 +42,7 @@ const ButtonPanel_SmallDevices: FC<ButtonPanel_SmallDevicesProps> = ({
     <>
       <div className="buttonpanel_small_devices">
         <div className="bottom_panel">
-          <div
-            className={`scratchmicrobit_row ${
-              course === "microbit" || course === "scratch" ? "active" : ""
-            }`}
-          >
+          <div className={`scratchmicrobit_row active`}>
             {course === "microbit" && (
               <MicrobitButtons
                 editorRef={editorRef}

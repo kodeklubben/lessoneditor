@@ -6,7 +6,7 @@
   flex-direction: row;
   justify-content: space-between;
   box-shadow: 0px 0px 7px 0px lightgrey;
-  position: relative;
+
   z-index: 30;
 }
 
@@ -42,10 +42,15 @@
   display: flex;
   justify-content: right;
   align-items: center;
+  padding-right: 1rem;
 }
 
 .navbar_image:hover {
   cursor: pointer;
+}
+
+.navbar_logo__mobile {
+  display: none;
 }
 
 @media (min-width: 570px) {
@@ -55,8 +60,6 @@
     padding: 0;
     height: 100%;
     width: auto;
-  }
-  .navbar_logo__mobile {
-    display: none;
+    padding-left: 1rem;
   }
 }
