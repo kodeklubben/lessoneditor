@@ -48,7 +48,8 @@
       "options": {
         "buildTarget": "frontend:build",
         "hmr": true,
-        "proxyConfig": "apps/frontend/proxy.conf.json"
+        "proxyConfig": "apps/frontend/proxy.conf.json",
+        "host": "0.0.0.0"
       },
       "configurations": {
         "production": {

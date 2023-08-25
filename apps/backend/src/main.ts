@@ -40,9 +40,10 @@ async function bootstrap() {
   const globalPrefix = "api";
   app.setGlobalPrefix(globalPrefix);
   const port = process.env.PORT || 8080;
+  const host = process.env.HOST || "0.0.0.0";
 
-  await app.listen(port, () => {
-    Logger.log("Listening at http://localhost:" + port + "/" + globalPrefix);
+  await app.listen(port, host, () => {
+    Logger.log(`Listening at http://${host}:${port}/${globalPrefix}`);
   });
 }
 

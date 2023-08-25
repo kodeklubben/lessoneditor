@@ -98,7 +98,7 @@ const frontpage: FC = () => {
                 onChange={handleSortChange}
                 inline
                 options={sortOptions}
-                defaultValue={sortOptions[0].value}
+                // defaultValue={sortOptions[0].value}
                 value={sortValue}
               />
             </div>
