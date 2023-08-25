@@ -14,9 +14,9 @@ const Navbar: FC<{ children?: ReactNode }> = ({ children }) => {
     navigate("/");
   };
 
-  const username = userState.user?.name || userState.user?.username || "";
-  const userphoto = userState.user?.photo;
-  const useremail = userState.user?.email;
+  const username = userState?.user?.name || userState?.user?.username || "";
+  const userphoto = userState?.user?.photo || "";
+  const useremail = userState?.user?.email || "";
 
   return (
     <nav className="navbar_container">
@@ -26,7 +26,7 @@ const Navbar: FC<{ children?: ReactNode }> = ({ children }) => {
       </div>
       <div className="navbar_children_container">{children}</div>
       <div className="navbar_profilemenu_container">
-        <ProfileMenu name={username} photo={userphoto} email={useremail} />
+        {userState?.user && <ProfileMenu name={username} photo={userphoto} email={useremail} />}
       </div>
     </nav>
   );

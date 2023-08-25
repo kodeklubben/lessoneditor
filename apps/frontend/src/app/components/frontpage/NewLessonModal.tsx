@@ -50,9 +50,6 @@ const NewLessonModal: FC<NewLessonModalProps> = ({ openNewLessonModal, setOpenNe
     COURSESLIST.splice(0, COURSESLIST.length, ...tempCourselist);
   };
 
-  const onBlur = (e: any) => {
-    setIsEmptyField(true);
-  };
   const closeModal = () => {
     setLessonData(defaultState);
     setIsEmptyField(false);
@@ -66,6 +63,12 @@ const NewLessonModal: FC<NewLessonModalProps> = ({ openNewLessonModal, setOpenNe
   };
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!lessonData.lessonTitle) {
+      setIsEmptyField(true);
+      return;
+    }
+
     setLoading(true);
     const { course, lessonTitle, language } = lessonData;
 
@@ -115,13 +118,12 @@ const NewLessonModal: FC<NewLessonModalProps> = ({ openNewLessonModal, setOpenNe
             <section className="new-lesson-modal-container">
               <div className="new-lesson-modal-container__title">
                 <label>
-                  Tittel:
+                  Tittel (Obligatorisk):
                   <br />
                   <Input
                     className="new-lesson-modal-container__title-input"
                     disabled={loading}
                     autoFocus
-                    onBlur={onBlur}
                     onChange={onChange}
                     name={"lessonTitle"}
                     defaultValue={lessonData["lessonTitle"]}
@@ -178,7 +180,6 @@ const NewLessonModal: FC<NewLessonModalProps> = ({ openNewLessonModal, setOpenNe
             loading={loading}
             form={"skjema-for-oppretting-av-ny-oppgave"}
             type={"submit"}
-            disabled={lessonData.lessonTitle.length === 0}
             content="Neste"
             labelPosition="right"
             icon="right arrow"

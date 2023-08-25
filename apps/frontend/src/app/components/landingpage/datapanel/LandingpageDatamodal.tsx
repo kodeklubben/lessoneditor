@@ -14,6 +14,7 @@ import { deepEqual } from "fast-equals";
 const LandingpageDatamodal = () => {
   const lessonContext = useLessonContext();
   const { state, yml, setYml, updateYaml } = lessonContext;
+  const [isEmptyDatapanelText, setIsEmptyDatapanelText] = useState<boolean>(false);
   const [checkBoxState, setCheckBoxState] = useState({});
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -69,6 +70,11 @@ const LandingpageDatamodal = () => {
   }, [yml]);
 
   const onSubmit = async () => {
+    if (isEmptyDatapanel) {
+      setIsEmptyDatapanelText(true);
+      return;
+    }
+
     if (deepEqual(yml, prevData.current)) {
       updateYaml(lessonId, yml);
       return setOpen(false);
@@ -78,6 +84,7 @@ const LandingpageDatamodal = () => {
       await updateYaml(lessonId, yml);
       setOpen(false);
       setLoading(false);
+      setIsEmptyDatapanelText(false);
     } catch (e) {
       console.error(e);
     }
@@ -203,7 +210,7 @@ const LandingpageDatamodal = () => {
         </Modal.Content>
 
         <Modal.Actions className="landingpage_modal">
-          {isEmptyDatapanel ? (
+          {isEmptyDatapanelText ? (
             <p>
               <i style={{ color: "red" }}>
                 Må inneholde minst ett valg i kategoriene Tema, Fag, eller Klassetrinn
@@ -214,7 +221,6 @@ const LandingpageDatamodal = () => {
           )}
 
           <Button
-            disabled={isEmptyDatapanel}
             onClick={onSubmit}
             content="OK"
             labelPosition="right"

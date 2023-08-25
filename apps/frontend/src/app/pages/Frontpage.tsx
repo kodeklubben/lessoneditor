@@ -42,6 +42,10 @@ const frontpage: FC = () => {
     setUserLessons(sortLessons(state.lessons, sortValue));
   }, [state.lessons, sortValue]);
 
+  function openModal() {
+    if (!openNewLessonModal) setOpenNewLessonModal(true);
+  }
+
   const handleSortChange = (e: any, { value }: any) => {
     setSortValue(value);
   };
@@ -63,7 +67,7 @@ const frontpage: FC = () => {
                 <h3>Lag ny oppgave</h3>
               </label>
               <div className="card_container">
-                <div onClick={() => setOpenNewLessonModal(true)} className="card">
+                <div onClick={openModal} className="card">
                   <Card>
                     <Card.Content className="card_content">
                       <Card.Content>

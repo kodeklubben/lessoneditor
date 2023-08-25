@@ -47,6 +47,7 @@
       "options": {
         "buildTarget": "thumbnailer:build",
         "parallel": false,
+        "host": "localhost",
         "commands": [
           {
             "command": "nx build-app thumbnailer"

@@ -19,16 +19,16 @@ const Item: React.FC<Props> = ({ lesson }) => {
 
   const submitDate = new Date(lesson.submitted_at).toLocaleDateString();
 
-  const deleteLesson = async () => {
+  function deleteLesson() {
     try {
       setLoading(true);
-      await removeLesson(lesson.lessonId);
+      removeLesson(lesson.lessonId);
       setOpenDeleteLesson(false);
       setLoading(false);
     } catch (e) {
       console.error(e);
     }
-  };
+  }
 
   const navigateToHome = (lessonId: string) => {
     const target = ["/landingpage", lessonId].join("/");
