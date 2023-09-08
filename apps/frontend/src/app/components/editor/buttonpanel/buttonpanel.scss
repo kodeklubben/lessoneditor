@@ -3,7 +3,6 @@
   border-style: solid solid solid solid;
   border-radius: 5px;
   width: 100%;
-  height: 5rem;
   max-width: 1920px;
 
   .top_panel {
@@ -33,6 +32,7 @@
       justify-content: space-between;
       flex-flow: row;
       align-items: center;
+      height: 4rem;
       .undo-redo_button_group {
         button {
           padding: 0 1rem;
@@ -62,8 +62,8 @@
   }
 
   @media (min-width: 920px) {
-    height: fit-content;
     padding: 0 0 0.2rem 0;
+    height: 8rem;
     .top_panel {
       .firstrow_mobile {
         display: none;
@@ -88,6 +88,8 @@
       .secondrow {
         display: flex;
         justify-content: space-between;
+        // position: sticky;
+        // bottom: 0;
         padding: 0 1rem;
         .sectiongroup {
           display: flex;

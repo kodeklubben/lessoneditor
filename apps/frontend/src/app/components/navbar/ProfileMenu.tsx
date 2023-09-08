@@ -3,7 +3,7 @@ import { Image, Icon, Button, Popup } from "semantic-ui-react";
 import { useUserContext } from "../../contexts/UserContext";
 import { useNavigate } from "react-router-dom";
 
-type ProfileMenuProps = { name: string; photo: string | undefined; email: string | undefined };
+type ProfileMenuProps = { name: string; photo?: string | undefined; email?: string | undefined };
 
 const ProfileMenu: FC<ProfileMenuProps> = ({ name, photo, email }) => {
   const navigate = useNavigate();
