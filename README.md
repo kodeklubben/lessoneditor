@@ -2,6 +2,10 @@
 
 Create and edit lessons for the [Lær Kidsa Koding (LKK)](https://kidsakoder.no) website without any Git hassles!
 
+## 🌐 Live Demo
+
+Check out the live demo [here](https://lessoneditor.ew.r.appspot.com/).
+
 ## 📌 Features
 
 - **Frontend**: Developed using ReactJS with Semantic UI React theming.
