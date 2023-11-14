@@ -1,8 +1,10 @@
 export const oppgaveMal =
-  `(TEKSTMAL FOR OPPGAVER)
+  `**Tekstmal for nye oppgaver**
 
+Du kan trygt redigere denne teksten.
+  
 # Introduksjon {.intro}
-
+  
 Her skriver du en introduksjon til oppgaven.
 
 ![ALTERNATIV_TEKST](./image_rT34Yx.png)

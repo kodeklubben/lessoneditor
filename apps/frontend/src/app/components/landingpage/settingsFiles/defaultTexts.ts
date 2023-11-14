@@ -1,5 +1,7 @@
 const lessonBokmal: string =
-  `(TEKSTMAL FOR OPPGAVER)
+  `**Tekstmal for nye oppgaver**
+
+Du kan trygt redigere denne teksten.
 
 # Introduksjon {.intro}
 
@@ -92,7 +94,9 @@ Husk å lagre spillet/programmet ditt. Når du er ferdig kan du klikke på "Legg
 ut"-knappen. Da vil det bli lagt ut på Scratch-hjemmesiden din slik at du enkelt
 kan dele det med familien og vennene dine.`;
 
-const teacherBokmal: string = `(TEKSTMAL FOR LÆRERVEILEDNING)
+const teacherBokmal: string = `**Tekstmal for ny lærerveiledning**
+
+Du kan trygt redigere denne teksten.
 
 # Om oppgaven {.activity}
 
