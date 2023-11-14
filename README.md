@@ -38,8 +38,8 @@ Check out the live demo [here](https://lessoneditor.ew.r.appspot.com/).
    GH_CLIENT_SECRET=<Your_GitHub_Client_Secret>
    GH_CALLBACK_URL=<Your_Callback_URL> (e.g., http://localhost:4200/api/auth/callback)
    THUMB_SERVICE_URL=<Your_Thumbnail_Service_URL> (e.g., http://localhost:3012)
-   GH_LESSON_REPO_OWNER=<"Oppgaver"-Repo_owner> (this should be "kodeklubben" in production, but you can use your github name if you have made a fork of https://github.com/kodeklubben/oppgaver and want to test submitting to it instead.)
-   GH_LESSON_REPO=oppgaver (name of oppgaver repo)
+   GH_LESSON_REPO_OWNER=kodeklubben
+   GH_LESSON_REPO=oppgaver
 
    POSTGRES_USER=<Your_Postgres_Username>
    POSTGRES_PASSWORD=<Your_Postgres_Password>
