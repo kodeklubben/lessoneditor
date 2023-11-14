@@ -17,7 +17,7 @@ const Levels: FC<LevelsProps> = ({ changeHandler, data }) => {
         placeholder="Velg Nivå"
         name="level"
         value={data.level}
-        defaultValue={1}
+        // defaultValue={1}
         fluid
         selection
         onChange={changeHandler}

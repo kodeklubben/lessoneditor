@@ -14,13 +14,15 @@ let storeSVG = {};
 export const renderScratchBlocks = (content: string) => {
   const scratchblocks = require("scratchblocks/browser.js");
 
+  //debug
+
   // NOTE: English (en) is included by default. All other languages
   //       that exist in getAvailableLanguages() should be loaded here,
   //       otherwise rendering will fail.
   //       It is also possible to just do a
   //           require('scratchblocks/locales-src/translations-all.js')
   //       but that includes many unnecessary files.
-  scratchblocks.loadLanguages({
+  scratchblocks.default.loadLanguages({
     nb: require("scratchblocks/locales/nb.json"),
     nn: require("scratchblocks/locales/nn.json"),
     is: require("scratchblocks/locales/is.json"),
@@ -46,11 +48,11 @@ export const renderScratchBlocks = (content: string) => {
           // @ts-ignore
           returnContent = returnContent.replace(block, storeSVG[checksum]);
         } else {
-          let doc = scratchblocks.parse(code, {
+          let doc = scratchblocks.default.parse(code, {
             inline: false,
             languages: LANGUAGES,
           });
-          let docView = scratchblocks.newView(doc, { style: "scratch3" });
+          let docView = scratchblocks.default.newView(doc, { style: "scratch3" });
           let svg = docView.render();
           svg.setAttribute(
             "viewBox",

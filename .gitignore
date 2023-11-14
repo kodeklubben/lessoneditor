@@ -1,22 +1,33 @@
+# OS-generated files #
+######################
 .DS_Store
-.env
-.env.development.local
-.local.env
-.env.local
-.local.env
-.env.production.local
-.env.test.local
-.eslintrc.js
-/.idea
-/backend/.env
-/backend/.env.local
-/backend/examples/.env
-build/
-dist/
+
+# Node #
+########
 node_modules/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 yarn.lock
 
+# Environment files #
+#####################
+.env*
+!.env.example
+
+# IDE files #
+#############
+.idea/
+
+# Build/output files #
+######################
+build/
+dist/
+/backend/examples/build/
+/backend/examples/dist/
+
+# Misc #
+########
 cloud_sql_proxy
+.eslintrc.js
+.nx/
