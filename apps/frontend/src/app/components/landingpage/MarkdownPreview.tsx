@@ -29,7 +29,6 @@ const MarkdownPreview: FC<MarkdownPreviewProps> = ({
 
   useEffect(() => {
     async function fetchText() {
-      console.log(filename);
       try {
         const result = await axios.get<FileDTO<string>>(
           paths.LESSON_FILE.replace(":lessonId", lessonId).replace(":filename", filename)

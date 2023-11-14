@@ -96,10 +96,7 @@ const NewLessontextModal: FC<any> = ({
 
   async function fetchLessonData() {
     try {
-      setLoading(true);
-      console.log({ lessonId, textMode, translateFromLang, lessonSlug });
       const filename = getFilename(textMode, translateFromLang, lessonSlug);
-      console.log({ filename });
       const result = await axios.get<FileDTO<string>>(replaceAPIPath(String(lessonId), filename));
       const [_, header, body] = result.data.content.split(separator);
       return body;
@@ -116,19 +113,16 @@ const NewLessontextModal: FC<any> = ({
       conversationHistory: [
         {
           role: "system",
-          content:
-            "Vær så snill å hjelpe meg å oversette tekster skrevet i markdown. Behold all markdownsyntax,og kodeblokker, og oversett bare teksten.",
+          content: `Vær så snill å oversette teksten skrevet i markdown. Behold all markdownsyntax,og kodeblokker, og oversett bare teksten. Oversett til ${
+            lang!.text
+          }.`,
         },
         {
           role: "user",
-          content: `Kan du oversette denne teksten til ${lang!.text}?
-          
-
-          
-          ${lessonText}`,
+          content: lessonText,
         },
       ],
-      chatGPTModel: "gpt-3.5-turbo-16k",
+      chatGPTModel: "gpt-4-1106-preview",
     };
 
     const response = await chatGPT(packageForGPT);
@@ -136,12 +130,12 @@ const NewLessontextModal: FC<any> = ({
   };
 
   const onSubmit = async () => {
+    setLoading(true);
     const { name = "", username = "" } = state.user || {};
     let target, language, lessonText;
 
     if (translateWithGPT) {
       lessonText = await translateLessonText();
-      console.log({ lessonText });
       language = translateToLang;
     } else if (textMode === "lessontext") {
       lessonText = lessonGuideDefaultText[lessontextLang];
@@ -161,14 +155,13 @@ const NewLessontextModal: FC<any> = ({
       content: rawBody,
     };
 
-    console.log({ newFileDTO, lessonId, textMode, language, lessonSlug });
-
     try {
       await axios.post<number>(
         paths.LESSON_FILES.replace(":lessonId", lessonId.toString()),
         newFileDTO
       );
     } catch (e) {
+      setLoading(false);
       console.error(e);
     }
 
@@ -204,7 +197,7 @@ const NewLessontextModal: FC<any> = ({
         onClose={() => onClose()}
         onOpen={() => setOpenNewLessontextModal(true)}
         open={openNewLessontextModal}
-        closeOnDimmerClick={!loading}
+        closeOnDimmerClick={loading}
         dimmer={"inverted"}
       >
         <>
@@ -221,7 +214,7 @@ const NewLessontextModal: FC<any> = ({
                 style={{
                   marginRight: "1em",
                 }}
-                disabled={unusedLessontextLanguages.length <= 0}
+                disabled={unusedLessontextLanguages.length <= 0 || loading}
               />
               <Radio
                 label="Lærerveiledning"
@@ -229,7 +222,7 @@ const NewLessontextModal: FC<any> = ({
                 value="teacherguide"
                 checked={textMode === "teacherguide"}
                 onChange={() => onRadiobuttonChange("teacherguide")}
-                disabled={unusedTeacherguideLanguages.length <= 0}
+                disabled={unusedTeacherguideLanguages.length <= 0 || loading}
               />
             </Modal.Description>
             {(!translateWithGPT || !isTranslateFromLangEnabled) && (
@@ -269,7 +262,7 @@ const NewLessontextModal: FC<any> = ({
                   style={{
                     marginRight: "1em",
                   }}
-                  disabled={unusedLessontextLanguages.length <= 0}
+                  disabled={unusedLessontextLanguages.length <= 0 || loading}
                 />
                 <Radio
                   label="Nei"
@@ -277,14 +270,16 @@ const NewLessontextModal: FC<any> = ({
                   value="translateWithGPT"
                   checked={!translateWithGPT}
                   onChange={() => setTranslateWithGPT(false)}
-                  disabled={unusedTeacherguideLanguages.length <= 0}
+                  disabled={unusedTeacherguideLanguages.length <= 0 || loading}
                 />
               </Modal.Description>
             </Modal.Content>
           )}
           {translateWithGPT && isTranslateFromLangEnabled && (
             <>
-              <i style={{ paddingLeft: "1.5rem" }}>Merk: Oversetting kan ta lang tid</i>
+              <i style={{ paddingLeft: "1.5rem" }}>
+                <span style={{ color: "green" }}>Merk: Oversetting kan ta lang tid</span>
+              </i>
               <Modal.Content style={{ display: "flex", flexFlow: "row wrap" }}>
                 <Modal.Description style={{ display: "flex", flexFlow: "row wrap" }}>
                   <p style={{ marginRight: "1em", fontWeight: "700" }}>Oversett fra: </p>
@@ -297,6 +292,7 @@ const NewLessontextModal: FC<any> = ({
                         setTranslateFromLang(value);
                       }}
                       options={usedLessontextLanguages}
+                      disabled={loading}
                     />
                   ) : textMode === "teacherguide" && unusedTeacherguideLanguages.length > 0 ? (
                     <Dropdown
@@ -307,6 +303,7 @@ const NewLessontextModal: FC<any> = ({
                         setTranslateFromLang;
                       }}
                       options={usedTeacherguideLanguages}
+                      disabled={loading}
                     />
                   ) : (
                     ""
@@ -321,6 +318,7 @@ const NewLessontextModal: FC<any> = ({
                         setTranslateToLang(value);
                       }}
                       options={unusedLessontextLanguages}
+                      disabled={loading}
                     />
                   ) : textMode === "teacherguide" && unusedTeacherguideLanguages.length > 0 ? (
                     <Dropdown
@@ -331,6 +329,7 @@ const NewLessontextModal: FC<any> = ({
                         setTranslateToLang(value);
                       }}
                       options={unusedTeacherguideLanguages}
+                      disabled={loading}
                     />
                   ) : (
                     ""
@@ -355,6 +354,7 @@ const NewLessontextModal: FC<any> = ({
                 onClick={() => onSubmit()}
                 positive
                 loading={loading}
+                disabled={loading}
               />
             </>
           </Modal.Actions>
