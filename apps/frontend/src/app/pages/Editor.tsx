@@ -98,7 +98,6 @@ const Editor: FC = () => {
   const pushRedoValue = (mdText: string) => {
     resetButtons();
     if (redo.length > 0) {
-      console.log(redo.length);
       const text = redo[redo.length - 1];
       const position = redoCursorPosition[redoCursorPosition.length - 1];
       setUndoAndUndoPosition(mdText, position);
