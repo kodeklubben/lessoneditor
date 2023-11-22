@@ -31,7 +31,7 @@ jobs:
 
       - run: npm run test-all
 
-      - run: npm run build-all
+      - run: npm run build:all
 
       - name: Cache Dist Folder
         uses: actions/cache@v3
