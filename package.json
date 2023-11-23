@@ -13,7 +13,7 @@
     "affected:lint": "nx affected:lint",
     "affected:test": "nx affected:test",
     "affected": "nx affected",
-    "build:all": "concurrently \"npm run build:backend\" \"npm run build:frontend\" \"npm run build:thumbnailer\"",
+    "build:all": "concurrently \"npm run build:backend\" \"nx run-many --target=build --all --parallel=true\"",
     "build:backend": "tsc --p apps/backend/tsconfig.app.json",
     "build:frontend": "tsc --p apps/frontend/tsconfig.app.json",
     "build:thumbnailer": "tsc --p apps/thumbnailer/tsconfig.app.json",
