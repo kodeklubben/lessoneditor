@@ -135,7 +135,6 @@ const Editor: FC = () => {
           <ImageUpload
             uploadImageRef={uploadImageRef}
             mdText={mdText}
-            pushUndoValue={pushUndoValue}
             cursorPositionStart={cursorPositionStart}
             cursorPositionEnd={cursorPositionEnd}
             setMdText={setMdText}
