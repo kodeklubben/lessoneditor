@@ -19,7 +19,7 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: "20"
+          node-version: "18"
 
       - run: npm ci
 
@@ -31,9 +31,7 @@ jobs:
 
       - run: npm run test-all
 
-      - run: npm run build:all
-
-      - run: ls -la dist
+      - run: npm run build-all
 
       - name: Cache Dist Folder
         uses: actions/cache@v3
@@ -57,7 +55,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: "20"
+          node-version: "18"
 
       - run: 'echo "$SSH_KEY" > credentials.json'
         env:
