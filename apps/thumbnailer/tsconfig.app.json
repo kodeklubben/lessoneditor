@@ -1,7 +1,7 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../dist",
+    "outDir": "../../dist/out-tsc",
     "module": "CommonJS",
     "types": ["node", "express"],
     "allowSyntheticDefaultImports": true

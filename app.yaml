@@ -1,2 +1,2 @@
 runtime: nodejs20
-entrypoint: node dist/apps/backend/main.js
+entrypoint: node dist/apps/backend/apps/backend/src/main.js
