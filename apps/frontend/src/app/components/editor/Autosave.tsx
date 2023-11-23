@@ -15,8 +15,8 @@ const Autosave: FC<AutosaveProps> = ({ mdText }) => {
   const checkTypingFrequency = useCallback(() => {
     const now = new Date();
     if (lastTypingTime.current) {
-      // Sjekk om tidsforskjellen mellom nåværende og siste tastetrykk er mindre enn et sekund
-      return now.getTime() - lastTypingTime.current.getTime() < 1000;
+      // Sjekk om tidsforskjellen mellom nåværende og siste tastetrykk er mindre enn to sekund
+      return now.getTime() - lastTypingTime.current.getTime() < 2000;
     }
     lastTypingTime.current = now;
     return false;
