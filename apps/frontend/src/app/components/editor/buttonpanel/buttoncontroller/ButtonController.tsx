@@ -176,6 +176,7 @@ export const ButtonController: FC<ButtonControllerProps> = ({
       }
 
       case "redo": {
+        console.log({ mdText });
         if (pushRedoValue) {
           pushRedoValue(mdText);
           break;

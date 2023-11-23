@@ -175,7 +175,7 @@ const LandingpageDatamodal = () => {
         }
       />
       <Modal
-        closeOnDimmerClick={!isEmptyDatapanel}
+        closeOnDimmerClick={isEmptyDatapanel ? false : true}
         onClose={() => {
           onSubmit();
           loading ? setOpen(false) : "";
