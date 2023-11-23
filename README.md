@@ -21,17 +21,11 @@ Check out the live demo [here](https://lessoneditor.ew.r.appspot.com/).
 5. **Database**: Set up the database by executing `docker-compose up --build`.
    - If running the DB for the first time, set up tables using `npm run migration:run`.
 6. **Build**:
-   - Backend: `npm run build:backend`.
-   - Frontend: `npm run build:frontend`.
-   - Thumbnailer: `npm run build:thumbnailer`.
-     or take the shortcut...
-   - All services: `npm run build:dev`.
+   - Frontend, contracts, and thumbnailer: `npm run build-all`.
+   - Backend: `npm run build-backend`.
 7. **Run**:
-   - Backend: `npm run start:backend`.
-   - Frontend: `npm run start:frontend`.
-   - Thumbnailer: `npm run start:thumbnailer`.
-     or take the shortcut...
-   - All Services: `npm start:all`.
+   - Backend: `npm run start-backend`.
+   - Frontend & Thumbnailer: `npm start`.
 8. 🌍 **Access**: Open [http://localhost:4200/](http://localhost:4200) and start editing!
 
 ## 🛠 Development Setup

@@ -1,14 +1,23 @@
 import * as puppeteer from "puppeteer";
-import { Browser, Page } from "puppeteer";
+import { Browser } from "puppeteer";
 import logger from "./logger";
 
-let browser: Browser | null = null;
+let browser: Browser;
 
-async function getBrowserInstance(): Promise<Browser> {
+export async function killBrowser() {
+  if (browser) {
+    await browser.close();
+  }
+}
+
+const takeScreenshot = async (url, token, waitForSelector?) => {
+  const metadata = {
+    component: "takeScreenshot",
+  };
   if (!browser) {
-    logger.info("Creating a new browser");
+    logger.info("Creating a new browser", metadata);
     browser = await puppeteer.launch({
-      headless: "new", // eller "headless: false" hvis du trenger et GUI
+      headless: "new",
       args: [
         "--no-sandbox",
         "--disable-setuid-sandbox",
@@ -20,52 +29,45 @@ async function getBrowserInstance(): Promise<Browser> {
         "--disable-gpu",
       ],
     });
+    logger.debug("Browser created", metadata);
   }
-  return browser;
-}
-
-async function takeScreenshot(
-  url: string,
-  token: string,
-  waitForSelector?: string
-): Promise<Buffer> {
-  const metadata = { component: "takeScreenshot" };
-  const browser = await getBrowserInstance();
-  let page: Page | null = null;
-
+  const page = await browser.newPage();
+  await page.setExtraHTTPHeaders({
+    Authorization: "Bearer " + token,
+  });
+  page.setDefaultNavigationTimeout(13000);
+  await page.setViewport({
+    width: 600,
+    height: 1000,
+    deviceScaleFactor: 1,
+  });
   try {
-    page = await browser.newPage();
-    await page.setExtraHTTPHeaders({ Authorization: `Bearer ${token}` });
-    page.setDefaultNavigationTimeout(13000);
-    await page.setViewport({ width: 600, height: 1000, deviceScaleFactor: 1 });
-
-    await page.goto(url, { waitUntil: "networkidle0" });
-
-    if (waitForSelector) {
-      logger.info("Waiting for selector: " + waitForSelector, metadata);
-      await page.waitForSelector(waitForSelector, { visible: true });
-    }
-
-    const screenshotBuffer = await page.screenshot({ type: "png", encoding: "binary" });
-
-    if (!(screenshotBuffer instanceof Buffer)) {
-      throw new Error("Screenshot failed, did not return a buffer");
-    }
-
-    return screenshotBuffer;
+    await page.goto(url, {
+      waitUntil: "networkidle0",
+    });
   } catch (error) {
-    logger.error("Error taking screenshot: " + error.message, metadata);
-    throw error; // Re-throw the error for the caller to handle
-  } finally {
-    if (page) await page.close(); // Make sure to close the page to free up resources
+    console.error(error);
   }
-}
 
-export async function killBrowser() {
-  if (browser) {
-    await browser.close();
-    browser = null; // Set browser to null to ensure clean re-initialization
+  if (waitForSelector) {
+    logger.info("Waiting for selector: " + waitForSelector);
+    await page.waitForSelector(waitForSelector, {
+      visible: true,
+    });
+  } else {
+    logger.info("Waiting for timeout", metadata);
+    await page.waitForTimeout(1000);
   }
-}
+  const screenShotBuffer = await page.screenshot({
+    type: "png",
+    encoding: "binary",
+  });
+  await page.close();
+  if (screenShotBuffer instanceof Buffer) {
+    return screenShotBuffer;
+  } else {
+    throw Error("Something failed, page.screenshot did not return a buffer as expected");
+  }
+};
 
 export default takeScreenshot;

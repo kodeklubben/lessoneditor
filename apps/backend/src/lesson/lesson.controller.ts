@@ -17,8 +17,6 @@ import { LoginGuard } from "../auth/login.guard";
 import { UpdatedFileDTO } from "@lessoneditor/contracts";
 import { Request } from "express";
 import { User } from "../user/user.entity";
-import { BadRequestException, InternalServerErrorException } from "@nestjs/common";
-import { validate } from "class-validator";
 
 @Controller("lesson")
 export class LessonController {
@@ -115,18 +113,8 @@ export class LessonController {
   @UseGuards(LoginGuard)
   @Post(":lessonId/files")
   async AddLessonFile(@Req() req, @Param() params, @Body() newFile: NewFileDTO): Promise<number> {
-    try {
-      const errors = await validate(newFile);
-      if (errors.length > 0) {
-        throw new BadRequestException("Validation failed");
-      }
-
-      const addFileRes = await this.lessonService.addLessonFile(params.lessonId, newFile, req);
-      return addFileRes;
-    } catch (err) {
-      console.error(err);
-      throw new InternalServerErrorException("An error occurred");
-    }
+    const addFileRes = await this.lessonService.addLessonFile(params.lessonId, newFile, req);
+    return addFileRes;
   }
 
   @UseGuards(LoginGuard)
