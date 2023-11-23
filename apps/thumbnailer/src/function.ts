@@ -1,13 +1,10 @@
 import takeScreenshot from "./app/take-screenshot";
 import { HttpFunction } from "@google-cloud/functions-framework";
 import logger from "./app/logger";
-
-// import env variable LOCAL_FRONTEND_URL from .env file
-const dotenv = require("dotenv");
+import fastq from "fastq";
+import * as dotenv from "dotenv";
 
 dotenv.config();
-
-const fastq = require("fastq");
 
 const initTime = new Date().toISOString();
 
