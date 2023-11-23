@@ -9,13 +9,12 @@ import { base64StringToBlob, createObjectURL, blobToBase64String } from "blob-ut
 import slugify from "slugify";
 import Compressor from "compressorjs";
 
-// const imgRegex = /^[\w-]+(.jpg|.jpeg|.gif|.png)$/i;
+const MAX_IMAGE_SIZE = 5000000;
 const imageSizeErrorMessage = "Bildet kan ikke være over 5mb";
 
 interface ImageUploadProps {
   uploadImageRef: Ref<HTMLInputElement>;
   mdText: string;
-  pushUndoValue?: (mdText: string, cursorPositionStart: number) => void;
   cursorPositionStart: number;
   cursorPositionEnd: number;
   setMdText: Dispatch<SetStateAction<string>>;
@@ -32,8 +31,8 @@ const ImageUpload: FC<ImageUploadProps> = ({
   setCursor,
   setCursorPosition,
 }) => {
-  let start = cursorPositionStart + 2;
-  let end = cursorPositionEnd + 18;
+  const start = cursorPositionStart + 2;
+  const end = cursorPositionEnd + 18;
 
   const [showSpinner, setShowSpinner] = useState(false);
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -65,7 +64,7 @@ const ImageUpload: FC<ImageUploadProps> = ({
       ext,
       content: content,
     };
-    const _postImageRes = await axios.post(
+    await axios.post(
       paths.LESSON_FILES.replace(":lessonId", state.lesson.lessonId.toString()),
       newFileDTO
     );
@@ -84,7 +83,7 @@ const ImageUpload: FC<ImageUploadProps> = ({
       if (!event.target.files) {
         return;
       }
-      if (event.target.files[0].size > 5000000) {
+      if (event.target.files[0].size > MAX_IMAGE_SIZE) {
         setErrorMessage(imageSizeErrorMessage);
         setShowModal(true);
         return;

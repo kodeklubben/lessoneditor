@@ -102,6 +102,10 @@ export class LessonService {
 
   async addLessonFile(lessonId: number, newFile: NewFileDTO, request: Request): Promise<number> {
     const lesson = await this.lessonRepository.findOne({ where: { lessonId } });
+    if (!lesson) {
+      throw new Error(`Lesson with id ${lessonId} not found`);
+    }
+
     const file = new FileStore();
     const user = request.user as User;
     file.filename = newFile.filename;
@@ -109,20 +113,22 @@ export class LessonService {
     file.created_by = user.username;
     file.updated_by = user.username;
     file.lesson = lesson;
+
     if ([".jpg", ".jpeg", ".gif", ".png"].includes(file.ext)) {
       file.content = Buffer.from(newFile.content, "base64");
     } else {
       file.content = Buffer.from(newFile.content);
     }
+
     try {
-      const newFile = await this.fileStoreRepository.save(file, {
+      const savedFile = await this.fileStoreRepository.save(file, {
         transaction: true,
         chunk: 10,
       });
-
-      return newFile.fileId;
+      return savedFile.fileId;
     } catch (error) {
       console.error(error);
+      throw new Error("Failed to save file");
     }
   }
 
@@ -159,7 +165,13 @@ export class LessonService {
 
   async updateThumbnail(lessonId, filename, request): Promise<any> {
     const lesson = await this.getLesson(lessonId);
-    const thumbImage = await this.thumbService.getThumb(lessonId, filename, request);
+    let thumbImage;
+    try {
+      thumbImage = await this.thumbService.getThumb(lessonId, filename, request);
+    } catch (error) {
+      console.error(error);
+      throw new HttpException("Error generating thumbnail", HttpStatus.INTERNAL_SERVER_ERROR);
+    }
     const previewFile = lesson.files.find((file) => file.filename == "preview");
     previewFile.content = Buffer.from(thumbImage);
     const savedLesson = await this.lessonRepository.save(lesson);
