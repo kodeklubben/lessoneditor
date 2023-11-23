@@ -53,7 +53,7 @@
             "command": "nx build-app thumbnailer"
           },
           {
-            "command": "functions-framework --target=thumbnailer --port=3012 --source=dist/apps/thumbnailer/main.js"
+            "command": "functions-framework --source=dist/apps/thumbnailer/src --target=thumbnailer --port=3012"
           }
         ]
       }
