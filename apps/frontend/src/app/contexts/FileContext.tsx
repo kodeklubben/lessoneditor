@@ -87,11 +87,6 @@ const FileContextProvider = (props: any) => {
   };
 
   const saveFileBody = async (body: string) => {
-    if (typeof body !== "string") {
-      console.error("Invalid body");
-      return -1;
-    }
-
     const fileHeader = fileContextState.rawMdFileContent?.split(separator)[1] || "";
     const newRawText = ["", fileHeader, body].join(separator);
 
@@ -101,27 +96,19 @@ const FileContextProvider = (props: any) => {
       };
 
       const filename = lang === "nb" ? file : `${file}_${lang}`;
-      const updateUrl = paths.LESSON_FILE_UPDATE.replace(":lessonId", lessonId.toString()).replace(
-        ":filename",
-        filename
+      const uploadedFile = await axios.put<FileDTO<string>>(
+        paths.LESSON_FILE_UPDATE.replace(":lessonId", lessonId.toString()).replace(
+          ":filename",
+          filename
+        ),
+        updatedFile
       );
-      const uploadedFile = await axios.put<FileDTO<string>>(updateUrl, updatedFile);
-
-      if (uploadedFile.status !== 200) {
-        console.error("Failed to update file", uploadedFile.status, uploadedFile.data);
-        return -1;
-      }
-
-      const thumbUpdateUrl = paths.LESSON_FILE_UPDATE_THUMB.replace(
-        ":lessonId",
-        lessonId.toString()
-      ).replace(":filename", filename);
-      const isThumbUpdated = await axios.put<boolean>(thumbUpdateUrl);
-
-      if (!isThumbUpdated.data) {
-        console.error("Failed to update thumbnail");
-        return -1;
-      }
+      const isThumbUpdated = await axios.put<boolean>(
+        paths.LESSON_FILE_UPDATE_THUMB.replace(":lessonId", lessonId.toString()).replace(
+          ":filename",
+          filename
+        )
+      );
 
       setFileContextState((s) => {
         return {
@@ -130,10 +117,9 @@ const FileContextProvider = (props: any) => {
           savedFileBody: body,
         };
       });
-
       return uploadedFile.status;
     } catch (error) {
-      console.error("An error occurred", error);
+      console.error(error);
       return -1;
     }
   };

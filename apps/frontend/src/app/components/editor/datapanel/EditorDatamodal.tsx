@@ -79,6 +79,11 @@ const EditorDatamodal: FC<EditorDatamodalProps> = ({
     }
   };
 
+  const isLoading: boolean =
+    typeof state.headerData.authorList === "object" &&
+    !!state.headerData?.title &&
+    (!!state.headerData.author || state.headerData.authorList.length > 0);
+
   return (
     <>
       <Popup
@@ -97,11 +102,7 @@ const EditorDatamodal: FC<EditorDatamodalProps> = ({
         }
       />
       <Modal
-        closeOnDimmerClick={
-          typeof state.headerData.authorList === "object" &&
-          !!state.headerData?.title &&
-          (!!state.headerData.author || state.headerData.authorList.length > 0)
-        }
+        closeOnDimmerClick={isLoading}
         onClose={() => {
           onSubmit();
         }}

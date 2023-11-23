@@ -57,7 +57,6 @@ export const listController = (
       return;
     }
     if (listButtonValues["bTitle"] === "listOl") {
-      console.log({ orderedListIndex });
       setMdText(
         mdText.slice(0, cursorPositionStart) +
           "\n\n" +
