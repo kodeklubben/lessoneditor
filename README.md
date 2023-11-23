@@ -25,7 +25,7 @@ Check out the live demo [here](https://lessoneditor.ew.r.appspot.com/).
    - Frontend: `npm run build:frontend`.
    - Thumbnailer: `npm run build:thumbnailer`.
      or take the shortcut...
-   - All services: `npm run build:all`.
+   - All services: `npm run build:dev`.
 7. **Run**:
    - Backend: `npm run start:backend`.
    - Frontend: `npm run start:frontend`.
