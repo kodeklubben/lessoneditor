@@ -11,7 +11,7 @@ on:
 jobs:
   test:
     name: Run Test and Build Apps
-    timeout-minutes: 10
+    timeout-minutes: 20
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
