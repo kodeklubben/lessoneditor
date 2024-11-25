@@ -116,7 +116,7 @@ jobs:
             GH_CLIENT_SECRET=${{ secrets.GH_CLIENT_SECRET }}
             POSTGRES_HOST=/cloudsql/lessoneditor:europe-north1:lessoneditor
             POSTGRES_DB=lessoneditor
-            GH_CLIENT_ID=29df9fe87b3b11799c63
+            GH_CLIENT_ID=e880a288499ff2a0599c
             GH_CALLBACK_URL=https://lessoneditor.ew.r.appspot.com/api/auth/callback
             THUMB_SERVICE_URL=https://europe-west1-lessoneditor.cloudfunctions.net/thumbnailer
             GH_LESSON_REPO=oppgaver
