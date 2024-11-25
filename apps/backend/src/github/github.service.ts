@@ -258,7 +258,7 @@ export class GithubService {
     return filteredObjectsResult.filter((object) => object != null);
   }
 
-  async getContentCached(owner, repo, ref, path) {
+  async getContentCached(owner: string, repo: string, ref: string, path: string) {
     try {
       const response = await this.octokit.repos.getContent({
         owner,
@@ -274,12 +274,11 @@ export class GithubService {
         throw e;
       }
     }
-    return;
   }
 
   resolveMarkdownImageUrls(markdownContent: string) {
     return markdownContent.replace(
-      /(!\[.*?\]\()(.+?)(\))/gs,
+      /(!\[.*?\]\()(.+?)(\))/g,
       function (whole, prefix, imagePathRaw, postfix) {
         const imageName = imagePathRaw.split("/").pop().replace(/\s/g, "");
         return prefix + imageName + postfix;
@@ -289,7 +288,7 @@ export class GithubService {
 
   getMarkdownUrlsSubmit(markdownContent: string) {
     const images = [];
-    const matches = [...markdownContent.matchAll(/(!\[.*?\]\()(.+?)(\))/gs)];
+    const matches = [...markdownContent.matchAll(/(!\[.*?\]\()(.+?)(\))/g)];
     matches.map((match) => {
       const imagePathRaw = match[2];
       const imageName = imagePathRaw.split("/").pop();
@@ -298,13 +297,14 @@ export class GithubService {
     return images;
   }
 
-  async downloadImage(url) {
+  async downloadImage(url: string) {
     try {
       const response = await axios.get<ArrayBuffer>(url, {
         responseType: "arraybuffer",
       });
       return Buffer.from(response.data);
     } catch (e) {
+      console.error("Error downloading image:", e);
       return null;
     }
   }

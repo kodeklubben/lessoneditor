@@ -8,7 +8,7 @@ async function getBrowserInstance(): Promise<Browser> {
   if (!browser) {
     logger.info("Creating a new browser");
     browser = await puppeteer.launch({
-      headless: "new", // eller "headless: false" hvis du trenger et GUI
+      headless: true, // eller "headless: false" hvis du trenger et GUI
       args: [
         "--no-sandbox",
         "--disable-setuid-sandbox",
