@@ -19,7 +19,7 @@ Check out the live demo [here](https://lessoneditor.ew.r.appspot.com/)
 3. **Node Version**: Ensure NodeJS is installed using `nvm use` (correct version in ./.nvmrc)
 4. **Setup**: Install the required dependencies using `npm install`
 5. **Database**: Set up the database by executing `docker-compose up --build`
-   - If running the DB for the first time, set up tables using `npm run migration:run`
+   - If running the DB for the first time, you need to set up tables using `npm run migration:run`
 6. **Build**:
 
    - Build all services: `npm run build:dev`
