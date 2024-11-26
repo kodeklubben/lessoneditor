@@ -1,12 +1,11 @@
 import * as puppeteer from "puppeteer";
 import { Browser, Page } from "puppeteer";
-import logger from "./logger";
 
 let browser: Browser | null = null;
 
 async function getBrowserInstance(): Promise<Browser> {
   if (!browser) {
-    logger.info("Creating a new browser");
+    console.log("Creating a new browser");
     browser = await puppeteer.launch({
       headless: true, // eller "headless: false" hvis du trenger et GUI
       args: [
@@ -42,7 +41,7 @@ async function takeScreenshot(
     await page.goto(url, { waitUntil: "networkidle0" });
 
     if (waitForSelector) {
-      logger.info("Waiting for selector: " + waitForSelector, metadata);
+      console.log("Waiting for selector:", waitForSelector, metadata);
       await page.waitForSelector(waitForSelector, { visible: true });
     }
 
@@ -54,7 +53,8 @@ async function takeScreenshot(
 
     return screenshotBuffer;
   } catch (error) {
-    logger.error("Error taking screenshot: " + error.message, metadata);
+    const err = error as Error;
+    console.error("Error taking screenshot:", err.message, metadata);
     throw error; // Re-throw the error for the caller to handle
   } finally {
     if (page) await page.close(); // Make sure to close the page to free up resources
