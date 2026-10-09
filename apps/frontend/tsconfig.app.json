@@ -1,15 +1,13 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "composite": true,
+    "composite": false,
     "outDir": "../../dist/out-tsc",
-    "types": ["node", "jest"]
+    "types": ["node"],
+    "incremental": false
   },
-  "files": [
-    "../../node_modules/@nx/react/typings/cssmodule.d.ts",
-    "../../node_modules/@nx/react/typings/image.d.ts"
-  ],
-  "exclude": ["**/*.spec.ts", "**/*.spec.tsx", "jest.config.ts"],
+  "files": ["src/assets.d.ts"],
+  "exclude": ["**/*.spec.ts", "**/*.spec.tsx", "jest.config.cjs"],
   "include": [
     "**/*.js",
     "**/*.jsx",

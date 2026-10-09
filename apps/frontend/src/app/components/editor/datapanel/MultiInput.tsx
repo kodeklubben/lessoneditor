@@ -24,7 +24,7 @@ const MultiInput: FC<MultiInputProps> = ({
   let inputOrder = 1;
   const { setFileContextState } = useFileContext();
 
-  let textInput: Input | null = null;
+  let textInput: HTMLInputElement | null = null;
 
   const handleClick = (event: SyntheticEvent<HTMLButtonElement> | KeyboardEvent) => {
     if (inputValue && !inputArray.includes(inputValue)) {
@@ -39,7 +39,7 @@ const MultiInput: FC<MultiInputProps> = ({
 
   const multiInputHandler = (
     object: { [s: string]: unknown } | ArrayLike<unknown>,
-    name: string
+    name: string,
   ) => {
     const key = Object.keys(object)[0];
     const value = Object.values(object)[0];

@@ -3,63 +3,25 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/frontend/src",
   "projectType": "application",
+  "tags": [],
   "targets": {
     "build": {
-      "executor": "@nx/webpack:webpack",
-      "outputs": ["{options.outputPath}"],
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/dist/apps/frontend"],
       "options": {
-        "outputPath": "dist/apps/frontend",
-        "index": "apps/frontend/src/index.html",
-        "main": "apps/frontend/src/main.tsx",
-        "polyfills": "apps/frontend/src/polyfills.ts",
-        "tsConfig": "apps/frontend/tsconfig.app.json",
-        "assets": ["apps/frontend/src/favicon.ico", "apps/frontend/src/assets"],
-        "styles": ["apps/frontend/src/styles.scss"],
-        "scripts": [],
-        "webpackConfig": "@nx/react/plugins/webpack"
-      },
-      "configurations": {
-        "production": {
-          "fileReplacements": [
-            {
-              "replace": "apps/frontend/src/environments/environment.ts",
-              "with": "apps/frontend/src/environments/environment.prod.ts"
-            }
-          ],
-          "optimization": true,
-          "outputHashing": "all",
-          "sourceMap": false,
-          "extractCss": true,
-          "namedChunks": false,
-          "extractLicenses": true,
-          "vendorChunk": false,
-          "budgets": [
-            {
-              "type": "initial",
-              "maximumWarning": "500kb",
-              "maximumError": "1mb"
-            }
-          ]
-        }
+        "cwd": "apps/frontend",
+        "command": "webpack build --mode=production"
       }
     },
     "serve": {
-      "executor": "@nx/webpack:dev-server",
+      "executor": "nx:run-commands",
       "options": {
-        "buildTarget": "frontend:build",
-        "hmr": true,
-        "proxyConfig": "apps/frontend/proxy.conf.json",
-        "host": "localhost"
-      },
-      "configurations": {
-        "production": {
-          "buildTarget": "frontend:build:production",
-          "hmr": false
-        }
+        "cwd": "apps/frontend",
+        "command": "webpack serve --mode=development"
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
+      "executor": "@nx/eslint:lint",
       "options": {
         "lintFilePatterns": ["apps/frontend/**/*.{ts,tsx,js,jsx}"]
       }
@@ -68,10 +30,9 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/apps/frontend"],
       "options": {
-        "jestConfig": "apps/frontend/jest.config.ts",
+        "jestConfig": "apps/frontend/jest.config.cjs",
         "passWithNoTests": true
       }
     }
-  },
-  "tags": []
+  }
 }

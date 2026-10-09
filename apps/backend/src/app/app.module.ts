@@ -19,7 +19,7 @@ import { dataSourceOptions } from "../../../../db/data-sources";
     }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, "../../../../../frontend"),
-      exclude: ["/api*"],
+      exclude: ["/api", "/api/{*path}"],
     }),
     TypeOrmModule.forRoot(dataSourceOptions),
     forwardRef(() => UserModule),

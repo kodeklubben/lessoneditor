@@ -18,7 +18,6 @@ import { UpdatedFileDTO } from "@lessoneditor/contracts";
 import { Request } from "express";
 import { User } from "../user/user.entity";
 import { BadRequestException, InternalServerErrorException } from "@nestjs/common";
-import { validate } from "class-validator";
 
 @Controller("lesson")
 export class LessonController {
@@ -49,7 +48,7 @@ export class LessonController {
       req.user as User,
       accessToken,
       params.lessonId,
-      submitMessage
+      submitMessage,
     );
   }
 
@@ -82,7 +81,7 @@ export class LessonController {
     try {
       const { lesson, content, ...fileProps } = await this.lessonService.getLessonFile(
         lessonId,
-        filename
+        filename,
       );
 
       if ([".jpg", ".jpeg", ".gif", ".png"].includes(fileProps.ext)) {
@@ -102,31 +101,32 @@ export class LessonController {
         return res.send(fileDTO);
       }
     } catch (error) {
-      console.error(error);
+      throw error;
     }
   }
 
   @UseGuards(LoginGuard)
   @Post(":lessonId/user")
-  async AddLessonUser(@Param() params, @Body() shareLesson: ShareLessonDTO) {
-    await this.lessonService.addLessonUser(params.lessonId, shareLesson);
+  async AddLessonUser(@Req() req: Request, @Param() params, @Body() shareLesson: ShareLessonDTO) {
+    await this.lessonService.addLessonUser(params.lessonId, {
+      ...shareLesson,
+      invitationByUserId: String((req.user as UserDTO).userId),
+    });
   }
 
   @UseGuards(LoginGuard)
   @Post(":lessonId/files")
   async AddLessonFile(@Req() req, @Param() params, @Body() newFile: NewFileDTO): Promise<number> {
-    try {
-      const errors = await validate(newFile);
-      if (errors.length > 0) {
-        throw new BadRequestException("Validation failed");
-      }
-
-      const addFileRes = await this.lessonService.addLessonFile(params.lessonId, newFile, req);
-      return addFileRes;
-    } catch (err) {
-      console.error(err);
-      throw new InternalServerErrorException("An error occurred");
-    }
+    if (
+      !newFile ||
+      typeof newFile.filename !== "string" ||
+      !newFile.filename.trim() ||
+      /[/\\\x00]/.test(newFile.filename) ||
+      ![".md", ".yml", ".jpg", ".jpeg", ".gif", ".png"].includes(newFile.ext) ||
+      typeof newFile.content !== "string"
+    )
+      throw new BadRequestException("Invalid file name, extension or content");
+    return this.lessonService.addLessonFile(params.lessonId, newFile, req);
   }
 
   @UseGuards(LoginGuard)
@@ -135,14 +135,14 @@ export class LessonController {
     @Req() req,
     @Param("lessonId") lessonId,
     @Param("filename") filename,
-    @Body() updatedFile: UpdatedFileDTO
+    @Body() updatedFile: UpdatedFileDTO,
   ): Promise<FileDTO<string>> {
     const { lesson, content, ...fileProps } = await this.lessonService.updateLessonFile(
       lessonId,
       filename,
       req.user.userId,
       filename === "lesson" ? JSON.stringify(updatedFile.content) : updatedFile.content,
-      req
+      req,
     );
     const newFile: FileDTO<string> = {
       ...fileProps,
@@ -156,7 +156,7 @@ export class LessonController {
   async UpdateThumbnail(
     @Req() req,
     @Param("lessonId") lessonId,
-    @Param("filename") filename
+    @Param("filename") filename,
   ): Promise<any> {
     const isThumbUpdated = await this.lessonService.updateThumbnail(lessonId, filename, req);
 
@@ -169,7 +169,7 @@ export class LessonController {
     @Req() req,
     @Param("lessonId") lessonId,
     @Param("filename") filename,
-    @Param("ext") ext
+    @Param("ext") ext,
   ): Promise<any> {
     const deleteRes = await this.lessonService.deleteLessonFile(lessonId, filename, ext, req);
     return deleteRes;

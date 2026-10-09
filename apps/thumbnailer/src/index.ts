@@ -1,71 +1,43 @@
-import { HttpFunction } from "@google-cloud/functions-framework";
+import type { HttpFunction } from "@google-cloud/functions-framework";
 import takeScreenshot from "./app/take-screenshot";
-import * as fastq from "fastq";
-import * as dotenv from "dotenv";
+import fastq from "fastq";
+import "dotenv/config";
+import { previewUrl } from "./app/preview-url";
 
-dotenv.config();
-
-const initTime = new Date().toISOString();
-let queue = fastq.promise(worker, 1);
-
-async function worker(task: any) {
-  let { url, token, res } = task;
-  const waitForSelector = "div.preview-area";
-  const buffer = await takeScreenshot(url, token, waitForSelector);
-  res.writeHead(200, {
-    "Content-Type": "image/png",
-  });
-  console.log("Completed", url);
-  res.end(buffer);
-}
+type Task = { url: string; token: string };
+const queue = fastq.promise(
+  async ({ url, token }: Task) => takeScreenshot(url, token, "div.preview-area"),
+  1,
+);
 
 export const thumbnailer: HttpFunction = async (req, res) => {
-  let { url, token } = req.query;
-  const isDev = process.env.NODE_ENV !== "production";
-
-  console.log("Received request", {
-    hasToken: !!token,
-    tokenLength: token ? token.toString().length : 0,
-    tokenStart: token ? token.toString().substring(0, 10) + '...' : 'none',
-    url: url
-  });
-
-  if (isDev && typeof url === "string") {
-    const localFrontendUrl = process.env.LOCAL_FRONTEND_URL || "localhost:3000";
-    url = url.replace("localhost:8080", localFrontendUrl);
+  if (req.method !== "GET") {
+    res.set("Allow", "GET").status(405).send("Method not allowed");
+    return;
   }
-
-  if (url && token) {
-    try {
-      console.log("Start fetching with token", {
-        url,
-        tokenPreview: token.toString().substring(0, 20) + '...'
-      });
-      
-      await queue.push({ url, token, res }).catch((error: Error) => {
-        console.error("Error:", error.message, {
-          trace: error.stack,
-          token: token.toString().substring(0, 15) + '...'
-        });
-        res.status(500).send(error.message);
-      });
-    } catch (error) {
-      const err = error as Error;
-      console.error("Error:", err.message, {
-        trace: err.stack,
-        token: token.toString().substring(0, 15) + '...'
-      });
-      res.status(500).send(err.message);
-    }
-  } else {
-    console.warn("Missing required parameters", {
-      hasUrl: !!url,
-      hasToken: !!token
-    });
-    
-    res
-      .status(400)
-      .set("Content-Type", "text/plain")
-      .send("Url and token need to be set. Function created: " + initTime);
+  let url: URL;
+  const token = req.query.token;
+  try {
+    url = previewUrl(req.query.url);
+    if (typeof token !== "string" || !token || token.length > 4096)
+      throw new Error("Invalid token");
+  } catch {
+    res.status(400).send("A valid preview URL and token are required");
+    return;
+  }
+  if (queue.length() >= 10) {
+    res.status(503).send("Thumbnail service is busy");
+    return;
+  }
+  try {
+    const buffer = await queue.push({ url: url.href, token: token as string });
+    res.set("Content-Type", "image/png").set("Cache-Control", "no-store").status(200).send(buffer);
+  } catch (error) {
+    const message =
+      error instanceof Error
+        ? error.message.replaceAll(token as string, "[redacted]")
+        : "Unknown error";
+    console.error("Thumbnail generation failed:", message);
+    res.status(500).send("Thumbnail generation failed");
   }
 };

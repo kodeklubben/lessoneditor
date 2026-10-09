@@ -4,7 +4,7 @@ import { generateChecklist } from "./markdown-it-plugins/markdown-it-checklist";
 import { markdownItLineNumber } from "./markdown-it-plugins/markdown-it-line-number";
 
 const hljs = require("highlight.js");
-const emoji = require("markdown-it-emoji");
+const { full: emoji } = require("markdown-it-emoji");
 const markdownCustomContainer = require("markdown-it-container");
 
 const md = require("markdown-it")({
@@ -14,7 +14,7 @@ const md = require("markdown-it")({
   highlight: function (str: any, lang: any) {
     if (lang && hljs.getLanguage(lang)) {
       try {
-        return hljs.highlight(lang, str).value;
+        return hljs.highlight(str, { language: lang }).value;
       } catch (__) {}
     }
     if (!lang) {
@@ -45,7 +45,7 @@ const md = require("markdown-it")({
           type: string;
         };
       },
-      idx: string | number
+      idx: string | number,
     ) {
       if (tokens[idx].type === "container_video_open") {
         const matches = tokens[idx].info.trim().match(/^video\s*\[(.*)]$/);

@@ -5,16 +5,8 @@
     "module": "commonjs",
     "types": ["node"],
     "emitDecoratorMetadata": true,
-    "target": "es2015"
+    "target": "es2022"
   },
   "exclude": ["**/*.spec.ts"],
-  "include": [
-    "**/*.ts",
-    "../../db/migrations/*.ts",
-    "../../libs/lesson/src/lib/lesson.dto.ts",
-    "../../libs/lesson/src/lib/lesson.entity.ts",
-    "../../libs/user/src/lib/user.entity.ts",
-    "../../libs/contracts/src/lib/lesson.dto.ts",
-    "../../libs/contracts/src/lib/user.dto.ts"
-  ]
+  "include": ["src/**/*.ts", "../../db/**/*.ts", "../../libs/contracts/src/**/*.ts"]
 }

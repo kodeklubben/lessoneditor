@@ -5,11 +5,9 @@
   "projectType": "library",
   "targets": {
     "lint": {
-      "executor": "@nx/linter:eslint",
+      "executor": "@nx/eslint:lint",
       "options": {
-        "lintFilePatterns": [
-          "libs/api-interfaces/**/*.ts"
-        ]
+        "lintFilePatterns": ["libs/api-interfaces/**/*.ts"]
       }
     }
   },

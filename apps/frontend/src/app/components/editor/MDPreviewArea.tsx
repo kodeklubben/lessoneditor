@@ -38,7 +38,7 @@ const MDPreviewArea: FC<MDPreviewProps> = ({ mdText, course, language, preview, 
         }
       }
     }
-    scrollToLine(lineNumber! - 1 ?? 0);
+    scrollToLine((lineNumber ?? 1) - 1);
   }, [lineNumber]);
 
   useEffect(() => {
@@ -51,7 +51,7 @@ const MDPreviewArea: FC<MDPreviewProps> = ({ mdText, course, language, preview, 
         /(!\[.*?\])(\(\.\/.*?\))/gs,
         function (whole: string, prefix: string, imagePathRaw: string, postfix: string) {
           filenames.push(imagePathRaw.slice(3, -1));
-        }
+        },
       );
       return markdownContent.replace(
         /(!\[.*?\]\()(.+?)(\))/gs,
@@ -60,7 +60,7 @@ const MDPreviewArea: FC<MDPreviewProps> = ({ mdText, course, language, preview, 
           const filename: string = filenames.shift() ?? "";
           const imageBlobUrl = images[filename];
           return prefix + imageBlobUrl + postfix;
-        }
+        },
       );
     }
 

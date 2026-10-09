@@ -1,4 +1,4 @@
-import { Injectable, Inject } from "@nestjs/common";
+import { Injectable, Inject, ForbiddenException } from "@nestjs/common";
 import { CACHE_MANAGER } from "@nestjs/cache-manager";
 import { Cache } from "cache-manager";
 import { Octokit, RestEndpointMethodTypes } from "@octokit/rest";
@@ -28,15 +28,11 @@ export class GithubService {
     user: User,
     accessToken: string,
     lesson: Lesson,
-    submitMessage: { message: string }
+    submitMessage: { message: string },
   ) {
-    console.log({
-      user,
-      accessToken,
-      lesson,
-
-      submitMessage,
-    });
+    if (process.env.DISABLE_PULL_REQUESTS !== "false") {
+      throw new ForbiddenException("GitHub submission is disabled in this environment");
+    }
     try {
       // const accessToken = await this.cacheManager.get(user.userId.toString());
       this.octokit = new Octokit({ auth: accessToken });
@@ -46,12 +42,11 @@ export class GithubService {
     console.log("octokit");
     const { owner, repo, status } = await this.createFork(user);
     console.log("owner, repo, status", owner, repo, status);
-    if (status !== 202) {
-      return status;
+    if (status !== 202 && status !== 201) {
+      throw new Error("GitHub fork is not ready");
     }
     if (!lesson.files) {
-      console.warn("No lesson data files");
-      return null;
+      throw new Error("No lesson data files");
     }
 
     const formatLessonData = lesson.files.map((file) => {
@@ -83,11 +78,10 @@ export class GithubService {
       }
     });
 
-    lesson.files = formatLessonData;
     const lessonPath = ["src", lesson.courseSlug, lesson.lessonSlug].join("/");
 
     const filesToUpload: UploadObject[] = [];
-    lesson.files.forEach((file) => {
+    formatLessonData.forEach((file) => {
       const path = [lessonPath, file.filename + file.ext].join("/");
       if (file.ext === ".yml") {
         filesToUpload.push({
@@ -125,14 +119,10 @@ export class GithubService {
       repo,
       commitMessage,
       newTree.sha,
-      branch.commit.sha
+      branch.commit.sha,
     );
-    try {
-      await this.setBranchToCommit(owner, repo, branchName, newCommit.sha);
-      await this.createPullRequest(owner, lesson.lessonTitle, branchName, submitMessage.message);
-    } catch (error) {
-      console.error(error);
-    }
+    await this.setBranchToCommit(owner, repo, branchName, newCommit.sha);
+    await this.createPullRequest(owner, lesson.lessonTitle, branchName, submitMessage.message);
   }
 
   async createFork(user: User) {
@@ -145,7 +135,7 @@ export class GithubService {
         (item) =>
           item.fork &&
           item.owner.login === process.env.GH_LESSON_REPO_OWNER &&
-          item.name === process.env.GH_LESSON_REPO
+          item.name === process.env.GH_LESSON_REPO,
       );
 
       if (alreadyForked) {
@@ -179,7 +169,7 @@ export class GithubService {
   async getBranchCached(
     owner,
     repo,
-    branch
+    branch,
   ): Promise<components["schemas"]["branch-with-protection"]> {
     const cacheKey = JSON.stringify({ owner, repo, branch });
     const value = await this.cacheManager.get(cacheKey);
@@ -194,7 +184,7 @@ export class GithubService {
           branch,
         });
         console.log("Branch fetched, should caching the result", cacheKey);
-        this.cacheManager.set(cacheKey, branchInfo.data);
+        await this.cacheManager.set(cacheKey, branchInfo.data);
         return await this.cacheManager.get(cacheKey);
       } catch (e) {
         if (e.status === 404) {
@@ -230,7 +220,7 @@ export class GithubService {
     owner: string,
     repo: string,
     branch: string,
-    uploadObjects: UploadObject[]
+    uploadObjects: UploadObject[],
   ): Promise<UploadObject[]> {
     const filteredObjects: Promise<UploadObject>[] = [];
     filteredObjects.push(
@@ -252,7 +242,7 @@ export class GithubService {
           }
         }
         return object;
-      })
+      }),
     );
     const filteredObjectsResult = await Promise.all(filteredObjects);
     return filteredObjectsResult.filter((object) => object != null);
@@ -282,7 +272,7 @@ export class GithubService {
       function (whole, prefix, imagePathRaw, postfix) {
         const imageName = imagePathRaw.split("/").pop().replace(/\s/g, "");
         return prefix + imageName + postfix;
-      }
+      },
     );
   }
 
@@ -381,7 +371,7 @@ export class GithubService {
     repo: string,
     message: string,
     currentTreeSha: string,
-    currentCommitSha: string
+    currentCommitSha: string,
   ) =>
     (
       await this.octokit.git.createCommit({
@@ -397,7 +387,7 @@ export class GithubService {
     owner: string,
     repo: string,
     uploadBlobs: UploadBlob[],
-    parentTreeSha: string
+    parentTreeSha: string,
   ) => {
     // My custom config. Could be taken as parameters
     const tree = uploadBlobs.map(({ blob, path }, index) => ({

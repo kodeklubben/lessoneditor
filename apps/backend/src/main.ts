@@ -1,50 +1,52 @@
-/**
- * This is not a production server yet!
- * This is only a minimal backend to get started.
- */
+import "dotenv/config";
 import { Logger } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
-import * as bodyParser from "body-parser";
+import { NestExpressApplication } from "@nestjs/platform-express";
 import { AppModule } from "./app/app.module";
 import { DataSource } from "typeorm";
 import * as ExpressSession from "express-session";
+import { PostgresSessionStore } from "./session/postgres-session.store";
 import { Session } from "./session/session.entity";
 import * as passport from "passport";
 import * as cookieParser from "cookie-parser";
 
-console.log("process.env.GH_CLIENT_ID", process?.env?.GH_CLIENT_ID);
-
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  for (const key of [
+    "GH_CLIENT_ID",
+    "GH_CLIENT_SECRET",
+    "GH_CALLBACK_URL",
+    "FRONTEND_URL",
+    "THUMB_SERVICE_URL",
+    "COOKIE_SECRET",
+    "SESSION_SECRET",
+  ]) {
+    if (!process.env[key]) throw new Error(`Missing required environment variable: ${key}`);
+  }
+  const production = process.env.NODE_ENV === "production";
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  if (production) app.set("trust proxy", 1);
   app.use(cookieParser(process.env.COOKIE_SECRET));
-  const sessionRepository = app.get(DataSource).getRepository(Session);
-
   app.use(
     ExpressSession({
       resave: false,
       saveUninitialized: false,
-      // store: new TypeormStore({
-      //   cleanupLimit: 2,
-      //   limitSubquery: false,
-      //   ttl: 86400, // 24 hours
-      // }).connect(sessionRepository),
-      secret: process.env.SESSION_SECRET || "keyboard cat", // Make sure to use a strong secret
-    })
+      store: new PostgresSessionStore(app.get(DataSource).getRepository(Session)),
+      secret: process.env.SESSION_SECRET,
+      cookie: { httpOnly: true, sameSite: "lax", secure: production, maxAge: 86400000 },
+    }),
   );
-  app.enableCors({ origin: true, methods: "GET,HEAD,PUT,PATCH,POST,DELETE", credentials: true });
-  app.use(bodyParser.json({ limit: "50mb" }));
-
+  app.useBodyParser("json", { limit: "50mb" });
   app.use(passport.initialize());
   app.use(passport.session());
-
-  const globalPrefix = "api";
-  app.setGlobalPrefix(globalPrefix);
-  const port = process.env.PORT || 8080;
-  const host = process.env.HOST || "localhost";
-
-  await app.listen(port, host, () => {
-    Logger.log(`Listening at http://${host}:${port}/${globalPrefix}`);
-  });
+  app.setGlobalPrefix("api");
+  app.enableShutdownHooks();
+  const port = Number(process.env.PORT || 8080);
+  const host = process.env.HOST || (production ? "0.0.0.0" : "localhost");
+  await app.listen(port, host);
+  Logger.log(`Listening at http://${host}:${port}/api`);
 }
 
-bootstrap();
+bootstrap().catch((error) => {
+  Logger.error(error.message);
+  process.exitCode = 1;
+});

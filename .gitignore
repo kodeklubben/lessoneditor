@@ -31,3 +31,7 @@ dist/
 cloud_sql_proxy
 .eslintrc.js
 .nx/
+coverage/
+*.tsbuildinfo
+test-results/
+playwright-report/

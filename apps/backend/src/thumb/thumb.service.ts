@@ -19,7 +19,6 @@ export class ThumbService {
     });
     const response: AxiosResponse<ArrayBuffer> = await lastValueFrom(response$);
     return response.data;
-    request.user;
   }
 
   thumbUrl(previewUrl: string, user: UserDTO) {
@@ -31,11 +30,15 @@ export class ThumbService {
   }
 
   createJwtToken(userId, secret) {
-    return jwt.sign({ sub: userId }, secret);
+    return jwt.sign({}, secret, {
+      subject: String(userId),
+      audience: "lessoneditor-thumbnail",
+      expiresIn: "5m",
+      algorithm: "HS256",
+    });
   }
 
-  baseUrl(req) {
-    const protocol = req.hostname === "localhost" ? "http" : "https";
-    return protocol + "://" + req.get("host");
+  baseUrl(_req) {
+    return new URL(process.env.FRONTEND_URL).origin;
   }
 }

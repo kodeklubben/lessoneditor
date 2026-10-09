@@ -18,34 +18,27 @@ export class LessonService {
     @InjectRepository(FileStore)
     private fileStoreRepository: Repository<FileStore>,
     private githubService: GithubService,
-    private thumbService: ThumbService
+    private thumbService: ThumbService,
   ) {}
 
   async submitLesson(
     user: User,
     accessToken: string,
     lessonId: number,
-    submitMessage: { message: string }
+    submitMessage: { message: string },
   ) {
     const lesson = await this.getLesson(lessonId);
-    lesson.submitted = true;
-    lesson.submitted_at = new Date();
-    const updateLessonRes = await this.lessonRepository.save(lesson);
-
-    if (lesson == null) {
-      throw new HttpException("Lesson does not exist", HttpStatus.NOT_FOUND);
-    }
-    try {
-      await this.githubService.submitLesson(user, accessToken, lesson, submitMessage);
-    } catch (error) {
-      console.error(error);
-    }
+    await this.githubService.submitLesson(user, accessToken, lesson, submitMessage);
+    await this.lessonRepository.update(lessonId, {
+      submitted: true,
+      submitted_at: new Date(),
+    });
   }
 
   async getLesson(lessonId: number): Promise<Lesson> {
     const lesson = await this.lessonRepository.findOne({
       where: { lessonId },
-      relations: ["files"],
+      relations: ["files", "users"],
     });
     if (lesson == null) {
       throw new HttpException("Lesson does not exist", HttpStatus.NOT_FOUND);
@@ -137,7 +130,7 @@ export class LessonService {
     filename: string,
     updatedByUserId: number,
     fileContent: string,
-    request: Request
+    request: Request,
   ): Promise<FileStore> {
     const lesson = await this.getLesson(lessonId);
     lesson.updated_at = new Date();
@@ -169,7 +162,7 @@ export class LessonService {
     try {
       thumbImage = await this.thumbService.getThumb(lessonId, filename, request);
     } catch (error) {
-      console.error(error);
+      console.error("Thumbnail request failed");
       throw new HttpException("Error generating thumbnail", HttpStatus.INTERNAL_SERVER_ERROR);
     }
     const previewFile = lesson.files.find((file) => file.filename == "preview");

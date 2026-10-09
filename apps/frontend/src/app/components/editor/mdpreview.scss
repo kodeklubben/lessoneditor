@@ -4,7 +4,8 @@
 // and
 // codeclub_lesson_builder/styles/lesson.less
 //////////////////////////////////////////////
-@import "node_modules/highlight.js/scss/idea.scss";
+@use "sass:color";
+@use "highlight.js/scss/idea";
 
 $checkbox-blue: #abdbea;
 
@@ -577,6 +578,6 @@ a:hover {
 
   input[type="checkbox"]:active + label::before,
   input[type="checkbox"]:focus + label::before {
-    background: darken($checkbox-blue, 20%);
+    background: color.adjust($checkbox-blue, $lightness: -20%);
   }
 }

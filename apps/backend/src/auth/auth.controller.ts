@@ -11,7 +11,7 @@ import { UserDTO } from "@lessoneditor/contracts";
 export class AuthController {
   constructor(
     private authService: AuthService,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
   @UseGuards(LoginGuard)
@@ -21,19 +21,13 @@ export class AuthController {
   @UseGuards(LoginGuard)
   @Post("logout")
   async logout(@Req() req: Request, @Res() res: Response) {
-    try {
-      this.cacheManager.del((req.user as UserDTO).userId.toString());
-      req.logOut(function (err) {
-        if (err) {
-          return err;
-        }
-      });
-      res.clearCookie("access_token");
-
-      res.redirect("/logout");
-    } catch (error) {
-      console.error(error);
-    }
+    await this.cacheManager.del((req.user as UserDTO).userId.toString());
+    await new Promise<void>((resolve, reject) => {
+      req.logOut((error) => (error ? reject(error) : resolve()));
+    });
+    res.clearCookie("access_token");
+    res.clearCookie("connect.sid");
+    res.redirect("/logout");
   }
 
   @UseGuards(LoginGuard)

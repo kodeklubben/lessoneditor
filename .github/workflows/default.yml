@@ -1,130 +1,67 @@
-name: Build, push, and deploy
+name: CI
 
 on:
   push:
-    branches:
-      - "main"
+    branches: [main]
   pull_request:
-    branches:
-      - main
+    branches: [main]
+  workflow_call:
+
+permissions:
+  contents: read
 
 jobs:
-  test:
+  verify:
     name: Run Test and Build Apps
+    runs-on: ubuntu-latest
     timeout-minutes: 20
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      - uses: actions/setup-node@v3
-        with:
-          node-version: "20"
-
-      - run: npm ci
-
-      - name: Cache Node Modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: npm-deps-${{ hashFiles('package-lock.json') }}
-
-      # - run: npm run test-all
-
-      - run: npm run build:all
-
-      - name: Cache Dist Folder
-        uses: actions/cache@v3
-        with:
-          path: ./dist
-          key: cache-dist-${{ github.sha }}
-
-  deploy_db:
-    permissions:
-      contents: "read"
-      id-token: "write"
-    timeout-minutes: 9
-    needs: test
-    name: Deploy to Cloud SQL Postgres
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: "20"
-
-      - run: 'echo "$SSH_KEY" > credentials.json'
+    services:
+      postgres:
+        image: postgres:15-alpine
         env:
-          SSH_KEY: ${{ secrets.SERVICE_ACCOUNT }}
-
-      - run: npm ci
-
-      - name: Install Cloud SQL Auth Proxy
-        run: wget https://dl.google.com/cloudsql/cloud_sql_proxy.linux.amd64 -O cloud_sql_proxy && chmod +x cloud_sql_proxy
-
-      - name: Start Cloud SQL Proxy
-        run: |
-          ./cloud_sql_proxy -instances=lessoneditor:europe-north1:lessoneditor=tcp:5432 -credential_file=credentials.json &
-          PROXY_PID=$!
-          sleep 10
-          npm run migration:run
-          kill $PROXY_PID
-        env:
-          POSTGRES_CONNECTION: postgres
-          POSTGRES_HOST: 127.0.0.1
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_USER: lessoneditor
+          POSTGRES_PASSWORD: ci-local-only
           POSTGRES_DB: lessoneditor
-          POSTGRES_PORT: 5432
-          POSTGRES_SYNCHRONIZE: false
-          POSTGRES_MIGRATIONS: dist/apps/backend/db/migrations/*.js
-          POSTGRES_ENTITIES: dist/apps/backend/**/*.entity.js
-
-  deploy:
-    permissions:
-      contents: "read"
-      id-token: "write"
-    timeout-minutes: 9
-    needs: test
-    if: github.ref == 'refs/heads/main'
-    name: Deploy to Google App Engine
-    runs-on: ubuntu-latest
-
+        ports: ["55432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U lessoneditor -d lessoneditor"
+          --health-interval 2s --health-timeout 5s --health-retries 20
+    env:
+      NX_DAEMON: "false"
+      NX_ISOLATE_PLUGINS: "false"
+      PUPPETEER_SKIP_DOWNLOAD: "true"
+      NODE_ENV: test
+      GH_CLIENT_ID: ci-placeholder
+      GH_CLIENT_SECRET: ci-placeholder-secret
+      GH_CALLBACK_URL: http://localhost:44100/api/auth/callback
+      COOKIE_SECRET: ci-cookie-secret-only
+      SESSION_SECRET: ci-session-secret-only
+      FRONTEND_URL: http://localhost:44100
+      THUMB_SERVICE_URL: http://localhost:44112
+      DISABLE_PULL_REQUESTS: "true"
+      POSTGRES_USER: lessoneditor
+      POSTGRES_PASSWORD: ci-local-only
+      POSTGRES_DB: lessoneditor
+      POSTGRES_HOST: 127.0.0.1
+      POSTGRES_PORT: "55432"
+      POSTGRES_SYNCHRONIZE: "false"
+      POSTGRES_ENTITIES: dist/apps/backend/**/*.entity.js
+      POSTGRES_MIGRATIONS: dist/apps/backend/db/migrations/*.js
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
-      - name: Restoring Dist Folder
-        uses: actions/cache@v3
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
-          path: ./dist
-          key: cache-dist-"${{ github.sha }}"
-      - id: "auth"
-        name: "Authenticate to Google Cloud"
-        uses: "google-github-actions/auth@v1"
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - run: npm audit --omit=dev --audit-level=moderate
+      - run: npm run migration:run
+      - run: npm run browser:install -- --install-deps
+      - run: npm run test:smoke
+      - uses: actions/upload-artifact@v7
+        if: always()
         with:
-          credentials_json: "${{ secrets.SERVICE_ACCOUNT }}"
-
-      - id: "deploy"
-        uses: "google-github-actions/deploy-appengine@v1"
-        with:
-          env_vars: |
-            POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
-            GH_CLIENT_SECRET=${{ secrets.GH_CLIENT_SECRET }}
-            POSTGRES_HOST=/cloudsql/lessoneditor:europe-north1:lessoneditor
-            POSTGRES_DB=lessoneditor
-            GH_CLIENT_ID=e880a288499ff2a0599c
-            GH_CALLBACK_URL=https://lessoneditor.ew.r.appspot.com/api/auth/callback
-            THUMB_SERVICE_URL=https://europe-west1-lessoneditor.cloudfunctions.net/thumbnailer
-            GH_LESSON_REPO=oppgaver
-            GH_LESSON_REPO_OWNER=kodeklubben
-            DISABLE_PULL_REQUESTS=false
-            POSTGRES_USER=postgres
-            POSTGRES_PORT=5432
-            POSTGRES_ENTITIES=dist/apps/backend/**/*.entity.js
-            POSTGRES_MIGRATIONS=dist/apps/backend/db/migrations/*.js
-
-          project_id: "lessoneditor"
+          name: smoke-test-results
+          path: test-results/
+          if-no-files-found: ignore

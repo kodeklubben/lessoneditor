@@ -1,0 +1,100 @@
+name: Deploy to production (manual)
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: Type production to deploy the checked main branch
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lessoneditor-production
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    if: github.ref == 'refs/heads/main' && inputs.confirm == 'production'
+    uses: ./.github/workflows/default.yml
+
+  deploy:
+    name: Migrate database, then deploy App Engine
+    needs: verify
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment: production
+    env:
+      PUPPETEER_SKIP_DOWNLOAD: "true"
+      POSTGRES_HOST: 127.0.0.1
+      POSTGRES_PORT: "5432"
+      POSTGRES_USER: postgres
+      POSTGRES_DB: lessoneditor
+      POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      POSTGRES_SYNCHRONIZE: "false"
+      POSTGRES_ENTITIES: dist/apps/backend/**/*.entity.js
+      POSTGRES_MIGRATIONS: dist/apps/backend/db/migrations/*.js
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - name: Check required production configuration
+        env:
+          GH_CLIENT_SECRET: ${{ secrets.GH_CLIENT_SECRET }}
+          COOKIE_SECRET: ${{ secrets.COOKIE_SECRET }}
+          SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
+          THUMB_SERVICE_URL: ${{ vars.THUMB_SERVICE_URL }}
+        run: |
+          for key in POSTGRES_PASSWORD GH_CLIENT_SECRET COOKIE_SECRET SESSION_SECRET THUMB_SERVICE_URL; do
+            if [ -z "${!key}" ]; then
+              echo "Missing production configuration: $key" >&2
+              exit 1
+            fi
+          done
+      - uses: google-github-actions/auth@v3
+        with:
+          credentials_json: ${{ secrets.SERVICE_ACCOUNT }}
+      - run: npm ci
+      - name: Install Cloud SQL Auth Proxy
+        run: |
+          curl --fail --location https://storage.googleapis.com/cloud-sql-connectors/cloud-sql-proxy/v2.26.0/cloud-sql-proxy.linux.amd64 -o cloud-sql-proxy
+          chmod +x cloud-sql-proxy
+      - name: Run migrations before application deployment
+        run: |
+          ./cloud-sql-proxy --port=5432 --run-connection-test lessoneditor:europe-north1:lessoneditor &
+          proxy_pid=$!
+          trap 'kill "$proxy_pid"' EXIT
+          for attempt in {1..30}; do
+            if pg_isready -h 127.0.0.1 -p 5432; then break; fi
+            sleep 1
+          done
+          npm run migration:run
+      - uses: google-github-actions/deploy-appengine@v3
+        with:
+          project_id: lessoneditor
+          promote: true
+          env_vars: |
+            NODE_ENV=production
+            HOST=0.0.0.0
+            POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+            GH_CLIENT_SECRET=${{ secrets.GH_CLIENT_SECRET }}
+            COOKIE_SECRET=${{ secrets.COOKIE_SECRET }}
+            SESSION_SECRET=${{ secrets.SESSION_SECRET }}
+            POSTGRES_HOST=/cloudsql/lessoneditor:europe-north1:lessoneditor
+            POSTGRES_DB=lessoneditor
+            GH_CLIENT_ID=e880a288499ff2a0599c
+            GH_CALLBACK_URL=https://lessoneditor.ew.r.appspot.com/api/auth/callback
+            FRONTEND_URL=https://lessoneditor.ew.r.appspot.com
+            THUMB_SERVICE_URL=${{ vars.THUMB_SERVICE_URL }}
+            GH_LESSON_REPO=oppgaver
+            GH_LESSON_REPO_OWNER=kodeklubben
+            DISABLE_PULL_REQUESTS=false
+            POSTGRES_USER=postgres
+            POSTGRES_PORT=5432
+            POSTGRES_SYNCHRONIZE=false
+            POSTGRES_ENTITIES=dist/apps/backend/**/*.entity.js
+            POSTGRES_MIGRATIONS=dist/apps/backend/db/migrations/*.js

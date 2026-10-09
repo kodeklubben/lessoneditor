@@ -20,7 +20,7 @@ export class LocalStrategy extends PassportStrategy(Strategy, "github") {
     private authService: AuthService,
     private http: HttpService,
     private userService: UserService,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {
     super({
       authorizationURL: `https://github.com/login/oauth/authorize?${stringify({
@@ -34,6 +34,7 @@ export class LocalStrategy extends PassportStrategy(Strategy, "github") {
       clientSecret: process.env.GH_CLIENT_SECRET,
       callbackURL: process.env.GH_CALLBACK_URL,
       scope: null,
+      state: true,
     });
   }
 
@@ -67,7 +68,7 @@ export class LocalStrategy extends PassportStrategy(Strategy, "github") {
       };
       user = await this.userService.addUser(newUserDTO);
     }
-    this.cacheManager.set(user.userId.toString(), accessToken);
+    await this.cacheManager.set(user.userId.toString(), accessToken);
     return user;
   }
 
