@@ -57,7 +57,12 @@ jobs:
       - run: npm run check
       - run: npm audit --omit=dev --audit-level=moderate
       - run: npm run migration:run
-      - run: npm run browser:install -- --install-deps
+      - name: Install Chrome and system dependencies
+        # apt needs root; keep Chrome in the runner user's cache for the smoke test.
+        run: >-
+          sudo env "PUPPETEER_CACHE_DIR=$HOME/.cache/puppeteer"
+          "$(command -v node)" node_modules/.bin/puppeteer
+          browsers install chrome --install-deps
       - run: npm run test:smoke
       - uses: actions/upload-artifact@v7
         if: always()
