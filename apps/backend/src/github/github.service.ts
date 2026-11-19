@@ -1,13 +1,10 @@
 import {
   Injectable,
-  Inject,
   BadRequestException,
   ForbiddenException,
   UnauthorizedException,
 } from "@nestjs/common";
 import { isCourseSlug, isLessonSlug } from "../../../../libs/contracts/src/lib/validation";
-import { CACHE_MANAGER } from "@nestjs/cache-manager";
-import { Cache } from "cache-manager";
 import { Octokit, RestEndpointMethodTypes } from "@octokit/rest";
 import {} from "@octokit/core";
 import { components } from "@octokit/openapi-types";
@@ -23,8 +20,6 @@ interface UploadBlob {
 
 @Injectable()
 export class GithubService {
-  constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {}
-
   /** A new client per submission: a shared instance mixed up tokens between concurrent users. */
   createClient(accessToken: string): Octokit {
     return new Octokit({ auth: accessToken });
@@ -135,43 +130,26 @@ export class GithubService {
     }
   }
 
-  async getBranchCached(
+  /** Always asks GitHub: a cached branch head went stale after the first push. */
+  async getBranch(
     octokit: Octokit,
-    owner,
-    repo,
-    branch,
-  ): Promise<components["schemas"]["branch-with-protection"]> {
-    const cacheKey = JSON.stringify({ owner, repo, branch });
-    const value = await this.cacheManager.get(cacheKey);
-    if (value != null) {
-      console.log("Getting branch from cache", cacheKey);
-      return <components["schemas"]["branch-with-protection"]>value;
-    } else {
-      try {
-        const branchInfo = await octokit.repos.getBranch({
-          owner,
-          repo,
-          branch,
-        });
-        console.log("Branch fetched, should caching the result", cacheKey);
-        await this.cacheManager.set(cacheKey, branchInfo.data);
-        return await this.cacheManager.get(cacheKey);
-      } catch (e) {
-        if (e.status === 404) {
-          console.log("Couldn't find branch", cacheKey);
-          return null;
-        } else {
-          throw e;
-        }
-      }
+    owner: string,
+    repo: string,
+    branch: string,
+  ): Promise<components["schemas"]["branch-with-protection"] | null> {
+    try {
+      return (await octokit.repos.getBranch({ owner, repo, branch })).data;
+    } catch (e) {
+      if (e.status === 404) return null;
+      throw e;
     }
   }
 
   async ensureBranch(octokit: Octokit, owner, repo, branch) {
-    const branchData = await this.getBranchCached(octokit, owner, repo, branch);
+    const branchData = await this.getBranch(octokit, owner, repo, branch);
     if (branchData === null) {
       console.log("Branch is not existing, creating", { owner, repo, branch });
-      const masterBranch = await this.getBranchCached(octokit, owner, repo, "master");
+      const masterBranch = await this.getBranch(octokit, owner, repo, "master");
 
       await octokit.git.createRef({
         owner,
@@ -179,7 +157,7 @@ export class GithubService {
         ref: `refs/heads/${branch}`,
         sha: masterBranch.commit.sha,
       });
-      return await this.getBranchCached(octokit, owner, repo, branch);
+      return await this.getBranch(octokit, owner, repo, branch);
     } else {
       console.log("Branch exists", { owner, repo, branch });
       return branchData;
