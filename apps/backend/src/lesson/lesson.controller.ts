@@ -18,7 +18,10 @@ import { sessionGithubToken } from "../auth/github-token";
 import { UpdatedFileDTO } from "@lessoneditor/contracts";
 import { Request } from "express";
 import { User } from "../user/user.entity";
-import { BadRequestException, InternalServerErrorException } from "@nestjs/common";
+import { BadRequestException, PayloadTooLargeException } from "@nestjs/common";
+
+/** 5 MB of binary data, base64 encoded; matches the limit shown in the image upload. */
+const MAX_FILE_BASE64_LENGTH = Math.ceil((5 * 1024 * 1024) / 3) * 4;
 
 @Controller("lesson")
 export class LessonController {
@@ -123,6 +126,8 @@ export class LessonController {
       typeof newFile.content !== "string"
     )
       throw new BadRequestException("Invalid file name, extension or content");
+    if (newFile.content.length > MAX_FILE_BASE64_LENGTH)
+      throw new PayloadTooLargeException("Files can be at most 5 MB");
     return this.lessonService.addLessonFile(params.lessonId, newFile, req);
   }
 

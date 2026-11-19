@@ -40,7 +40,8 @@ async function bootstrap() {
       cookie: { httpOnly: true, sameSite: "lax", secure: production, maxAge: 86400000 },
     }),
   );
-  app.useBodyParser("json", { limit: "50mb" });
+  // Images are sent as base64 JSON: 5 MB (the editor's limit) is about 6.7 MB encoded.
+  app.useBodyParser("json", { limit: "8mb" });
   app.use(passport.initialize());
   app.use(passport.session());
   app.setGlobalPrefix("api");
