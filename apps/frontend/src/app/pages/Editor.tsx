@@ -11,6 +11,7 @@ import Navbar from "../components/navbar/Navbar";
 
 import ButtonPanel_SmallDevices from "../components/editor/buttonpanel/ButtonPanel_SmallDevices";
 import { useAutosave } from "../components/editor/useAutosave";
+import MachineTranslationNotice from "../components/editor/MachineTranslationNotice";
 import { DESKTOP_EDITOR, useMediaQuery } from "../utils/useMediaQuery";
 
 const Editor: FC = () => {
@@ -181,6 +182,7 @@ const Editor: FC = () => {
               flushAutosave={autosave.flush}
             />
 
+            <MachineTranslationNotice />
             <div className="editor-windows">
               <MDTextArea
                 editorRef={editorRef}

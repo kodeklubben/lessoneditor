@@ -137,6 +137,12 @@ async function run() {
     { lessonTitle: "Sti", lessonSlug: "../x", courseTitle: "Python", courseSlug: "python" },
     400,
   );
+  assert.deepEqual(
+    await api("/translate/status"),
+    { enabled: false },
+    "Translation is off by default",
+  );
+  await api(`/lesson/${lessonId}/translate`, "POST", { source: "lokal-test", language: "en" }, 503);
   const files = await api(`/lesson/${lessonId}/filenames`);
   assert.ok(files.includes("lokal-test.md"));
   const file = await api(`/lesson/${lessonId}/files/lokal-test`);
@@ -260,6 +266,32 @@ async function run() {
   await page.screenshot({ path: "test-results/editor-desktop.png", fullPage: true });
   await page.setViewport({ width: 390, height: 844 });
   await page.screenshot({ path: "test-results/editor-mobile.png", fullPage: true });
+  await page.setViewport({ width: 1440, height: 1000 });
+  // With a topic set, the lesson data dialog does not open on top of the landing page.
+  await api(`/lesson/${lessonId}/files/lesson`, "PUT", {
+    content: {
+      level: 1,
+      license: "CC BY-SA 4.0",
+      tags: { topic: ["app"], subject: [], grade: [] },
+    },
+  });
+  await page.goto(`${base}/landingpage/${lessonId}`);
+  await page.locator("button::-p-text(Ny tekstfil)").click();
+  await page.waitForSelector("::-p-text(Opprett ny tekstfil)");
+  assert.equal(
+    await page.$$eval(".ui.modal", (m) => m.some((x) => x.textContent.includes("maskinoversett"))),
+    false,
+    "The translate option is hidden while translation is off",
+  );
+  await page.locator(".ui.modal button::-p-text(Fortsett)").click();
+  await page
+    .waitForFunction(() => location.pathname.includes("/editor/"), { timeout: 15000 })
+    .catch(async () => {
+      const text = await page.$$eval(".ui.modal", (m) => m.map((x) => x.textContent).join(" | "));
+      throw new Error(`No editor after creating a text: ${text}`);
+    });
+  assert.match(page.url(), /\/editor\/\d+\/lokal-test\/nn/);
+  assert.ok((await api(`/lesson/${lessonId}/filenames`)).includes("lokal-test_nn.md"));
   await api(`/lesson/${lessonId}/files/lokal-test/updateThumbnail`, "PUT");
   const image = await client.query(
     'SELECT content FROM file_store WHERE "lessonLessonId" = $1 AND filename = $2',
