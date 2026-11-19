@@ -23,6 +23,11 @@ import { BadRequestException, PayloadTooLargeException } from "@nestjs/common";
 /** 5 MB of binary data, base64 encoded; matches the limit shown in the image upload. */
 const MAX_FILE_BASE64_LENGTH = Math.ceil((5 * 1024 * 1024) / 3) * 4;
 
+/** What other members of a lesson may see about each other: never the e-mail address. */
+export function publicMember({ userId, username, name, photo }: User): Omit<UserDTO, "email"> {
+  return { userId, username, name, photo };
+}
+
 @Controller("lesson")
 export class LessonController {
   constructor(private lessonService: LessonService) {}
@@ -54,13 +59,9 @@ export class LessonController {
 
   @UseGuards(LoginGuard)
   @Get(":lessonId/users")
-  async GetLessonUsers(@Param() params): Promise<UserDTO[]> {
-    const { users, files, ...lessonDTO } = await this.lessonService.getLesson(params.lessonId);
-    const userArray: UserDTO[] = users.map(function (user) {
-      const { lessons, ...userDTO } = user;
-      return userDTO;
-    });
-    return userArray;
+  async GetLessonUsers(@Param() params): Promise<Omit<UserDTO, "email">[]> {
+    const { users } = await this.lessonService.getLesson(params.lessonId);
+    return users.map(publicMember);
   }
 
   // @UseGuards(LoginGuard)

@@ -1,3 +1,4 @@
+import { publicMember } from "./lesson.controller";
 import { LessonService } from "./lesson.service";
 
 describe("lesson submission state", () => {
@@ -31,6 +32,25 @@ describe("lesson submission state", () => {
     expect(repository.update).toHaveBeenCalledWith(7, {
       submitted: true,
       submitted_at: expect.any(Date),
+    });
+  });
+});
+
+describe("lesson members", () => {
+  it("does not expose e-mail addresses to other members", () => {
+    const member = publicMember({
+      userId: 1,
+      username: "ada",
+      name: "Ada",
+      photo: "https://avatars.example/1",
+      email: "ada@example.invalid",
+      lessons: [],
+    } as never);
+    expect(member).toEqual({
+      userId: 1,
+      username: "ada",
+      name: "Ada",
+      photo: "https://avatars.example/1",
     });
   });
 });

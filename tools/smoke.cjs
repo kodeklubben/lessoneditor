@@ -170,6 +170,9 @@ async function run() {
     { invitationByUserId: String(otherId), invitationToUserId: String(otherId) },
     201,
   );
+  const members = await api(`/lesson/${lessonId}/users`);
+  assert.equal(members.length, 2);
+  assert.ok(members.every((member) => !("email" in member)), "Members do not see e-mail addresses");
 
   browser = await puppeteer.launch({
     headless: true,
