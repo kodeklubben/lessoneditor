@@ -2,7 +2,7 @@ import "./textitem.scss";
 import { useNavigate } from "react-router";
 import { Button, Item, Image, Icon } from "semantic-ui-react";
 import { FC, useState } from "react";
-import { LANGUAGEOPTIONS } from "../frontpage/settings/newLessonOptions";
+import { languageOption } from "../frontpage/settings/newLessonOptions";
 import { useUserContext } from "../../contexts/UserContext";
 
 import DeleteModal from "../shared/DeleteModal";
@@ -33,7 +33,7 @@ const TeacherguideItem: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug
     navigate({ pathname: target });
   };
 
-  const lang = LANGUAGEOPTIONS.find((item) => item.value === language);
+  const lang = languageOption(language);
 
   const languageText = lang!.text;
   const languageImage = lang!.image!.src;

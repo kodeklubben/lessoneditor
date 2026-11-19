@@ -49,6 +49,20 @@ describe("files sent to the lesson repo", () => {
   });
 });
 
+describe("old language codes", () => {
+  it("submits Northern Sami as se, as the lesson repo names it", () => {
+    const [upload] = buildUploadFiles({ courseSlug: "python", lessonSlug: "hei" }, [
+      {
+        filename: "hei_sam",
+        ext: ".md",
+        content: md("title: Hei\nauthorList: [Ada]\nlanguage: sam\n", "Tekst"),
+      },
+    ]);
+    expect(upload.path).toBe("src/python/hei/hei_se.md");
+    expect(upload.buffer.toString()).toContain("language: se\n");
+  });
+});
+
 describe("git blob ids", () => {
   it("match what git computes", () => {
     // printf 'hei\n' | git hash-object --stdin

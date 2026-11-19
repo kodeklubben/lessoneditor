@@ -3,7 +3,7 @@ import { FC, useEffect, useState } from "react";
 import { Item, Button, Modal, Icon, Image } from "semantic-ui-react";
 import axios from "axios";
 import { paths } from "@lessoneditor/contracts";
-import { LANGUAGEOPTIONS } from "../frontpage/settings/newLessonOptions";
+import { languageOption } from "../frontpage/settings/newLessonOptions";
 import { useLessonContext } from "../../contexts/LessonContext";
 import { useUserContext } from "../../contexts/UserContext";
 import { filenameParser } from "../../utils/filename-parser";
@@ -38,7 +38,7 @@ const ListFiles: FC<ListFilesProps> = ({ item, lessonId }) => {
   let languageImage;
 
   if (ext === "md") {
-    lang = LANGUAGEOPTIONS.find((item) => item.value === language);
+    lang = languageOption(language);
 
     languageImage = lang!.image!.src;
   }

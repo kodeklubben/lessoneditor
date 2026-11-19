@@ -170,16 +170,15 @@ oppgaven enda.*
 
 - [ ] Foreløpig ingen eksterne ressurser ...`;
 
-export const teacherGuideDefaultText: Record<string, string> = {
-  nb: teacherBokmal,
-  nn: teacherBokmal,
-  en: teacherBokmal,
-  is: teacherBokmal,
-};
+// Only bokmål templates exist so far; every language in LANGUAGEOPTIONS starts from them.
+const LANGUAGES = ["nb", "nn", "se", "en", "is", "fr"];
 
-export const lessonGuideDefaultText: Record<string, string> = {
-  nb: lessonBokmal,
-  nn: lessonBokmal,
-  en: lessonBokmal,
-  is: lessonBokmal,
-};
+/** Lookups never return undefined, also for a language added to the list later. */
+const withFallback = (template: string): Record<string, string> =>
+  new Proxy(Object.fromEntries(LANGUAGES.map((language) => [language, template])), {
+    get: (target, key: string) => target[key] ?? template,
+  });
+
+export const teacherGuideDefaultText: Record<string, string> = withFallback(teacherBokmal);
+
+export const lessonGuideDefaultText: Record<string, string> = withFallback(lessonBokmal);

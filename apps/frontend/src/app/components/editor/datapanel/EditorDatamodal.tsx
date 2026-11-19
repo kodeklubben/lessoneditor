@@ -1,6 +1,6 @@
 import "./editordatamodal.scss";
 import { Dispatch, SetStateAction, SyntheticEvent, FC, useEffect, useRef } from "react";
-import { LANGUAGEOPTIONS } from "../../frontpage/settings/newLessonOptions";
+import { languageOption } from "../../frontpage/settings/newLessonOptions";
 import { useParams } from "react-router";
 import { useState } from "react";
 import { Button, Header, Input, Modal, Popup } from "semantic-ui-react";
@@ -46,7 +46,7 @@ const EditorDatamodal: FC<EditorDatamodalProps> = ({
     prevData.current = { ...state };
   }, [openSettings]);
 
-  const languageName = LANGUAGEOPTIONS.filter((item) => item.value === lang)[0].text;
+  const languageName = languageOption(lang ?? "nb").text;
 
   const changeHandler = (event: SyntheticEvent, data: Record<string, string>) => {
     const { name, value } = data;
