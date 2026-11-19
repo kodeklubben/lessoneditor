@@ -9,6 +9,7 @@ import { PostgresSessionStore } from "./session/postgres-session.store";
 import { Session } from "./session/session.entity";
 import * as passport from "passport";
 import * as cookieParser from "cookie-parser";
+import { originCheck } from "./app/origin-check";
 
 async function bootstrap() {
   for (const key of [
@@ -28,6 +29,7 @@ async function bootstrap() {
   const production = process.env.NODE_ENV === "production";
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   if (production) app.set("trust proxy", 1);
+  app.use("/api", originCheck(process.env.FRONTEND_URL));
   app.use(cookieParser(process.env.COOKIE_SECRET));
   app.use(
     ExpressSession({

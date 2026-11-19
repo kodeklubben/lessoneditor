@@ -151,6 +151,12 @@ async function run() {
   );
   await api(`/lesson/${lessonId}/files/ekstra/md`, "DELETE");
   await api(`/lesson/${lessonId}/submit`, "POST", { message: "Must stay local" }, 403);
+  const crossSite = await fetch(`${base}/api/lesson/${lessonId}/files/lokal-test`, {
+    method: "PUT",
+    headers: { Cookie: cookie, "Content-Type": "application/json", Origin: "https://evil.example" },
+    body: JSON.stringify({ content: "overwritten" }),
+  });
+  assert.equal(crossSite.status, 403, "Cross-site writes are refused");
   assert.equal((await api(`/lesson/${lessonId}`)).submitted, false);
   await api(
     `/lesson/${lessonId}/user`,
