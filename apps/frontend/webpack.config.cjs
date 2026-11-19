@@ -14,6 +14,15 @@ module.exports = (_env, argv) => {
     },
     // gray-matter (front matter parsing) expects Node's fs and Buffer; fs is never used here.
     resolve: { fallback: { fs: false } },
+    module: {
+      rules: [
+        {
+          test: /semantic-ui-css[\\/].*\.css$/,
+          enforce: "pre",
+          use: [resolve(__dirname, "tools/strip-google-fonts-loader.cjs")],
+        },
+      ],
+    },
     plugins: [
       new ProvidePlugin({ Buffer: ["buffer", "Buffer"] }),
       new NxAppWebpackPlugin({
