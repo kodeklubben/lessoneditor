@@ -27,7 +27,7 @@ export class LoginGuard extends AuthGuard("github") {
       if (type !== "Bearer" || !token || request.method !== "GET")
         throw new UnauthorizedException();
       try {
-        const decoded = verify(token, process.env.GH_CLIENT_SECRET, {
+        const decoded = verify(token, process.env.JWT_SECRET, {
           algorithms: ["HS256"],
           audience: "lessoneditor-thumbnail",
         });

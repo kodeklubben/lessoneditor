@@ -36,6 +36,7 @@ jobs:
       GH_CALLBACK_URL: http://localhost:44100/api/auth/callback
       COOKIE_SECRET: ci-cookie-secret-only
       SESSION_SECRET: ci-session-secret-only
+      JWT_SECRET: ci-jwt-secret-only
       FRONTEND_URL: http://localhost:44100
       THUMB_SERVICE_URL: http://localhost:44112
       DISABLE_PULL_REQUESTS: "true"

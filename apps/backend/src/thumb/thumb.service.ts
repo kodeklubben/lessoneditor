@@ -23,7 +23,7 @@ export class ThumbService {
 
   thumbUrl(previewUrl: string, user: UserDTO) {
     const url = new URL(process.env.THUMB_SERVICE_URL);
-    const token = this.createJwtToken(user.userId, process.env.GH_CLIENT_SECRET);
+    const token = this.createJwtToken(user.userId, process.env.JWT_SECRET);
     url.searchParams.append("url", previewUrl);
     url.searchParams.append("token", token);
     return url.toString();

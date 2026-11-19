@@ -19,9 +19,12 @@ async function bootstrap() {
     "THUMB_SERVICE_URL",
     "COOKIE_SECRET",
     "SESSION_SECRET",
+    "JWT_SECRET",
   ]) {
     if (!process.env[key]) throw new Error(`Missing required environment variable: ${key}`);
   }
+  if (process.env.JWT_SECRET === process.env.GH_CLIENT_SECRET)
+    throw new Error("JWT_SECRET must not reuse GH_CLIENT_SECRET");
   const production = process.env.NODE_ENV === "production";
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   if (production) app.set("trust proxy", 1);

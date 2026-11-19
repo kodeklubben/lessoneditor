@@ -23,7 +23,7 @@ describe("API access", () => {
     }) as ExecutionContext;
 
   beforeEach(() => {
-    process.env.GH_CLIENT_SECRET = secret;
+    process.env.JWT_SECRET = secret;
     exists.mockReset();
   });
 
@@ -59,6 +59,17 @@ describe("API access", () => {
     await expect(guard.canActivate(context({ user: undefined, headers }))).resolves.toBe(true);
     await expect(
       guard.canActivate(context({ user: undefined, headers, method: "PUT" })),
+    ).rejects.toBeInstanceOf(UnauthorizedException);
+  });
+
+  it("rejects tokens signed with the GitHub client secret", async () => {
+    const token = sign({}, "github-client-secret", {
+      subject: "12",
+      audience: "lessoneditor-thumbnail",
+      expiresIn: "5m",
+    });
+    await expect(
+      guard.canActivate(context({ headers: { authorization: `Bearer ${token}` } })),
     ).rejects.toBeInstanceOf(UnauthorizedException);
   });
 

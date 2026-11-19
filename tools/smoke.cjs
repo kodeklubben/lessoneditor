@@ -31,6 +31,7 @@ const env = {
   FRONTEND_URL: base,
   THUMB_SERVICE_URL: thumb,
   DISABLE_PULL_REQUESTS: "true",
+  JWT_SECRET: process.env.JWT_SECRET || randomBytes(32).toString("hex"),
 };
 const signature = createHmac("sha256", env.SESSION_SECRET)
   .update(sessionId)
