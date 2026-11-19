@@ -172,7 +172,23 @@ async function run() {
   );
   const members = await api(`/lesson/${lessonId}/users`);
   assert.equal(members.length, 2);
-  assert.ok(members.every((member) => !("email" in member)), "Members do not see e-mail addresses");
+  assert.ok(
+    members.every((member) => !("email" in member)),
+    "Members do not see e-mail addresses",
+  );
+  const shared = await api(
+    `/user/${userId}/lesson`,
+    "POST",
+    { lessonTitle: "Delt", lessonSlug: "delt", courseTitle: "Python", courseSlug: "python" },
+    201,
+  );
+  await api(`/lesson/${shared}/user`, "POST", { invitationToUserId: String(otherId) }, 201);
+  await api(`/user/${userId}/lesson/${shared}`, "DELETE");
+  const left = await client.query(
+    'SELECT count(*)::int AS n FROM file_store WHERE "lessonLessonId" = $1',
+    [shared],
+  );
+  assert.equal(left.rows[0].n, 0, "A shared lesson is deleted completely");
 
   browser = await puppeteer.launch({
     headless: true,

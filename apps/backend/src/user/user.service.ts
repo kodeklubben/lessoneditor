@@ -226,14 +226,16 @@ export class UserService {
     if (!isLessonOwner(lesson, user)) {
       throw new HttpException("Lesson can only be deleted by creator", HttpStatus.FORBIDDEN);
     }
-    const promises: Promise<FileStore>[] = [];
-    lesson.files.map((file) => {
-      promises.push(this.fileStoreRepository.remove(file));
+    // All or nothing: the membership rows of every user (not only the creator) go first, or the
+    // foreign key (ON DELETE NO ACTION) stops a shared lesson half way, files already gone.
+    await this.lessonRepository.manager.transaction(async (manager) => {
+      await manager.query(`DELETE FROM "user_lessons_lesson" WHERE "lessonLessonId" = $1`, [
+        lesson.lessonId,
+      ]);
+      await manager.delete(FileStore, { lesson: { lessonId: lesson.lessonId } });
+      await manager.delete(Lesson, { lessonId: lesson.lessonId });
     });
-    await Promise.all(promises);
-    user.lessons = user.lessons.filter((lesson) => lesson.lessonId != lessonId);
-    await this.userRepository.save(user);
-    return await this.lessonRepository.remove(lesson);
+    return lesson;
   }
 
   // insertMetaData(ymlData: YamlContent) {
