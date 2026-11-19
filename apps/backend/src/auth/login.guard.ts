@@ -1,25 +1,20 @@
 import {
   ExecutionContext,
   Injectable,
-  Inject,
   UnauthorizedException,
   ForbiddenException,
 } from "@nestjs/common";
-import { CACHE_MANAGER } from "@nestjs/cache-manager";
 import { AuthGuard } from "@nestjs/passport";
 import { Request, Response } from "express";
 import { verify } from "jsonwebtoken";
 import { UserDTO } from "@lessoneditor/contracts";
-import { Cache } from "cache-manager";
 import { DataSource } from "typeorm";
 import { User } from "../user/user.entity";
+import { encryptToken, RequestWithGithubToken } from "./github-token";
 
 @Injectable()
 export class LoginGuard extends AuthGuard("github") {
-  constructor(
-    @Inject(CACHE_MANAGER) private cacheManager: Cache,
-    private readonly dataSource: DataSource,
-  ) {
+  constructor(private readonly dataSource: DataSource) {
     super();
   }
 
@@ -53,15 +48,12 @@ export class LoginGuard extends AuthGuard("github") {
         throw new UnauthorizedException();
       const result = (await super.canActivate(context)) as boolean;
       await super.logIn(request);
-      const accessToken = await this.cacheManager.get<string>(
-        (request.user as UserDTO).userId.toString(),
-      );
-      response.cookie("access_token", accessToken, {
-        httpOnly: true,
-        sameSite: "lax",
-        secure: process.env.NODE_ENV === "production",
-        maxAge: 86400000,
-      });
+      // logIn regenerates the session, so the token is stored after it. The browser only ever
+      // holds the signed session id; the old clear-text access_token cookie is removed.
+      const accessToken = (request as RequestWithGithubToken).githubAccessToken;
+      delete (request as RequestWithGithubToken).githubAccessToken;
+      if (accessToken) request.session.githubToken = encryptToken(accessToken);
+      response.clearCookie("access_token");
       return result;
     }
 

@@ -14,6 +14,7 @@ import { LessonService } from "./lesson.service";
 import { LessonDTO, FileDTO, ShareLessonDTO, NewFileDTO } from "@lessoneditor/contracts";
 import { UserDTO } from "@lessoneditor/contracts";
 import { LoginGuard } from "../auth/login.guard";
+import { sessionGithubToken } from "../auth/github-token";
 import { UpdatedFileDTO } from "@lessoneditor/contracts";
 import { Request } from "express";
 import { User } from "../user/user.entity";
@@ -39,11 +40,7 @@ export class LessonController {
   @UseGuards(LoginGuard)
   @Post(":lessonId/submit")
   async SubmitLesson(@Req() req: Request, @Param() params, @Body() submitMessage) {
-    const accessToken: string = req.cookies["access_token"];
-    // console.log("accessToken", accessToken);
-    // console.log("submitMessage", submitMessage);
-    // console.log("params", params);
-    // console.log("req.user", req.user);
+    const accessToken = sessionGithubToken(req);
     await this.lessonService.submitLesson(
       req.user as User,
       accessToken,

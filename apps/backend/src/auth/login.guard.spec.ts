@@ -1,16 +1,12 @@
 import { ExecutionContext, ForbiddenException, UnauthorizedException } from "@nestjs/common";
 import { sign } from "jsonwebtoken";
-import { Cache } from "cache-manager";
 import { DataSource } from "typeorm";
 import { LoginGuard } from "./login.guard";
 
 describe("API access", () => {
   const secret = "test-only-secret";
   const exists = jest.fn();
-  const guard = new LoginGuard(
-    {} as Cache,
-    { getRepository: () => ({ exists }) } as unknown as DataSource,
-  );
+  const guard = new LoginGuard({ getRepository: () => ({ exists }) } as unknown as DataSource);
   const context = (overrides = {}) =>
     ({
       switchToHttp: () => ({

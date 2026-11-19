@@ -1,26 +1,21 @@
 import { Strategy } from "passport-oauth2";
 import { PassportStrategy } from "@nestjs/passport";
 import { Injectable } from "@nestjs/common";
-import { AuthService } from "./auth.service";
 import { stringify } from "querystring";
 import { UserService } from "../user/user.service";
 import { UserDTO } from "@lessoneditor/contracts";
 import { lastValueFrom } from "rxjs";
 import { HttpService } from "@nestjs/axios";
-import { Inject } from "@nestjs/common";
-import { CACHE_MANAGER } from "@nestjs/cache-manager";
-import { Cache } from "cache-manager";
 import { User } from "../user/user.entity";
+import { RequestWithGithubToken } from "./github-token";
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy, "github") {
   private axiosResponse$: any;
   private data: any;
   constructor(
-    private authService: AuthService,
     private http: HttpService,
     private userService: UserService,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {
     super({
       authorizationURL: `https://github.com/login/oauth/authorize?${stringify({
@@ -36,10 +31,11 @@ export class LocalStrategy extends PassportStrategy(Strategy, "github") {
       callbackURL: process.env.GH_CALLBACK_URL,
       scope: null,
       state: true,
+      passReqToCallback: true,
     });
   }
 
-  async validate(accessToken: string): Promise<UserDTO> {
+  async validate(request: RequestWithGithubToken, accessToken: string): Promise<UserDTO> {
     this.axiosResponse$ = this.http.get("https://api.github.com/user", {
       headers: { Authorization: `Bearer ${accessToken}` },
     });
@@ -69,7 +65,8 @@ export class LocalStrategy extends PassportStrategy(Strategy, "github") {
       };
       user = await this.userService.addUser(newUserDTO);
     }
-    await this.cacheManager.set(user.userId.toString(), accessToken);
+    // Kept on this request only; LoginGuard moves it, encrypted, into the server-side session.
+    request.githubAccessToken = accessToken;
     return user;
   }
 

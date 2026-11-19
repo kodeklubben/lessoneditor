@@ -1,19 +1,10 @@
 import { Controller, UseGuards, Get, Res, Req, Post } from "@nestjs/common";
-import { AuthService } from "./auth.service";
 import { LoginGuard } from "./login.guard";
 import { Request, Response } from "express";
-import { Inject } from "@nestjs/common";
-import { CACHE_MANAGER } from "@nestjs/cache-manager";
-import { Cache } from "cache-manager";
-import { UserDTO } from "@lessoneditor/contracts";
+import { revokeGithubToken, sessionGithubToken } from "./github-token";
 
 @Controller("auth")
 export class AuthController {
-  constructor(
-    private authService: AuthService,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache,
-  ) {}
-
   @UseGuards(LoginGuard)
   @Get("login")
   async login(@Res() res) {}
@@ -21,10 +12,12 @@ export class AuthController {
   @UseGuards(LoginGuard)
   @Post("logout")
   async logout(@Req() req: Request, @Res() res: Response) {
-    await this.cacheManager.del((req.user as UserDTO).userId.toString());
+    const token = sessionGithubToken(req);
+    if (token) await revokeGithubToken(token);
     await new Promise<void>((resolve, reject) => {
       req.logOut((error) => (error ? reject(error) : resolve()));
     });
+    await new Promise<void>((resolve) => req.session.destroy(() => resolve()));
     res.clearCookie("access_token");
     res.clearCookie("connect.sid");
     res.redirect("/logout");
