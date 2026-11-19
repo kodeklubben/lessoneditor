@@ -27,7 +27,8 @@ export class LocalStrategy extends PassportStrategy(Strategy, "github") {
         client_id: process.env.GH_CLIENT_ID,
         redirect_uri: process.env.GH_CALLBACK_URL,
         response_type: "code",
-        scope: "repo",
+        // Forks, commits and pull requests against the public lesson repo need no more than this.
+        scope: "public_repo",
       })}`,
       tokenURL: "https://github.com/login/oauth/access_token",
       clientID: process.env.GH_CLIENT_ID,

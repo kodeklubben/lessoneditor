@@ -115,6 +115,7 @@ async function run() {
   assert.equal(login.status, 302);
   assert.equal(new URL(login.headers.get("location")).hostname, "github.com");
   assert.ok(new URL(login.headers.get("location")).searchParams.get("state"));
+  assert.equal(new URL(login.headers.get("location")).searchParams.get("scope"), "public_repo");
   assert.equal((await api("/user")).userId, userId);
   await api(`/user/${otherId}/lessons`, "GET", undefined, 403);
   lessonId = await api(
