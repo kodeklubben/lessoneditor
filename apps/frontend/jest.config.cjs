@@ -15,6 +15,7 @@ module.exports = {
     ],
   },
   moduleNameMapper: {
+    "^@lessoneditor/contracts$": "<rootDir>/../../libs/contracts/src/index.ts",
     "\\.(jpg|ico|jpeg|png|gif|svg|woff2?|ttf|css|scss|less)$": "<rootDir>/__mocks__/fileMock.js",
   },
 };
