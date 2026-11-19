@@ -155,9 +155,11 @@ const removeIframe = () => {
   //console.log('Microbit iframe removed');
 };
 
-const processIframeMessage = (e: { data: any }) => {
+const processIframeMessage = (e: { data: any; origin?: string }) => {
+  // Only MakeCode may hand us SVG for the preview; any other window could post fake blocks.
+  if (e.origin !== "https://makecode.microbit.org") return;
   const msg = e.data;
-  if (msg.source === "makecode") {
+  if (msg?.source === "makecode") {
     if (msg.type === "renderready") {
       renderSnippets();
     } else if (msg.type === "renderblocks") {
