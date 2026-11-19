@@ -20,8 +20,9 @@ const MarkdownPreview: FC<MarkdownPreviewProps> = ({
   setShowMDPreview,
 }) => {
   const [text, setText] = useState<string>("");
+  const [language, setLanguage] = useState<string>("nb");
 
-  const { lessonId, file, lang } = useParams() as any;
+  const { lessonId } = useParams() as any;
   const { state } = useLessonContext();
   const { courseSlug } = state.lesson;
 
@@ -31,7 +32,8 @@ const MarkdownPreview: FC<MarkdownPreviewProps> = ({
         const result = await axios.get<FileDTO<string>>(
           paths.LESSON_FILE.replace(":lessonId", lessonId).replace(":filename", filename),
         );
-        const { body } = parseLessonMarkdown(result.data.content);
+        const { body, data } = parseLessonMarkdown<{ language?: string }>(result.data.content);
+        setLanguage(data.language || "nb");
 
         setText(body);
       } catch (error) {
@@ -52,7 +54,7 @@ const MarkdownPreview: FC<MarkdownPreviewProps> = ({
           dimmer="inverted"
         >
           <Modal.Content className="markdown-preview--content">
-            <MDPreview mdText={text} course={courseSlug} language={lang} preview={true} />
+            <MDPreview mdText={text} course={courseSlug} language={language} preview={true} />
             <Button onClick={() => setShowMDPreview(false)} icon>
               <Icon size="huge" name="x" />
             </Button>
