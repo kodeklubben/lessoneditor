@@ -1,4 +1,4 @@
-import { Injectable, Inject, ForbiddenException } from "@nestjs/common";
+import { Injectable, Inject, ForbiddenException, UnauthorizedException } from "@nestjs/common";
 import { CACHE_MANAGER } from "@nestjs/cache-manager";
 import { Cache } from "cache-manager";
 import { Octokit, RestEndpointMethodTypes } from "@octokit/rest";
@@ -21,8 +21,12 @@ interface UploadBlob {
 
 @Injectable()
 export class GithubService {
-  octokit: Octokit;
   constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache) {}
+
+  /** A new client per submission: a shared instance mixed up tokens between concurrent users. */
+  createClient(accessToken: string): Octokit {
+    return new Octokit({ auth: accessToken });
+  }
 
   async submitLesson(
     user: User,
@@ -33,15 +37,11 @@ export class GithubService {
     if (process.env.DISABLE_PULL_REQUESTS !== "false") {
       throw new ForbiddenException("GitHub submission is disabled in this environment");
     }
-    try {
-      // const accessToken = await this.cacheManager.get(user.userId.toString());
-      this.octokit = new Octokit({ auth: accessToken });
-    } catch (error) {
-      console.error(error);
+    if (!accessToken) {
+      throw new UnauthorizedException("Missing GitHub authorization");
     }
-    console.log("octokit");
-    const { owner, repo, status } = await this.createFork(user);
-    console.log("owner, repo, status", owner, repo, status);
+    const octokit = this.createClient(accessToken);
+    const { owner, repo, status } = await this.createFork(octokit, user);
     if (status !== 202 && status !== 201) {
       throw new Error("GitHub fork is not ready");
     }
@@ -107,27 +107,46 @@ export class GithubService {
       }
     });
     const branchName = lesson.lessonId.toString();
-    const branch = await this.ensureBranch(owner, repo, branchName);
-    const filesToUpdate = await this.getChangedFilesList(owner, repo, branchName, filesToUpload);
+    const branch = await this.ensureBranch(octokit, owner, repo, branchName);
+    const filesToUpdate = await this.getChangedFilesList(
+      octokit,
+      owner,
+      repo,
+      branchName,
+      filesToUpload,
+    );
     const uploadBlobs: Promise<UploadBlob>[] = [];
-    uploadBlobs.push(...filesToUpdate.map(this.createBlobForFile(owner, repo)));
+    uploadBlobs.push(...filesToUpdate.map(this.createBlobForFile(octokit, owner, repo)));
     const uploadBlobResults = await Promise.all(uploadBlobs);
-    const newTree = await this.createNewTree(owner, repo, uploadBlobResults, branch.commit.sha);
+    const newTree = await this.createNewTree(
+      octokit,
+      owner,
+      repo,
+      uploadBlobResults,
+      branch.commit.sha,
+    );
     const commitMessage = `Pull request from lesson editor`;
     const newCommit = await this.createNewCommit(
+      octokit,
       owner,
       repo,
       commitMessage,
       newTree.sha,
       branch.commit.sha,
     );
-    await this.setBranchToCommit(owner, repo, branchName, newCommit.sha);
-    await this.createPullRequest(owner, lesson.lessonTitle, branchName, submitMessage.message);
+    await this.setBranchToCommit(octokit, owner, repo, branchName, newCommit.sha);
+    await this.createPullRequest(
+      octokit,
+      owner,
+      lesson.lessonTitle,
+      branchName,
+      submitMessage.message,
+    );
   }
 
-  async createFork(user: User) {
+  async createFork(octokit: Octokit, user: User) {
     try {
-      const response = await this.octokit.request("GET /users/{username}/repos", {
+      const response = await octokit.request("GET /users/{username}/repos", {
         username: user.username,
       });
 
@@ -146,7 +165,7 @@ export class GithubService {
           repo: alreadyForked.name,
         };
       } else {
-        const forkResponse = await this.octokit.repos.createFork({
+        const forkResponse = await octokit.repos.createFork({
           owner: process.env.GH_LESSON_REPO_OWNER,
           repo: process.env.GH_LESSON_REPO,
         });
@@ -167,6 +186,7 @@ export class GithubService {
   }
 
   async getBranchCached(
+    octokit: Octokit,
     owner,
     repo,
     branch,
@@ -178,7 +198,7 @@ export class GithubService {
       return <components["schemas"]["branch-with-protection"]>value;
     } else {
       try {
-        const branchInfo = await this.octokit.repos.getBranch({
+        const branchInfo = await octokit.repos.getBranch({
           owner,
           repo,
           branch,
@@ -197,19 +217,19 @@ export class GithubService {
     }
   }
 
-  async ensureBranch(owner, repo, branch) {
-    const branchData = await this.getBranchCached(owner, repo, branch);
+  async ensureBranch(octokit: Octokit, owner, repo, branch) {
+    const branchData = await this.getBranchCached(octokit, owner, repo, branch);
     if (branchData === null) {
       console.log("Branch is not existing, creating", { owner, repo, branch });
-      const masterBranch = await this.getBranchCached(owner, repo, "master");
+      const masterBranch = await this.getBranchCached(octokit, owner, repo, "master");
 
-      await this.octokit.git.createRef({
+      await octokit.git.createRef({
         owner,
         repo,
         ref: `refs/heads/${branch}`,
         sha: masterBranch.commit.sha,
       });
-      return await this.getBranchCached(owner, repo, branch);
+      return await this.getBranchCached(octokit, owner, repo, branch);
     } else {
       console.log("Branch exists", { owner, repo, branch });
       return branchData;
@@ -217,6 +237,7 @@ export class GithubService {
   }
 
   async getChangedFilesList(
+    octokit: Octokit,
     owner: string,
     repo: string,
     branch: string,
@@ -229,8 +250,14 @@ export class GithubService {
           console.debug("No update for " + object.path + ", buffer is invalid.");
           return null;
         }
-        await this.ensureBranch(owner, repo, branch);
-        const fileContent: any = await this.getContentCached(owner, repo, branch, object.path);
+        await this.ensureBranch(octokit, owner, repo, branch);
+        const fileContent: any = await this.getContentCached(
+          octokit,
+          owner,
+          repo,
+          branch,
+          object.path,
+        );
         if (fileContent) {
           // just to a quick comparision to avoid updating files that are actually the same.
           const x = Buffer.compare(Buffer.from(fileContent.content, "base64"), object.buffer);
@@ -248,9 +275,9 @@ export class GithubService {
     return filteredObjectsResult.filter((object) => object != null);
   }
 
-  async getContentCached(owner: string, repo: string, ref: string, path: string) {
+  async getContentCached(octokit: Octokit, owner: string, repo: string, ref: string, path: string) {
     try {
-      const response = await this.octokit.repos.getContent({
+      const response = await octokit.repos.getContent({
         owner,
         repo,
         path,
@@ -299,7 +326,7 @@ export class GithubService {
     }
   }
 
-  async createPullRequest(username, title, branch, body) {
+  async createPullRequest(octokit: Octokit, username, title, branch, body) {
     const disablePullRequests = process.env.DISABLE_PULL_REQUESTS === "true";
 
     if (disablePullRequests) {
@@ -308,7 +335,7 @@ export class GithubService {
     }
     try {
       console.log("Creating pull request.");
-      return await this.octokit.pulls.create({
+      return await octokit.pulls.create({
         owner: process.env.GH_LESSON_REPO_OWNER,
         repo: process.env.GH_LESSON_REPO,
         title: title, // title of PR
@@ -327,12 +354,12 @@ export class GithubService {
   }
 
   createBlobForFile =
-    (owner: string, repo: string) =>
+    (octokit: Octokit, owner: string, repo: string) =>
     async (uploadbject: UploadObject): Promise<UploadBlob> => {
       const ext = uploadbject.path.split(".").pop();
       if (["jpg", "jpeg", "gif", "png"].includes(ext)) {
         const blobData: RestEndpointMethodTypes["git"]["createBlob"]["response"] =
-          await this.octokit.git.createBlob({
+          await octokit.git.createBlob({
             owner: owner,
             repo: repo,
             content: uploadbject.buffer.toString("base64"),
@@ -345,7 +372,7 @@ export class GithubService {
         return uploadBlob;
       } else {
         const blobData: RestEndpointMethodTypes["git"]["createBlob"]["response"] =
-          await this.octokit.git.createBlob({
+          await octokit.git.createBlob({
             owner: owner,
             repo: repo,
             content: uploadbject.buffer.toString(),
@@ -358,8 +385,14 @@ export class GithubService {
         return uploadBlob;
       }
     };
-  setBranchToCommit = (org: string, repo: string, branch = `master`, commitSha: string) =>
-    this.octokit.git.updateRef({
+  setBranchToCommit = (
+    octokit: Octokit,
+    org: string,
+    repo: string,
+    branch: string,
+    commitSha: string,
+  ) =>
+    octokit.git.updateRef({
       owner: org,
       repo,
       ref: `heads/${branch}`,
@@ -367,6 +400,7 @@ export class GithubService {
     });
 
   createNewCommit = async (
+    octokit: Octokit,
     org: string,
     repo: string,
     message: string,
@@ -374,7 +408,7 @@ export class GithubService {
     currentCommitSha: string,
   ) =>
     (
-      await this.octokit.git.createCommit({
+      await octokit.git.createCommit({
         owner: org,
         repo,
         message,
@@ -384,6 +418,7 @@ export class GithubService {
     ).data;
 
   createNewTree = async (
+    octokit: Octokit,
     owner: string,
     repo: string,
     uploadBlobs: UploadBlob[],
@@ -396,7 +431,7 @@ export class GithubService {
       type: `blob`,
       sha: blob.sha,
     })) as RestEndpointMethodTypes["git"]["createTree"]["parameters"]["tree"];
-    const { data } = await this.octokit.git.createTree({
+    const { data } = await octokit.git.createTree({
       owner,
       repo,
       tree,
