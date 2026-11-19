@@ -5,6 +5,7 @@ import { renderMicrobit } from "../../utils/renderMicrobit";
 import { renderScratchBlocks } from "../../utils/renderScratchblocks";
 import { mdParser } from "../../utils/mdParser";
 import { sanitizeLessonHtml } from "../../utils/sanitizeHtml";
+import { replaceLocalImageUrls } from "../../utils/localImages";
 import { useLessonContext } from "../../contexts/LessonContext";
 import ContentPlaceholder from "./ContentPlaceholder";
 
@@ -43,34 +44,12 @@ const MDPreviewArea: FC<MDPreviewProps> = ({ mdText, course, language, preview, 
   }, [lineNumber]);
 
   useEffect(() => {
-    function replaceImageUrlWithBlobUrl(markdownContent: any) {
-      if (!/(!\[.*?\])(\(\.\/.*?\))/.test(markdownContent)) {
-        return markdownContent;
-      }
-      const filenames: string[] = [];
-      markdownContent.replace(
-        /(!\[.*?\])(\(\.\/.*?\))/gs,
-        function (whole: string, prefix: string, imagePathRaw: string, postfix: string) {
-          filenames.push(imagePathRaw.slice(3, -1));
-        },
-      );
-      return markdownContent.replace(
-        /(!\[.*?\]\()(.+?)(\))/gs,
-        function (whole: string, prefix: string, imagePathRaw: string, postfix: string) {
-          imagePathRaw = imagePathRaw.slice(2);
-          const filename: string = filenames.shift() ?? "";
-          const imageBlobUrl = images[filename];
-          return prefix + imageBlobUrl + postfix;
-        },
-      );
-    }
-
     async function replaceUrls() {
-      const newMdText = replaceImageUrlWithBlobUrl(mdText);
+      const newMdText = replaceLocalImageUrls(mdText, images);
       setParsedMDwithUpdatedImageURLS(mdParser(newMdText));
     }
     replaceUrls();
-  }, [mdText]);
+  }, [mdText, images]);
 
   useEffect(() => {
     if (course !== "scratch") {
