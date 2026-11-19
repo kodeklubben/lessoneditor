@@ -27,7 +27,8 @@ const md = require("markdown-it")({
   },
 })
   .use(require("markdown-it-attrs"), {
-    allowedAttributes: ["class", /^target.*$/, /^style.*$/, /^width.*$/, /^height.*$/],
+    // No style: {style="..."} let a lesson restyle or overlay the whole editor page.
+    allowedAttributes: ["class", /^target.*$/, /^width.*$/, /^height.*$/],
   })
   .use(headerSections)
   .use(insertImg)
@@ -53,6 +54,7 @@ const md = require("markdown-it")({
         if (matches && matches[1]) {
           return '<div class="video-container">' + getVideoIframeMarkup({ url: matches[1].trim() });
         }
+        return '<div class="video-container">';
       } else if (tokens[idx].type === "container_video_close") {
         return "</div>";
       }
@@ -60,42 +62,45 @@ const md = require("markdown-it")({
   })
   .use(markdownItLineNumber);
 
-// @ts-ignore
-function getVideoIframeMarkup(url: { url: any }) {
-  const providerAndVideoID = getVideoId(url);
-  // @ts-ignore
-  const videoId = Object.values(providerAndVideoID)[0];
-  // @ts-ignore
-  const provider = Object.keys(providerAndVideoID)[0];
+const escapeHtml: (value: string) => string = md.utils.escapeHtml;
 
-  if (!videoId) {
+export function getVideoIframeMarkup({ url }: { url: string }): string {
+  const video = getVideoId(url);
+  if (!video) {
     return "";
   }
-  if (provider === "youtube") {
-    return `<iframe src="https://www.youtube-nocookie.com/embed/${videoId}" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
-  } else if (provider === "vimeo") {
-    return `<iframe src="https://player.vimeo.com/video/${videoId}" dnt="1" width="640" height="360" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
-  } else {
-    console.error("markdown custom container error");
+  // The id is checked against a strict pattern and escaped, so it can never close the attribute.
+  const id = escapeHtml(video.id);
+  if (video.provider === "youtube") {
+    return `<iframe src="https://www.youtube-nocookie.com/embed/${id}" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
   }
+  return `<iframe src="https://player.vimeo.com/video/${id}" dnt="1" width="640" height="360" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
 }
 
-// @ts-ignore
-function getVideoId(url: { url: any }) {
-  const youtubeRegEx = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+const YOUTUBE_ID = /^[A-Za-z0-9_-]{11}$/;
+const VIMEO_ID = /^[0-9]{1,12}$/;
 
-  const vimeoRegEx = /^(http:\/\/|https:\/\/)?(www\.)?(vimeo\.com\/)([0-9]+)$/;
-
-  const isYoutube = url.url.match(youtubeRegEx);
-  const isVimeo = url.url.match(vimeoRegEx);
-
-  if (isYoutube) {
-    return isYoutube && isYoutube[2].length === 11 ? { youtube: isYoutube[2] } : null;
-  } else if (isVimeo) {
-    return isVimeo ? { vimeo: isVimeo[isVimeo.length - 1] } : null;
-  } else {
-    console.error("RegEx validate error");
+export function getVideoId(url: string): { provider: "youtube" | "vimeo"; id: string } | undefined {
+  let parsed: URL;
+  try {
+    parsed = new URL(/^https?:\/\//i.test(url) ? url : `https://${url}`);
+  } catch {
+    return undefined;
   }
+  const host = parsed.hostname.replace(/^(www\.|m\.)/, "");
+  const segments = parsed.pathname.split("/").filter(Boolean);
+  let id: string | null | undefined;
+  if (host === "youtu.be") {
+    id = segments[0];
+  } else if (["youtube.com", "youtube-nocookie.com"].includes(host)) {
+    id = ["embed", "v", "shorts", "live"].includes(segments[0])
+      ? segments[1]
+      : parsed.searchParams.get("v");
+  } else if (["vimeo.com", "player.vimeo.com"].includes(host)) {
+    const vimeoId = segments[segments.length - 1];
+    return vimeoId && VIMEO_ID.test(vimeoId) ? { provider: "vimeo", id: vimeoId } : undefined;
+  }
+  return id && YOUTUBE_ID.test(id) ? { provider: "youtube", id } : undefined;
 }
 
 export const mdParser = (content: any) => {

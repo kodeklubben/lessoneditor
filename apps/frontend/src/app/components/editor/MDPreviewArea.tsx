@@ -4,6 +4,7 @@ import { FC, useEffect, useState } from "react";
 import { renderMicrobit } from "../../utils/renderMicrobit";
 import { renderScratchBlocks } from "../../utils/renderScratchblocks";
 import { mdParser } from "../../utils/mdParser";
+import { sanitizeLessonHtml } from "../../utils/sanitizeHtml";
 import { useLessonContext } from "../../contexts/LessonContext";
 import ContentPlaceholder from "./ContentPlaceholder";
 
@@ -97,7 +98,7 @@ const MDPreviewArea: FC<MDPreviewProps> = ({ mdText, course, language, preview, 
     return (
       <div
         className={`preview-area ${preview ? "preview" : ""}`}
-        dangerouslySetInnerHTML={{ __html: lessonContent }}
+        dangerouslySetInnerHTML={{ __html: sanitizeLessonHtml(lessonContent) }}
       />
     );
   } else if (!parsedMDwithUpdatedImageURLS && mdText !== "") {
@@ -110,7 +111,7 @@ const MDPreviewArea: FC<MDPreviewProps> = ({ mdText, course, language, preview, 
     return (
       <div
         className={`preview-area ${preview ? "preview" : ""}`}
-        dangerouslySetInnerHTML={{ __html: parsedMDwithUpdatedImageURLS }}
+        dangerouslySetInnerHTML={{ __html: sanitizeLessonHtml(parsedMDwithUpdatedImageURLS) }}
       />
     );
   }
