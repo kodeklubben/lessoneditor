@@ -1,5 +1,5 @@
 import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
-import { Lesson, FileStore } from "./lesson.entity";
+import { Lesson, FileStore, isLessonOwner } from "./lesson.entity";
 import { User } from "../user/user.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
@@ -72,7 +72,7 @@ export class LessonService {
       throw new HttpException("Lesson does not exist", HttpStatus.NOT_FOUND);
     }
     //A lesson can only be shared by the creator
-    if (!(lesson.created_by == (await invitedByUser).username)) {
+    if (!isLessonOwner(lesson, invitedByUser)) {
       throw new HttpException("Lesson can only be shared by creator", HttpStatus.FORBIDDEN);
     }
     invitedToUser.lessons.push(lesson);

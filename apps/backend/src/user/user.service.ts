@@ -9,7 +9,7 @@ import {
   HeaderData,
   invalidLessonFields,
 } from "@lessoneditor/contracts";
-import { FileStore, Lesson } from "../lesson/lesson.entity";
+import { FileStore, Lesson, isLessonOwner } from "../lesson/lesson.entity";
 import { ThumbService } from "../thumb/thumb.service";
 import { Request } from "express";
 import { oppgaveMal, imageTemplate } from "./fileTemplates";
@@ -99,6 +99,7 @@ export class UserService {
     newLesson.submitted_at = null;
     newLesson.updated_by = user.username;
     newLesson.created_by = user.username;
+    newLesson.created_by_id = user.userId;
     newLesson.created_at = new Date();
 
     const savedLesson = await this.lessonRepository.save(newLesson);
@@ -225,7 +226,7 @@ export class UserService {
       throw new HttpException("Lesson does not exist", HttpStatus.NOT_FOUND);
     }
     //You can only delete the items you have self created
-    if (!(lesson.created_by == user.username)) {
+    if (!isLessonOwner(lesson, user)) {
       throw new HttpException("Lesson can only be deleted by creator", HttpStatus.FORBIDDEN);
     }
     const promises: Promise<FileStore>[] = [];

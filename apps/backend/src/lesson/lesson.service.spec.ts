@@ -1,4 +1,5 @@
 import { publicMember } from "./lesson.controller";
+import { isLessonOwner } from "./lesson.entity";
 import { LessonService } from "./lesson.service";
 
 describe("lesson submission state", () => {
@@ -52,5 +53,19 @@ describe("lesson members", () => {
       name: "Ada",
       photo: "https://avatars.example/1",
     });
+  });
+});
+
+describe("lesson ownership", () => {
+  it("follows the user id, not a username that can be renamed and taken over", () => {
+    const lesson = { created_by: "ada", created_by_id: 1 };
+    expect(isLessonOwner(lesson, { userId: 1, username: "ada-renamed" })).toBe(true);
+    expect(isLessonOwner(lesson, { userId: 2, username: "ada" })).toBe(false);
+  });
+
+  it("falls back to the username only for rows without an id", () => {
+    const lesson = { created_by: "ada", created_by_id: null };
+    expect(isLessonOwner(lesson, { userId: 2, username: "ada" })).toBe(true);
+    expect(isLessonOwner(lesson, { userId: 2, username: "" })).toBe(false);
   });
 });

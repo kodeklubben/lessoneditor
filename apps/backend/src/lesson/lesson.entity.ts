@@ -36,6 +36,10 @@ export class Lesson {
   @Column()
   created_by: string;
 
+  /** GitHub user id of the creator; null only for rows the migration could not match. */
+  @Column({ type: "integer", nullable: true })
+  created_by_id: number | null;
+
   @Column()
   updated_by: string;
 
@@ -82,4 +86,13 @@ export class FileStore {
 
   @ManyToOne((type) => Lesson, (lesson) => lesson.files, { onDelete: "CASCADE" })
   lesson: Lesson;
+}
+
+/** Checks the creator by user id. The username is only a fallback for rows without an id. */
+export function isLessonOwner(
+  lesson: Pick<Lesson, "created_by" | "created_by_id">,
+  user: Pick<User, "userId" | "username">,
+): boolean {
+  if (lesson.created_by_id != null) return lesson.created_by_id === user.userId;
+  return !!user.username && lesson.created_by === user.username;
 }
