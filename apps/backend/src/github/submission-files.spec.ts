@@ -31,4 +31,20 @@ describe("files sent to the lesson repo", () => {
     ]);
     expect(uploads[0].buffer.toString()).toBe("level: 1\ntags:\n  topic: []\n");
   });
+
+  it("sends the template image only while a text still refers to it", () => {
+    const image = { filename: "image_rT34Yx", ext: ".png", content: Buffer.from("png") };
+    const text = (body: string) => ({
+      filename: "hei",
+      ext: ".md",
+      content: md("title: Hei\nauthorList: [Ada]\n", body),
+    });
+    const lesson = { courseSlug: "python", lessonSlug: "hei" };
+    expect(
+      buildUploadFiles(lesson, [text("![X](./image_rT34Yx.png)"), image]).map((u) => u.path),
+    ).toContain("src/python/hei/image_rT34Yx.png");
+    expect(
+      buildUploadFiles(lesson, [text("Ingen bilder"), image]).map((u) => u.path),
+    ).not.toContain("src/python/hei/image_rT34Yx.png");
+  });
 });

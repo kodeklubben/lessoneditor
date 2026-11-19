@@ -23,6 +23,8 @@ interface StoredHeader {
 }
 
 export const IMAGE_EXTENSIONS = [".jpg", ".jpeg", ".gif", ".png"];
+/** The placeholder image every new lesson starts with (see fileTemplates.ts). */
+export const TEMPLATE_IMAGE = "image_rT34Yx.png";
 
 /** The editor's front matter (lists) becomes the lesson repo's (comma separated strings). */
 export function toRepoMarkdown(raw: string): string {
@@ -43,6 +45,11 @@ export function buildUploadFiles(
 ): UploadObject[] {
   const lessonPath = ["src", lesson.courseSlug, lesson.lessonSlug].join("/");
   const uploads: UploadObject[] = [];
+  // The template image is only sent when a text still shows it; otherwise the lesson would
+  // reference an image that is missing in the repo (or ship an unused placeholder).
+  const templateImageUsed = files.some(
+    (file) => file.ext === ".md" && file.content.toString().includes(TEMPLATE_IMAGE),
+  );
   for (const file of files) {
     const path = [lessonPath, file.filename + file.ext].join("/");
     if (file.ext === ".yml") {
@@ -53,8 +60,8 @@ export function buildUploadFiles(
     } else if (file.ext === ".md") {
       uploads.push({ path, buffer: Buffer.from(toRepoMarkdown(file.content.toString()), "utf-8") });
     } else if (IMAGE_EXTENSIONS.includes(file.ext)) {
-      if ((file.filename === "preview" || file.filename === "image_rT34Yx") && file.ext === ".png")
-        continue;
+      const name = file.filename + file.ext;
+      if (name === "preview.png" || (name === TEMPLATE_IMAGE && !templateImageUsed)) continue;
       uploads.push({ path, buffer: Buffer.from(file.content) });
     }
   }
