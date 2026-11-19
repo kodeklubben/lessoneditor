@@ -243,6 +243,19 @@ async function run() {
   }
   assert.ok(saved.content.includes("Smoke autosave marker"), "Editor autosave persists typed text");
   assert.ok(saved.content.includes("authorList:"), "Autosave preserves markdown metadata");
+  assert.equal(await page.$$eval('[role="status"]', (nodes) => nodes.length), 1, "One autosave");
+  assert.equal(await page.$$eval(".buttonpanel_small_devices", (n) => n.length), 0);
+  await page.type("textarea.text-area", "\n\nFlush marker");
+  await Promise.all([
+    page.waitForNavigation(),
+    page.click('button[aria-label="Til prosjektoversikt"]'),
+  ]);
+  assert.ok(
+    (await api(`/lesson/${lessonId}/files/lokal-test`)).content.includes("Flush marker"),
+    "Leaving the editor saves the last seconds",
+  );
+  await page.goto(`${base}/editor/${lessonId}/lokal-test/nb`);
+  await page.waitForSelector("textarea.text-area", { visible: true });
   mkdirSync("test-results", { recursive: true });
   await page.screenshot({ path: "test-results/editor-desktop.png", fullPage: true });
   await page.setViewport({ width: 390, height: 844 });
