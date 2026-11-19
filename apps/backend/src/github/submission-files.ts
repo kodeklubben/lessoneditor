@@ -111,3 +111,23 @@ export function isPullRequestAlreadyExists(error: unknown): boolean {
   const messages = [e.message, ...(e.response?.data?.errors ?? []).map((item) => item?.message)];
   return messages.some((message) => /pull request already exists/i.test(message ?? ""));
 }
+
+/** A line for the PR so reviewers know which texts were machine translated and not yet checked. */
+export function machineTranslationNote(files: StoredFile[]): string {
+  const translated = files
+    .filter((file) => file.ext === ".md")
+    .map((file) => ({
+      file,
+      data: parseLessonMarkdown<{ machineTranslated?: boolean; translatedFrom?: string }>(
+        file.content.toString(),
+      ).data,
+    }))
+    .filter(({ data }) => data.machineTranslated === true)
+    .map(
+      ({ file, data }) =>
+        `${repoFilename(file.filename)}${file.ext}${data.translatedFrom ? ` (fra ${data.translatedFrom})` : ""}`,
+    );
+  return translated.length > 0
+    ? `\n\n---\nMaskinoversatt i Lesson Editor, bør leses gjennom: ${translated.join(", ")}`
+    : "";
+}

@@ -5,6 +5,7 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { PassportModule } from "@nestjs/passport";
 import { UserModule } from "../user/user.module";
 import { LessonModule } from "../lesson/lesson.module";
+import { TranslateModule } from "../translate/translate.module";
 import { AuthModule } from "../auth/auth.module";
 import { join } from "path";
 import { ServeStaticModule } from "@nestjs/serve-static";
@@ -26,6 +27,7 @@ import { dataSourceOptions } from "../../../../db/data-sources";
     AuthModule,
     UserModule,
     LessonModule,
+    TranslateModule,
     PassportModule,
   ],
   controllers: [],

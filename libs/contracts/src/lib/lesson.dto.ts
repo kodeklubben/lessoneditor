@@ -86,4 +86,7 @@ export interface HeaderData {
   translator: string;
   translatorList: string[];
   language: string;
+  /** Set when the text was made by the translate button; shown until someone has reviewed it. */
+  machineTranslated?: boolean;
+  translatedFrom?: string;
 }

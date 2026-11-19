@@ -1,4 +1,9 @@
-import { buildUploadFiles, gitBlobSha, toRepoMarkdown } from "./submission-files";
+import {
+  buildUploadFiles,
+  gitBlobSha,
+  machineTranslationNote,
+  toRepoMarkdown,
+} from "./submission-files";
 
 const md = (header: string, body: string) => Buffer.from(`---\n${header}---\n${body}`);
 
@@ -67,5 +72,26 @@ describe("git blob ids", () => {
   it("match what git computes", () => {
     // printf 'hei\n' | git hash-object --stdin
     expect(gitBlobSha(Buffer.from("hei\n"))).toBe("5eca02534fe1cf75a80560d9b943b4b88ca16a75");
+  });
+});
+
+describe("machine translated texts", () => {
+  it("are listed in the pull request and not marked in the repo front matter", () => {
+    const files = [
+      { filename: "hei", ext: ".md", content: md("title: Hei\nauthorList: [Ada]\n", "Tekst") },
+      {
+        filename: "hei_en",
+        ext: ".md",
+        content: md(
+          "title: Hei\nauthorList: [Ada]\ntranslatorList: [Bo]\nlanguage: en\nmachineTranslated: true\ntranslatedFrom: nb\n",
+          "Text",
+        ),
+      },
+    ];
+    expect(machineTranslationNote(files)).toContain("hei_en.md (fra nb)");
+    expect(machineTranslationNote(files.slice(0, 1))).toBe("");
+    expect(
+      buildUploadFiles({ courseSlug: "python", lessonSlug: "hei" }, files)[1].buffer.toString(),
+    ).toBe("---\ntitle: Hei\nauthor: Ada\ntranslator: Bo\nlanguage: en\n---\nText");
   });
 });

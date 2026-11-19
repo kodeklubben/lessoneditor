@@ -14,6 +14,7 @@ import {
   buildUploadFiles,
   changedUploads,
   isPullRequestAlreadyExists,
+  machineTranslationNote,
   pathsToDelete,
   RepoFile,
 } from "./submission-files";
@@ -123,7 +124,7 @@ export class GithubService {
         branch.name,
         upstreamBranch.name,
         lesson.lessonTitle,
-        submitMessage?.message ?? "",
+        (submitMessage?.message ?? "") + machineTranslationNote(lesson.files),
       );
       return { url: pr?.html_url ?? null };
     } catch (error) {

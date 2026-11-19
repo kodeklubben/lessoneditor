@@ -14,6 +14,8 @@ export const paths = {
   LESSON_FILE_DELETE: "api/lesson/:lessonId/files/:filename/:ext",
   LESSON_PROXY: "/api/lessons-proxy/*",
   LESSON_SUBMIT: "/api/lesson/:lessonId/submit",
+  LESSON_TRANSLATE: "/api/lesson/:lessonId/translate",
+  TRANSLATE_STATUS: "/api/translate/status",
   LESSON_THUMB: "/api/lesson-thumb/:lessonId/:file",
   LESSON_UPLOADS: "/api/lesson/:lessonId/upload",
   USER_LESSON_UPDATE: "/api/user/:userId/lesson/:lessonId",
