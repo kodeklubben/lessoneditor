@@ -28,11 +28,12 @@ export class LessonService {
     submitMessage: { message: string },
   ) {
     const lesson = await this.getLesson(lessonId);
-    await this.githubService.submitLesson(user, accessToken, lesson, submitMessage);
+    const result = await this.githubService.submitLesson(user, accessToken, lesson, submitMessage);
     await this.lessonRepository.update(lessonId, {
       submitted: true,
       submitted_at: new Date(),
     });
+    return result;
   }
 
   async getLesson(lessonId: number): Promise<Lesson> {

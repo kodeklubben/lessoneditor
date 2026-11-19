@@ -1,4 +1,4 @@
-import { buildUploadFiles, toRepoMarkdown } from "./submission-files";
+import { buildUploadFiles, gitBlobSha, toRepoMarkdown } from "./submission-files";
 
 const md = (header: string, body: string) => Buffer.from(`---\n${header}---\n${body}`);
 
@@ -46,5 +46,12 @@ describe("files sent to the lesson repo", () => {
     expect(
       buildUploadFiles(lesson, [text("Ingen bilder"), image]).map((u) => u.path),
     ).not.toContain("src/python/hei/image_rT34Yx.png");
+  });
+});
+
+describe("git blob ids", () => {
+  it("match what git computes", () => {
+    // printf 'hei\n' | git hash-object --stdin
+    expect(gitBlobSha(Buffer.from("hei\n"))).toBe("5eca02534fe1cf75a80560d9b943b4b88ca16a75");
   });
 });

@@ -49,7 +49,7 @@ export class LessonController {
   @Post(":lessonId/submit")
   async SubmitLesson(@Req() req: Request, @Param() params, @Body() submitMessage) {
     const accessToken = sessionGithubToken(req);
-    await this.lessonService.submitLesson(
+    return await this.lessonService.submitLesson(
       req.user as User,
       accessToken,
       params.lessonId,

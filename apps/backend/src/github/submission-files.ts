@@ -1,3 +1,4 @@
+import { createHash } from "crypto";
 import { dump } from "js-yaml";
 import {
   parseLessonMarkdown,
@@ -66,4 +67,38 @@ export function buildUploadFiles(
     }
   }
   return uploads;
+}
+
+/** Git's blob id, so unchanged files can be skipped without downloading them from GitHub. */
+export function gitBlobSha(buffer: Buffer): string {
+  return createHash("sha1").update(`blob ${buffer.length}\0`).update(buffer).digest("hex");
+}
+
+export interface RepoFile {
+  path: string;
+  sha: string;
+}
+
+/** Uploads whose content differs from what the branch already has. */
+export function changedUploads(existing: RepoFile[], uploads: UploadObject[]): UploadObject[] {
+  const shas = new Map(existing.map((file) => [file.path, file.sha]));
+  return uploads.filter((upload) => shas.get(upload.path) !== gitBlobSha(upload.buffer));
+}
+
+/** Files in the lesson folder on the branch that were deleted in the editor. */
+export function pathsToDelete(existing: RepoFile[], uploads: UploadObject[]): string[] {
+  const kept = new Set(uploads.map((upload) => upload.path));
+  return existing.map((file) => file.path).filter((path) => !kept.has(path));
+}
+
+/** GitHub answers 422 for many things; only this one means "the PR is already open". */
+export function isPullRequestAlreadyExists(error: unknown): boolean {
+  const e = error as {
+    status?: number;
+    message?: string;
+    response?: { data?: { errors?: { message?: string }[] } };
+  };
+  if (e?.status !== 422) return false;
+  const messages = [e.message, ...(e.response?.data?.errors ?? []).map((item) => item?.message)];
+  return messages.some((message) => /pull request already exists/i.test(message ?? ""));
 }
