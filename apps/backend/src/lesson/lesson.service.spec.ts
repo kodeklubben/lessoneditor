@@ -1,6 +1,6 @@
 import { publicMember } from "./lesson.controller";
 import { isLessonOwner } from "./lesson.entity";
-import { LessonService } from "./lesson.service";
+import { LessonService, uniqueFilename } from "./lesson.service";
 
 describe("lesson submission state", () => {
   const lesson = { lessonId: 7, files: [] };
@@ -67,5 +67,12 @@ describe("lesson ownership", () => {
     const lesson = { created_by: "ada", created_by_id: null };
     expect(isLessonOwner(lesson, { userId: 2, username: "ada" })).toBe(true);
     expect(isLessonOwner(lesson, { userId: 2, username: "" })).toBe(false);
+  });
+});
+
+describe("file names", () => {
+  it("keeps a free name and numbers a taken one", () => {
+    expect(uniqueFilename("bilde", ["hei"])).toBe("bilde");
+    expect(uniqueFilename("bilde", ["bilde", "bilde-2"])).toBe("bilde-3");
   });
 });

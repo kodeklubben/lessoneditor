@@ -117,7 +117,11 @@ export class LessonController {
 
   @UseGuards(LoginGuard)
   @Post(":lessonId/files")
-  async AddLessonFile(@Req() req, @Param() params, @Body() newFile: NewFileDTO): Promise<number> {
+  async AddLessonFile(
+    @Req() req,
+    @Param() params,
+    @Body() newFile: NewFileDTO,
+  ): Promise<{ fileId: number; filename: string; ext: string }> {
     if (
       !newFile ||
       typeof newFile.filename !== "string" ||

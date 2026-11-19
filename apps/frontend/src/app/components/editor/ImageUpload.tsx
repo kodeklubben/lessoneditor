@@ -10,7 +10,8 @@ import slugify from "slugify";
 import Compressor from "compressorjs";
 
 const MAX_IMAGE_SIZE = 5000000;
-const imageSizeErrorMessage = "Bildet kan ikke være over 5mb";
+const imageSizeErrorMessage = "Bildet kan ikke være over 5 MB.";
+const imageUploadErrorMessage = "Bildet ble ikke lastet opp. Prøv igjen.";
 
 interface ImageUploadProps {
   uploadImageRef: Ref<HTMLInputElement>;
@@ -64,18 +65,25 @@ const ImageUpload: FC<ImageUploadProps> = ({
       ext,
       content: content,
     };
-    await axios.post(
-      paths.LESSON_FILES.replace(":lessonId", state.lesson.lessonId.toString()),
-      newFileDTO
-    );
-
-    setImages((prevImages: any) => ({
-      ...prevImages,
-      [filename + ext]: createObjectURL(imageBlob),
-    }));
-
-    setShowSpinner(false);
-    imageSubmitHandler(filename + ext);
+    try {
+      // The server may rename the file (bilde -> bilde-2) when the name is taken.
+      const { data: saved } = await axios.post<{ filename: string; ext: string }>(
+        paths.LESSON_FILES.replace(":lessonId", state.lesson.lessonId.toString()),
+        newFileDTO
+      );
+      const name = saved.filename + saved.ext;
+      setImages((prevImages: any) => ({
+        ...prevImages,
+        [name]: createObjectURL(imageBlob),
+      }));
+      imageSubmitHandler(name);
+    } catch (error) {
+      console.error(error);
+      setErrorMessage(imageUploadErrorMessage);
+      setShowModal(true);
+    } finally {
+      setShowSpinner(false);
+    }
   };
 
   const fileSelectedHandler = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -97,7 +105,8 @@ const ImageUpload: FC<ImageUploadProps> = ({
       reader.onload = async () => {
         try {
           if (reader.result) {
-            const filename = slugify(file.name.split(".")[0], { lower: true, strict: true });
+            const filename =
+              slugify(file.name.split(".")[0], { lower: true, strict: true }) || "bilde";
             const ext = `.${
               file.name.split(".").pop()?.toLowerCase() === "jpg"
                 ? "jpeg"
@@ -117,18 +126,32 @@ const ImageUpload: FC<ImageUploadProps> = ({
 
                   contentFunction(contentString, compressedResult, filename, ext);
                 },
+                error: (error) => {
+                  console.error(error);
+                  setShowSpinner(false);
+                  setErrorMessage(imageUploadErrorMessage);
+                  setShowModal(true);
+                },
               });
             } else {
               const content =
                 reader.result.toString().split(`data:${file.type};base64,`).pop()! ?? "";
 
-              contentFunction(content, base64StringToBlob(content, `image/${ext}`), filename, ext);
+              contentFunction(
+                content,
+                base64StringToBlob(content, `image/${ext.slice(1)}`),
+                filename,
+                ext
+              );
             }
           }
         } catch (error) {
           console.error(error);
+          setShowSpinner(false);
         }
       };
+      // Lets the same file be chosen again after an error.
+      event.target.value = "";
     } catch (err) {
       console.log(err);
     }

@@ -156,6 +156,24 @@ async function run() {
     201,
   );
   await api(`/lesson/${lessonId}/files/ekstra/md`, "DELETE");
+  const png = Buffer.from("smoke").toString("base64");
+  const first = await api(
+    `/lesson/${lessonId}/files`,
+    "POST",
+    { filename: "bilde", ext: ".png", content: png },
+    201,
+  );
+  const second = await api(
+    `/lesson/${lessonId}/files`,
+    "POST",
+    { filename: "bilde", ext: ".png", content: png },
+    201,
+  );
+  assert.deepEqual(
+    [first.filename, second.filename],
+    ["bilde", "bilde-2"],
+    "Image names are unique",
+  );
   await api(`/lesson/${lessonId}/submit`, "POST", { message: "Must stay local" }, 403);
   const crossSite = await fetch(`${base}/api/lesson/${lessonId}/files/lokal-test`, {
     method: "PUT",

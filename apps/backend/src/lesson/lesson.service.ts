@@ -8,6 +8,15 @@ import { GithubService } from "../github/github.service";
 import { ThumbService } from "../thumb/thumb.service";
 import { Request } from "express";
 
+/** bilde, bilde-2, bilde-3 …: a second upload with the same name must not shadow the first. */
+export function uniqueFilename(wanted: string, taken: string[]): string {
+  const names = new Set(taken);
+  if (!names.has(wanted)) return wanted;
+  let n = 2;
+  while (names.has(`${wanted}-${n}`)) n++;
+  return `${wanted}-${n}`;
+}
+
 @Injectable()
 export class LessonService {
   constructor(
@@ -94,21 +103,37 @@ export class LessonService {
     return file;
   }
 
-  async addLessonFile(lessonId: number, newFile: NewFileDTO, request: Request): Promise<number> {
-    const lesson = await this.lessonRepository.findOne({ where: { lessonId } });
+  async addLessonFile(
+    lessonId: number,
+    newFile: NewFileDTO,
+    request: Request,
+  ): Promise<{ fileId: number; filename: string; ext: string }> {
+    const lesson = await this.lessonRepository.findOne({
+      where: { lessonId },
+      relations: ["files"],
+    });
     if (!lesson) {
-      throw new Error(`Lesson with id ${lessonId} not found`);
+      throw new HttpException("Lesson does not exist", HttpStatus.NOT_FOUND);
+    }
+    const isImage = [".jpg", ".jpeg", ".gif", ".png"].includes(newFile.ext);
+    // Files are fetched by name without extension, so names must be unique per lesson.
+    const filename = uniqueFilename(
+      newFile.filename,
+      lesson.files.map((existing) => existing.filename),
+    );
+    if (filename !== newFile.filename && !isImage) {
+      throw new HttpException("A text with this name already exists", HttpStatus.CONFLICT);
     }
 
     const file = new FileStore();
     const user = request.user as User;
-    file.filename = newFile.filename;
+    file.filename = filename;
     file.ext = newFile.ext;
     file.created_by = user.username;
     file.updated_by = user.username;
     file.lesson = lesson;
 
-    if ([".jpg", ".jpeg", ".gif", ".png"].includes(file.ext)) {
+    if (isImage) {
       file.content = Buffer.from(newFile.content, "base64");
     } else {
       file.content = Buffer.from(newFile.content);
@@ -119,7 +144,7 @@ export class LessonService {
         transaction: true,
         chunk: 10,
       });
-      return savedFile.fileId;
+      return { fileId: savedFile.fileId, filename: savedFile.filename, ext: savedFile.ext };
     } catch (error) {
       console.error(error);
       throw new Error("Failed to save file");
