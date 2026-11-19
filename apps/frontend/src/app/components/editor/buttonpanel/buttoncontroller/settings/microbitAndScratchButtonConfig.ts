@@ -36,6 +36,7 @@ const KEY_COMBINATIONS_SCRATCH = {
   sensing: [SHORTCUTKEY, "+", "8"].join(""),
   operators: [SHORTCUTKEY, "+", "9"].join(""),
   moreblocks: [SHORTCUTKEY, "+", "0"].join(""),
+  lightgrey: [SHORTCUTKEY, "+", SHORTCUTKEY2, "+", "9"].join(""),
 };
 
 const microbitbuttons = {
@@ -284,6 +285,15 @@ const scratchbuttons = {
     cursorIntOFF: 19,
     shortcut: KEY_COMBINATIONS_SCRATCH.moreblocks,
     color: "#ff6680",
+  },
+  lightgrey: {
+    slug: "lightgrey",
+    output: "`" + DEFAULT_TEXT + "`{.blocklightgrey}",
+    title: "Lys grå",
+    cursorIntON: 1,
+    cursorIntOFF: 18,
+    shortcut: KEY_COMBINATIONS_SCRATCH.lightgrey,
+    color: "#bfbfbf",
   },
 };
 

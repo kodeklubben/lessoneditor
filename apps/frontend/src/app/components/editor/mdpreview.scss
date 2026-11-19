@@ -405,6 +405,12 @@ a:hover {
       background-color: #ff6680;
     }
 
+    // Used in lessons for blocks without a colour of their own; dark text for contrast.
+    &.blocklightgrey {
+      background-color: #bfbfbf;
+      color: #000;
+    }
+
     &.microbitbasic {
       background-color: #1e90ff;
     }

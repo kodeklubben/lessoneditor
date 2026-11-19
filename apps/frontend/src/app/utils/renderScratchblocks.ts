@@ -2,71 +2,73 @@ import md5 from "crypto-js/md5";
 
 /**
  * Render scratchblocks
- * @param {string} content HTML with <pre class="blocks">...</pre> and <code class="b">...</code>
- * @param {object} styles css-modules object
- * @returns {string} <pre class="blocks">...</pre> and <code class="b">...</code> replaced with SVG
+ * @param {string} content HTML with <pre><code class="blocks">...</code></pre> (block scripts)
+ *   and <code class="b">...</code> (single blocks inside a sentence)
+ * @returns {string} the same HTML with each of them replaced by an SVG
  */
 
 const LANGUAGES = ["nb", "nn", "en", "is"];
 
-let storeSVG = {};
+const storeSVG: Record<string, string> = {};
+
+/** markdown-it escapes the code; scratchblocks needs the characters (<, >, &) back. */
+const unescapeHtml = (html: string) =>
+  html
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&amp;/g, "&");
+
+const PATTERNS = [
+  { inline: false, re: /<pre><code class="blocks">([\s\S]*?)<\/code><\/pre>/g },
+  // Inline blocks: `si [Hei!]`{.b} renders as <code class="b">si [Hei!]</code>
+  { inline: true, re: /<code class="b">([\s\S]*?)<\/code>/g },
+];
 
 export const renderScratchBlocks = (content: string) => {
   const scratchblocks = require("scratchblocks/browser.js");
 
-  //debug
-
   // NOTE: English (en) is included by default. All other languages
   //       that exist in getAvailableLanguages() should be loaded here,
   //       otherwise rendering will fail.
-  //       It is also possible to just do a
-  //           require('scratchblocks/locales-src/translations-all.js')
-  //       but that includes many unnecessary files.
   scratchblocks.default.loadLanguages({
     nb: require("scratchblocks/locales/nb.json"),
     nn: require("scratchblocks/locales/nn.json"),
     is: require("scratchblocks/locales/is.json"),
   });
 
-  let replace = [];
-
-  replace.push({
-    start: '<pre><code class="blocks">',
-    end: "</code></pre>",
-  });
-
   let returnContent = content;
-  replace.forEach((r) => {
-    const re = new RegExp(r.start + "[\\s\\S]*?" + r.end, "g");
-
-    let blocks = content.match(re);
-    if (blocks) {
-      blocks.forEach((block) => {
-        let code = block.substring(r.start.length, block.length - r.end.length);
-        const checksum = md5(code).toString();
-        if (checksum in storeSVG) {
-          // @ts-ignore
-          returnContent = returnContent.replace(block, storeSVG[checksum]);
-        } else {
-          let doc = scratchblocks.default.parse(code, {
-            inline: false,
-            languages: LANGUAGES,
-          });
-          let docView = scratchblocks.default.newView(doc, { style: "scratch3" });
-          let svg = docView.render();
+  for (const { inline, re } of PATTERNS) {
+    returnContent = returnContent.replace(re, (block: string, escaped: string) => {
+      const code = unescapeHtml(escaped);
+      const checksum = `${inline ? "i" : "b"}:${md5(code).toString()}`;
+      if (!(checksum in storeSVG)) {
+        try {
+          const doc = scratchblocks.default.parse(code, { inline, languages: LANGUAGES });
+          const svg = scratchblocks.default.newView(doc, { style: "scratch3" }).render();
           svg.setAttribute(
             "viewBox",
-            `0 0 ${svg.getAttribute("width")} ${svg.getAttribute("height")}`
+            `0 0 ${svg.getAttribute("width")} ${svg.getAttribute("height")}`,
           );
-          svg.style.maxWidth = "100%";
-          svg.style.display = "block";
-          svg.style.margin = "0 auto 15px";
-          returnContent = returnContent.replace(block, svg.outerHTML);
-          // @ts-ignore
+          if (inline) {
+            svg.style.display = "inline-block";
+            svg.style.verticalAlign = "middle";
+            svg.setAttribute("role", "img");
+            svg.setAttribute("aria-label", code);
+          } else {
+            svg.style.maxWidth = "100%";
+            svg.style.display = "block";
+            svg.style.margin = "0 auto 15px";
+          }
           storeSVG[checksum] = svg.outerHTML;
+        } catch (error) {
+          console.error(error);
+          return block;
         }
-      });
-    }
-  });
+      }
+      return storeSVG[checksum];
+    });
+  }
   return returnContent;
 };
