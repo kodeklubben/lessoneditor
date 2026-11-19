@@ -1,4 +1,11 @@
-import { Injectable, Inject, ForbiddenException, UnauthorizedException } from "@nestjs/common";
+import {
+  Injectable,
+  Inject,
+  BadRequestException,
+  ForbiddenException,
+  UnauthorizedException,
+} from "@nestjs/common";
+import { isCourseSlug, isLessonSlug } from "@lessoneditor/contracts";
 import { CACHE_MANAGER } from "@nestjs/cache-manager";
 import { Cache } from "cache-manager";
 import { Octokit, RestEndpointMethodTypes } from "@octokit/rest";
@@ -39,6 +46,10 @@ export class GithubService {
     }
     if (!accessToken) {
       throw new UnauthorizedException("Missing GitHub authorization");
+    }
+    // Checked again here: older rows were stored before slugs were validated.
+    if (!isCourseSlug(lesson.courseSlug) || !isLessonSlug(lesson.lessonSlug)) {
+      throw new BadRequestException("The lesson or course slug cannot be used as a path");
     }
     const octokit = this.createClient(accessToken);
     const { owner, repo, status } = await this.createFork(octokit, user);

@@ -131,6 +131,12 @@ async function run() {
     },
     201,
   );
+  await api(
+    `/user/${userId}/lesson`,
+    "POST",
+    { lessonTitle: "Sti", lessonSlug: "../x", courseTitle: "Python", courseSlug: "python" },
+    400,
+  );
   const files = await api(`/lesson/${lessonId}/filenames`);
   assert.ok(files.includes("lokal-test.md"));
   const file = await api(`/lesson/${lessonId}/files/lokal-test`);

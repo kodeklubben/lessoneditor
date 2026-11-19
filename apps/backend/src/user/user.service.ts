@@ -1,14 +1,26 @@
-import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
+import { Injectable, HttpException, HttpStatus, BadRequestException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { UserDTO } from "@lessoneditor/contracts";
 import { User } from "./user.entity";
-import { NewLessonDTO, YamlContent, HeaderData } from "@lessoneditor/contracts";
+import {
+  NewLessonDTO,
+  YamlContent,
+  HeaderData,
+  invalidLessonFields,
+} from "@lessoneditor/contracts";
 import { FileStore, Lesson } from "../lesson/lesson.entity";
 import { ThumbService } from "../thumb/thumb.service";
 import { Request } from "express";
 import { oppgaveMal, imageTemplate } from "./fileTemplates";
 import * as yaml from "js-yaml";
+
+/** Slugs end up as paths in the lesson repo, so they are checked before they are stored. */
+export function assertValidLesson(lesson: NewLessonDTO) {
+  const invalid = invalidLessonFields(lesson ?? ({} as NewLessonDTO));
+  if (invalid.length > 0)
+    throw new BadRequestException(`Invalid lesson fields: ${invalid.join(", ")}`);
+}
 
 @Injectable()
 export class UserService {
@@ -19,7 +31,7 @@ export class UserService {
     private userRepository: Repository<User>,
     @InjectRepository(FileStore)
     private fileStoreRepository: Repository<FileStore>,
-    private thumbService: ThumbService
+    private thumbService: ThumbService,
   ) {}
 
   async getUsers(): Promise<User[]> {
@@ -70,6 +82,7 @@ export class UserService {
   }
 
   async addUserLesson(userId: number, lesson: NewLessonDTO, request: Request): Promise<number> {
+    assertValidLesson({ language: "nb", ...lesson });
     const user = await this.userRepository.findOne({ where: { userId }, relations: ["lessons"] });
     if (!user) {
       throw new HttpException("User does not exist", HttpStatus.NOT_FOUND);
@@ -168,8 +181,9 @@ export class UserService {
     lessonId: number,
     regenThumb: boolean,
     updatedLesson: NewLessonDTO,
-    request: Request
+    request: Request,
   ): Promise<Lesson> {
+    assertValidLesson(updatedLesson);
     const user = await this.getUser(userId);
     const isAssignedLesson = user.lessons.find((lesson) => lesson.lessonId == lessonId);
     if (!isAssignedLesson) {
