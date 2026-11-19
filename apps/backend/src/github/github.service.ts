@@ -5,7 +5,7 @@ import {
   ForbiddenException,
   UnauthorizedException,
 } from "@nestjs/common";
-import { isCourseSlug, isLessonSlug } from "@lessoneditor/contracts";
+import { isCourseSlug, isLessonSlug } from "../../../../libs/contracts/src/lib/validation";
 import { CACHE_MANAGER } from "@nestjs/cache-manager";
 import { Cache } from "cache-manager";
 import { Octokit, RestEndpointMethodTypes } from "@octokit/rest";

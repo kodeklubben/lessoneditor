@@ -3,12 +3,9 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { UserDTO } from "@lessoneditor/contracts";
 import { User } from "./user.entity";
-import {
-  NewLessonDTO,
-  YamlContent,
-  HeaderData,
-  invalidLessonFields,
-} from "@lessoneditor/contracts";
+import { NewLessonDTO, YamlContent, HeaderData } from "@lessoneditor/contracts";
+// Runtime code from the shared lib is imported by path: tsc does not rewrite the alias.
+import { invalidLessonFields } from "../../../../libs/contracts/src/lib/validation";
 import { FileStore, Lesson, isLessonOwner } from "../lesson/lesson.entity";
 import { ThumbService } from "../thumb/thumb.service";
 import { Request } from "express";
