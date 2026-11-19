@@ -35,5 +35,8 @@ export function sanitizeLessonHtml(html: string): string {
     ADD_TAGS: ["iframe"],
     ADD_ATTR: ["allow", "allowfullscreen", "frameborder", "dnt", "target"],
     FORBID_TAGS: ["style", "form", "button", "textarea", "select"],
+    // DOMPurify's default list, plus blob: for the lesson's own images loaded in the editor.
+    ALLOWED_URI_REGEXP:
+      /^(?:(?:(?:f|ht)tps?|mailto|tel|callto|sms|cid|xmpp|matrix|blob):|[^a-z]|[a-z+.-]+(?:[^a-z+.\-:]|$))/i,
   });
 }

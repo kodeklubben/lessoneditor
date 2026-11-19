@@ -58,6 +58,12 @@ describe("preview sanitising", () => {
     expect(html).not.toMatch(/onerror|javascript:|evil\.example|<script/);
   });
 
+  it("keeps the lesson's own images, which the editor shows as blob: URLs", () => {
+    expect(sanitizeLessonHtml('<img src="blob:http://localhost/abc" alt="Katt">')).toContain(
+      'src="blob:http://localhost/abc"',
+    );
+  });
+
   it("adds rel=noopener to links that open a new tab", () => {
     expect(sanitizeLessonHtml('<a href="https://kidsakoder.no" target="_blank">x</a>')).toContain(
       'rel="noopener noreferrer"',
