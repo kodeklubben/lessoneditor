@@ -14,12 +14,7 @@ import { components } from "@octokit/openapi-types";
 import { Lesson } from "../lesson/lesson.entity";
 import { User } from "../user/user.entity";
 import axios from "axios";
-import * as yaml from "js-yaml";
-
-interface UploadObject {
-  path: string;
-  buffer: Buffer;
-}
+import { buildUploadFiles, UploadObject } from "./submission-files";
 
 interface UploadBlob {
   path: string;
@@ -60,63 +55,7 @@ export class GithubService {
       throw new Error("No lesson data files");
     }
 
-    const formatLessonData = lesson.files.map((file) => {
-      if (file.ext === ".yml") {
-        const newContent = yaml.dump(JSON.parse(file.content.toString()));
-        return { ...file, content: Buffer.from(newContent, "utf-8") };
-      } else if (file.ext === ".md") {
-        const separator = "---\n";
-        const textContent = file.content.toString();
-        const [_, header, body] = textContent.split(separator);
-        const headerData = yaml.load(header);
-        const newHeaderData =
-          headerData["translatorList"].length > 0
-            ? {
-                title: headerData["title"],
-                author: headerData["authorList"].join(", "),
-                translator: headerData["translatorList"].join(", "),
-                language: headerData["language"],
-              }
-            : {
-                title: headerData["title"],
-                author: headerData["authorList"].join(", "),
-                language: headerData["language"],
-              };
-        const newContent = ["", yaml.dump(newHeaderData), body].join(separator);
-        return { ...file, content: Buffer.from(newContent, "utf-8") };
-      } else {
-        return file;
-      }
-    });
-
-    const lessonPath = ["src", lesson.courseSlug, lesson.lessonSlug].join("/");
-
-    const filesToUpload: UploadObject[] = [];
-    formatLessonData.forEach((file) => {
-      const path = [lessonPath, file.filename + file.ext].join("/");
-      if (file.ext === ".yml") {
-        filesToUpload.push({
-          path,
-          buffer: Buffer.from(file.content),
-        });
-      } else if (file.ext === ".md") {
-        filesToUpload.push({
-          path,
-          buffer: Buffer.from(file.content.toString()),
-        });
-      } else if ([".jpg", ".jpeg", ".gif", ".png"].includes(file.ext)) {
-        if (
-          (file.filename === "preview" || file.filename === "image_rT34Yx") &&
-          file.ext === ".png"
-        ) {
-          return;
-        }
-        filesToUpload.push({
-          path,
-          buffer: Buffer.from(file.content),
-        });
-      }
-    });
+    const filesToUpload = buildUploadFiles(lesson, lesson.files);
     const branchName = lesson.lessonId.toString();
     const branch = await this.ensureBranch(octokit, owner, repo, branchName);
     const filesToUpdate = await this.getChangedFilesList(

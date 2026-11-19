@@ -6,11 +6,11 @@ import { User } from "./user.entity";
 import { NewLessonDTO, YamlContent, HeaderData } from "@lessoneditor/contracts";
 // Runtime code from the shared lib is imported by path: tsc does not rewrite the alias.
 import { invalidLessonFields } from "../../../../libs/contracts/src/lib/validation";
+import { stringifyLessonMarkdown } from "../../../../libs/contracts/src/lib/frontmatter";
 import { FileStore, Lesson, isLessonOwner } from "../lesson/lesson.entity";
 import { ThumbService } from "../thumb/thumb.service";
 import { Request } from "express";
 import { oppgaveMal, imageTemplate } from "./fileTemplates";
-import * as yaml from "js-yaml";
 
 /** Slugs end up as paths in the lesson repo, so they are checked before they are stored. */
 export function assertValidLesson(lesson: NewLessonDTO) {
@@ -122,7 +122,7 @@ export class UserService {
       translatorList: [],
     };
 
-    const rawBody = "---\n" + yaml.dump(header) + "---\n" + oppgaveMal;
+    const rawBody = stringifyLessonMarkdown(header, oppgaveMal);
     const emptyMdFile = new FileStore();
     emptyMdFile.content = Buffer.from(rawBody);
     emptyMdFile.ext = ".md";

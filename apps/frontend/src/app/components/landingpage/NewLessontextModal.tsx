@@ -3,15 +3,17 @@ import { FC, SyntheticEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { useUserContext } from "../../contexts/UserContext";
 import { useLessonContext } from "../../contexts/LessonContext";
-import * as yaml from "js-yaml";
-import { FileDTO, paths } from "@lessoneditor/contracts";
+import {
+  FileDTO,
+  paths,
+  parseLessonMarkdown,
+  stringifyLessonMarkdown,
+} from "@lessoneditor/contracts";
 import { lessonGuideDefaultText } from "./settingsFiles/defaultTexts";
 import axios from "axios";
 import insertMetaDataInTeacherGuide from "./utils/insertMetaDataInTeacherGuide";
 import { LANGUAGEOPTIONS } from "../frontpage/settings/newLessonOptions";
 import { chatGPT } from "./utils/chatGPT";
-
-const separator = "---\n";
 
 type TextMode = "lessontext" | "teacherguide";
 
@@ -60,7 +62,7 @@ const NewLessontextModal: FC<any> = ({
   setTranslateToLang,
 }) => {
   const [textMode, setTextMode] = useState<TextMode>(
-    unusedLessontextLanguages.length > 0 ? "lessontext" : "teacherguide"
+    unusedLessontextLanguages.length > 0 ? "lessontext" : "teacherguide",
   );
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -98,8 +100,7 @@ const NewLessontextModal: FC<any> = ({
     try {
       const filename = getFilename(textMode, translateFromLang, lessonSlug);
       const result = await axios.get<FileDTO<string>>(replaceAPIPath(String(lessonId), filename));
-      const [_, header, body] = result.data.content.split(separator);
-      return body;
+      return parseLessonMarkdown(result.data.content).body;
     } catch (error) {
       return error;
     }
@@ -147,7 +148,7 @@ const NewLessontextModal: FC<any> = ({
 
     const header = prepareHeader(lessonTitle, name, username, language);
 
-    const rawBody = `---\n${yaml.dump(header)}---\n${lessonText}`;
+    const rawBody = stringifyLessonMarkdown(header, lessonText);
     const filename = getFilename(textMode, language, lessonSlug);
     const newFileDTO = {
       filename,
@@ -158,7 +159,7 @@ const NewLessontextModal: FC<any> = ({
     try {
       await axios.post<number>(
         paths.LESSON_FILES.replace(":lessonId", lessonId.toString()),
-        newFileDTO
+        newFileDTO,
       );
     } catch (e) {
       setLoading(false);

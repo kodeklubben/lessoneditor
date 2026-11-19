@@ -3,7 +3,7 @@ import React, { FC, useEffect, useState } from "react";
 import { FileDTO } from "@lessoneditor/contracts";
 import axios from "axios";
 import { Button, Icon, Modal } from "semantic-ui-react";
-import { paths } from "@lessoneditor/contracts";
+import { paths, parseLessonMarkdown } from "@lessoneditor/contracts";
 import { useParams } from "react-router";
 import MDPreview from "../editor/MDPreviewArea";
 import { useLessonContext } from "../../contexts/LessonContext";
@@ -13,8 +13,6 @@ type MarkdownPreviewProps = {
   showMDPreview: boolean;
   setShowMDPreview: any;
 };
-
-const separator = "---\n";
 
 const MarkdownPreview: FC<MarkdownPreviewProps> = ({
   filename,
@@ -31,9 +29,9 @@ const MarkdownPreview: FC<MarkdownPreviewProps> = ({
     async function fetchText() {
       try {
         const result = await axios.get<FileDTO<string>>(
-          paths.LESSON_FILE.replace(":lessonId", lessonId).replace(":filename", filename)
+          paths.LESSON_FILE.replace(":lessonId", lessonId).replace(":filename", filename),
         );
-        const [_, header, body] = result.data.content.split(separator);
+        const { body } = parseLessonMarkdown(result.data.content);
 
         setText(body);
       } catch (error) {

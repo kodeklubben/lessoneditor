@@ -1,5 +1,6 @@
 const { NxAppWebpackPlugin } = require("@nx/webpack/app-plugin");
 const { resolve } = require("node:path");
+const { ProvidePlugin } = require("webpack");
 
 module.exports = (_env, argv) => {
   const production = argv.mode === "production";
@@ -11,7 +12,10 @@ module.exports = (_env, argv) => {
       historyApiFallback: true,
       proxy: [{ context: ["/api"], target: "http://localhost:8080", changeOrigin: true }],
     },
+    // gray-matter (front matter parsing) expects Node's fs and Buffer; fs is never used here.
+    resolve: { fallback: { fs: false } },
     plugins: [
+      new ProvidePlugin({ Buffer: ["buffer", "Buffer"] }),
       new NxAppWebpackPlugin({
         target: "web",
         compiler: "babel",

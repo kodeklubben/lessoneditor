@@ -8,10 +8,12 @@ import {
   FileContextState,
   initialFileContextState,
 } from "./fileContext.functions";
-import * as yml from "js-yaml";
+import {
+  parseLessonMarkdown,
+  replaceLessonBody,
+  stringifyLessonMarkdown,
+} from "@lessoneditor/contracts";
 import ShowSpinner from "../components/ShowSpinner";
-
-const separator = "---\n";
 
 const FileContext = React.createContext<FileContextModel>({} as FileContextModel);
 
@@ -29,11 +31,9 @@ const FileContextProvider = (props: any) => {
         const filename =
           lang === "nb" ? file : typeof lang !== "undefined" ? `${file}_${lang}` : file;
         const result = await axios.get<FileDTO<string>>(
-          paths.LESSON_FILE.replace(":lessonId", lessonId).replace(":filename", filename)
+          paths.LESSON_FILE.replace(":lessonId", lessonId).replace(":filename", filename),
         );
-        const [_, header, body] = result.data.content.split(separator);
-
-        const headerData = yml.load(header) as HeaderData;
+        const { data: headerData, body } = parseLessonMarkdown<HeaderData>(result.data.content);
         setFileContextState((s) => {
           return {
             ...s,
@@ -55,10 +55,8 @@ const FileContextProvider = (props: any) => {
   }, [lessonId, lang]);
 
   const saveFileHeader = async (data: HeaderData) => {
-    const fileBody = fileContextState?.rawMdFileContent?.split(separator)[2];
-
-    const header = yml.dump(data);
-    const newRawText = ["", header, fileBody].join(separator);
+    const fileBody = parseLessonMarkdown(fileContextState?.rawMdFileContent ?? "").body;
+    const newRawText = stringifyLessonMarkdown(data, fileBody);
     try {
       const updatedFile: UpdatedFileDTO = {
         content: newRawText,
@@ -67,9 +65,9 @@ const FileContextProvider = (props: any) => {
       const newFile = await axios.put<FileDTO<UpdatedFileDTO>>(
         paths.LESSON_FILE_UPDATE.replace(":lessonId", lessonId.toString()).replace(
           ":filename",
-          filename
+          filename,
         ),
-        updatedFile
+        updatedFile,
       );
 
       setFileContextState((s) => {
@@ -91,8 +89,7 @@ const FileContextProvider = (props: any) => {
       console.error("Invalid body");
       return -1;
     }
-    const fileHeader = fileContextState.rawMdFileContent?.split(separator)[1] || "";
-    const newRawText = ["", fileHeader, body].join(separator);
+    const newRawText = replaceLessonBody(fileContextState.rawMdFileContent ?? "", body);
 
     try {
       const updatedFile: UpdatedFileDTO = {
@@ -102,7 +99,7 @@ const FileContextProvider = (props: any) => {
       const filename = lang === "nb" ? file : `${file}_${lang}`;
       const updateUrl = paths.LESSON_FILE_UPDATE.replace(":lessonId", lessonId.toString()).replace(
         ":filename",
-        filename
+        filename,
       );
       const uploadedFile = await axios.put<FileDTO<string>>(updateUrl, updatedFile);
 
@@ -113,7 +110,7 @@ const FileContextProvider = (props: any) => {
 
       const thumbUpdateUrl = paths.LESSON_FILE_UPDATE_THUMB.replace(
         ":lessonId",
-        lessonId.toString()
+        lessonId.toString(),
       ).replace(":filename", filename);
       const isThumbUpdated = await axios.put<boolean>(thumbUpdateUrl);
 
