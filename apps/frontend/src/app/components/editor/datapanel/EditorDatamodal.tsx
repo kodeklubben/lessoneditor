@@ -97,6 +97,7 @@ const EditorDatamodal: FC<EditorDatamodalProps> = ({
             id="next"
             size="big"
             icon="address card"
+            aria-label="Endre data for oppgavetekst"
             onClick={() => setOpenSettings(true)}
           />
         }

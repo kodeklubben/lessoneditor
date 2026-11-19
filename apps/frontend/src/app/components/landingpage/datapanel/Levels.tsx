@@ -14,7 +14,7 @@ const Levels: FC<LevelsProps> = ({ changeHandler, data }) => {
     <div className="levels">
       <h3>{FORM_TEXT.LEVEL.heading}</h3>
       <Dropdown
-        placeholder="Velg Nivå"
+        placeholder="Velg nivå"
         name="level"
         value={data.level}
         // defaultValue={1}

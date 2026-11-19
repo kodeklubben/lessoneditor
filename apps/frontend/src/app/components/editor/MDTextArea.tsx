@@ -130,6 +130,8 @@ const MDTextArea: FC<MDTextAreaProps> = ({
           autoFocus
           ref={editorRef}
           className="text-area"
+          aria-label="Oppgavetekst i Markdown"
+          spellCheck
           value={mdText}
           onChange={handleChange}
           onKeyDown={onTextareaKeyDown}

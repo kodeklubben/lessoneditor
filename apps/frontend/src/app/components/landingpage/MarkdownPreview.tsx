@@ -55,7 +55,7 @@ const MarkdownPreview: FC<MarkdownPreviewProps> = ({
         >
           <Modal.Content className="markdown-preview--content">
             <MDPreview mdText={text} course={courseSlug} language={language} preview={true} />
-            <Button onClick={() => setShowMDPreview(false)} icon>
+            <Button onClick={() => setShowMDPreview(false)} icon aria-label="Lukk forhåndsvisningen">
               <Icon size="huge" name="x" />
             </Button>
           </Modal.Content>

@@ -5,3 +5,9 @@
 @import '~@fontsource/lato/400-italic.css';
 @import '~@fontsource/lato/700.css';
 @import '~@fontsource/lato/700-italic.css';
+
+// Keyboard focus must be visible everywhere, also on Semantic's buttons and our own controls.
+:focus-visible {
+  outline: 3px solid #2185d0 !important;
+  outline-offset: 2px;
+}

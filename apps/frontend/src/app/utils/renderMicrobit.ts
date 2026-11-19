@@ -24,7 +24,7 @@ const renderSpinner = () => {
     const img = document.createElement("img");
     img.className = "spinner";
     img.src = "../../assets/public/spinner.gif";
-    img.alt = "Spinner";
+    img.alt = "Laster micro:bit-kode";
     img.loading = "lazy";
     img.width = 100;
     img.height = 100;

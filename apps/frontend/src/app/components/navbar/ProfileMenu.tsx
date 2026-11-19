@@ -32,11 +32,20 @@ const ProfileMenu: FC<ProfileMenuProps> = ({ name, photo, email }) => {
                 <div>
                   {email ? <h4 style={{ color: "gray" }}>{email}</h4> : ""}
                   <Button color="red" style={{ marginLeft: "2em" }} onClick={logout}>
-                    Log Ut
+                    Logg ut
                   </Button>
                 </div>
               }
-              trigger={<Image className="navbar_image" src={photo} size="mini" avatar />}
+              trigger={
+                <button
+                  type="button"
+                  className="navbar_profile_button"
+                  aria-label={`Profilmeny for ${name}`}
+                  style={{ background: "none", border: 0, padding: 0, cursor: "pointer" }}
+                >
+                  <Image className="navbar_image" src={photo} size="mini" avatar alt="" />
+                </button>
+              }
               on="click"
             />
           </div>
@@ -47,7 +56,7 @@ const ProfileMenu: FC<ProfileMenuProps> = ({ name, photo, email }) => {
             <Icon name="user" size="large" />
             <span>{name}</span>
           </div>
-          <Button onClick={logout}>Log Ut</Button>
+          <Button onClick={logout}>Logg ut</Button>
         </>
       )}
     </>

@@ -162,7 +162,7 @@ const NewLessonModal: FC<NewLessonModalProps> = ({ openNewLessonModal, setOpenNe
                 <br />
                 <Dropdown
                   className="new-lesson-modal-container__language-dropdown"
-                  placeholder="Velg Språk"
+                  placeholder="Velg språk"
                   name="language"
                   defaultValue={defaultState.language}
                   selection

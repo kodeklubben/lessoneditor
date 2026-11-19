@@ -134,7 +134,7 @@ export const COURSESLIST: { key: any; text: any; value: any }[] = [
   },
   {
     key: "uten_datamaskin",
-    text: "Uten Datamaskin",
+    text: "Uten datamaskin",
     value: "uten_datamaskin",
   },
 ];

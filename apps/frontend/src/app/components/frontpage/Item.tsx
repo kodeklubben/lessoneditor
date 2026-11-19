@@ -80,6 +80,7 @@ const Item: React.FC<Props> = ({ lesson }) => {
               icon
               onClick={() => navigateToHome(lesson.lessonId.toString())}
               positive
+              aria-label={`Åpne ${lesson.lessonTitle}`}
             >
               <Icon name="folder open" />
             </Button>
@@ -102,6 +103,7 @@ const Item: React.FC<Props> = ({ lesson }) => {
               onClick={() => {
                 setOpenDeleteLesson(true);
               }}
+              aria-label={`Slett ${lesson.lessonTitle}`}
             >
               <Icon name="delete" />
               Slett

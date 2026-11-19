@@ -20,10 +20,18 @@ const Navbar: FC<{ children?: ReactNode }> = ({ children }) => {
 
   return (
     <nav className="navbar_container">
-      <div className="navbar_image_container" onClick={navigateToFrontpage}>
-        <img className="navbar_logo__desktop" src={logo} alt="Logo desktop"></img>
-        <img className="navbar_logo__mobile" src={logo_mobile} alt="Logo mobile"></img>
-      </div>
+      <a
+        className="navbar_image_container"
+        href="/"
+        aria-label="Lær Kidsa Koding – til forsiden"
+        onClick={(event) => {
+          event.preventDefault();
+          navigateToFrontpage();
+        }}
+      >
+        <img className="navbar_logo__desktop" src={logo} alt=""></img>
+        <img className="navbar_logo__mobile" src={logo_mobile} alt=""></img>
+      </a>
       <div className="navbar_children_container">{children}</div>
       <div className="navbar_profilemenu_container">
         {userState?.user && <ProfileMenu name={username} photo={userphoto} email={useremail} />}

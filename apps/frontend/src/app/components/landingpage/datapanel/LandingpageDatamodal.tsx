@@ -170,6 +170,7 @@ const LandingpageDatamodal = () => {
               id="landingpage_datamodal_trigger__small"
               size="medium"
               icon="tags"
+              aria-label="Oppgavedata"
             />
           </div>
         }

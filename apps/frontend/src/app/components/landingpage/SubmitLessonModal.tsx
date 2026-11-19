@@ -110,26 +110,26 @@ const SubmitLessonModal: FC<any> = ({ openSubmitModal, setOpenSubmitModal, lesso
                     href="https://oppgaver.kidsakoder.no"
                     target="_blank"
                   >
-                    Lær Kidsa Koder.
+                    Lær Kidsa Koding.
                   </a>
                 </p>
               </Modal.Description>
             </Modal.Content>
 
             <Modal.Content>
-              <h4>
-                Skriv gjerne en kommentar <span style={{ color: "grey" }}>(hvis du vil)</span>:
-              </h4>
+              <label htmlFor="submit-comment" style={{ fontWeight: 700, display: "block" }}>
+                Skriv gjerne en kommentar <span style={{ color: "#595959" }}>(hvis du vil)</span>:
+              </label>
 
               <textarea
                 style={{
                   width: "100%",
                   height: "10vh",
-                  outline: "none",
                   borderColor: "grey",
                   borderRadius: "3px",
                   padding: "1em",
                 }}
+                id="submit-comment"
                 name="textValue"
                 onChange={handleChange}
                 placeholder="...dette er en oppgave som handler om..."

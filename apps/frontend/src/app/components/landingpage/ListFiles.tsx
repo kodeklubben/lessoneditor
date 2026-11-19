@@ -1,3 +1,4 @@
+import { asButton } from "../../utils/a11y";
 import "./listfiles.scss";
 import { FC, useEffect, useState } from "react";
 import { Item, Button, Modal, Icon, Image } from "semantic-ui-react";
@@ -97,6 +98,7 @@ const ListFiles: FC<ListFilesProps> = ({ item, lessonId }) => {
               onClick={() => setOpenImageModal(false)}
               style={{ position: "absolute", background: "none", top: "0", right: "0" }}
               icon
+              aria-label="Lukk"
             >
               <Icon size="huge" name="x" />
             </Button>
@@ -121,17 +123,11 @@ const ListFiles: FC<ListFilesProps> = ({ item, lessonId }) => {
       <Item className="all-files--container">
         <div className="all-files--content">
           <Item.Content
-            onClick={
-              ext == "md"
-                ? () => setShowMDPreview((prevValue) => !prevValue)
-                : isImage
-                ? () => {
-                    setOpenImageModal(true);
-                  }
-                : () => {
-                    console.log("noPreviewContent");
-                  }
-            }
+            {...(ext == "md"
+              ? asButton(() => setShowMDPreview((prevValue) => !prevValue), `Forhåndsvis ${item}`)
+              : isImage
+                ? asButton(() => setOpenImageModal(true), `Vis bildet ${item}`)
+                : {})}
             className="all-files--image"
           >
             <Item.Image
@@ -140,7 +136,7 @@ const ListFiles: FC<ListFilesProps> = ({ item, lessonId }) => {
                 ext === "md" ? previewImage[lessonId] : isImage ? images[item] : placeholderImage
               }
               size="tiny"
-              alt="thumbUrl"
+              alt=""
               rounded
               bordered
             />
@@ -175,7 +171,12 @@ const ListFiles: FC<ListFilesProps> = ({ item, lessonId }) => {
             margin: "1em",
           }}
         >
-          <Button style={{ background: "none" }} icon onClick={() => setOpenDeleteContent(true)}>
+          <Button
+            style={{ background: "none" }}
+            icon
+            onClick={() => setOpenDeleteContent(true)}
+            aria-label={`Slett ${item}`}
+          >
             <Icon name="delete" />
             Slett
           </Button>

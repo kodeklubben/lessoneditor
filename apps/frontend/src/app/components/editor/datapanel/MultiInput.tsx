@@ -107,7 +107,8 @@ const MultiInput: FC<MultiInputProps> = ({
               floated="right"
               content={element}
               style={{ order: inputOrder - 1, height: "2.6em" }}
-              id="removeNameButton"
+              className="removeNameButton"
+              aria-label={`Fjern ${element}`}
               key={"button-" + index}
               onClick={() => removeClickHandler(name, element)}
             />
@@ -120,6 +121,7 @@ const MultiInput: FC<MultiInputProps> = ({
             backgroundColor: "white",
           }}
           id="addNameButton"
+          aria-label="Legg til"
           name={name}
           onClick={handleClick}
         />

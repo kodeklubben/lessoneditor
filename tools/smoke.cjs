@@ -220,7 +220,12 @@ async function run() {
   });
   const page = await browser.newPage();
   const errors = [];
+  const thirdParty = [];
   page.on("pageerror", (error) => errors.push(error.message));
+  page.on("request", (request) => {
+    if (/fonts\.googleapis|fonts\.gstatic|run\.app/.test(request.url()))
+      thirdParty.push(request.url());
+  });
   await page.setViewport({ width: 1440, height: 1000 });
   await page.goto(base);
   await page.waitForSelector(".not-logged-in-page");
@@ -236,6 +241,13 @@ async function run() {
   await page.waitForFunction(() =>
     document.querySelector("textarea.text-area")?.value.includes("Lagring fungerer lokalt."),
   );
+  await page.waitForFunction(
+    () =>
+      [...document.querySelectorAll(".preview-area img")].some(
+        (image) => image.src.startsWith("blob:") && image.naturalWidth > 0,
+      ),
+    { timeout: 10000 },
+  );
   await page.$eval("textarea.text-area", (element) => {
     element.focus();
     element.setSelectionRange(element.value.length, element.value.length);
@@ -250,6 +262,21 @@ async function run() {
   assert.ok(saved.content.includes("Smoke autosave marker"), "Editor autosave persists typed text");
   assert.ok(saved.content.includes("authorList:"), "Autosave preserves markdown metadata");
   assert.equal(await page.$$eval('[role="status"]', (nodes) => nodes.length), 1, "One autosave");
+  const unnamed = await page.$$eval("button, [role=button]", (nodes) =>
+    nodes
+      .filter((node) => node.offsetParent !== null)
+      .filter(
+        (node) =>
+          !(
+            node.getAttribute("aria-label") ||
+            node.textContent.trim() ||
+            node.getAttribute("title")
+          ),
+      )
+      .map((node) => node.outerHTML.slice(0, 80)),
+  );
+  assert.deepEqual(unnamed, [], "Every visible button has a name");
+  assert.equal(await page.$eval("html", (html) => html.lang), "nb");
   assert.equal(await page.$$eval(".buttonpanel_small_devices", (n) => n.length), 0);
   await page.type("textarea.text-area", "\n\nFlush marker");
   await Promise.all([
@@ -301,6 +328,36 @@ async function run() {
   assert.ok(image.rows[0].content.length > 1000);
   writeFileSync("test-results/thumbnail.png", image.rows[0].content);
   assert.deepEqual(errors, [], "Browser runtime errors");
+  assert.deepEqual(thirdParty, [], "No requests to Google Fonts or the old translation server");
+  const scratch = await api(
+    `/user/${userId}/lesson`,
+    "POST",
+    {
+      lessonTitle: "Scratch",
+      lessonSlug: "scratch-test",
+      courseTitle: "Scratch",
+      courseSlug: "scratch",
+      language: "nb",
+    },
+    201,
+  );
+  const scratchFile = await api(`/lesson/${scratch}/files/scratch-test`);
+  await api(`/lesson/${scratch}/files/scratch-test`, "PUT", {
+    content: scratchFile.content.replace(
+      /(# .*)/,
+      "$1\n\nTrykk `når grønt flagg klikkes`{.b} og `si [Hei!]`{.b}.",
+    ),
+  });
+  await page.goto(`${base}/preview/${scratch}/scratch-test`);
+  await page.waitForFunction(() => document.querySelectorAll(".preview-area svg").length >= 2, {
+    timeout: 15000,
+  });
+  assert.equal(
+    await page.$$eval(".preview-area code.b", (n) => n.length),
+    0,
+    "Inline {.b} blocks are drawn",
+  );
+  await api(`/user/${userId}/lesson/${scratch}`, "DELETE");
   assert.equal(
     (
       await fetch(

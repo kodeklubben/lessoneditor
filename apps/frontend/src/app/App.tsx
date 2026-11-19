@@ -59,7 +59,7 @@ const App = () => {
           }
         />
         <Route path="/logout" element={<Logout></Logout>} />
-        <Route path="*" element={<h1>PAGE NOT FOUND</h1>} />
+        <Route path="*" element={<h1>Fant ikke siden</h1>} />
       </Routes>
     </BrowserRouter>
   );

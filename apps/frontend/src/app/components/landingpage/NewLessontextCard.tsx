@@ -69,9 +69,11 @@ const NewLessontextCard = () => {
           <Header>Opprett ny tekstfil</Header>
           <Card className="new-lesson_card">
             <div className="new-lesson_card__content">
+              {/* A larger mouse target; keyboard and screen readers use the button below. */}
               <div
                 className="new-lesson_card__image"
                 onClick={() => setOpenNewLessontextModal(true)}
+                aria-hidden="true"
               >
                 <Icon color="grey" name="file text outline" size="huge" />
               </div>
