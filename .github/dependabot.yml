@@ -1,27 +1,32 @@
 version: 2
+# At most two pull requests a month per ecosystem. Dependabot updates an open one instead of
+# opening another:
+# - minor-and-patch: all small updates together; merge it when CI is green.
+# - major: all new major versions together, as a to-do list. They need code changes and testing
+#   (TypeScript 7, Babel 8, webpack-dev-server 6 …), so it may stay open, and red, until someone
+#   takes them on in a pull request of their own.
+# Security alerts show under Security either way.
 updates:
   - package-ecosystem: github-actions
     directory: /
     schedule:
-      interval: weekly
-    open-pull-requests-limit: 3
+      interval: monthly
+    groups:
+      actions:
+        patterns: ["*"]
   - package-ecosystem: npm
     directory: /
     schedule:
-      interval: weekly
-    open-pull-requests-limit: 3
+      interval: monthly
+    open-pull-requests-limit: 2
     groups:
-      nx:
-        patterns: ["nx", "@nx/*"]
-      nest:
-        patterns: ["@nestjs/*"]
-      # Babel's core and presets only work at the same major version.
-      babel:
-        patterns: ["@babel/*"]
+      minor-and-patch:
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
+      major:
+        patterns: ["*"]
+        update-types: ["major"]
     ignore:
       # The types follow the Node version the app runs on (.nvmrc, App Engine nodejs24).
       - dependency-name: "@types/node"
-        update-types: ["version-update:semver-major"]
-      # Babel 8 needs core, presets and the Jest setup upgraded together, on purpose.
-      - dependency-name: "@babel/*"
         update-types: ["version-update:semver-major"]
