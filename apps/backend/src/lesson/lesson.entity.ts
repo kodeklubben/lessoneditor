@@ -43,6 +43,14 @@ export class Lesson {
   @Column()
   updated_by!: string;
 
+  /** For a copy of a published lesson: its folder in kodeklubben/oppgaver, e.g. src/scratch/asteroids. */
+  @Column({ type: "varchar", nullable: true })
+  upstream_path!: string | null;
+
+  /** The commit of kodeklubben/oppgaver the copy was made from. */
+  @Column({ type: "varchar", nullable: true })
+  upstream_commit!: string | null;
+
   @CreateDateColumn()
   created_at!: Date;
 
@@ -77,6 +85,14 @@ export class FileStore {
 
   @Column()
   updated_by!: string;
+
+  /** For an imported file: the blob sha it had in kodeklubben/oppgaver. */
+  @Column({ type: "varchar", nullable: true })
+  upstream_sha!: string | null;
+
+  /** For an imported file: the git blob sha of the content as stored, to tell whether it changed. */
+  @Column({ type: "varchar", nullable: true })
+  imported_sha!: string | null;
 
   @CreateDateColumn()
   created_at!: Date;

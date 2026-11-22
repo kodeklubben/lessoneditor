@@ -14,6 +14,7 @@ import {
   LESSON_SLUG_PATTERN,
   MAX_SLUG_LENGTH,
   MAX_TITLE_LENGTH,
+  REPO_NAME_PATTERN,
 } from "../../../../libs/contracts/src/lib/validation";
 
 /**
@@ -26,6 +27,24 @@ export const FILE_EXTENSIONS = [".md", ".yml", ...IMAGE_EXTENSIONS];
 
 /** 5 MB of binary data, base64 encoded; matches the limit shown in the image upload. */
 export const MAX_FILE_BASE64_LENGTH = Math.ceil((5 * 1024 * 1024) / 3) * 4;
+
+/** A published lesson to copy: its folder src/<course>/<lesson>/ in kodeklubben/oppgaver. */
+export class ImportLessonBody {
+  @IsString()
+  @MaxLength(MAX_SLUG_LENGTH)
+  @Matches(COURSE_SLUG_PATTERN)
+  course!: string;
+
+  @IsString()
+  @MaxLength(MAX_SLUG_LENGTH)
+  @Matches(REPO_NAME_PATTERN)
+  lesson!: string;
+
+  @IsOptional()
+  @IsString()
+  @MaxLength(MAX_TITLE_LENGTH)
+  courseTitle?: string;
+}
 
 export class NewLessonBody {
   @IsString()

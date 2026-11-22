@@ -13,6 +13,7 @@ export const paths = {
   TRANSLATE_STATUS: "/api/translate/status",
   USER_LESSON_UPDATE: "/api/user/:userId/lesson/:lessonId",
   USER_LESSON_NEW: "/api/user/:userId/lesson",
+  USER_LESSON_IMPORT: "/api/user/:userId/lesson/import",
   USER: "/api/user",
   USER_LESSONS: "/api/user/:userId/lessons",
 };

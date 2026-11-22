@@ -8,8 +8,24 @@ export function splitFilename(name: string): FileName {
     : { filename: name, ext: "" };
 }
 
-const isLessonText = (file: FileName) =>
-  file.ext === ".md" && !/^README(_|$)/.test(file.filename);
+/**
+ * Language codes that appear as a suffix on lesson texts in kodeklubben/oppgaver and the editor
+ * (bokmål has none). "sam" is the editor's old code for Northern Sami.
+ */
+export const TEXT_LANGUAGES = ["nb", "nn", "se", "sam", "en", "is", "fr", "ua"];
+
+/**
+ * "lunar_lander_nn" → { base: "lunar_lander", language: "nn" }; "lunar_lander" → bokmål. Only a
+ * known language code counts as a suffix, so an underscore in the name is not read as a language.
+ */
+export function splitTextName(name: string): { base: string; language: string } {
+  const match = /^(.+)_([a-z]{2,3})$/.exec(name);
+  return match && TEXT_LANGUAGES.includes(match[2])
+    ? { base: match[1], language: match[2] }
+    : { base: name, language: "nb" };
+}
+
+const isLessonText = (file: FileName) => file.ext === ".md" && !/^README(_|$)/.test(file.filename);
 
 /**
  * lesson.yml, preview.png and the last lesson text hold a lesson together: without them the

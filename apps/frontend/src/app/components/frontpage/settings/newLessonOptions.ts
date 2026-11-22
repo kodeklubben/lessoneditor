@@ -4,6 +4,7 @@ import enFlag from "../../../../assets/public/languagesFlag/flag_en.svg";
 import isFlag from "../../../../assets/public/languagesFlag/flag_is.svg";
 import frFlag from "../../../../assets/public/languagesFlag/flag_fr.svg";
 import samFlag from "../../../../assets/public/languagesFlag/flag_sam.svg";
+import uaFlag from "../../../../assets/public/languagesFlag/flag_ua.svg";
 
 export const LANGUAGEOPTIONS: Record<string, any>[] = [
   {
@@ -42,6 +43,13 @@ export const LANGUAGEOPTIONS: Record<string, any>[] = [
     text: "Fransk",
     value: "fr",
     image: { avatar: true, src: frFlag },
+  },
+  {
+    // "ua", as kodeklubben/oppgaver names its Ukrainian texts (ISO 639-1 would be "uk").
+    key: "ua",
+    text: "Ukrainsk",
+    value: "ua",
+    image: { avatar: true, src: uaFlag },
   },
 ];
 

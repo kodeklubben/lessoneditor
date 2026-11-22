@@ -7,6 +7,7 @@ import { UserContextProvider } from "./contexts/UserContext";
 import { FileContextProvider } from "./contexts/FileContext";
 import Logout from "./components/shared/Logout";
 import SimplePreview from "./components/simple-preview/simple-preview";
+import ImportLesson from "./pages/ImportLesson";
 
 const App = () => {
   return (
@@ -54,6 +55,14 @@ const App = () => {
                   <SimplePreview />
                 </FileContextProvider>
               </LessonContextProvider>
+            </UserContextProvider>
+          }
+        />
+        <Route
+          path="/rediger/:course/:lesson"
+          element={
+            <UserContextProvider>
+              <ImportLesson />
             </UserContextProvider>
           }
         />

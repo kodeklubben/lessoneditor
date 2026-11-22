@@ -25,7 +25,15 @@ describe("languages", () => {
   });
 
   it("does not crash on an unknown language code", () => {
-    expect(filenameParser("hei_xx.md").languageName).toBe("xx");
+    expect(languageOption("xx").text).toBe("xx");
+  });
+
+  it("reads only known language codes as a suffix, as in kodeklubben/oppgaver", () => {
+    expect(filenameParser("lunar_lander.md")).toMatchObject({ language: "nb", isReadme: false });
+    expect(filenameParser("lunar_lander_nn.md").language).toBe("nn");
+    expect(filenameParser("asteroids_ua.md").languageName).toBe("Ukrainsk");
+    expect(filenameParser("README_nn.md")).toMatchObject({ language: "nn", isReadme: true });
+    expect(filenameParser("hei_xx.md").language).toBe("nb");
   });
 
   it("lists languages in the order of the language menu", () => {

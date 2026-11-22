@@ -4,11 +4,13 @@ import { UserService } from "./user.service";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { User } from "./user.entity";
 import { LessonModule } from "../lesson/lesson.module";
+import { GithubModule } from "../github/github.module";
+import { LessonImportService } from "./lesson-import.service";
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User]), forwardRef(() => LessonModule)],
+  imports: [TypeOrmModule.forFeature([User]), forwardRef(() => LessonModule), GithubModule],
   controllers: [UserController],
-  providers: [UserService],
+  providers: [UserService, LessonImportService],
   exports: [UserService, TypeOrmModule],
 })
 export class UserModule {}

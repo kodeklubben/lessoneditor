@@ -6,6 +6,8 @@ import { useUserContext } from "../contexts/UserContext";
 import Navbar from "../components/navbar/Navbar";
 import { Card, Divider, Header, Icon, Message, Dropdown } from "semantic-ui-react";
 import { LessonDTO } from "@lessoneditor/contracts";
+import { useNavigate } from "react-router";
+import { takeReturnTo } from "../utils/returnTo";
 
 const sortOptions = [
   { key: "date-modified", text: "Sist endret", value: "date-modified" },
@@ -32,15 +34,22 @@ const sortLessons = (lessons: LessonDTO[], key: string) => {
 
 const frontpage: FC = () => {
   const { state } = useUserContext();
+  const navigate = useNavigate();
   const [openNewLessonModal, setOpenNewLessonModal] = useState<boolean>(false);
   const [sortValue, setSortValue] = useState<string>("date-modified");
   const [userLessons, setUserLessons] = useState<LessonDTO[]>(
-    sortLessons(state.lessons, sortValue)
+    sortLessons(state.lessons, sortValue),
   );
 
   useEffect(() => {
     setUserLessons(sortLessons(state.lessons, sortValue));
   }, [state.lessons, sortValue]);
+
+  // Back to the page the visitor came to before signing in, e.g. /rediger/<course>/<lesson>.
+  useEffect(() => {
+    const returnTo = takeReturnTo();
+    if (returnTo) navigate(returnTo, { replace: true });
+  }, [navigate]);
 
   function openModal() {
     if (!openNewLessonModal) setOpenNewLessonModal(true);
