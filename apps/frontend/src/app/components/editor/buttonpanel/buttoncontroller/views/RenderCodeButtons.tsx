@@ -1,5 +1,6 @@
 import { FC } from "react";
 import { Button, Popup } from "semantic-ui-react";
+import { shortcutLabel } from "../utils/buttonMethods";
 
 interface RenderCodeButtonsProps {
   isON: boolean;
@@ -26,7 +27,7 @@ export const RenderCodeButtons: FC<RenderCodeButtonsProps> = ({
   return (
     <>
       <Popup
-        content={title + " (" + shortcutKey + ")"}
+        content={title + " (" + shortcutLabel(shortcutKey) + ")"}
         disabled={isTouchDevice()}
         mouseEnterDelay={250}
         mouseLeaveDelay={250}

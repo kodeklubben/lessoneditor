@@ -1,7 +1,7 @@
 import { FC, RefObject, Dispatch, SetStateAction, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
-import { buttonAction } from "./utils/buttonMethods";
-import { codebuttons } from "./settings/buttonConfig";
+import { buttonAction, isInsideCodeBlock } from "./utils/buttonMethods";
+import { codebuttons, emphasis } from "./settings/buttonConfig";
 import { microbitbuttons, scratchbuttons } from "./settings/microbitAndScratchButtonConfig";
 import { RenderButtons } from "./views/RenderButtons";
 import { RenderMicroScratchButtons } from "./views/RenderMicroScratchButtons";
@@ -92,6 +92,14 @@ export const ButtonController: FC<ButtonControllerProps> = ({
     }
   };
 
+  // Bold, italic, strikethrough and inline code act on the text every time: a second click removes
+  // the markers again (buttonAction), instead of only turning the button off.
+  const actsEveryTime = buttonSlug in emphasis || buttonSlug === codebuttons.inline.slug;
+  // Block colours only mean something in running text; inside a code block they would become
+  // stray blocks in the preview.
+  const isBlockColour = buttonSlug in microbitbuttons || buttonSlug in scratchbuttons;
+  const disabledInCodeBlock = isBlockColour && isInsideCodeBlock(mdText, cursorPositionStart);
+
   const setButton = (
     isON: boolean,
     cursorIntON: number,
@@ -99,9 +107,9 @@ export const ButtonController: FC<ButtonControllerProps> = ({
     output: string,
     mdText: string,
     cursorPositionStart: number,
-    cursorPositionEnd: number
+    cursorPositionEnd: number,
   ) => {
-    if (!isON) {
+    if (!isON || actsEveryTime) {
       setPrevTextData({ mdText, cursorPositionStart, cursorPositionEnd });
 
       if (setUndoAndUndoPosition) {
@@ -113,7 +121,7 @@ export const ButtonController: FC<ButtonControllerProps> = ({
         cursorPositionEnd,
         cursorIntON,
         cursorIntOFF,
-        output
+        output,
       );
       setChanges(results.mdText, results.cursorPositionStart, results.cursorPositionEnd);
     }
@@ -130,7 +138,7 @@ export const ButtonController: FC<ButtonControllerProps> = ({
           output.slice(0, 3) + (course === "scratch" ? "blocks" : course) + output.slice(3),
           mdText,
           cursorPositionStart,
-          cursorPositionEnd
+          cursorPositionEnd,
         );
         break;
       }
@@ -169,12 +177,13 @@ export const ButtonController: FC<ButtonControllerProps> = ({
           output,
           mdText,
           cursorPositionStart,
-          cursorPositionEnd
+          cursorPositionEnd,
         );
         break;
       }
 
       default: {
+        if (disabledInCodeBlock) break;
         toggleButton(buttonSlug);
         setButton(
           isON,
@@ -183,7 +192,7 @@ export const ButtonController: FC<ButtonControllerProps> = ({
           output,
           mdText,
           cursorPositionStart,
-          cursorPositionEnd
+          cursorPositionEnd,
         );
       }
     }
@@ -196,7 +205,7 @@ export const ButtonController: FC<ButtonControllerProps> = ({
       set(buttonSlug);
     },
     { enableOnFormTags: ["TEXTAREA"], keydown: true },
-    [toggleButton, setButton]
+    [toggleButton, setButton],
   );
 
   const handleButtonClick = (button: string) => {
@@ -231,6 +240,7 @@ export const ButtonController: FC<ButtonControllerProps> = ({
           buttonSlug={buttonSlug}
           shortcutKey={shortcutKey}
           color={color || ""}
+          disabled={disabledInCodeBlock}
         />
       );
     } else {

@@ -62,7 +62,14 @@ const EditorDatamodal: FC<EditorDatamodalProps> = ({
     });
   };
 
+  // A text needs a title and an author; the dialog does not close or save without them.
+  const isValid: boolean =
+    typeof state.headerData.authorList === "object" &&
+    !!state.headerData?.title?.trim() &&
+    (!!state.headerData.author || state.headerData.authorList.length > 0);
+
   const onSubmit = async () => {
+    if (!isValid) return;
     if (shallowEqual(state.headerData, prevData.current.headerData)) {
       saveFileHeader(state.headerData);
       return setOpenSettings(false);
@@ -78,11 +85,6 @@ const EditorDatamodal: FC<EditorDatamodalProps> = ({
       }
     }
   };
-
-  const isLoading: boolean =
-    typeof state.headerData.authorList === "object" &&
-    !!state.headerData?.title &&
-    (!!state.headerData.author || state.headerData.authorList.length > 0);
 
   return (
     <>
@@ -103,7 +105,7 @@ const EditorDatamodal: FC<EditorDatamodalProps> = ({
         }
       />
       <Modal
-        closeOnDimmerClick={isLoading}
+        closeOnDimmerClick={isValid}
         onClose={() => {
           onSubmit();
         }}
@@ -136,7 +138,7 @@ const EditorDatamodal: FC<EditorDatamodalProps> = ({
             onChange={changeHandler}
             fluid
           />
-          {!state.headerData.title ? (
+          {!state.headerData.title?.trim() ? (
             <p style={{ color: "red" }}>
               <i>Må ha tittel</i>
             </p>
@@ -191,10 +193,7 @@ const EditorDatamodal: FC<EditorDatamodalProps> = ({
             content="Avbryt"
           /> */}
           <Button
-            disabled={
-              typeof state.headerData.authorList === "object" &&
-              !(state.headerData.author || state.headerData!.authorList!.length > 0)
-            }
+            disabled={!isValid}
             onClick={onSubmit}
             content="OK"
             positive

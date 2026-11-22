@@ -2,21 +2,24 @@ import { BUTTON_TITLE, DEFAULT_TEXT } from "../../../settingsFiles/languages/edi
 
 const backticks = "```";
 
-// SHORTCUTKEY options: "ctrl", "shift", "alt", "option", "command"
+// SHORTCUTKEY options: "ctrl", "shift", "alt", "option", "command", "mod" (Cmd on a Mac, Ctrl elsewhere)
 const SHORTCUTKEY = "ctrl";
+// Only for shortcuts a Mac user expects with Cmd. The others stay on Ctrl: Cmd+R, Cmd+P, Cmd+O and
+// several Cmd+Shift combinations belong to the browser.
+const MOD = "mod";
 const SHORTCUTKEY2 = "shift";
 
 // SHORTCUTKEYS config
 const KEY_COMBINATIONS = {
   emphasis: {
-    bold: [SHORTCUTKEY, "+", "b"].join(""),
-    italic: [SHORTCUTKEY, "+", "i"].join(""),
+    bold: [MOD, "+", "b"].join(""),
+    italic: [MOD, "+", "i"].join(""),
     //heading: [SHORTCUTKEY, "+", "h"].join(""),
     strikethrough: [SHORTCUTKEY, "+", "s"].join(""),
   },
   undoRedo: {
-    undo: [SHORTCUTKEY, "+", "z"].join(""),
-    redo: [SHORTCUTKEY, "+", SHORTCUTKEY2, "+", "z"].join(""),
+    undo: [MOD, "+", "z"].join(""),
+    redo: [MOD, "+", SHORTCUTKEY2, "+", "z"].join(""),
   },
   hyperlink: { hyperlink: [SHORTCUTKEY, "+", SHORTCUTKEY2, "+", "h"].join("") },
   media: {
