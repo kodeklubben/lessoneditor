@@ -19,7 +19,7 @@ const Content = () => {
             style={activeItem === "lessontext" ? { borderBottom: "5px solid green" } : {}}
           />
           <Menu.Item
-            name="Veiledningtekst"
+            name="Veiledningstekst"
             active={activeItem === "teacherguide"}
             onClick={() => setActiveItem("teacherguide")}
             style={activeItem === "teacherguide" ? { borderBottom: "5px solid green" } : {}}

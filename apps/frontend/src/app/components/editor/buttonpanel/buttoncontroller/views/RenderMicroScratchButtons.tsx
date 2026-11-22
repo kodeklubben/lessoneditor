@@ -1,5 +1,6 @@
 import { FC } from "react";
 import { Button, Popup } from "semantic-ui-react";
+import { shortcutLabel } from "../utils/buttonMethods";
 
 interface RenderMicroScratchButtonsProps {
   isON: boolean;
@@ -8,6 +9,7 @@ interface RenderMicroScratchButtonsProps {
   buttonSlug: string;
   shortcutKey: string;
   color: string;
+  disabled?: boolean;
 }
 
 export const RenderMicroScratchButtons: FC<RenderMicroScratchButtonsProps> = ({
@@ -17,6 +19,7 @@ export const RenderMicroScratchButtons: FC<RenderMicroScratchButtonsProps> = ({
   buttonSlug,
   shortcutKey,
   color,
+  disabled = false,
 }) => {
   const isTouchDevice = () => {
     return "ontouchstart" in document.documentElement;
@@ -24,7 +27,11 @@ export const RenderMicroScratchButtons: FC<RenderMicroScratchButtonsProps> = ({
   return (
     <>
       <Popup
-        content={title + " (" + shortcutKey + ")"}
+        content={
+          disabled
+            ? `${title}: ikke inne i en kodeblokk`
+            : title + " (" + shortcutLabel(shortcutKey) + ")"
+        }
         disabled={isTouchDevice()}
         mouseEnterDelay={250}
         mouseLeaveDelay={250}
@@ -33,6 +40,7 @@ export const RenderMicroScratchButtons: FC<RenderMicroScratchButtonsProps> = ({
             style={isON ? { backgroundColor: "#AAA" } : { backgroundColor: color }}
             className="MBButton"
             size="tiny"
+            disabled={disabled}
             onClick={() => handleButtonClick(buttonSlug)}
           >
             {title}
