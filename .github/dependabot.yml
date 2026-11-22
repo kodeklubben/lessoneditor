@@ -15,3 +15,13 @@ updates:
         patterns: ["nx", "@nx/*"]
       nest:
         patterns: ["@nestjs/*"]
+      # Babel's core and presets only work at the same major version.
+      babel:
+        patterns: ["@babel/*"]
+    ignore:
+      # The types follow the Node version the app runs on (.nvmrc, App Engine nodejs24).
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
+      # Babel 8 needs core, presets and the Jest setup upgraded together, on purpose.
+      - dependency-name: "@babel/*"
+        update-types: ["version-update:semver-major"]
