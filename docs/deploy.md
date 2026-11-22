@@ -14,6 +14,7 @@ In **Settings → Environments → `production`**:
 
 - Secrets: `SERVICE_ACCOUNT`, `POSTGRES_PASSWORD`, `GH_CLIENT_SECRET`, `COOKIE_SECRET`, `SESSION_SECRET`, `JWT_SECRET`. The last three are random and distinct (`openssl rand -hex 32`); `JWT_SECRET` must differ from `GH_CLIENT_SECRET`.
 - Variable: `THUMB_SERVICE_URL=https://europe-north1-lessoneditor.cloudfunctions.net/thumbnailer`.
+- For test versions, a second GitHub OAuth app (an OAuth app has only one callback URL) with homepage `https://test-dot-lessoneditor.ew.r.appspot.com` and callback `https://test-dot-lessoneditor.ew.r.appspot.com/api/auth/callback`: its client ID as the variable `TEST_GH_CLIENT_ID` and its secret as `TEST_GH_CLIENT_SECRET`.
 - Protection: require a reviewer. Do not limit the environment to `main`: test versions are deployed from branches, and the workflow itself only lets `main` get traffic.
 
 The workflow refuses to run when any of these are missing.
@@ -24,11 +25,13 @@ The workflow reruns CI, makes an on-demand Cloud SQL backup named after the comm
 
 ### 1. Test a branch before merging
 
-Run the workflow from the branch with mode **test**. It deploys version `test-<commit>` **without traffic**, with submissions to GitHub turned off, at:
+Run the workflow from the branch with mode **test**. It deploys the version `test` **without traffic**, with the test OAuth app and submissions to GitHub turned off, at:
 
 ```
-https://test-<commit>-dot-lessoneditor.ew.r.appspot.com
+https://test-dot-lessoneditor.ew.r.appspot.com
 ```
+
+There is one test version at a time; the next test deploy replaces it.
 
 Sign in with GitHub there and check: your lessons open, editing and autosave, images, new lesson and new text file, sharing, deleting, logout. Users stay on the current version meanwhile.
 
@@ -36,7 +39,7 @@ Thumbnails are not made for a test version: the thumbnail service only accepts p
 
 The migrations run against the production database already at this step. Write them so the version that has traffic keeps working (add columns, do not rename or drop), or do not use test mode for that change.
 
-Delete the test version when done: `gcloud app versions delete test-<commit> --service default --project lessoneditor`.
+Without traffic it scales down to no instances by itself; delete it when the branch is merged: `gcloud app versions delete test --service default --project lessoneditor`.
 
 ### 2. Release after merging
 

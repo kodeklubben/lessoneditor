@@ -5,8 +5,8 @@ on:
     inputs:
       mode:
         description: >-
-          test: a version without traffic, from any branch, at test-<commit>-dot-lessoneditor.ew.r.appspot.com
-          with submissions to GitHub turned off. production: main only, gets all traffic.
+          test: version "test" without traffic, from any branch, at test-dot-lessoneditor.ew.r.appspot.com,
+          with its own OAuth app and submissions to GitHub turned off. production: main only, gets all traffic.
         required: true
         type: choice
         options:
@@ -56,13 +56,18 @@ jobs:
           cache: npm
       - name: Check required production configuration
         env:
+          MODE: ${{ inputs.mode }}
           GH_CLIENT_SECRET: ${{ secrets.GH_CLIENT_SECRET }}
           COOKIE_SECRET: ${{ secrets.COOKIE_SECRET }}
           SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           THUMB_SERVICE_URL: ${{ vars.THUMB_SERVICE_URL }}
+          TEST_GH_CLIENT_ID: ${{ vars.TEST_GH_CLIENT_ID }}
+          TEST_GH_CLIENT_SECRET: ${{ secrets.TEST_GH_CLIENT_SECRET }}
         run: |
-          for key in POSTGRES_PASSWORD GH_CLIENT_SECRET COOKIE_SECRET SESSION_SECRET JWT_SECRET THUMB_SERVICE_URL; do
+          keys="POSTGRES_PASSWORD GH_CLIENT_SECRET COOKIE_SECRET SESSION_SECRET JWT_SECRET THUMB_SERVICE_URL"
+          if [ "$MODE" = test ]; then keys="$keys TEST_GH_CLIENT_ID TEST_GH_CLIENT_SECRET"; fi
+          for key in $keys; do
             if [ -z "${!key}" ]; then
               echo "Missing production configuration: $key" >&2
               exit 1
@@ -82,12 +87,12 @@ jobs:
               echo "disable_pull_requests=false"
             } >> "$GITHUB_OUTPUT"
           else
-            version="test-${GITHUB_SHA::7}"
-            # GitHub accepts a callback on a subdomain of the OAuth app's callback host.
+            # Always the same version and address: a GitHub OAuth app has exactly one callback URL,
+            # and test-dot-… is a separate host, not a subdomain of the production address.
             {
-              echo "version=$version"
+              echo "version=test"
               echo "promote=false"
-              echo "origin=https://$version-dot-lessoneditor.ew.r.appspot.com"
+              echo "origin=https://test-dot-lessoneditor.ew.r.appspot.com"
               echo "disable_pull_requests=true"
             } >> "$GITHUB_OUTPUT"
           fi
@@ -124,13 +129,13 @@ jobs:
             NODE_ENV=production
             HOST=0.0.0.0
             POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
-            GH_CLIENT_SECRET=${{ secrets.GH_CLIENT_SECRET }}
+            GH_CLIENT_SECRET=${{ inputs.mode == 'test' && secrets.TEST_GH_CLIENT_SECRET || secrets.GH_CLIENT_SECRET }}
             COOKIE_SECRET=${{ secrets.COOKIE_SECRET }}
             SESSION_SECRET=${{ secrets.SESSION_SECRET }}
             JWT_SECRET=${{ secrets.JWT_SECRET }}
             POSTGRES_HOST=/cloudsql/lessoneditor:europe-north1:lessoneditor
             POSTGRES_DB=lessoneditor
-            GH_CLIENT_ID=e880a288499ff2a0599c
+            GH_CLIENT_ID=${{ inputs.mode == 'test' && vars.TEST_GH_CLIENT_ID || 'e880a288499ff2a0599c' }}
             GH_CALLBACK_URL=${{ steps.target.outputs.origin }}/api/auth/callback
             FRONTEND_URL=${{ steps.target.outputs.origin }}
             THUMB_SERVICE_URL=${{ vars.THUMB_SERVICE_URL }}
