@@ -4,8 +4,11 @@ const { ProvidePlugin } = require("webpack");
 
 module.exports = (_env, argv) => {
   const production = argv.mode === "production";
+  // NxAppWebpackPlugin takes the webpack mode and the bundled NODE_ENV from the environment, not
+  // from --mode; without this a production build ships React's development build.
+  process.env.NODE_ENV = production ? "production" : "development";
   return {
-    output: { path: resolve(__dirname, "../../dist/apps/frontend"), publicPath: "/" },
+    output: { path: resolve(__dirname, "../../dist/apps/frontend"), publicPath: "/", clean: true },
     devServer: {
       host: "localhost",
       port: 4200,
