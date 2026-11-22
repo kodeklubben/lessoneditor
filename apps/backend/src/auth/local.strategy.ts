@@ -1,6 +1,6 @@
 import { Strategy } from "passport-oauth2";
 import { PassportStrategy } from "@nestjs/passport";
-import { Injectable } from "@nestjs/common";
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { stringify } from "querystring";
 import { UserService } from "../user/user.service";
 import { UserDTO } from "@lessoneditor/contracts";
@@ -11,8 +11,6 @@ import { RequestWithGithubToken } from "./github-token";
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy, "github") {
-  private axiosResponse$: any;
-  private data: any;
   constructor(
     private http: HttpService,
     private userService: UserService,
@@ -36,34 +34,30 @@ export class LocalStrategy extends PassportStrategy(Strategy, "github") {
   }
 
   async validate(request: RequestWithGithubToken, accessToken: string): Promise<UserDTO> {
-    this.axiosResponse$ = this.http.get("https://api.github.com/user", {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
-    const response: any = await lastValueFrom(this.axiosResponse$);
+    const response: any = await lastValueFrom(
+      this.http.get("https://api.github.com/user", {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      }),
+    );
+    const newUserDTO: UserDTO = {
+      userId: response.data.id,
+      name: response.data.name,
+      username: response.data.login || response.data.id,
+      email: response.data.email,
+      photo: response.data.avatar_url,
+    };
     let user: User;
     try {
-      user = await this.userService.getUser(response.data.id);
-      const { lessons, ...storedUser } = user;
-      const newUserDTO: UserDTO = {
-        userId: response.data.id,
-        name: response.data.name,
-        username: response.data.login || response.data.id,
-        email: response.data.email,
-        photo: response.data.avatar_url,
-      };
-
-      if (!this.shallowEqual(storedUser, newUserDTO)) {
-        user = await this.userService.updateUser(newUserDTO, storedUser.userId);
-      }
+      user = await this.userService.getUser(newUserDTO.userId);
     } catch (error) {
-      const newUserDTO: UserDTO = {
-        userId: response.data.id,
-        name: response.data.name,
-        username: response.data.login || response.data.id,
-        email: response.data.email,
-        photo: response.data.avatar_url,
-      };
+      // Only an unknown user is created; a database error must fail the login, not add a user.
+      if (!(error instanceof HttpException) || error.getStatus() !== HttpStatus.NOT_FOUND)
+        throw error;
       user = await this.userService.addUser(newUserDTO);
+    }
+    const { lessons, ...storedUser } = user;
+    if (!this.shallowEqual(storedUser, newUserDTO)) {
+      user = await this.userService.updateUser(newUserDTO, storedUser.userId);
     }
     // Kept on this request only; LoginGuard moves it, encrypted, into the server-side session.
     request.githubAccessToken = accessToken;

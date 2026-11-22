@@ -1,19 +1,25 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router";
 import axios from "axios";
+import { Container, Message } from "semantic-ui-react";
 
-import { NewLessonDTO, LessonDTO, FileDTO, YamlContent } from "@lessoneditor/contracts";
+import { LessonDTO, FileDTO, YamlContent, splitFilename } from "@lessoneditor/contracts";
 import { LessonContextState, LessonContextModel } from "./lessonContext.functions";
 import ShowSpinner from "../components/ShowSpinner";
 import { paths } from "@lessoneditor/contracts";
-import { useUserContext } from "./UserContext";
 import { base64StringToBlob, createObjectURL } from "blob-util";
 import { load } from "js-yaml";
 
 const LessonContext = React.createContext<LessonContextModel>({} as LessonContextModel);
 
+const IMAGE_TYPES: Record<string, string> = {
+  ".jpg": "image/jpeg",
+  ".jpeg": "image/jpeg",
+  ".png": "image/png",
+  ".gif": "image/gif",
+};
+
 export const LessonContextProvider = (props: any) => {
-  const { state } = useUserContext();
   const { lessonId } = useParams() as any;
 
   const [lesson, setLesson] = useState<LessonDTO | undefined>(undefined);
@@ -25,60 +31,74 @@ export const LessonContextProvider = (props: any) => {
     tags: { grade: [], subject: [], topic: [] },
   });
   const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string>("");
+
+  const fetchFileList = async () => {
+    const filenames = await axios.get<string[]>(
+      paths.LESSON_FILENAMES.replace(":lessonId", lessonId),
+    );
+    return filenames.data;
+  };
 
   useEffect(() => {
+    let active = true;
     async function fetchLessonData() {
       try {
         setLoading(true);
-        const lesson = await axios.get<LessonDTO>(paths.LESSON.replace(":lessonId", lessonId));
-        const yamlFile = await axios.get<FileDTO<YamlContent>>(
-          paths.LESSON_FILE.replace(":lessonId", lessonId).replace(":filename", "lesson")
+        const [lessonRes, yamlFile, filenames] = await Promise.all([
+          axios.get<LessonDTO>(paths.LESSON.replace(":lessonId", lessonId)),
+          axios.get<FileDTO<YamlContent>>(
+            paths.LESSON_FILE.replace(":lessonId", lessonId).replace(":filename", "lesson"),
+          ),
+          fetchFileList(),
+        ]);
+        // In parallel, before the page is shown, so the first preview (and the thumbnail) has
+        // them. One that fails is just missing from the preview.
+        const loaded = await Promise.all(
+          filenames.map(async (file) => {
+            const { filename, ext } = splitFilename(file);
+            if (!IMAGE_TYPES[ext]) return null;
+            try {
+              const imageRes = await axios.get<string>(
+                paths.LESSON_FILE.replace(":lessonId", lessonId).replace(
+                  ":filename",
+                  encodeURIComponent(filename),
+                ),
+              );
+              return [file, createObjectURL(base64StringToBlob(imageRes.data, IMAGE_TYPES[ext]))];
+            } catch {
+              return null;
+            }
+          }),
         );
-
-        const filenames = await fetchFileList();
-
-        for (const file of filenames) {
-          const ext = file.split(".").pop() === "jpg" ? "jpeg" : file.split(".").pop() ?? "";
-          if (!["jpeg", "png", "gif"].includes(ext)) {
-            continue;
-          }
-          const url = paths.LESSON_FILE.replace(":lessonId", lessonId).replace(
-            ":filename",
-            file.split(".")[0]
-          );
-
-          const imageRes: any = await axios.get(url);
-          setImages((prevImages) => ({
-            ...prevImages,
-            [file]: createObjectURL(base64StringToBlob(imageRes.data, `image/${ext}`)),
-          }));
-        }
-
+        if (!active) return;
+        setImages(Object.fromEntries(loaded.filter((entry) => entry !== null)));
         setYml(yamlFile.data.content);
-        setLesson(lesson.data);
+        setLesson(lessonRes.data);
         setFiles(filenames);
         setLoading(false);
-      } catch (error) {
-        console.error(error);
+      } catch (e) {
+        const status = (e as { response?: { status?: number } })?.response?.status;
+        if (active)
+          setError(
+            status === 403 || status === 404
+              ? "Fant ikke oppgaven, eller du har ikke tilgang til den."
+              : "Kunne ikke laste oppgaven. Prøv igjen.",
+          );
       }
     }
 
     fetchLessonData();
-  }, []);
-
-  const fetchFileList = async () => {
-    const filenames = await axios.get<string[]>(
-      paths.LESSON_FILENAMES.replace(":lessonId", lessonId)
-    );
-
-    return filenames.data;
-  };
+    return () => {
+      active = false;
+    };
+  }, [lessonId]);
 
   const updateYaml = async (lessonId: string, data: YamlContent) => {
     try {
       const updatedFile = await axios.put<FileDTO<any>>(
         paths.LESSON_FILE_UPDATE.replace(":lessonId", lessonId).replace(":filename", "lesson"),
-        { content: data }
+        { content: data },
       );
       const newData: unknown = load(updatedFile.data.content);
       setYml(newData);
@@ -89,13 +109,19 @@ export const LessonContextProvider = (props: any) => {
     }
   };
 
-  const updatelesson = async (data: NewLessonDTO) => {
-    const savedLesson = await axios.put<LessonDTO>(
-      paths.USER_LESSON_UPDATE.replace(":userId", state.user!.userId.toString()),
-      data
+  // Before: an error left the spinner up for good.
+  if (error) {
+    return (
+      <Container style={{ marginTop: "3em" }}>
+        <Message negative role="alert">
+          <Message.Header>{error}</Message.Header>
+          <p>
+            <a href="/">Til forsiden</a>
+          </p>
+        </Message>
+      </Container>
     );
-    setLesson(savedLesson.data);
-  };
+  }
 
   if (!lesson) {
     return <ShowSpinner />;
@@ -111,7 +137,6 @@ export const LessonContextProvider = (props: any) => {
     state: lessonState,
     yml,
     setYml: setYml,
-    updateLesson: updatelesson,
     updateYaml: updateYaml,
     images,
     setImages,
@@ -120,10 +145,6 @@ export const LessonContextProvider = (props: any) => {
     loading,
   };
 
-  return (
-    <>
-      <LessonContext.Provider value={context}>{props.children}</LessonContext.Provider>
-    </>
-  );
+  return <LessonContext.Provider value={context}>{props.children}</LessonContext.Provider>;
 };
 export const useLessonContext = (): LessonContextModel => useContext(LessonContext);

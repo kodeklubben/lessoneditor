@@ -1,4 +1,53 @@
-import { UserService } from "./user.service";
+import { newLessonFiles, UserService } from "./user.service";
+
+describe("creating a lesson", () => {
+  const lesson = {
+    lessonSlug: "hei",
+    lessonTitle: "Hei",
+    courseSlug: "python",
+    courseTitle: "Python",
+  };
+
+  it("names the text after the slug and language, defaulting to bokmål", async () => {
+    const saved: { entity: { name: string }; value: unknown }[] = [];
+    const add = jest.fn();
+    const manager = {
+      save: jest.fn(async (entity: { name: string }, value: unknown) => {
+        saved.push({ entity, value });
+        return entity.name === "Lesson" ? { ...(value as object), lessonId: 9 } : value;
+      }),
+      createQueryBuilder: () => ({ relation: () => ({ of: () => ({ add }) }) }),
+    };
+    const lessonRepository = {
+      manager: { transaction: jest.fn(async (work: (m: typeof manager) => unknown) => work(manager)) },
+    };
+    const userRepository = {
+      findOne: jest.fn().mockResolvedValue({ userId: 1, username: "ada", name: "Ada" }),
+    };
+    const service = new UserService(lessonRepository as never, userRepository as never);
+
+    await expect(service.addUserLesson(1, lesson)).resolves.toBe(9);
+    const files = saved.find(({ entity }) => entity.name === "FileStore")?.value as {
+      filename: string;
+      ext: string;
+    }[];
+    expect(files.map(({ filename, ext }) => filename + ext)).toEqual([
+      "hei.md",
+      "lesson.yml",
+      "image_rT34Yx.png",
+      "preview.png",
+    ]);
+    expect(add).toHaveBeenCalledWith(9);
+    expect(lessonRepository.manager.transaction).toHaveBeenCalledTimes(1);
+  });
+
+  it("uses <slug>_<language> for other languages and puts the language in the front matter", () => {
+    const [text] = newLessonFiles({ ...lesson, language: "en" }, { name: "", username: "ada" });
+    expect(text.filename).toBe("hei_en");
+    expect(text.content.toString()).toContain("language: en");
+    expect(text.content.toString()).toContain("- ada");
+  });
+});
 
 describe("deleting a lesson", () => {
   function setup(lesson: object | null) {
@@ -20,12 +69,7 @@ describe("deleting a lesson", () => {
     const userRepository = {
       findOne: jest.fn().mockResolvedValue({ userId: 1, username: "ada", lessons: [] }),
     };
-    const service = new UserService(
-      lessonRepository as never,
-      userRepository as never,
-      undefined,
-      undefined,
-    );
+    const service = new UserService(lessonRepository as never, userRepository as never);
     return { service, steps, lessonRepository };
   }
 

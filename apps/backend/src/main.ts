@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { Logger } from "@nestjs/common";
+import { Logger, ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import { NestExpressApplication } from "@nestjs/platform-express";
 import { AppModule } from "./app/app.module";
@@ -44,6 +44,8 @@ async function bootstrap() {
   app.useBodyParser("json", { limit: "8mb" });
   app.use(passport.initialize());
   app.use(passport.session());
+  // Request bodies typed as classes (app/request-bodies.ts) are checked, and unknown fields dropped.
+  app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
   app.setGlobalPrefix("api");
   app.enableShutdownHooks();
   const port = Number(process.env.PORT || 8080);

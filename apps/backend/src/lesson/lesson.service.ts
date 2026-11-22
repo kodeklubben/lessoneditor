@@ -13,6 +13,12 @@ import { deletionBlocker } from "../../../../libs/contracts/src/lib/files";
 
 const TEXT_EXTENSIONS = [".md", ".yml"];
 
+/** For logs: the error's class and database code, never its message with parameters or data. */
+export const errorKind = (error: unknown) =>
+  [(error as Error)?.name ?? "Error", (error as { code?: string })?.code]
+    .filter(Boolean)
+    .join(" ");
+
 /** bilde, bilde-2, bilde-3 …: a second upload with the same name must not shadow the first. */
 export function uniqueFilename(wanted: string, taken: string[]): string {
   const names = new Set(taken);
@@ -92,21 +98,18 @@ export class LessonService {
     if (!isLessonOwner(lesson, invitedByUser)) {
       throw new HttpException("Lesson can only be shared by creator", HttpStatus.FORBIDDEN);
     }
+    // Sharing twice is a no-op, not a duplicate key error from the join table.
+    if (invitedToUser.lessons.some((existing) => existing.lessonId === lesson.lessonId)) return;
     invitedToUser.lessons.push(lesson);
     await this.userRepository.save(invitedToUser);
   }
 
   async getLessonFile(lessonId: number, filename: string) {
     const lesson = await this.getLesson(lessonId);
-
     const file = lesson.files.find((file) => file.filename == filename);
-
     if (!file) {
       throw new HttpException("File does not exist", HttpStatus.NOT_FOUND);
     }
-    // if (file.filename == "preview") {
-    //   return file;
-    // }
     return file;
   }
 
@@ -153,8 +156,9 @@ export class LessonService {
       });
       return { fileId: savedFile.fileId, filename: savedFile.filename, ext: savedFile.ext };
     } catch (error) {
-      console.error(error);
-      throw new Error("Failed to save file");
+      // The error can carry the query parameters, i.e. the file itself: log only its kind.
+      this.logger.error(`Saving a file in lesson ${lessonId} failed: ${errorKind(error)}`);
+      throw new HttpException("Failed to save file", HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -163,7 +167,6 @@ export class LessonService {
     filename: string,
     updatedByUserId: number,
     fileContent: string,
-    request: Request,
   ): Promise<FileStore> {
     const lesson = await this.getLesson(lessonId);
     lesson.updated_at = new Date();
@@ -215,7 +218,7 @@ export class LessonService {
     return true;
   }
 
-  async deleteLessonFile(lessonId: number, filename: string, ext: string) {
+  async deleteLessonFile(lessonId: number, filename: string, ext: string): Promise<number> {
     const lesson = await this.getLesson(lessonId);
     const file = lesson.files.find((file) => file.filename === filename && file.ext === `.${ext}`);
 
@@ -225,6 +228,6 @@ export class LessonService {
     const blocker = deletionBlocker(file, lesson.files);
     if (blocker) throw new ConflictException(blocker);
     const deletedFileRes = await this.fileStoreRepository.delete(file.fileId);
-    return deletedFileRes.affected;
+    return deletedFileRes.affected ?? 0;
   }
 }
