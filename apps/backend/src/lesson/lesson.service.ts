@@ -48,7 +48,7 @@ export class LessonService {
   async getLesson(lessonId: number): Promise<Lesson> {
     const lesson = await this.lessonRepository.findOne({
       where: { lessonId },
-      relations: ["files", "users"],
+      relations: { files: true, users: true },
     });
     if (lesson == null) {
       throw new HttpException("Lesson does not exist", HttpStatus.NOT_FOUND);
@@ -71,7 +71,7 @@ export class LessonService {
     }
     const invitedToUser = await this.userRepository.findOne({
       where: { userId: Number(shareLesson.invitationToUserId) },
-      relations: ["lessons"],
+      relations: { lessons: true },
     });
 
     if (!invitedToUser) {
@@ -110,7 +110,7 @@ export class LessonService {
   ): Promise<{ fileId: number; filename: string; ext: string }> {
     const lesson = await this.lessonRepository.findOne({
       where: { lessonId },
-      relations: ["files"],
+      relations: { files: true },
     });
     if (!lesson) {
       throw new HttpException("Lesson does not exist", HttpStatus.NOT_FOUND);

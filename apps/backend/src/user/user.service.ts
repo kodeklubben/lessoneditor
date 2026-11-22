@@ -36,7 +36,7 @@ export class UserService {
   }
 
   async getUser(userId: number): Promise<User> {
-    const user = await this.userRepository.findOne({ where: { userId }, relations: ["lessons"] });
+    const user = await this.userRepository.findOne({ where: { userId }, relations: { lessons: true } });
     if (!user) {
       throw new HttpException("User does not exist", HttpStatus.NOT_FOUND);
     }
@@ -80,7 +80,7 @@ export class UserService {
 
   async addUserLesson(userId: number, lesson: NewLessonDTO, request: Request): Promise<number> {
     assertValidLesson({ language: "nb", ...lesson });
-    const user = await this.userRepository.findOne({ where: { userId }, relations: ["lessons"] });
+    const user = await this.userRepository.findOne({ where: { userId }, relations: { lessons: true } });
     if (!user) {
       throw new HttpException("User does not exist", HttpStatus.NOT_FOUND);
     }
@@ -189,7 +189,7 @@ export class UserService {
     }
     const lesson = await this.lessonRepository.findOne({
       where: { lessonId },
-      relations: ["files"],
+      relations: { files: true },
     });
     // if (regenThumb) {
     //   const previewFile = lesson.files.find((file) => file.filename == "preview");
@@ -216,7 +216,7 @@ export class UserService {
     const user = await this.getUser(userId);
     const lesson = await this.lessonRepository.findOne({
       where: { lessonId },
-      relations: ["files"],
+      relations: { files: true },
     });
 
     if (!lesson) {
