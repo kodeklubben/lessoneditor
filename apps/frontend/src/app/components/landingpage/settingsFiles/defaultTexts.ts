@@ -104,7 +104,7 @@ I denne oppgaven...
 
 ## Oppgaven passer til: {.check}
 
- **Fag**: {subject}
+**Fag**: {subject}
 
 **Anbefalte trinn**: {grade}
 

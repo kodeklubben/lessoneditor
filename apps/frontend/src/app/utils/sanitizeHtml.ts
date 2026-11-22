@@ -13,6 +13,14 @@ function install() {
   if (hooked) return;
   hooked = true;
   DOMPurify.addHook("uponSanitizeElement", (node, data) => {
+    if (data.tagName === "use") {
+      // Scratch blocks draw their icons (green flag, turn arrows) with <use href="#sb3-…">. Only a
+      // reference to the same document is kept: an external one could load another SVG.
+      const element = node as Element;
+      const href = element.getAttribute("href") ?? element.getAttribute("xlink:href") ?? "";
+      if (!href.startsWith("#")) node.parentNode?.removeChild(node);
+      return;
+    }
     if (data.tagName !== "iframe") return;
     const src = (node as Element).getAttribute("src") || "";
     if (!FRAME_ORIGINS.some((origin) => src.startsWith(origin))) node.parentNode?.removeChild(node);
@@ -32,7 +40,7 @@ function install() {
 export function sanitizeLessonHtml(html: string): string {
   install();
   return DOMPurify.sanitize(html, {
-    ADD_TAGS: ["iframe"],
+    ADD_TAGS: ["iframe", "use"],
     ADD_ATTR: ["allow", "allowfullscreen", "frameborder", "dnt", "target"],
     FORBID_TAGS: ["style", "form", "button", "textarea", "select"],
     // DOMPurify's default list, plus blob: for the lesson's own images loaded in the editor.

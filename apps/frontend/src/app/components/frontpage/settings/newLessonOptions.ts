@@ -49,6 +49,16 @@ export const LANGUAGEOPTIONS: Record<string, any>[] = [
 const LANGUAGE_ALIASES: Record<string, string> = { sam: "se" };
 
 /** Never undefined: unknown codes get a plain entry instead of crashing the page. */
+/** Sorts language codes in the order of the language list (bokmål, nynorsk, samisk …). */
+export function compareLanguages(a: string, b: string): number {
+  const order = LANGUAGEOPTIONS.map((option) => option.value);
+  const rank = (code: string) => {
+    const index = order.indexOf(languageOption(code).value);
+    return index === -1 ? order.length : index;
+  };
+  return rank(a) - rank(b) || a.localeCompare(b);
+}
+
 export function languageOption(code: string): Record<string, any> {
   const value = LANGUAGE_ALIASES[code] ?? code;
   return (
