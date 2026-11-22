@@ -28,6 +28,15 @@ describe("lesson submission state", () => {
     expect(repository.update).not.toHaveBeenCalled();
   });
 
+  it("does not submit a copy of a published lesson with the submission for new lessons", async () => {
+    repository.findOne.mockResolvedValue({ ...lesson, upstream_path: "src/scratch/asteroids" });
+    await expect(
+      service.submitLesson(undefined as never, "test-token", 7, { message: "test" }),
+    ).rejects.toThrow("ikke på plass ennå");
+    expect(github.submitLesson).not.toHaveBeenCalled();
+    expect(repository.update).not.toHaveBeenCalled();
+  });
+
   it("updates only submission status after success, without resaving transformed files", async () => {
     github.submitLesson.mockResolvedValue(undefined);
     await service.submitLesson(undefined as never, "test-token", 7, { message: "test" });
