@@ -9,7 +9,7 @@ import { ThumbService } from "../thumb/thumb.service";
 import { Request } from "express";
 
 // Runtime code from the shared lib is imported by path: tsc does not rewrite the alias.
-import { deletionBlocker } from "../../../../libs/contracts/src/lib/files";
+import { deletionBlocker, splitFilename } from "../../../../libs/contracts/src/lib/files";
 
 const TEXT_EXTENSIONS = [".md", ".yml"];
 
@@ -102,9 +102,21 @@ export class LessonService {
     await this.userRepository.save(invitedToUser);
   }
 
+  /**
+   * "asteroids.png" finds that image; "asteroids" finds the text first. Lessons from
+   * kodeklubben/oppgaver often have a text and an image with the same name (asteroids.md and
+   * asteroids.png), so a name without extension cannot pick between them.
+   */
   async getLessonFile(lessonId: number, filename: string) {
     const lesson = await this.getLesson(lessonId);
-    const file = lesson.files.find((file) => file.filename == filename);
+    const named = splitFilename(filename);
+    const file =
+      (named.ext &&
+        lesson.files.find((file) => file.filename === named.filename && file.ext === named.ext)) ||
+      lesson.files.find(
+        (file) => file.filename === filename && TEXT_EXTENSIONS.includes(file.ext),
+      ) ||
+      lesson.files.find((file) => file.filename === filename);
     if (!file) {
       throw new HttpException("File does not exist", HttpStatus.NOT_FOUND);
     }

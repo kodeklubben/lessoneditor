@@ -144,3 +144,29 @@ describe("thumbnails (K14)", () => {
     expect(thumbs.getThumb).not.toHaveBeenCalled();
   });
 });
+
+describe("finding a file by name", () => {
+  // As in kodeklubben/oppgaver: the cover image has the lesson text's name.
+  const files = [
+    { filename: "asteroids", ext: ".png", content: Buffer.from("png") },
+    { filename: "asteroids", ext: ".md", content: Buffer.from("text") },
+    { filename: "lesson", ext: ".yml", content: Buffer.from("{}") },
+  ];
+  const repository = { findOne: jest.fn() };
+  const service = new LessonService(
+    repository as never,
+    undefined as never,
+    undefined as never,
+    undefined as never,
+    undefined as never,
+  );
+
+  beforeEach(() => repository.findOne.mockResolvedValue({ lessonId: 1, files }));
+
+  it("finds the image by its full name and the text by the name alone", async () => {
+    expect((await service.getLessonFile(1, "asteroids.png")).ext).toBe(".png");
+    expect((await service.getLessonFile(1, "asteroids")).ext).toBe(".md");
+    expect((await service.getLessonFile(1, "lesson")).ext).toBe(".yml");
+    await expect(service.getLessonFile(1, "asteroids.gif")).rejects.toThrow("File does not exist");
+  });
+});
