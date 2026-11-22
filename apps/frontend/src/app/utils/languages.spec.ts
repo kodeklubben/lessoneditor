@@ -1,4 +1,8 @@
-import { LANGUAGEOPTIONS, languageOption } from "../components/frontpage/settings/newLessonOptions";
+import {
+  LANGUAGEOPTIONS,
+  compareLanguages,
+  languageOption,
+} from "../components/frontpage/settings/newLessonOptions";
 import {
   lessonGuideDefaultText,
   teacherGuideDefaultText,
@@ -22,5 +26,23 @@ describe("languages", () => {
 
   it("does not crash on an unknown language code", () => {
     expect(filenameParser("hei_xx.md").languageName).toBe("xx");
+  });
+
+  it("lists languages in the order of the language menu", () => {
+    expect(["fr", "en", "se", "nb", "is", "nn"].sort(compareLanguages)).toEqual([
+      "nb",
+      "nn",
+      "se",
+      "en",
+      "is",
+      "fr",
+    ]);
+    expect(["sam", "nb"].sort(compareLanguages)).toEqual(["nb", "sam"]);
+  });
+
+  it("does not indent the subject line of a new teacher guide", () => {
+    for (const text of Object.values(teacherGuideDefaultText))
+      expect(text).not.toMatch(/^ \*\*Fag/m);
+    expect(teacherGuideDefaultText.nb).toMatch(/^\*\*Fag\*\*: /m);
   });
 });

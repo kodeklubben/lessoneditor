@@ -5,10 +5,12 @@ import axios from "axios";
 import { paths } from "@lessoneditor/contracts";
 import { filenameParser } from "../../utils/filename-parser";
 import { Item, Message } from "semantic-ui-react";
+import { compareLanguages } from "../frontpage/settings/newLessonOptions";
 import TeacherguideItem from "./TeacherguideItem";
 
 const TeacherguideItems = () => {
-  const [usedLanguages, setUsedLanguages] = useState<string[]>([]);
+  // undefined until the file list has loaded, so "no text yet" is not shown while loading.
+  const [usedLanguages, setUsedLanguages] = useState<string[] | undefined>(undefined);
 
   const { fetchFileList, setFiles, state: lessonState } = useLessonContext();
   const { lessonId } = useParams() as any;
@@ -42,9 +44,9 @@ const TeacherguideItems = () => {
 
   return (
     <Item.Group divided>
-      {usedLanguages.length > 0 ? (
+      {usedLanguages === undefined ? null : usedLanguages.length > 0 ? (
         [...usedLanguages]
-          .sort((i, j) => j.localeCompare(i))
+          .sort(compareLanguages)
           .map((language: string) => (
             <TeacherguideItem
               key={language}
