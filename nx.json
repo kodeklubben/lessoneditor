@@ -26,5 +26,8 @@
       "cache": true
     }
   },
-  "defaultBase": "main"
+  "defaultBase": "main",
+  "affected": {
+    "legacy": true
+  }
 }

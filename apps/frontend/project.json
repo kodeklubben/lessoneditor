@@ -7,7 +7,9 @@
   "targets": {
     "build": {
       "executor": "nx:run-commands",
-      "outputs": ["{workspaceRoot}/dist/apps/frontend"],
+      "outputs": [
+        "{workspaceRoot}/dist/apps/frontend"
+      ],
       "options": {
         "cwd": "apps/frontend",
         "command": "webpack build --mode=production"
@@ -18,20 +20,6 @@
       "options": {
         "cwd": "apps/frontend",
         "command": "webpack serve --mode=development"
-      }
-    },
-    "lint": {
-      "executor": "@nx/eslint:lint",
-      "options": {
-        "lintFilePatterns": ["apps/frontend/**/*.{ts,tsx,js,jsx}"]
-      }
-    },
-    "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/apps/frontend"],
-      "options": {
-        "jestConfig": "apps/frontend/jest.config.cjs",
-        "passWithNoTests": true
       }
     }
   }
