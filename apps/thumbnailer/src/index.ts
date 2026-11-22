@@ -3,6 +3,7 @@ import takeScreenshot from "./app/take-screenshot";
 import fastq from "fastq";
 import "dotenv/config";
 import { readRequest } from "./app/read-request";
+import logger from "./app/logger";
 
 type Task = { url: string; token: string };
 const queue = fastq.promise(
@@ -33,7 +34,7 @@ export const thumbnailer: HttpFunction = async (req, res) => {
   } catch (error) {
     const message =
       error instanceof Error ? error.message.replaceAll(token, "[redacted]") : "Unknown error";
-    console.error("Thumbnail generation failed:", message);
+    logger.error("Thumbnail generation failed", { error: message });
     res.status(500).send("Thumbnail generation failed");
   }
 };

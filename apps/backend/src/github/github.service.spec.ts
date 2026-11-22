@@ -1,5 +1,15 @@
-import { GithubService } from "./github.service";
+import { commitMessage, GithubService } from "./github.service";
 import { gitBlobSha, isPullRequestAlreadyExists } from "./submission-files";
+
+describe("commit messages (V8)", () => {
+  it("name the lesson and carry the submitter's message as the body", () => {
+    expect(commitMessage("Hei", "  Ny oppgave om løkker\n")).toBe(
+      "Oppgave fra Lesson Editor: Hei\n\nNy oppgave om løkker",
+    );
+    expect(commitMessage("Hei", "")).toBe("Oppgave fra Lesson Editor: Hei");
+    expect(commitMessage("Hei")).toBe("Oppgave fra Lesson Editor: Hei");
+  });
+});
 
 const md = (body: string) =>
   Buffer.from(`---\ntitle: Hei\nauthorList: [Ada]\nlanguage: nb\n---\n${body}`);

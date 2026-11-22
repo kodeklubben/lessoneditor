@@ -4,6 +4,7 @@ import {
   BadRequestException,
   ForbiddenException,
   HttpException,
+  Logger,
   UnauthorizedException,
 } from "@nestjs/common";
 import { isCourseSlug, isLessonSlug } from "../../../../libs/contracts/src/lib/validation";
@@ -24,8 +25,17 @@ type Branch = { name: string; commitSha: string; treeSha: string };
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
+/** «Oppgave fra Lesson Editor: <title>», with the submitter's message as the body when given. */
+export function commitMessage(title: string, message?: string): string {
+  const subject = `Oppgave fra Lesson Editor: ${title}`;
+  const body = (message ?? "").trim();
+  return body ? `${subject}\n\n${body}` : subject;
+}
+
 @Injectable()
 export class GithubService {
+  private readonly logger = new Logger(GithubService.name);
+
   /** Polling for a new fork: GitHub creates it asynchronously. */
   forkWaitMs = 2000;
   forkWaitAttempts = 15;
@@ -110,7 +120,7 @@ export class GithubService {
         });
         const commit = await octokit.git.createCommit({
           ...fork,
-          message: `Oppgave fra Lesson Editor: ${lesson.lessonTitle}`,
+          message: commitMessage(lesson.lessonTitle, submitMessage?.message),
           tree: tree.data.sha,
           parents: [branch.commitSha],
         });
@@ -136,7 +146,7 @@ export class GithubService {
   toHttpError(error: unknown): HttpException {
     if (error instanceof HttpException) return error;
     const status = (error as { status?: number })?.status;
-    console.error("GitHub submission failed:", status ?? "no status");
+    this.logger.warn(`GitHub submission failed: ${status ?? "no status"}`);
     if (status === 401)
       return new UnauthorizedException("GitHub-innloggingen er utløpt. Logg inn på nytt.");
     if (status === 403 || status === 404)

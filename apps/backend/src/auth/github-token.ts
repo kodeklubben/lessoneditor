@@ -1,3 +1,4 @@
+import { Logger } from "@nestjs/common";
 import { createCipheriv, createDecipheriv, hkdfSync, randomBytes } from "crypto";
 import type { Request } from "express";
 import "express-session";
@@ -76,7 +77,9 @@ export async function revokeGithubToken(
     // 404 means GitHub no longer knows the token, which is the outcome we want.
     return response.status === 204 || response.status === 404;
   } catch (error) {
-    console.error("Could not revoke GitHub token:", error instanceof Error ? error.name : "error");
+    new Logger("GithubToken").warn(
+      `Could not revoke GitHub token: ${error instanceof Error ? error.name : "error"}`,
+    );
     return false;
   }
 }
