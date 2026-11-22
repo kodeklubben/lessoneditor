@@ -8,7 +8,7 @@ import ShowSpinner from "../components/ShowSpinner";
 import { paths } from "@lessoneditor/contracts";
 import { useUserContext } from "./UserContext";
 import { base64StringToBlob, createObjectURL } from "blob-util";
-import yaml from "js-yaml";
+import { load } from "js-yaml";
 
 const LessonContext = React.createContext<LessonContextModel>({} as LessonContextModel);
 
@@ -80,7 +80,7 @@ export const LessonContextProvider = (props: any) => {
         paths.LESSON_FILE_UPDATE.replace(":lessonId", lessonId).replace(":filename", "lesson"),
         { content: data }
       );
-      const newData: unknown = yaml.load(updatedFile.data.content);
+      const newData: unknown = load(updatedFile.data.content);
       setYml(newData);
       return updatedFile.status;
     } catch (error) {

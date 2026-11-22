@@ -3,7 +3,7 @@ import { dump, load } from "js-yaml";
 // require keeps this file usable from both the CommonJS backend and the webpack frontend.
 const matter: typeof import("gray-matter") = require("gray-matter");
 
-/** js-yaml 4 for both directions; passing options also bypasses gray-matter's shared cache. */
+/** js-yaml 5 for both directions; passing options also bypasses gray-matter's shared cache. */
 const options = {
   engines: {
     yaml: {
