@@ -152,11 +152,8 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
                     setButtonValues={setButtonValues}
                     setUndoAndUndoPosition={setUndoAndUndoPosition}
                   />
-                  {/* <div style={{ marginRight: "3em" }} />
-            <Explorer /> */}
                 </div>
                 <div className="settingspanel">
-                  {/* <Languages saveEditorText={saveEditorText} setShowSpinner={setShowSpinner} /> */}
                   <EditorDatamodal
                     courseTitle={courseTitle}
                     lessonTitle={lessonTitle}
@@ -247,7 +244,6 @@ const ButtonPanel: FC<ButtonPanelProps> = ({
               />
 
               <div className="settingspanel">
-                {/* <Languages saveEditorText={saveEditorText} setShowSpinner={setShowSpinner} /> */}
                 <EditorDatamodal
                   courseTitle={courseTitle}
                   lessonTitle={lessonTitle}

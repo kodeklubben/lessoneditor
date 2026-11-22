@@ -117,38 +117,6 @@ export const ButtonController: FC<ButtonControllerProps> = ({
       );
       setChanges(results.mdText, results.cursorPositionStart, results.cursorPositionEnd);
     }
-
-    // TODO: Fix undo and redo and shortcut triggering twice
-
-    // else if (isON) {
-    //   if (
-    //     cursorPositionStart === cursorPositionEnd &&
-    //     cursorPositionStart !== prevTextData.cursorPositionStart
-    //   ) {
-    //     setPrevTextData({ mdText: "", cursorPositionStart: -1, cursorPositionEnd: -1 });
-    //     if (output.slice(-3) === "\n#\n") {
-    //       const position =
-    //         mdText.slice(cursorPositionStart).indexOf("\n#\n") + cursorPositionEnd + 3;
-    //       setChanges(mdText, position, position);
-    //     } else {
-    //       setChanges(
-    //         mdText,
-    //         cursorPositionStart + cursorIntOFF,
-    //         cursorPositionStart + cursorIntOFF
-    //       );
-    //     }
-    //   } else {
-    //     setPrevTextData({ mdText: "", cursorPositionStart: -1, cursorPositionEnd: -1 });
-    //     if (setUndoAndUndoPosition) {
-    //       setUndoAndUndoPosition(mdText, cursorPositionStart);
-    //     }
-    //     setChanges(
-    //       prevTextData.mdText,
-    //       prevTextData.cursorPositionStart,
-    //       prevTextData.cursorPositionEnd
-    //     );
-    //   }
-    // }
   };
 
   const set = (button: string) => {

@@ -51,33 +51,33 @@ const MDPreviewArea: FC<MDPreviewProps> = ({ mdText, course, language, preview, 
     replaceUrls();
   }, [mdText, images]);
 
+  // Scratch blocks are drawn once per change, 300 ms after typing stops. Before, the result was
+  // run through scratchblocks again on every render.
   useEffect(() => {
     if (course !== "scratch") {
       return;
     }
     const timeoutHandler = setTimeout(() => {
-      const returnContent = renderScratchBlocks(parsedMDwithUpdatedImageURLS);
-
-      setSvgContent(returnContent);
+      setSvgContent(renderScratchBlocks(parsedMDwithUpdatedImageURLS));
     }, 300);
 
     return () => {
       clearTimeout(timeoutHandler);
     };
-  }, [parsedMDwithUpdatedImageURLS]);
+  }, [parsedMDwithUpdatedImageURLS, course]);
 
   useEffect(() => {
     if (course === "microbit") {
       renderMicrobit(language);
     }
-  }, [parsedMDwithUpdatedImageURLS]);
+  }, [parsedMDwithUpdatedImageURLS, course, language]);
 
   if (course === "scratch" && parsedMDwithUpdatedImageURLS) {
-    const lessonContent = renderScratchBlocks(svgContent);
     return (
       <div
         className={`preview-area ${preview ? "preview" : ""}`}
-        dangerouslySetInnerHTML={{ __html: sanitizeLessonHtml(lessonContent) }}
+        // Empty until the blocks are drawn, so the thumbnailer never photographs raw block code.
+        dangerouslySetInnerHTML={{ __html: sanitizeLessonHtml(svgContent) }}
       />
     );
   } else if (!parsedMDwithUpdatedImageURLS && mdText !== "") {

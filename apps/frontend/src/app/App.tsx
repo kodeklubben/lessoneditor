@@ -1,5 +1,4 @@
 import Editor from "./pages/Editor";
-// import Landingpage from "./landingpage/Landingpage";
 import Landingpage from "./pages/Landingpage";
 import Overview from "./pages/Frontpage";
 import { BrowserRouter, Route, Routes } from "react-router";

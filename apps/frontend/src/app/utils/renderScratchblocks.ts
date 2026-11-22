@@ -26,17 +26,26 @@ const PATTERNS = [
   { inline: true, re: /<code class="b">([\s\S]*?)<\/code>/g },
 ];
 
-export const renderScratchBlocks = (content: string) => {
-  const scratchblocks = require("scratchblocks/browser.js");
+let scratchblocksModule: any;
 
-  // NOTE: English (en) is included by default. All other languages
-  //       that exist in getAvailableLanguages() should be loaded here,
-  //       otherwise rendering will fail.
-  scratchblocks.default.loadLanguages({
-    nb: require("scratchblocks/locales/nb.json"),
-    nn: require("scratchblocks/locales/nn.json"),
-    is: require("scratchblocks/locales/is.json"),
-  });
+/** Loaded on first use; the languages are registered once, not on every render. */
+const loadScratchblocks = () => {
+  if (!scratchblocksModule) {
+    scratchblocksModule = require("scratchblocks/browser.js");
+    // NOTE: English (en) is included by default. All other languages
+    //       that exist in getAvailableLanguages() should be loaded here,
+    //       otherwise rendering will fail.
+    scratchblocksModule.default.loadLanguages({
+      nb: require("scratchblocks/locales/nb.json"),
+      nn: require("scratchblocks/locales/nn.json"),
+      is: require("scratchblocks/locales/is.json"),
+    });
+  }
+  return scratchblocksModule;
+};
+
+export const renderScratchBlocks = (content: string) => {
+  const scratchblocks = loadScratchblocks();
 
   let returnContent = content;
   for (const { inline, re } of PATTERNS) {
