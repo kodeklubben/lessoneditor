@@ -1,10 +1,20 @@
-name: Deploy to production (manual)
+name: Deploy (manual)
 
 on:
   workflow_dispatch:
     inputs:
+      mode:
+        description: >-
+          test: a version without traffic, from any branch, at test-<commit>-dot-lessoneditor.ew.r.appspot.com
+          with submissions to GitHub turned off. production: main only, gets all traffic.
+        required: true
+        type: choice
+        options:
+          - test
+          - production
+        default: test
       confirm:
-        description: Type production to deploy the checked main branch
+        description: Type production to confirm (both modes use the production database)
         required: true
         type: string
 
@@ -17,14 +27,16 @@ concurrency:
 
 jobs:
   verify:
-    if: github.ref == 'refs/heads/main' && inputs.confirm == 'production'
+    if: >-
+      inputs.confirm == 'production' &&
+      (inputs.mode == 'test' || github.ref == 'refs/heads/main')
     uses: ./.github/workflows/default.yml
 
   deploy:
-    name: Migrate database, then deploy App Engine
+    name: Back up and migrate the database, then deploy App Engine
     needs: verify
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     environment: production
     env:
       PUPPETEER_SKIP_DOWNLOAD: "true"
@@ -56,10 +68,38 @@ jobs:
               exit 1
             fi
           done
+      - name: Choose the version
+        id: target
+        env:
+          MODE: ${{ inputs.mode }}
+        run: |
+          if [ "$MODE" = production ]; then
+            # An empty version lets App Engine name it by date.
+            {
+              echo "version="
+              echo "promote=true"
+              echo "origin=https://lessoneditor.ew.r.appspot.com"
+              echo "disable_pull_requests=false"
+            } >> "$GITHUB_OUTPUT"
+          else
+            version="test-${GITHUB_SHA::7}"
+            # GitHub accepts a callback on a subdomain of the OAuth app's callback host.
+            {
+              echo "version=$version"
+              echo "promote=false"
+              echo "origin=https://$version-dot-lessoneditor.ew.r.appspot.com"
+              echo "disable_pull_requests=true"
+            } >> "$GITHUB_OUTPUT"
+          fi
       - uses: google-github-actions/auth@v3
         with:
           credentials_json: ${{ secrets.SERVICE_ACCOUNT }}
       - run: npm ci
+      - name: Back up the database
+        # A named restore point next to the daily backups and point-in-time recovery.
+        run: |
+          gcloud sql backups create --instance lessoneditor --project lessoneditor \
+            --description "Before ${{ inputs.mode }} deploy of ${GITHUB_SHA::7}"
       - name: Install Cloud SQL Auth Proxy
         run: |
           curl --fail --location https://storage.googleapis.com/cloud-sql-connectors/cloud-sql-proxy/v2.26.0/cloud-sql-proxy.linux.amd64 -o cloud-sql-proxy
@@ -69,15 +109,17 @@ jobs:
           ./cloud-sql-proxy --port=5432 --run-connection-test lessoneditor:europe-north1:lessoneditor &
           proxy_pid=$!
           trap 'kill "$proxy_pid"' EXIT
-          for attempt in {1..30}; do
+          for _ in {1..30}; do
             if pg_isready -h 127.0.0.1 -p 5432; then break; fi
             sleep 1
           done
           npm run migration:run
       - uses: google-github-actions/deploy-appengine@v3
+        id: deploy
         with:
           project_id: lessoneditor
-          promote: true
+          version: ${{ steps.target.outputs.version }}
+          promote: ${{ steps.target.outputs.promote }}
           env_vars: |
             NODE_ENV=production
             HOST=0.0.0.0
@@ -89,14 +131,16 @@ jobs:
             POSTGRES_HOST=/cloudsql/lessoneditor:europe-north1:lessoneditor
             POSTGRES_DB=lessoneditor
             GH_CLIENT_ID=e880a288499ff2a0599c
-            GH_CALLBACK_URL=https://lessoneditor.ew.r.appspot.com/api/auth/callback
-            FRONTEND_URL=https://lessoneditor.ew.r.appspot.com
+            GH_CALLBACK_URL=${{ steps.target.outputs.origin }}/api/auth/callback
+            FRONTEND_URL=${{ steps.target.outputs.origin }}
             THUMB_SERVICE_URL=${{ vars.THUMB_SERVICE_URL }}
             GH_LESSON_REPO=oppgaver
             GH_LESSON_REPO_OWNER=kodeklubben
-            DISABLE_PULL_REQUESTS=false
+            DISABLE_PULL_REQUESTS=${{ steps.target.outputs.disable_pull_requests }}
             POSTGRES_USER=postgres
             POSTGRES_PORT=5432
             POSTGRES_SYNCHRONIZE=false
             POSTGRES_ENTITIES=dist/apps/backend/**/*.entity.js
             POSTGRES_MIGRATIONS=dist/apps/backend/db/migrations/*.js
+      - name: Show the address
+        run: echo "Deployed ${{ inputs.mode }} version at ${{ steps.target.outputs.origin }} (${{ steps.deploy.outputs.version_url }})" >> "$GITHUB_STEP_SUMMARY"
