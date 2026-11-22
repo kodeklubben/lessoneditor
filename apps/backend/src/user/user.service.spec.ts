@@ -19,7 +19,9 @@ describe("creating a lesson", () => {
       createQueryBuilder: () => ({ relation: () => ({ of: () => ({ add }) }) }),
     };
     const lessonRepository = {
-      manager: { transaction: jest.fn(async (work: (m: typeof manager) => unknown) => work(manager)) },
+      manager: {
+        transaction: jest.fn(async (work: (m: typeof manager) => unknown) => work(manager)),
+      },
     };
     const userRepository = {
       findOne: jest.fn().mockResolvedValue({ userId: 1, username: "ada", name: "Ada" }),

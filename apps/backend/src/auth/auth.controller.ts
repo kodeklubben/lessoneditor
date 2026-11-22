@@ -7,7 +7,7 @@ import { revokeGithubToken, sessionGithubToken } from "./github-token";
 export class AuthController {
   @UseGuards(LoginGuard)
   @Get("login")
-  async login(@Res() res) {}
+  async login(@Res() _res: Response) {}
 
   @UseGuards(LoginGuard)
   @Post("logout")
@@ -25,7 +25,7 @@ export class AuthController {
 
   @UseGuards(LoginGuard)
   @Get("callback")
-  authCallback(@Req() req, @Res() res) {
+  authCallback(@Res() res: Response) {
     res.redirect("/");
   }
 }

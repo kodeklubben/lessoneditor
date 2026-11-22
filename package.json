@@ -19,7 +19,7 @@
     "build:backend": "tsc -p apps/backend/tsconfig.app.json",
     "build:frontend": "nx build frontend",
     "build:thumbnailer": "npm run build --workspace=thumbnailer",
-    "typecheck": "tsc -p apps/backend/tsconfig.app.json --noEmit && tsc -p apps/frontend/tsconfig.app.json --noEmit && tsc -p apps/thumbnailer/tsconfig.json --noEmit",
+    "typecheck": "tsc -p apps/backend/tsconfig.app.json --noEmit && tsc -p apps/frontend/tsconfig.app.json --noEmit && tsc -p apps/frontend/tsconfig.spec.json && tsc -p apps/thumbnailer/tsconfig.json --noEmit",
     "lint": "eslint apps/backend/src apps/frontend/src/app apps/frontend/src/main.tsx apps/thumbnailer/src libs db --max-warnings=0",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand",
     "test-all": "npm test",

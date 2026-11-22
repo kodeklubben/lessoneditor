@@ -60,7 +60,11 @@ describe("lesson.yml", () => {
   it("keeps the known fields", () => {
     expect(
       lessonYaml({ level: 2, license: "CC BY-SA 4.0", tags: { topic: ["app"] }, extra: 1 }),
-    ).toEqual({ level: 2, license: "CC BY-SA 4.0", tags: { topic: ["app"], subject: [], grade: [] } });
+    ).toEqual({
+      level: 2,
+      license: "CC BY-SA 4.0",
+      tags: { topic: ["app"], subject: [], grade: [] },
+    });
   });
 
   it("refuses other shapes", () => {

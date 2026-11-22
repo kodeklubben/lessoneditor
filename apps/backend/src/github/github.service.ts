@@ -19,6 +19,7 @@ import {
   pathsToDelete,
   RepoFile,
 } from "./submission-files";
+import { env } from "../app/env";
 
 type Repo = { owner: string; repo: string };
 type Branch = { name: string; commitSha: string; treeSha: string };
@@ -48,7 +49,7 @@ export class GithubService {
   /** Commits the lesson to src/<course>/<lesson>/ on branch <lessonId> in the user's fork and opens (or reuses) the PR. */
   async submitLesson(
     user: User,
-    accessToken: string,
+    accessToken: string | undefined,
     lesson: Lesson,
     submitMessage: { message: string },
   ): Promise<{ url: string | null }> {
@@ -67,8 +68,8 @@ export class GithubService {
     }
     const octokit = this.createClient(accessToken);
     const upstream: Repo = {
-      owner: process.env.GH_LESSON_REPO_OWNER,
-      repo: process.env.GH_LESSON_REPO,
+      owner: env("GH_LESSON_REPO_OWNER"),
+      repo: env("GH_LESSON_REPO"),
     };
     try {
       const upstreamBranch = await this.defaultBranch(octokit, upstream);
@@ -179,7 +180,7 @@ export class GithubService {
       const { data } = await octokit.repos.getBranch({ ...repo, branch });
       return { name: data.name, commitSha: data.commit.sha, treeSha: data.commit.commit.tree.sha };
     } catch (e) {
-      if (e.status === 404) return null;
+      if ((e as { status?: number }).status === 404) return null;
       throw e;
     }
   }
@@ -214,7 +215,7 @@ export class GithubService {
         .filter((entry) => entry.type === "file")
         .map((entry) => ({ path: entry.path, sha: entry.sha }));
     } catch (e) {
-      if (e.status === 404) return [];
+      if ((e as { status?: number }).status === 404) return [];
       throw e;
     }
   }

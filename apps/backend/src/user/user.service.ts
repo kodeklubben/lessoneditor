@@ -38,7 +38,7 @@ export function newLessonFiles(
   const header: HeaderData = {
     title: lesson.lessonTitle,
     author: "",
-    authorList: [user.name || user.username],
+    authorList: [user.name || user.username || ""],
     language: lesson.language,
     translator: "",
     translatorList: [],
@@ -64,7 +64,10 @@ export class UserService {
   ) {}
 
   async getUser(userId: number): Promise<User> {
-    const user = await this.userRepository.findOne({ where: { userId }, relations: { lessons: true } });
+    const user = await this.userRepository.findOne({
+      where: { userId },
+      relations: { lessons: true },
+    });
     if (!user) {
       throw new HttpException("User does not exist", HttpStatus.NOT_FOUND);
     }

@@ -31,21 +31,21 @@ export class NewLessonBody {
   @IsString()
   @MaxLength(MAX_SLUG_LENGTH)
   @Matches(LESSON_SLUG_PATTERN)
-  lessonSlug: string;
+  lessonSlug!: string;
 
   @IsString()
   @MinLength(1)
   @MaxLength(MAX_TITLE_LENGTH)
-  lessonTitle: string;
+  lessonTitle!: string;
 
   @IsString()
   @MaxLength(MAX_SLUG_LENGTH)
   @Matches(COURSE_SLUG_PATTERN)
-  courseSlug: string;
+  courseSlug!: string;
 
   @IsString()
   @MaxLength(MAX_TITLE_LENGTH)
-  courseTitle: string;
+  courseTitle!: string;
 
   @IsOptional()
   @IsString()
@@ -61,14 +61,14 @@ export class NewFileBody {
   @Matches(/^[^/\\\x00]*[^/\\\x00\s][^/\\\x00]*$/, {
     message: "filename must not be blank or contain / or \\",
   })
-  filename: string;
+  filename!: string;
 
   @IsIn(FILE_EXTENSIONS)
-  ext: string;
+  ext!: string;
 
   // The size is checked in the controller, which answers 413 instead of 400.
   @IsString()
-  content: string;
+  content!: string;
 }
 
 export class UpdatedFileBody {
@@ -80,7 +80,7 @@ export class UpdatedFileBody {
 export class ShareLessonBody {
   @IsString()
   @Matches(/^[1-9]\d{0,15}$/, { message: "invitationToUserId must be a GitHub user id" })
-  invitationToUserId: string;
+  invitationToUserId!: string;
 }
 
 export class SubmitLessonBody {

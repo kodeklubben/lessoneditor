@@ -15,9 +15,7 @@ const TEXT_EXTENSIONS = [".md", ".yml"];
 
 /** For logs: the error's class and database code, never its message with parameters or data. */
 export const errorKind = (error: unknown) =>
-  [(error as Error)?.name ?? "Error", (error as { code?: string })?.code]
-    .filter(Boolean)
-    .join(" ");
+  [(error as Error)?.name ?? "Error", (error as { code?: string })?.code].filter(Boolean).join(" ");
 
 /** bilde, bilde-2, bilde-3 …: a second upload with the same name must not shadow the first. */
 export function uniqueFilename(wanted: string, taken: string[]): string {
@@ -45,7 +43,7 @@ export class LessonService {
 
   async submitLesson(
     user: User,
-    accessToken: string,
+    accessToken: string | undefined,
     lessonId: number,
     submitMessage: { message: string },
   ) {
@@ -139,8 +137,8 @@ export class LessonService {
     const user = request.user as User;
     file.filename = filename;
     file.ext = newFile.ext;
-    file.created_by = user.username;
-    file.updated_by = user.username;
+    file.created_by = user.username ?? String(user.userId);
+    file.updated_by = user.username ?? String(user.userId);
     file.lesson = lesson;
 
     if (isImage) {
@@ -182,7 +180,7 @@ export class LessonService {
       throw new HttpException("User does not exist", HttpStatus.NOT_FOUND);
     }
     file.content = Buffer.from(fileContent);
-    file.updated_by = updatedByUser.username;
+    file.updated_by = updatedByUser.username ?? String(updatedByUser.userId);
     await this.lessonRepository.save(lesson);
     return file;
   }

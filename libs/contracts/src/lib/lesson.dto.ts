@@ -11,7 +11,7 @@ export interface LessonDTO {
 
   submitted: boolean;
 
-  submitted_at: Date;
+  submitted_at: Date | null;
 
   created_by: string;
 

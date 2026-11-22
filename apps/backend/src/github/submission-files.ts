@@ -42,7 +42,8 @@ export function toRepoMarkdown(raw: string): string {
     title: data.title ?? "",
     author: (data.authorList ?? []).join(", "),
   };
-  if ((data.translatorList ?? []).length > 0) header.translator = data.translatorList.join(", ");
+  const translators = data.translatorList ?? [];
+  if (translators.length > 0) header.translator = translators.join(", ");
   header.language = repoLanguage(data.language ?? "nb");
   return stringifyLessonMarkdown(header, body);
 }

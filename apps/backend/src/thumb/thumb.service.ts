@@ -5,6 +5,7 @@ import * as jwt from "jsonwebtoken";
 import { lastValueFrom } from "rxjs";
 import { Request } from "express";
 import { UserDTO } from "@lessoneditor/contracts";
+import { env } from "../app/env";
 
 /** Must match the header the thumbnailer reads (apps/thumbnailer/src/app/read-request.ts). */
 export const PREVIEW_TOKEN_HEADER = "x-preview-token";
@@ -27,13 +28,13 @@ export class ThumbService {
    * Not in Authorization: that is kept for Google's ID token once the function is private (IAM).
    */
   thumbRequest(previewUrl: string, user: UserDTO) {
-    const url = new URL(process.env.THUMB_SERVICE_URL);
+    const url = new URL(env("THUMB_SERVICE_URL"));
     url.searchParams.append("url", previewUrl);
-    const token = this.createJwtToken(user.userId, process.env.JWT_SECRET);
+    const token = this.createJwtToken(user.userId, env("JWT_SECRET"));
     return { url: url.toString(), headers: { [PREVIEW_TOKEN_HEADER]: token } };
   }
 
-  createJwtToken(userId, secret) {
+  createJwtToken(userId: number, secret: string) {
     return jwt.sign({}, secret, {
       subject: String(userId),
       audience: "lessoneditor-thumbnail",
@@ -42,7 +43,7 @@ export class ThumbService {
     });
   }
 
-  baseUrl(_req) {
-    return new URL(process.env.FRONTEND_URL).origin;
+  baseUrl(_req: unknown) {
+    return new URL(env("FRONTEND_URL")).origin;
   }
 }

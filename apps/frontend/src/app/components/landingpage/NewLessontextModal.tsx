@@ -120,7 +120,7 @@ const NewLessontextModal: FC<Props> = ({
           filename: textFilename(textMode, language, lessonSlug),
           ext: ".md",
           content: stringifyLessonMarkdown(
-            prepareHeader(lessonTitle, name, username, language),
+            prepareHeader(lessonTitle, name ?? "", username ?? "", language),
             text,
           ),
         });

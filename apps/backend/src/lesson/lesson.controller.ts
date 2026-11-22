@@ -54,7 +54,7 @@ export function lessonYaml(content: unknown): YamlContent {
   )
     throw new BadRequestException("Invalid lesson.yml content");
   return {
-    level: yml.level,
+    level: yml.level as number,
     license: yml.license,
     tags: { topic: tags.topic ?? [], subject: tags.subject ?? [], grade: tags.grade ?? [] },
   };
@@ -82,12 +82,9 @@ export class LessonController {
     @Param("lessonId", ParseIntPipe) lessonId: number,
     @Body() submitMessage: SubmitLessonBody,
   ) {
-    return this.lessonService.submitLesson(
-      req.user as User,
-      sessionGithubToken(req),
-      lessonId,
-      { message: submitMessage.message ?? "" },
-    );
+    return this.lessonService.submitLesson(req.user as User, sessionGithubToken(req), lessonId, {
+      message: submitMessage.message ?? "",
+    });
   }
 
   @Get(":lessonId/users")
@@ -113,8 +110,7 @@ export class LessonController {
     }
     const fileDTO: FileDTO<unknown> = {
       ...fileProps,
-      content:
-        filename === "lesson" ? JSON.parse(content.toString()) : content.toString("utf-8"),
+      content: filename === "lesson" ? JSON.parse(content.toString()) : content.toString("utf-8"),
     };
     return res.send(fileDTO);
   }
@@ -158,7 +154,11 @@ export class LessonController {
     } else {
       throw new BadRequestException("content must be a string");
     }
-    const { lesson, content: saved, ...fileProps } = await this.lessonService.updateLessonFile(
+    const {
+      lesson,
+      content: saved,
+      ...fileProps
+    } = await this.lessonService.updateLessonFile(
       lessonId,
       filename,
       (req.user as UserDTO).userId,

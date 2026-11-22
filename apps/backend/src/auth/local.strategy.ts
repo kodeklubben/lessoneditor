@@ -8,6 +8,7 @@ import { lastValueFrom } from "rxjs";
 import { HttpService } from "@nestjs/axios";
 import { User } from "../user/user.entity";
 import { RequestWithGithubToken } from "./github-token";
+import { env } from "../app/env";
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy, "github") {
@@ -17,17 +18,16 @@ export class LocalStrategy extends PassportStrategy(Strategy, "github") {
   ) {
     super({
       authorizationURL: `https://github.com/login/oauth/authorize?${stringify({
-        client_id: process.env.GH_CLIENT_ID,
-        redirect_uri: process.env.GH_CALLBACK_URL,
+        client_id: env("GH_CLIENT_ID"),
+        redirect_uri: env("GH_CALLBACK_URL"),
         response_type: "code",
         // Forks, commits and pull requests against the public lesson repo need no more than this.
         scope: "public_repo",
       })}`,
       tokenURL: "https://github.com/login/oauth/access_token",
-      clientID: process.env.GH_CLIENT_ID,
-      clientSecret: process.env.GH_CLIENT_SECRET,
-      callbackURL: process.env.GH_CALLBACK_URL,
-      scope: null,
+      clientID: env("GH_CLIENT_ID"),
+      clientSecret: env("GH_CLIENT_SECRET"),
+      callbackURL: env("GH_CALLBACK_URL"),
       state: true,
       passReqToCallback: true,
     });
@@ -64,17 +64,10 @@ export class LocalStrategy extends PassportStrategy(Strategy, "github") {
     return user;
   }
 
-  shallowEqual(object1, object2) {
-    const keys1 = Object.keys(object1);
-    const keys2 = Object.keys(object2);
-    if (keys1.length !== keys2.length) {
-      return false;
-    }
-    for (let key of keys1) {
-      if (object1[key] !== object2[key]) {
-        return false;
-      }
-    }
-    return true;
+  shallowEqual(object1: object, object2: object) {
+    const a = object1 as Record<string, unknown>;
+    const b = object2 as Record<string, unknown>;
+    const keys = Object.keys(a);
+    return keys.length === Object.keys(b).length && keys.every((key) => a[key] === b[key]);
   }
 }

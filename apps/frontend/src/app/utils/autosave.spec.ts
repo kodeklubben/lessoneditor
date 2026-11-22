@@ -69,7 +69,7 @@ describe("autosave", () => {
   });
 
   it("reports a failed save instead of saying 'saving' forever, and keeps the text dirty", async () => {
-    const { autosave, statuses } = setup(jest.fn(async () => false));
+    const { autosave, statuses } = setup(jest.fn(async (_text: string) => false));
     autosave.update("tekst");
     await expect(autosave.flush()).resolves.toBe(false);
     expect(statuses.at(-1)).toBe("error");
@@ -77,7 +77,9 @@ describe("autosave", () => {
   });
 
   it("treats a rejected save as an error", async () => {
-    const { autosave, statuses } = setup(jest.fn(async () => Promise.reject(new Error("nett"))));
+    const { autosave, statuses } = setup(
+      jest.fn(async (_text: string): Promise<boolean> => Promise.reject(new Error("nett"))),
+    );
     autosave.update("tekst");
     await autosave.flush();
     expect(statuses.at(-1)).toBe("error");

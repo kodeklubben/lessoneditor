@@ -11,6 +11,6 @@ export class Session {
   @Column("text")
   public json = "";
 
-  @DeleteDateColumn()
-  deletedAt?: Date;
+  @DeleteDateColumn({ type: "timestamp" })
+  deletedAt?: Date | null;
 }

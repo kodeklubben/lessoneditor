@@ -7,14 +7,14 @@
     "types": [
       "jest",
       "node"
-    ]
+    ],
+    "composite": false,
+    "noEmit": true
   },
   "include": [
-    "**/*.spec.ts",
-    "**/*.spec.tsx",
-    "**/*.spec.js",
-    "**/*.spec.jsx",
-    "**/*.d.ts"
+    "src/**/*.ts",
+    "src/**/*.tsx",
+    "../../libs/contracts/src/**/*.ts"
   ],
   "files": [
     "src/assets.d.ts"

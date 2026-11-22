@@ -10,33 +10,23 @@ import { Session } from "./session/session.entity";
 import passport from "passport";
 import cookieParser from "cookie-parser";
 import { originCheck } from "./app/origin-check";
+import { env, REQUIRED_ENV } from "./app/env";
 
 async function bootstrap() {
-  for (const key of [
-    "GH_CLIENT_ID",
-    "GH_CLIENT_SECRET",
-    "GH_CALLBACK_URL",
-    "FRONTEND_URL",
-    "THUMB_SERVICE_URL",
-    "COOKIE_SECRET",
-    "SESSION_SECRET",
-    "JWT_SECRET",
-  ]) {
-    if (!process.env[key]) throw new Error(`Missing required environment variable: ${key}`);
-  }
-  if (process.env.JWT_SECRET === process.env.GH_CLIENT_SECRET)
+  for (const key of REQUIRED_ENV) env(key);
+  if (env("JWT_SECRET") === env("GH_CLIENT_SECRET"))
     throw new Error("JWT_SECRET must not reuse GH_CLIENT_SECRET");
   const production = process.env.NODE_ENV === "production";
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   if (production) app.set("trust proxy", 1);
-  app.use("/api", originCheck(process.env.FRONTEND_URL));
-  app.use(cookieParser(process.env.COOKIE_SECRET));
+  app.use("/api", originCheck(env("FRONTEND_URL")));
+  app.use(cookieParser(env("COOKIE_SECRET")));
   app.use(
     ExpressSession({
       resave: false,
       saveUninitialized: false,
       store: new PostgresSessionStore(app.get(DataSource).getRepository(Session)),
-      secret: process.env.SESSION_SECRET,
+      secret: env("SESSION_SECRET"),
       cookie: { httpOnly: true, sameSite: "lax", secure: production, maxAge: 86400000 },
     }),
   );

@@ -11,6 +11,7 @@ import { UserDTO } from "@lessoneditor/contracts";
 import { DataSource } from "typeorm";
 import { User } from "../user/user.entity";
 import { encryptToken, RequestWithGithubToken } from "./github-token";
+import { env } from "../app/env";
 
 @Injectable()
 export class LoginGuard extends AuthGuard("github") {
@@ -27,7 +28,7 @@ export class LoginGuard extends AuthGuard("github") {
       if (type !== "Bearer" || !token || request.method !== "GET")
         throw new UnauthorizedException();
       try {
-        const decoded = verify(token, process.env.JWT_SECRET, {
+        const decoded = verify(token, env("JWT_SECRET"), {
           algorithms: ["HS256"],
           audience: "lessoneditor-thumbnail",
         });

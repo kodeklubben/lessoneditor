@@ -16,7 +16,7 @@ const Item: React.FC<Props> = ({ lesson }) => {
   const [openDeleteLesson, setOpenDeleteLesson] = useState<boolean>(false);
   const { removeLesson, previewImage } = useUserContext();
 
-  const submitDate = new Date(lesson.submitted_at).toLocaleDateString();
+  const submitDate = lesson.submitted_at ? new Date(lesson.submitted_at).toLocaleDateString() : "";
 
   const navigateToHome = (lessonId: string) => {
     const target = ["/landingpage", lessonId].join("/");
