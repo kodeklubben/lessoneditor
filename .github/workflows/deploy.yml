@@ -61,11 +61,10 @@ jobs:
           COOKIE_SECRET: ${{ secrets.COOKIE_SECRET }}
           SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
-          THUMB_SERVICE_URL: ${{ vars.THUMB_SERVICE_URL }}
           TEST_GH_CLIENT_ID: ${{ vars.TEST_GH_CLIENT_ID }}
           TEST_GH_CLIENT_SECRET: ${{ secrets.TEST_GH_CLIENT_SECRET }}
         run: |
-          keys="POSTGRES_PASSWORD GH_CLIENT_SECRET COOKIE_SECRET SESSION_SECRET JWT_SECRET THUMB_SERVICE_URL"
+          keys="POSTGRES_PASSWORD GH_CLIENT_SECRET COOKIE_SECRET SESSION_SECRET JWT_SECRET"
           if [ "$MODE" = test ]; then keys="$keys TEST_GH_CLIENT_ID TEST_GH_CLIENT_SECRET"; fi
           for key in $keys; do
             if [ -z "${!key}" ]; then
@@ -84,6 +83,7 @@ jobs:
               echo "version="
               echo "promote=true"
               echo "origin=https://lessoneditor.ew.r.appspot.com"
+              echo "thumb_url=https://thumbnailer-dot-lessoneditor.ew.r.appspot.com"
               echo "disable_pull_requests=false"
             } >> "$GITHUB_OUTPUT"
           else
@@ -93,6 +93,7 @@ jobs:
               echo "version=test"
               echo "promote=false"
               echo "origin=https://test-dot-lessoneditor.ew.r.appspot.com"
+              echo "thumb_url=https://test-dot-thumbnailer-dot-lessoneditor.ew.r.appspot.com"
               echo "disable_pull_requests=true"
             } >> "$GITHUB_OUTPUT"
           fi
@@ -119,6 +120,12 @@ jobs:
             sleep 1
           done
           npm run migration:run
+      - name: Deploy the thumbnail service
+        # Its own App Engine service, deployed first so the editor's new version finds it. A test
+        # deploy makes its version "test", which only renders the test editor's previews.
+        env:
+          MODE: ${{ inputs.mode }}
+        run: tools/deploy-thumbnailer.sh "$MODE"
       - uses: google-github-actions/deploy-appengine@v3
         id: deploy
         with:
@@ -138,7 +145,7 @@ jobs:
             GH_CLIENT_ID=${{ inputs.mode == 'test' && vars.TEST_GH_CLIENT_ID || 'e880a288499ff2a0599c' }}
             GH_CALLBACK_URL=${{ steps.target.outputs.origin }}/api/auth/callback
             FRONTEND_URL=${{ steps.target.outputs.origin }}
-            THUMB_SERVICE_URL=${{ vars.THUMB_SERVICE_URL }}
+            THUMB_SERVICE_URL=${{ steps.target.outputs.thumb_url }}
             GH_LESSON_REPO=oppgaver
             GH_LESSON_REPO_OWNER=kodeklubben
             DISABLE_PULL_REQUESTS=${{ steps.target.outputs.disable_pull_requests }}
