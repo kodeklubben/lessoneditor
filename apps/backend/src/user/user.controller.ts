@@ -4,73 +4,49 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Post,
-  Put,
-  Query,
   Req,
   UseGuards,
-  ForbiddenException,
 } from "@nestjs/common";
+import { Request } from "express";
 import { UserService } from "./user.service";
-import { LessonDTO, NewLessonDTO } from "@lessoneditor/contracts";
-import { UserDTO } from "@lessoneditor/contracts";
+import { LessonDTO, UserDTO } from "@lessoneditor/contracts";
 import { LoginGuard } from "../auth/login.guard";
+import { NewLessonBody } from "../app/request-bodies";
 
 @Controller("user")
+@UseGuards(LoginGuard)
 export class UserController {
   constructor(private userService: UserService) {}
 
-  @UseGuards(LoginGuard)
   @Get(":userId/lessons")
-  async GetUserLessons(@Param() params): Promise<LessonDTO[]> {
-    const { lessons, ...userDTO } = await this.userService.getUserLessons(params.userId);
+  async GetUserLessons(@Param("userId", ParseIntPipe) userId: number): Promise<LessonDTO[]> {
+    const { lessons } = await this.userService.getUserLessons(userId);
     return lessons;
   }
 
-  @UseGuards(LoginGuard)
   @Get()
-  async GetUser(@Req() req): Promise<UserDTO> {
-    if (req.user == null) {
-      throw new ForbiddenException();
-    }
-    return req.user;
+  GetUser(@Req() req: Request): UserDTO {
+    return req.user as UserDTO;
   }
 
-  @UseGuards(LoginGuard)
   @Post(":userId/lesson")
-  async AddLesson(@Req() req, @Param() params, @Body() newLesson: NewLessonDTO): Promise<number> {
-    return await this.userService.addUserLesson(params.userId, newLesson, req);
+  async AddLesson(
+    @Param("userId", ParseIntPipe) userId: number,
+    @Body() newLesson: NewLessonBody,
+  ): Promise<number> {
+    return this.userService.addUserLesson(userId, newLesson);
   }
 
-  @UseGuards(LoginGuard)
-  @Put(":userId/lesson/:lessonId")
-  async UpdateLesson(
-    @Req() req,
-    @Param("userId") userId,
-    @Param("lessonId") lessonId,
-    @Query("regenThumb") regenThumb: boolean,
-    @Body() updatedLesson: LessonDTO
-  ): Promise<LessonDTO> {
-    const { users, files, ...updatedLessonDTO } = await this.userService.updateUserLesson(
-      userId,
-      lessonId,
-      regenThumb,
-      updatedLesson,
-      req
-    );
-    return updatedLessonDTO;
-  }
-
-  @UseGuards(LoginGuard)
   @Delete(":userId/lesson/:lessonId")
   async DeleteLesson(
-    @Param("userId") userId,
-    @Param("lessonId") lessonId,
-    @Query() queryParams
+    @Param("userId", ParseIntPipe) userId: number,
+    @Param("lessonId", ParseIntPipe) lessonId: number,
   ): Promise<LessonDTO> {
     const { users, files, ...deletedLessonDTO } = await this.userService.deleteUserLesson(
       userId,
-      lessonId
+      lessonId,
     );
     return deletedLessonDTO;
   }

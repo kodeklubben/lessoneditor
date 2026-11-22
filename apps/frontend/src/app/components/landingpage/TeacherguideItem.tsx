@@ -1,8 +1,9 @@
 import "./textitem.scss";
 import { useNavigate } from "react-router";
 import { Button, Item, Image, Icon } from "semantic-ui-react";
+import { asButton } from "../../utils/a11y";
 import { FC, useState } from "react";
-import { LANGUAGEOPTIONS } from "../frontpage/settings/newLessonOptions";
+import { languageOption } from "../frontpage/settings/newLessonOptions";
 import { useUserContext } from "../../contexts/UserContext";
 
 import DeleteModal from "../shared/DeleteModal";
@@ -12,28 +13,16 @@ const TeacherguideItem: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug
   const navigate = useNavigate();
   const { previewImage } = useUserContext();
   const [openDeleteContent, setOpenDeleteContent] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
   const [showMDPreview, setShowMDPreview] = useState<boolean>(false);
 
-  const filename = language === "nb" ? "README" : `${"README"}_${language}`;
-
-  const deleteContent = async () => {
-    try {
-      setLoading(true);
-      await removeMD(language, "README");
-      setOpenDeleteContent(false);
-      setLoading(false);
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  const filename = language === "nb" ? "README" : `README_${language}`;
 
   const navigateToEditor = (lessonId: any, lessonSlug: any, language: string) => {
     const target = ["/editor", lessonId, "README", language].join("/");
     navigate({ pathname: target });
   };
 
-  const lang = LANGUAGEOPTIONS.find((item) => item.value === language);
+  const lang = languageOption(language);
 
   const languageText = lang!.text;
   const languageImage = lang!.image!.src;
@@ -51,21 +40,23 @@ const TeacherguideItem: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug
         <DeleteModal
           openDeleteContent={openDeleteContent}
           setOpenDeleteContent={setOpenDeleteContent}
-          deleteContent={deleteContent}
-          loading={loading}
+          deleteContent={() => removeMD(language, "README")}
         />
       )}
       <Item className="lesson_menu_card">
         <div className="lesson_menu_card_content_container">
           <Item.Content
             className="lesson_menu_card_content"
-            onClick={() => setShowMDPreview((prevValue) => !prevValue)}
+            {...asButton(
+              () => setShowMDPreview((prevValue) => !prevValue),
+              `Forhåndsvis lærerveiledningen på ${languageText.toLowerCase()}`,
+            )}
           >
             <Item.Image
               className="lesson_menu_card_content__image"
               src={previewImage[lessonId]}
               size="tiny"
-              alt="thumbUrl"
+              alt=""
               rounded
               bordered
             />
@@ -77,7 +68,7 @@ const TeacherguideItem: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug
           <Item.Header>
             <h2>
               {`Tittel: ${lessonTitle}`}
-              <div>(lærerveildening)</div>
+              <div>(lærerveiledning)</div>
             </h2>
           </Item.Header>
           <Item.Content>
@@ -92,6 +83,7 @@ const TeacherguideItem: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug
             className="text_item_button__mobile"
             onClick={() => navigateToEditor(lessonId, lessonSlug, language)}
             icon="pencil"
+            aria-label="Rediger"
             positive
           />
           <Button
@@ -102,7 +94,12 @@ const TeacherguideItem: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug
             content={"Rediger"}
             positive
           />
-          <Button style={{ background: "none" }} icon onClick={() => setOpenDeleteContent(true)}>
+          <Button
+            style={{ background: "none" }}
+            icon
+            onClick={() => setOpenDeleteContent(true)}
+            aria-label={`Slett lærerveiledningen på ${languageText.toLowerCase()}`}
+          >
             <Icon name="delete" />
             Slett
           </Button>

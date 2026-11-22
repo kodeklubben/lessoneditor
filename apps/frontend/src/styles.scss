@@ -1,2 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
-@import '~semantic-ui-css/semantic.css';
+// Lato from our own server, not from Google Fonts. Semantic UI is imported in main.tsx, where
+// tools/strip-google-fonts-loader.cjs removes its @import of fonts.googleapis.com.
+@import '~@fontsource/lato/400.css';
+@import '~@fontsource/lato/400-italic.css';
+@import '~@fontsource/lato/700.css';
+@import '~@fontsource/lato/700-italic.css';
+
+// Keyboard focus must be visible everywhere, also on Semantic's buttons and our own controls.
+:focus-visible {
+  outline: 3px solid #2185d0 !important;
+  outline-offset: 2px;
+}

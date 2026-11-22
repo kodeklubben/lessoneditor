@@ -1,4 +1,4 @@
-import { LANGUAGEOPTIONS } from "../components/frontpage/settings/newLessonOptions";
+import { languageOption } from "../components/frontpage/settings/newLessonOptions";
 
 export type FilenameData = {
   language: string;
@@ -19,7 +19,7 @@ export const filenameParser = (filename?: string): FilenameData => {
 
     const isReadme = name.split("_")[0] === "README";
     const languageName = isMarkdown
-      ? LANGUAGEOPTIONS.filter((item) => item.value === language)[0].text
+      ? languageOption(language).text
       : "";
 
     return {

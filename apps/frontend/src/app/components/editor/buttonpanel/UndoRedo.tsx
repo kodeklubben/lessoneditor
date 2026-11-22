@@ -3,7 +3,7 @@ import { undoRedo as config } from "./buttoncontroller/settings/buttonConfig";
 import { FC, RefObject } from "react";
 
 interface UndoRedoProps {
-  editorRef: RefObject<HTMLTextAreaElement>;
+  editorRef: RefObject<HTMLTextAreaElement | null>;
   mdText: string;
   cursorPositionStart: number;
   undoCursorPosition: number[];

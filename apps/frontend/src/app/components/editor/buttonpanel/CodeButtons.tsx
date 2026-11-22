@@ -3,7 +3,7 @@ import { codebuttons as config } from "./buttoncontroller/settings/buttonConfig"
 import { FC, RefObject } from "react";
 
 export interface CodeButtonsProps {
-  editorRef: RefObject<HTMLTextAreaElement>;
+  editorRef: RefObject<HTMLTextAreaElement | null>;
   mdText: string;
   cursorPositionStart: number;
   cursorPositionEnd: number;

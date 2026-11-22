@@ -47,6 +47,7 @@ export const RenderButtons: FC<RenderButtonsProps> = ({
               className="CPButton"
               size="huge"
               icon={icon}
+              aria-label={title}
               onClick={() => handleButtonClick(buttonSlug)}
             />
           ) : (
@@ -66,7 +67,7 @@ export const RenderButtons: FC<RenderButtonsProps> = ({
                       margin: "-4px",
                     }}
                     src={imageurl}
-                    alt="test"
+                    alt=""
                   />
                   <div
                     style={{

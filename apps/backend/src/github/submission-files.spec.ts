@@ -1,0 +1,97 @@
+import {
+  buildUploadFiles,
+  gitBlobSha,
+  machineTranslationNote,
+  toRepoMarkdown,
+} from "./submission-files";
+
+const md = (header: string, body: string) => Buffer.from(`---\n${header}---\n${body}`);
+
+describe("files sent to the lesson repo", () => {
+  it("writes the repo's front matter and keeps the whole body", () => {
+    const out = toRepoMarkdown(
+      "---\ntitle: Hei\nauthor: ''\nauthorList:\n  - Ada\n  - Bo\ntranslator: ''\ntranslatorList: []\nlanguage: nb\n---\nA\n\n---\n\nB\n",
+    );
+    expect(out).toBe("---\ntitle: Hei\nauthor: Ada, Bo\nlanguage: nb\n---\nA\n\n---\n\nB\n");
+  });
+
+  it("includes translators when there are any", () => {
+    const out = toRepoMarkdown(
+      "---\ntitle: Hi\nauthorList: [Ada]\ntranslatorList: [Cy]\nlanguage: en\n---\nText",
+    );
+    expect(out).toContain("translator: Cy\n");
+  });
+
+  it("puts every file under src/<course>/<lesson>/ and skips the preview thumbnail", () => {
+    const uploads = buildUploadFiles({ courseSlug: "python", lessonSlug: "hei" }, [
+      { filename: "lesson", ext: ".yml", content: Buffer.from('{"level":1,"tags":{"topic":[]}}') },
+      { filename: "hei", ext: ".md", content: md("title: Hei\nauthorList: [Ada]\n", "Tekst") },
+      { filename: "preview", ext: ".png", content: Buffer.from("png") },
+      { filename: "bilde", ext: ".png", content: Buffer.from("png") },
+    ]);
+    expect(uploads.map((upload) => upload.path)).toEqual([
+      "src/python/hei/lesson.yml",
+      "src/python/hei/hei.md",
+      "src/python/hei/bilde.png",
+    ]);
+    expect(uploads[0].buffer.toString()).toBe("level: 1\ntags:\n  topic: []\n");
+  });
+
+  it("sends the template image only while a text still refers to it", () => {
+    const image = { filename: "image_rT34Yx", ext: ".png", content: Buffer.from("png") };
+    const text = (body: string) => ({
+      filename: "hei",
+      ext: ".md",
+      content: md("title: Hei\nauthorList: [Ada]\n", body),
+    });
+    const lesson = { courseSlug: "python", lessonSlug: "hei" };
+    expect(
+      buildUploadFiles(lesson, [text("![X](./image_rT34Yx.png)"), image]).map((u) => u.path),
+    ).toContain("src/python/hei/image_rT34Yx.png");
+    expect(
+      buildUploadFiles(lesson, [text("Ingen bilder"), image]).map((u) => u.path),
+    ).not.toContain("src/python/hei/image_rT34Yx.png");
+  });
+});
+
+describe("old language codes", () => {
+  it("submits Northern Sami as se, as the lesson repo names it", () => {
+    const [upload] = buildUploadFiles({ courseSlug: "python", lessonSlug: "hei" }, [
+      {
+        filename: "hei_sam",
+        ext: ".md",
+        content: md("title: Hei\nauthorList: [Ada]\nlanguage: sam\n", "Tekst"),
+      },
+    ]);
+    expect(upload.path).toBe("src/python/hei/hei_se.md");
+    expect(upload.buffer.toString()).toContain("language: se\n");
+  });
+});
+
+describe("git blob ids", () => {
+  it("match what git computes", () => {
+    // printf 'hei\n' | git hash-object --stdin
+    expect(gitBlobSha(Buffer.from("hei\n"))).toBe("5eca02534fe1cf75a80560d9b943b4b88ca16a75");
+  });
+});
+
+describe("machine translated texts", () => {
+  it("are listed in the pull request and not marked in the repo front matter", () => {
+    const files = [
+      { filename: "hei", ext: ".md", content: md("title: Hei\nauthorList: [Ada]\n", "Tekst") },
+      {
+        filename: "hei_en",
+        ext: ".md",
+        content: md(
+          "title: Hei\nauthorList: [Ada]\ntranslatorList: [Bo]\nlanguage: en\nmachineTranslated: true\ntranslatedFrom: nb\n",
+          "Text",
+        ),
+      },
+    ];
+    expect(machineTranslationNote(files)).toContain("hei_en.md (fra nb)");
+    expect(machineTranslationNote(files.slice(0, 1))).toBe("");
+    expect(
+      buildUploadFiles({ courseSlug: "python", lessonSlug: "hei" }, files)[1].buffer.toString(),
+    ).toBe("---\ntitle: Hei\nauthor: Ada\ntranslator: Bo\nlanguage: en\n---\nText");
+  });
+});

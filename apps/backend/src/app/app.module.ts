@@ -10,6 +10,10 @@ import { join } from "path";
 import { ServeStaticModule } from "@nestjs/serve-static";
 import { dataSourceOptions } from "../../../../db/data-sources";
 
+// Machine translation (../translate) is kept but not registered, so its endpoints do not exist and
+// the editor hides the option. Turn it on again only with an EU provider and a data processing
+// agreement: import TranslateModule here and set TRANSLATION_PROVIDER and MISTRAL_API_KEY.
+
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, cache: true }),
@@ -19,7 +23,7 @@ import { dataSourceOptions } from "../../../../db/data-sources";
     }),
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, "../../../../../frontend"),
-      exclude: ["/api*"],
+      exclude: ["/api", "/api/{*path}"],
     }),
     TypeOrmModule.forRoot(dataSourceOptions),
     forwardRef(() => UserModule),

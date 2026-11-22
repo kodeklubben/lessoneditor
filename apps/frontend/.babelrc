@@ -1,11 +1,17 @@
 {
   "presets": [
     [
-      "@nx/react/babel",
+      "@babel/preset-env",
+      {
+        "targets": "defaults"
+      }
+    ],
+    [
+      "@babel/preset-react",
       {
         "runtime": "automatic"
       }
-    ]
-  ],
-  "plugins": []
+    ],
+    "@babel/preset-typescript"
+  ]
 }

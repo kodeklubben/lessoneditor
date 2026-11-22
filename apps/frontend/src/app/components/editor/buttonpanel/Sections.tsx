@@ -4,7 +4,7 @@ import { sections as config } from "./buttoncontroller/settings/buttonConfig";
 import { FC } from "react";
 
 interface SectionsProps {
-  editorRef: RefObject<HTMLTextAreaElement>;
+  editorRef: RefObject<HTMLTextAreaElement | null>;
   cursorPositionStart: number;
   cursorPositionEnd: number;
   mdText: string;

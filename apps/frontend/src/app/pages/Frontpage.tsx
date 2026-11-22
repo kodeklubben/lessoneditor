@@ -67,11 +67,17 @@ const frontpage: FC = () => {
                 <h3>Lag ny oppgave</h3>
               </label>
               <div className="card_container">
-                <div onClick={openModal} className="card">
+                <div className="card">
                   <Card>
                     <Card.Content className="card_content">
                       <Card.Content>
-                        <Icon.Group className="card_image_height">
+                        {/* A larger mouse target; the "Ny oppgave" button is the real control. */}
+                        <Icon.Group
+                          className="card_image_height"
+                          onClick={openModal}
+                          aria-hidden="true"
+                          style={{ cursor: "pointer" }}
+                        >
                           <Icon color="grey" name="file text outline" size="huge" />
                         </Icon.Group>
                       </Card.Content>

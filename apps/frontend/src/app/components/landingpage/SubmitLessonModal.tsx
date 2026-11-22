@@ -3,30 +3,41 @@ import { FC, useState } from "react";
 
 import { paths } from "@lessoneditor/contracts";
 import axios from "axios";
+import { submitErrorMessage } from "./utils/submitError";
 import { useNavigate } from "react-router";
 
 const SubmitLessonModal: FC<any> = ({ openSubmitModal, setOpenSubmitModal, lessonId }) => {
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
   const [submitComment, addSubmitComment] = useState("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
+  const [pullRequestUrl, setPullRequestUrl] = useState<string | null>(null);
 
   const navigate = useNavigate();
 
   const onSubmit = async (lessonId: string) => {
     const submitMessage = { message: submitComment };
+    setLoading(true);
+    setError("");
     try {
-      setLoading(true);
-      await axios.post(paths.LESSON_SUBMIT.replace(":lessonId", lessonId), submitMessage);
+      const { data } = await axios.post<{ url?: string | null }>(
+        paths.LESSON_SUBMIT.replace(":lessonId", lessonId),
+        submitMessage
+      );
+      setPullRequestUrl(data?.url ?? null);
       setIsSubmitted(true);
-      setLoading(false);
     } catch (e) {
       console.error(e);
+      setError(submitErrorMessage(e));
+    } finally {
+      setLoading(false);
     }
   };
 
   const onClose = () => {
     setIsSubmitted(false);
     setLoading(false);
+    setError("");
     setOpenSubmitModal(false);
   };
 
@@ -46,10 +57,14 @@ const SubmitLessonModal: FC<any> = ({ openSubmitModal, setOpenSubmitModal, lesso
 
           <p>
             Du kan følge{" "}
-            <a href="https://github.com/kodeklubben/oppgaver/pulls" target="_blank">
-              denne
+            <a
+              href={pullRequestUrl ?? "https://github.com/kodeklubben/oppgaver/pulls"}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              denne lenken
             </a>{" "}
-            linken for å sjekke at oppgaven kom helt frem.
+            for å sjekke at oppgaven kom helt frem.
           </p>
         </Modal.Content>
         <Modal.Actions>
@@ -95,30 +110,35 @@ const SubmitLessonModal: FC<any> = ({ openSubmitModal, setOpenSubmitModal, lesso
                     href="https://oppgaver.kidsakoder.no"
                     target="_blank"
                   >
-                    Lær Kidsa Koder.
+                    Lær Kidsa Koding.
                   </a>
                 </p>
               </Modal.Description>
             </Modal.Content>
 
             <Modal.Content>
-              <h4>
-                Skriv gjerne en kommentar <span style={{ color: "grey" }}>(hvis du vil)</span>:
-              </h4>
+              <label htmlFor="submit-comment" style={{ fontWeight: 700, display: "block" }}>
+                Skriv gjerne en kommentar <span style={{ color: "#595959" }}>(hvis du vil)</span>:
+              </label>
 
               <textarea
                 style={{
                   width: "100%",
                   height: "10vh",
-                  outline: "none",
                   borderColor: "grey",
                   borderRadius: "3px",
                   padding: "1em",
                 }}
+                id="submit-comment"
                 name="textValue"
                 onChange={handleChange}
                 placeholder="...dette er en oppgave som handler om..."
               />
+              {error && (
+                <p role="alert" style={{ color: "#9f3a38", marginTop: "1em" }}>
+                  {error}
+                </p>
+              )}
             </Modal.Content>
 
             <Modal.Actions>
@@ -133,6 +153,7 @@ const SubmitLessonModal: FC<any> = ({ openSubmitModal, setOpenSubmitModal, lesso
                   onClick={() => onSubmit(lessonId)}
                   positive
                   loading={loading}
+                  disabled={loading}
                 />
               </>
             </Modal.Actions>

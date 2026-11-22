@@ -1,37 +1,20 @@
-import { Button, Modal, Header, Dropdown, Radio } from "semantic-ui-react";
-import { FC, SyntheticEvent, useEffect, useState } from "react";
+import { Button, Modal, Header, Dropdown, Radio, Message } from "semantic-ui-react";
+import { FC, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { useUserContext } from "../../contexts/UserContext";
 import { useLessonContext } from "../../contexts/LessonContext";
-import * as yaml from "js-yaml";
-import { FileDTO, paths } from "@lessoneditor/contracts";
+import { paths, stringifyLessonMarkdown } from "@lessoneditor/contracts";
 import { lessonGuideDefaultText } from "./settingsFiles/defaultTexts";
 import axios from "axios";
 import insertMetaDataInTeacherGuide from "./utils/insertMetaDataInTeacherGuide";
-import { LANGUAGEOPTIONS } from "../frontpage/settings/newLessonOptions";
-import { chatGPT } from "./utils/chatGPT";
-
-const separator = "---\n";
 
 type TextMode = "lessontext" | "teacherguide";
+type LanguageOption = { key: string; text: string; value: string };
 
-interface FilenameBuilders {
-  lessontext: (slug: string, lang: string) => string;
-  teacherguide: (lang: string) => string;
-}
-
-const filenames: FilenameBuilders = {
-  lessontext: (lang: string, slug: string) => (lang === "nb" ? slug : `${slug}_${lang}`),
-  teacherguide: (lang: string) => (lang === "nb" ? "README" : `README_${lang}`),
-};
-
-const replaceAPIPath = (lessonId: string, filename: string) =>
-  paths.LESSON_FILE.replace(":lessonId", String(lessonId)).replace(":filename", filename);
-
-const getFilename = (textMode: TextMode, lang: string, slug?: string) => {
-  if (textMode === "teacherguide") return filenames[textMode](lang);
-
-  return filenames[textMode](lang, slug || "");
+/** <slug> / <slug>_<lang> for lesson texts, README / README_<lang> for teacher guides. */
+export const textFilename = (textMode: TextMode, lang: string, slug: string) => {
+  const base = textMode === "teacherguide" ? "README" : slug;
+  return lang === "nb" ? base : `${base}_${lang}`;
 };
 
 const prepareHeader = (lessonTitle: string, name: string, username: string, language: string) => ({
@@ -43,324 +26,254 @@ const prepareHeader = (lessonTitle: string, name: string, username: string, lang
   translatorList: [],
 });
 
-const NewLessontextModal: FC<any> = ({
+/** The server's own message for 4xx/502 (e.g. limit reached), otherwise a general one. */
+const errorMessage = (error: unknown, fallback: string) => {
+  const response = (error as { response?: { status?: number; data?: { message?: unknown } } })
+    ?.response;
+  return typeof response?.data?.message === "string" && response.status !== 500
+    ? response.data.message
+    : fallback;
+};
+
+interface Props {
+  openNewLessontextModal: boolean;
+  setOpenNewLessontextModal: (open: boolean) => void;
+  unusedLessontextLanguages: LanguageOption[];
+  unusedTeacherguideLanguages: LanguageOption[];
+  usedLessontextLanguages: LanguageOption[];
+  usedTeacherguideLanguages: LanguageOption[];
+}
+
+const NewLessontextModal: FC<Props> = ({
   openNewLessontextModal,
   setOpenNewLessontextModal,
-  lessontextLang,
-  teacherguideLang,
-  setLessontextLang,
-  setTeacherguideLang,
   unusedLessontextLanguages,
   unusedTeacherguideLanguages,
   usedLessontextLanguages,
   usedTeacherguideLanguages,
-  translateFromLang,
-  setTranslateFromLang,
-  translateToLang,
-  setTranslateToLang,
 }) => {
   const [textMode, setTextMode] = useState<TextMode>(
-    unusedLessontextLanguages.length > 0 ? "lessontext" : "teacherguide"
+    unusedLessontextLanguages.length > 0 ? "lessontext" : "teacherguide",
   );
-  const [loading, setLoading] = useState<boolean>(false);
+  const unused =
+    textMode === "lessontext" ? unusedLessontextLanguages : unusedTeacherguideLanguages;
+  const used = textMode === "lessontext" ? usedLessontextLanguages : usedTeacherguideLanguages;
 
-  const [translateWithGPT, setTranslateWithGPT] = useState<boolean>(false);
+  const [language, setLanguage] = useState<string>(unused[0]?.value ?? "");
+  const [translate, setTranslate] = useState<boolean>(false);
+  const [translateFrom, setTranslateFrom] = useState<string>(used[0]?.value ?? "");
+  const [translationEnabled, setTranslationEnabled] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
 
   const navigate = useNavigate();
   const { yml, state: lessonState } = useLessonContext();
   const { state } = useUserContext();
   const { lessonTitle, lessonSlug, lessonId } = lessonState.lesson;
 
+  // Without a configured EU provider the server says no, and the option is not shown.
   useEffect(() => {
-    if (textMode === "lessontext" && usedLessontextLanguages.length > 0) {
-      setTranslateFromLang(usedLessontextLanguages[0].value);
-    }
-    if (textMode === "teacherguide" && usedTeacherguideLanguages.length > 0) {
-      setTranslateFromLang(usedTeacherguideLanguages[0].value);
-    }
+    let active = true;
+    axios
+      .get<{ enabled: boolean }>(paths.TRANSLATE_STATUS)
+      .then(({ data }) => active && setTranslationEnabled(data?.enabled === true))
+      .catch(() => active && setTranslationEnabled(false));
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  // Each kind of text has its own lists, so the choices follow the selected kind.
+  useEffect(() => {
+    setLanguage(unused[0]?.value ?? "");
+    setTranslateFrom(used[0]?.value ?? "");
+    setError("");
   }, [textMode]);
 
-  useEffect(() => {
-    if (translateWithGPT && textMode === "lessontext") {
-      setTranslateToLang(unusedLessontextLanguages[0].value);
-    } else if (translateWithGPT && textMode === "teacherguide") {
-      setTranslateToLang(unusedTeacherguideLanguages[0].value);
-    } else {
-      setTranslateToLang("-1");
-    }
-  }, [translateWithGPT]);
+  const canTranslate = translationEnabled && used.length > 0 && unused.length > 0;
+  const translating = translate && canTranslate;
 
-  const isTranslateFromLangEnabled =
-    ["lessontext", "teacherguide"].includes(textMode) &&
-    (textMode === "lessontext" ? usedLessontextLanguages : usedTeacherguideLanguages).length > 0;
-
-  async function fetchLessonData() {
-    try {
-      const filename = getFilename(textMode, translateFromLang, lessonSlug);
-      const result = await axios.get<FileDTO<string>>(replaceAPIPath(String(lessonId), filename));
-      const [_, header, body] = result.data.content.split(separator);
-      return body;
-    } catch (error) {
-      return error;
-    }
-  }
-
-  const translateLessonText = async () => {
-    const lessonText = await fetchLessonData();
-    const lang = LANGUAGEOPTIONS.find((item) => item.value === translateToLang);
-
-    const packageForGPT = {
-      conversationHistory: [
-        {
-          role: "system",
-          content: `Vær så snill å oversette teksten skrevet i markdown. Behold all markdownsyntax,og kodeblokker, og oversett bare teksten. Oversett til ${
-            lang!.text
-          }.`,
-        },
-        {
-          role: "user",
-          content: lessonText,
-        },
-      ],
-      chatGPTModel: "gpt-4-1106-preview",
-    };
-
-    const response = await chatGPT(packageForGPT);
-    return response.conversationHistory.pop().content;
-  };
+  const openEditor = (lang: string) =>
+    navigate(
+      ["/editor", lessonId, textMode === "lessontext" ? lessonSlug : "README", `${lang}?init`].join(
+        "/",
+      ),
+    );
 
   const onSubmit = async () => {
+    if (!language) return;
     setLoading(true);
-    const { name = "", username = "" } = state.user || {};
-    let target, language, lessonText;
-
-    if (translateWithGPT) {
-      lessonText = await translateLessonText();
-      language = translateToLang;
-    } else if (textMode === "lessontext") {
-      lessonText = lessonGuideDefaultText[lessontextLang];
-      language = lessontextLang;
-    } else {
-      lessonText = insertMetaDataInTeacherGuide(yml, teacherguideLang);
-      language = teacherguideLang;
-    }
-
-    const header = prepareHeader(lessonTitle, name, username, language);
-
-    const rawBody = `---\n${yaml.dump(header)}---\n${lessonText}`;
-    const filename = getFilename(textMode, language, lessonSlug);
-    const newFileDTO = {
-      filename,
-      ext: ".md",
-      content: rawBody,
-    };
-
+    setError("");
     try {
-      await axios.post<number>(
-        paths.LESSON_FILES.replace(":lessonId", lessonId.toString()),
-        newFileDTO
-      );
+      if (translating) {
+        await axios.post(paths.LESSON_TRANSLATE.replace(":lessonId", String(lessonId)), {
+          source: textFilename(textMode, translateFrom, lessonSlug),
+          language,
+        });
+      } else {
+        const { name = "", username = "" } = state.user || {};
+        const text =
+          textMode === "lessontext"
+            ? lessonGuideDefaultText[language]
+            : insertMetaDataInTeacherGuide(yml, language);
+        await axios.post(paths.LESSON_FILES.replace(":lessonId", String(lessonId)), {
+          filename: textFilename(textMode, language, lessonSlug),
+          ext: ".md",
+          content: stringifyLessonMarkdown(
+            prepareHeader(lessonTitle, name ?? "", username ?? "", language),
+            text,
+          ),
+        });
+      }
+      openEditor(language);
     } catch (e) {
-      setLoading(false);
       console.error(e);
+      setError(
+        errorMessage(
+          e,
+          translating
+            ? "Oversettelsen feilet, og ingen fil ble laget. Prøv igjen senere."
+            : "Kunne ikke lage tekstfilen. Prøv igjen.",
+        ),
+      );
+      setLoading(false);
     }
-
-    target = [
-      "/editor",
-      lessonId,
-      textMode === "lessontext" ? lessonSlug : "README",
-      `${language}?init`,
-    ].join("/");
-
-    navigate(target);
-  };
-
-  const onChange = (e: SyntheticEvent, { value }: Record<string, string>) => {
-    if (textMode === "lessontext") {
-      setLessontextLang(value);
-    } else {
-      setTeacherguideLang(value);
-    }
-  };
-
-  const onRadiobuttonChange = (s: TextMode) => {
-    setTextMode(s);
   };
 
   const onClose = () => {
-    setOpenNewLessontextModal(false);
+    if (!loading) setOpenNewLessontextModal(false);
   };
 
   return (
-    <>
-      <Modal
-        onClose={() => onClose()}
-        onOpen={() => setOpenNewLessontextModal(true)}
-        open={openNewLessontextModal}
-        closeOnDimmerClick={loading}
-        dimmer={"inverted"}
-      >
-        <>
-          <Modal.Header>Opprett ny tekstfil</Modal.Header>
-          <Modal.Content style={{ display: "flex", flexFlow: "row wrap" }}>
-            <Modal.Description style={{ display: "flex", flexFlow: "row wrap" }}>
-              <Header style={{ marginRight: "1em" }}>Velg type tekst: </Header>
-              <Radio
-                label="Oppgavetekst"
-                name="lessontext"
-                value="lessontext"
-                checked={textMode === "lessontext"}
-                onChange={() => onRadiobuttonChange("lessontext")}
-                style={{
-                  marginRight: "1em",
-                }}
-                disabled={unusedLessontextLanguages.length <= 0 || loading}
-              />
-              <Radio
-                label="Lærerveiledning"
-                name="teacherguide"
-                value="teacherguide"
-                checked={textMode === "teacherguide"}
-                onChange={() => onRadiobuttonChange("teacherguide")}
-                disabled={unusedTeacherguideLanguages.length <= 0 || loading}
-              />
-            </Modal.Description>
-            {(!translateWithGPT || !isTranslateFromLangEnabled) && (
-              <Modal.Description style={{ display: "flex", flexFlow: "row wrap" }}>
-                <Header style={{ marginRight: "1em" }}>Velg språk: </Header>
+    <Modal
+      onClose={onClose}
+      onOpen={() => setOpenNewLessontextModal(true)}
+      open={openNewLessontextModal}
+      closeOnDimmerClick={!loading}
+      closeOnEscape={!loading}
+      dimmer={"inverted"}
+    >
+      <Modal.Header>Opprett ny tekstfil</Modal.Header>
+      <Modal.Content style={{ display: "flex", flexFlow: "row wrap", gap: "1em" }}>
+        <Header as="h3" id="new-text-kind" style={{ margin: 0 }}>
+          Velg type tekst:
+        </Header>
+        <div
+          role="radiogroup"
+          aria-labelledby="new-text-kind"
+          style={{ display: "flex", gap: "1em" }}
+        >
+          <Radio
+            label="Oppgavetekst"
+            name="textMode"
+            value="lessontext"
+            checked={textMode === "lessontext"}
+            onChange={() => setTextMode("lessontext")}
+            disabled={unusedLessontextLanguages.length <= 0 || loading}
+          />
+          <Radio
+            label="Lærerveiledning"
+            name="textMode"
+            value="teacherguide"
+            checked={textMode === "teacherguide"}
+            onChange={() => setTextMode("teacherguide")}
+            disabled={unusedTeacherguideLanguages.length <= 0 || loading}
+          />
+        </div>
+      </Modal.Content>
 
-                {textMode === "lessontext" && unusedLessontextLanguages.length > 0 ? (
-                  <Dropdown
-                    name="language"
-                    value={lessontextLang}
-                    onChange={onChange}
-                    options={unusedLessontextLanguages}
-                  />
-                ) : textMode === "teacherguide" && unusedTeacherguideLanguages.length > 0 ? (
-                  <Dropdown
-                    name="language"
-                    value={teacherguideLang}
-                    onChange={onChange}
-                    options={unusedTeacherguideLanguages}
-                  />
-                ) : (
-                  ""
-                )}
-              </Modal.Description>
-            )}
-          </Modal.Content>
-          {isTranslateFromLangEnabled && (
-            <Modal.Content style={{ display: "flex", flexFlow: "row wrap" }}>
-              <Modal.Description style={{ display: "flex", flexFlow: "row wrap" }}>
-                <Header style={{ marginRight: "1em" }}>Oversette oppgave med chatGPT? </Header>
-                <Radio
-                  label="Ja"
-                  name="translateWithGPT"
-                  value="translateWithGPT"
-                  checked={translateWithGPT}
-                  onChange={() => setTranslateWithGPT(true)}
-                  style={{
-                    marginRight: "1em",
-                  }}
-                  disabled={unusedLessontextLanguages.length <= 0 || loading}
-                />
-                <Radio
-                  label="Nei"
-                  name="translateWithGPT"
-                  value="translateWithGPT"
-                  checked={!translateWithGPT}
-                  onChange={() => setTranslateWithGPT(false)}
-                  disabled={unusedTeacherguideLanguages.length <= 0 || loading}
-                />
-              </Modal.Description>
-            </Modal.Content>
-          )}
-          {translateWithGPT && isTranslateFromLangEnabled && (
-            <>
-              <i style={{ paddingLeft: "1.5rem" }}>
-                <span style={{ color: "green" }}>Merk: Oversetting kan ta lang tid</span>
-              </i>
-              <Modal.Content style={{ display: "flex", flexFlow: "row wrap" }}>
-                <Modal.Description style={{ display: "flex", flexFlow: "row wrap" }}>
-                  <p style={{ marginRight: "1em", fontWeight: "700" }}>Oversett fra: </p>
-                  {textMode === "lessontext" && unusedLessontextLanguages.length > 0 ? (
-                    <Dropdown
-                      name="translateFromLang"
-                      value={translateFromLang}
-                      onChange={(e: any, data: any) => {
-                        const { value } = data;
-                        setTranslateFromLang(value);
-                      }}
-                      options={usedLessontextLanguages}
-                      disabled={loading}
-                    />
-                  ) : textMode === "teacherguide" && unusedTeacherguideLanguages.length > 0 ? (
-                    <Dropdown
-                      name="translateFromLang"
-                      value={translateFromLang}
-                      onChange={(e: any, data: any) => {
-                        const { value } = data;
-                        setTranslateFromLang;
-                      }}
-                      options={usedTeacherguideLanguages}
-                      disabled={loading}
-                    />
-                  ) : (
-                    ""
-                  )}
-                  <p style={{ margin: "0 1em", fontWeight: "700" }}>Oversett til: </p>
-                  {textMode === "lessontext" && unusedLessontextLanguages.length > 0 ? (
-                    <Dropdown
-                      name="translateToLang"
-                      value={translateToLang}
-                      onChange={(e: any, data: any) => {
-                        const { value } = data;
-                        setTranslateToLang(value);
-                      }}
-                      options={unusedLessontextLanguages}
-                      disabled={loading}
-                    />
-                  ) : textMode === "teacherguide" && unusedTeacherguideLanguages.length > 0 ? (
-                    <Dropdown
-                      name="translateToLang"
-                      value={translateToLang}
-                      onChange={(e: any, data: any) => {
-                        const { value } = data;
-                        setTranslateToLang(value);
-                      }}
-                      options={unusedTeacherguideLanguages}
-                      disabled={loading}
-                    />
-                  ) : (
-                    ""
-                  )}
-                </Modal.Description>
-              </Modal.Content>
-            </>
-          )}
-          <Modal.Actions>
-            <>
-              <Button
-                disabled={loading}
-                color="black"
-                onClick={() => setOpenNewLessontextModal(false)}
-              >
-                Avbryt
-              </Button>
-              <Button
-                content="Fortsett"
-                labelPosition="right"
-                icon="checkmark"
-                onClick={() => onSubmit()}
-                positive
-                loading={loading}
-                disabled={loading}
-              />
-            </>
-          </Modal.Actions>
-        </>
-      </Modal>
-    </>
+      {canTranslate && (
+        <Modal.Content style={{ display: "flex", flexFlow: "row wrap", gap: "1em" }}>
+          <Header as="h3" id="new-text-translate" style={{ margin: 0 }}>
+            Lag teksten ved å oversette en eksisterende?
+          </Header>
+          <div
+            role="radiogroup"
+            aria-labelledby="new-text-translate"
+            style={{ display: "flex", gap: "1em" }}
+          >
+            <Radio
+              label="Ja, maskinoversett"
+              name="translate"
+              checked={translate}
+              onChange={() => setTranslate(true)}
+              disabled={loading}
+            />
+            <Radio
+              label="Nei, start fra malen"
+              name="translate"
+              checked={!translate}
+              onChange={() => setTranslate(false)}
+              disabled={loading}
+            />
+          </div>
+        </Modal.Content>
+      )}
+
+      <Modal.Content
+        style={{ display: "flex", flexFlow: "row wrap", alignItems: "center", gap: "1em" }}
+      >
+        {translating && (
+          <>
+            <label htmlFor="translate-from" style={{ fontWeight: 700 }}>
+              Oversett fra:
+            </label>
+            <Dropdown
+              id="translate-from"
+              selection
+              value={translateFrom}
+              onChange={(_e, data) => setTranslateFrom(String(data.value))}
+              options={used}
+              disabled={loading}
+            />
+          </>
+        )}
+        <label htmlFor="new-text-language" style={{ fontWeight: 700 }}>
+          {translating ? "Oversett til:" : "Velg språk:"}
+        </label>
+        <Dropdown
+          id="new-text-language"
+          selection
+          value={language}
+          onChange={(_e, data) => setLanguage(String(data.value))}
+          options={unused}
+          disabled={loading || unused.length === 0}
+        />
+      </Modal.Content>
+
+      {translating && (
+        <Modal.Content>
+          <Message info size="small">
+            Teksten sendes uten tittel, navn, e-post, kode og lenker til en oversettelsestjeneste i
+            EU. Resultatet merkes som maskinoversatt med deg som oversetter. Les gjennom og rett det
+            før du sender inn, og husk å oversette tittelen. Det kan ta et minutt.
+          </Message>
+        </Modal.Content>
+      )}
+
+      {error && (
+        <Modal.Content>
+          <Message negative role="alert">
+            {error}
+          </Message>
+        </Modal.Content>
+      )}
+
+      <Modal.Actions>
+        <Button disabled={loading} color="black" onClick={onClose}>
+          Avbryt
+        </Button>
+        <Button
+          content={translating ? "Oversett" : "Fortsett"}
+          labelPosition="right"
+          icon="checkmark"
+          onClick={onSubmit}
+          positive
+          loading={loading}
+          disabled={loading || !language || (translating && !translateFrom)}
+        />
+      </Modal.Actions>
+    </Modal>
   );
 };
 

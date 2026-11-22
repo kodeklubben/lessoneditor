@@ -6,8 +6,8 @@ import { media as config, KEY_COMBINATIONS as KEY } from "./buttoncontroller/set
 import { FC, RefObject } from "react";
 
 interface ImageProps {
-  editorRef: RefObject<HTMLTextAreaElement>;
-  uploadImageRef: RefObject<HTMLInputElement>;
+  editorRef: RefObject<HTMLTextAreaElement | null>;
+  uploadImageRef: RefObject<HTMLInputElement | null>;
   setUndoAndUndoPosition: (mdText: string, position: number) => void;
   mdText: string;
   cursorPositionStart: number;

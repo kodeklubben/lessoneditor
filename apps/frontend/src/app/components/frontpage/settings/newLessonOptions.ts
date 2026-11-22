@@ -19,9 +19,10 @@ export const LANGUAGEOPTIONS: Record<string, any>[] = [
     image: { avatar: true, src: nnFlag },
   },
   {
-    key: "sam",
-    text: "Samisk",
-    value: "sam",
+    // ISO 639-1 for Northern Sami, as in kodeklubben/oppgaver. Older files may still say "sam".
+    key: "se",
+    text: "Nordsamisk",
+    value: "se",
     image: { avatar: true, src: samFlag },
   },
   {
@@ -43,6 +44,22 @@ export const LANGUAGEOPTIONS: Record<string, any>[] = [
     image: { avatar: true, src: frFlag },
   },
 ];
+
+/** Language codes that were used before and now mean another entry. */
+const LANGUAGE_ALIASES: Record<string, string> = { sam: "se" };
+
+/** Never undefined: unknown codes get a plain entry instead of crashing the page. */
+export function languageOption(code: string): Record<string, any> {
+  const value = LANGUAGE_ALIASES[code] ?? code;
+  return (
+    LANGUAGEOPTIONS.find((item) => item.value === value) ?? {
+      key: code,
+      text: code,
+      value: code,
+      image: { avatar: true, src: "" },
+    }
+  );
+}
 
 export const COURSESLIST: { key: any; text: any; value: any }[] = [
   {
@@ -117,7 +134,7 @@ export const COURSESLIST: { key: any; text: any; value: any }[] = [
   },
   {
     key: "uten_datamaskin",
-    text: "Uten Datamaskin",
+    text: "Uten datamaskin",
     value: "uten_datamaskin",
   },
 ];

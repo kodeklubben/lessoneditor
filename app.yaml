@@ -1,2 +1,4 @@
-runtime: nodejs18
-entrypoint: node dist/apps/backend/apps/backend/src/main.js
+runtime: nodejs24
+entrypoint: npm start
+build_env_variables:
+  PUPPETEER_SKIP_DOWNLOAD: "true"

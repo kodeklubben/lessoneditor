@@ -24,7 +24,7 @@ const MultiInput: FC<MultiInputProps> = ({
   let inputOrder = 1;
   const { setFileContextState } = useFileContext();
 
-  let textInput: Input | null = null;
+  let textInput: HTMLInputElement | null = null;
 
   const handleClick = (event: SyntheticEvent<HTMLButtonElement> | KeyboardEvent) => {
     if (inputValue && !inputArray.includes(inputValue)) {
@@ -39,7 +39,7 @@ const MultiInput: FC<MultiInputProps> = ({
 
   const multiInputHandler = (
     object: { [s: string]: unknown } | ArrayLike<unknown>,
-    name: string
+    name: string,
   ) => {
     const key = Object.keys(object)[0];
     const value = Object.values(object)[0];
@@ -84,7 +84,9 @@ const MultiInput: FC<MultiInputProps> = ({
           }}
         >
           <Input
-            ref={(element) => (textInput = element)}
+            ref={(element) => {
+              textInput = element;
+            }}
             autoComplete="off"
             type="text"
             name={name}
@@ -107,7 +109,8 @@ const MultiInput: FC<MultiInputProps> = ({
               floated="right"
               content={element}
               style={{ order: inputOrder - 1, height: "2.6em" }}
-              id="removeNameButton"
+              className="removeNameButton"
+              aria-label={`Fjern ${element}`}
               key={"button-" + index}
               onClick={() => removeClickHandler(name, element)}
             />
@@ -120,6 +123,7 @@ const MultiInput: FC<MultiInputProps> = ({
             backgroundColor: "white",
           }}
           id="addNameButton"
+          aria-label="Legg til"
           name={name}
           onClick={handleClick}
         />

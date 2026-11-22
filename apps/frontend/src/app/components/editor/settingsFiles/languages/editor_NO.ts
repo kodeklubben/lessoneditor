@@ -1,7 +1,3 @@
-// AUTOSAVE MESSAGE
-const SAVING = "lagrer...";
-const SAVED = "dokument er lagret";
-
 // imagePopup text
 const PHOTO_TEXT = "Bildebeskrivelse her";
 
@@ -37,11 +33,11 @@ const BUTTON_TITLE = {
   tip: "Tips",
   protip: "ProTips",
   challenge: "Utfordring",
-  flag: "Flag",
-  try: "Prøv Selv",
-  inline: "Inline Code",
-  codeblock: "Code Block",
+  flag: "Flagg",
+  try: "Prøv selv",
+  inline: "Kode i teksten",
+  codeblock: "Kodeblokk",
   save: "Lagre",
 };
 
-export { SAVING, SAVED, PHOTO_TEXT, DEFAULT_TEXT, BUTTON_TITLE, NAV_BUTTONS };
+export { PHOTO_TEXT, DEFAULT_TEXT, BUTTON_TITLE, NAV_BUTTONS };

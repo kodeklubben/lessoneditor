@@ -1,5 +1,4 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useLocation } from "react-router";
 import axios from "axios";
 import { paths } from "@lessoneditor/contracts";
 import { LessonDTO, NewLessonDTO } from "@lessoneditor/contracts";
@@ -11,6 +10,7 @@ import {
   UserContextState,
 } from "./userContext.functions";
 import NotLoggedInPage from "../pages/NotLoggedInPage";
+import ShowSpinner from "../components/ShowSpinner";
 import { base64StringToBlob, createObjectURL } from "blob-util";
 
 export const UserContext = React.createContext({} as UserContextModel);
@@ -20,98 +20,83 @@ export const UserContextProvider = (props: any) => {
     useState<UserContextState>(initialUserContextState);
   const [loading, setLoading] = useState<boolean>(true);
   const [previewImage, setPreviewImages] = useState({});
-  const location = useLocation();
 
+  const lessonsUrl = (userId: number) => paths.USER_LESSONS.replace(":userId", String(userId));
+
+  /** Each lesson's thumbnail; a lesson without one (or a failed request) just shows no image. */
+  const fetchPreviews = (lessons: LessonDTO[]) =>
+    lessons.forEach(async ({ lessonId }) => {
+      try {
+        const file = await axios.get(
+          paths.LESSON_FILE.replace(":lessonId", String(lessonId)).replace(":filename", "preview"),
+        );
+        setPreviewImages((prevImages) => ({
+          ...prevImages,
+          [lessonId]: createObjectURL(base64StringToBlob(file.data, "image/png")),
+        }));
+      } catch {
+        // No preview yet.
+      }
+    });
+
+  // Once per page: the provider is mounted per route, so it does not need to follow the location.
   useEffect(() => {
+    let active = true;
     async function fetchData() {
       try {
-        setLoading(true);
         const userRes = await axios.get<UserDTO>(paths.USER);
-        const userLessonsRes = await axios.get<LessonDTO[]>(
-          paths.USER_LESSONS.replace(":userId", userRes.data.userId.toString())
-        );
-
-        userLessonsRes.data.map(async (lesson: LessonDTO) => {
-          const lessonId = lesson.lessonId.toString();
-          const file = await axios.get(
-            paths.LESSON_FILE.replace(":lessonId", lessonId)
-              .replace(":filename", "preview")
-              .replace(":ext", ".png")
-          );
-
-          setPreviewImages((prevImages) => ({
-            ...prevImages,
-            [lessonId]: createObjectURL(base64StringToBlob(file.data, "image/png")),
-          }));
-        });
-
-        setUserContextState((s) => {
-          return {
-            ...s,
-            user: userRes.data,
-            lessons: userLessonsRes.data,
-            loggedIn: true,
-          };
-        });
-        setLoading(false);
-      } catch (error: any) {
-        console.log("error");
-        // window.location.href = "/api/auth/login/";
+        const userLessonsRes = await axios.get<LessonDTO[]>(lessonsUrl(userRes.data.userId));
+        if (!active) return;
+        fetchPreviews(userLessonsRes.data);
+        setUserContextState((s) => ({
+          ...s,
+          user: userRes.data,
+          lessons: userLessonsRes.data,
+          loggedIn: true,
+        }));
+      } catch {
+        // Not logged in (401) or the session is gone: the login page is shown.
+      } finally {
+        if (active) setLoading(false);
       }
     }
     fetchData();
-  }, [location]);
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const getLesson = (lessonId: number): LessonDTO | undefined => {
     return userContexState.lessons?.find((item: LessonDTO) => item.lessonId === lessonId);
   };
 
-  const getLessonByCourseAndLesson = (
-    courseSlug: string,
-    lessonSlug: string
-  ): LessonDTO | undefined => {
-    return userContexState.lessons?.find(
-      (item: LessonDTO) => item.courseSlug === courseSlug && item.lessonSlug === lessonSlug
-    );
+  const refreshLessons = async () => {
+    const userLessonsRes = await axios.get<LessonDTO[]>(lessonsUrl(userContexState.user!.userId));
+    setUserContextState((s) => ({ ...s, lessons: userLessonsRes.data }));
   };
 
   const logoutUser = async () => {
     try {
-      const newLessonRes = await axios.post(paths.AUTH_LOGOUT);
-    } catch (error) {
-      console.log(error);
+      await axios.post(paths.AUTH_LOGOUT);
+    } catch {
+      // The session is removed on the server either way; the page goes to /logout.
     }
   };
+
   const addLesson = async (
     courseSlug: string,
     courseTitle: string,
     lessonSlug: string,
     lessonTitle: string,
-    language: string
+    language: string,
   ): Promise<number | undefined> => {
     try {
-      const newLesson: NewLessonDTO = {
-        courseSlug: courseSlug,
-        courseTitle: courseTitle,
-        lessonSlug: lessonSlug,
-        lessonTitle: lessonTitle,
-        language: language,
-      };
+      const newLesson: NewLessonDTO = { courseSlug, courseTitle, lessonSlug, lessonTitle, language };
       const newLessonRes = await axios.post<number>(
         paths.USER_LESSON_NEW.replace(":userId", userContexState.user!.userId.toString()),
-        newLesson
+        newLesson,
       );
-      const userLessonsRes = await axios.get<LessonDTO[]>(
-        paths.USER_LESSONS.replace(":userId", userContexState.user!.userId.toString())
-      );
-
-      setUserContextState((s) => {
-        return {
-          ...s,
-          lessons: userLessonsRes.data,
-        };
-      });
-
+      await refreshLessons();
       return newLessonRes.data;
     } catch (error) {
       console.error(error);
@@ -119,29 +104,16 @@ export const UserContextProvider = (props: any) => {
     }
   };
 
+  /** Throws when the server refuses (e.g. only the creator may delete), so the dialog can say so. */
   const removeLesson = async (lessonId: number) => {
-    const existing = getLesson(lessonId);
-    if (existing) {
-      try {
-        const deletedLesson = await axios.delete(
-          paths.USER_LESSON_UPDATE.replace(
-            ":userId",
-            userContexState.user!.userId.toString()
-          ).replace(":lessonId", lessonId.toString())
-        );
-        const userLessonsRes = await axios.get<LessonDTO[]>(
-          paths.USER_LESSONS.replace(":userId", userContexState.user!.userId.toString())
-        );
-        setUserContextState((s) => {
-          return {
-            ...s,
-            lessons: userLessonsRes.data,
-          };
-        });
-      } catch (error) {
-        console.error(error);
-      }
-    }
+    if (!getLesson(lessonId)) return;
+    await axios.delete(
+      paths.USER_LESSON_UPDATE.replace(":userId", userContexState.user!.userId.toString()).replace(
+        ":lessonId",
+        lessonId.toString(),
+      ),
+    );
+    await refreshLessons();
   };
 
   const context: UserContextModel = {
@@ -155,8 +127,8 @@ export const UserContextProvider = (props: any) => {
 
   if (userContexState.loggedIn) {
     return <UserContext.Provider value={context}>{props.children}</UserContext.Provider>;
-  } else {
-    return <NotLoggedInPage></NotLoggedInPage>;
   }
+  // A spinner while the session is checked, so logged-in users do not see the login page flash.
+  return loading ? <ShowSpinner /> : <NotLoggedInPage />;
 };
 export const useUserContext = (): UserContextModel => useContext<UserContextModel>(UserContext);

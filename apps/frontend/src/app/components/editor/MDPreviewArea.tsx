@@ -4,6 +4,8 @@ import { FC, useEffect, useState } from "react";
 import { renderMicrobit } from "../../utils/renderMicrobit";
 import { renderScratchBlocks } from "../../utils/renderScratchblocks";
 import { mdParser } from "../../utils/mdParser";
+import { sanitizeLessonHtml } from "../../utils/sanitizeHtml";
+import { replaceLocalImageUrls } from "../../utils/localImages";
 import { useLessonContext } from "../../contexts/LessonContext";
 import ContentPlaceholder from "./ContentPlaceholder";
 
@@ -38,66 +40,44 @@ const MDPreviewArea: FC<MDPreviewProps> = ({ mdText, course, language, preview, 
         }
       }
     }
-    scrollToLine(lineNumber! - 1 ?? 0);
+    scrollToLine((lineNumber ?? 1) - 1);
   }, [lineNumber]);
 
   useEffect(() => {
-    function replaceImageUrlWithBlobUrl(markdownContent: any) {
-      if (!/(!\[.*?\])(\(\.\/.*?\))/.test(markdownContent)) {
-        return markdownContent;
-      }
-      const filenames: string[] = [];
-      markdownContent.replace(
-        /(!\[.*?\])(\(\.\/.*?\))/gs,
-        function (whole: string, prefix: string, imagePathRaw: string, postfix: string) {
-          filenames.push(imagePathRaw.slice(3, -1));
-        }
-      );
-      return markdownContent.replace(
-        /(!\[.*?\]\()(.+?)(\))/gs,
-        function (whole: string, prefix: string, imagePathRaw: string, postfix: string) {
-          imagePathRaw = imagePathRaw.slice(2);
-          const filename: string = filenames.shift() ?? "";
-          const imageBlobUrl = images[filename];
-          return prefix + imageBlobUrl + postfix;
-        }
-      );
-    }
-
     async function replaceUrls() {
-      const newMdText = replaceImageUrlWithBlobUrl(mdText);
+      const newMdText = replaceLocalImageUrls(mdText, images);
       setParsedMDwithUpdatedImageURLS(mdParser(newMdText));
     }
     replaceUrls();
-  }, [mdText]);
+  }, [mdText, images]);
 
+  // Scratch blocks are drawn once per change, 300 ms after typing stops. Before, the result was
+  // run through scratchblocks again on every render.
   useEffect(() => {
     if (course !== "scratch") {
       return;
     }
     const timeoutHandler = setTimeout(() => {
-      const returnContent = renderScratchBlocks(parsedMDwithUpdatedImageURLS);
-
-      setSvgContent(returnContent);
+      setSvgContent(renderScratchBlocks(parsedMDwithUpdatedImageURLS));
     }, 300);
 
     return () => {
       clearTimeout(timeoutHandler);
     };
-  }, [parsedMDwithUpdatedImageURLS]);
+  }, [parsedMDwithUpdatedImageURLS, course]);
 
   useEffect(() => {
     if (course === "microbit") {
       renderMicrobit(language);
     }
-  }, [parsedMDwithUpdatedImageURLS]);
+  }, [parsedMDwithUpdatedImageURLS, course, language]);
 
   if (course === "scratch" && parsedMDwithUpdatedImageURLS) {
-    const lessonContent = renderScratchBlocks(svgContent);
     return (
       <div
         className={`preview-area ${preview ? "preview" : ""}`}
-        dangerouslySetInnerHTML={{ __html: lessonContent }}
+        // Empty until the blocks are drawn, so the thumbnailer never photographs raw block code.
+        dangerouslySetInnerHTML={{ __html: sanitizeLessonHtml(svgContent) }}
       />
     );
   } else if (!parsedMDwithUpdatedImageURLS && mdText !== "") {
@@ -110,7 +90,7 @@ const MDPreviewArea: FC<MDPreviewProps> = ({ mdText, course, language, preview, 
     return (
       <div
         className={`preview-area ${preview ? "preview" : ""}`}
-        dangerouslySetInnerHTML={{ __html: parsedMDwithUpdatedImageURLS }}
+        dangerouslySetInnerHTML={{ __html: sanitizeLessonHtml(parsedMDwithUpdatedImageURLS) }}
       />
     );
   }

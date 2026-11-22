@@ -2,7 +2,7 @@ import "./item.scss";
 import { LessonDTO } from "@lessoneditor/contracts";
 import React, { useState } from "react";
 import { Button, Card, Image, Icon, Popup } from "semantic-ui-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { useUserContext } from "../../contexts/UserContext";
 
 import DeleteModal from "../shared/DeleteModal";
@@ -14,21 +14,9 @@ interface Props {
 const Item: React.FC<Props> = ({ lesson }) => {
   const navigate = useNavigate();
   const [openDeleteLesson, setOpenDeleteLesson] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
   const { removeLesson, previewImage } = useUserContext();
 
-  const submitDate = new Date(lesson.submitted_at).toLocaleDateString();
-
-  function deleteLesson() {
-    try {
-      setLoading(true);
-      removeLesson(lesson.lessonId);
-      setOpenDeleteLesson(false);
-      setLoading(false);
-    } catch (e) {
-      console.error(e);
-    }
-  }
+  const submitDate = lesson.submitted_at ? new Date(lesson.submitted_at).toLocaleDateString() : "";
 
   const navigateToHome = (lessonId: string) => {
     const target = ["/landingpage", lessonId].join("/");
@@ -41,8 +29,7 @@ const Item: React.FC<Props> = ({ lesson }) => {
         <DeleteModal
           openDeleteContent={openDeleteLesson}
           setOpenDeleteContent={setOpenDeleteLesson}
-          deleteContent={deleteLesson}
-          loading={loading}
+          deleteContent={() => removeLesson(lesson.lessonId)}
         />
       )}
       <div className="card-item">
@@ -54,6 +41,7 @@ const Item: React.FC<Props> = ({ lesson }) => {
             <Image
               className="card-content__image"
               src={previewImage[lesson.lessonId]}
+              alt=""
               bordered
               rounded
             />
@@ -80,6 +68,7 @@ const Item: React.FC<Props> = ({ lesson }) => {
               icon
               onClick={() => navigateToHome(lesson.lessonId.toString())}
               positive
+              aria-label={`Åpne ${lesson.lessonTitle}`}
             >
               <Icon name="folder open" />
             </Button>
@@ -102,6 +91,7 @@ const Item: React.FC<Props> = ({ lesson }) => {
               onClick={() => {
                 setOpenDeleteLesson(true);
               }}
+              aria-label={`Slett ${lesson.lessonTitle}`}
             >
               <Icon name="delete" />
               Slett

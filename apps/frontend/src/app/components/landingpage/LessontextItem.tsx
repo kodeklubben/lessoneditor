@@ -1,39 +1,35 @@
 import "./textitem.scss";
 import { useNavigate } from "react-router";
 import { Button, Item, Image, Icon } from "semantic-ui-react";
+import { asButton } from "../../utils/a11y";
 import { FC, useState } from "react";
-import { LANGUAGEOPTIONS } from "../frontpage/settings/newLessonOptions";
+import { languageOption } from "../frontpage/settings/newLessonOptions";
 import { useUserContext } from "../../contexts/UserContext";
 
 import DeleteModal from "../shared/DeleteModal";
 import MarkdownPreview from "./MarkdownPreview";
 
-const LessontextItem: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug, removeMD }) => {
+const LessontextItem: FC<any> = ({
+  lessonId,
+  language,
+  lessonTitle,
+  lessonSlug,
+  removeMD,
+  canDelete,
+}) => {
   const navigate = useNavigate();
   const { previewImage } = useUserContext();
   const [openDeleteContent, setOpenDeleteContent] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
   const [showMDPreview, setShowMDPreview] = useState<boolean>(false);
 
   const filename = language === "nb" ? lessonSlug : `${lessonSlug}_${language}`;
-
-  const deleteContent = async () => {
-    try {
-      setLoading(true);
-      await removeMD(language, lessonSlug);
-      setOpenDeleteContent(false);
-      setLoading(false);
-    } catch (e) {
-      console.error(e);
-    }
-  };
 
   const navigateToEditor = (lessonId: any, lessonSlug: any, language: string) => {
     const target = ["/editor", lessonId, lessonSlug, language].join("/");
     navigate({ pathname: target });
   };
 
-  const lang = LANGUAGEOPTIONS.find((item) => item.value === language);
+  const lang = languageOption(language);
 
   const languageText = lang!.text;
   const languageImage = lang!.image!.src;
@@ -51,8 +47,7 @@ const LessontextItem: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug, 
         <DeleteModal
           openDeleteContent={openDeleteContent}
           setOpenDeleteContent={setOpenDeleteContent}
-          deleteContent={deleteContent}
-          loading={loading}
+          deleteContent={() => removeMD(language, lessonSlug)}
         />
       )}
 
@@ -60,13 +55,16 @@ const LessontextItem: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug, 
         <div className="lesson_menu_card_content_container">
           <Item.Content
             className="lesson_menu_card_content"
-            onClick={() => setShowMDPreview((prevValue) => !prevValue)}
+            {...asButton(
+              () => setShowMDPreview((prevValue) => !prevValue),
+              `Forhåndsvis oppgaveteksten på ${languageText.toLowerCase()}`,
+            )}
           >
             <Item.Image
               className="lesson_menu_card_content__image"
               src={previewImage[lessonId]}
               size="tiny"
-              alt="thumbUrl"
+              alt=""
               rounded
               bordered
             />
@@ -89,6 +87,7 @@ const LessontextItem: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug, 
             className="text_item_button__mobile"
             onClick={() => navigateToEditor(lessonId, lessonSlug, language)}
             icon="pencil"
+            aria-label="Rediger"
             positive
           />
           <Button
@@ -99,10 +98,18 @@ const LessontextItem: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug, 
             content={"Rediger"}
             positive
           />
-          <Button style={{ background: "none" }} icon onClick={() => setOpenDeleteContent(true)}>
-            <Icon name="delete" />
-            Slett
-          </Button>
+          {/* The last lesson text cannot be deleted (K15); the server refuses it as well. */}
+          {canDelete && (
+            <Button
+              style={{ background: "none" }}
+              icon
+              onClick={() => setOpenDeleteContent(true)}
+              aria-label={`Slett oppgaveteksten på ${languageText.toLowerCase()}`}
+            >
+              <Icon name="delete" />
+              Slett
+            </Button>
+          )}
         </Item.Content>
       </Item>
     </>

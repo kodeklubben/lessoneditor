@@ -4,7 +4,7 @@ import { microbitbuttons as config } from "./buttoncontroller/settings/microbitA
 import { FC, RefObject } from "react";
 
 interface MicrobitButtonsProps {
-  editorRef: RefObject<HTMLTextAreaElement>;
+  editorRef: RefObject<HTMLTextAreaElement | null>;
   cursorPositionStart: number;
   cursorPositionEnd: number;
   mdText: string;

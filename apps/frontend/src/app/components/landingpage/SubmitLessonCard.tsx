@@ -26,7 +26,8 @@ const SubmitLessonCard = () => {
         <Header>Sende inn oppgave</Header>
         <Card className="new-lesson_card">
           <div className="new-lesson_card__content">
-            <div className="new-lesson_card__image" onClick={onSubmit}>
+            {/* A larger mouse target; keyboard and screen readers use the button below. */}
+            <div className="new-lesson_card__image" onClick={onSubmit} aria-hidden="true">
               <Image
                 style={{
                   height: "5rem",
@@ -37,6 +38,7 @@ const SubmitLessonCard = () => {
                 src={previewImage[lessonId]}
                 fluid
                 rounded
+                alt=""
               />
             </div>
           </div>

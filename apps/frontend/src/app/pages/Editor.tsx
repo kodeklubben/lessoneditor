@@ -10,6 +10,9 @@ import { useLessonContext } from "../contexts/LessonContext";
 import Navbar from "../components/navbar/Navbar";
 
 import ButtonPanel_SmallDevices from "../components/editor/buttonpanel/ButtonPanel_SmallDevices";
+import { useAutosave } from "../components/editor/useAutosave";
+import MachineTranslationNotice from "../components/editor/MachineTranslationNotice";
+import { DESKTOP_EDITOR, useMediaQuery } from "../utils/useMediaQuery";
 
 const Editor: FC = () => {
   const { lang } = useParams() as any;
@@ -45,6 +48,8 @@ const Editor: FC = () => {
   const uploadImageRef = useRef<HTMLInputElement>(null);
 
   const language: string = lang;
+  const isDesktop = useMediaQuery(DESKTOP_EDITOR);
+  const autosave = useAutosave(mdText, savedFileBody);
 
   useEffect(() => {
     if (location.search === "?init") {
@@ -172,8 +177,12 @@ const Editor: FC = () => {
               setUndoAndUndoPosition={setUndoAndUndoPosition}
               openSettings={openSettings}
               setOpenSettings={setOpenSettings}
+              isDesktop={isDesktop}
+              saveStatus={autosave.status}
+              flushAutosave={autosave.flush}
             />
 
+            <MachineTranslationNotice />
             <div className="editor-windows">
               <MDTextArea
                 editorRef={editorRef}
@@ -200,21 +209,23 @@ const Editor: FC = () => {
                 lineNumber={lineNumber}
               />
             </div>
-            <ButtonPanel_SmallDevices
-              buttonValues={buttonValues}
-              course={state.lesson.courseSlug}
-              courseTitle={state.lesson.courseTitle}
-              cursorPositionStart={cursorPositionStart}
-              cursorPositionEnd={cursorPositionEnd}
-              editorRef={editorRef}
-              mdText={mdText}
-              setButtonValues={setButtonValues}
-              setCursor={setCursor}
-              setCursorPosition={setCursorPosition}
-              setMdText={setMdText}
-              setUndoAndUndoPosition={setUndoAndUndoPosition}
-              setPreview={setPreview}
-            />
+            {!isDesktop && (
+              <ButtonPanel_SmallDevices
+                buttonValues={buttonValues}
+                course={state.lesson.courseSlug}
+                courseTitle={state.lesson.courseTitle}
+                cursorPositionStart={cursorPositionStart}
+                cursorPositionEnd={cursorPositionEnd}
+                editorRef={editorRef}
+                mdText={mdText}
+                setButtonValues={setButtonValues}
+                setCursor={setCursor}
+                setCursorPosition={setCursorPosition}
+                setMdText={setMdText}
+                setUndoAndUndoPosition={setUndoAndUndoPosition}
+                setPreview={setPreview}
+              />
+            )}
           </div>
         </>
       )}

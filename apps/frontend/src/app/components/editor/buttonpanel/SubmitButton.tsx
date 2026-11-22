@@ -1,26 +1,26 @@
 import { Button, Popup } from "semantic-ui-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { useParams } from "react-router";
-import { FC } from "react";
-import { useFileContext } from "../../../contexts/FileContext";
+import { FC, useState } from "react";
 
 interface SubmitButtonProps {
   mdText: string;
+  flushAutosave: () => Promise<boolean>;
 }
 
-const SubmitButton: FC<SubmitButtonProps> = ({ mdText }) => {
+const SubmitButton: FC<SubmitButtonProps> = ({ mdText, flushAutosave }) => {
   const navigate = useNavigate();
   const { lessonId } = useParams<any>();
-  const { saveFileBody } = useFileContext();
+  const [saving, setSaving] = useState(false);
 
-  const onSubmit = () => {
-    navigateToHome();
-  };
-
-  const navigateToHome = () => {
-    saveFileBody(mdText);
-    const target = ["/landingpage", lessonId].join("/");
-    navigate(target);
+  // Saves what is not saved yet before leaving, instead of dropping the last seconds (K4).
+  const navigateToHome = async () => {
+    setSaving(true);
+    const saved = await flushAutosave();
+    setSaving(false);
+    if (!saved && !window.confirm("Endringene er ikke lagret. Vil du gå til oversikten likevel?"))
+      return;
+    navigate(["/landingpage", lessonId].join("/"));
   };
 
   return (
@@ -37,9 +37,11 @@ const SubmitButton: FC<SubmitButtonProps> = ({ mdText }) => {
               padding: "0 1em 0 1em",
             }}
             basic
-            disabled={!mdText || mdText.length === 0}
+            aria-label="Til prosjektoversikt"
+            disabled={!mdText || mdText.length === 0 || saving}
+            loading={saving}
             size="big"
-            onClick={onSubmit}
+            onClick={navigateToHome}
             icon="home"
           />
         }

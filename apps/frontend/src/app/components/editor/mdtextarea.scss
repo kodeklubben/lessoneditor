@@ -3,8 +3,12 @@
   width: 100%;
   border-radius: 5px;
   border-style: none;
-  outline: none;
   height: 100%;
+  // A visible focus ring for keyboard users (it used to be outline: none).
+  &:focus-visible {
+    outline: 3px solid #2185d0;
+    outline-offset: -3px;
+  }
   // height: calc(100vh - 16rem);
   @media (min-width: 900px) {
     height: calc(100vh - 12rem);

@@ -4,7 +4,8 @@
 // and
 // codeclub_lesson_builder/styles/lesson.less
 //////////////////////////////////////////////
-@import "node_modules/highlight.js/scss/idea.scss";
+@use "sass:color";
+@use "highlight.js/scss/idea";
 
 $checkbox-blue: #abdbea;
 
@@ -404,6 +405,12 @@ a:hover {
       background-color: #ff6680;
     }
 
+    // Used in lessons for blocks without a colour of their own; dark text for contrast.
+    &.blocklightgrey {
+      background-color: #bfbfbf;
+      color: #000;
+    }
+
     &.microbitbasic {
       background-color: #1e90ff;
     }
@@ -577,6 +584,6 @@ a:hover {
 
   input[type="checkbox"]:active + label::before,
   input[type="checkbox"]:focus + label::before {
-    background: darken($checkbox-blue, 20%);
+    background: color.adjust($checkbox-blue, $lightness: -20%);
   }
 }

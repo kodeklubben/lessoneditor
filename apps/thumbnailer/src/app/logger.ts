@@ -1,18 +1,17 @@
-const writeLog = (message: String, severity: String, data: Object = {}) => {
-    const entry = Object.assign(
-        {
-            severity,
-            message,
-        },
-        data
-    );
-    if (process.env.NODE_ENV === "production") {
-        console.log(JSON.stringify(entry));
-    } else {
-        console.log(JSON.stringify(entry));
-    }
-
-}
+const writeLog = (message: string, severity: string, data: Record<string, unknown> = {}) => {
+  const entry = Object.assign(
+    {
+      severity,
+      message,
+    },
+    data,
+  );
+  if (process.env.NODE_ENV === "production") {
+    console.log(JSON.stringify(entry));
+  } else {
+    console.log(JSON.stringify(entry));
+  }
+};
 /**
  Enums
  DEFAULT    (0) The log entry has no assigned severity level.
@@ -26,14 +25,14 @@ const writeLog = (message: String, severity: String, data: Object = {}) => {
  EMERGENCY    (800) One or more systems are unusable.
  */
 const logger = {
-    log: (msg: String, data?: Object) => writeLog(msg, "DEFAULT", data),
-    debug: (msg: String, data?: Object) => writeLog(msg, "DEBUG", data),
-    info: (msg: String, data?: Object) => writeLog(msg, "INFO", data),
-    notice: (msg: String, data?: Object) => writeLog(msg, "NOTICE", data),
-    warning: (msg: String, data?: Object) => writeLog(msg, "WARNING", data),
-    error: (msg: String, data?: Object) => writeLog(msg, "ERROR", data),
-    critical: (msg: String, data?: Object) => writeLog(msg, "CRITICAL", data),
-    alert: (msg: String, data?: Object) => writeLog(msg, "ALERT", data),
-    emergency: (msg: String, data?: Object) => writeLog(msg, "EMERGENCY", data),
-}
+  log: (msg: string, data?: Record<string, unknown>) => writeLog(msg, "DEFAULT", data),
+  debug: (msg: string, data?: Record<string, unknown>) => writeLog(msg, "DEBUG", data),
+  info: (msg: string, data?: Record<string, unknown>) => writeLog(msg, "INFO", data),
+  notice: (msg: string, data?: Record<string, unknown>) => writeLog(msg, "NOTICE", data),
+  warning: (msg: string, data?: Record<string, unknown>) => writeLog(msg, "WARNING", data),
+  error: (msg: string, data?: Record<string, unknown>) => writeLog(msg, "ERROR", data),
+  critical: (msg: string, data?: Record<string, unknown>) => writeLog(msg, "CRITICAL", data),
+  alert: (msg: string, data?: Record<string, unknown>) => writeLog(msg, "ALERT", data),
+  emergency: (msg: string, data?: Record<string, unknown>) => writeLog(msg, "EMERGENCY", data),
+};
 export default logger;

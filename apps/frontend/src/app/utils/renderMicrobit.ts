@@ -24,7 +24,7 @@ const renderSpinner = () => {
     const img = document.createElement("img");
     img.className = "spinner";
     img.src = "../../assets/public/spinner.gif";
-    img.alt = "Spinner";
+    img.alt = "Laster micro:bit-kode";
     img.loading = "lazy";
     img.width = 100;
     img.height = 100;
@@ -155,9 +155,11 @@ const removeIframe = () => {
   //console.log('Microbit iframe removed');
 };
 
-const processIframeMessage = (e: { data: any }) => {
+const processIframeMessage = (e: { data: any; origin?: string }) => {
+  // Only MakeCode may hand us SVG for the preview; any other window could post fake blocks.
+  if (e.origin !== "https://makecode.microbit.org") return;
   const msg = e.data;
-  if (msg.source === "makecode") {
+  if (msg?.source === "makecode") {
     if (msg.type === "renderready") {
       renderSnippets();
     } else if (msg.type === "renderblocks") {

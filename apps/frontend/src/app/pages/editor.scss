@@ -49,6 +49,17 @@
       flex-flow: row;
       justify-content: space-between;
       height: calc(100vh - 4rem - 7rem);
+      // Room at the edges and between the panes, in line with the buttons above. The bottom
+      // padding takes up exactly the rem the panes are shorter than this row.
+      gap: 1rem;
+      padding: 0 1rem 1rem;
+
+      .text-area,
+      .preview-area {
+        flex: 1 1 0;
+        min-width: 0;
+        width: auto;
+      }
     }
   }
 }

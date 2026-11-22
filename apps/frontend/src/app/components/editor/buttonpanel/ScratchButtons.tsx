@@ -4,7 +4,7 @@ import { scratchbuttons as config } from "./buttoncontroller/settings/microbitAn
 import { FC, RefObject } from "react";
 
 interface ScratchButtonsProps {
-  editorRef: RefObject<HTMLTextAreaElement>;
+  editorRef: RefObject<HTMLTextAreaElement | null>;
   cursorPositionStart: number;
   cursorPositionEnd: number;
   mdText: string;

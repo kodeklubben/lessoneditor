@@ -1,5 +1,5 @@
-import { Injectable, HttpException, HttpStatus } from "@nestjs/common";
-import { Lesson, FileStore } from "./lesson.entity";
+import { ConflictException, Injectable, HttpException, HttpStatus, Logger } from "@nestjs/common";
+import { Lesson, FileStore, isLessonOwner } from "./lesson.entity";
 import { User } from "../user/user.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
@@ -8,8 +8,28 @@ import { GithubService } from "../github/github.service";
 import { ThumbService } from "../thumb/thumb.service";
 import { Request } from "express";
 
+// Runtime code from the shared lib is imported by path: tsc does not rewrite the alias.
+import { deletionBlocker } from "../../../../libs/contracts/src/lib/files";
+
+const TEXT_EXTENSIONS = [".md", ".yml"];
+
+/** For logs: the error's class and database code, never its message with parameters or data. */
+export const errorKind = (error: unknown) =>
+  [(error as Error)?.name ?? "Error", (error as { code?: string })?.code].filter(Boolean).join(" ");
+
+/** bilde, bilde-2, bilde-3 …: a second upload with the same name must not shadow the first. */
+export function uniqueFilename(wanted: string, taken: string[]): string {
+  const names = new Set(taken);
+  if (!names.has(wanted)) return wanted;
+  let n = 2;
+  while (names.has(`${wanted}-${n}`)) n++;
+  return `${wanted}-${n}`;
+}
+
 @Injectable()
 export class LessonService {
+  private readonly logger = new Logger(LessonService.name);
+
   constructor(
     @InjectRepository(Lesson)
     private lessonRepository: Repository<Lesson>,
@@ -18,34 +38,28 @@ export class LessonService {
     @InjectRepository(FileStore)
     private fileStoreRepository: Repository<FileStore>,
     private githubService: GithubService,
-    private thumbService: ThumbService
+    private thumbService: ThumbService,
   ) {}
 
   async submitLesson(
     user: User,
-    accessToken: string,
+    accessToken: string | undefined,
     lessonId: number,
-    submitMessage: { message: string }
+    submitMessage: { message: string },
   ) {
     const lesson = await this.getLesson(lessonId);
-    lesson.submitted = true;
-    lesson.submitted_at = new Date();
-    const updateLessonRes = await this.lessonRepository.save(lesson);
-
-    if (lesson == null) {
-      throw new HttpException("Lesson does not exist", HttpStatus.NOT_FOUND);
-    }
-    try {
-      await this.githubService.submitLesson(user, accessToken, lesson, submitMessage);
-    } catch (error) {
-      console.error(error);
-    }
+    const result = await this.githubService.submitLesson(user, accessToken, lesson, submitMessage);
+    await this.lessonRepository.update(lessonId, {
+      submitted: true,
+      submitted_at: new Date(),
+    });
+    return result;
   }
 
   async getLesson(lessonId: number): Promise<Lesson> {
     const lesson = await this.lessonRepository.findOne({
       where: { lessonId },
-      relations: ["files"],
+      relations: { files: true, users: true },
     });
     if (lesson == null) {
       throw new HttpException("Lesson does not exist", HttpStatus.NOT_FOUND);
@@ -68,7 +82,7 @@ export class LessonService {
     }
     const invitedToUser = await this.userRepository.findOne({
       where: { userId: Number(shareLesson.invitationToUserId) },
-      relations: ["lessons"],
+      relations: { lessons: true },
     });
 
     if (!invitedToUser) {
@@ -79,42 +93,55 @@ export class LessonService {
       throw new HttpException("Lesson does not exist", HttpStatus.NOT_FOUND);
     }
     //A lesson can only be shared by the creator
-    if (!(lesson.created_by == (await invitedByUser).username)) {
+    if (!isLessonOwner(lesson, invitedByUser)) {
       throw new HttpException("Lesson can only be shared by creator", HttpStatus.FORBIDDEN);
     }
+    // Sharing twice is a no-op, not a duplicate key error from the join table.
+    if (invitedToUser.lessons.some((existing) => existing.lessonId === lesson.lessonId)) return;
     invitedToUser.lessons.push(lesson);
     await this.userRepository.save(invitedToUser);
   }
 
   async getLessonFile(lessonId: number, filename: string) {
     const lesson = await this.getLesson(lessonId);
-
     const file = lesson.files.find((file) => file.filename == filename);
-
     if (!file) {
       throw new HttpException("File does not exist", HttpStatus.NOT_FOUND);
     }
-    // if (file.filename == "preview") {
-    //   return file;
-    // }
     return file;
   }
 
-  async addLessonFile(lessonId: number, newFile: NewFileDTO, request: Request): Promise<number> {
-    const lesson = await this.lessonRepository.findOne({ where: { lessonId } });
+  async addLessonFile(
+    lessonId: number,
+    newFile: NewFileDTO,
+    request: Request,
+  ): Promise<{ fileId: number; filename: string; ext: string }> {
+    const lesson = await this.lessonRepository.findOne({
+      where: { lessonId },
+      relations: { files: true },
+    });
     if (!lesson) {
-      throw new Error(`Lesson with id ${lessonId} not found`);
+      throw new HttpException("Lesson does not exist", HttpStatus.NOT_FOUND);
+    }
+    const isImage = [".jpg", ".jpeg", ".gif", ".png"].includes(newFile.ext);
+    // Files are fetched by name without extension, so names must be unique per lesson.
+    const filename = uniqueFilename(
+      newFile.filename,
+      lesson.files.map((existing) => existing.filename),
+    );
+    if (filename !== newFile.filename && !isImage) {
+      throw new HttpException("A text with this name already exists", HttpStatus.CONFLICT);
     }
 
     const file = new FileStore();
     const user = request.user as User;
-    file.filename = newFile.filename;
+    file.filename = filename;
     file.ext = newFile.ext;
-    file.created_by = user.username;
-    file.updated_by = user.username;
+    file.created_by = user.username ?? String(user.userId);
+    file.updated_by = user.username ?? String(user.userId);
     file.lesson = lesson;
 
-    if ([".jpg", ".jpeg", ".gif", ".png"].includes(file.ext)) {
+    if (isImage) {
       file.content = Buffer.from(newFile.content, "base64");
     } else {
       file.content = Buffer.from(newFile.content);
@@ -125,10 +152,11 @@ export class LessonService {
         transaction: true,
         chunk: 10,
       });
-      return savedFile.fileId;
+      return { fileId: savedFile.fileId, filename: savedFile.filename, ext: savedFile.ext };
     } catch (error) {
-      console.error(error);
-      throw new Error("Failed to save file");
+      // The error can carry the query parameters, i.e. the file itself: log only its kind.
+      this.logger.error(`Saving a file in lesson ${lessonId} failed: ${errorKind(error)}`);
+      throw new HttpException("Failed to save file", HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
@@ -137,11 +165,13 @@ export class LessonService {
     filename: string,
     updatedByUserId: number,
     fileContent: string,
-    request: Request
   ): Promise<FileStore> {
     const lesson = await this.getLesson(lessonId);
     lesson.updated_at = new Date();
-    const file = lesson.files.find((file) => file.filename == filename);
+    // Only texts are edited in place; an image with the same name must never be overwritten.
+    const file = lesson.files.find(
+      (file) => file.filename == filename && TEXT_EXTENSIONS.includes(file.ext),
+    );
     if (!file) {
       throw new HttpException("File does not exist", HttpStatus.NOT_FOUND);
     }
@@ -150,46 +180,52 @@ export class LessonService {
       throw new HttpException("User does not exist", HttpStatus.NOT_FOUND);
     }
     file.content = Buffer.from(fileContent);
-    file.updated_by = updatedByUser.username;
-
-    // if (updateThumb) {
-    //   console.log("thumbUpdated");
-    //   const thumbImage = await this.thumbService.getThumb(lessonId, filename, request);
-    //   const previewFile = lesson.files.find((file) => file.filename == "preview");
-    //   previewFile.content = Buffer.from(thumbImage);
-    // }
-
-    const savedLesson = await this.lessonRepository.save(lesson);
+    file.updated_by = updatedByUser.username ?? String(updatedByUser.userId);
+    await this.lessonRepository.save(lesson);
     return file;
   }
 
-  async updateThumbnail(lessonId, filename, request): Promise<any> {
+  /** Photographs a text of the lesson and stores it as preview.png, which older lessons may lack. */
+  async updateThumbnail(lessonId: number, filename: string, request: Request): Promise<boolean> {
     const lesson = await this.getLesson(lessonId);
-    let thumbImage;
+    if (!lesson.files.some((file) => file.filename === filename && file.ext === ".md")) {
+      throw new HttpException("File does not exist", HttpStatus.NOT_FOUND);
+    }
+    let thumbImage: ArrayBuffer;
     try {
       thumbImage = await this.thumbService.getThumb(lessonId, filename, request);
-    } catch (error) {
-      console.error(error);
-      throw new HttpException("Error generating thumbnail", HttpStatus.INTERNAL_SERVER_ERROR);
+    } catch {
+      this.logger.warn(`Thumbnail request failed for lesson ${lessonId}`);
+      throw new HttpException("Error generating thumbnail", HttpStatus.BAD_GATEWAY);
     }
-    const previewFile = lesson.files.find((file) => file.filename == "preview");
+    let previewFile = lesson.files.find(
+      (file) => file.filename === "preview" && file.ext === ".png",
+    );
+    if (!previewFile) {
+      const username = (request.user as User)?.username ?? "";
+      previewFile = Object.assign(new FileStore(), {
+        filename: "preview",
+        ext: ".png",
+        created_by: username,
+        updated_by: username,
+      });
+      lesson.files.push(previewFile);
+    }
     previewFile.content = Buffer.from(thumbImage);
-    const savedLesson = await this.lessonRepository.save(lesson);
+    await this.lessonRepository.save(lesson);
     return true;
   }
 
-  async deleteLessonFile(lessonId: number, filename: string, ext: string, request: Request) {
+  async deleteLessonFile(lessonId: number, filename: string, ext: string): Promise<number> {
     const lesson = await this.getLesson(lessonId);
     const file = lesson.files.find((file) => file.filename === filename && file.ext === `.${ext}`);
 
     if (!file) {
       throw new HttpException("File does not exist", HttpStatus.NOT_FOUND);
     }
-    try {
-      const deletedFileRes = await this.fileStoreRepository.delete(file.fileId);
-      return deletedFileRes.affected;
-    } catch (e) {
-      console.log(e);
-    }
+    const blocker = deletionBlocker(file, lesson.files);
+    if (blocker) throw new ConflictException(blocker);
+    const deletedFileRes = await this.fileStoreRepository.delete(file.fileId);
+    return deletedFileRes.affected ?? 0;
   }
 }

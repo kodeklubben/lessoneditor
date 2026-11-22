@@ -3,7 +3,7 @@ import { lists as config } from "./buttoncontroller/settings/buttonConfig";
 import { FC, RefObject } from "react";
 
 interface ListsProps {
-  editorRef: RefObject<HTMLTextAreaElement>;
+  editorRef: RefObject<HTMLTextAreaElement | null>;
   cursorPositionStart: number;
   cursorPositionEnd: number;
   mdText: string;

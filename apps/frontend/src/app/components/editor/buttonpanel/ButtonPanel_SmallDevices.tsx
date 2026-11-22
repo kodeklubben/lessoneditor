@@ -13,7 +13,7 @@ interface ButtonPanel_SmallDevicesProps {
   courseTitle: string;
   cursorPositionStart: number;
   cursorPositionEnd: number;
-  editorRef: RefObject<HTMLTextAreaElement>;
+  editorRef: RefObject<HTMLTextAreaElement | null>;
   mdText: string;
   setButtonValues: Dispatch<SetStateAction<Record<string, boolean>>>;
   setCursor: (pos1: number, pos2: number) => void;

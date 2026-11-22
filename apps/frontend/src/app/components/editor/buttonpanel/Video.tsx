@@ -4,6 +4,7 @@ import { useHotkeys } from "react-hotkeys-hook";
 import { KEY_COMBINATIONS as KEY, media as config } from "./buttoncontroller/settings/buttonConfig";
 
 import { Button, Header, Input, Modal } from "semantic-ui-react";
+import { getVideoId } from "../../../utils/mdParser";
 
 const languageNO = {
   header: "Video",
@@ -14,7 +15,7 @@ const languageNO = {
 };
 
 interface VideoProps {
-  editorRef: RefObject<HTMLTextAreaElement>;
+  editorRef: RefObject<HTMLTextAreaElement | null>;
   mdText: string;
   cursorPositionStart: number;
   cursorPositionEnd: number;
@@ -40,9 +41,10 @@ const Video: FC<VideoProps> = ({
 
   const isEmptyField = url === "";
 
-  const isYoutube = url.match(/^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=|\?v=)([^#&?]*).*/);
-
-  const isVimeo = url.match(/^(http:\/\/|https:\/\/)?(www\.)?(vimeo\.com\/)([0-9]+)$/);
+  // Same check as the preview, so a link that is accepted here also renders there.
+  const video = getVideoId(url.trim());
+  const isYoutube = video?.provider === "youtube";
+  const isVimeo = video?.provider === "vimeo";
 
   useHotkeys(
     `${KEY.media.video}`,
@@ -51,7 +53,7 @@ const Video: FC<VideoProps> = ({
       handleButtonClick();
       return false;
     },
-    { enableOnFormTags: ["TEXTAREA"], keydown: true }
+    { enableOnFormTags: ["TEXTAREA"], keydown: true },
   );
 
   const handleButtonClick = () => {
@@ -69,10 +71,10 @@ const Video: FC<VideoProps> = ({
 
     setMdText(
       mdText.slice(0, cursorPositionStart) +
-        `:::${"video"}[${url}]
+        `:::${"video"}[${url.trim()}]
 :::
 ` +
-        mdText.slice(cursorPositionStart)
+        mdText.slice(cursorPositionStart),
     );
 
     setIsOpen(false);
@@ -129,30 +131,15 @@ const Video: FC<VideoProps> = ({
             placeholder="Støtter YouTube og Vimeo"
           />
 
-          <p style={{ color: "red" }}>{validateUrl}</p>
+          <p style={{ color: "red" }} role="alert">
+            {url && !video ? languageNO.mandatoryText : validateUrl}
+          </p>
         </Modal.Content>
 
         <Modal.Content className="hyperlink_modal"></Modal.Content>
 
         <Modal.Actions className="hyperlink_modal">
           <Button onClick={clickCancelHandler} content={languageNO.cancel} color="black" />
-          <div
-            style={{
-              display: !(isYoutube || isVimeo) ? "hidden" : "none",
-              position: "absolute",
-              top: "84%",
-              left: "83.5%",
-              zIndex: 9999,
-              width: "7.2em",
-              height: "2.7em",
-            }}
-            onClick={() => {
-              if (!(isYoutube || isVimeo)) {
-                setValidateUrl(languageNO.mandatoryText);
-                return;
-              }
-            }}
-          ></div>
           <Button
             disabled={isEmptyField || !(isYoutube || isVimeo)}
             onClick={clickOKHandler}

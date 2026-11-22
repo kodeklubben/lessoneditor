@@ -1,8 +1,7 @@
 import Editor from "./pages/Editor";
-// import Landingpage from "./landingpage/Landingpage";
 import Landingpage from "./pages/Landingpage";
 import Overview from "./pages/Frontpage";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router";
 import { LessonContextProvider } from "./contexts/LessonContext";
 import { UserContextProvider } from "./contexts/UserContext";
 import { FileContextProvider } from "./contexts/FileContext";
@@ -59,7 +58,7 @@ const App = () => {
           }
         />
         <Route path="/logout" element={<Logout></Logout>} />
-        <Route path="*" element={<h1>PAGE NOT FOUND</h1>} />
+        <Route path="*" element={<h1>Fant ikke siden</h1>} />
       </Routes>
     </BrowserRouter>
   );

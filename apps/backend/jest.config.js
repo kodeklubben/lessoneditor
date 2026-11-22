@@ -1,15 +1,7 @@
 module.exports = {
   displayName: "backend",
   preset: "../../jest.preset.js",
-  globals: {
-    "ts-jest": {
-      tsconfig: "<rootDir>/tsconfig.spec.json",
-    },
-  },
   testEnvironment: "node",
-  transform: {
-    "^.+\\.[tj]s$": "ts-jest",
-  },
-  moduleFileExtensions: ["ts", "js", "html"],
-  coverageDirectory: "../../coverage/apps/backend",
+  transform: { "^.+\\.ts$": ["ts-jest", { tsconfig: "<rootDir>/tsconfig.spec.json" }] },
+  moduleNameMapper: { "^@lessoneditor/contracts$": "<rootDir>/../../libs/contracts/src/index.ts" },
 };

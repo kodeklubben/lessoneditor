@@ -1,87 +1,73 @@
 import { Strategy } from "passport-oauth2";
 import { PassportStrategy } from "@nestjs/passport";
-import { Injectable } from "@nestjs/common";
-import { AuthService } from "./auth.service";
+import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { stringify } from "querystring";
 import { UserService } from "../user/user.service";
 import { UserDTO } from "@lessoneditor/contracts";
 import { lastValueFrom } from "rxjs";
 import { HttpService } from "@nestjs/axios";
-import { Inject } from "@nestjs/common";
-import { CACHE_MANAGER } from "@nestjs/cache-manager";
-import { Cache } from "cache-manager";
 import { User } from "../user/user.entity";
+import { RequestWithGithubToken } from "./github-token";
+import { env } from "../app/env";
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy, "github") {
-  private axiosResponse$: any;
-  private data: any;
   constructor(
-    private authService: AuthService,
     private http: HttpService,
     private userService: UserService,
-    @Inject(CACHE_MANAGER) private cacheManager: Cache
   ) {
     super({
       authorizationURL: `https://github.com/login/oauth/authorize?${stringify({
-        client_id: process.env.GH_CLIENT_ID,
-        redirect_uri: process.env.GH_CALLBACK_URL,
+        client_id: env("GH_CLIENT_ID"),
+        redirect_uri: env("GH_CALLBACK_URL"),
         response_type: "code",
-        scope: "repo",
+        // Forks, commits and pull requests against the public lesson repo need no more than this.
+        scope: "public_repo",
       })}`,
       tokenURL: "https://github.com/login/oauth/access_token",
-      clientID: process.env.GH_CLIENT_ID,
-      clientSecret: process.env.GH_CLIENT_SECRET,
-      callbackURL: process.env.GH_CALLBACK_URL,
-      scope: null,
+      clientID: env("GH_CLIENT_ID"),
+      clientSecret: env("GH_CLIENT_SECRET"),
+      callbackURL: env("GH_CALLBACK_URL"),
+      state: true,
+      passReqToCallback: true,
     });
   }
 
-  async validate(accessToken: string): Promise<UserDTO> {
-    this.axiosResponse$ = this.http.get("https://api.github.com/user", {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    });
-    const response: any = await lastValueFrom(this.axiosResponse$);
+  async validate(request: RequestWithGithubToken, accessToken: string): Promise<UserDTO> {
+    const response: any = await lastValueFrom(
+      this.http.get("https://api.github.com/user", {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      }),
+    );
+    const newUserDTO: UserDTO = {
+      userId: response.data.id,
+      name: response.data.name,
+      username: response.data.login || response.data.id,
+      email: response.data.email,
+      photo: response.data.avatar_url,
+    };
     let user: User;
     try {
-      user = await this.userService.getUser(response.data.id);
-      const { lessons, ...storedUser } = user;
-      const newUserDTO: UserDTO = {
-        userId: response.data.id,
-        name: response.data.name,
-        username: response.data.login || response.data.id,
-        email: response.data.email,
-        photo: response.data.avatar_url,
-      };
-
-      if (!this.shallowEqual(storedUser, newUserDTO)) {
-        user = await this.userService.updateUser(newUserDTO, storedUser.userId);
-      }
+      user = await this.userService.getUser(newUserDTO.userId);
     } catch (error) {
-      const newUserDTO: UserDTO = {
-        userId: response.data.id,
-        name: response.data.name,
-        username: response.data.login || response.data.id,
-        email: response.data.email,
-        photo: response.data.avatar_url,
-      };
+      // Only an unknown user is created; a database error must fail the login, not add a user.
+      if (!(error instanceof HttpException) || error.getStatus() !== HttpStatus.NOT_FOUND)
+        throw error;
       user = await this.userService.addUser(newUserDTO);
     }
-    this.cacheManager.set(user.userId.toString(), accessToken);
+    const { lessons, ...storedUser } = user;
+    if (!this.shallowEqual(storedUser, newUserDTO)) {
+      user = await this.userService.updateUser(newUserDTO, storedUser.userId);
+    }
+    // Kept on this request only; LoginGuard moves it, encrypted, into the server-side session.
+    request.githubAccessToken = accessToken;
     return user;
   }
 
-  shallowEqual(object1, object2) {
-    const keys1 = Object.keys(object1);
-    const keys2 = Object.keys(object2);
-    if (keys1.length !== keys2.length) {
-      return false;
-    }
-    for (let key of keys1) {
-      if (object1[key] !== object2[key]) {
-        return false;
-      }
-    }
-    return true;
+  shallowEqual(object1: object, object2: object) {
+    const a = object1 as Record<string, unknown>;
+    const b = object2 as Record<string, unknown>;
+    const keys = Object.keys(a);
+    return keys.length === Object.keys(b).length && keys.every((key) => a[key] === b[key]);
   }
 }

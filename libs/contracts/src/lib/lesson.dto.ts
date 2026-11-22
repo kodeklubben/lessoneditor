@@ -11,7 +11,7 @@ export interface LessonDTO {
 
   submitted: boolean;
 
-  submitted_at: Date;
+  submitted_at: Date | null;
 
   created_by: string;
 
@@ -86,4 +86,7 @@ export interface HeaderData {
   translator: string;
   translatorList: string[];
   language: string;
+  /** Set when the text was made by the translate button; shown until someone has reviewed it. */
+  machineTranslated?: boolean;
+  translatedFrom?: string;
 }
