@@ -15,10 +15,8 @@ Both commands run from the root. `.env` must set `FRONTEND_URL=http://localhost:
 
 ## Google Cloud
 
-Deployment is a separate, manual operation. Confirm the existing function's generation, region and public endpoint before choosing whether to update it or create a replacement. Do not blindly switch a live first-generation function to second generation.
+Deploy with `tools/deploy-thumbnailer.sh` (Node 24, logged in with `gcloud`), right before the App Engine deploy: the new backend sends the token in `X-Preview-Token`, which an older thumbnailer does not read, and this version refuses the query-string token an older backend sends.
 
-For a new second-generation deployment, prepare a standalone source directory with this package's `package.json`, compiled `dist/`, and a standalone npm lockfile. Set its `gcp-build` script to an empty string because compilation has already occurred. Apply the root project's `cloudevents`/`uuid` override in that standalone package. Keep the generated directory outside the source tree and do not copy `.env` files.
+The script updates the existing second-generation function `thumbnailer` in `europe-north1` in place, so its URL (`THUMB_SERVICE_URL`) and its public invoker binding stay; creating or opening a new function needs `setIamPolicy`, which the Editor role does not have. It packages the compiled `dist/` as a standalone package with its own lockfile, installs Puppeteer's Chrome during the cloud build into the source directory (so it is there at runtime), and runs the function as `thumbnailer-runtime`, a service account with no roles, with 2 GiB, 1 CPU, a 120 s timeout and one request per instance. `DRY_RUN=1` builds the package without deploying. It prints the previous revision and the command to roll back to it.
 
-Use Node 24, entry point `thumbnailer`, adequate memory for Chromium (at least 1 GiB), and a request timeout of at least 60 seconds. Install Puppeteer's matching Chrome during the cloud build and ensure its cache is available at runtime; the root App Engine setting `PUPPETEER_SKIP_DOWNLOAD=true` is **not** suitable for this service. Configure `NODE_ENV=production` and `FRONTEND_URL` with the deployed editor origin.
-
-Validate the new endpoint with an expiring token from the matching backend, then set the main application's `THUMB_SERVICE_URL`. The root deployment workflow deliberately requires this endpoint to be configured explicitly.
+A real screenshot needs a token from the matching backend, so check a thumbnail in the editor after the App Engine deploy.
