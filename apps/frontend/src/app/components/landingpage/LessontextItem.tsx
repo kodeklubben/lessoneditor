@@ -9,25 +9,20 @@ import { useUserContext } from "../../contexts/UserContext";
 import DeleteModal from "../shared/DeleteModal";
 import MarkdownPreview from "./MarkdownPreview";
 
-const LessontextItem: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug, removeMD }) => {
+const LessontextItem: FC<any> = ({
+  lessonId,
+  language,
+  lessonTitle,
+  lessonSlug,
+  removeMD,
+  canDelete,
+}) => {
   const navigate = useNavigate();
   const { previewImage } = useUserContext();
   const [openDeleteContent, setOpenDeleteContent] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
   const [showMDPreview, setShowMDPreview] = useState<boolean>(false);
 
   const filename = language === "nb" ? lessonSlug : `${lessonSlug}_${language}`;
-
-  const deleteContent = async () => {
-    try {
-      setLoading(true);
-      await removeMD(language, lessonSlug);
-      setOpenDeleteContent(false);
-      setLoading(false);
-    } catch (e) {
-      console.error(e);
-    }
-  };
 
   const navigateToEditor = (lessonId: any, lessonSlug: any, language: string) => {
     const target = ["/editor", lessonId, lessonSlug, language].join("/");
@@ -52,8 +47,7 @@ const LessontextItem: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug, 
         <DeleteModal
           openDeleteContent={openDeleteContent}
           setOpenDeleteContent={setOpenDeleteContent}
-          deleteContent={deleteContent}
-          loading={loading}
+          deleteContent={() => removeMD(language, lessonSlug)}
         />
       )}
 
@@ -104,15 +98,18 @@ const LessontextItem: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug, 
             content={"Rediger"}
             positive
           />
-          <Button
-            style={{ background: "none" }}
-            icon
-            onClick={() => setOpenDeleteContent(true)}
-            aria-label={`Slett oppgaveteksten på ${languageText.toLowerCase()}`}
-          >
-            <Icon name="delete" />
-            Slett
-          </Button>
+          {/* The last lesson text cannot be deleted (K15); the server refuses it as well. */}
+          {canDelete && (
+            <Button
+              style={{ background: "none" }}
+              icon
+              onClick={() => setOpenDeleteContent(true)}
+              aria-label={`Slett oppgaveteksten på ${languageText.toLowerCase()}`}
+            >
+              <Icon name="delete" />
+              Slett
+            </Button>
+          )}
         </Item.Content>
       </Item>
     </>

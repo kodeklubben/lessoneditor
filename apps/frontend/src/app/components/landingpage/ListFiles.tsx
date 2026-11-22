@@ -1,9 +1,9 @@
 import { asButton } from "../../utils/a11y";
 import "./listfiles.scss";
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
 import { Item, Button, Modal, Icon, Image } from "semantic-ui-react";
 import axios from "axios";
-import { paths } from "@lessoneditor/contracts";
+import { deletionBlocker, paths, splitFilename } from "@lessoneditor/contracts";
 import { languageOption } from "../frontpage/settings/newLessonOptions";
 import { useLessonContext } from "../../contexts/LessonContext";
 import { useUserContext } from "../../contexts/UserContext";
@@ -15,25 +15,26 @@ import placeholderImage from "../../../assets/public/landingPage/image.png";
 type ListFilesProps = {
   item: string;
   lessonId: string;
+  /** Every file of the lesson, to know whether this one may be deleted. */
+  files: string[];
 };
 
-const ListFiles: FC<ListFilesProps> = ({ item, lessonId }) => {
+const ListFiles: FC<ListFilesProps> = ({ item, lessonId, files }) => {
   const { fetchFileList, setFiles } = useLessonContext();
   const [openDeleteContent, setOpenDeleteContent] = useState<boolean>(false);
   const [openImageModal, setOpenImageModal] = useState<boolean>(false);
   const { previewImage } = useUserContext();
   const { images } = useLessonContext();
-  const [imageUrl, setImageUrl] = useState();
   const [showMDPreview, setShowMDPreview] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [fileList, setFileList] = useState<string[]>([]);
 
   const { language } = filenameParser(item);
 
-  const filename = item.split(".").slice(0, -1).toString();
-  const ext: string = item.split(".").pop() ?? "";
+  const { filename, ext: dotExt } = splitFilename(item);
+  const ext = dotExt.slice(1);
 
-  const isImage = ["jpeg", "png", "gif"].includes(ext);
+  const isImage = ["jpg", "jpeg", "png", "gif"].includes(ext);
+  // lesson.yml, preview.png and the last lesson text stay (K15); the server refuses them too.
+  const canDelete = !deletionBlocker(splitFilename(item), files.map(splitFilename));
 
   let lang;
   let languageImage;
@@ -44,38 +45,14 @@ const ListFiles: FC<ListFilesProps> = ({ item, lessonId }) => {
     languageImage = lang!.image!.src;
   }
 
-  useEffect(() => {
-    async function fetchFiles() {
-      setFileList(await fetchFileList());
-    }
-    fetchFiles();
-  }, []);
-
+  /** Throws on failure, so the dialog can show the server's reason. */
   const removeFile = async () => {
-    try {
-      const isDeleted = await axios.delete(
-        paths.LESSON_FILE_DELETE.replace(":lessonId", lessonId.toString())
-          .replace(":filename", filename)
-          .replace(":ext", ext)
-      );
-      if (isDeleted.data === 1) {
-        const index = fileList.findIndex((item: string) => item === filename);
-        const newList = fileList.splice(index, 1);
-        setFiles(newList);
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  const getFile = async () => {
-    try {
-      const res = await axios.get(
-        paths.LESSON_FILE.replace(":lessonId", lessonId.toString()).replace(":filename", filename)
-      );
-    } catch (e) {
-      console.log(e);
-    }
+    await axios.delete(
+      paths.LESSON_FILE_DELETE.replace(":lessonId", lessonId.toString())
+        .replace(":filename", encodeURIComponent(filename))
+        .replace(":ext", ext),
+    );
+    setFiles(await fetchFileList());
   };
 
   return (
@@ -85,7 +62,6 @@ const ListFiles: FC<ListFilesProps> = ({ item, lessonId }) => {
           onClose={() => setOpenImageModal(false)}
           onOpen={() => setOpenImageModal(true)}
           open={openImageModal}
-          trigger={<Button>Show Modal</Button>}
           dimmer="inverted"
         >
           <Modal.Header>{item}</Modal.Header>
@@ -117,7 +93,6 @@ const ListFiles: FC<ListFilesProps> = ({ item, lessonId }) => {
           openDeleteContent={openDeleteContent}
           setOpenDeleteContent={setOpenDeleteContent}
           deleteContent={removeFile}
-          loading={loading}
         />
       )}
       <Item className="all-files--container">
@@ -171,15 +146,17 @@ const ListFiles: FC<ListFilesProps> = ({ item, lessonId }) => {
             margin: "1em",
           }}
         >
-          <Button
-            style={{ background: "none" }}
-            icon
-            onClick={() => setOpenDeleteContent(true)}
-            aria-label={`Slett ${item}`}
-          >
-            <Icon name="delete" />
-            Slett
-          </Button>
+          {canDelete && (
+            <Button
+              style={{ background: "none" }}
+              icon
+              onClick={() => setOpenDeleteContent(true)}
+              aria-label={`Slett ${item}`}
+            >
+              <Icon name="delete" />
+              Slett
+            </Button>
+          )}
         </Item.Content>
       </Item>
     </>

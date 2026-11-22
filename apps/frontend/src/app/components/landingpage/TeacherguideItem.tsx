@@ -13,21 +13,9 @@ const TeacherguideItem: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug
   const navigate = useNavigate();
   const { previewImage } = useUserContext();
   const [openDeleteContent, setOpenDeleteContent] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
   const [showMDPreview, setShowMDPreview] = useState<boolean>(false);
 
-  const filename = language === "nb" ? "README" : `${"README"}_${language}`;
-
-  const deleteContent = async () => {
-    try {
-      setLoading(true);
-      await removeMD(language, "README");
-      setOpenDeleteContent(false);
-      setLoading(false);
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  const filename = language === "nb" ? "README" : `README_${language}`;
 
   const navigateToEditor = (lessonId: any, lessonSlug: any, language: string) => {
     const target = ["/editor", lessonId, "README", language].join("/");
@@ -52,8 +40,7 @@ const TeacherguideItem: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug
         <DeleteModal
           openDeleteContent={openDeleteContent}
           setOpenDeleteContent={setOpenDeleteContent}
-          deleteContent={deleteContent}
-          loading={loading}
+          deleteContent={() => removeMD(language, "README")}
         />
       )}
       <Item className="lesson_menu_card">
@@ -81,7 +68,7 @@ const TeacherguideItem: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug
           <Item.Header>
             <h2>
               {`Tittel: ${lessonTitle}`}
-              <div>(lærerveildening)</div>
+              <div>(lærerveiledning)</div>
             </h2>
           </Item.Header>
           <Item.Content>

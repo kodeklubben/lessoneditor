@@ -14,21 +14,9 @@ interface Props {
 const Item: React.FC<Props> = ({ lesson }) => {
   const navigate = useNavigate();
   const [openDeleteLesson, setOpenDeleteLesson] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
   const { removeLesson, previewImage } = useUserContext();
 
   const submitDate = new Date(lesson.submitted_at).toLocaleDateString();
-
-  function deleteLesson() {
-    try {
-      setLoading(true);
-      removeLesson(lesson.lessonId);
-      setOpenDeleteLesson(false);
-      setLoading(false);
-    } catch (e) {
-      console.error(e);
-    }
-  }
 
   const navigateToHome = (lessonId: string) => {
     const target = ["/landingpage", lessonId].join("/");
@@ -41,8 +29,7 @@ const Item: React.FC<Props> = ({ lesson }) => {
         <DeleteModal
           openDeleteContent={openDeleteLesson}
           setOpenDeleteContent={setOpenDeleteLesson}
-          deleteContent={deleteLesson}
-          loading={loading}
+          deleteContent={() => removeLesson(lesson.lessonId)}
         />
       )}
       <div className="card-item">
@@ -54,6 +41,7 @@ const Item: React.FC<Props> = ({ lesson }) => {
             <Image
               className="card-content__image"
               src={previewImage[lesson.lessonId]}
+              alt=""
               bordered
               rounded
             />

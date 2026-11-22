@@ -178,7 +178,6 @@ export class LessonController {
     @Param("filename") filename,
     @Param("ext") ext,
   ): Promise<any> {
-    const deleteRes = await this.lessonService.deleteLessonFile(lessonId, filename, ext, req);
-    return deleteRes;
+    return this.lessonService.deleteLessonFile(lessonId, filename, ext);
   }
 }
