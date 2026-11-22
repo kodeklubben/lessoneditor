@@ -1,8 +1,11 @@
 version: 2
-# One pull request a month per ecosystem, with all minor and patch updates together.
-# Major versions are left out on purpose: they need code changes and testing (TypeScript 7,
-# Babel 8, webpack-dev-server 6, @types/node beyond the Node version the app runs on), and are
-# done in their own pull request. Security alerts still show under Security.
+# At most two pull requests a month per ecosystem. Dependabot updates an open one instead of
+# opening another:
+# - minor-and-patch: all small updates together; merge it when CI is green.
+# - major: all new major versions together, as a to-do list. They need code changes and testing
+#   (TypeScript 7, Babel 8, webpack-dev-server 6 …), so it may stay open, and red, until someone
+#   takes them on in a pull request of their own.
+# Security alerts show under Security either way.
 updates:
   - package-ecosystem: github-actions
     directory: /
@@ -20,6 +23,10 @@ updates:
       minor-and-patch:
         patterns: ["*"]
         update-types: ["minor", "patch"]
+      major:
+        patterns: ["*"]
+        update-types: ["major"]
     ignore:
-      - dependency-name: "*"
+      # The types follow the Node version the app runs on (.nvmrc, App Engine nodejs24).
+      - dependency-name: "@types/node"
         update-types: ["version-update:semver-major"]
