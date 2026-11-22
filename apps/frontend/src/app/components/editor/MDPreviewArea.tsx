@@ -5,7 +5,7 @@ import { renderMicrobit } from "../../utils/renderMicrobit";
 import { renderScratchBlocks } from "../../utils/renderScratchblocks";
 import { mdParser } from "../../utils/mdParser";
 import { sanitizeLessonHtml } from "../../utils/sanitizeHtml";
-import { replaceLocalImageUrls } from "../../utils/localImages";
+import { replaceLocalImageUrls, upstreamImageBase } from "../../utils/localImages";
 import { useLessonContext } from "../../contexts/LessonContext";
 import ContentPlaceholder from "./ContentPlaceholder";
 
@@ -18,7 +18,8 @@ interface MDPreviewProps {
 }
 
 const MDPreviewArea: FC<MDPreviewProps> = ({ mdText, course, language, preview, lineNumber }) => {
-  const { images } = useLessonContext();
+  const { images, state: lessonState } = useLessonContext();
+  const upstreamBase = upstreamImageBase(lessonState.lesson);
 
   const [svgContent, setSvgContent] = useState<string>("");
 
@@ -45,11 +46,11 @@ const MDPreviewArea: FC<MDPreviewProps> = ({ mdText, course, language, preview, 
 
   useEffect(() => {
     async function replaceUrls() {
-      const newMdText = replaceLocalImageUrls(mdText, images);
+      const newMdText = replaceLocalImageUrls(mdText, images, upstreamBase);
       setParsedMDwithUpdatedImageURLS(mdParser(newMdText));
     }
     replaceUrls();
-  }, [mdText, images]);
+  }, [mdText, images, upstreamBase]);
 
   // Scratch blocks are drawn once per change, 300 ms after typing stops. Before, the result was
   // run through scratchblocks again on every render.

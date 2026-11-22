@@ -108,15 +108,18 @@ export class LessonService {
    * asteroids.png), so a name without extension cannot pick between them.
    */
   async getLessonFile(lessonId: number, filename: string) {
-    const lesson = await this.getLesson(lessonId);
     const named = splitFilename(filename);
+    const names = named.ext ? [named.filename, filename] : [filename];
+    // Only the requested file: loading the lesson with all its files fetched every image's
+    // content for each image the editor asked for.
+    const candidates = await this.fileStoreRepository.find({
+      where: names.map((name) => ({ lesson: { lessonId }, filename: name })),
+    });
     const file =
       (named.ext &&
-        lesson.files.find((file) => file.filename === named.filename && file.ext === named.ext)) ||
-      lesson.files.find(
-        (file) => file.filename === filename && TEXT_EXTENSIONS.includes(file.ext),
-      ) ||
-      lesson.files.find((file) => file.filename === filename);
+        candidates.find((file) => file.filename === named.filename && file.ext === named.ext)) ||
+      candidates.find((file) => file.filename === filename && TEXT_EXTENSIONS.includes(file.ext)) ||
+      candidates.find((file) => file.filename === filename);
     if (!file) {
       throw new HttpException("File does not exist", HttpStatus.NOT_FOUND);
     }

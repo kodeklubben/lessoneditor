@@ -152,16 +152,26 @@ describe("finding a file by name", () => {
     { filename: "asteroids", ext: ".md", content: Buffer.from("text") },
     { filename: "lesson", ext: ".yml", content: Buffer.from("{}") },
   ];
-  const repository = { findOne: jest.fn() };
+  // Answers like the database: the files of lesson 1 whose name is one of those asked for.
+  const fileRepository = {
+    find: jest.fn(),
+  };
   const service = new LessonService(
-    repository as never,
     undefined as never,
     undefined as never,
+    fileRepository as never,
     undefined as never,
     undefined as never,
   );
 
-  beforeEach(() => repository.findOne.mockResolvedValue({ lessonId: 1, files }));
+  beforeEach(() =>
+    fileRepository.find.mockImplementation(
+      async ({ where }: { where: { lesson: { lessonId: number }; filename: string }[] }) =>
+        files.filter((file) =>
+          where.some((w) => w.lesson.lessonId === 1 && w.filename === file.filename),
+        ),
+    ),
+  );
 
   it("finds the image by its full name and the text by the name alone", async () => {
     expect((await service.getLessonFile(1, "asteroids.png")).ext).toBe(".png");
