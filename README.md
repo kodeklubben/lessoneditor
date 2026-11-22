@@ -2,6 +2,8 @@
 
 Create and edit lessons for [Lær Kidsa Koding](https://kidsakoder.no) with a React editor, a NestJS API, PostgreSQL and a Puppeteer thumbnail service.
 
+**Use it:** https://lessoneditor.ew.r.appspot.com (sign in with GitHub). Submitted lessons become pull requests to [kodeklubben/oppgaver](https://github.com/kodeklubben/oppgaver), which is published at [oppgaver.kidsakoder.no](https://oppgaver.kidsakoder.no).
+
 ## Run locally
 
 Prerequisites: **Node.js 24 LTS**, npm 11 or 12, and Docker with Compose v2.
@@ -53,7 +55,7 @@ The `overrides` in `package.json` patch transitive `undici` and `uuid` dependenc
 
 ## Deployment
 
-Pushing or merging to `main` runs CI. **Production deployment is manual**, through the “Deploy to production (manual)” workflow. It reruns CI, migrates the database, then deploys App Engine. See [deployment setup](docs/deploy.md) and the [thumbnail service](apps/thumbnailer/README.md) before the first deployment of this version.
+Pushing or merging to `main` runs CI. **Deployment is manual**, through the “Deploy (manual)” workflow: a branch can first be deployed as a test version without traffic, and `main` is then released to everyone. Each deploy backs up the database before migrating. See the [deployment guide](docs/deploy.md).
 
 ## License
 

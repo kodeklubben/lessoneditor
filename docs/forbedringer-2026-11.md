@@ -1,7 +1,7 @@
 # Forbedringer november 2026
 
 Grenen `forbedringer-2026-11` (fra lokal `main`, `f324dae`) retter funnene i gjennomgangen fra
-2026-11-19 (S = sikkerhet, K = korrekthet, V = vedlikehold). Ingenting er pushet eller deployet.
+2026-11-19 (S = sikkerhet, K = korrekthet, V = vedlikehold).
 Hver retting er en egen commit med begrunnelse; `git log f324dae..` viser dem.
 
 ## Rettet
@@ -131,10 +131,11 @@ hver side i et døgn i stedet for å logge ut.
 
 ## Før deploy
 
-1. Legg `JWT_SECRET`, `SESSION_SECRET` og `COOKIE_SECRET` (tilfeldige, 32 byte; `JWT_SECRET` ulik
-   `GH_CLIENT_SECRET`) og variabelen `THUMB_SERVICE_URL` inn i GitHub-miljøet `production`.
-2. Deploy thumbnaileren og backend sammen: tokenet går nå i `X-Preview-Token`.
-3. Senere: gjør thumbnaileren privat (S8), og bytt til Workload Identity Federation, Secret Manager
-   og egen databasebruker (S12).
-4. Oversettelse senere: databehandleravtale med en EU-leverandør (Mistral er laget), registrer
-   `TranslateModule` igjen, og legg `TRANSLATION_PROVIDER` og `MISTRAL_API_KEY` inn som secrets.
+Se [deploy.md](deploy.md): hemmeligheter og variabler i GitHub-miljøet `production`, testversjon uten
+trafikk før merge, og thumbnailer og backend sammen (tokenet går nå i `X-Preview-Token`).
+
+Senere:
+- Gjør thumbnaileren privat (S8), og bytt til Workload Identity Federation, Secret Manager og egen
+  databasebruker (S12). Begge krever en eier av GCP-prosjektet.
+- Oversettelse: databehandleravtale med en EU-leverandør (Mistral er laget), registrer
+  `TranslateModule` igjen, og legg `TRANSLATION_PROVIDER` og `MISTRAL_API_KEY` inn som secrets.
