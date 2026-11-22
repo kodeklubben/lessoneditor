@@ -1,27 +1,25 @@
 version: 2
+# One pull request a month per ecosystem, with all minor and patch updates together.
+# Major versions are left out on purpose: they need code changes and testing (TypeScript 7,
+# Babel 8, webpack-dev-server 6, @types/node beyond the Node version the app runs on), and are
+# done in their own pull request. Security alerts still show under Security.
 updates:
   - package-ecosystem: github-actions
     directory: /
     schedule:
-      interval: weekly
-    open-pull-requests-limit: 3
+      interval: monthly
+    groups:
+      actions:
+        patterns: ["*"]
   - package-ecosystem: npm
     directory: /
     schedule:
-      interval: weekly
-    open-pull-requests-limit: 3
+      interval: monthly
+    open-pull-requests-limit: 2
     groups:
-      nx:
-        patterns: ["nx", "@nx/*"]
-      nest:
-        patterns: ["@nestjs/*"]
-      # Babel's core and presets only work at the same major version.
-      babel:
-        patterns: ["@babel/*"]
+      minor-and-patch:
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
     ignore:
-      # The types follow the Node version the app runs on (.nvmrc, App Engine nodejs24).
-      - dependency-name: "@types/node"
-        update-types: ["version-update:semver-major"]
-      # Babel 8 needs core, presets and the Jest setup upgraded together, on purpose.
-      - dependency-name: "@babel/*"
+      - dependency-name: "*"
         update-types: ["version-update:semver-major"]
