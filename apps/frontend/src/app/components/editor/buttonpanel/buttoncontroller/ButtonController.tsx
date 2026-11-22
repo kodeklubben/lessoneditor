@@ -8,7 +8,7 @@ import { RenderMicroScratchButtons } from "./views/RenderMicroScratchButtons";
 import { RenderCodeButtons } from "./views/RenderCodeButtons";
 
 interface ButtonControllerProps {
-  editorRef: RefObject<HTMLTextAreaElement>;
+  editorRef: RefObject<HTMLTextAreaElement | null>;
   isON: boolean;
   title: string;
   buttonSlug: string;

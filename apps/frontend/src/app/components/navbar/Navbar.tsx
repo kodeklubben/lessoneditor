@@ -1,6 +1,6 @@
 import "./navbar.scss";
 import { FC, ReactNode } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import ProfileMenu from "./ProfileMenu";
 import { useUserContext } from "../../contexts/UserContext";
 import logo from "../../../../src/assets/public/lav_logo.jpg";

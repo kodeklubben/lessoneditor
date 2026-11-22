@@ -3,7 +3,7 @@ import { emphasis as config } from "./buttoncontroller/settings/buttonConfig";
 import { FC, RefObject } from "react";
 
 interface EmphasisProps {
-  editorRef: RefObject<HTMLTextAreaElement>;
+  editorRef: RefObject<HTMLTextAreaElement | null>;
   mdText: string;
   buttonValues: Record<string, boolean>;
   cursorPositionStart: number;

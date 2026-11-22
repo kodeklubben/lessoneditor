@@ -9,7 +9,7 @@ import {
 import { Dispatch, FC, RefObject, SetStateAction } from "react";
 
 interface PreviewProps {
-  editorRef: RefObject<HTMLTextAreaElement>;
+  editorRef: RefObject<HTMLTextAreaElement | null>;
   setPreview: Dispatch<SetStateAction<boolean>>;
 }
 

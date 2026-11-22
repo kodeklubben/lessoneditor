@@ -218,7 +218,13 @@ async function run() {
   const page = await browser.newPage();
   const errors = [];
   const thirdParty = [];
+  const consoleErrors = [];
   page.on("pageerror", (error) => errors.push(error.message));
+  // React warnings (deprecated APIs, key and ref problems) only show up in the console.
+  page.on("console", (message) => {
+    if (["error", "warn"].includes(message.type()))
+      consoleErrors.push(`${message.type()}: ${message.text()} (${message.location()?.url ?? ""})`);
+  });
   page.on("request", (request) => {
     if (/fonts\.googleapis|fonts\.gstatic|run\.app/.test(request.url()))
       thirdParty.push(request.url());
@@ -324,6 +330,7 @@ async function run() {
   assert.equal(image.rows[0].content.subarray(0, 8).toString("hex"), "89504e470d0a1a0a");
   assert.ok(image.rows[0].content.length > 1000);
   writeFileSync("test-results/thumbnail.png", image.rows[0].content);
+  writeFileSync("test-results/console.log", consoleErrors.join("\n"));
   assert.deepEqual(errors, [], "Browser runtime errors");
   assert.deepEqual(thirdParty, [], "No requests to Google Fonts or the old translation server");
   const scratch = await api(

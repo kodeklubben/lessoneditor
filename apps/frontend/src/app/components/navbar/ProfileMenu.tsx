@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Image, Icon, Button, Popup } from "semantic-ui-react";
 import { useUserContext } from "../../contexts/UserContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 
 type ProfileMenuProps = { name: string; photo?: string | undefined; email?: string | undefined };
 

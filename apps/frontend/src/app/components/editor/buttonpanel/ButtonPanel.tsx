@@ -21,7 +21,7 @@ interface ButtonPanelProps {
   courseTitle: string;
   cursorPositionStart: number;
   cursorPositionEnd: number;
-  editorRef: RefObject<HTMLTextAreaElement>;
+  editorRef: RefObject<HTMLTextAreaElement | null>;
   lessonTitle: string;
   mdText: string;
   pushRedoValue: (mdText: string) => void;
@@ -37,7 +37,7 @@ interface ButtonPanelProps {
   setMdText: Dispatch<SetStateAction<string>>;
   setRedoCursorPosition: Dispatch<SetStateAction<number[]>>;
   setUndoCursorPosition: Dispatch<SetStateAction<number[]>>;
-  uploadImageRef: RefObject<HTMLInputElement>;
+  uploadImageRef: RefObject<HTMLInputElement | null>;
   setUndoAndUndoPosition: (mdText: string, position: number) => void;
   openSettings: boolean;
   setOpenSettings: Dispatch<SetStateAction<boolean>>;

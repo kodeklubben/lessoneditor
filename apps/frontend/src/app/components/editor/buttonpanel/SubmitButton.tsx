@@ -1,5 +1,5 @@
 import { Button, Popup } from "semantic-ui-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { useParams } from "react-router";
 import { FC, useState } from "react";
 

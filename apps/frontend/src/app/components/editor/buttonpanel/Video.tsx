@@ -15,7 +15,7 @@ const languageNO = {
 };
 
 interface VideoProps {
-  editorRef: RefObject<HTMLTextAreaElement>;
+  editorRef: RefObject<HTMLTextAreaElement | null>;
   mdText: string;
   cursorPositionStart: number;
   cursorPositionEnd: number;

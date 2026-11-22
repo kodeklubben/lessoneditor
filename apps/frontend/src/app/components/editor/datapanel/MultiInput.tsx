@@ -84,7 +84,9 @@ const MultiInput: FC<MultiInputProps> = ({
           }}
         >
           <Input
-            ref={(element) => (textInput = element)}
+            ref={(element) => {
+              textInput = element;
+            }}
             autoComplete="off"
             type="text"
             name={name}

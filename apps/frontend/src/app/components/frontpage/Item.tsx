@@ -2,7 +2,7 @@ import "./item.scss";
 import { LessonDTO } from "@lessoneditor/contracts";
 import React, { useState } from "react";
 import { Button, Card, Image, Icon, Popup } from "semantic-ui-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import { useUserContext } from "../../contexts/UserContext";
 
 import DeleteModal from "../shared/DeleteModal";
