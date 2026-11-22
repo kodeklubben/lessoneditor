@@ -55,6 +55,25 @@ tastaturtilgang til forhåndsvisningene, synlig fokus, etiketter på tekstfelten
 lagringsstatus, `{.tip}`-knapp, inline `{.b}`-blokker tegnes, stil og knapp for `blocklightgrey`,
 Lato fra `@fontsource/lato` i stedet for Google Fonts, norske tekster og «Lær Kidsa Koding.».
 
+**Andre runde (resten av funnlisten)**
+
+| Funn | Hva |
+|---|---|
+| S8 | Miniatyrtokenet sendes i headeren `X-Preview-Token`, ikke i query-strengen; thumbnaileren avviser `?token=`. `Authorization` står ledig for Googles ID-token, så funksjonen kan gjøres privat med IAM uten kodeendring. Backend og thumbnailer må deployes sammen. |
+| K9 | Var allerede rettet: forken polles med tidsgrense (15 × 2 s), ingen fast `sleep` og ingen repoliste. |
+| K14 | `updateThumbnail` lager `preview.png` når den mangler (før: TypeError og 500), godtar bare en tekst i oppgaven, og feil hos miniatyrtjenesten gir 502. |
+| K15 | `lesson.yml`, `preview.png` og den siste oppgaveteksten kan ikke slettes (409 med forklaring). Regelen ligger i `libs/contracts/src/lib/files.ts` og skjuler også Slett-knappen. Slettedialogen viser serverens grunn og lukkes bare ved suksess; fillista hentes på nytt etter sletting (før satte `splice(-1)` lista til feil element). |
+| K20–K28 | Brukerkonteksten henter ikke alt på nytt ved hver adresseendring, og viser spinner i stedet for at innloggingssiden blinker. Oppgavekonteksten viser feil i stedet for evig spinner, og bildene hentes parallelt. Scratch-blokker tegnes én gang per endring (før: scratchblocks på ferdig SVG ved hver rendring, språk lastet ved hvert kall). `$` i maler settes inn som tekst. PUT på en fil overskriver aldri et bilde. |
+| V1 | Global `ValidationPipe` (whitelist, transform) med egne klasser i `apps/backend/src/app/request-bodies.ts`; `ParseIntPipe` på id-er; `lesson.yml` lagres bare med kjente felt og typer. DTO-ene i `libs/contracts` er fortsatt interfaces fordi frontend bruker dem. |
+| V4 | Død kode fjernet: `libs/api-interfaces`, Explorer, `shared/ListFiles`, Languages, flere ubrukte hjelpere, `SessionModule`, utkommentert kode og ubrukte API-stier. `PUT /api/user/:id/lesson/:id` er fjernet: den ble kalt med en uerstattet `:lessonId` og endret sluggen uten å døpe om filene. |
+| V8 | Commiten får innsenderens melding som brødtekst. |
+| V9 | Backend logger med Nest Logger og bare statuskode/feiltype, aldri tokens, e-post eller innhold. |
+
+Andre feil rettet underveis: en ny oppgave uten språk fikk `<slug>_undefined.md`; oppgave, filer og
+medlemskap lages i én transaksjon; `addUser`/`updateUser` svelget feil, og innloggingen kunne lage
+en ny bruker ved en databasefeil; å dele to ganger ga 500; en sesjon for en slettet bruker ga 500 på
+hver side i et døgn i stedet for å logge ut.
+
 ## Verifisert
 
 - `npm run check` (lint, typecheck, 108 tester i 22 suiter, bygg) grønn etter hver del.
@@ -65,14 +84,19 @@ Lato fra `@fontsource/lato` i stedet for Google Fonts, norske tekster og «Lær 
   Google Fonts eller den gamle oversettelsesserveren, Scratch-blokker i linjen tegnet i Chrome,
   bilder i forhåndsvisningen og ekte PNG-miniatyr.
 - Ikke testet mot ekte GitHub eller ekte Mistral (bare med falske klienter i jest).
+- Andre runde: `npm run check` (129 tester i 25 suiter) og `npm run test:smoke` grønne, også
+  miniatyren gjennom den nye headeren. Smoke-testen må kjøres fra en sti uten punktum-mapper
+  (`serve-static` nekter filer under f.eks. `.claude/`).
 
 ## Gjenstår i koden
 
-- S8: miniatyr-JWT går fortsatt i query-strengen til en offentlig Cloud Function (kortlevd, 5 min, egen hemmelighet nå). Gjør funksjonen privat (IAM) og send tokenet i en header.
+- S8 (drift): tokenet går nå i en header, men funksjonen er fortsatt offentlig. Gjør den privat (IAM) og la backend sende et Google ID-token i `Authorization`.
 - S12: `deploy.yml` bruker JSON-nøkkel, miljø i klartekst og DB-brukeren `postgres`.
+- Miniatyrtokenet gjelder alle GET-kall for brukeren i 5 minutter, ikke bare den ene forhåndsvisningen.
 - Rategrensen og sperren mot samtidige oversettelser ligger i minnet, altså per instans.
 - Unike filnavn håndheves i appen, ikke med en unik indeks i databasen (gamle duplikater må ryddes først).
-- K9 (delvis), K14, K15 (lesson.yml og hovedfilen kan slettes), K20–K28, V1 (ValidationPipe), V2 (Semantic UI-beta), V5 (maler i backend og frontend), V7, V8.
+- V2 (Semantic UI-beta låser React 18), V5 (maler i backend og frontend), V7 (`created_at`/`updated_at` er `timestamp` uten tidssone, `submitted_at` er `timestamptz`; krever en migrasjon og kjennskap til tidssonen dataene ble skrevet i).
+- E-post lagres fortsatt i `user` (vises bare til brukeren selv).
 - Ingen i18n-løsning (react-i18next); malene finnes bare på bokmål.
 - Personvernerklæring og kontosletting mangler. Et token trekkes bare tilbake ved utlogging, ikke når sesjonen utløper.
 - Claude via Bedrock EU er ikke laget; bare Mistral.
