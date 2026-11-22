@@ -21,7 +21,7 @@ Hver retting er en egen commit med begrunnelse; `git log f324dae..` viser dem.
 | S14 | micro:bit-forhåndsvisningen godtar bare `postMessage` fra MakeCode. |
 | S15 | Medlemslisten for en oppgave viser ikke e-post. |
 | S16 | Eierskap via `lesson.created_by_id` (GitHub-id). Migrasjon `1795096346000-lesson-owner-id` fyller kolonnen. |
-| S17 | `npm audit fix`, markdown-it 15.0.3, multer overstyrt til 2.5.0. Igjen: 3 moderate i prod-avhengigheter (glob/minimatch under typeorm), 30 moderate i utviklingsverktøy. |
+| S17 | `npm audit` gir 0 sårbarheter, også i utviklingsverktøyene: typeorm 1.1, multer overstyrt til 2.5.0, og bare de sårbare områdene av glob (→ 14.0.6) og minimatch (→ 11.0.9) overstyrt, fordi jest 30.5 og nx 24 fortsatt krever dem. |
 
 **Korrekthet**
 
@@ -39,7 +39,9 @@ Hver retting er en egen commit med begrunnelse; `git log f324dae..` viser dem.
 | K18 | `/preview` og forhåndsvisningen på landingssiden bruker oppgavens kurs og språk. |
 | K19 | `sam` er `se` (Nordsamisk), med alias for gamle filer og omdøping ved innsending. Alle språk i lista har mal. |
 
-**Oversettelsen.** Klientkallet til den eksterne Cloud Run-serveren (`chatGPT.ts`) er fjernet. Nytt
+**Oversettelsen (skjult).** `TranslateModule` registreres ikke i `app.module.ts`, så endepunktene
+finnes ikke og valget vises ikke. Koden og testene står igjen til det finnes en EU-leverandør med
+databehandleravtale; slå den på ved å importere modulen og sette miljøvariablene under. Klientkallet til den eksterne Cloud Run-serveren (`chatGPT.ts`) er fjernet. Nytt
 endepunkt `POST /api/lesson/:id/translate` bak LoginGuard, med rategrense (10 per time per bruker,
 200 per døgn, én om gangen). Front matter, navn, e-post, telefon, kode, inline-kode, `{.klasse}`,
 lenkemål, URL-er, HTML og `:::`-containere byttes med plassholdere før noe sendes, og settes inn
@@ -54,6 +56,19 @@ dekorative bilder `alt=""`, `<html lang="nb">`, logo som lenke og profilmeny som
 tastaturtilgang til forhåndsvisningene, synlig fokus, etiketter på tekstfeltene, `aria-live` for
 lagringsstatus, `{.tip}`-knapp, inline `{.b}`-blokker tegnes, stil og knapp for `blocklightgrey`,
 Lato fra `@fontsource/lato` i stedet for Google Fonts, norske tekster og «Lær Kidsa Koding.».
+
+**Avhengigheter og typer (tredje runde)**
+
+- Alle pakker på nyeste minor/patch; major: Nx 24 (ubrukte `@nx/eslint`, `@nx/jest`, `@nx/js`,
+  `@nx/workspace` og lint/test-targets fjernet), typeorm 1.1, js-yaml 5, React 19.3, react-router 8.5
+  (`react-router-dom` fjernet), TypeScript 6.0 uten avviklede innstillinger (ingen `baseUrl`,
+  `moduleResolution` `bundler`/`node16`).
+- Strict TypeScript også i backenden og i testene. Påkrevde miljøvariabler leses med `env()`
+  (`apps/backend/src/app/env.ts`). Nullbare kolonner er typet `T | null`, også i `UserDTO` og
+  `LessonDTO`. `npm run typecheck` sjekker nå også frontendens tester.
+- Produksjonsbygget av frontenden inneholdt Reacts development-bygg: `NxAppWebpackPlugin` leser
+  `NODE_ENV` fra miljøet, ikke fra `--mode`. `webpack.config.cjs` setter den nå fra `--mode`.
+- Røyktesten skriver nettleserens konsollfeil og advarsler til `test-results/console.log`.
 
 **Andre runde (resten av funnlisten)**
 
@@ -84,6 +99,8 @@ hver side i et døgn i stedet for å logge ut.
   Google Fonts eller den gamle oversettelsesserveren, Scratch-blokker i linjen tegnet i Chrome,
   bilder i forhåndsvisningen og ekte PNG-miniatyr.
 - Ikke testet mot ekte GitHub eller ekte Mistral (bare med falske klienter i jest).
+- Tredje runde: `npm run check` (129 tester), `npm audit` (0) og `npm run test:smoke` grønne etter
+  hver oppgradering. `migration:generate` mot lokal Postgres viser ingen endring i kolonnene.
 - Andre runde: `npm run check` (129 tester i 25 suiter) og `npm run test:smoke` grønne, også
   miniatyren gjennom den nye headeren. Smoke-testen må kjøres fra en sti uten punktum-mapper
   (`serve-static` nekter filer under f.eks. `.claude/`).
@@ -95,7 +112,16 @@ hver side i et døgn i stedet for å logge ut.
 - Miniatyrtokenet gjelder alle GET-kall for brukeren i 5 minutter, ikke bare den ene forhåndsvisningen.
 - Rategrensen og sperren mot samtidige oversettelser ligger i minnet, altså per instans.
 - Unike filnavn håndheves i appen, ikke med en unik indeks i databasen (gamle duplikater må ryddes først).
-- V2 (Semantic UI-beta låser React 18), V5 (maler i backend og frontend), V7 (`created_at`/`updated_at` er `timestamp` uten tidssone, `submitted_at` er `timestamptz`; krever en migrasjon og kjennskap til tidssonen dataene ble skrevet i).
+- Ikke oppgradert fordi verktøyene ikke støtter det ennå: Babel 8 og webpack-dev-server 6
+  (`@nx/webpack` 24 krever Babel 7 og dev-server 5), TypeScript 7 (typescript-eslint <6.1, ts-jest <7).
+  `@types/node` følger Node 24 som App Engine kjører.
+- Semantic UI React 3 beta er ikke vedlikeholdt siden 2023; peer-kravet `react ^18` er overstyrt.
+  Den gir én advarsel i utvikling (`element.ref` i `useTrigger`); ref-en virker. Varig løsning er å
+  bytte UI-bibliotek (V2).
+- Fremmednøkkelen `lessonLessonId` i `user_lessons_lesson` er `ON DELETE NO ACTION` i databasen,
+  mens typeorm 1 forventer `CASCADE`; koden sletter koblingsradene selv. Neste `migration:generate`
+  tar den med.
+- V5 (maler i backend og frontend), V5 (maler i backend og frontend), V7 (`created_at`/`updated_at` er `timestamp` uten tidssone, `submitted_at` er `timestamptz`; krever en migrasjon og kjennskap til tidssonen dataene ble skrevet i).
 - E-post lagres fortsatt i `user` (vises bare til brukeren selv).
 - Ingen i18n-løsning (react-i18next); malene finnes bare på bokmål.
 - Personvernerklæring og kontosletting mangler. Et token trekkes bare tilbake ved utlogging, ikke når sesjonen utløper.
