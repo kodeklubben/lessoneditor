@@ -108,6 +108,7 @@ const NewLessonModal: FC<NewLessonModalProps> = ({ openNewLessonModal, setOpenNe
         className="new-lesson-modal"
         closeOnDimmerClick={!loading}
         onClose={closeModal}
+        onOpen={() => setOpenNewLessonModal(true)}
         open={openNewLessonModal}
         dimmer="inverted"
         trigger={<Button icon="plus" labelPosition="left" content="Ny oppgave" positive />}
