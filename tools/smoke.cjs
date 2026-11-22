@@ -137,12 +137,9 @@ async function run() {
     { lessonTitle: "Sti", lessonSlug: "../x", courseTitle: "Python", courseSlug: "python" },
     400,
   );
-  assert.deepEqual(
-    await api("/translate/status"),
-    { enabled: false },
-    "Translation is off by default",
-  );
-  await api(`/lesson/${lessonId}/translate`, "POST", { source: "lokal-test", language: "en" }, 503);
+  // Machine translation is hidden: the module is not registered, so neither endpoint exists.
+  await api("/translate/status", "GET", undefined, 404);
+  await api(`/lesson/${lessonId}/translate`, "POST", { source: "lokal-test", language: "en" }, 404);
   const files = await api(`/lesson/${lessonId}/filenames`);
   assert.ok(files.includes("lokal-test.md"));
   const file = await api(`/lesson/${lessonId}/files/lokal-test`);
@@ -308,7 +305,7 @@ async function run() {
   assert.equal(
     await page.$$eval(".ui.modal", (m) => m.some((x) => x.textContent.includes("maskinoversett"))),
     false,
-    "The translate option is hidden while translation is off",
+    "The translate option is hidden",
   );
   await page.locator(".ui.modal button::-p-text(Fortsett)").click();
   await page

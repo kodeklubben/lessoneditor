@@ -5,11 +5,14 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 import { PassportModule } from "@nestjs/passport";
 import { UserModule } from "../user/user.module";
 import { LessonModule } from "../lesson/lesson.module";
-import { TranslateModule } from "../translate/translate.module";
 import { AuthModule } from "../auth/auth.module";
 import { join } from "path";
 import { ServeStaticModule } from "@nestjs/serve-static";
 import { dataSourceOptions } from "../../../../db/data-sources";
+
+// Machine translation (../translate) is kept but not registered, so its endpoints do not exist and
+// the editor hides the option. Turn it on again only with an EU provider and a data processing
+// agreement: import TranslateModule here and set TRANSLATION_PROVIDER and MISTRAL_API_KEY.
 
 @Module({
   imports: [
@@ -27,7 +30,6 @@ import { dataSourceOptions } from "../../../../db/data-sources";
     AuthModule,
     UserModule,
     LessonModule,
-    TranslateModule,
     PassportModule,
   ],
   controllers: [],
