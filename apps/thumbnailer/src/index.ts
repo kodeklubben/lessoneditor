@@ -2,7 +2,7 @@ import type { HttpFunction } from "@google-cloud/functions-framework";
 import takeScreenshot from "./app/take-screenshot";
 import fastq from "fastq";
 import "dotenv/config";
-import { previewUrl } from "./app/preview-url";
+import { readRequest } from "./app/read-request";
 
 type Task = { url: string; token: string };
 const queue = fastq.promise(
@@ -16,13 +16,11 @@ export const thumbnailer: HttpFunction = async (req, res) => {
     return;
   }
   let url: URL;
-  const token = req.query.token;
+  let token: string;
   try {
-    url = previewUrl(req.query.url);
-    if (typeof token !== "string" || !token || token.length > 4096)
-      throw new Error("Invalid token");
+    ({ url, token } = readRequest(req.query, (name) => req.get(name)));
   } catch {
-    res.status(400).send("A valid preview URL and token are required");
+    res.status(400).send("A valid preview URL and an X-Preview-Token header are required");
     return;
   }
   if (queue.length() >= 10) {
@@ -30,13 +28,11 @@ export const thumbnailer: HttpFunction = async (req, res) => {
     return;
   }
   try {
-    const buffer = await queue.push({ url: url.href, token: token as string });
+    const buffer = await queue.push({ url: url.href, token });
     res.set("Content-Type", "image/png").set("Cache-Control", "no-store").status(200).send(buffer);
   } catch (error) {
     const message =
-      error instanceof Error
-        ? error.message.replaceAll(token as string, "[redacted]")
-        : "Unknown error";
+      error instanceof Error ? error.message.replaceAll(token, "[redacted]") : "Unknown error";
     console.error("Thumbnail generation failed:", message);
     res.status(500).send("Thumbnail generation failed");
   }

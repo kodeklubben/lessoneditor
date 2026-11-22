@@ -6,27 +6,31 @@ import { lastValueFrom } from "rxjs";
 import { Request } from "express";
 import { UserDTO } from "@lessoneditor/contracts";
 
+/** Must match the header the thumbnailer reads (apps/thumbnailer/src/app/read-request.ts). */
+export const PREVIEW_TOKEN_HEADER = "x-preview-token";
+
 @Injectable()
 export class ThumbService {
   constructor(private http: HttpService) {}
 
   async getThumb(lessonId: number, filename: string, request: Request): Promise<ArrayBuffer> {
     const baseUrl = this.baseUrl(request);
-    const previewurl = [baseUrl, "preview", lessonId, filename].join("/");
-    const url = this.thumbUrl(previewurl, request.user as UserDTO);
-    const response$ = this.http.get<ArrayBuffer>(url, {
-      responseType: "arraybuffer",
-    });
+    const previewurl = [baseUrl, "preview", lessonId, encodeURIComponent(filename)].join("/");
+    const { url, headers } = this.thumbRequest(previewurl, request.user as UserDTO);
+    const response$ = this.http.get<ArrayBuffer>(url, { responseType: "arraybuffer", headers });
     const response: AxiosResponse<ArrayBuffer> = await lastValueFrom(response$);
     return response.data;
   }
 
-  thumbUrl(previewUrl: string, user: UserDTO) {
+  /**
+   * The token goes in a header, never in the query string, which ends up in request logs.
+   * Not in Authorization: that is kept for Google's ID token once the function is private (IAM).
+   */
+  thumbRequest(previewUrl: string, user: UserDTO) {
     const url = new URL(process.env.THUMB_SERVICE_URL);
-    const token = this.createJwtToken(user.userId, process.env.JWT_SECRET);
     url.searchParams.append("url", previewUrl);
-    url.searchParams.append("token", token);
-    return url.toString();
+    const token = this.createJwtToken(user.userId, process.env.JWT_SECRET);
+    return { url: url.toString(), headers: { [PREVIEW_TOKEN_HEADER]: token } };
   }
 
   createJwtToken(userId, secret) {

@@ -1,6 +1,6 @@
 # Thumbnail service
 
-The service receives `GET ?url=<preview URL>&token=<short-lived token>` and returns a PNG. Only `/preview/:lessonId/:filename` on the configured `FRONTEND_URL` is accepted. Browser requests send authentication only to that origin. Request queues are bounded and errors do not include tokens.
+The service receives `GET ?url=<preview URL>` with the short-lived token in the `X-Preview-Token` header and returns a PNG. A token in the query string is refused, because query strings are written to the request log. `Authorization` is left free for Google's ID token, so the function can be made private (IAM) without code changes. Deploy this service and the backend together: an older backend sends the token in the query string. Only `/preview/:lessonId/:filename` on the configured `FRONTEND_URL` is accepted. Browser requests send authentication only to that origin. Request queues are bounded and errors do not include tokens.
 
 ## Local development
 
