@@ -8,6 +8,7 @@ import { LessonModule } from "../lesson/lesson.module";
 import { AuthModule } from "../auth/auth.module";
 import { join } from "path";
 import { ServeStaticModule } from "@nestjs/serve-static";
+import { APP_ROUTE, staticCacheHeaders } from "./static-assets";
 import { dataSourceOptions } from "../../../../db/data-sources";
 
 // Machine translation (../translate) is kept but not registered, so its endpoints do not exist and
@@ -24,6 +25,8 @@ import { dataSourceOptions } from "../../../../db/data-sources";
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, "../../../../../frontend"),
       exclude: ["/api", "/api/{*path}"],
+      renderPath: APP_ROUTE,
+      serveStaticOptions: { setHeaders: staticCacheHeaders() },
     }),
     TypeOrmModule.forRoot(dataSourceOptions),
     forwardRef(() => UserModule),
