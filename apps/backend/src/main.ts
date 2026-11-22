@@ -4,11 +4,11 @@ import { NestFactory } from "@nestjs/core";
 import { NestExpressApplication } from "@nestjs/platform-express";
 import { AppModule } from "./app/app.module";
 import { DataSource } from "typeorm";
-import * as ExpressSession from "express-session";
+import ExpressSession from "express-session";
 import { PostgresSessionStore } from "./session/postgres-session.store";
 import { Session } from "./session/session.entity";
-import * as passport from "passport";
-import * as cookieParser from "cookie-parser";
+import passport from "passport";
+import cookieParser from "cookie-parser";
 import { originCheck } from "./app/origin-check";
 
 async function bootstrap() {

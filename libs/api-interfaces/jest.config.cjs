@@ -2,5 +2,10 @@ module.exports = {
   displayName: "api-interfaces",
   preset: "../../jest.preset.js",
   testEnvironment: "node",
-  transform: { "^.+\\.ts$": ["ts-jest", { tsconfig: { module: "commonjs" } }] },
+  transform: {
+    "^.+\\.ts$": [
+      "ts-jest",
+      { tsconfig: { module: "commonjs", moduleResolution: "bundler", types: ["jest", "node"] } },
+    ],
+  },
 };

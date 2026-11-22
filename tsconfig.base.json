@@ -3,21 +3,26 @@
   "compilerOptions": {
     "rootDir": ".",
     "sourceMap": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
     "target": "es2022",
     "module": "esnext",
-    "lib": ["ES2022", "DOM"],
+    "lib": [
+      "ES2022",
+      "DOM"
+    ],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
-    "baseUrl": ".",
     "paths": {
-      "@lessoneditor/contracts": ["libs/contracts/src/index.ts"],
-      "@libs/*": ["libs/*"],
-      "libtest": ["libs/libtest/src/index.ts"]
+      "@lessoneditor/contracts": [
+        "./libs/contracts/src/index.ts"
+      ]
     }
   },
-  "exclude": ["node_modules", "tmp"]
+  "exclude": [
+    "node_modules",
+    "tmp"
+  ]
 }

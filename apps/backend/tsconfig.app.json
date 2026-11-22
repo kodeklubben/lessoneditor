@@ -2,11 +2,20 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "../../dist/apps/backend",
-    "module": "commonjs",
-    "types": ["node"],
+    "module": "node20",
+    "moduleResolution": "node16",
+    "types": [
+      "node"
+    ],
     "emitDecoratorMetadata": true,
     "target": "es2022"
   },
-  "exclude": ["**/*.spec.ts"],
-  "include": ["src/**/*.ts", "../../db/**/*.ts", "../../libs/contracts/src/**/*.ts"]
+  "exclude": [
+    "**/*.spec.ts"
+  ],
+  "include": [
+    "src/**/*.ts",
+    "../../db/**/*.ts",
+    "../../libs/contracts/src/**/*.ts"
+  ]
 }

@@ -14,3 +14,6 @@ declare module "*.module.scss" {
   const classes: Record<string, string>;
   export default classes;
 }
+// Plain stylesheets are imported for their side effect only.
+declare module "*.scss";
+declare module "*.css";
