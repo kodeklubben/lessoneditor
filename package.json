@@ -138,7 +138,7 @@
     "typescript": "6.0.3",
     "webpack": "5.113.0",
     "webpack-cli": "7.3.1",
-    "webpack-dev-server": "5.2.7"
+    "webpack-dev-server": "6.1.0"
   },
   "workspaces": [
     "apps/thumbnailer"
