@@ -21,6 +21,7 @@ import {
   buildUploadFiles,
   changedInRepo,
   changedUploads,
+  keepRepoFrontMatter,
   isPullRequestAlreadyExists,
   machineTranslationNote,
   pathsToDelete,
@@ -111,7 +112,15 @@ export class GithubService {
               "Lag en ny kopi og ta med endringene dine dit.",
           );
         }
-        uploads = changedSinceCopy.map(({ upload }) => upload);
+        uploads = await Promise.all(
+          changedSinceCopy.map(async ({ upload, upstreamSha }) => {
+            if (!upstreamSha || !upload.path.endsWith(".md")) return upload;
+            const { data } = await octokit.git.getBlob({ ...upstream, file_sha: upstreamSha });
+            const original = Buffer.from(data.content, "base64").toString("utf-8");
+            const text = keepRepoFrontMatter(original, upload.buffer.toString("utf-8"));
+            return { ...upload, buffer: Buffer.from(text, "utf-8") };
+          }),
+        );
       } else {
         uploads = buildUploadFiles(lesson, lesson.files);
       }

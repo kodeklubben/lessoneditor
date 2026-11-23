@@ -221,6 +221,14 @@ describe("submitting a copy of a published lesson", () => {
     (fake.octokit.repos as Record<string, unknown>).getContent = async () => ({
       data: repo.map((file) => ({ type: "file", ...file })),
     });
+    // The text as it is in the repo, for keeping its front matter.
+    (fake.octokit.git as Record<string, unknown>).getBlob = async () => ({
+      data: {
+        content: Buffer.from(
+          "---\ntitle: Asteroids\nlevel: 4\nauthor: 'Geir'\nlanguage: nb\n---\nTekst\n",
+        ).toString("base64"),
+      },
+    });
     const github = new GithubService();
     github.forkWaitMs = 0;
     github.createClient = () => fake.octokit as never;
@@ -245,7 +253,10 @@ describe("submitting a copy of a published lesson", () => {
       ["src/scratch/asteroids/asteroids.md", "blob-sha"],
     ]);
     const blob = fake.calls["git.createBlob"][0] as { content: string };
-    expect(Buffer.from(blob.content, "base64").toString()).toContain("level: 4");
+    // The repo's own front matter text, quotes included; only the body changed.
+    expect(Buffer.from(blob.content, "base64").toString()).toBe(
+      "---\ntitle: Asteroids\nlevel: 4\nauthor: 'Geir'\nlanguage: nb\n---\nTekst, rettet\n",
+    );
     expect(fake.calls["repos.createFork"]).toHaveLength(1);
     expect(fake.calls["pulls.create"][0]).toMatchObject({ title: "Endringer i Asteroids" });
   });

@@ -1,4 +1,5 @@
 import { createHash } from "crypto";
+import { isDeepStrictEqual } from "util";
 import { dump } from "js-yaml";
 import {
   parseLessonMarkdown,
@@ -94,6 +95,23 @@ export function buildUploadFiles(
 /** Git's blob id, so unchanged files can be skipped without downloading them from GitHub. */
 export function gitBlobSha(buffer: Buffer): string {
   return createHash("sha1").update(`blob ${buffer.length}\0`).update(buffer).digest("hex");
+}
+
+/**
+ * The repo's own front matter text when its values did not change, so a submitted text differs
+ * from the original only where the teacher edited it, not in quoting or line breaks that YAML
+ * writes differently. Both texts are in the repo's format.
+ */
+export function keepRepoFrontMatter(original: string, updated: string): string {
+  const before = parseLessonMarkdown(original);
+  const after = parseLessonMarkdown(updated);
+  if (!original.startsWith("---") || !isDeepStrictEqual(before.data, after.data)) return updated;
+  const close = original.indexOf("\n---", 3);
+  if (close === -1) return updated;
+  const lineEnd = original.indexOf("\n", close + 4);
+  const head =
+    lineEnd === -1 ? original.slice(0, close + 4) + "\n" : original.slice(0, lineEnd + 1);
+  return head + after.body;
 }
 
 /** A stored file of a lesson copied from the repo (docs/rediger-oppgave.md). */

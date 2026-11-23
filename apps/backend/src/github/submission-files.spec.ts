@@ -3,6 +3,7 @@ import {
   buildUploadFiles,
   changedInRepo,
   gitBlobSha,
+  keepRepoFrontMatter,
   machineTranslationNote,
   toRepoMarkdown,
 } from "./submission-files";
@@ -159,5 +160,26 @@ describe("submitting a copy of a published lesson", () => {
       { path: "src/s/a/annen.png", sha: "someone-else" },
     ];
     expect(changedInRepo(changed, repo)).toEqual(["a.md", "annen.png"]);
+  });
+});
+
+describe("the repo's front matter text", () => {
+  const original =
+    "---\ntitle: 'Heksens kjøkken'\nlevel: 1\nauthor: 'Johanna B. Stumpf'\nlanguage: nb\n---\n\n\n# Intro\n";
+
+  it("is kept when its values did not change, so only the edited body differs", () => {
+    const updated = toRepoMarkdown(toEditorMarkdown(original, "nb")).replace(
+      "# Intro\n",
+      "# Intro\n\nNy linje.\n",
+    );
+    expect(keepRepoFrontMatter(original, updated)).toBe(
+      "---\ntitle: 'Heksens kjøkken'\nlevel: 1\nauthor: 'Johanna B. Stumpf'\nlanguage: nb\n---\n\n\n# Intro\n\nNy linje.\n",
+    );
+  });
+
+  it("is written anew when the teacher changed a value", () => {
+    const updated =
+      "---\ntitle: Nytt navn\nlevel: 1\nauthor: Johanna B. Stumpf\nlanguage: nb\n---\n\n\n# Intro\n";
+    expect(keepRepoFrontMatter(original, updated)).toBe(updated);
   });
 });
