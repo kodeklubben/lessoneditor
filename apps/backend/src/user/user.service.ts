@@ -1,6 +1,13 @@
-import { Injectable, HttpException, HttpStatus, BadRequestException } from "@nestjs/common";
+import {
+  Injectable,
+  HttpException,
+  HttpStatus,
+  BadRequestException,
+  ConflictException,
+  Logger,
+} from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { IsNull, Repository } from "typeorm";
 import { UserDTO } from "@lessoneditor/contracts";
 import { User } from "./user.entity";
 import { NewLessonDTO, YamlContent, HeaderData } from "@lessoneditor/contracts";
@@ -9,6 +16,7 @@ import { invalidLessonFields } from "../../../../libs/contracts/src/lib/validati
 import { stringifyLessonMarkdown } from "../../../../libs/contracts/src/lib/frontmatter";
 import { FileStore, Lesson, isLessonOwner } from "../lesson/lesson.entity";
 import { oppgaveMal, imageTemplate } from "./fileTemplates";
+import { GithubService, publishedLessonMessage } from "../github/github.service";
 
 /** Slugs end up as paths in the lesson repo, so they are checked before they are stored. */
 export function assertValidLesson(lesson: NewLessonDTO) {
@@ -56,11 +64,14 @@ export function newLessonFiles(
 
 @Injectable()
 export class UserService {
+  private readonly logger = new Logger(UserService.name);
+
   constructor(
     @InjectRepository(Lesson)
     private lessonRepository: Repository<Lesson>,
     @InjectRepository(User)
     private userRepository: Repository<User>,
+    private githubService: GithubService,
   ) {}
 
   async getUser(userId: number): Promise<User> {
@@ -98,8 +109,12 @@ export class UserService {
     return this.getUser(userId);
   }
 
-  /** The lesson, its files and the membership are created together or not at all. */
-  async addUserLesson(userId: number, lesson: NewLessonDTO): Promise<number> {
+  /**
+   * The lesson, its files and the membership are created together or not at all. Its folder
+   * src/<course>/<slug> must be free: a submission writes there, and replaced a published lesson
+   * of the same name.
+   */
+  async addUserLesson(userId: number, lesson: NewLessonDTO, accessToken?: string): Promise<number> {
     // Without a language the text file was named <slug>_undefined.
     const withLanguage = { ...lesson, language: lesson.language ?? "nb" };
     assertValidLesson(withLanguage);
@@ -107,6 +122,32 @@ export class UserService {
     if (!user) {
       throw new HttpException("User does not exist", HttpStatus.NOT_FOUND);
     }
+    const own = await this.lessonRepository.findOne({
+      where: {
+        created_by_id: userId,
+        courseSlug: lesson.courseSlug,
+        lessonSlug: lesson.lessonSlug,
+        upstream_path: IsNull(),
+      },
+    });
+    if (own) {
+      throw new ConflictException(
+        `Du har allerede en oppgave som heter «${own.lessonTitle}» i dette kurset. Velg et annet navn.`,
+      );
+    }
+    const folder = ["src", lesson.courseSlug, lesson.lessonSlug].join("/");
+    let published = false;
+    if (accessToken) {
+      try {
+        published = await this.githubService.lessonFolderExists(accessToken, folder);
+      } catch (error) {
+        // Checked again, and strictly, when the lesson is submitted.
+        this.logger.warn(
+          `Could not check ${folder} on GitHub: ${(error as { status?: number }).status}`,
+        );
+      }
+    }
+    if (published) throw new ConflictException(publishedLessonMessage(folder));
 
     return this.lessonRepository.manager.transaction(async (manager) => {
       const newLesson = Object.assign(new Lesson(), {

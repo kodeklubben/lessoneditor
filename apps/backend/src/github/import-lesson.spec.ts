@@ -2,6 +2,7 @@ import {
   lessonTitleFrom,
   planImport,
   RepoEntry,
+  thumbnailText,
   toEditorLessonData,
   toEditorMarkdown,
 } from "./import-lesson";
@@ -73,6 +74,19 @@ describe("planImport", () => {
     expect(planImport([file("lesson.yml"), file("README.md")]).ok).toBe(false);
     const big = planImport([file("a.md"), file("lesson.yml"), file("stor.png", 6 * 1024 * 1024)]);
     expect(!big.ok && big.reason).toContain("stor.png");
+  });
+});
+
+describe("preview.png and the first thumbnail", () => {
+  it("copies the repo's preview.png, which some texts show", () => {
+    const plan = planImport([file("bilde.md"), file("lesson.yml"), file("preview.png")]);
+    expect(names(plan)).toContain("preview.png");
+  });
+
+  it("photographs bokmål first, and a lesson with only nynorsk too", () => {
+    expect(thumbnailText(["hyllest_nn", "README", "hyllest", "hyllest_en"])).toBe("hyllest");
+    expect(thumbnailText(["README_nn", "hyllest_en", "hyllest_nn"])).toBe("hyllest_nn");
+    expect(thumbnailText(["README"])).toBeNull();
   });
 });
 

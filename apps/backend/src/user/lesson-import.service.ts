@@ -8,7 +8,7 @@ import {
   UnprocessableEntityException,
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { In, Repository } from "typeorm";
 // Runtime code from the shared lib is imported by path: tsc does not rewrite the alias.
 import { splitTextName } from "../../../../libs/contracts/src/lib/files";
 import { isCourseSlug, isRepoName } from "../../../../libs/contracts/src/lib/validation";
@@ -17,6 +17,7 @@ import {
   lessonTitleFrom,
   planImport,
   RepoEntry,
+  thumbnailText,
   toEditorLessonData,
   toEditorMarkdown,
 } from "../github/import-lesson";
@@ -29,7 +30,15 @@ export interface ImportResult {
   lessonId: number;
   /** True when the user already had an unsubmitted copy, which is opened instead of a new one. */
   existing: boolean;
+  /**
+   * The text to photograph for the copy's thumbnail while it still has none, otherwise null.
+   * Also for an existing copy: the first import's answer can be lost to a reload.
+   */
+  thumbnailFrom: string | null;
 }
+
+/** The one-byte preview.png a lesson starts with, until its first thumbnail is taken. */
+const isPlaceholder = (content: Buffer) => content.length <= 1;
 
 const stem = (name: string) => name.slice(0, name.lastIndexOf("."));
 const ext = (name: string) => name.slice(name.lastIndexOf("."));
@@ -43,6 +52,7 @@ export class LessonImportService {
   constructor(
     @InjectRepository(Lesson) private lessonRepository: Repository<Lesson>,
     @InjectRepository(User) private userRepository: Repository<User>,
+    @InjectRepository(FileStore) private fileStoreRepository: Repository<FileStore>,
     private githubService: GithubService,
   ) {}
 
@@ -63,7 +73,21 @@ export class LessonImportService {
     const existing = await this.lessonRepository.findOne({
       where: { upstream_path: upstreamPath, created_by_id: userId, submitted: false },
     });
-    if (existing) return { lessonId: existing.lessonId, existing: true };
+    if (existing) {
+      const files = await this.fileStoreRepository.find({
+        select: { filename: true, ext: true, content: true, upstream_sha: true },
+        where: { lesson: { lessonId: existing.lessonId }, ext: In([".md", ".png"]) },
+      });
+      const preview = files.find((file) => file.filename === "preview" && file.ext === ".png");
+      const needsThumbnail = !preview || (!preview.upstream_sha && isPlaceholder(preview.content));
+      return {
+        lessonId: existing.lessonId,
+        existing: true,
+        thumbnailFrom: needsThumbnail
+          ? thumbnailText(files.filter((file) => file.ext === ".md").map((file) => file.filename))
+          : null,
+      };
+    }
 
     const octokit = this.githubService.createClient(accessToken);
     const upstream = { owner: env("GH_LESSON_REPO_OWNER"), repo: env("GH_LESSON_REPO") };
@@ -113,8 +137,9 @@ export class LessonImportService {
         imported_sha: gitBlobSha(content),
       });
     });
-    // A placeholder until the first thumbnail is taken; not part of the repo.
-    stored.push(
+    // Without one in the repo: a placeholder until the first thumbnail is taken, never submitted.
+    const hasPreview = plan.files.some((entry) => entry.name === "preview.png");
+    if (!hasPreview) stored.push(
       Object.assign(new FileStore(), {
         filename: "preview",
         ext: ".png",
@@ -162,6 +187,12 @@ export class LessonImportService {
         .add(saved.lessonId);
       return saved.lessonId;
     });
-    return { lessonId, existing: false };
+    return {
+      lessonId,
+      existing: false,
+      thumbnailFrom: hasPreview
+        ? null
+        : thumbnailText(texts.map(({ name }) => stem(name)).filter(Boolean)),
+    };
   }
 }

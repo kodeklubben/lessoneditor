@@ -107,41 +107,89 @@ describe("deleting files (K15)", () => {
 });
 
 describe("thumbnails (K14)", () => {
-  const setup = () => {
-    const lesson = { lessonId: 3, files: [{ filename: "hei", ext: ".md" }] };
-    const repository = { findOne: jest.fn().mockResolvedValue(lesson), save: jest.fn() };
+  type Row = { fileId: number; filename: string; ext: string; upstream_sha?: string | null };
+  // Answers findOne like the database, for the files of lesson 3.
+  const setup = (rows: Row[]) => {
+    const files = {
+      findOne: jest.fn(async ({ where }: { where: { filename: string; ext: string } }) => {
+        return rows.find((row) => row.filename === where.filename && row.ext === where.ext) ?? null;
+      }),
+      update: jest.fn(),
+      insert: jest.fn(),
+    };
+    const lessons = { save: jest.fn(), findOne: jest.fn() };
     const thumbs = { getThumb: jest.fn().mockResolvedValue(new Uint8Array([137, 80]).buffer) };
     const service = new LessonService(
-      repository as never,
+      lessons as never,
       undefined as never,
-      undefined as never,
+      files as never,
       undefined as never,
       thumbs as never,
     );
-    return { lesson, thumbs, service };
+    return { files, lessons, thumbs, service };
   };
+  const text = { fileId: 1, filename: "hei", ext: ".md" };
+
+  it("writes only the preview row, never the lesson with all its files", async () => {
+    const { files, lessons, service } = setup([text, { fileId: 2, filename: "preview", ext: ".png" }]);
+    await expect(service.updateThumbnail(3, "hei", {} as never)).resolves.toBe(true);
+    expect(files.update).toHaveBeenCalledWith(2, { content: expect.any(Buffer) });
+    expect(files.update.mock.calls[0][1].content[0]).toBe(137);
+    expect(lessons.save).not.toHaveBeenCalled();
+    expect(lessons.findOne).not.toHaveBeenCalled();
+  });
 
   it("creates preview.png when an older lesson has none", async () => {
-    const { lesson, service } = setup();
-    await expect(
-      service.updateThumbnail(3, "hei", { user: { username: "ada" } } as never),
-    ).resolves.toBe(true);
-    const preview = lesson.files.find((file) => file.filename === "preview") as unknown as {
-      ext: string;
-      content: Buffer;
-      created_by: string;
-    };
-    expect(preview.ext).toBe(".png");
-    expect(preview.content[0]).toBe(137);
-    expect(preview.created_by).toBe("ada");
+    const { files, service } = setup([text]);
+    await service.updateThumbnail(3, "hei", { user: { username: "ada" } } as never);
+    expect(files.insert).toHaveBeenCalledWith(
+      expect.objectContaining({
+        filename: "preview",
+        ext: ".png",
+        created_by: "ada",
+        lesson: { lessonId: 3 },
+      }),
+    );
+  });
+
+  it("keeps a copy's own preview.png from the repo", async () => {
+    const preview = { fileId: 2, filename: "preview", ext: ".png", upstream_sha: "abc" };
+    const { files, thumbs, service } = setup([text, preview]);
+    await expect(service.updateThumbnail(3, "hei", {} as never)).resolves.toBe(false);
+    expect(thumbs.getThumb).not.toHaveBeenCalled();
+    expect(files.update).not.toHaveBeenCalled();
   });
 
   it("refuses a file that is not a text of the lesson", async () => {
-    const { thumbs, service } = setup();
+    const { thumbs, service } = setup([text]);
     await expect(service.updateThumbnail(3, "ukjent", {} as never)).rejects.toThrow(
       "File does not exist",
     );
     expect(thumbs.getThumb).not.toHaveBeenCalled();
+  });
+});
+
+describe("saving a text", () => {
+  it("updates only that file's row and the lesson's time", async () => {
+    const file = { fileId: 5, filename: "hei", ext: ".md", content: Buffer.from("gammel") };
+    const files = { findOne: jest.fn().mockResolvedValue(file), update: jest.fn() };
+    const lessons = { save: jest.fn(), update: jest.fn() };
+    const users = { findOne: jest.fn().mockResolvedValue({ userId: 1, username: "ada" }) };
+    const service = new LessonService(
+      lessons as never,
+      users as never,
+      files as never,
+      undefined as never,
+      undefined as never,
+    );
+    const saved = await service.updateLessonFile(3, "hei", 1, "ny");
+    expect(files.update).toHaveBeenCalledWith(5, {
+      content: Buffer.from("ny"),
+      updated_by: "ada",
+    });
+    expect(lessons.update).toHaveBeenCalledWith(3, { updated_at: expect.any(Date) });
+    expect(lessons.save).not.toHaveBeenCalled();
+    expect(saved.content.toString()).toBe("ny");
   });
 });
 

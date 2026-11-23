@@ -2,7 +2,7 @@ import { ConflictException, Injectable, HttpException, HttpStatus, Logger } from
 import { Lesson, FileStore, isLessonOwner } from "./lesson.entity";
 import { User } from "../user/user.entity";
 import { InjectRepository } from "@nestjs/typeorm";
-import { Repository } from "typeorm";
+import { In, Repository } from "typeorm";
 import { NewFileDTO, ShareLessonDTO } from "@lessoneditor/contracts";
 import { GithubService } from "../github/github.service";
 import { ThumbService } from "../thumb/thumb.service";
@@ -175,18 +175,20 @@ export class LessonService {
     }
   }
 
+  /**
+   * Writes only this file's row. Saving the lesson with all its files (cascade) wrote every file
+   * back as it was loaded, over a text another request had saved in the meantime.
+   */
   async updateLessonFile(
     lessonId: number,
     filename: string,
     updatedByUserId: number,
     fileContent: string,
   ): Promise<FileStore> {
-    const lesson = await this.getLesson(lessonId);
-    lesson.updated_at = new Date();
     // Only texts are edited in place; an image with the same name must never be overwritten.
-    const file = lesson.files.find(
-      (file) => file.filename == filename && TEXT_EXTENSIONS.includes(file.ext),
-    );
+    const file = await this.fileStoreRepository.findOne({
+      where: { lesson: { lessonId }, filename, ext: In(TEXT_EXTENSIONS) },
+    });
     if (!file) {
       throw new HttpException("File does not exist", HttpStatus.NOT_FOUND);
     }
@@ -194,18 +196,34 @@ export class LessonService {
     if (!updatedByUser) {
       throw new HttpException("User does not exist", HttpStatus.NOT_FOUND);
     }
-    file.content = Buffer.from(fileContent);
-    file.updated_by = updatedByUser.username ?? String(updatedByUser.userId);
-    await this.lessonRepository.save(lesson);
-    return file;
+    const changes = {
+      content: Buffer.from(fileContent),
+      updated_by: updatedByUser.username ?? String(updatedByUser.userId),
+    };
+    await this.fileStoreRepository.update(file.fileId, changes);
+    await this.lessonRepository.update(lessonId, { updated_at: new Date() });
+    return Object.assign(file, changes);
   }
 
-  /** Photographs a text of the lesson and stores it as preview.png, which older lessons may lack. */
+  /**
+   * Photographs a text of the lesson and stores it as preview.png, which older lessons may lack.
+   * The photo takes 15–20 s, so only the preview row is written afterwards: texts saved meanwhile
+   * stay as they are. A copy's own preview.png from the repo is a picture the lesson shows, and
+   * is kept (false).
+   */
   async updateThumbnail(lessonId: number, filename: string, request: Request): Promise<boolean> {
-    const lesson = await this.getLesson(lessonId);
-    if (!lesson.files.some((file) => file.filename === filename && file.ext === ".md")) {
+    const text = await this.fileStoreRepository.findOne({
+      select: { fileId: true },
+      where: { lesson: { lessonId }, filename, ext: ".md" },
+    });
+    if (!text) {
       throw new HttpException("File does not exist", HttpStatus.NOT_FOUND);
     }
+    const preview = await this.fileStoreRepository.findOne({
+      select: { fileId: true, upstream_sha: true },
+      where: { lesson: { lessonId }, filename: "preview", ext: ".png" },
+    });
+    if (preview?.upstream_sha) return false;
     let thumbImage: ArrayBuffer;
     try {
       thumbImage = await this.thumbService.getThumb(lessonId, filename, request);
@@ -213,21 +231,20 @@ export class LessonService {
       this.logger.warn(`Thumbnail request failed for lesson ${lessonId}`);
       throw new HttpException("Error generating thumbnail", HttpStatus.BAD_GATEWAY);
     }
-    let previewFile = lesson.files.find(
-      (file) => file.filename === "preview" && file.ext === ".png",
-    );
-    if (!previewFile) {
+    const content = Buffer.from(thumbImage);
+    if (preview) {
+      await this.fileStoreRepository.update(preview.fileId, { content });
+    } else {
       const username = (request.user as User)?.username ?? "";
-      previewFile = Object.assign(new FileStore(), {
+      await this.fileStoreRepository.insert({
         filename: "preview",
         ext: ".png",
+        content,
         created_by: username,
         updated_by: username,
+        lesson: { lessonId } as Lesson,
       });
-      lesson.files.push(previewFile);
     }
-    previewFile.content = Buffer.from(thumbImage);
-    await this.lessonRepository.save(lesson);
     return true;
   }
 
