@@ -1,9 +1,12 @@
 import {
+  buildChangedUploads,
   buildUploadFiles,
+  changedInRepo,
   gitBlobSha,
   machineTranslationNote,
   toRepoMarkdown,
 } from "./submission-files";
+import { toEditorMarkdown } from "./import-lesson";
 
 const md = (header: string, body: string) => Buffer.from(`---\n${header}---\n${body}`);
 
@@ -93,5 +96,68 @@ describe("machine translated texts", () => {
     expect(
       buildUploadFiles({ courseSlug: "python", lessonSlug: "hei" }, files)[1].buffer.toString(),
     ).toBe("---\ntitle: Hei\nauthor: Ada\ntranslator: Bo\nlanguage: en\n---\nText");
+  });
+});
+
+describe("submitting a copy of a published lesson", () => {
+  const repoText =
+    "---\ntitle: Asteroids\nlevel: 4\nauthor: Geir Arne Hjelle\nlanguage: nb\n---\n\n# Intro {.intro}\n";
+  const stored = (filename: string, ext: string, content: string, imported = true) => {
+    const buffer = Buffer.from(content);
+    return {
+      filename,
+      ext,
+      content: buffer,
+      imported_sha: imported ? gitBlobSha(buffer) : null,
+      upstream_sha: imported ? `repo-${filename}${ext}` : null,
+    };
+  };
+  const editorText = toEditorMarkdown(repoText, "nb");
+
+  it("keeps fields the editor does not know, such as level", () => {
+    expect(toRepoMarkdown(editorText)).toBe(
+      "---\ntitle: Asteroids\nlevel: 4\nlanguage: nb\nauthor: Geir Arne Hjelle\n---\n\n# Intro {.intro}\n",
+    );
+  });
+
+  it("sends nothing for a copy nobody changed", () => {
+    const files = [
+      stored("asteroids", ".md", editorText),
+      stored("lesson", ".yml", '{"level":4}'),
+      stored("asteroids", ".png", "png"),
+      stored("preview", ".png", " ", false),
+    ];
+    expect(buildChangedUploads("src/scratch/asteroids", files)).toEqual([]);
+  });
+
+  it("sends only the changed text and a new image, under the repo's folder", () => {
+    const text = stored("asteroids", ".md", editorText);
+    const files = [
+      { ...text, content: Buffer.from(editorText + "Ny linje.\n") },
+      stored("asteroids_nn", ".md", toEditorMarkdown(repoText, "nn")),
+      stored("nytt_bilde", ".png", "png", false),
+    ];
+    const changed = buildChangedUploads("src/scratch/asteroids", files);
+    expect(changed.map(({ upload, upstreamSha }) => [upload.path, upstreamSha])).toEqual([
+      ["src/scratch/asteroids/asteroids.md", "repo-asteroids.md"],
+      ["src/scratch/asteroids/nytt_bilde.png", null],
+    ]);
+    expect(changed[0].upload.buffer.toString()).toContain("level: 4");
+    expect(changed[0].upload.buffer.toString()).toContain("Ny linje.");
+  });
+
+  it("finds files changed in the repo since the copy was made", () => {
+    const changed = [
+      { upload: { path: "src/s/a/a.md", buffer: Buffer.from("x") }, upstreamSha: "old" },
+      { upload: { path: "src/s/a/b.md", buffer: Buffer.from("x") }, upstreamSha: "same" },
+      { upload: { path: "src/s/a/ny.png", buffer: Buffer.from("x") }, upstreamSha: null },
+      { upload: { path: "src/s/a/annen.png", buffer: Buffer.from("x") }, upstreamSha: null },
+    ];
+    const repo = [
+      { path: "src/s/a/a.md", sha: "new" },
+      { path: "src/s/a/b.md", sha: "same" },
+      { path: "src/s/a/annen.png", sha: "someone-else" },
+    ];
+    expect(changedInRepo(changed, repo)).toEqual(["a.md", "annen.png"]);
   });
 });
