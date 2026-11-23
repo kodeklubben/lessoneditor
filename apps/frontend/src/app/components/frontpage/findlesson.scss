@@ -32,6 +32,42 @@
     }
   }
 
+  // The search field with × on the right while there is something to empty.
+  .find-lesson__search {
+    position: relative;
+
+    .ui.input > input {
+      padding-right: 2.75rem !important;
+    }
+  }
+
+  .find-lesson__clear-search {
+    position: absolute;
+    top: 50%;
+    right: 0.5rem;
+    transform: translateY(-50%);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border: 0;
+    border-radius: 50%;
+    background: none;
+    color: var(--le-muted);
+    cursor: pointer;
+
+    .icon {
+      margin: 0;
+    }
+
+    &:hover,
+    &:focus-visible {
+      background: var(--le-band);
+      color: var(--le-ink);
+    }
+  }
+
   .find-lesson__filters {
     display: flex;
     flex-wrap: wrap;
@@ -239,6 +275,7 @@
     padding: 2rem 0;
 
     p {
+      margin: 0 0 0.75rem;
       font-size: 1.1rem;
       color: var(--le-muted);
     }

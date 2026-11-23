@@ -1,5 +1,5 @@
 import "./findlesson.scss";
-import { FC, useDeferredValue, useMemo, useState } from "react";
+import { FC, useDeferredValue, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router";
 import { Button, Dropdown, Icon, Input, Message, Modal } from "semantic-ui-react";
 import { CatalogLesson } from "@lessoneditor/contracts";
@@ -56,6 +56,8 @@ const FindLessonDialog: FC<{ onClose: () => void }> = ({ onClose }) => {
   const [language, setLanguage] = useState<string>();
   const [shown, setShown] = useState(PAGE);
   const [viewMode, setViewMode] = useViewMode("find-lesson");
+  // The field itself, to put the cursor back after «Tøm søket».
+  const searchRef = useRef<HTMLInputElement | null>(null);
   const [copying, setCopying] = useState<string>();
   const [error, setError] = useState("");
   // Typing stays quick while the results catch up.
@@ -150,12 +152,16 @@ const FindLessonDialog: FC<{ onClose: () => void }> = ({ onClose }) => {
     setCourse(undefined);
     setLevel(undefined);
     setLanguage(undefined);
+    setShown(PAGE);
+    searchRef.current?.focus();
   };
 
   return (
     <Modal
       open
       onClose={copying ? undefined : onClose}
+      // Esc empties the search first (the field's own handler); with an empty search it closes.
+      closeOnEscape={!query && !copying}
       closeIcon={!copying}
       size="large"
       dimmer="inverted"
@@ -171,19 +177,49 @@ const FindLessonDialog: FC<{ onClose: () => void }> = ({ onClose }) => {
       </Modal.Header>
 
       <div className="find-lesson__controls">
-        <Input
-          fluid
-          autoFocus
-          icon="search"
-          iconPosition="left"
-          placeholder="Søk etter tittel, kurs eller tema"
-          value={query}
-          onChange={(_e, { value }) => {
-            setQuery(value);
-            setShown(PAGE);
+        <div
+          className="find-lesson__search"
+          ref={(element) => {
+            searchRef.current = element?.querySelector("input") ?? null;
           }}
-          aria-label="Søk etter oppgaver"
-        />
+        >
+          <Input
+            fluid
+            autoFocus
+            icon="search"
+            iconPosition="left"
+            placeholder="Søk etter tittel, kurs eller tema"
+            value={query}
+            onChange={(_e, { value }) => {
+              setQuery(value);
+              setShown(PAGE);
+            }}
+            // Esc empties the search first; the dialog closes on Esc only when it is empty.
+            onKeyDown={(event: React.KeyboardEvent) => {
+              if (event.key === "Escape" && query) {
+                event.stopPropagation();
+                event.preventDefault();
+                setQuery("");
+              }
+            }}
+            aria-label="Søk etter oppgaver"
+          />
+          {query && (
+            <button
+              type="button"
+              className="find-lesson__clear-search"
+              aria-label="Tøm søket"
+              title="Tøm søket"
+              onClick={() => {
+                setQuery("");
+                setShown(PAGE);
+                searchRef.current?.focus();
+              }}
+            >
+              <Icon name="close" />
+            </button>
+          )}
+        </div>
         <div className="find-lesson__filters">
           <Dropdown
             selection
@@ -270,7 +306,15 @@ const FindLessonDialog: FC<{ onClose: () => void }> = ({ onClose }) => {
             {results.length === 0 ? (
               <div className="find-lesson__empty">
                 <img src="assets/public/maskot.png" alt="" width={96} height={96} />
-                <p>Ingen oppgaver passer. Prøv et annet ord, eller fjern et filter.</p>
+                <div>
+                  <p>Ingen oppgaver passer. Prøv et annet ord, eller fjern et filter.</p>
+                  <Button
+                    className="le-secondary"
+                    icon="undo"
+                    content="Fjern søk og filtre"
+                    onClick={clear}
+                  />
+                </div>
               </div>
             ) : (
               <div className={`find-lesson__grid find-lesson__grid--${viewMode}`}>
