@@ -235,10 +235,11 @@ export class LessonService {
   }
 
   /**
-   * Photographs a text of the lesson and stores it as preview.png, which older lessons may lack.
-   * The photo takes 15–20 s, so only the preview row is written afterwards: texts saved meanwhile
-   * stay as they are. A copy's own preview.png from the repo is a picture the lesson shows, and
-   * is kept (false).
+   * Photographs a text and stores the picture with it, for its row on the lesson page. The main
+   * text's picture (bokmål first) is also the lesson's preview.png, for its card and «Sende
+   * inn»; a teacher guide or a translation never is (N5). The photo takes 6–20 s, so only those
+   * rows are written afterwards: texts saved meanwhile stay as they are. A copy's own
+   * preview.png from the repo is a picture the lesson shows, and is kept.
    */
   async updateThumbnail(lessonId: number, filename: string, request: Request): Promise<boolean> {
     const text = await this.fileStoreRepository.findOne({
@@ -248,18 +249,17 @@ export class LessonService {
     if (!text) {
       throw new HttpException("File does not exist", HttpStatus.NOT_FOUND);
     }
-    // One thumbnail per lesson, always of its main text (bokmål first), not of whichever text was
-    // saved last: a teacher guide or a translation made every card show that instead (N5).
     const texts = await this.fileStoreRepository.find({
       select: { filename: true },
       where: { lesson: { lessonId }, ext: ".md" },
     });
-    if (thumbnailText(texts.map((file) => file.filename)) !== filename) return false;
-    const preview = await this.fileStoreRepository.findOne({
-      select: { fileId: true, upstream_sha: true },
-      where: { lesson: { lessonId }, filename: "preview", ext: ".png" },
-    });
-    if (preview?.upstream_sha) return false;
+    const isMain = thumbnailText(texts.map((file) => file.filename)) === filename;
+    const preview = isMain
+      ? await this.fileStoreRepository.findOne({
+          select: { fileId: true, upstream_sha: true },
+          where: { lesson: { lessonId }, filename: "preview", ext: ".png" },
+        })
+      : null;
     let thumbImage: ArrayBuffer;
     try {
       thumbImage = await this.thumbService.getThumb(lessonId, filename, request);
@@ -268,6 +268,8 @@ export class LessonService {
       throw new HttpException("Error generating thumbnail", HttpStatus.BAD_GATEWAY);
     }
     const content = Buffer.from(thumbImage);
+    await this.fileStoreRepository.update(text.fileId, { thumbnail: content });
+    if (!isMain || preview?.upstream_sha) return true;
     if (preview) {
       await this.fileStoreRepository.update(preview.fileId, { content });
     } else {
@@ -282,6 +284,38 @@ export class LessonService {
       });
     }
     return true;
+  }
+
+  /**
+   * The main text to photograph when the lesson still has only the one-byte placeholder (or no
+   * preview.png), otherwise undefined: then nothing needs doing (9f).
+   */
+  async textForMissingPreview(lessonId: number): Promise<string | undefined> {
+    const preview = await this.fileStoreRepository.findOne({
+      select: { fileId: true, content: true, upstream_sha: true },
+      where: { lesson: { lessonId }, filename: "preview", ext: ".png" },
+    });
+    if (preview && (preview.upstream_sha || preview.content.length > 1)) return undefined;
+    return this.mainText(lessonId);
+  }
+
+  /** The lesson's main text (bokmål first); undefined without texts. */
+  async mainText(lessonId: number): Promise<string | undefined> {
+    const texts = await this.fileStoreRepository.find({
+      select: { filename: true },
+      where: { lesson: { lessonId }, ext: ".md" },
+    });
+    return thumbnailText(texts.map((file) => file.filename)) ?? undefined;
+  }
+
+  /** A text's own thumbnail, or null when it has none yet. */
+  async textThumbnail(lessonId: number, filename: string): Promise<Buffer | null> {
+    const text = await this.fileStoreRepository.findOne({
+      select: { fileId: true, thumbnail: true },
+      where: { lesson: { lessonId }, filename, ext: ".md" },
+    });
+    if (!text) throw new HttpException("File does not exist", HttpStatus.NOT_FOUND);
+    return text.thumbnail ?? null;
   }
 
   async deleteLessonFile(lessonId: number, filename: string, ext: string): Promise<number> {

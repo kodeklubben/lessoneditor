@@ -86,6 +86,13 @@ export class FileStore {
   @Column()
   updated_by!: string;
 
+  /**
+   * For a text: a PNG of it, for its row on the lesson page. Not loaded unless asked for
+   * (select: false), so reading a lesson's files does not fetch every picture.
+   */
+  @Column({ type: "bytea", nullable: true, select: false })
+  thumbnail!: Buffer | null;
+
   /** For an imported file: the blob sha it had in kodeklubben/oppgaver. */
   @Column({ type: "varchar", nullable: true })
   upstream_sha!: string | null;

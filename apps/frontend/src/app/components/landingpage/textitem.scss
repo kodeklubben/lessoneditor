@@ -46,7 +46,8 @@
     max-width: 10rem;
     display: flex;
     flex-flow: column;
-    align-items: flex-end;
+    // Left: «Tittel:» and «Språk:» start at the same place in every row (9e).
+    align-items: flex-start;
     h2 {
       font-size: 0.8rem;
       margin-left: 0.4rem;

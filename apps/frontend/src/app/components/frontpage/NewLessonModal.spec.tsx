@@ -5,7 +5,7 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 // react-router needs these, and jsdom does not have them.
 Object.assign(globalThis, { TextEncoder, TextDecoder });
 const { MemoryRouter } = require("react-router");
-const { default: NewLessonModal, newLessonProblem } = require("./NewLessonModal");
+const { default: NewLessonModal, newLessonProblem, matchesCourse } = require("./NewLessonModal");
 
 const mockAddLesson = jest.fn();
 jest.mock("../../contexts/UserContext", () => ({
@@ -74,5 +74,17 @@ describe("NewLessonModal", () => {
       "Asteroids",
       "nb",
     );
+  });
+
+  it("does not offer a new course for a search that names one in the list (2)", () => {
+    const courses = [
+      { text: "Micro:bit", value: "microbit" },
+      { text: "Scratch", value: "scratch" },
+    ];
+    expect(matchesCourse("micro", courses)).toBe(true);
+    expect(matchesCourse("MICRO:BIT", courses)).toBe(true);
+    expect(matchesCourse("micro bit", courses)).toBe(true);
+    expect(matchesCourse("Robotikk", courses)).toBe(false);
+    expect(matchesCourse("", courses)).toBe(false);
   });
 });

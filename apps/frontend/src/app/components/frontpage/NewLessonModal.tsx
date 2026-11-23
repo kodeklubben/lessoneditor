@@ -4,7 +4,7 @@ import slugify from "slugify";
 import { COURSESLIST, LANGUAGEOPTIONS } from "./settings/newLessonOptions";
 import { useUserContext } from "../../contexts/UserContext";
 import { useNavigate } from "react-router";
-import { Button, Input, Modal, Dropdown } from "semantic-ui-react";
+import { Button, Input, Modal, Dropdown, Header } from "semantic-ui-react";
 import FieldError from "../shared/FieldError";
 import { isCourseSlug, isLessonSlug, isTitle, MAX_TITLE_LENGTH } from "@lessoneditor/contracts";
 
@@ -14,6 +14,23 @@ interface NewLessonModalProps {
 }
 
 const toSlug = (text: string) => slugify(text, { lower: true, strict: true });
+
+/** "Micro:bit", "micro bit" and "MICRO" compare alike: letters and digits only, lower case. */
+const loose = (text: string) => text.toLowerCase().replace(/[^\p{L}\p{N}]/gu, "");
+
+/**
+ * Whether a search already names a course in the list, so «Legg til nytt kurs» is not offered
+ * for it (2): typing "micro" must find Micro:bit, not make a course called micro.
+ */
+export function matchesCourse(query: string, courses: { text: string; value: string }[]) {
+  const wanted = loose(query);
+  return (
+    wanted.length > 0 &&
+    courses.some(
+      (course) => loose(course.text).includes(wanted) || loose(course.value).includes(wanted),
+    )
+  );
+}
 
 /** Why the lesson cannot be created from these fields, or null. The slug becomes its folder name. */
 export function newLessonProblem(title: string, course: string): string | null {
@@ -48,11 +65,15 @@ const NewLessonModal: FC<NewLessonModalProps> = ({ openNewLessonModal, setOpenNe
   const defaultState: LessonData = {
     lessonTitle: "",
     language: LANGUAGEOPTIONS[0].value,
-    courses: COURSESLIST,
+    // A copy: a course added in one dialog must not stay in the list after it is cancelled.
+    courses: [...COURSESLIST],
     course: COURSESLIST[0].value,
   };
   const [lessonData, setLessonData] = useState<LessonData>(defaultState);
   const [openNewCourseModal, setOpenNewCourseModal] = useState(false);
+  const [courseSearch, setCourseSearch] = useState("");
+  // The course chosen before «Legg til nytt kurs», to go back to if the teacher regrets it.
+  const [previousCourse, setPreviousCourse] = useState<string>(COURSESLIST[0].value);
   const [problem, setProblem] = useState<string | null>(null);
 
   const onChange = (e: SyntheticEvent, { name, value }: Record<string, string>) => {
@@ -61,16 +82,24 @@ const NewLessonModal: FC<NewLessonModalProps> = ({ openNewLessonModal, setOpenNe
   };
 
   const addCourseHandler = (e: SyntheticEvent, { value: v }: Record<string, string>) => {
-    const tempCourselist = COURSESLIST;
     const newCourseSlug = toSlug(v);
-    tempCourselist.push({ key: newCourseSlug, text: v, value: newCourseSlug });
+    setPreviousCourse(lessonData.course);
     setLessonData((prevValues) => ({
       ...prevValues,
+      courses: [...prevValues.courses, { key: newCourseSlug, text: v, value: newCourseSlug }],
       course: newCourseSlug,
     }));
-
     setOpenNewCourseModal(true);
-    COURSESLIST.splice(0, COURSESLIST.length, ...tempCourselist);
+  };
+
+  /** «Velg et kurs som finnes»: undoes the new course and goes back to the one before. */
+  const regretNewCourse = () => {
+    setLessonData((prevValues) => ({
+      ...prevValues,
+      courses: prevValues.courses.filter((course) => course.value !== prevValues.course),
+      course: previousCourse,
+    }));
+    setOpenNewCourseModal(false);
   };
 
   const closeModal = () => {
@@ -117,13 +146,21 @@ const NewLessonModal: FC<NewLessonModalProps> = ({ openNewLessonModal, setOpenNe
 
   return (
     <>
-      <Modal
-        open={openNewCourseModal}
-        onClose={() => setOpenNewCourseModal(false)}
-        header="Opprette et nytt kurs"
-        content="Kurset vil bli opprettet når moderatorer har gått gjennom innleveringen"
-        actions={[{ key: "Ok", content: "Ok", positive: true }]}
-      />
+      <Modal open={openNewCourseModal} onClose={regretNewCourse} size="tiny" dimmer="inverted">
+        <Modal.Content>
+          <Header as="h2" size="medium">
+            Nytt kurs: «{lessonData.courses.find((c) => c.value === lessonData.course)?.text}»
+          </Header>
+          <p>
+            Oppgaven legges i et kurs som ikke finnes ennå. Kurset opprettes når Lær Kidsa Koding
+            har gått gjennom innsendingen.
+          </p>
+        </Modal.Content>
+        <Modal.Actions>
+          <Button basic content="Velg et kurs som finnes" onClick={regretNewCourse} />
+          <Button positive content="Bruk nytt kurs" onClick={() => setOpenNewCourseModal(false)} />
+        </Modal.Actions>
+      </Modal>
       <Modal
         className="new-lesson-modal"
         closeOnDimmerClick={!loading}
@@ -165,11 +202,19 @@ const NewLessonModal: FC<NewLessonModalProps> = ({ openNewLessonModal, setOpenNe
                   fluid
                   search
                   selection
-                  allowAdditions
+                  // Leaving the field (or clicking Avbryt) must never pick «Legg til nytt kurs».
+                  selectOnBlur={false}
+                  selectOnNavigation={false}
+                  allowAdditions={!matchesCourse(courseSearch, lessonData.courses)}
+                  additionPosition="bottom"
+                  onSearchChange={(_e, { searchQuery }) => setCourseSearch(searchQuery)}
                   name="course"
                   additionLabel="Legg til nytt kurs: "
                   onAddItem={addCourseHandler}
-                  onChange={onChange}
+                  onChange={(e, data) => {
+                    setCourseSearch("");
+                    onChange(e, data as unknown as Record<string, string>);
+                  }}
                 />
               </div>
               <div className="new-lesson-modal-container__language">

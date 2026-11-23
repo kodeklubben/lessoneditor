@@ -7,6 +7,8 @@ export const paths = {
   LESSON_FILE_UPDATE: "/api/lesson/:lessonId/files/:filename",
   LESSON_FILE_UPDATE_THUMB: "/api/lesson/:lessonId/files/:filename/updateThumbnail",
   LESSON_WARMUP: "/api/lesson/:lessonId/warmup",
+  LESSON_TEXT_THUMB: "/api/lesson/:lessonId/files/:filename/thumbnail",
+  LESSON_THUMB: "/api/lesson/:lessonId/thumbnail",
   LESSON_FILE_DELETE: "/api/lesson/:lessonId/files/:filename/:ext",
   LESSON_SUBMIT: "/api/lesson/:lessonId/submit",
   // Machine translation is hidden (TranslateModule is not registered); kept with the module.
