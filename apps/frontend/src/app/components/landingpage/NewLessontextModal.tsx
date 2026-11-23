@@ -88,14 +88,21 @@ const NewLessontextModal: FC<Props> = ({
   useEffect(() => {
     setLanguage(unused[0]?.value ?? "");
     setTranslateFrom(used[0]?.value ?? "");
+    setCopyChoice(undefined);
     setError("");
   }, [textMode]);
 
   const canTranslate = translationEnabled && used.length > 0 && unused.length > 0;
   const translating = translate && canTranslate;
-  // Without machine translation, a new language starts as a copy of an existing text (V6).
-  const copyFrom = translating ? undefined : copySourceLanguage(used);
+  // Without machine translation, a new language starts as a copy of an existing text (V6). Which
+  // one is the teacher's choice (9c), bokmål first; "" starts from the template.
+  const [copyChoice, setCopyChoice] = useState<string | undefined>(undefined);
+  const copyFrom = translating ? undefined : (copyChoice ?? copySourceLanguage(used)) || undefined;
   const copyFromName = used.find((option) => option.value === copyFrom)?.text;
+  const copyOptions = [
+    ...[...used].sort((a, b) => (a.value === "nb" ? -1 : b.value === "nb" ? 1 : 0)),
+    { key: "template", value: "", text: "Ingen – start med malen" },
+  ];
 
   const openEditor = (lang: string) =>
     navigate(
@@ -240,6 +247,21 @@ const NewLessontextModal: FC<Props> = ({
               value={translateFrom}
               onChange={(_e, data) => setTranslateFrom(String(data.value))}
               options={used}
+              disabled={loading}
+            />
+          </>
+        )}
+        {!translating && used.length > 0 && (
+          <>
+            <label htmlFor="copy-from" style={{ fontWeight: 700 }}>
+              Kopier fra:
+            </label>
+            <Dropdown
+              id="copy-from"
+              selection
+              value={copyFrom ?? ""}
+              onChange={(_e, data) => setCopyChoice(String(data.value))}
+              options={copyOptions}
               disabled={loading}
             />
           </>

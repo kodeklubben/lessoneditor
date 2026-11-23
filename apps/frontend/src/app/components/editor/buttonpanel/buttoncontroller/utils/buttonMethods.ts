@@ -7,12 +7,15 @@ const ifNewLine = (mdText: string, cursorPositionStart: number) => {
   return mdText[cursorPositionStart - 1] === "\n" || cursorPositionStart === 0;
 };
 
-const doNotNeedNewLine = (output: string) => {
+/** Inline buttons (bold, code, block colours …) go in the line, the rest on a line of their own. */
+const doNotNeedNewLine = (output: string, placeholder: string) => {
+  // The outputs are written with «Tekst her»; compare them as the text's language has them.
+  const same = (candidate: string) => candidate.replaceAll(DEFAULT_TEXT, placeholder) === output;
   return (
-    Object.entries(emphasis).findIndex((item) => item[1].output === output) > -1 ||
-    Object.entries(microbitbuttons).findIndex((item) => item[1].output === output) > -1 ||
-    Object.entries(scratchbuttons).findIndex((item) => item[1].output === output) > -1 ||
-    output === codebuttons.inline.output
+    Object.values(emphasis).some((item) => same(item.output)) ||
+    Object.values(microbitbuttons).some((item) => same(item.output)) ||
+    Object.values(scratchbuttons).some((item) => same(item.output)) ||
+    same(codebuttons.inline.output)
   );
 };
 
@@ -34,6 +37,7 @@ const trimTextAndUpdatePosition = (
   cursorPositionEnd: number,
   output: string,
   cursorIntON: number,
+  placeholder: string,
 ): Result => {
   let i = mdText.slice(cursorPositionStart, cursorPositionEnd);
   while (i[0] === " " || i[i.length - 1] === " " || i[0] === "\n" || i[i.length - 1] === "\n") {
@@ -50,7 +54,7 @@ const trimTextAndUpdatePosition = (
     mdText.slice(0, cursorPositionStart) +
     output.slice(0, cursorIntON) +
     i +
-    output.slice(cursorIntON + DEFAULT_TEXT.length) +
+    output.slice(cursorIntON + placeholder.length) +
     mdText.slice(cursorPositionEnd);
 
   cursorPositionStart += cursorIntON;
@@ -69,9 +73,10 @@ const unwrapInline = (
   end: number,
   output: string,
   cursorIntON: number,
+  placeholder: string,
 ): Result | undefined => {
   const before = output.slice(0, cursorIntON);
-  const after = output.slice(cursorIntON + DEFAULT_TEXT.length);
+  const after = output.slice(cursorIntON + placeholder.length);
   if (!before || !after) return undefined;
   // "*" next to "**" is part of the bold marker, not italic: count the whole run of that
   // character. A run of three is bold and italic, from which either can be removed.
@@ -117,8 +122,10 @@ export const buttonAction = (
   cursorIntON: number,
   _cursorIntOFF: number,
   output: string,
+  /** The placeholder in `output`, in the text's language (9d). */
+  placeholder: string = DEFAULT_TEXT,
 ): Result => {
-  const inline = doNotNeedNewLine(output);
+  const inline = doNotNeedNewLine(output, placeholder);
 
   if (inline && cursorPositionStart !== cursorPositionEnd) {
     const unwrapped = unwrapInline(
@@ -127,6 +134,7 @@ export const buttonAction = (
       cursorPositionEnd,
       output,
       cursorIntON,
+      placeholder,
     );
     if (unwrapped) return unwrapped;
   }
@@ -134,7 +142,7 @@ export const buttonAction = (
   // A section, list or code block while the placeholder of the previous one is still selected:
   // start a new line after it instead of wrapping the placeholder, so the blocks come in the
   // order they were clicked.
-  if (!inline && mdText.slice(cursorPositionStart, cursorPositionEnd) === DEFAULT_TEXT) {
+  if (!inline && mdText.slice(cursorPositionStart, cursorPositionEnd) === placeholder) {
     let after = cursorPositionEnd;
     if (isInsideCodeBlock(mdText, after)) {
       // After the closing fence, not inside the code block.
@@ -166,13 +174,14 @@ export const buttonAction = (
       cursorPositionEnd,
       output,
       cursorIntON,
+      placeholder,
     );
   }
 
   mdText = mdText.slice(0, cursorPositionStart) + output + mdText.slice(cursorPositionStart);
 
   cursorPositionStart += cursorIntON;
-  cursorPositionEnd += cursorIntON + DEFAULT_TEXT.length;
+  cursorPositionEnd += cursorIntON + placeholder.length;
   return {
     mdText,
     cursorPositionStart,
