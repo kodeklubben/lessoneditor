@@ -1,8 +1,20 @@
-export type AutosaveStatus = "idle" | "dirty" | "saving" | "saved" | "error";
+export type AutosaveStatus =
+  | "idle"
+  | "dirty"
+  | "saving"
+  | "saved"
+  | "error"
+  /** Saved elsewhere meanwhile (another tab, a co-author): waits for the user to choose. */
+  | "conflict"
+  /** The text is gone (deleted in another tab): saving again cannot help. */
+  | "missing";
+
+/** A save that must not be retried: the user has to decide what happens to the text. */
+export type SaveRefusal = "conflict" | "missing";
 
 export interface AutosaveOptions {
   /** Saves the text; resolves true on success. Always called with the newest text. */
-  save: (text: string) => Promise<boolean>;
+  save: (text: string) => Promise<boolean | SaveRefusal>;
   onStatus?: (status: AutosaveStatus) => void;
   /** Quiet time after the last change before saving. */
   delay?: number;
@@ -36,6 +48,7 @@ export class AutosaveController {
   update(text: string) {
     this.latest = text;
     this.clearTimer();
+    if (this.status === "conflict" || this.status === "missing") return;
     if (!this.isDirty) {
       if (this.status === "dirty") this.setStatus("idle");
       return;
@@ -62,17 +75,28 @@ export class AutosaveController {
     this.clearTimer();
     while (this.running) await this.running.catch(() => false);
     if (!this.isDirty) return this.status !== "error" || !this.latest;
+    // A refused save waits for the user (overwrite or reload), not for the next keystroke.
+    if (this.status === "conflict" || this.status === "missing") return false;
     const text = this.latest as string;
     this.setStatus("saving");
+    let refusal: SaveRefusal | undefined;
     this.running = this.options
       .save(text)
       .catch(() => false)
-      .then((ok) => {
-        if (ok) this.saved = text;
-        return ok;
+      .then((result) => {
+        if (result === "conflict" || result === "missing") {
+          refusal = result;
+          return false;
+        }
+        if (result) this.saved = text;
+        return result;
       });
     const ok = await this.running;
     this.running = undefined;
+    if (refusal) {
+      this.setStatus(refusal);
+      return false;
+    }
     if (!ok) {
       this.setStatus("error");
       return false;
@@ -80,6 +104,12 @@ export class AutosaveController {
     if (this.isDirty) return this.flush();
     this.setStatus("saved");
     return true;
+  }
+
+  /** After the user chose to keep their text over the other version: save it again now. */
+  retry(): Promise<boolean> {
+    this.setStatus("dirty");
+    return this.flush();
   }
 
   dispose() {
