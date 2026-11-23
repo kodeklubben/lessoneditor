@@ -1,4 +1,4 @@
-import { CatalogService } from "./catalog.service";
+import { CatalogService, frontMatterTitle } from "./catalog.service";
 
 describe("courses and tags from the lesson repo (#335)", () => {
   const env = { ...process.env };
@@ -184,5 +184,17 @@ describe("the lessons in the lesson repo, to find and copy from the front page",
 
   it("answers null without a token and nothing read yet", async () => {
     expect(await setup().lessons(undefined)).toBeNull();
+  });
+});
+
+describe("the title in a lesson's front matter", () => {
+  it("reads quoted, plain and multi-line titles, also from a cut-off start", () => {
+    expect(frontMatterTitle("---\ntitle: 'Lys og lyd'\nlevel: 2\n---\n# Intro")).toBe("Lys og lyd");
+    expect(frontMatterTitle("---\ntitle: >-\n  Skilpadde-\n  kunst\nlevel: 1\n---\n")).toBe(
+      "Skilpadde- kunst",
+    );
+    expect(frontMatterTitle("---\ntitle: Asteroids\nlevel: 4\nauth")).toBe("Asteroids");
+    expect(frontMatterTitle("---\ntitle: >-\n  Lang tit")).toBeUndefined();
+    expect(frontMatterTitle("# Bare tekst")).toBeUndefined();
   });
 });

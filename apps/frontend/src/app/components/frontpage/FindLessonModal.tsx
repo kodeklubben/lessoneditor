@@ -9,6 +9,8 @@ import { useLessonCatalog } from "../../utils/useLessonCatalog";
 import { searchLessons } from "../../utils/searchLessons";
 import { copyLessonFromRepo, importErrorMessage } from "../../utils/importLesson";
 import { languageOption } from "./settings/newLessonOptions";
+import { useViewMode } from "../../utils/useViewMode";
+import ViewToggle from "../shared/ViewToggle";
 
 const RAW = "https://raw.githubusercontent.com/kodeklubben/oppgaver/HEAD/";
 const PAGE = 48;
@@ -53,6 +55,7 @@ const FindLessonDialog: FC<{ onClose: () => void }> = ({ onClose }) => {
   const [level, setLevel] = useState<number>();
   const [language, setLanguage] = useState<string>();
   const [shown, setShown] = useState(PAGE);
+  const [viewMode, setViewMode] = useViewMode("find-lesson");
   const [copying, setCopying] = useState<string>();
   const [error, setError] = useState("");
   // Typing stays quick while the results catch up.
@@ -251,23 +254,26 @@ const FindLessonDialog: FC<{ onClose: () => void }> = ({ onClose }) => {
         )}
         {lessons && (
           <>
-            <p className="find-lesson__count" aria-live="polite">
-              {filtered
-                ? `${results.length} av ${lessons.length} oppgaver`
-                : `${lessons.length} oppgaver`}
-              {filtered && (
-                <button type="button" className="find-lesson__clear" onClick={clear}>
-                  Vis alle
-                </button>
-              )}
-            </p>
+            <div className="find-lesson__count-row">
+              <p className="find-lesson__count" aria-live="polite">
+                {filtered
+                  ? `${results.length} av ${lessons.length} oppgaver`
+                  : `${lessons.length} oppgaver`}
+                {filtered && (
+                  <button type="button" className="find-lesson__clear" onClick={clear}>
+                    Vis alle
+                  </button>
+                )}
+              </p>
+              <ViewToggle mode={viewMode} onChange={setViewMode} />
+            </div>
             {results.length === 0 ? (
               <div className="find-lesson__empty">
                 <img src="assets/public/maskot.png" alt="" width={96} height={96} />
                 <p>Ingen oppgaver passer. Prøv et annet ord, eller fjern et filter.</p>
               </div>
             ) : (
-              <div className="find-lesson__grid">
+              <div className={`find-lesson__grid find-lesson__grid--${viewMode}`}>
                 {results.slice(0, shown).map((lesson) => (
                   <LessonResult
                     key={`${lesson.course}/${lesson.slug}`}

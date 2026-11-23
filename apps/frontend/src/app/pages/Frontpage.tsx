@@ -3,6 +3,8 @@ import { FC, useEffect, useState } from "react";
 import NewLessonModal from "../components/frontpage/NewLessonModal";
 import FindLessonModal from "../components/frontpage/FindLessonModal";
 import { prefetchLessonCatalog } from "../utils/useLessonCatalog";
+import { useViewMode } from "../utils/useViewMode";
+import ViewToggle from "../components/shared/ViewToggle";
 import ItemList from "../components/frontpage/ItemList";
 import { useUserContext } from "../contexts/UserContext";
 import Navbar from "../components/navbar/Navbar";
@@ -59,6 +61,7 @@ const frontpage: FC = () => {
   const navigate = useNavigate();
   const [openNewLessonModal, setOpenNewLessonModal] = useState<boolean>(false);
   const [sortValue, setSortValue] = useState<string>("date-modified");
+  const [viewMode, setViewMode] = useViewMode("frontpage");
   const pullRequests = useLessonPullRequests(state.user?.userId, state.lessons);
   const [userLessons, setUserLessons] = useState<LessonDTO[]>(
     sortLessons(state.lessons, sortValue),
@@ -110,18 +113,21 @@ const frontpage: FC = () => {
           <div className="frontpage-lessons-section__header">
             <h2 className="le-display">Mine oppgaver</h2>
             {state.lessons.length > 1 && (
-              <Dropdown
-                onChange={handleSortChange}
-                inline
-                options={sortOptions}
-                value={sortValue}
-                aria-label="Sorter oppgavene"
-              />
+              <div className="frontpage-lessons-section__tools">
+                <ViewToggle mode={viewMode} onChange={setViewMode} />
+                <Dropdown
+                  onChange={handleSortChange}
+                  inline
+                  options={sortOptions}
+                  value={sortValue}
+                  aria-label="Sorter oppgavene"
+                />
+              </div>
             )}
           </div>
 
           {state.lessons.length > 0 ? (
-            <ItemList lessons={userLessons} pullRequests={pullRequests} />
+            <ItemList lessons={userLessons} pullRequests={pullRequests} mode={viewMode} />
           ) : (
             <div className="frontpage-empty">
               <img src="assets/public/maskot.png" alt="" width={120} height={120} />

@@ -217,10 +217,19 @@ export class CatalogService {
 
 const frontMatter = (text: string) => /^---\r?\n([\s\S]*?)(?:\r?\n---|$)/.exec(text)?.[1] ?? "";
 
-/** The title from a text's front matter, also when only its first bytes were read. */
+/**
+ * The title from a text's front matter, also when only its first bytes were read: as YAML when
+ * the front matter is complete (a title may run over several lines, `title: >-`), otherwise
+ * from its own line.
+ */
 export function frontMatterTitle(text: string): string | undefined {
+  const complete = /^---\r?\n[\s\S]*?\r?\n---/.test(text);
+  const parsed = complete
+    ? (safeLoad(frontMatter(text)) as { title?: unknown } | undefined)
+    : undefined;
+  if (typeof parsed?.title === "string" && parsed.title.trim()) return parsed.title.trim();
   const title = /^title:[ \t]*(.+?)[ \t]*$/m.exec(frontMatter(text))?.[1];
-  if (!title) return undefined;
+  if (!title || /^[>|][+-]?$/.test(title)) return undefined;
   return title.replace(/^(['"])(.*)\1$/, "$2").trim() || undefined;
 }
 

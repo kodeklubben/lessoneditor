@@ -148,12 +148,12 @@ const ListFiles: FC<ListFilesProps> = ({ item, lessonId, files }) => {
         >
           {canDelete && (
             <Button
-              style={{ background: "none" }}
+              className="text_item__delete"
               icon
               onClick={() => setOpenDeleteContent(true)}
               aria-label={`Slett ${item}`}
             >
-              <Icon name="delete" />
+              <Icon name="trash alternate outline" />
               Slett
             </Button>
           )}

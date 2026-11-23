@@ -61,6 +61,12 @@
       font-size: 1.5rem;
     }
 
+    .frontpage-lessons-section__tools {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
     .ui.inline.dropdown {
       color: var(--le-muted);
     }

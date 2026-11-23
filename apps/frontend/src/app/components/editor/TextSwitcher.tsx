@@ -45,7 +45,6 @@ const TextSwitcher: FC = () => {
       active = false;
     };
     // The list is read once per text that is opened.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lessonId, file, lang]);
 
   const label = (

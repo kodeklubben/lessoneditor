@@ -1,0 +1,38 @@
+// Cards or list: two joined square buttons, the chosen one with the green frame.
+
+.view-toggle {
+  display: inline-flex;
+
+  button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    min-height: 2.3rem;
+    padding: 0 0.75rem;
+    border: 1px solid var(--le-line);
+    background: #fff;
+    color: var(--le-muted);
+    font: inherit;
+    cursor: pointer;
+
+    & + button {
+      margin-left: -1px;
+    }
+
+    .icon {
+      margin: 0;
+    }
+
+    &:hover {
+      color: var(--le-ink);
+    }
+
+    &[aria-pressed="true"] {
+      position: relative;
+      color: var(--le-ink);
+      font-weight: 700;
+      border-color: var(--le-green);
+      box-shadow: inset 0 0 0 1px var(--le-green);
+    }
+  }
+}
