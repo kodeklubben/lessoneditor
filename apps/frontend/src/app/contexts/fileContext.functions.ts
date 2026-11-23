@@ -15,6 +15,10 @@ export interface FileContextModel {
   saveFileHeader: (data: HeaderData) => Promise<number>;
   setFileContextState: React.Dispatch<React.SetStateAction<FileContextState>>;
   loading: boolean;
+  /** Reads the text from the server again and returns its body. */
+  reloadFile: () => Promise<string>;
+  /** Lets the next save replace a text that was changed elsewhere. */
+  forgetVersion: () => void;
 }
 
 export const initialFileContextState: FileContextState = {

@@ -5,7 +5,8 @@ import ItemList from "../components/frontpage/ItemList";
 import { useUserContext } from "../contexts/UserContext";
 import Navbar from "../components/navbar/Navbar";
 import { Card, Divider, Header, Icon, Message, Dropdown } from "semantic-ui-react";
-import { LessonDTO } from "@lessoneditor/contracts";
+import { LessonDTO, LessonPullRequest } from "@lessoneditor/contracts";
+import { useLessonPullRequests } from "../components/frontpage/LessonStatus";
 import { useNavigate } from "react-router";
 import { takeReturnTo } from "../utils/returnTo";
 
@@ -13,20 +14,39 @@ const sortOptions = [
   { key: "date-modified", text: "Sist endret", value: "date-modified" },
   { key: "lesson-title", text: "Tittel", value: "lesson-title" },
   { key: "course-title", text: "Kurs", value: "course-title" },
-  { key: "is-submitted", text: "Sendt inn", value: "is-submitted" },
+  { key: "status", text: "Status", value: "status" },
 ];
 
-const sortLessons = (lessons: LessonDTO[], key: string) => {
+/**
+ * Waiting for review first, then published, not taken, and not submitted: what may need the
+ * teacher's attention comes first.
+ */
+export function statusRank(lesson: LessonDTO, pullRequest?: LessonPullRequest): number {
+  if (!lesson.submitted) return 3;
+  return { open: 0, merged: 1, closed: 2 }[pullRequest?.state ?? "open"];
+}
+
+const newestFirst = (a: LessonDTO, b: LessonDTO) => (a.updated_at < b.updated_at ? 1 : -1);
+
+export const sortLessons = (
+  lessons: LessonDTO[],
+  key: string,
+  pullRequests: Record<number, LessonPullRequest> = {},
+) => {
   const sortedLessons = [...lessons];
   switch (key) {
     case "date-modified":
-      return sortedLessons.sort((a, b) => (a.updated_at < b.updated_at ? 1 : -1));
+      return sortedLessons.sort(newestFirst);
     case "lesson-title":
       return sortedLessons.sort((a, b) => a.lessonTitle.localeCompare(b.lessonTitle));
     case "course-title":
       return sortedLessons.sort((a, b) => a.courseTitle.localeCompare(b.courseTitle));
-    case "is-submitted":
-      return sortedLessons.sort((a, b) => (a.submitted === b.submitted ? 0 : a.submitted ? -1 : 1));
+    case "status":
+      return sortedLessons.sort(
+        (a, b) =>
+          statusRank(a, pullRequests[a.lessonId]) - statusRank(b, pullRequests[b.lessonId]) ||
+          newestFirst(a, b),
+      );
     default:
       return lessons;
   }
@@ -37,13 +57,14 @@ const frontpage: FC = () => {
   const navigate = useNavigate();
   const [openNewLessonModal, setOpenNewLessonModal] = useState<boolean>(false);
   const [sortValue, setSortValue] = useState<string>("date-modified");
+  const pullRequests = useLessonPullRequests(state.user?.userId, state.lessons);
   const [userLessons, setUserLessons] = useState<LessonDTO[]>(
     sortLessons(state.lessons, sortValue),
   );
 
   useEffect(() => {
-    setUserLessons(sortLessons(state.lessons, sortValue));
-  }, [state.lessons, sortValue]);
+    setUserLessons(sortLessons(state.lessons, sortValue, pullRequests));
+  }, [state.lessons, sortValue, pullRequests]);
 
   // Back to the page the visitor came to before signing in, e.g. /rediger/<course>/<lesson>.
   useEffect(() => {
@@ -123,10 +144,10 @@ const frontpage: FC = () => {
             </div>
 
             {state.lessons.length > 0 ? (
-              <ItemList lessons={userLessons} />
+              <ItemList lessons={userLessons} pullRequests={pullRequests} />
             ) : (
               <Message compact>
-                <Message.Header>Du har ingen kurs</Message.Header>
+                <Message.Header>Du har ingen oppgaver ennå</Message.Header>
                 <p>Opprett en ny oppgave ved å trykke på knappen "Ny oppgave"</p>
               </Message>
             )}

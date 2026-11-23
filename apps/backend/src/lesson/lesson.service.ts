@@ -1,10 +1,12 @@
 import { ConflictException, Injectable, HttpException, HttpStatus, Logger } from "@nestjs/common";
+import { createHash } from "node:crypto";
 import { Lesson, FileStore, isLessonOwner } from "./lesson.entity";
 import { User } from "../user/user.entity";
 import { InjectRepository } from "@nestjs/typeorm";
 import { In, Repository } from "typeorm";
 import { NewFileDTO, ShareLessonDTO } from "@lessoneditor/contracts";
 import { GithubService } from "../github/github.service";
+import { thumbnailText } from "../github/import-lesson";
 import { ThumbService } from "../thumb/thumb.service";
 import { Request } from "express";
 
@@ -12,6 +14,16 @@ import { Request } from "express";
 import { deletionBlocker, splitFilename } from "../../../../libs/contracts/src/lib/files";
 
 const TEXT_EXTENSIONS = [".md", ".yml"];
+
+/**
+ * A text's version: the hash of what is stored. The editor sends back the version it started
+ * from, so a save over a text someone else saved meanwhile (another tab, a co-author) is refused
+ * instead of silently replacing it.
+ */
+export const contentVersion = (content: Buffer) => createHash("sha1").update(content).digest("hex");
+
+export const EDITED_ELSEWHERE =
+  "Teksten er endret et annet sted, i en annen fane eller av en du deler oppgaven med.";
 
 /** For logs: the error's class and database code, never its message with parameters or data. */
 export const errorKind = (error: unknown) =>
@@ -184,6 +196,7 @@ export class LessonService {
     filename: string,
     updatedByUserId: number,
     fileContent: string,
+    baseVersion?: string,
   ): Promise<FileStore> {
     // Only texts are edited in place; an image with the same name must never be overwritten.
     const file = await this.fileStoreRepository.findOne({
@@ -200,7 +213,18 @@ export class LessonService {
       content: Buffer.from(fileContent),
       updated_by: updatedByUser.username ?? String(updatedByUser.userId),
     };
-    await this.fileStoreRepository.update(file.fileId, changes);
+    if (baseVersion !== undefined && baseVersion !== contentVersion(file.content)) {
+      throw new ConflictException(EDITED_ELSEWHERE);
+    }
+    // With a base version, only while the row still holds what it was checked against: two saves
+    // that pass the check at the same time cannot both win.
+    const result = await this.fileStoreRepository.update(
+      baseVersion === undefined
+        ? { fileId: file.fileId }
+        : { fileId: file.fileId, content: file.content },
+      changes,
+    );
+    if (result.affected === 0) throw new ConflictException(EDITED_ELSEWHERE);
     await this.lessonRepository.update(lessonId, { updated_at: new Date() });
     return Object.assign(file, changes);
   }
@@ -219,6 +243,13 @@ export class LessonService {
     if (!text) {
       throw new HttpException("File does not exist", HttpStatus.NOT_FOUND);
     }
+    // One thumbnail per lesson, always of its main text (bokmål first), not of whichever text was
+    // saved last: a teacher guide or a translation made every card show that instead (N5).
+    const texts = await this.fileStoreRepository.find({
+      select: { filename: true },
+      where: { lesson: { lessonId }, ext: ".md" },
+    });
+    if (thumbnailText(texts.map((file) => file.filename)) !== filename) return false;
     const preview = await this.fileStoreRepository.findOne({
       select: { fileId: true, upstream_sha: true },
       where: { lesson: { lessonId }, filename: "preview", ext: ".png" },
