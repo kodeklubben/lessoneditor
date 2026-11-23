@@ -7,7 +7,9 @@ import md5 from "crypto-js/md5";
  * @returns {string} the same HTML with each of them replaced by an SVG
  */
 
-const LANGUAGES = ["nb", "nn", "en", "is"];
+// Ukrainian is "uk" here; the lesson repo names it "ua" (N10). Its 43 Scratch texts write their
+// blocks in Ukrainian, which did not render.
+const LANGUAGES = ["nb", "nn", "en", "is", "uk", "fr"];
 
 const storeSVG: Record<string, string> = {};
 
@@ -39,6 +41,8 @@ const loadScratchblocks = () => {
       nb: require("scratchblocks/locales/nb.json"),
       nn: require("scratchblocks/locales/nn.json"),
       is: require("scratchblocks/locales/is.json"),
+      uk: require("scratchblocks/locales/uk.json"),
+      fr: require("scratchblocks/locales/fr.json"),
     });
   }
   return scratchblocksModule;
