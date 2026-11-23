@@ -6,8 +6,8 @@ import axios from "axios";
 import { deletionBlocker, paths, splitFilename } from "@lessoneditor/contracts";
 import { languageOption } from "../frontpage/settings/newLessonOptions";
 import { useLessonContext } from "../../contexts/LessonContext";
-import { useUserContext } from "../../contexts/UserContext";
 import { filenameParser } from "../../utils/filename-parser";
+import { useTextThumbnail } from "./useTextThumbnail";
 import MarkdownPreview from "./MarkdownPreview";
 import DeleteModal from "../shared/DeleteModal";
 import placeholderImage from "../../../assets/public/landingPage/image.png";
@@ -23,7 +23,6 @@ const ListFiles: FC<ListFilesProps> = ({ item, lessonId, files }) => {
   const { fetchFileList, setFiles } = useLessonContext();
   const [openDeleteContent, setOpenDeleteContent] = useState<boolean>(false);
   const [openImageModal, setOpenImageModal] = useState<boolean>(false);
-  const { previewImage } = useUserContext();
   const { images } = useLessonContext();
   const [showMDPreview, setShowMDPreview] = useState<boolean>(false);
 
@@ -33,6 +32,8 @@ const ListFiles: FC<ListFilesProps> = ({ item, lessonId, files }) => {
   const ext = dotExt.slice(1);
 
   const isImage = ["jpg", "jpeg", "png", "gif"].includes(ext);
+  // A text shows its own picture (1), not the lesson's preview.
+  const textThumbnail = useTextThumbnail(lessonId, filename, ext === "md");
   // lesson.yml, preview.png and the last lesson text stay (K15); the server refuses them too.
   const canDelete = !deletionBlocker(splitFilename(item), files.map(splitFilename));
 
@@ -108,9 +109,7 @@ const ListFiles: FC<ListFilesProps> = ({ item, lessonId, files }) => {
           >
             <Item.Image
               className="_image"
-              src={
-                ext === "md" ? previewImage[lessonId] : isImage ? images[item] : placeholderImage
-              }
+              src={ext === "md" ? textThumbnail : isImage ? images[item] : placeholderImage}
               size="tiny"
               alt=""
               rounded

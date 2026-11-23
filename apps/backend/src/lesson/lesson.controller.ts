@@ -186,6 +186,33 @@ export class LessonController {
     return this.lessonService.updateThumbnail(lessonId, filename, req);
   }
 
+  /** A text's own thumbnail as base64, like the images; 404 until it has one. */
+  @Get(":lessonId/files/:filename/thumbnail")
+  async GetTextThumbnail(
+    @Res() res: Response,
+    @Param("lessonId", ParseIntPipe) lessonId: number,
+    @Param("filename") filename: string,
+  ) {
+    const thumbnail = await this.lessonService.textThumbnail(lessonId, filename);
+    if (!thumbnail) return res.status(404).end();
+    return res.end(thumbnail.toString("base64"));
+  }
+
+  /**
+   * A thumbnail of the lesson's main text, for a lesson that has none yet (9f): an older copy,
+   * or one whose first thumbnail failed. Answers with the text it photographed.
+   */
+  @Put(":lessonId/thumbnail")
+  async MakeLessonThumbnail(
+    @Req() req: Request,
+    @Param("lessonId", ParseIntPipe) lessonId: number,
+  ): Promise<{ text: string | null }> {
+    const text = await this.lessonService.textForMissingPreview(lessonId);
+    if (!text) return { text: null };
+    await this.lessonService.updateThumbnail(lessonId, text, req);
+    return { text };
+  }
+
   @Delete(":lessonId/files/:filename/:ext")
   async DeleteLessonFile(
     @Param("lessonId", ParseIntPipe) lessonId: number,

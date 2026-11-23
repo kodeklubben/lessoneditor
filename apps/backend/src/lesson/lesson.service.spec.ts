@@ -107,7 +107,13 @@ describe("deleting files (K15)", () => {
 });
 
 describe("thumbnails (K14)", () => {
-  type Row = { fileId: number; filename: string; ext: string; upstream_sha?: string | null };
+  type Row = {
+    fileId: number;
+    filename: string;
+    ext: string;
+    upstream_sha?: string | null;
+    content?: Buffer;
+  };
   // Answers findOne like the database, for the files of lesson 3.
   const setup = (rows: Row[]) => {
     const files = {
@@ -131,14 +137,15 @@ describe("thumbnails (K14)", () => {
   };
   const text = { fileId: 1, filename: "hei", ext: ".md" };
 
-  it("writes only the preview row, never the lesson with all its files", async () => {
+  it("writes only the text's and the preview's rows, never the lesson with all its files", async () => {
     const { files, lessons, service } = setup([
       text,
       { fileId: 2, filename: "preview", ext: ".png" },
     ]);
     await expect(service.updateThumbnail(3, "hei", {} as never)).resolves.toBe(true);
+    expect(files.update).toHaveBeenCalledWith(1, { thumbnail: expect.any(Buffer) });
     expect(files.update).toHaveBeenCalledWith(2, { content: expect.any(Buffer) });
-    expect(files.update.mock.calls[0][1].content[0]).toBe(137);
+    expect(files.update.mock.calls[1][1].content[0]).toBe(137);
     expect(lessons.save).not.toHaveBeenCalled();
     expect(lessons.findOne).not.toHaveBeenCalled();
   });
@@ -156,26 +163,40 @@ describe("thumbnails (K14)", () => {
     );
   });
 
-  it("keeps a copy's own preview.png from the repo", async () => {
+  it("keeps a copy's own preview.png from the repo, and still gives the text its picture", async () => {
     const preview = { fileId: 2, filename: "preview", ext: ".png", upstream_sha: "abc" };
-    const { files, thumbs, service } = setup([text, preview]);
-    await expect(service.updateThumbnail(3, "hei", {} as never)).resolves.toBe(false);
-    expect(thumbs.getThumb).not.toHaveBeenCalled();
-    expect(files.update).not.toHaveBeenCalled();
+    const { files, service } = setup([text, preview]);
+    await expect(service.updateThumbnail(3, "hei", {} as never)).resolves.toBe(true);
+    expect(files.update).toHaveBeenCalledTimes(1);
+    expect(files.update).toHaveBeenCalledWith(1, { thumbnail: expect.any(Buffer) });
   });
 
-  it("photographs only the main text, not a teacher guide or a translation (N5)", async () => {
+  it("gives each text its own picture; only the main text's is the lesson's preview (1, N5)", async () => {
     const rows = [
       text,
       { fileId: 3, filename: "hei_nn", ext: ".md" },
       { fileId: 4, filename: "README", ext: ".md" },
       { fileId: 2, filename: "preview", ext: ".png" },
     ];
-    const { thumbs, service } = setup(rows);
-    await expect(service.updateThumbnail(3, "README", {} as never)).resolves.toBe(false);
-    await expect(service.updateThumbnail(3, "hei_nn", {} as never)).resolves.toBe(false);
-    expect(thumbs.getThumb).not.toHaveBeenCalled();
-    await expect(service.updateThumbnail(3, "hei", {} as never)).resolves.toBe(true);
+    const { files, service } = setup(rows);
+    await service.updateThumbnail(3, "README", {} as never);
+    await service.updateThumbnail(3, "hei_nn", {} as never);
+    expect(files.update.mock.calls).toEqual([
+      [4, { thumbnail: expect.any(Buffer) }],
+      [3, { thumbnail: expect.any(Buffer) }],
+    ]);
+    await service.updateThumbnail(3, "hei", {} as never);
+    expect(files.update).toHaveBeenCalledWith(2, { content: expect.any(Buffer) });
+  });
+
+  it("photographs a lesson without a preview yet, and leaves one that has it alone (9f)", async () => {
+    const placeholder = { fileId: 2, filename: "preview", ext: ".png", content: Buffer.from(" ") };
+    expect(await setup([text, placeholder]).service.textForMissingPreview(3)).toBe("hei");
+    expect(await setup([text]).service.textForMissingPreview(3)).toBe("hei");
+    const real = { ...placeholder, content: Buffer.from("png data") };
+    expect(await setup([text, real]).service.textForMissingPreview(3)).toBeUndefined();
+    const fromRepo = { ...placeholder, upstream_sha: "abc" };
+    expect(await setup([text, fromRepo]).service.textForMissingPreview(3)).toBeUndefined();
   });
 
   it("refuses a file that is not a text of the lesson", async () => {

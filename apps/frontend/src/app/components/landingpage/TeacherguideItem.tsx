@@ -4,20 +4,21 @@ import { Button, Item, Image, Icon } from "semantic-ui-react";
 import { asButton } from "../../utils/a11y";
 import { FC, useState } from "react";
 import { languageOption } from "../frontpage/settings/newLessonOptions";
-import { useUserContext } from "../../contexts/UserContext";
 
 import DeleteModal from "../shared/DeleteModal";
 import MarkdownPreview from "./MarkdownPreview";
 import { useTextTitle } from "./useTextTitle";
+import { useTextThumbnail } from "./useTextThumbnail";
+import PreviewImage from "../shared/PreviewImage";
 
 const TeacherguideItem: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug, removeMD }) => {
   const navigate = useNavigate();
-  const { previewImage } = useUserContext();
   const [openDeleteContent, setOpenDeleteContent] = useState<boolean>(false);
   const [showMDPreview, setShowMDPreview] = useState<boolean>(false);
 
   const filename = language === "nb" ? "README" : `README_${language}`;
   const title = useTextTitle(lessonId, filename);
+  const thumbnail = useTextThumbnail(lessonId, filename);
 
   const navigateToEditor = (lessonId: any, lessonSlug: any, language: string) => {
     const target = ["/editor", lessonId, "README", language].join("/");
@@ -55,13 +56,10 @@ const TeacherguideItem: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug
               `Forhåndsvis lærerveiledningen på ${languageText.toLowerCase()}`,
             )}
           >
-            <Item.Image
+            <PreviewImage
               className="lesson_menu_card_content__image"
-              src={previewImage[lessonId]}
-              size="tiny"
-              alt=""
-              rounded
-              bordered
+              style={{ height: "3.5rem" }}
+              src={thumbnail}
             />
 
             {language ? <Image className="image_flag" src={languageImage} alt={""} /> : ""}
