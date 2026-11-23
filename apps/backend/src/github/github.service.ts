@@ -209,6 +209,8 @@ export class GithubService {
         copy ? `Endringer i ${lesson.lessonTitle}` : lesson.lessonTitle,
         (submitMessage?.message ?? "") + machineTranslationNote(lesson.files),
       );
+      // The card and the lesson page ask again right away; the old answer is stale now.
+      this.pullRequestCache.delete(lesson.lessonId);
       return { url: pr?.html_url ?? null };
     } catch (error) {
       throw this.toHttpError(error);

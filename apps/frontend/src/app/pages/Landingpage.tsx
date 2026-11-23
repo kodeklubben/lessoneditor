@@ -1,4 +1,7 @@
 import "./landingpage.scss";
+import { useState } from "react";
+import { useUserContext } from "../contexts/UserContext";
+import { useLessonPullRequests } from "../components/frontpage/LessonStatus";
 import Navbar from "../components/navbar/Navbar";
 import NewLessontext from "../components/landingpage/NewLessontext";
 import SubmitLesson from "../components/landingpage/SubmitLesson";
@@ -13,6 +16,13 @@ import { announceThumbnail } from "../utils/thumbnailEvents";
 
 const Landingpage = () => {
   const { state } = useLessonContext();
+  const { state: userState } = useUserContext();
+  // Submitted in this visit: the lesson state from the server still says no until a reload.
+  const [justSubmitted, setJustSubmitted] = useState(0);
+  const lesson = justSubmitted ? { ...state.lesson, submitted: true } : state.lesson;
+  const pullRequest = useLessonPullRequests(userState.user?.userId, [lesson], justSubmitted)[
+    state.lesson.lessonId
+  ];
 
   const { lessonId, lessonTitle, courseTitle, submitted } = state.lesson;
 
@@ -45,11 +55,17 @@ const Landingpage = () => {
             <CourseInfo
               lessonTitle={lessonTitle}
               courseTitle={courseTitle}
-              isSubmitted={submitted}
+              isSubmitted={submitted || justSubmitted > 0}
+              lesson={lesson}
+              pullRequest={pullRequest}
             />
             <div className="landingpage_actions">
               <NewLessontext />
-              <SubmitLesson />
+              <SubmitLesson
+                lesson={lesson}
+                pullRequest={pullRequest}
+                onSubmitted={() => setJustSubmitted((n) => n + 1)}
+              />
             </div>
           </div>
         </section>
