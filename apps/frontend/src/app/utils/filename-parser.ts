@@ -1,3 +1,4 @@
+import { splitTextName } from "@lessoneditor/contracts";
 import { languageOption } from "../components/frontpage/settings/newLessonOptions";
 
 export type FilenameData = {
@@ -6,29 +7,21 @@ export type FilenameData = {
   isMarkdown: boolean;
   isReadme: boolean;
 };
+
 /**
- * Samler alle funksjoner som tolker innholdet i filenavnet ett sted.
- * @param filename
+ * Reads language and kind from a file name: "lunar_lander_nn.md" is a Nynorsk lesson text,
+ * "README.md" a bokmål teacher guide. An underscore in the name itself is not a language.
  */
 export const filenameParser = (filename?: string): FilenameData => {
-  if (filename) {
-    const [name, ext] = filename.split(".");
-
-    const isMarkdown = ext === "md";
-    const language = isMarkdown ? (name.includes("_") ? name.split("_")[1] : "nb") : "";
-
-    const isReadme = name.split("_")[0] === "README";
-    const languageName = isMarkdown
-      ? languageOption(language).text
-      : "";
-
-    return {
-      language,
-      isMarkdown,
-      isReadme,
-      languageName,
-    };
-  } else {
-    return { language: "", languageName: "", isMarkdown: false, isReadme: false };
-  }
+  if (!filename) return { language: "", languageName: "", isMarkdown: false, isReadme: false };
+  const dot = filename.lastIndexOf(".");
+  const name = dot > 0 ? filename.slice(0, dot) : filename;
+  const isMarkdown = filename.slice(dot + 1) === "md";
+  const { base, language } = splitTextName(name);
+  return {
+    language: isMarkdown ? language : "",
+    isMarkdown,
+    isReadme: base === "README",
+    languageName: isMarkdown ? languageOption(language).text : "",
+  };
 };

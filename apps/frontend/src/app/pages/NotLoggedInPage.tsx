@@ -2,9 +2,12 @@ import React from "react";
 import Navbar from "../components/navbar/Navbar";
 import { Button, Container, Header, Icon } from "semantic-ui-react";
 import "./NotLoggedInPage.scss";
+import { rememberReturnTo } from "../utils/returnTo";
 
 const NotLoggedInPage: React.FC = () => {
   const handleLogin = () => {
+    // GitHub's sign-in ends on the front page; from there the visitor is sent back here.
+    rememberReturnTo(window.location.pathname);
     window.location.href = "/api/auth/login/";
   };
 

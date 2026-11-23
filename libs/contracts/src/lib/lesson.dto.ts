@@ -22,6 +22,12 @@ export interface LessonDTO {
   updated_at: Date;
 
   language?: string;
+
+  /** For a copy of a published lesson: its folder in kodeklubben/oppgaver (docs/rediger-oppgave.md). */
+  upstream_path?: string | null;
+
+  /** The commit of kodeklubben/oppgaver the copy was made from. */
+  upstream_commit?: string | null;
 }
 
 export interface ShareLessonDTO {

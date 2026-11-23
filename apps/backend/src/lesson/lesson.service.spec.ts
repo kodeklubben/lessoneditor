@@ -28,6 +28,15 @@ describe("lesson submission state", () => {
     expect(repository.update).not.toHaveBeenCalled();
   });
 
+  it("does not submit a copy of a published lesson with the submission for new lessons", async () => {
+    repository.findOne.mockResolvedValue({ ...lesson, upstream_path: "src/scratch/asteroids" });
+    await expect(
+      service.submitLesson(undefined as never, "test-token", 7, { message: "test" }),
+    ).rejects.toThrow("ikke på plass ennå");
+    expect(github.submitLesson).not.toHaveBeenCalled();
+    expect(repository.update).not.toHaveBeenCalled();
+  });
+
   it("updates only submission status after success, without resaving transformed files", async () => {
     github.submitLesson.mockResolvedValue(undefined);
     await service.submitLesson(undefined as never, "test-token", 7, { message: "test" });
@@ -142,5 +151,41 @@ describe("thumbnails (K14)", () => {
       "File does not exist",
     );
     expect(thumbs.getThumb).not.toHaveBeenCalled();
+  });
+});
+
+describe("finding a file by name", () => {
+  // As in kodeklubben/oppgaver: the cover image has the lesson text's name.
+  const files = [
+    { filename: "asteroids", ext: ".png", content: Buffer.from("png") },
+    { filename: "asteroids", ext: ".md", content: Buffer.from("text") },
+    { filename: "lesson", ext: ".yml", content: Buffer.from("{}") },
+  ];
+  // Answers like the database: the files of lesson 1 whose name is one of those asked for.
+  const fileRepository = {
+    find: jest.fn(),
+  };
+  const service = new LessonService(
+    undefined as never,
+    undefined as never,
+    fileRepository as never,
+    undefined as never,
+    undefined as never,
+  );
+
+  beforeEach(() =>
+    fileRepository.find.mockImplementation(
+      async ({ where }: { where: { lesson: { lessonId: number }; filename: string }[] }) =>
+        files.filter((file) =>
+          where.some((w) => w.lesson.lessonId === 1 && w.filename === file.filename),
+        ),
+    ),
+  );
+
+  it("finds the image by its full name and the text by the name alone", async () => {
+    expect((await service.getLessonFile(1, "asteroids.png")).ext).toBe(".png");
+    expect((await service.getLessonFile(1, "asteroids")).ext).toBe(".md");
+    expect((await service.getLessonFile(1, "lesson")).ext).toBe(".yml");
+    await expect(service.getLessonFile(1, "asteroids.gif")).rejects.toThrow("File does not exist");
   });
 });

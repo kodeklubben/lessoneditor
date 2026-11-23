@@ -60,9 +60,11 @@ export const LessonContextProvider = (props: any) => {
             if (!IMAGE_TYPES[ext]) return null;
             try {
               const imageRes = await axios.get<string>(
+                // With the extension: a lesson from the repo can have asteroids.md and
+                // asteroids.png.
                 paths.LESSON_FILE.replace(":lessonId", lessonId).replace(
                   ":filename",
-                  encodeURIComponent(filename),
+                  encodeURIComponent(filename + ext),
                 ),
               );
               return [file, createObjectURL(base64StringToBlob(imageRes.data, IMAGE_TYPES[ext]))];

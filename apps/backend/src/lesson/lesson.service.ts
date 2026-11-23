@@ -9,7 +9,7 @@ import { ThumbService } from "../thumb/thumb.service";
 import { Request } from "express";
 
 // Runtime code from the shared lib is imported by path: tsc does not rewrite the alias.
-import { deletionBlocker } from "../../../../libs/contracts/src/lib/files";
+import { deletionBlocker, splitFilename } from "../../../../libs/contracts/src/lib/files";
 
 const TEXT_EXTENSIONS = [".md", ".yml"];
 
@@ -48,6 +48,14 @@ export class LessonService {
     submitMessage: { message: string },
   ) {
     const lesson = await this.getLesson(lessonId);
+    // A copy of a published lesson needs its own submission (only the changed files, nothing
+    // deleted; docs/rediger-oppgave.md, part B). The one for new lessons would remove the files
+    // the copy does not hold, such as code and subfolders.
+    if (lesson.upstream_path) {
+      throw new ConflictException(
+        "Innsending av endringer i en publisert oppgave er ikke på plass ennå. Kopien er lagret.",
+      );
+    }
     const result = await this.githubService.submitLesson(user, accessToken, lesson, submitMessage);
     await this.lessonRepository.update(lessonId, {
       submitted: true,
@@ -102,9 +110,24 @@ export class LessonService {
     await this.userRepository.save(invitedToUser);
   }
 
+  /**
+   * "asteroids.png" finds that image; "asteroids" finds the text first. Lessons from
+   * kodeklubben/oppgaver often have a text and an image with the same name (asteroids.md and
+   * asteroids.png), so a name without extension cannot pick between them.
+   */
   async getLessonFile(lessonId: number, filename: string) {
-    const lesson = await this.getLesson(lessonId);
-    const file = lesson.files.find((file) => file.filename == filename);
+    const named = splitFilename(filename);
+    const names = named.ext ? [named.filename, filename] : [filename];
+    // Only the requested file: loading the lesson with all its files fetched every image's
+    // content for each image the editor asked for.
+    const candidates = await this.fileStoreRepository.find({
+      where: names.map((name) => ({ lesson: { lessonId }, filename: name })),
+    });
+    const file =
+      (named.ext &&
+        candidates.find((file) => file.filename === named.filename && file.ext === named.ext)) ||
+      candidates.find((file) => file.filename === filename && TEXT_EXTENSIONS.includes(file.ext)) ||
+      candidates.find((file) => file.filename === filename);
     if (!file) {
       throw new HttpException("File does not exist", HttpStatus.NOT_FOUND);
     }
