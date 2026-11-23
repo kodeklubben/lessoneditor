@@ -5,6 +5,7 @@ import { COURSESLIST, LANGUAGEOPTIONS } from "./settings/newLessonOptions";
 import { useUserContext } from "../../contexts/UserContext";
 import { useNavigate } from "react-router";
 import { Button, Input, Modal, Dropdown } from "semantic-ui-react";
+import FieldError from "../shared/FieldError";
 import { isCourseSlug, isLessonSlug, isTitle, MAX_TITLE_LENGTH } from "@lessoneditor/contracts";
 
 interface NewLessonModalProps {
@@ -148,13 +149,7 @@ const NewLessonModal: FC<NewLessonModalProps> = ({ openNewLessonModal, setOpenNe
                     name={"lessonTitle"}
                     defaultValue={lessonData["lessonTitle"]}
                   />
-                  {problem ? (
-                    <p role="alert">
-                      <i style={{ color: "red" }}>{problem}</i>
-                    </p>
-                  ) : (
-                    <p style={{ height: "1rem" }} />
-                  )}
+                  <FieldError>{problem}</FieldError>
                 </label>
               </div>
 

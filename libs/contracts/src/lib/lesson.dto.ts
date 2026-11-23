@@ -62,6 +62,9 @@ export interface FileDTO<T> {
 
   content: T;
 
+  /** For texts: the version of the content, sent back as `base` when saving it. */
+  version?: string;
+
   created_by?: string;
 
   updated_by?: string;
@@ -79,6 +82,8 @@ export interface NewFileDTO {
 
 export interface UpdatedFileDTO {
   content: string;
+  /** The version the change was made to; the server refuses it (409) if the text changed since. */
+  base?: string;
 }
 
 export interface LessonFilterDTO {

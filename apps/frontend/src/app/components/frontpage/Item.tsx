@@ -31,6 +31,8 @@ const Item: React.FC<Props> = ({ lesson, pullRequest }) => {
           openDeleteContent={openDeleteLesson}
           setOpenDeleteContent={setOpenDeleteLesson}
           deleteContent={() => removeLesson(lesson.lessonId)}
+          what={`oppgaven «${lesson.lessonTitle || lesson.lessonSlug}»`}
+          detail="Alle tekstene og bildene i oppgaven slettes."
         />
       )}
       <div className="card-item">
