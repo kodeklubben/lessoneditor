@@ -4,6 +4,7 @@ import NewLessonModal from "../components/frontpage/NewLessonModal";
 import FindLessonModal from "../components/frontpage/FindLessonModal";
 import { prefetchLessonCatalog } from "../utils/useLessonCatalog";
 import { useViewMode } from "../utils/useViewMode";
+import { useThumbnailBackfill } from "../utils/useThumbnailBackfill";
 import ViewToggle from "../components/shared/ViewToggle";
 import ItemList from "../components/frontpage/ItemList";
 import { useUserContext } from "../contexts/UserContext";
@@ -57,12 +58,14 @@ export const sortLessons = (
 };
 
 const frontpage: FC = () => {
-  const { state } = useUserContext();
+  const { state, missingPreviews } = useUserContext();
   const navigate = useNavigate();
   const [openNewLessonModal, setOpenNewLessonModal] = useState<boolean>(false);
   const [sortValue, setSortValue] = useState<string>("date-modified");
   const [viewMode, setViewMode] = useViewMode("frontpage");
   const pullRequests = useLessonPullRequests(state.user?.userId, state.lessons);
+  // Cards without a picture get one in the background, a few per visit.
+  useThumbnailBackfill(missingPreviews, state.lessons);
   const [userLessons, setUserLessons] = useState<LessonDTO[]>(
     sortLessons(state.lessons, sortValue),
   );

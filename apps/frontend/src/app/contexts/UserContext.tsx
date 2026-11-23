@@ -22,6 +22,16 @@ export const UserContextProvider = (props: any) => {
     useState<UserContextState>(initialUserContextState);
   const [loading, setLoading] = useState<boolean>(true);
   const [previewImage, setPreviewImages] = useState({});
+  // Lessons whose card has no picture yet; the front page has them made in the background.
+  const [missingPreviews, setMissingPreviews] = useState<number[]>([]);
+  const markMissing = (lessonId: number, missing: boolean) =>
+    setMissingPreviews((ids) =>
+      missing
+        ? ids.includes(lessonId)
+          ? ids
+          : [...ids, lessonId]
+        : ids.filter((id) => id !== lessonId),
+    );
 
   const lessonsUrl = (userId: number) => paths.USER_LESSONS.replace(":userId", String(userId));
 
@@ -32,13 +42,15 @@ export const UserContextProvider = (props: any) => {
         const file = await axios.get(
           paths.LESSON_FILE.replace(":lessonId", String(lessonId)).replace(":filename", "preview"),
         );
-        if (!isPreviewImage(file.data)) return;
+        if (!isPreviewImage(file.data)) return markMissing(lessonId, true);
+        markMissing(lessonId, false);
         setPreviewImages((prevImages) => ({
           ...prevImages,
           [lessonId]: createObjectURL(base64StringToBlob(file.data, "image/png")),
         }));
       } catch {
         // No preview yet.
+        markMissing(lessonId, true);
       }
     });
 
@@ -135,6 +147,7 @@ export const UserContextProvider = (props: any) => {
     logoutUser: logoutUser,
     removeLesson: removeLesson,
     previewImage,
+    missingPreviews,
     loading,
   };
 
