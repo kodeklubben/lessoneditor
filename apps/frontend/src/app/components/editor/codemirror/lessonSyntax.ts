@@ -82,7 +82,18 @@ const blockColours = (
 
 export const SCRATCH_COLOURS: BlockColour[] = blockColours(scratchbuttons);
 export const MICROBIT_COLOURS: BlockColour[] = blockColours(microbitbuttons);
-const ALL_COLOURS = [...SCRATCH_COLOURS, ...MICROBIT_COLOURS];
+/**
+ * `si [Hei!]`{.b}: a Scratch block in a sentence whose colour scratchblocks works out from the
+ * block itself (399 times in kodeklubben/oppgaver). No button; the editor shows it as a block.
+ */
+export const SCRATCH_ANY_BLOCK: BlockColour = {
+  cls: "b",
+  slug: "b",
+  title: "Scratch-kloss (fargen finnes ut fra klossen)",
+  color: "#5f6b7a",
+  shortcut: "",
+};
+const ALL_COLOURS = [...SCRATCH_COLOURS, ...MICROBIT_COLOURS, SCRATCH_ANY_BLOCK];
 
 export const blockColourByClass = (cls: string) => ALL_COLOURS.find((colour) => colour.cls === cls);
 
@@ -93,6 +104,28 @@ export const coloursForCourse = (course?: string): BlockColour[] =>
 export const attributeClasses = (attributes: string) =>
   Array.from(attributes.matchAll(/\.([\w-]+)/g), (match) => match[1]);
 
+/** The language each course writes its code blocks in, as the lessons in kodeklubben/oppgaver do. */
+const COURSE_LANGUAGES: Record<string, string> = {
+  scratch: "blocks",
+  microbit: "microbit",
+  python: "python",
+  processing: "processing",
+  web: "html",
+  elm: "elm",
+  computercraft: "lua",
+  arduino: "cpp",
+  command_line: "sh",
+};
+
 /** The info string the code block button writes: ```blocks for Scratch, ```python for Python. */
-export const codeBlockLanguage = (course?: string) =>
-  course === "scratch" ? "blocks" : course || "";
+export const codeBlockLanguage = (course?: string) => (course && COURSE_LANGUAGES[course]) || "";
+
+/**
+ * Code languages the lessons name that CodeMirror knows under another name: MakeCode for the
+ * micro:bit is JavaScript, Processing is Java. ```blocks (Scratch) has no highlighting.
+ */
+export const CODE_LANGUAGE_ALIASES: Record<string, string> = {
+  microbit: "javascript",
+  processing: "java",
+  js: "javascript",
+};

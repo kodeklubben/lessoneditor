@@ -15,6 +15,9 @@ import {
 } from "./commands";
 import { lessonDiagnostics } from "./lint";
 import { codeMirrorKey } from "./setup";
+import { LanguageDescription } from "@codemirror/language";
+import { languages } from "@codemirror/language-data";
+import { blockColourByClass, CODE_LANGUAGE_ALIASES, codeBlockLanguage } from "./lessonSyntax";
 
 const TEXT = "Tekst her";
 
@@ -245,4 +248,33 @@ describe("lint", () => {
 it("writes the button config's shortcuts as CodeMirror keys", () => {
   expect(codeMirrorKey("mod+b")).toBe("Mod-b");
   expect(codeMirrorKey("ctrl+shift+a")).toBe("Ctrl-Shift-a");
+});
+
+describe("courses and their code", () => {
+  it("writes each course's code blocks in the language its lessons use", () => {
+    expect(codeBlockLanguage("scratch")).toBe("blocks");
+    expect(codeBlockLanguage("web")).toBe("html");
+    expect(codeBlockLanguage("computercraft")).toBe("lua");
+    expect(codeBlockLanguage("arduino")).toBe("cpp");
+    expect(codeBlockLanguage("legomindstorms")).toBe("");
+  });
+
+  it("highlights MakeCode as JavaScript and Processing as Java", () => {
+    const find = (name: string) =>
+      LanguageDescription.matchLanguageName(languages, CODE_LANGUAGE_ALIASES[name] ?? name, true)
+        ?.name;
+    expect(find("microbit")).toBe("JavaScript");
+    expect(find("processing")).toBe("Java");
+    expect(find("js")).toBe("JavaScript");
+    expect(find("lua")).toBe("Lua");
+    expect(find("elm")).toBe("Elm");
+    expect(find("cpp")).toBe("C++");
+    expect(find("csharp")).toBe("C#");
+    expect(find("sh")).toBe("Shell");
+    expect(find("blocks")).toBeUndefined();
+  });
+
+  it("knows `si [Hei!]`{.b} as a Scratch block", () => {
+    expect(blockColourByClass("b")?.title).toMatch(/Scratch-kloss/);
+  });
 });

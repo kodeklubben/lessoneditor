@@ -4,7 +4,7 @@ import {
   CompletionResult,
   snippetCompletion,
 } from "@codemirror/autocomplete";
-import { coloursForCourse, codeBlockLanguage, SECTIONS } from "./lessonSyntax";
+import { coloursForCourse, codeBlockLanguage, SCRATCH_ANY_BLOCK, SECTIONS } from "./lessonSyntax";
 
 /*
  * Suggestions while typing the lessons' own markup: the section after {. on a heading, the block
@@ -12,14 +12,20 @@ import { coloursForCourse, codeBlockLanguage, SECTIONS } from "./lessonSyntax";
  * after :::. The labels are the markdown; the Norwegian name stands next to it.
  */
 
+// The languages the lessons in kodeklubben/oppgaver use, with the names they use.
 const LANGUAGES: [string, string][] = [
   ["blocks", "Scratch-klosser"],
   ["microbit", "MakeCode-klosser"],
   ["python", "Python"],
+  ["processing", "Processing"],
   ["html", "HTML"],
   ["css", "CSS"],
-  ["javascript", "JavaScript"],
-  ["bash", "Terminal"],
+  ["js", "JavaScript"],
+  ["elm", "Elm"],
+  ["lua", "Lua (ComputerCraft)"],
+  ["cpp", "C++ (Arduino)"],
+  ["csharp", "C#"],
+  ["sh", "Terminal"],
   ["text", "Ren tekst"],
 ];
 
@@ -39,7 +45,7 @@ export function lessonCompletions(course?: string) {
       const end = closes ? "" : "}";
       const afterCode = before.slice(0, attribute.index).endsWith("`");
       const options: Completion[] = afterCode
-        ? colours.map((colour) => ({
+        ? [...colours, ...(course === "scratch" ? [SCRATCH_ANY_BLOCK] : [])].map((colour) => ({
             label: colour.cls,
             detail: colour.title,
             type: "constant",

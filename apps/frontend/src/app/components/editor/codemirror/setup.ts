@@ -37,6 +37,7 @@ import { linter, lintGutter, lintKeymap } from "@codemirror/lint";
 import { tags as t } from "@lezer/highlight";
 import {
   attributesTag,
+  CODE_LANGUAGE_ALIASES,
   coloursForCourse,
   codeBlockLanguage,
   lessonAttributes,
@@ -69,7 +70,16 @@ import {
  * ``` blocks. Each code language is downloaded the first time a lesson has it.
  */
 export const lessonMarkdown = (codeLanguages: LanguageDescription[] = languages) =>
-  markdown({ base: markdownLanguage, codeLanguages, extensions: [lessonAttributes] });
+  markdown({
+    base: markdownLanguage,
+    codeLanguages: (info) =>
+      LanguageDescription.matchLanguageName(
+        codeLanguages,
+        CODE_LANGUAGE_ALIASES[info.trim().toLowerCase()] ?? info,
+        true,
+      ),
+    extensions: [lessonAttributes],
+  });
 
 /** The dialogs and the file picker live in React; the shortcuts reach them through this. */
 export interface EditorActions {
