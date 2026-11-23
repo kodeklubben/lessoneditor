@@ -18,7 +18,7 @@ const LANGUAGES = [
 const NAV_BUTTONS = {
   prev: "Tilbake",
   next: "Neste",
-  submit: "Sende inn"
+  submit: "Send inn"
 };
 
 // YML page text

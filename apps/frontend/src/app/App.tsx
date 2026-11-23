@@ -1,7 +1,7 @@
 import Editor from "./pages/Editor";
 import Landingpage from "./pages/Landingpage";
 import Overview from "./pages/Frontpage";
-import { BrowserRouter, Route, Routes } from "react-router";
+import { BrowserRouter, Route, Routes, useParams } from "react-router";
 import { LessonContextProvider } from "./contexts/LessonContext";
 import { UserContextProvider } from "./contexts/UserContext";
 import { FileContextProvider } from "./contexts/FileContext";
@@ -9,6 +9,19 @@ import Logout from "./components/shared/Logout";
 import SimplePreview from "./components/simple-preview/simple-preview";
 import ImportLesson from "./pages/ImportLesson";
 import NotFound from "./pages/NotFound";
+
+/**
+ * A fresh editor for every text: switching to another language (the text switcher) unmounts the
+ * old one, so its last changes are saved to its own file before the next text is read.
+ */
+const EditorForText = () => {
+  const { file, lang } = useParams();
+  return (
+    <FileContextProvider key={`${file}/${lang}`}>
+      <Editor />
+    </FileContextProvider>
+  );
+};
 
 const App = () => {
   return (
@@ -39,9 +52,7 @@ const App = () => {
           element={
             <UserContextProvider>
               <LessonContextProvider>
-                <FileContextProvider>
-                  <Editor />
-                </FileContextProvider>
+                <EditorForText />
               </LessonContextProvider>
             </UserContextProvider>
           }

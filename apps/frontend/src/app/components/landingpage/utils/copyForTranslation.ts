@@ -15,6 +15,7 @@ export function copyForTranslation(raw: string, language: string, translator: st
   const header: Record<string, unknown> = { ...data };
   delete header.author;
   delete header.translator;
+  delete header.copiedFrom;
   return stringifyLessonMarkdown(
     {
       ...header,
@@ -24,6 +25,10 @@ export function copyForTranslation(raw: string, language: string, translator: st
       language,
       translator: "",
       translatorList: translator ? [translator] : [],
+      // The editor shows «Kopiert fra bokmål» until the translator is done (never submitted).
+      ...(typeof data.language === "string" && data.language !== language
+        ? { copiedFrom: data.language }
+        : {}),
     },
     body,
   );

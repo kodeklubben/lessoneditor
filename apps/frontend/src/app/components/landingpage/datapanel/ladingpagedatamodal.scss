@@ -1,5 +1,14 @@
-#landingpage_datamodal_trigger__big {
+// With its name next to «Del»; only the icon on a narrow screen.
+#landingpage_datamodal_trigger__small {
   display: none;
+}
+@media (max-width: 600px) {
+  #landingpage_datamodal_trigger__big {
+    display: none;
+  }
+  #landingpage_datamodal_trigger__small {
+    display: inline-block;
+  }
 }
 
 #landingpage_modal__content {

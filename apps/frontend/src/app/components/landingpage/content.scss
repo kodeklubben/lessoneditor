@@ -1,22 +1,117 @@
 .lessons_menu {
-  max-width: 1200px;
-  margin: auto;
-  padding: 1rem;
+  max-width: var(--le-column);
+  margin: 0 auto;
+  padding: 2rem 2rem 4rem;
 
-  .lessons_menu__items {
-    justify-content: flex-start;
-    a {
-      font-size: 0.9rem;
+  // The tabs on the left, cards or list on the right, on one line over the texts.
+  .lessons_menu__bar {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+    border-bottom: 1px solid var(--le-line);
+
+    .view-toggle {
+      margin-bottom: 0.4rem;
     }
   }
 
-  @media (min-width: 570px) {
-    .lessons_menu__items {
-      a {
-        font-size: 1rem;
+  .lessons_menu__items.ui.menu {
+    justify-content: flex-start;
+    margin: 0;
+
+    // The tabs: the chosen one with the green line, as the headings.
+    .item {
+      border-radius: 0 !important;
+      margin-bottom: -1px !important;
+      font-size: 1.05rem;
+    }
+    .active.item {
+      background: none !important;
+      font-weight: 700;
+    }
+  }
+
+  @media (max-width: 600px) {
+    padding: 1.5rem 1rem 3rem;
+  }
+}
+
+// As cards: the texts and files side by side with their pictures on top, framed as the lesson
+// cards on the front page.
+.landingpage-texts--cards {
+  .ui.items {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+
+    > .item {
+      margin: 0 !important;
+      padding: 0 !important;
+      border: 3px solid var(--le-green) !important;
+    }
+  }
+
+  .ui.items > .item.lesson_menu_card {
+    flex-direction: column !important;
+    align-items: stretch;
+    gap: 0;
+
+    .lesson_menu_card_content_container .lesson_menu_card_content .lesson_menu_card_content__image {
+      width: 100%;
+      height: auto !important;
+      aspect-ratio: 4 / 3;
+      border: 0;
+      border-bottom: 1px solid var(--le-line);
+    }
+
+    .text_item__lessontitle {
+      padding: 0.75rem 0.85rem 0.25rem;
+    }
+
+    .extra_content {
+      justify-content: space-between;
+      padding: 0.5rem 0.85rem 0.75rem;
+    }
+  }
+
+  // Slett on one line in a narrow card.
+  .text_item__delete.ui.button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    white-space: nowrap;
+  }
+
+  .ui.items > .item.all-files--container {
+    flex-direction: column !important;
+    align-items: stretch;
+    gap: 0;
+
+    .all-files--content {
+      flex-direction: column;
+      align-items: stretch;
+
+      .all-files--image ._image {
+        width: 100%;
+        height: auto;
+        aspect-ratio: 4 / 3;
+        border: 0;
+        border-bottom: 1px solid var(--le-line);
+      }
+
+      // The name under the picture, left as in the other cards.
+      > .content {
+        align-items: flex-start !important;
+        margin: 0.75rem 0.85rem 0 !important;
       }
     }
 
-    padding: 3rem;
+    > .content {
+      justify-content: flex-start !important;
+      margin: 0.4rem 0.5rem 0.6rem !important;
+    }
   }
 }

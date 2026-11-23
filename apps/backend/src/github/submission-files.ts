@@ -37,7 +37,13 @@ const repoFilename = (filename: string) =>
   );
 
 /** Front matter only the editor uses; it never goes to the lesson repo. */
-const EDITOR_ONLY_FIELDS = ["author", "translator", "machineTranslated", "translatedFrom"];
+const EDITOR_ONLY_FIELDS = [
+  "author",
+  "translator",
+  "machineTranslated",
+  "translatedFrom",
+  "copiedFrom",
+];
 
 /**
  * The editor's front matter (lists) becomes the lesson repo's (comma separated strings). Fields the

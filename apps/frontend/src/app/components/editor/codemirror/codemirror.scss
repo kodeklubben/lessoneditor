@@ -103,7 +103,7 @@ $sections: (
 
 .cm-editor {
   .cm-lesson-section {
-    border-radius: 6px;
+    border-radius: 0;
   }
 
   .cm-lesson-section-badge {
@@ -178,15 +178,7 @@ $sections: (
     font-family: "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
     font-size: 0.92em;
   }
-  .cm-lesson-codeblock-first {
-    border-radius: 6px 6px 0 0;
-  }
-  .cm-lesson-codeblock-last {
-    border-radius: 0 0 6px 6px;
-  }
-  .cm-lesson-codeblock-first.cm-lesson-codeblock-last {
-    border-radius: 6px;
-  }
+  // Square like the preview's code blocks.
 
   // Scratch and micro:bit blocks in their block colour.
   .cm-lesson-block {
@@ -213,5 +205,38 @@ $sections: (
     background-image: none;
     text-decoration: underline dotted #2185d0;
     text-underline-offset: 3px;
+  }
+}
+
+// The lesson's title in the top bar, in Monda as the other pages, with the course beside it.
+.editor-title {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  min-width: 0;
+
+  h1 {
+    margin: 0;
+    font-size: 1.6rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .editor-title__course {
+    color: var(--le-muted);
+    font-weight: 700;
+    white-space: nowrap;
+  }
+}
+
+.copied-text-notice.ui.message {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0.5rem 1rem;
+
+  > span {
+    flex: 1;
   }
 }

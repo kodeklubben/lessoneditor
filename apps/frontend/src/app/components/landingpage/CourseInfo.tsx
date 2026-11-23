@@ -13,10 +13,9 @@ type propTypes = {
 /** Title and course, and for a submitted lesson the same status as its card (3). */
 const CourseInfo = ({ lessonTitle, courseTitle, isSubmitted, lesson, pullRequest }: propTypes) => {
   return (
-    <section>
-      <h1>Tittel : {lessonTitle}</h1>
-
-      <h1>Kurs: {courseTitle}</h1>
+    <section className="course-info">
+      <p className="course-info__course">{courseTitle}</p>
+      <h1 className="course-info__title le-display">{lessonTitle}</h1>
       {isSubmitted && (
         <p className="course-info__status">
           Forslaget på GitHub: <LessonStatus lesson={lesson} pullRequest={pullRequest} />

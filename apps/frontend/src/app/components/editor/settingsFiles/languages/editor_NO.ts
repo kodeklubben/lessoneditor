@@ -23,7 +23,7 @@ export const placeholderText = (language?: string) =>
 const NAV_BUTTONS = {
   prev: "Tilbake",
   next: "Neste",
-  submit: "Sende inn",
+  submit: "Send inn",
 };
 
 // Button Names

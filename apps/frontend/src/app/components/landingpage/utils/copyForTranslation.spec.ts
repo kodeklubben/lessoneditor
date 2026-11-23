@@ -43,3 +43,12 @@ describe("a new language starts as a copy (V6)", () => {
     expect(copySourceLanguage([])).toBeUndefined();
   });
 });
+
+describe("the copy remembers its source", () => {
+  it("says which language it was copied from, until the translator is done", () => {
+    const copy = copyForTranslation(bokmal, "en", "Bo");
+    expect(copy).toMatch(/^copiedFrom: nb$/m);
+    // A copy of a copy is a copy of the text it was made from.
+    expect(copyForTranslation(copy, "fr", "Bo")).toMatch(/^copiedFrom: en$/m);
+  });
+});

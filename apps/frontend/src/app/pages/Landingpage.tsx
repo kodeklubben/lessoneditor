@@ -48,23 +48,22 @@ const Landingpage = () => {
     <>
       <Navbar />
       <div className="landingpage_container">
-        <section className="landingpage_actions">
-          <div className="landingpage_actions__container">
-            <div
-              className="landingpage_datamodal_button"
-              style={{ display: "flex", gap: "0.5em", alignItems: "flex-start" }}
-            >
-              <ShareLesson lessonId={state.lesson.lessonId} />
-              <LandingpageDatamodal />
+        <section className="landingpage-head">
+          <div className="le-column landingpage-head__row">
+            <div className="landingpage-head__info">
+              <CourseInfo
+                lessonTitle={lessonTitle}
+                courseTitle={courseTitle}
+                isSubmitted={submitted || justSubmitted > 0}
+                lesson={lesson}
+                pullRequest={pullRequest}
+              />
+              <div className="landingpage-head__tools">
+                <ShareLesson lessonId={state.lesson.lessonId} />
+                <LandingpageDatamodal />
+              </div>
             </div>
-            <CourseInfo
-              lessonTitle={lessonTitle}
-              courseTitle={courseTitle}
-              isSubmitted={submitted || justSubmitted > 0}
-              lesson={lesson}
-              pullRequest={pullRequest}
-            />
-            <div className="landingpage_actions">
+            <div className="landingpage-head__actions">
               <NewLessontext />
               <SubmitLesson
                 lesson={lesson}

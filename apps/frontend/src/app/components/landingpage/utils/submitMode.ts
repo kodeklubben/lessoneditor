@@ -12,7 +12,7 @@ export function submitMode(lesson: LessonDTO, pullRequest?: LessonPullRequest): 
 }
 
 export const SUBMIT_LABEL: Record<SubmitMode, string> = {
-  new: "Sende inn",
+  new: "Send inn",
   update: "Send oppdatering",
   again: "Send inn på nytt",
 };

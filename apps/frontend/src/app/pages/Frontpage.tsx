@@ -1,10 +1,14 @@
 import "./frontpage.scss";
-import React, { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import NewLessonModal from "../components/frontpage/NewLessonModal";
+import FindLessonModal from "../components/frontpage/FindLessonModal";
+import { prefetchLessonCatalog } from "../utils/useLessonCatalog";
+import { useViewMode } from "../utils/useViewMode";
+import ViewToggle from "../components/shared/ViewToggle";
 import ItemList from "../components/frontpage/ItemList";
 import { useUserContext } from "../contexts/UserContext";
 import Navbar from "../components/navbar/Navbar";
-import { Card, Divider, Header, Icon, Message, Dropdown } from "semantic-ui-react";
+import { Dropdown } from "semantic-ui-react";
 import { LessonDTO, LessonPullRequest } from "@lessoneditor/contracts";
 import { useLessonPullRequests } from "../components/frontpage/LessonStatus";
 import { useNavigate } from "react-router";
@@ -57,6 +61,7 @@ const frontpage: FC = () => {
   const navigate = useNavigate();
   const [openNewLessonModal, setOpenNewLessonModal] = useState<boolean>(false);
   const [sortValue, setSortValue] = useState<string>("date-modified");
+  const [viewMode, setViewMode] = useViewMode("frontpage");
   const pullRequests = useLessonPullRequests(state.user?.userId, state.lessons);
   const [userLessons, setUserLessons] = useState<LessonDTO[]>(
     sortLessons(state.lessons, sortValue),
@@ -66,15 +71,20 @@ const frontpage: FC = () => {
     setUserLessons(sortLessons(state.lessons, sortValue, pullRequests));
   }, [state.lessons, sortValue, pullRequests]);
 
+  // The lessons for «Finn en oppgave» are read while the page sits idle, before anyone asks.
+  useEffect(() => {
+    if (!state.user) return undefined;
+    const idle = window.requestIdleCallback ?? ((run: () => void) => window.setTimeout(run, 1500));
+    const cancel = window.cancelIdleCallback ?? window.clearTimeout;
+    const handle = idle(() => prefetchLessonCatalog());
+    return () => cancel(handle);
+  }, [state.user]);
+
   // Back to the page the visitor came to before signing in, e.g. /rediger/<course>/<lesson>.
   useEffect(() => {
     const returnTo = takeReturnTo();
     if (returnTo) navigate(returnTo, { replace: true });
   }, [navigate]);
-
-  function openModal() {
-    if (!openNewLessonModal) setOpenNewLessonModal(true);
-  }
 
   const handleSortChange = (e: any, { value }: any) => {
     setSortValue(value);
@@ -84,75 +94,51 @@ const frontpage: FC = () => {
     <>
       <Navbar />
       <div className="frontpage">
-        <section className="frontpage_section1">
-          <div className="frontpage_section1__container">
-            <header className="frontpage_section1__header">
-              <h1>
-                <span>Lær Kidsa Koding</span> <span className="subtitle">Tekstbehandler</span>
-              </h1>
-            </header>
-
-            <div className="frontpage_section1__cards">
-              <label>
-                <h3>Lag ny oppgave</h3>
-              </label>
-              <div className="card_container">
-                <div className="card">
-                  <Card>
-                    <Card.Content className="card_content">
-                      <Card.Content>
-                        {/* A larger mouse target; the "Ny oppgave" button is the real control. */}
-                        <Icon.Group
-                          className="card_image_height"
-                          onClick={openModal}
-                          aria-hidden="true"
-                          style={{ cursor: "pointer" }}
-                        >
-                          <Icon color="grey" name="file text outline" size="huge" />
-                        </Icon.Group>
-                      </Card.Content>
-
-                      <Card.Content>
-                        <Card.Header>
-                          <Divider />
-                        </Card.Header>
-                      </Card.Content>
-                      <Card.Content extra>
-                        <NewLessonModal
-                          openNewLessonModal={openNewLessonModal}
-                          setOpenNewLessonModal={setOpenNewLessonModal}
-                        />
-                      </Card.Content>
-                    </Card.Content>
-                  </Card>
-                </div>
-              </div>
+        <section className="frontpage-hero">
+          <div className="le-column frontpage-hero__row">
+            <h1 className="frontpage-brand">
+              <span className="frontpage-brand__org">Lær Kidsa Koding</span>
+              <span className="frontpage-brand__app le-display">Tekstbehandler</span>
+            </h1>
+            <div className="frontpage-hero__actions">
+              <FindLessonModal />
+              <NewLessonModal
+                openNewLessonModal={openNewLessonModal}
+                setOpenNewLessonModal={setOpenNewLessonModal}
+              />
             </div>
           </div>
         </section>
-        <section className="frontpage_section2">
-          <div className="frontpage_section2_container">
-            <div className="frontpage_section2_container__header">
-              <Header as="h3">Mine oppgaver</Header>
-              <Dropdown
-                onChange={handleSortChange}
-                inline
-                options={sortOptions}
-                // defaultValue={sortOptions[0].value}
-                value={sortValue}
-              />
-            </div>
-
-            {state.lessons.length > 0 ? (
-              <ItemList lessons={userLessons} pullRequests={pullRequests} />
-            ) : (
-              <Message compact>
-                <Message.Header>Du har ingen oppgaver ennå</Message.Header>
-                <p>Opprett en ny oppgave ved å trykke på knappen "Ny oppgave"</p>
-              </Message>
+        <section className="le-column frontpage-lessons-section">
+          <div className="frontpage-lessons-section__header">
+            <h2 className="le-display">Mine oppgaver</h2>
+            {state.lessons.length > 1 && (
+              <div className="frontpage-lessons-section__tools">
+                <ViewToggle mode={viewMode} onChange={setViewMode} />
+                <Dropdown
+                  onChange={handleSortChange}
+                  inline
+                  options={sortOptions}
+                  value={sortValue}
+                  aria-label="Sorter oppgavene"
+                />
+              </div>
             )}
-            <br />
           </div>
+
+          {state.lessons.length > 0 ? (
+            <ItemList lessons={userLessons} pullRequests={pullRequests} mode={viewMode} />
+          ) : (
+            <div className="frontpage-empty">
+              <img src="assets/public/maskot.png" alt="" width={120} height={120} />
+              <div>
+                <h3>Du har ingen oppgaver ennå</h3>
+                <p>
+                  Lag den første med «Ny oppgave» øverst. Den starter fra en mal du kan skrive over.
+                </p>
+              </div>
+            </div>
+          )}
         </section>
       </div>
     </>

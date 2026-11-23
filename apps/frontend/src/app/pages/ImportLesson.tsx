@@ -1,44 +1,14 @@
 import { FC, useEffect, useRef, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
-import axios from "axios";
 import { Container, Header, Message } from "semantic-ui-react";
-import { paths } from "@lessoneditor/contracts";
 import Navbar from "../components/navbar/Navbar";
 import ShowSpinner from "../components/ShowSpinner";
 import { COURSESLIST } from "../components/frontpage/settings/newLessonOptions";
 import { useUserContext } from "../contexts/UserContext";
 import { useCatalog } from "../utils/useCatalog";
-import { announceThumbnail } from "../utils/thumbnailEvents";
+import { copyLessonFromRepo, importErrorMessage } from "../utils/importLesson";
 
-/**
- * The server's message for a refused import (4xx), otherwise a general one. Validation errors
- * (400) come as a list of field messages, which mean nothing to a teacher.
- */
-export function importErrorMessage(error: unknown): string {
-  const response = (error as { response?: { status?: number; data?: { message?: unknown } } })
-    ?.response;
-  const status = response?.status ?? 500;
-  if (status === 400 && typeof response?.data?.message !== "string")
-    return "Adressen peker ikke på en oppgave. Den skal se slik ut: /rediger/<kurs>/<oppgave>, for eksempel /rediger/scratch/asteroids.";
-  return typeof response?.data?.message === "string" && status < 500
-    ? response.data.message
-    : "Kunne ikke hente oppgaven fra GitHub. Prøv igjen litt senere.";
-}
-
-/** Asks for the copy's first thumbnail, of the text the server chose. */
-async function makeThumbnail(lessonId: number, text: string) {
-  try {
-    const { data: made } = await axios.put<boolean>(
-      paths.LESSON_FILE_UPDATE_THUMB.replace(":lessonId", String(lessonId)).replace(
-        ":filename",
-        encodeURIComponent(text),
-      ),
-    );
-    if (made === true) announceThumbnail(lessonId, text);
-  } catch {
-    // Cosmetic: the thumbnail is made again after the first edit.
-  }
-}
+export { importErrorMessage } from "../utils/importLesson";
 
 /**
  * /rediger/<course>/<lesson>: the "Rediger oppgave" link from oppgaver.kidsakoder.no, also with
@@ -64,22 +34,8 @@ const ImportLesson: FC = () => {
     const courseTitle =
       catalog?.courses.find((item) => item.value === course)?.text ??
       COURSESLIST.find((item) => item.value === course)?.text;
-    axios
-      .post<{ lessonId: number; existing: boolean; thumbnailFrom: string | null }>(
-        paths.USER_LESSON_IMPORT.replace(":userId", String(userId)),
-        {
-          course,
-          lesson,
-          courseTitle,
-        },
-      )
-      .then(({ data }) => {
-        // A thumbnail right away instead of after the first edit, while the copy has none; it
-        // takes a few seconds and the page shows a neutral picture meanwhile. A failure only
-        // leaves that picture.
-        if (data.thumbnailFrom) void makeThumbnail(data.lessonId, data.thumbnailFrom);
-        navigate(`/landingpage/${data.lessonId}`, { replace: true });
-      })
+    copyLessonFromRepo(userId, course, lesson, courseTitle)
+      .then(({ lessonId }) => navigate(`/landingpage/${lessonId}`, { replace: true }))
       .catch((e) => setError(importErrorMessage(e)));
   }, [state.user?.userId, course, lesson, navigate]);
 

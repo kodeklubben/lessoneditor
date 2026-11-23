@@ -1,13 +1,123 @@
 /* You can add global styles to this file, and also import other style files */
 // Lato from our own server, not from Google Fonts. Semantic UI is imported in main.tsx, where
 // tools/strip-google-fonts-loader.cjs removes its @import of fonts.googleapis.com.
-@import '~@fontsource/lato/400.css';
-@import '~@fontsource/lato/400-italic.css';
-@import '~@fontsource/lato/700.css';
-@import '~@fontsource/lato/700-italic.css';
+@import "~@fontsource/lato/400.css";
+@import "~@fontsource/lato/400-italic.css";
+@import "~@fontsource/lato/700.css";
+@import "~@fontsource/lato/700-italic.css";
 
 // Keyboard focus must be visible everywhere, also on Semantic's buttons and our own controls.
 :focus-visible {
-  outline: 3px solid #2185d0 !important;
+  outline: 3px solid #0b7a50 !important;
   outline-offset: 2px;
+}
+
+// Monda for headings, as on kidsakoder.no; also from our own server.
+@import "~@fontsource/monda/400.css";
+@import "~@fontsource/monda/700.css";
+
+/*
+ * lessoneditor v2: the same family as kidsakoder.no. Its green lines and square frames, Monda for
+ * headings and Lato for text; the grey bands and the lesson section colours stay from v1.
+ */
+:root {
+  --le-green: #0fbe7b; // kidsakoder.no's green: frames, lines, the underline under headings
+  --le-green-ink: #0b7a50; // buttons and links with white text on them (5.4:1)
+  --le-green-ink-hover: #096643;
+  --le-ink: #333436;
+  --le-muted: #6b6f73;
+  --le-line: #dfe3e1;
+  --le-band: #f6f7f7;
+  --le-display: "Monda", "Lato", "Helvetica Neue", Arial, sans-serif;
+  --le-column: 1180px;
+}
+
+body {
+  color: var(--le-ink);
+}
+
+/* One column that headings, buttons and cards on a page line up with. */
+.le-column {
+  max-width: var(--le-column);
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* Page headings in Monda, with the green line under them that "Tekstbehandler" always had. */
+.le-display {
+  font-family: var(--le-display) !important;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--le-ink);
+}
+
+/*
+ * The green action buttons: the same green, dark enough for white text. Semantic's #21ba45 gave
+ * 2.6:1.
+ */
+body .ui.positive.button,
+body .ui.positive.buttons .button,
+body .ui.green.button {
+  background-color: var(--le-green-ink);
+  color: #fff;
+  &:hover,
+  &:focus {
+    background-color: var(--le-green-ink-hover);
+    color: #fff;
+  }
+  &:active {
+    background-color: #07563a;
+  }
+  // The darker strip behind an icon in a labeled button.
+  > .icon:not(.button) {
+    background-color: rgba(0, 0, 0, 0.12);
+  }
+}
+
+/* Dialogs: the heading in Monda, as the pages. */
+body .ui.modal > .header,
+body .ui.modal .ui.header:first-child {
+  font-family: var(--le-display);
+  letter-spacing: 0.02em;
+}
+
+/* A text field that has the focus: the green frame, not Semantic's blue. */
+body .ui.input > input:focus,
+body .ui.form input:focus,
+body .ui.selection.active.dropdown,
+body .ui.selection.active.dropdown .menu {
+  border-color: var(--le-green);
+}
+
+/*
+ * Secondary actions (Finn en oppgave, Del, Oppgavedata): white with a green frame, so they read as
+ * buttons next to the filled green ones and not as a grey input field.
+ */
+body .ui.button.le-secondary {
+  background: #fff;
+  color: var(--le-green-ink);
+  box-shadow: inset 0 0 0 2px var(--le-green-ink);
+  border-radius: 0.28571429rem;
+
+  &:hover,
+  &:focus {
+    background: #eef7f2;
+    color: var(--le-green-ink-hover);
+  }
+  > .icon {
+    opacity: 1;
+  }
+}
+
+/* Dialogs: the × inside the dialog (it sat outside, over the page's buttons) and a clear edge. */
+body .ui.modal {
+  box-shadow:
+    0 0 0 1px var(--le-line),
+    0 12px 32px rgba(0, 0, 0, 0.12);
+  > .close.icon {
+    top: 1rem;
+    right: 1rem;
+    color: var(--le-ink);
+    z-index: 2;
+  }
 }

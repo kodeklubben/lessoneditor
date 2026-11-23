@@ -1,31 +1,70 @@
+// One row (or card) per file: its picture with the language as a small flag in the corner, the
+// name, and Slett.
+
+.ui.items > .item.all-files--container,
 .all-files--container {
   display: flex;
   flex-direction: row !important;
+  align-items: center;
+  gap: 1rem;
+  margin: 0;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid var(--le-line);
+
   h3 {
+    margin: 0;
     font-size: 1rem;
+    overflow-wrap: anywhere;
   }
 
   .all-files--content {
     display: flex;
+    flex: 1;
     flex-flow: row;
+    align-items: center;
+    min-width: 0;
 
     .all-files--image {
       position: relative;
-      height: 100%;
+      flex: none;
+      line-height: 0;
+      background: var(--le-band);
+
       ._image {
-        max-height: 4.5rem;
         width: 5rem;
-        overflow: hidden;
+        height: 3.75rem;
+        max-height: none;
         object-fit: cover;
         object-position: 0 0;
-        border: 1px solid lightgray;
+        border: 1px solid var(--le-line);
+        border-radius: 0 !important;
       }
+
       .all-files--language-image {
-        width: 66%;
         position: absolute;
-        left: 0;
-        bottom: 0;
+        left: 0.3rem;
+        bottom: 0.3rem;
+        width: 1.4rem !important;
+        height: auto;
+        border: 1px solid #fff;
+        box-shadow: 0 0 0 1px var(--le-line);
       }
+    }
+  }
+
+  // The name in the middle of the row, beside the picture.
+  .all-files--content > .content {
+    align-self: center;
+  }
+
+  .text_item__delete.ui.button {
+    background: none;
+    color: var(--le-muted);
+    white-space: nowrap;
+
+    &:hover,
+    &:focus {
+      color: #b3261e;
     }
   }
 }

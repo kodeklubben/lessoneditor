@@ -86,7 +86,13 @@ const ShareLesson: FC<{ lessonId: number }> = ({ lessonId }) => {
 
   return (
     <>
-      <Button basic size="medium" icon="users" content="Del" onClick={() => setOpen(true)} />
+      <Button
+        className="le-secondary"
+        size="medium"
+        icon="users"
+        content="Del"
+        onClick={() => setOpen(true)}
+      />
       <Modal open={open} onClose={() => !busy && setOpen(false)} size="tiny" dimmer="inverted">
         <Modal.Header>Del oppgaven</Modal.Header>
         <Modal.Content>

@@ -1,0 +1,63 @@
+// The open text's language and kind beside the lesson title, as a menu to the other texts.
+
+.text-switcher {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.6rem;
+  border: 1px solid var(--le-line);
+  border-radius: 0;
+  background: #fff;
+  white-space: nowrap;
+
+  &.ui.dropdown:hover,
+  &.ui.dropdown.active {
+    border-color: var(--le-green);
+  }
+
+  .text-switcher__label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .text-switcher__language {
+    font-weight: 700;
+  }
+
+  .text-switcher__kind {
+    color: var(--le-muted);
+    padding-left: 0.45rem;
+    border-left: 1px solid var(--le-line);
+  }
+
+  .menu > .header {
+    text-transform: none;
+    font-size: 0.9rem;
+    color: var(--le-muted);
+  }
+
+  .menu > .item {
+    display: flex !important;
+    align-items: center;
+    gap: 0.5rem;
+
+    > img.text-switcher__flag {
+      width: 1.3rem;
+      height: auto;
+      max-height: none;
+      margin: 0;
+    }
+
+    .text-switcher__kind {
+      margin-left: auto;
+      padding-left: 1rem;
+    }
+  }
+}
+
+.text-switcher__flag {
+  width: 1.3rem;
+  height: auto;
+  border: 1px solid var(--le-line);
+}

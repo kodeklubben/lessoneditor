@@ -1,6 +1,6 @@
 import "./textitem.scss";
 import { useNavigate } from "react-router";
-import { Button, Item, Image, Icon } from "semantic-ui-react";
+import { Button, Item, Icon } from "semantic-ui-react";
 import { asButton } from "../../utils/a11y";
 import { FC, useState } from "react";
 import { languageOption } from "../frontpage/settings/newLessonOptions";
@@ -61,22 +61,15 @@ const TeacherguideItem: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug
               style={{ height: "3.5rem" }}
               src={thumbnail}
             />
-
-            {language ? <Image className="image_flag" src={languageImage} alt={""} /> : ""}
           </Item.Content>
         </div>
         <div className="text_item__lessontitle">
-          <Item.Header>
-            <h2>
-              {`Tittel: ${title ?? lessonTitle}`}
-              <div>(lærerveiledning)</div>
-            </h2>
-          </Item.Header>
-          <Item.Content>
-            <Item.Meta>
-              <h3>Språk: {languageText} </h3>
-            </Item.Meta>
-          </Item.Content>
+          <span className="text_item__language">
+            {language ? <img className="text_item__flag" src={languageImage} alt="" /> : null}
+            {languageText}
+          </span>
+          <h2 className="text_item__title">{title ?? lessonTitle}</h2>
+          <span className="text_item__kind">Lærerveiledning</span>
         </div>
 
         <Item.Content className="extra_content">
