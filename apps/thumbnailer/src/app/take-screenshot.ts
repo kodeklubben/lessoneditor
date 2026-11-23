@@ -5,11 +5,32 @@ import { previewUrl } from "./preview-url";
 let browserPromise: Promise<Browser> | undefined;
 
 /**
- * Starts Chromium ahead of the first thumbnail: on a new instance it is launched by the first
- * request, which then took 17–19 s instead of 6–7 s.
+ * Gets Chromium ready ahead of the first thumbnail. Launching it was not enough: in App Engine
+ * the first picture after a launch still took 12 s against 6 s for the next ones (renderer
+ * process, fonts, DNS and TLS to the app, compiling its script). So the app's own front page is
+ * rendered once too, with no credentials and the same settings as a real preview.
  */
-export async function warmUpBrowser(): Promise<void> {
-  await getBrowserInstance();
+export async function warmUpBrowser(frontendUrl = process.env.FRONTEND_URL): Promise<void> {
+  const browser = await getBrowserInstance();
+  if (!frontendUrl) return;
+  const origin = new URL(frontendUrl).origin;
+  const context = await browser.createBrowserContext();
+  try {
+    const page = await context.newPage();
+    await page.setCacheEnabled(false);
+    await page.setRequestInterception(true);
+    page.on("request", (request) => {
+      if (new URL(request.url()).origin === origin) void request.continue();
+      else void request.abort();
+    });
+    await page.setViewport({ width: 600, height: 1000, deviceScaleFactor: 1 });
+    await page.goto(`${origin}/`, { waitUntil: "networkidle0", timeout: 15000 });
+    await page.evaluate(() => document.fonts.ready);
+  } catch {
+    // Warming up is best effort; the real thumbnail does the work if this did not.
+  } finally {
+    await context.close().catch(() => undefined);
+  }
 }
 
 async function getBrowserInstance(): Promise<Browser> {
