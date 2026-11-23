@@ -240,9 +240,9 @@ async function run() {
     httpOnly: true,
   });
   await page.goto(`${base}/editor/${lessonId}/lokal-test/nb`);
-  await page.waitForSelector("textarea.text-area", { visible: true });
+  await page.waitForSelector(".cm-editor .cm-content", { visible: true });
   await page.waitForFunction(() =>
-    document.querySelector("textarea.text-area")?.value.includes("Lagring fungerer lokalt."),
+    document.querySelector(".cm-content")?.textContent.includes("Lagring fungerer lokalt."),
   );
   await page.waitForFunction(
     () =>
@@ -251,11 +251,13 @@ async function run() {
       ),
     { timeout: 10000 },
   );
-  await page.$eval("textarea.text-area", (element) => {
-    element.focus();
-    element.setSelectionRange(element.value.length, element.value.length);
+  // The cursor to the end of the text, through the editor's own view.
+  await page.$eval(".cm-content", (element) => {
+    const view = element.cmTile?.view ?? element.cmView?.view;
+    view.dispatch({ selection: { anchor: view.state.doc.length } });
+    view.focus();
   });
-  await page.type("textarea.text-area", "\n\nSmoke autosave marker");
+  await page.type(".cm-content", "\n\nSmoke autosave marker");
   let saved;
   for (let attempt = 0; attempt < 30; attempt++) {
     saved = await api(`/lesson/${lessonId}/files/lokal-test`);
@@ -281,7 +283,7 @@ async function run() {
   assert.deepEqual(unnamed, [], "Every visible button has a name");
   assert.equal(await page.$eval("html", (html) => html.lang), "nb");
   assert.equal(await page.$$eval(".buttonpanel_small_devices", (n) => n.length), 0);
-  await page.type("textarea.text-area", "\n\nFlush marker");
+  await page.type(".cm-content", "\n\nFlush marker");
   await Promise.all([
     page.waitForNavigation(),
     page.click('button[aria-label="Til prosjektoversikt"]'),
@@ -290,8 +292,11 @@ async function run() {
     (await api(`/lesson/${lessonId}/files/lokal-test`)).content.includes("Flush marker"),
     "Leaving the editor saves the last seconds",
   );
-  await page.goto(`${base}/editor/${lessonId}/lokal-test/nb`);
+  // The classic editor is soft-deleted, not gone: ?editor=classic still opens it.
+  await page.goto(`${base}/editor/${lessonId}/lokal-test/nb?editor=classic`);
   await page.waitForSelector("textarea.text-area", { visible: true });
+  await page.goto(`${base}/editor/${lessonId}/lokal-test/nb?editor=codemirror`);
+  await page.waitForSelector(".cm-editor .cm-content", { visible: true });
   mkdirSync("test-results", { recursive: true });
   await page.screenshot({ path: "test-results/editor-desktop.png", fullPage: true });
   await page.setViewport({ width: 390, height: 844 });

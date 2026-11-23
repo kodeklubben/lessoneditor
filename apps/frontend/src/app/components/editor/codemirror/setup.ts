@@ -104,7 +104,7 @@ export function toolbarKeymap(
     key: codeMirrorKey(shortcut),
     run: () => (run(), true),
   });
-  return [
+  const bindings: KeyBinding[] = [
     inline("bold", emphasis.bold.shortcut),
     inline("italic", emphasis.italic.shortcut),
     inline("strikethrough", emphasis.strikethrough.shortcut),
@@ -128,6 +128,14 @@ export function toolbarKeymap(
     action(media.video.shortcut, () => actions().openVideo()),
     action(media.image.shortcut, () => actions().openImage()),
   ];
+  // CodeMirror looks a key up as typed ("Ctrl-A" for ctrl+shift+a) before "Ctrl-Shift-a", and on a
+  // Mac its default keymap has Ctrl-A (block comment). The buttons' shortcuts win both ways.
+  return bindings.flatMap((binding) => {
+    const shifted = /^(.*)Shift-([a-z])$/.exec(binding.key ?? "");
+    return shifted
+      ? [binding, { ...binding, key: shifted[1] + shifted[2].toUpperCase() }]
+      : [binding];
+  });
 }
 
 const monospace = "'SFMono-Regular', Menlo, Consolas, 'Liberation Mono', monospace";

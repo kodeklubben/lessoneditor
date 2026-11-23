@@ -39,7 +39,12 @@ export const LinkDialog: FC<{
           name="linkUrl"
           value={url}
           onChange={(event) => setUrl(event.target.value)}
-          onKeyDown={(event: React.KeyboardEvent) => event.key === "Enter" && insert()}
+          onKeyDown={(event: React.KeyboardEvent) => {
+            // The Enter must not reach the editor, which gets the focus back as the dialog closes.
+            if (event.key !== "Enter") return;
+            event.preventDefault();
+            insert();
+          }}
           size="big"
           placeholder="URL"
         />
@@ -110,7 +115,12 @@ export const VideoDialog: FC<{
           name="videoUrl"
           value={url}
           onChange={(event) => setUrl(event.target.value)}
-          onKeyDown={(event: React.KeyboardEvent) => event.key === "Enter" && insert()}
+          onKeyDown={(event: React.KeyboardEvent) => {
+            // The Enter must not reach the editor, which gets the focus back as the dialog closes.
+            if (event.key !== "Enter") return;
+            event.preventDefault();
+            insert();
+          }}
           size="big"
           placeholder="Støtter YouTube og Vimeo"
         />

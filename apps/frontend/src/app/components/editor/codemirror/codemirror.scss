@@ -25,28 +25,6 @@
   }
 }
 
-.cm-status {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.cm-beta-note {
-  font-size: 0.8rem;
-  color: #5c6166;
-  white-space: nowrap;
-}
-
-.cm-beta-switch {
-  border: 0;
-  padding: 0;
-  background: none;
-  color: #1e70bf;
-  text-decoration: underline;
-  cursor: pointer;
-  font: inherit;
-}
-
 $sections: (
   // class: (stripe, heading background, heading text, badge background, badge text, badge border)
   intro: (

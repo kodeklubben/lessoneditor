@@ -48,7 +48,7 @@ const KEY_COMBINATIONS = {
     codeblock: [SHORTCUTKEY, "+", "k"].join(""),
     preview: [SHORTCUTKEY, "+", SHORTCUTKEY2, "+", "y"].join(""),
   },
-  preview: { preview: [SHORTCUTKEY, "+", SHORTCUTKEY2 + "o"].join("") },
+  preview: { preview: [SHORTCUTKEY, "+", SHORTCUTKEY2, "+", "o"].join("") },
 };
 
 const emphasis = {

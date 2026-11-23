@@ -19,9 +19,13 @@ import SaveProblemModal from "../components/editor/SaveProblemModal";
 import ContentPlaceholder from "../components/editor/ContentPlaceholder";
 import { codeMirrorEditorEnabled } from "../utils/featureFlags";
 
-// Only loaded for those who turned it on (?editor=codemirror): the others download none of it.
+// In a chunk of its own, so the front page does not wait for CodeMirror.
 const CodeMirrorEditor = lazy(() => import("../components/editor/codemirror/CodeMirrorEditor"));
 
+/**
+ * The classic textarea editor, soft-deleted: hidden behind ?editor=classic since CodeMirror took
+ * over, and kept so it is easy to bring back (DEFAULT_EDITOR in utils/featureFlags.ts).
+ */
 const ClassicEditor: FC = () => {
   const { lang, lessonId } = useParams() as any;
   const { state } = useLessonContext();

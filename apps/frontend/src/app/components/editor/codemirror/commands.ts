@@ -58,7 +58,13 @@ function blockPadding(state: EditorState, from: number, to: number) {
 
 /** Where a block goes: in place of an empty line, or after the line the cursor is on. */
 function blockTarget(state: EditorState, range: SelectionRange) {
-  if (!range.empty) return { from: range.from, to: range.to };
+  if (!range.empty) {
+    // Words taken out of the middle of a line leave no stray spaces at the cut.
+    let { from, to } = range;
+    while (from > 0 && /[ \t]/.test(state.sliceDoc(from - 1, from))) from--;
+    while (to < state.doc.length && /[ \t]/.test(state.sliceDoc(to, to + 1))) to++;
+    return { from, to };
+  }
   const line = state.doc.lineAt(range.head);
   return line.text.trim() === ""
     ? { from: line.from, to: line.to }
@@ -245,6 +251,22 @@ export const toggleCodeBlock = (language: string, placeholder: string): StateCom
         return { changes: set, range: range.map(set) };
       }
       const fence = "```" + language;
+      const line = state.doc.lineAt(range.from);
+      const partOfLine =
+        !range.empty &&
+        range.to <= line.to &&
+        state.sliceDoc(range.from, range.to).trim() !== line.text.trim();
+      if (partOfLine) {
+        // Some words of a line: only they become the code block, on lines of their own.
+        const code = state.sliceDoc(range.from, range.to).trim();
+        const { from, to } = blockTarget(state, range);
+        const { lead, trail } = blockPadding(state, from, to);
+        const start = from + lead.length + fence.length + 1;
+        return {
+          changes: { from, to, insert: `${lead}${fence}\n${code}\n\`\`\`${trail}` },
+          range: EditorSelection.range(start, start + code.length),
+        };
+      }
       if (!range.empty) {
         const first = state.doc.lineAt(range.from);
         let last = state.doc.lineAt(range.to);

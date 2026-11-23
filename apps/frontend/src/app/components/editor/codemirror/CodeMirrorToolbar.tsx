@@ -55,7 +55,6 @@ interface Props {
   saveStatus: AutosaveStatus;
   flushAutosave: () => Promise<boolean>;
   setPreview: Dispatch<SetStateAction<boolean>>;
-  onClassic: () => void;
   /** On a phone or tablet the text buttons sit below the text, as in the classic editor. */
   part?: "top" | "bottom";
 }
@@ -80,7 +79,6 @@ const CodeMirrorToolbar: FC<Props> = ({
   saveStatus,
   flushAutosave,
   setPreview,
-  onClassic,
   part = "top",
 }) => {
   const { active, inCodeBlock } = toolbar;
@@ -244,15 +242,6 @@ const CodeMirrorToolbar: FC<Props> = ({
     </div>
   );
 
-  const beta = (
-    <span className="cm-beta-note">
-      Ny editor (beta) ·{" "}
-      <button type="button" className="cm-beta-switch" onClick={onClassic}>
-        bytt tilbake
-      </button>
-    </span>
-  );
-
   if (!isDesktop && part === "top") {
     return (
       <div className="buttonpanel">
@@ -320,10 +309,7 @@ const CodeMirrorToolbar: FC<Props> = ({
             <span style={{ marginRight: "5em" }} />
             {codeButtons}
           </div>
-          <div className="cm-status">
-            {beta}
-            <SaveStatus status={saveStatus} />
-          </div>
+          <SaveStatus status={saveStatus} />
         </div>
         <div className="scratchmicrobit_row">{colourButtons}</div>
       </div>

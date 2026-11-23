@@ -11,7 +11,6 @@ import { paths } from "@lessoneditor/contracts";
 import { useLessonContext } from "../../../contexts/LessonContext";
 import { useFileContext } from "../../../contexts/FileContext";
 import { DESKTOP_EDITOR, useMediaQuery } from "../../../utils/useMediaQuery";
-import { setCodeMirrorEditor } from "../../../utils/featureFlags";
 import Navbar from "../../navbar/Navbar";
 import ShowSpinner from "../../ShowSpinner";
 import MDPreviewArea from "../MDPreviewArea";
@@ -35,7 +34,7 @@ const toolbarFor = (state: EditorState): ToolbarState => ({
 });
 
 /**
- * The editor page with CodeMirror instead of the textarea (behind ?editor=codemirror). The lesson
+ * The editor page, with CodeMirror (the classic textarea editor is soft-deleted, ?editor=classic). The lesson
  * around it is the same as in the classic editor: the same preview with the lesson page's CSS, the
  * same autosave, conflict dialog, lesson data and submit button.
  */
@@ -195,12 +194,6 @@ const CodeMirrorEditor: FC = () => {
     view.focus();
   };
 
-  const backToClassic = async () => {
-    await autosave.flush();
-    setCodeMirrorEditor(false);
-    window.location.assign(window.location.pathname);
-  };
-
   if (!state.lesson) return null;
 
   const toolbarProps = {
@@ -218,7 +211,6 @@ const CodeMirrorEditor: FC = () => {
     saveStatus: autosave.status,
     flushAutosave: autosave.flush,
     setPreview,
-    onClassic: backToClassic,
   };
 
   return (

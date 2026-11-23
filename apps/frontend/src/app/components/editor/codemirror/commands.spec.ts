@@ -101,6 +101,12 @@ describe("sections", () => {
     expect(run(toggleSection("activity", 1, TEXT), "# Steg 1| {.activity}").text).toBe("# Steg 1");
   });
 
+  it("takes selected words out of the middle of a line without stray spaces", () => {
+    expect(run(toggleSection("tip", 2, TEXT), "Før «Lag figuren» etter").text).toBe(
+      "Før\n\n## Lag figuren {.tip}\n\netter",
+    );
+  });
+
   it("makes the selected words the title", () => {
     expect(run(toggleSection("tip", 2, TEXT), "«Husk å lagre»").text).toBe(
       "## Husk å lagre {.tip}\n",
@@ -141,6 +147,12 @@ describe("code blocks", () => {
   it("wraps the selected lines in a code block for the course's language", () => {
     expect(run(toggleCodeBlock("python", TEXT), "Kode:\n«print(1)\nprint(2)»").text).toBe(
       "Kode:\n\n```python\nprint(1)\nprint(2)\n```\n",
+    );
+  });
+
+  it("makes only the selected words of a line a code block", () => {
+    expect(run(toggleCodeBlock("python", TEXT), "Skriv «print(1)» her").text).toBe(
+      "Skriv\n\n```python\nprint(1)\n```\n\nher",
     );
   });
 
