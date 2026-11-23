@@ -15,8 +15,10 @@ import type { LessonPullRequest } from "@lessoneditor/contracts";
 // Runtime code from the shared lib is imported by path: tsc does not rewrite the alias.
 import { invalidLessonFields } from "../../../../libs/contracts/src/lib/validation";
 import { stringifyLessonMarkdown } from "../../../../libs/contracts/src/lib/frontmatter";
+// A relative path: the backend runs from dist without the @lessoneditor/contracts alias.
+import { lessonTemplate } from "../../../../libs/contracts/src/lib/templates";
 import { FileStore, Lesson, isLessonOwner } from "../lesson/lesson.entity";
-import { oppgaveMal, imageTemplate } from "./fileTemplates";
+import { imageTemplate } from "./fileTemplates";
 import { GithubService, publishedLessonMessage } from "../github/github.service";
 
 /** Slugs end up as paths in the lesson repo, so they are checked before they are stored. */
@@ -55,7 +57,11 @@ export function newLessonFiles(
   const textName =
     lesson.language === "nb" ? lesson.lessonSlug : `${lesson.lessonSlug}_${lesson.language}`;
   return [
-    file(textName, ".md", Buffer.from(stringifyLessonMarkdown(header, oppgaveMal))),
+    file(
+      textName,
+      ".md",
+      Buffer.from(stringifyLessonMarkdown(header, lessonTemplate(lesson.language))),
+    ),
     file("lesson", ".yml", Buffer.from(JSON.stringify(yml))),
     file("image_rT34Yx", ".png", Buffer.from(imageTemplate, "base64")),
     // A placeholder until the first thumbnail is taken.
