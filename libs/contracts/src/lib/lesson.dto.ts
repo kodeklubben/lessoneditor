@@ -101,3 +101,11 @@ export interface HeaderData {
   machineTranslated?: boolean;
   translatedFrom?: string;
 }
+
+/** Where a submitted lesson's pull request on the lesson repo stands. */
+export type PullRequestState = "open" | "merged" | "closed";
+
+export interface LessonPullRequest {
+  state: PullRequestState;
+  url: string;
+}

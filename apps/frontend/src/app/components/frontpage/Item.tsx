@@ -1,23 +1,23 @@
 import "./item.scss";
-import { LessonDTO } from "@lessoneditor/contracts";
+import { LessonDTO, LessonPullRequest } from "@lessoneditor/contracts";
 import React, { useState } from "react";
-import { Button, Card, Icon, Popup } from "semantic-ui-react";
+import { Button, Card, Icon } from "semantic-ui-react";
 import { useNavigate } from "react-router";
 import { useUserContext } from "../../contexts/UserContext";
 
 import DeleteModal from "../shared/DeleteModal";
 import PreviewImage from "../shared/PreviewImage";
+import LessonStatus from "./LessonStatus";
 
 interface Props {
   lesson: LessonDTO;
+  pullRequest?: LessonPullRequest;
 }
 
-const Item: React.FC<Props> = ({ lesson }) => {
+const Item: React.FC<Props> = ({ lesson, pullRequest }) => {
   const navigate = useNavigate();
   const [openDeleteLesson, setOpenDeleteLesson] = useState<boolean>(false);
   const { removeLesson, previewImage } = useUserContext();
-
-  const submitDate = lesson.submitted_at ? new Date(lesson.submitted_at).toLocaleDateString() : "";
 
   const navigateToHome = (lessonId: string) => {
     const target = ["/landingpage", lessonId].join("/");
@@ -44,18 +44,14 @@ const Item: React.FC<Props> = ({ lesson }) => {
             <PreviewImage className="card-content__image" src={previewImage[lesson.lessonId]} />
 
             <Card.Content className="card-content__content">
-              <Card.Header>
+              {/* Two lines at most, so every card in a row has the same height (N12). */}
+              <Card.Header title={lesson.lessonTitle || lesson.lessonSlug}>
                 {lesson.lessonTitle ? lesson.lessonTitle : lesson.lessonSlug}
               </Card.Header>
               <Card.Meta>{lesson.courseTitle ? lesson.courseTitle : lesson.courseSlug}</Card.Meta>
-              {lesson.submitted && (
-                <Popup trigger={<i className="check circle outline"></i>}>
-                  <div>
-                    <p>Denne oppgaven har blitt sendt inn til Lær Kidsa Koding</p>
-                    <p>{`Dato: ${submitDate}`}</p>
-                  </div>
-                </Popup>
-              )}
+              <div className="card-content__status">
+                <LessonStatus lesson={lesson} pullRequest={pullRequest} />
+              </div>
             </Card.Content>
           </Card.Content>
 
