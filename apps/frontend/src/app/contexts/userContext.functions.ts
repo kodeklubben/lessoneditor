@@ -15,12 +15,10 @@ export interface UserContextModel {
     courseTitle: string,
     lesson: string,
     lessonTitle: string,
-    language: string,
+    language: string
   ) => Promise<number | undefined>;
   removeLesson: (lessonId: number) => Promise<void>;
   previewImage: any;
-  /** Lessons whose card has no picture yet. */
-  missingPreviews: number[];
   loading: boolean;
 }
 
