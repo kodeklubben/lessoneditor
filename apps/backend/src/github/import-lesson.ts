@@ -4,7 +4,7 @@ import {
   parseLessonMarkdown,
   stringifyLessonMarkdown,
 } from "../../../../libs/contracts/src/lib/frontmatter";
-import { splitTextName } from "../../../../libs/contracts/src/lib/files";
+import { splitTextName, TEXT_LANGUAGES } from "../../../../libs/contracts/src/lib/files";
 import { isRepoName } from "../../../../libs/contracts/src/lib/validation";
 import { IMAGE_EXTENSIONS } from "./submission-files";
 
@@ -63,11 +63,10 @@ export function planImport(entries: RepoEntry[]): ImportPlan {
   if (!isRepoName(bases[0])) {
     return { ok: false, reason: `Tekstnavnet ${bases[0]} kan ikke brukes i editoren.` };
   }
+  // preview.png too: some texts show it (processing/bildepresentasjon), and then it is the
+  // copy's thumbnail instead of a photo of the text.
   const images = files.filter(
-    (file) =>
-      IMAGE_EXTENSIONS.includes(extension(file.name)) &&
-      file.name !== "preview.png" &&
-      isRepoName(stem(file.name)),
+    (file) => IMAGE_EXTENSIONS.includes(extension(file.name)) && isRepoName(stem(file.name)),
   );
   const copied = [...texts, ...guides, ...files.filter((f) => f.name === "lesson.yml"), ...images];
   const tooBig = copied.find((file) => file.size > MAX_IMPORT_FILE_SIZE);
@@ -121,6 +120,19 @@ export function toEditorLessonData(yml: string): string {
       grade: list(tags.grade),
     },
   });
+}
+
+/**
+ * The text a copy's first thumbnail is taken of: bokmål, or else the first language the editor
+ * lists. Some lessons have only nynorsk (web/hyllest), so the lesson slug alone is not a text.
+ */
+export function thumbnailText(textNames: string[]): string | null {
+  const rank = (name: string) => {
+    const index = TEXT_LANGUAGES.indexOf(splitTextName(name).language);
+    return index < 0 ? TEXT_LANGUAGES.length : index;
+  };
+  const texts = textNames.filter((name) => !/^README(_|$)/.test(name));
+  return texts.sort((a, b) => rank(a) - rank(b))[0] ?? null;
 }
 
 /** The title the copy is listed under: the bokmål text's, or else the first one's. */
