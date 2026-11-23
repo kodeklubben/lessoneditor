@@ -1,7 +1,21 @@
 import "./tags.scss";
 import { FC, SyntheticEvent } from "react";
 import { Checkbox } from "semantic-ui-react";
-import { gradeSettings, subjectSettings, topicSettings } from "../settingsFiles/LESSONTAGSSETTINGS";
+import {
+  gradeSettings as builtInGrades,
+  subjectSettings as builtInSubjects,
+  topicSettings as builtInTopics,
+} from "../settingsFiles/LESSONTAGSSETTINGS";
+import { useCatalog } from "../../../utils/useCatalog";
+
+type Setting = { name: string; value: string; subtag: string };
+
+/** The repo's tags (#335) when they are read, otherwise the editor's own list. */
+function useTagSettings(subtag: "topic" | "subject" | "grade", builtIn: Setting[]): Setting[] {
+  const catalog = useCatalog();
+  const fromRepo = catalog?.[subtag];
+  return fromRepo?.length ? fromRepo.map(({ name, value }) => ({ name, value, subtag })) : builtIn;
+}
 
 interface CheckboxWrapperProps {
   name: string;
@@ -34,6 +48,7 @@ const CheckboxWrapper: FC<CheckboxWrapperProps> = ({ value, onCheck, data, name,
 };
 
 const TagsGrade: FC<Tags> = ({ changeHandler, data }) => {
+  const gradeSettings = useTagSettings("grade", builtInGrades);
   return (
     <div className="tags_container">
       <div>
@@ -66,6 +81,7 @@ const TagsGrade: FC<Tags> = ({ changeHandler, data }) => {
 };
 
 const TagsSubject: FC<Tags> = ({ changeHandler, data }) => {
+  const subjectSettings = useTagSettings("subject", builtInSubjects);
   return (
     <div className="tags_container">
       <div>
@@ -98,6 +114,7 @@ const TagsSubject: FC<Tags> = ({ changeHandler, data }) => {
 };
 
 const TagsTopic: FC<Tags> = ({ changeHandler, data }) => {
+  const topicSettings = useTagSettings("topic", builtInTopics);
   return (
     <div className="tags_container">
       <div>
