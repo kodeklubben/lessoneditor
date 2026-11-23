@@ -6,6 +6,7 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { In, Repository } from "typeorm";
 import { NewFileDTO, ShareLessonDTO } from "@lessoneditor/contracts";
 import { GithubService } from "../github/github.service";
+import { thumbnailText } from "../github/import-lesson";
 import { ThumbService } from "../thumb/thumb.service";
 import { Request } from "express";
 
@@ -242,6 +243,13 @@ export class LessonService {
     if (!text) {
       throw new HttpException("File does not exist", HttpStatus.NOT_FOUND);
     }
+    // One thumbnail per lesson, always of its main text (bokmål first), not of whichever text was
+    // saved last: a teacher guide or a translation made every card show that instead (N5).
+    const texts = await this.fileStoreRepository.find({
+      select: { filename: true },
+      where: { lesson: { lessonId }, ext: ".md" },
+    });
+    if (thumbnailText(texts.map((file) => file.filename)) !== filename) return false;
     const preview = await this.fileStoreRepository.findOne({
       select: { fileId: true, upstream_sha: true },
       where: { lesson: { lessonId }, filename: "preview", ext: ".png" },

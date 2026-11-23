@@ -114,6 +114,7 @@ describe("thumbnails (K14)", () => {
       findOne: jest.fn(async ({ where }: { where: { filename: string; ext: string } }) => {
         return rows.find((row) => row.filename === where.filename && row.ext === where.ext) ?? null;
       }),
+      find: jest.fn(async () => rows.filter((row) => row.ext === ".md")),
       update: jest.fn(),
       insert: jest.fn(),
     };
@@ -161,6 +162,20 @@ describe("thumbnails (K14)", () => {
     await expect(service.updateThumbnail(3, "hei", {} as never)).resolves.toBe(false);
     expect(thumbs.getThumb).not.toHaveBeenCalled();
     expect(files.update).not.toHaveBeenCalled();
+  });
+
+  it("photographs only the main text, not a teacher guide or a translation (N5)", async () => {
+    const rows = [
+      text,
+      { fileId: 3, filename: "hei_nn", ext: ".md" },
+      { fileId: 4, filename: "README", ext: ".md" },
+      { fileId: 2, filename: "preview", ext: ".png" },
+    ];
+    const { thumbs, service } = setup(rows);
+    await expect(service.updateThumbnail(3, "README", {} as never)).resolves.toBe(false);
+    await expect(service.updateThumbnail(3, "hei_nn", {} as never)).resolves.toBe(false);
+    expect(thumbs.getThumb).not.toHaveBeenCalled();
+    await expect(service.updateThumbnail(3, "hei", {} as never)).resolves.toBe(true);
   });
 
   it("refuses a file that is not a text of the lesson", async () => {
