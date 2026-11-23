@@ -9,6 +9,7 @@ import ShowSpinner from "../components/ShowSpinner";
 import { paths } from "@lessoneditor/contracts";
 import { base64StringToBlob, createObjectURL } from "blob-util";
 import { load } from "js-yaml";
+import { failedImageUrl, loadingImageUrl } from "../utils/imageSkeleton";
 
 const LessonContext = React.createContext<LessonContextModel>({} as LessonContextModel);
 
@@ -52,33 +53,43 @@ export const LessonContextProvider = (props: any) => {
           ),
           fetchFileList(),
         ]);
-        // In parallel, before the page is shown, so the first preview (and the thumbnail) has
-        // them. One that fails is just missing from the preview.
-        const loaded = await Promise.all(
-          filenames.map(async (file) => {
-            const { filename, ext } = splitFilename(file);
-            if (!IMAGE_TYPES[ext]) return null;
-            try {
-              const imageRes = await axios.get<string>(
-                // With the extension: a lesson from the repo can have asteroids.md and
-                // asteroids.png.
-                paths.LESSON_FILE.replace(":lessonId", lessonId).replace(
-                  ":filename",
-                  encodeURIComponent(filename + ext),
-                ),
-              );
-              return [file, createObjectURL(base64StringToBlob(imageRes.data, IMAGE_TYPES[ext]))];
-            } catch {
-              return null;
-            }
-          }),
-        );
         if (!active) return;
-        setImages(Object.fromEntries(loaded.filter((entry) => entry !== null)));
+        // The page is shown now; each image takes the place of its stand-in when it arrives.
+        // Waiting for all of them held the page for up to 7 s (22 images, 3.6 MB).
+        const imageFiles = filenames.filter((file) => IMAGE_TYPES[splitFilename(file).ext]);
+        setImages(Object.fromEntries(imageFiles.map((file) => [file, loadingImageUrl()])));
         setYml(yamlFile.data.content);
         setLesson(lessonRes.data);
         setFiles(filenames);
         setLoading(false);
+
+        const isCopy = Boolean(lessonRes.data.upstream_path);
+        for (const file of imageFiles) {
+          const { filename, ext } = splitFilename(file);
+          axios
+            .get<string>(
+              // With the extension: a lesson from the repo can have asteroids.md and
+              // asteroids.png.
+              paths.LESSON_FILE.replace(":lessonId", lessonId).replace(
+                ":filename",
+                encodeURIComponent(filename + ext),
+              ),
+            )
+            .then(({ data }) => createObjectURL(base64StringToBlob(data, IMAGE_TYPES[ext])))
+            .then(
+              (url) =>
+                active && setImages((prev: Record<string, string>) => ({ ...prev, [file]: url })),
+              () => {
+                if (!active) return;
+                setImages((prev: Record<string, string>) => {
+                  // A copy's preview shows a missing image from GitHub instead.
+                  if (!isCopy) return { ...prev, [file]: failedImageUrl() };
+                  const { [file]: _missing, ...rest } = prev;
+                  return rest;
+                });
+              },
+            );
+        }
       } catch (e) {
         const status = (e as { response?: { status?: number } })?.response?.status;
         if (active)
