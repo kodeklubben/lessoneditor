@@ -50,6 +50,7 @@ const LessontextItem: FC<any> = ({
           openDeleteContent={openDeleteContent}
           setOpenDeleteContent={setOpenDeleteContent}
           deleteContent={() => removeMD(language, lessonSlug)}
+          what={`oppgaveteksten på ${String(lang?.text ?? language).toLowerCase()}`}
         />
       )}
 

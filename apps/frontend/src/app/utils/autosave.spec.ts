@@ -1,6 +1,8 @@
 import { AutosaveController, AutosaveStatus } from "./autosave";
 
-function setup(save = jest.fn(async (_text: string) => true)) {
+function setup(
+  save = jest.fn(async (_text: string): Promise<boolean | "conflict" | "missing"> => true),
+) {
   const statuses: AutosaveStatus[] = [];
   const autosave = new AutosaveController({
     save,
@@ -83,5 +85,36 @@ describe("autosave", () => {
     autosave.update("tekst");
     await autosave.flush();
     expect(statuses.at(-1)).toBe("error");
+  });
+
+  it("stops on a text saved elsewhere, and waits for the user instead of retrying", async () => {
+    const save = jest.fn(async (_text: string): Promise<boolean | "conflict"> => "conflict");
+    const { autosave, statuses } = setup(save);
+    autosave.update("min tekst");
+    await expect(autosave.flush()).resolves.toBe(false);
+    expect(statuses.at(-1)).toBe("conflict");
+    // More typing neither saves nor clears the conflict.
+    autosave.update("min tekst og mer");
+    await jest.advanceTimersByTimeAsync(10000);
+    await autosave.flush();
+    expect(save).toHaveBeenCalledTimes(1);
+    expect(statuses.at(-1)).toBe("conflict");
+
+    // "Behold min tekst": saved again, with the newest text.
+    save.mockResolvedValue(true);
+    await expect(autosave.retry()).resolves.toBe(true);
+    expect(save).toHaveBeenLastCalledWith("min tekst og mer");
+    expect(statuses.at(-1)).toBe("saved");
+  });
+
+  it("stops on a deleted text, and starts over from a reloaded one", async () => {
+    const save = jest.fn(async (_text: string): Promise<boolean | "missing"> => "missing");
+    const { autosave, statuses } = setup(save);
+    autosave.update("tekst");
+    await autosave.flush();
+    expect(statuses.at(-1)).toBe("missing");
+    autosave.reset("den andre versjonen");
+    expect(statuses.at(-1)).toBe("idle");
+    expect(autosave.isDirty).toBe(false);
   });
 });

@@ -7,10 +7,11 @@ import {
   Logger,
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { IsNull, Repository } from "typeorm";
+import { In, IsNull, Repository } from "typeorm";
 import { UserDTO } from "@lessoneditor/contracts";
 import { User } from "./user.entity";
 import { NewLessonDTO, YamlContent, HeaderData } from "@lessoneditor/contracts";
+import type { LessonPullRequest } from "@lessoneditor/contracts";
 // Runtime code from the shared lib is imported by path: tsc does not rewrite the alias.
 import { invalidLessonFields } from "../../../../libs/contracts/src/lib/validation";
 import { stringifyLessonMarkdown } from "../../../../libs/contracts/src/lib/frontmatter";
@@ -103,6 +104,49 @@ export class UserService {
     user.name = newUser.name;
     user.photo = newUser.photo;
     return this.userRepository.save(user);
+  }
+
+  /**
+   * For the cards on the front page: each submitted lesson's pull request, open, merged or
+   * closed. A lesson GitHub does not answer for is left out; the card then just says it was
+   * submitted.
+   */
+  async lessonPullRequests(
+    userId: number,
+    accessToken: string | undefined,
+  ): Promise<Record<number, LessonPullRequest>> {
+    if (!accessToken) return {};
+    const mine = await this.lessonRepository.find({
+      select: { lessonId: true },
+      where: { users: { userId }, submitted: true },
+    });
+    if (mine.length === 0) return {};
+    // Loaded again for all members: the filter above keeps only this user in `users`.
+    const lessons = await this.lessonRepository.find({
+      where: { lessonId: In(mine.map(({ lessonId }) => lessonId)) },
+      relations: { users: true },
+    });
+    const result: Record<number, LessonPullRequest> = {};
+    await Promise.all(
+      lessons.map(async (lesson) => {
+        const owners = [lesson.created_by, ...lesson.users.map((user) => user.username)].filter(
+          (name): name is string => Boolean(name),
+        );
+        try {
+          const pr = await this.githubService.lessonPullRequest(
+            accessToken,
+            lesson.lessonId,
+            owners,
+          );
+          if (pr) result[lesson.lessonId] = pr;
+        } catch (error) {
+          this.logger.warn(
+            `Pull request of lesson ${lesson.lessonId}: ${(error as { status?: number }).status}`,
+          );
+        }
+      }),
+    );
+    return result;
   }
 
   async getUserLessons(userId: number): Promise<User> {

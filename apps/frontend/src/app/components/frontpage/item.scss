@@ -2,15 +2,20 @@
   font-size: 0.8rem;
   display: flex;
   flex-flow: row wrap;
-  align-items: center;
+  // Stretch, not center: a card with a longer title made its row uneven (N12).
+  align-items: stretch;
   justify-content: space-between;
   margin: 0.5rem 0 0 0;
 
   .card-item {
     width: 43vw;
     margin: 0 1.81vw 2rem 0;
+    display: flex;
 
     .card {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
       border: 4px solid #0fbe7b;
       border-radius: 3px;
       box-shadow: none;
@@ -23,6 +28,7 @@
       .card-content {
         padding: 0;
         cursor: pointer;
+        flex: 1 0 auto;
         .content {
           padding: 0.5rem;
         }
@@ -37,12 +43,23 @@
         .card-content__content {
           padding: 0.5rem;
           border-top: 0.5px solid lightgrey;
-          i {
-            position: absolute;
-            bottom: 0.7em;
-            right: -0.5em;
-            width: 10rem;
+
+          .header {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            overflow: hidden;
+            overflow-wrap: anywhere;
+            line-height: 1.25;
+            min-height: 2.5em;
           }
+        }
+
+        // Always there, so cards with and without a tag line up.
+        .card-content__status {
+          min-height: 1.9em;
+          margin-top: 0.4em;
         }
       }
       .extra_content {
@@ -150,4 +167,47 @@
       }
     }
   }
+}
+
+// Submitted, published or not taken: a quiet tag, coloured by outcome, never the only cue (text + icon).
+.lesson-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15em;
+  padding: 0.2em 0.65em 0.2em 0.45em;
+  border-radius: 999px;
+  font-size: 0.95em;
+  font-weight: 700;
+  line-height: 1.4;
+  white-space: nowrap;
+
+  .icon {
+    margin: 0;
+    font-size: 0.95em;
+  }
+
+  &--merged {
+    color: #0b6b47;
+    background: #dff5ec;
+  }
+
+  &--open {
+    color: #24527d;
+    background: #e6eff8;
+  }
+
+  &--closed {
+    color: #55595d;
+    background: #eceef0;
+  }
+}
+
+a.lesson-status:hover,
+a.lesson-status:focus-visible {
+  text-decoration: underline;
+}
+
+a.lesson-status:focus-visible {
+  outline: 2px solid #24527d;
+  outline-offset: 2px;
 }

@@ -56,6 +56,8 @@ const createIframe = (language: string) => {
     nn: "nn-NO", // Norwegian
     sv: "sv-SE", // Swedish
     tr: "tr", // Turkish
+    uk: "uk", // Ukrainian
+    ua: "uk", // Ukrainian as the lesson repo names it (N10)
   };
   const f = document.createElement("iframe");
   f.addEventListener("load", (e) => {
@@ -98,7 +100,7 @@ const renderSnippets = () => {
           id: checksum,
           code: codeBlock.innerText,
         },
-        "https://makecode.microbit.org/"
+        "https://makecode.microbit.org/",
       );
     }
   });
@@ -135,7 +137,7 @@ const createImage = (msg: { src: string; width: number; height: number; id: stri
       if (codeBlock.className === "microbit") {
         Array.from(
           // @ts-ignore
-          codeBlock.parentElement.getElementsByClassName("spinner")
+          codeBlock.parentElement.getElementsByClassName("spinner"),
         ).forEach((element) => {
           element.remove();
         });

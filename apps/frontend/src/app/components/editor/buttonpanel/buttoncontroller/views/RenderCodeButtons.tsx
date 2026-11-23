@@ -38,8 +38,10 @@ export const RenderCodeButtons: FC<RenderCodeButtonsProps> = ({
               className="CPButton"
               size="tiny"
               onClick={() => handleButtonClick(buttonSlug)}
+              // The label shows the markdown; a screen reader should not read three backticks.
+              aria-label={`Kodeblokk (${courseTitle})`}
             >
-              <div style={{ position: "relative", top: "-5px" }}>
+              <div style={{ position: "relative", top: "-5px" }} aria-hidden="true">
                 {"```Kodeblokk"}
                 <span style={{ color: "#008000" }}>{'("' + courseTitle + '")'}</span>
               </div>
@@ -50,8 +52,11 @@ export const RenderCodeButtons: FC<RenderCodeButtonsProps> = ({
               className="CPButton"
               size="tiny"
               onClick={() => handleButtonClick(buttonSlug)}
+              aria-label="Inline-kode"
             >
-              <div style={{ position: "relative", top: "-5px" }}>{"`Inline-kode"}</div>
+              <div style={{ position: "relative", top: "-5px" }} aria-hidden="true">
+                {"`Inline-kode"}
+              </div>
             </Button>
           )
         }

@@ -28,6 +28,7 @@ import {
   RepoFile,
 } from "./submission-files";
 import { env } from "../app/env";
+import type { LessonPullRequest } from "@lessoneditor/contracts";
 
 type Repo = { owner: string; repo: string };
 type Branch = { name: string; commitSha: string; treeSha: string };
@@ -212,6 +213,48 @@ export class GithubService {
     } catch (error) {
       throw this.toHttpError(error);
     }
+  }
+
+  private pullRequestCache = new Map<number, { at: number; value: LessonPullRequest | null }>();
+  /** GitHub is asked again after this long; a merge shows on the card within minutes. */
+  pullRequestCacheMs = 5 * 60 * 1000;
+
+  /**
+   * The pull request a submitted lesson opened: the newest one from the branch <lessonId> in one
+   * of the given forks (the lesson's members; the repo owner works in the repo itself). Null when
+   * there is none.
+   */
+  async lessonPullRequest(
+    accessToken: string,
+    lessonId: number,
+    owners: string[],
+  ): Promise<LessonPullRequest | null> {
+    const cached = this.pullRequestCache.get(lessonId);
+    if (cached && Date.now() - cached.at < this.pullRequestCacheMs) return cached.value;
+    const octokit = this.createClient(accessToken);
+    const upstream = { owner: env("GH_LESSON_REPO_OWNER"), repo: env("GH_LESSON_REPO") };
+    let newest:
+      { created_at: string; merged_at: string | null; state: string; html_url: string } | undefined;
+    for (const owner of new Set(owners)) {
+      const { data } = await octokit.pulls.list({
+        ...upstream,
+        head: `${owner}:${lessonId}`,
+        state: "all",
+        sort: "created",
+        direction: "desc",
+        per_page: 1,
+      });
+      const pr = data[0];
+      if (pr && (!newest || pr.created_at > newest.created_at)) newest = pr;
+    }
+    const value: LessonPullRequest | null = newest
+      ? {
+          state: newest.merged_at ? "merged" : newest.state === "open" ? "open" : "closed",
+          url: newest.html_url,
+        }
+      : null;
+    this.pullRequestCache.set(lessonId, { at: Date.now(), value });
+    return value;
   }
 
   /** Whether the lesson repo's default branch has anything at this path. */

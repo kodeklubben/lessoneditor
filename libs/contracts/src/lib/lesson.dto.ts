@@ -62,6 +62,9 @@ export interface FileDTO<T> {
 
   content: T;
 
+  /** For texts: the version of the content, sent back as `base` when saving it. */
+  version?: string;
+
   created_by?: string;
 
   updated_by?: string;
@@ -79,6 +82,8 @@ export interface NewFileDTO {
 
 export interface UpdatedFileDTO {
   content: string;
+  /** The version the change was made to; the server refuses it (409) if the text changed since. */
+  base?: string;
 }
 
 export interface LessonFilterDTO {
@@ -95,4 +100,12 @@ export interface HeaderData {
   /** Set when the text was made by the translate button; shown until someone has reviewed it. */
   machineTranslated?: boolean;
   translatedFrom?: string;
+}
+
+/** Where a submitted lesson's pull request on the lesson repo stands. */
+export type PullRequestState = "open" | "merged" | "closed";
+
+export interface LessonPullRequest {
+  state: PullRequestState;
+  url: string;
 }

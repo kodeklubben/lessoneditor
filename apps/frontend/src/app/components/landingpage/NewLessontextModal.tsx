@@ -7,6 +7,7 @@ import { paths, stringifyLessonMarkdown } from "@lessoneditor/contracts";
 import { lessonGuideDefaultText } from "./settingsFiles/defaultTexts";
 import axios from "axios";
 import insertMetaDataInTeacherGuide from "./utils/insertMetaDataInTeacherGuide";
+import { copyForTranslation, copySourceLanguage } from "./utils/copyForTranslation";
 
 type TextMode = "lessontext" | "teacherguide";
 type LanguageOption = { key: string; text: string; value: string };
@@ -92,6 +93,9 @@ const NewLessontextModal: FC<Props> = ({
 
   const canTranslate = translationEnabled && used.length > 0 && unused.length > 0;
   const translating = translate && canTranslate;
+  // Without machine translation, a new language starts as a copy of an existing text (V6).
+  const copyFrom = translating ? undefined : copySourceLanguage(used);
+  const copyFromName = used.find((option) => option.value === copyFrom)?.text;
 
   const openEditor = (lang: string) =>
     navigate(
@@ -112,17 +116,29 @@ const NewLessontextModal: FC<Props> = ({
         });
       } else {
         const { name = "", username = "" } = state.user || {};
-        const text =
-          textMode === "lessontext"
-            ? lessonGuideDefaultText[language]
-            : insertMetaDataInTeacherGuide(yml, language);
+        let content: string;
+        if (copyFrom) {
+          const source = await axios.get<{ content: string }>(
+            paths.LESSON_FILE.replace(":lessonId", String(lessonId)).replace(
+              ":filename",
+              encodeURIComponent(textFilename(textMode, copyFrom, lessonSlug)),
+            ),
+          );
+          content = copyForTranslation(source.data.content, language, name || username || "");
+        } else {
+          const text =
+            textMode === "lessontext"
+              ? lessonGuideDefaultText[language]
+              : insertMetaDataInTeacherGuide(yml, language);
+          content = stringifyLessonMarkdown(
+            prepareHeader(lessonTitle, name ?? "", username ?? "", language),
+            text,
+          );
+        }
         await axios.post(paths.LESSON_FILES.replace(":lessonId", String(lessonId)), {
           filename: textFilename(textMode, language, lessonSlug),
           ext: ".md",
-          content: stringifyLessonMarkdown(
-            prepareHeader(lessonTitle, name ?? "", username ?? "", language),
-            text,
-          ),
+          content,
         });
       }
       openEditor(language);
@@ -240,6 +256,15 @@ const NewLessontextModal: FC<Props> = ({
           disabled={loading || unused.length === 0}
         />
       </Modal.Content>
+
+      {copyFrom && copyFromName && unused.length > 0 && (
+        <Modal.Content>
+          <Message info size="small">
+            Den nye teksten starter som en kopi av teksten på {copyFromName.toLowerCase()}, med
+            bilder og kode. Oversett den i editoren, også tittelen.
+          </Message>
+        </Modal.Content>
+      )}
 
       {translating && (
         <Modal.Content>

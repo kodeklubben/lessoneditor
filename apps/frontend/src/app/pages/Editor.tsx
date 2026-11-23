@@ -13,9 +13,10 @@ import ButtonPanel_SmallDevices from "../components/editor/buttonpanel/ButtonPan
 import { useAutosave } from "../components/editor/useAutosave";
 import MachineTranslationNotice from "../components/editor/MachineTranslationNotice";
 import { DESKTOP_EDITOR, useMediaQuery } from "../utils/useMediaQuery";
+import SaveProblemModal from "../components/editor/SaveProblemModal";
 
 const Editor: FC = () => {
-  const { lang } = useParams() as any;
+  const { lang, lessonId } = useParams() as any;
   const { state } = useLessonContext();
 
   const { savedFileBody, state: fileState } = useFileContext();
@@ -145,6 +146,22 @@ const Editor: FC = () => {
             setMdText={setMdText}
             setCursor={setCursor}
             setCursorPosition={setCursorPosition}
+          />
+          <SaveProblemModal
+            problem={
+              autosave.status === "conflict" || autosave.status === "missing"
+                ? autosave.status
+                : undefined
+            }
+            lessonId={lessonId}
+            text={mdText}
+            keepMine={autosave.keepMine}
+            takeTheirs={async () => {
+              const body = await autosave.takeTheirs();
+              setMdText(body);
+              setUndo([body]);
+              setRedo([]);
+            }}
           />
           <Navbar>
             <div>

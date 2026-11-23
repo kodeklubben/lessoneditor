@@ -104,16 +104,12 @@ a:hover {
     width: 100%;
   }
 
+  // A link in a checklist item: the text's own size and no negative margin, which made the
+  // words after it run into the link (N3).
   .checklist-item a {
     @include a_style;
-    margin-left: 0px;
-    margin-right: -1.5em;
-  }
-
-  .checklist-item a {
     @include a_hover;
-    margin-left: 0px;
-    margin-right: -1.5em;
+    font-size: inherit;
   }
 
   ul > li > p > a {

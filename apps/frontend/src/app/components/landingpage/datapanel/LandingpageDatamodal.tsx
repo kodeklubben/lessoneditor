@@ -1,6 +1,7 @@
 import "./ladingpagedatamodal.scss";
 import { SyntheticEvent, useEffect, useState, useRef } from "react";
 import { useParams } from "react-router";
+import FieldError from "../../shared/FieldError";
 import { Button, Modal, Popup } from "semantic-ui-react";
 import { TagsGrade, TagsSubject, TagsTopic } from "./Tags";
 import CheckboxField from "./CheckboxField";
@@ -18,6 +19,7 @@ const LandingpageDatamodal = () => {
   const [checkBoxState, setCheckBoxState] = useState({});
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [saveError, setSaveError] = useState("");
   const { lessonId } = useParams() as any;
 
   const prevData = useRef<any>(null);
@@ -46,21 +48,21 @@ const LandingpageDatamodal = () => {
           accumulator[currentValue] = true;
           return accumulator;
         },
-        { ...obj }
+        { ...obj },
       );
       obj = yml.tags.subject.reduce(
         (accumulator: { [x: string]: boolean }, currentValue: string) => {
           accumulator[currentValue] = true;
           return accumulator;
         },
-        { ...obj }
+        { ...obj },
       );
       obj = yml.tags.grade.reduce(
         (accumulator: { [x: string]: boolean }, currentValue: string) => {
           accumulator[currentValue] = true;
           return accumulator;
         },
-        { ...obj }
+        { ...obj },
       );
       setCheckBoxState((prevState) => ({ ...prevState, ...obj }));
     };
@@ -74,19 +76,17 @@ const LandingpageDatamodal = () => {
       setIsEmptyDatapanelText(true);
       return;
     }
-
-    if (deepEqual(yml, prevData.current)) {
-      updateYaml(lessonId, yml);
-      return setOpen(false);
-    }
-    try {
-      setLoading(true);
-      await updateYaml(lessonId, yml);
+    if (deepEqual(yml, prevData.current)) return setOpen(false);
+    // A failed save used to close the dialog as if it had worked.
+    setLoading(true);
+    setSaveError("");
+    const status = await updateYaml(lessonId, yml);
+    setLoading(false);
+    if (status === 200) {
       setOpen(false);
-      setLoading(false);
       setIsEmptyDatapanelText(false);
-    } catch (e) {
-      console.error(e);
+    } else {
+      setSaveError("Kunne ikke lagre oppgavedataene. Prøv igjen.");
     }
   };
 
@@ -176,10 +176,11 @@ const LandingpageDatamodal = () => {
         }
       />
       <Modal
-        closeOnDimmerClick={!isEmptyDatapanel}
+        closeOnDimmerClick={false}
         onClose={() => {
-          onSubmit();
-          loading ? setOpen(false) : "";
+          // Esc: an empty dialog is put off (M3), a filled-in one is saved as before.
+          if (isEmptyDatapanel) setOpen(false);
+          else void onSubmit();
         }}
         onOpen={() => setOpen(true)}
         open={open}
@@ -210,17 +211,28 @@ const LandingpageDatamodal = () => {
           </div>
         </Modal.Content>
 
-        <Modal.Actions className="landingpage_modal">
-          {isEmptyDatapanelText ? (
-            <p>
-              <i style={{ color: "red" }}>
-                Må inneholde minst ett valg i kategoriene Tema, Fag, eller Klassetrinn
-              </i>
-            </p>
-          ) : (
-            <p style={{ height: "1.3em" }} />
-          )}
+        <Modal.Actions
+          className="landingpage_modal"
+          style={{ display: "flex", alignItems: "center", gap: "0.5em" }}
+        >
+          <div style={{ textAlign: "left", flex: 1 }}>
+            <FieldError>
+              {saveError ||
+                (isEmptyDatapanelText &&
+                  "Velg minst ett tema, fag eller klassetrinn. Det hjelper lærere å finne oppgaven.")}
+            </FieldError>
+          </div>
 
+          {isEmptyDatapanel && (
+            <Button
+              basic
+              content="Senere"
+              onClick={() => {
+                setIsEmptyDatapanelText(false);
+                setOpen(false);
+              }}
+            />
+          )}
           <Button
             onClick={onSubmit}
             content="OK"
