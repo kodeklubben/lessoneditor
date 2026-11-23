@@ -38,10 +38,11 @@ export class UserController {
 
   @Post(":userId/lesson")
   async AddLesson(
+    @Req() req: Request,
     @Param("userId", ParseIntPipe) userId: number,
     @Body() newLesson: NewLessonBody,
   ): Promise<number> {
-    return this.userService.addUserLesson(userId, newLesson);
+    return this.userService.addUserLesson(userId, newLesson, sessionGithubToken(req));
   }
 
   /** Copies a published lesson for editing (docs/rediger-oppgave.md); reads GitHub, writes nothing there. */

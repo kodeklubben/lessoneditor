@@ -5,12 +5,14 @@ import LessontextItem from "./LessontextItem";
 import axios from "axios";
 import { paths } from "@lessoneditor/contracts";
 import { filenameParser } from "../../utils/filename-parser";
-import { Item, Message } from "semantic-ui-react";
+import { Button, Item, Loader, Message } from "semantic-ui-react";
 import { compareLanguages } from "../frontpage/settings/newLessonOptions";
 
 const LessontextItems = () => {
   // undefined until the file list has loaded, so "no text yet" is not shown while loading.
   const [usedLanguages, setUsedLanguages] = useState<string[] | undefined>(undefined);
+  const [failed, setFailed] = useState(false);
+  const [attempt, setAttempt] = useState(0);
 
   const { fetchFileList, setFiles, state: lessonState } = useLessonContext();
   const { lessonId } = useParams() as any;
@@ -18,18 +20,24 @@ const LessontextItems = () => {
   const { lessonTitle, lessonSlug } = lessonState.lesson;
 
   useEffect(() => {
-    const fetchData = async () => {
-      const fileList = await fetchFileList();
-      setUsedLanguages(
-        fileList
-          .map(filenameParser)
-          .filter(({ isReadme, language }) => !isReadme && language.length > 0)
-          .map(({ language }) => language),
-      );
+    let active = true;
+    // A failed list was a blank tab with no sign of what happened (P2-11).
+    fetchFileList()
+      .then((fileList) => {
+        if (!active) return;
+        setFailed(false);
+        setUsedLanguages(
+          fileList
+            .map(filenameParser)
+            .filter(({ isReadme, language }) => !isReadme && language.length > 0)
+            .map(({ language }) => language),
+        );
+      })
+      .catch(() => active && setFailed(true));
+    return () => {
+      active = false;
     };
-
-    fetchData();
-  }, [lessonState.files]);
+  }, [lessonState.files, attempt]);
 
   /** Throws on failure, so the dialog can say so. The server keeps the last lesson text (K15). */
   const removeMD = async (language: string, file: string) => {
@@ -44,7 +52,14 @@ const LessontextItems = () => {
 
   return (
     <Item.Group divided>
-      {usedLanguages === undefined ? null : usedLanguages.length > 0 ? (
+      {failed ? (
+        <Message warning>
+          <p>Kunne ikke hente tekstene.</p>
+          <Button size="small" onClick={() => setAttempt((n) => n + 1)} content="Prøv igjen" />
+        </Message>
+      ) : usedLanguages === undefined ? (
+        <Loader active inline="centered" content="Henter tekstene …" />
+      ) : usedLanguages.length > 0 ? (
         [...usedLanguages]
           .sort(compareLanguages)
           .map((language: string) => (

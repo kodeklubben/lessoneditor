@@ -322,7 +322,16 @@ async function run() {
     });
   assert.match(page.url(), /\/editor\/\d+\/lokal-test\/nn/);
   assert.ok((await api(`/lesson/${lessonId}/filenames`)).includes("lokal-test_nn.md"));
-  await api(`/lesson/${lessonId}/files/lokal-test/updateThumbnail`, "PUT");
+  // A text saved while the thumbnail is taken (15–20 s in App Engine) must survive it.
+  const thumbnail = api(`/lesson/${lessonId}/files/lokal-test/updateThumbnail`, "PUT");
+  await new Promise((resolve) => setTimeout(resolve, 300));
+  await api(`/lesson/${lessonId}/files/lokal-test`, "PUT", { content: "# Lagret under bildet\n" });
+  await thumbnail;
+  assert.equal(
+    (await api(`/lesson/${lessonId}/files/lokal-test`)).content,
+    "# Lagret under bildet\n",
+    "The thumbnail does not write back a text saved while it was taken",
+  );
   const image = await client.query(
     'SELECT content FROM file_store WHERE "lessonLessonId" = $1 AND filename = $2',
     [lessonId, "preview"],

@@ -47,6 +47,14 @@ export function commitMessage(title: string, message?: string): string {
   return body ? `${subject}\n\n${body}` : subject;
 }
 
+/** For a new lesson whose folder is taken by a published lesson (src/scratch/asteroids). */
+export const publishedLessonMessage = (folder: string, submitting = false) =>
+  `Det finnes allerede en publisert oppgave i ${folder}. ` +
+  (submitting
+    ? "Innsendingen ville erstattet den. Lag en ny oppgave med et annet navn og kopier teksten dit, " +
+      "eller bruk «Rediger oppgaven» på den publiserte."
+    : "Bruk «Rediger oppgaven» på den, eller velg et annet navn.");
+
 @Injectable()
 export class GithubService {
   private readonly logger = new Logger(GithubService.name);
@@ -97,6 +105,15 @@ export class GithubService {
     try {
       const upstreamBranch = await this.defaultBranch(octokit, upstream);
       const lessonPath = copy ?? ["src", lesson.courseSlug, lesson.lessonSlug].join("/");
+      // A new lesson's first submission branches from the repo: a published lesson in its folder
+      // would be replaced, its other files deleted. After a submission the folder can be the
+      // lesson's own merged pull request.
+      if (!copy && !lesson.submitted && !lesson.submitted_at) {
+        const published = await this.listFiles(octokit, upstream, upstreamBranch.name, lessonPath);
+        if (published.length > 0) {
+          throw new ConflictException(publishedLessonMessage(lessonPath, true));
+        }
+      }
 
       let uploads;
       if (copy) {
@@ -194,6 +211,22 @@ export class GithubService {
       return { url: pr?.html_url ?? null };
     } catch (error) {
       throw this.toHttpError(error);
+    }
+  }
+
+  /** Whether the lesson repo's default branch has anything at this path. */
+  async lessonFolderExists(accessToken: string, path: string): Promise<boolean> {
+    const octokit = this.createClient(accessToken);
+    try {
+      await octokit.repos.getContent({
+        owner: env("GH_LESSON_REPO_OWNER"),
+        repo: env("GH_LESSON_REPO"),
+        path,
+      });
+      return true;
+    } catch (e) {
+      if ((e as { status?: number }).status === 404) return false;
+      throw e;
     }
   }
 

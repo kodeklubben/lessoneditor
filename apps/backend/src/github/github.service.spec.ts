@@ -112,7 +112,9 @@ describe("submitting a lesson to GitHub", () => {
       { path: "src/python/hei/slettet.png", content: Buffer.from("old") },
     ]);
     const { github } = service(fake);
-    const result = await github.submitLesson(user as never, "token", lesson as never, {
+    // Submitted before: the folder is the lesson's own, from its earlier pull request.
+    const again = { ...lesson, submitted: true, submitted_at: new Date() };
+    const result = await github.submitLesson(user as never, "token", again as never, {
       message: "Melding",
     });
     expect(result.url).toBe("https://github.com/kodeklubben/oppgaver/pull/1");
@@ -133,6 +135,18 @@ describe("submitting a lesson to GitHub", () => {
       base: "master",
       body: "Melding",
     });
+  });
+
+  it("never replaces a published lesson with a new one of the same name (P0-2)", async () => {
+    const fake = fakeGithub([
+      { path: "src/python/hei/hei.md", content: md("Publisert") },
+      { path: "src/python/hei/kode.py", content: Buffer.from("print()") },
+    ]);
+    await expect(
+      service(fake).github.submitLesson(user as never, "token", lesson as never, { message: "" }),
+    ).rejects.toMatchObject({ status: 409, message: expect.stringContaining("src/python/hei") });
+    expect(fake.calls["repos.createFork"]).toBeUndefined();
+    expect(fake.calls["git.createTree"]).toBeUndefined();
   });
 
   it("reuses the open pull request, but does not hide other 422 errors", async () => {

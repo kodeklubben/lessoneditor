@@ -1,8 +1,14 @@
-const IMAGE = /(!\[[^\]]*\]\()\s*(?:\.\/)?([^)\s]+)((?:\s+"[^"]*")?\s*\))/g;
+// The alt text may hold one level of brackets, such as a link to the image's source
+// (uten_datamaskin/Algoritmia: ![[Robot historic …](https://…)](./bilde.jpg)).
+const IMAGE = /(!\[(?:[^[\]]|\[[^\]]*\])*\]\()\s*(?:\.\/)?([^)\s]+)((?:\s+"[^"]*")?\s*\))/g;
 
 /**
  * Swaps the lesson's own images (./bilde.png) for the blob URLs the editor has loaded. Each link
  * is matched by its own name; external images and unknown files are left as they are (K17).
+ *
+ * A copy of a published lesson holds only the images it could copy. The rest (../bilder/,
+ * subfolders, SVG, names with dots such as Ada_Lovelace.600x751.jpg) are shown from the commit
+ * the copy was made from, as on oppgaver.kidsakoder.no.
  */
 export function replaceLocalImageUrls(
   markdown: string,
@@ -10,13 +16,11 @@ export function replaceLocalImageUrls(
   upstreamBase?: string,
 ): string {
   return markdown.replace(IMAGE, (whole, prefix: string, path: string, suffix: string) => {
-    // A shared image of the course (../bilder/x.png) is not copied with a lesson from the repo;
-    // the preview shows it from the commit the copy was made from.
-    if (upstreamBase && path.startsWith("../"))
-      return prefix + new URL(path, upstreamBase).href + suffix;
-    if (path.includes("/") || path.includes(":")) return whole;
-    const url = images[path];
-    return url ? prefix + url + suffix : whole;
+    if (path.includes(":") || path.startsWith("/")) return whole;
+    const url = path.includes("/") ? undefined : images[path];
+    if (url) return prefix + url + suffix;
+    if (upstreamBase) return prefix + new URL(path, upstreamBase).href + suffix;
+    return whole;
   });
 }
 
