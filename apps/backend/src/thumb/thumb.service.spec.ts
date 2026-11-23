@@ -22,3 +22,27 @@ it("sends the token in a header and keeps it out of the URL", () => {
   expect(url).not.toContain("token");
   expect((verify(headers[PREVIEW_TOKEN_HEADER], "test-secret") as JwtPayload).sub).toBe("7");
 });
+
+it("wakes the thumbnailer at most once per interval, without waiting for it", () => {
+  process.env.THUMB_SERVICE_URL = "https://thumbs.example/thumbnailer";
+  const { of } = require("rxjs");
+  const get = jest.fn(() => of({ status: 204 }));
+  const service = new ThumbService({ get } as never);
+  service.warmUp();
+  service.warmUp();
+  expect(get).toHaveBeenCalledTimes(1);
+  expect((get.mock.calls[0] as unknown as [string])[0]).toBe(
+    "https://thumbs.example/thumbnailer?warmup=1",
+  );
+  service.warmUpIntervalMs = 0;
+  service.warmUp();
+  expect(get).toHaveBeenCalledTimes(2);
+});
+
+it("lets a failed wake-up pass quietly", async () => {
+  process.env.THUMB_SERVICE_URL = "https://thumbs.example/thumbnailer";
+  const { throwError } = require("rxjs");
+  const service = new ThumbService({ get: () => throwError(() => new Error("down")) } as never);
+  expect(() => service.warmUp()).not.toThrow();
+  await new Promise((resolve) => setImmediate(resolve));
+});

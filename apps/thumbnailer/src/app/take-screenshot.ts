@@ -4,6 +4,14 @@ import { previewUrl } from "./preview-url";
 
 let browserPromise: Promise<Browser> | undefined;
 
+/**
+ * Starts Chromium ahead of the first thumbnail: on a new instance it is launched by the first
+ * request, which then took 17–19 s instead of 6–7 s.
+ */
+export async function warmUpBrowser(): Promise<void> {
+  await getBrowserInstance();
+}
+
 async function getBrowserInstance(): Promise<Browser> {
   if (!browserPromise) {
     browserPromise = puppeteer

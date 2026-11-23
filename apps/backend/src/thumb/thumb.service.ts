@@ -14,6 +14,23 @@ export const PREVIEW_TOKEN_HEADER = "x-preview-token";
 export class ThumbService {
   constructor(private http: HttpService) {}
 
+  private lastWarmUp = 0;
+  /** An instance stays up for about 15 idle minutes; one wake-up per five minutes is plenty. */
+  warmUpIntervalMs = 5 * 60 * 1000;
+
+  /**
+   * Wakes the thumbnailer (instance and Chromium) when a thumbnail is likely soon: the editor
+   * was opened, or a lesson is being copied. Does not wait for it; a failure only means the
+   * first thumbnail takes longer.
+   */
+  warmUp(): void {
+    if (Date.now() - this.lastWarmUp < this.warmUpIntervalMs) return;
+    this.lastWarmUp = Date.now();
+    const url = new URL(env("THUMB_SERVICE_URL"));
+    url.searchParams.set("warmup", "1");
+    lastValueFrom(this.http.get(url.toString(), { timeout: 60_000 })).catch(() => undefined);
+  }
+
   async getThumb(lessonId: number, filename: string, request: Request): Promise<ArrayBuffer> {
     const baseUrl = this.baseUrl(request);
     const previewurl = [baseUrl, "preview", lessonId, encodeURIComponent(filename)].join("/");

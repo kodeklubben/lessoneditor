@@ -22,6 +22,7 @@ import {
   toEditorMarkdown,
 } from "../github/import-lesson";
 import { GithubService } from "../github/github.service";
+import { ThumbService } from "../thumb/thumb.service";
 import { gitBlobSha } from "../github/submission-files";
 import { FileStore, Lesson } from "../lesson/lesson.entity";
 import { User } from "./user.entity";
@@ -54,6 +55,7 @@ export class LessonImportService {
     @InjectRepository(User) private userRepository: Repository<User>,
     @InjectRepository(FileStore) private fileStoreRepository: Repository<FileStore>,
     private githubService: GithubService,
+    private thumbService: ThumbService,
   ) {}
 
   async importLesson(
@@ -89,6 +91,9 @@ export class LessonImportService {
       };
     }
 
+    // The copy's first thumbnail is asked for as soon as it exists; reading GitHub takes a few
+    // seconds, time the thumbnailer can use to start.
+    this.thumbService.warmUp();
     const octokit = this.githubService.createClient(accessToken);
     const upstream = { owner: env("GH_LESSON_REPO_OWNER"), repo: env("GH_LESSON_REPO") };
     const branch = await this.githubService.defaultBranch(octokit, upstream);
@@ -139,17 +144,18 @@ export class LessonImportService {
     });
     // Without one in the repo: a placeholder until the first thumbnail is taken, never submitted.
     const hasPreview = plan.files.some((entry) => entry.name === "preview.png");
-    if (!hasPreview) stored.push(
-      Object.assign(new FileStore(), {
-        filename: "preview",
-        ext: ".png",
-        content: Buffer.from(" "),
-        created_by: user.username,
-        updated_by: user.username,
-        upstream_sha: null,
-        imported_sha: null,
-      }),
-    );
+    if (!hasPreview)
+      stored.push(
+        Object.assign(new FileStore(), {
+          filename: "preview",
+          ext: ".png",
+          content: Buffer.from(" "),
+          created_by: user.username,
+          updated_by: user.username,
+          upstream_sha: null,
+          imported_sha: null,
+        }),
+      );
 
     const texts = contents
       .filter(({ entry }) => ext(entry.name) === ".md" && !entry.name.startsWith("README"))

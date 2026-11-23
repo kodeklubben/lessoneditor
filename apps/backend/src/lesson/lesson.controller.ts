@@ -1,4 +1,5 @@
 import {
+  HttpCode,
   BadRequestException,
   Body,
   Controller,
@@ -74,6 +75,13 @@ export class LessonController {
   @Get(":lessonId/filenames")
   async GetLessonFileNames(@Param("lessonId", ParseIntPipe) lessonId: number): Promise<string[]> {
     return this.lessonService.getLessonFileNames(lessonId);
+  }
+
+  /** Wakes the thumbnail service while the teacher starts writing; answers at once. */
+  @Post(":lessonId/warmup")
+  @HttpCode(204)
+  Warmup(@Param("lessonId", ParseIntPipe) _lessonId: number): void {
+    this.lessonService.warmUpThumbnails();
   }
 
   @Post(":lessonId/submit")
