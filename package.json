@@ -109,10 +109,10 @@
     "typeorm": "1.1.3"
   },
   "devDependencies": {
-    "@babel/core": "7.29.13",
-    "@babel/preset-env": "7.29.14",
-    "@babel/preset-react": "7.29.7",
-    "@babel/preset-typescript": "7.29.7",
+    "@babel/core": "8.1.3",
+    "@babel/preset-env": "8.0.7",
+    "@babel/preset-react": "8.0.1",
+    "@babel/preset-typescript": "8.0.7",
     "@nx/webpack": "24.0.6",
     "@testing-library/dom": "10.4.2",
     "@testing-library/react": "16.3.3",
@@ -148,10 +148,10 @@
     "style-loader": "4.0.0",
     "ts-jest": "29.4.15",
     "ts-node": "10.9.2",
-    "typescript": "6.0.3",
+    "typescript": "7.0.2",
     "webpack": "5.113.0",
     "webpack-cli": "7.3.1",
-    "webpack-dev-server": "5.2.7"
+    "webpack-dev-server": "6.1.0"
   },
   "workspaces": [
     "apps/thumbnailer"
