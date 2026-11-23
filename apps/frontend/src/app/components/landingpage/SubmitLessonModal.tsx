@@ -1,4 +1,5 @@
 import { Button, Modal, Header } from "semantic-ui-react";
+import FieldError from "../shared/FieldError";
 import { FC, useState } from "react";
 
 import { paths } from "@lessoneditor/contracts";
@@ -22,7 +23,7 @@ const SubmitLessonModal: FC<any> = ({ openSubmitModal, setOpenSubmitModal, lesso
     try {
       const { data } = await axios.post<{ url?: string | null }>(
         paths.LESSON_SUBMIT.replace(":lessonId", lessonId),
-        submitMessage
+        submitMessage,
       );
       setPullRequestUrl(data?.url ?? null);
       setIsSubmitted(true);
@@ -134,11 +135,7 @@ const SubmitLessonModal: FC<any> = ({ openSubmitModal, setOpenSubmitModal, lesso
                 onChange={handleChange}
                 placeholder="...dette er en oppgave som handler om..."
               />
-              {error && (
-                <p role="alert" style={{ color: "#9f3a38", marginTop: "1em" }}>
-                  {error}
-                </p>
-              )}
+              {error && <FieldError>{error}</FieldError>}
             </Modal.Content>
 
             <Modal.Actions>

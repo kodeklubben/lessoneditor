@@ -11,7 +11,8 @@ const RETRY_DELAY = 10000;
  * writing has paused, so a slow or failing thumbnail never blocks saving (K5).
  */
 export function useAutosave(text: string, loadedText: string | undefined) {
-  const { saveFileBody, saveFileBodyOnUnload, updateThumbnail } = useFileContext();
+  const { saveFileBody, saveFileBodyOnUnload, updateThumbnail, reloadFile, forgetVersion } =
+    useFileContext();
   const [status, setStatus] = useState<AutosaveStatus>("idle");
   const latest = useRef({ saveFileBody, saveFileBodyOnUnload, updateThumbnail });
   latest.current = { saveFileBody, saveFileBodyOnUnload, updateThumbnail };
@@ -20,7 +21,10 @@ export function useAutosave(text: string, loadedText: string | undefined) {
   const controller = useMemo(
     () =>
       new AutosaveController({
-        save: async (value) => (await latest.current.saveFileBody(value)) === 200,
+        save: async (value) => {
+          const status = await latest.current.saveFileBody(value);
+          return status === 409 ? "conflict" : status === 404 ? "missing" : status === 200;
+        },
         onStatus: (next) => {
           if (next === "saved") thumbnailStale.current = true;
           setStatus(next);
@@ -77,5 +81,19 @@ export function useAutosave(text: string, loadedText: string | undefined) {
     };
   }, [controller]);
 
-  return { status, flush: () => controller.flush() };
+  return {
+    status,
+    flush: () => controller.flush(),
+    /** The text in this editor wins: it replaces the version saved elsewhere. */
+    keepMine: () => {
+      forgetVersion();
+      return controller.retry();
+    },
+    /** The version saved elsewhere wins. Returns its text, for the editor to show. */
+    takeTheirs: async () => {
+      const body = await reloadFile();
+      controller.reset(body);
+      return body;
+    },
+  };
 }

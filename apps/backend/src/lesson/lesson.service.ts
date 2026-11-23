@@ -1,4 +1,5 @@
 import { ConflictException, Injectable, HttpException, HttpStatus, Logger } from "@nestjs/common";
+import { createHash } from "node:crypto";
 import { Lesson, FileStore, isLessonOwner } from "./lesson.entity";
 import { User } from "../user/user.entity";
 import { InjectRepository } from "@nestjs/typeorm";
@@ -12,6 +13,16 @@ import { Request } from "express";
 import { deletionBlocker, splitFilename } from "../../../../libs/contracts/src/lib/files";
 
 const TEXT_EXTENSIONS = [".md", ".yml"];
+
+/**
+ * A text's version: the hash of what is stored. The editor sends back the version it started
+ * from, so a save over a text someone else saved meanwhile (another tab, a co-author) is refused
+ * instead of silently replacing it.
+ */
+export const contentVersion = (content: Buffer) => createHash("sha1").update(content).digest("hex");
+
+export const EDITED_ELSEWHERE =
+  "Teksten er endret et annet sted, i en annen fane eller av en du deler oppgaven med.";
 
 /** For logs: the error's class and database code, never its message with parameters or data. */
 export const errorKind = (error: unknown) =>
@@ -184,6 +195,7 @@ export class LessonService {
     filename: string,
     updatedByUserId: number,
     fileContent: string,
+    baseVersion?: string,
   ): Promise<FileStore> {
     // Only texts are edited in place; an image with the same name must never be overwritten.
     const file = await this.fileStoreRepository.findOne({
@@ -200,7 +212,18 @@ export class LessonService {
       content: Buffer.from(fileContent),
       updated_by: updatedByUser.username ?? String(updatedByUser.userId),
     };
-    await this.fileStoreRepository.update(file.fileId, changes);
+    if (baseVersion !== undefined && baseVersion !== contentVersion(file.content)) {
+      throw new ConflictException(EDITED_ELSEWHERE);
+    }
+    // With a base version, only while the row still holds what it was checked against: two saves
+    // that pass the check at the same time cannot both win.
+    const result = await this.fileStoreRepository.update(
+      baseVersion === undefined
+        ? { fileId: file.fileId }
+        : { fileId: file.fileId, content: file.content },
+      changes,
+    );
+    if (result.affected === 0) throw new ConflictException(EDITED_ELSEWHERE);
     await this.lessonRepository.update(lessonId, { updated_at: new Date() });
     return Object.assign(file, changes);
   }

@@ -14,7 +14,7 @@ import {
   UseGuards,
 } from "@nestjs/common";
 import { Request, Response } from "express";
-import { LessonService } from "./lesson.service";
+import { contentVersion, LessonService } from "./lesson.service";
 import { LessonDTO, FileDTO, UserDTO, YamlContent } from "@lessoneditor/contracts";
 import { LoginGuard } from "../auth/login.guard";
 import { sessionGithubToken } from "../auth/github-token";
@@ -111,6 +111,7 @@ export class LessonController {
     const fileDTO: FileDTO<unknown> = {
       ...fileProps,
       content: filename === "lesson" ? JSON.parse(content.toString()) : content.toString("utf-8"),
+      version: contentVersion(content),
     };
     return res.send(fileDTO);
   }
@@ -163,8 +164,9 @@ export class LessonController {
       filename,
       (req.user as UserDTO).userId,
       content,
+      updatedFile.base,
     );
-    return { ...fileProps, content: saved.toString("utf-8") };
+    return { ...fileProps, content: saved.toString("utf-8"), version: contentVersion(saved) };
   }
 
   @Put(":lessonId/files/:filename/updateThumbnail")

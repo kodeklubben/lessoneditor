@@ -11,14 +11,18 @@ export function deleteErrorMessage(error: unknown): string {
 }
 
 /**
- * Asks before deleting, waits for deleteContent and closes only when it succeeded; a failure is
- * shown in the dialog instead of leaving a spinner that never stops.
+ * Asks before deleting, naming what goes, waits for deleteContent and closes only when it
+ * succeeded; a failure is shown in the dialog instead of leaving a spinner that never stops.
  */
 const DeleteModal: FC<{
   setOpenDeleteContent: React.Dispatch<React.SetStateAction<boolean>>;
   openDeleteContent: boolean;
   deleteContent: () => Promise<unknown>;
-}> = ({ openDeleteContent, setOpenDeleteContent, deleteContent }) => {
+  /** What is deleted, as it ends the question: «Slette oppgaveteksten på nynorsk?». */
+  what: string;
+  /** What else goes with it; the dialog always says it cannot be undone. */
+  detail?: string;
+}> = ({ openDeleteContent, setOpenDeleteContent, deleteContent, what, detail }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -41,30 +45,30 @@ const DeleteModal: FC<{
       onOpen={() => setOpenDeleteContent(true)}
       open={openDeleteContent}
       dimmer="inverted"
+      size="tiny"
       closeOnDimmerClick={!loading}
     >
       <Modal.Content>
-        <Modal.Description>
-          <Header>Vil du slette innhold?</Header>
-        </Modal.Description>
-      </Modal.Content>
-      {error && (
-        <Modal.Content>
+        <Header as="h2" size="medium">
+          Slette {what}?
+        </Header>
+        <p>{detail ? `${detail} ` : ""}Det kan ikke angres.</p>
+        {error && (
           <Message negative role="alert">
             {error}
           </Message>
-        </Modal.Content>
-      )}
+        )}
+      </Modal.Content>
       <Modal.Actions>
-        <Button disabled={loading} onClick={() => setOpenDeleteContent(false)} color="black">
-          Nei
+        <Button basic disabled={loading} onClick={() => setOpenDeleteContent(false)}>
+          Avbryt
         </Button>
         <Button
-          content="Ja"
-          labelPosition="right"
-          icon="checkmark"
+          content="Slett"
+          labelPosition="left"
+          icon="trash alternate outline"
           onClick={onConfirm}
-          positive
+          negative
           loading={loading}
           disabled={loading}
         />

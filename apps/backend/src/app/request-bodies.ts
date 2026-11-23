@@ -94,6 +94,11 @@ export class UpdatedFileBody {
   /** Markdown as a string, or the lesson.yml data as an object; the controller checks which. */
   @IsDefined()
   content: unknown;
+
+  /** The version the editor started from (contentVersion); without it, the save always wins. */
+  @IsOptional()
+  @Matches(/^[0-9a-f]{40}$/)
+  base?: string;
 }
 
 export class ShareLessonBody {

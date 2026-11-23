@@ -4,6 +4,7 @@ import { useHotkeys } from "react-hotkeys-hook";
 import { KEY_COMBINATIONS as KEY, media as config } from "./buttoncontroller/settings/buttonConfig";
 
 import { Button, Header, Input, Modal } from "semantic-ui-react";
+import FieldError from "../../shared/FieldError";
 import { getVideoId } from "../../../utils/mdParser";
 
 const languageNO = {
@@ -11,7 +12,7 @@ const languageNO = {
   insertLink: "Sett inn URL til din video",
   ok: "OK",
   cancel: "Avbryt",
-  mandatoryText: "Må være gyldig lenke til youtube eller vimeo",
+  mandatoryText: "Lim inn en lenke til en video på YouTube eller Vimeo.",
 };
 
 interface VideoProps {
@@ -131,9 +132,7 @@ const Video: FC<VideoProps> = ({
             placeholder="Støtter YouTube og Vimeo"
           />
 
-          <p style={{ color: "red" }} role="alert">
-            {url && !video ? languageNO.mandatoryText : validateUrl}
-          </p>
+          <FieldError>{url && !video ? languageNO.mandatoryText : validateUrl}</FieldError>
         </Modal.Content>
 
         <Modal.Content className="hyperlink_modal"></Modal.Content>
