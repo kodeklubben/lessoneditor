@@ -107,8 +107,9 @@ export const UserContextProvider = (props: any) => {
       await refreshLessons();
       return newLessonRes.data;
     } catch (error) {
+      // The dialog shows why (a name that is taken, for instance).
       console.error(error);
-      return undefined;
+      throw error;
     }
   };
 

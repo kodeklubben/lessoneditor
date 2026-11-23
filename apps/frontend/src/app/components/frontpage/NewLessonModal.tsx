@@ -5,10 +5,32 @@ import { COURSESLIST, LANGUAGEOPTIONS } from "./settings/newLessonOptions";
 import { useUserContext } from "../../contexts/UserContext";
 import { useNavigate } from "react-router";
 import { Button, Input, Modal, Dropdown } from "semantic-ui-react";
+import { isCourseSlug, isLessonSlug, isTitle, MAX_TITLE_LENGTH } from "@lessoneditor/contracts";
 
 interface NewLessonModalProps {
   openNewLessonModal: boolean;
   setOpenNewLessonModal: Dispatch<SetStateAction<boolean>>;
+}
+
+const toSlug = (text: string) => slugify(text, { lower: true, strict: true });
+
+/** Why the lesson cannot be created from these fields, or null. The slug becomes its folder name. */
+export function newLessonProblem(title: string, course: string): string | null {
+  if (!title.trim()) return "Oppgavetittel må være satt";
+  if (!isTitle(title)) return `Tittelen kan ha høyst ${MAX_TITLE_LENGTH} tegn.`;
+  if (!isLessonSlug(toSlug(title)))
+    return "Tittelen må ha minst én bokstav (a–z) eller ett tall, og kan ikke være så lang.";
+  if (!isCourseSlug(course)) return "Kursnavnet må ha minst én bokstav (a–z) eller ett tall.";
+  return null;
+}
+
+/** The server's message for a refused lesson (409, 400), otherwise a general one. */
+function serverMessage(error: unknown): string {
+  const response = (error as { response?: { status?: number; data?: { message?: unknown } } })
+    ?.response;
+  return typeof response?.data?.message === "string" && response.status === 409
+    ? response.data.message
+    : "Kunne ikke opprette oppgaven. Prøv igjen litt senere.";
 }
 
 interface LessonData {
@@ -30,16 +52,16 @@ const NewLessonModal: FC<NewLessonModalProps> = ({ openNewLessonModal, setOpenNe
   };
   const [lessonData, setLessonData] = useState<LessonData>(defaultState);
   const [openNewCourseModal, setOpenNewCourseModal] = useState(false);
-  const [isEmptyField, setIsEmptyField] = useState(false);
+  const [problem, setProblem] = useState<string | null>(null);
 
-  const errorMessage = "Oppgavetittel må være satt";
   const onChange = (e: SyntheticEvent, { name, value }: Record<string, string>) => {
     setLessonData((prevValues) => ({ ...prevValues, [name]: value }));
+    setProblem(null);
   };
 
   const addCourseHandler = (e: SyntheticEvent, { value: v }: Record<string, string>) => {
     const tempCourselist = COURSESLIST;
-    const newCourseSlug = slugify(v, { lower: true, strict: true });
+    const newCourseSlug = toSlug(v);
     tempCourselist.push({ key: newCourseSlug, text: v, value: newCourseSlug });
     setLessonData((prevValues) => ({
       ...prevValues,
@@ -52,7 +74,7 @@ const NewLessonModal: FC<NewLessonModalProps> = ({ openNewLessonModal, setOpenNe
 
   const closeModal = () => {
     setLessonData(defaultState);
-    setIsEmptyField(false);
+    setProblem(null);
     setOpenNewLessonModal(false);
   };
 
@@ -64,18 +86,15 @@ const NewLessonModal: FC<NewLessonModalProps> = ({ openNewLessonModal, setOpenNe
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!lessonData.lessonTitle) {
-      setIsEmptyField(true);
+    const { course, lessonTitle, language } = lessonData;
+    const invalid = newLessonProblem(lessonTitle, course);
+    if (invalid) {
+      setProblem(invalid);
       return;
     }
 
     setLoading(true);
-    const { course, lessonTitle, language } = lessonData;
-
-    const lesson = {
-      title: lessonTitle,
-      slug: slugify(lessonTitle, { lower: true, strict: true }),
-    };
+    const lesson = { title: lessonTitle.trim(), slug: toSlug(lessonTitle) };
     const courseTitleFromSlug = lessonData.courses.find(({ value }) => value === course);
     try {
       const lessonId = await addLesson(
@@ -83,13 +102,13 @@ const NewLessonModal: FC<NewLessonModalProps> = ({ openNewLessonModal, setOpenNe
         courseTitleFromSlug?.text || "",
         lesson.slug,
         lesson.title,
-        language
+        language,
       );
       if (lessonId) {
         navigateToEditor(lessonId, lesson.slug);
       }
     } catch (error) {
-      console.error("Error while adding a lesson:", error);
+      setProblem(serverMessage(error));
     } finally {
       setLoading(false);
     }
@@ -129,9 +148,9 @@ const NewLessonModal: FC<NewLessonModalProps> = ({ openNewLessonModal, setOpenNe
                     name={"lessonTitle"}
                     defaultValue={lessonData["lessonTitle"]}
                   />
-                  {!lessonData.lessonTitle && isEmptyField ? (
-                    <p>
-                      <i style={{ color: "red" }}>{errorMessage}</i>
+                  {problem ? (
+                    <p role="alert">
+                      <i style={{ color: "red" }}>{problem}</i>
                     </p>
                   ) : (
                     <p style={{ height: "1rem" }} />

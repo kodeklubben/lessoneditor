@@ -1,5 +1,58 @@
 import { newLessonFiles, UserService } from "./user.service";
 
+describe("a new lesson's folder (P0-2)", () => {
+  const lesson = {
+    lessonSlug: "asteroids",
+    lessonTitle: "Asteroids",
+    courseSlug: "scratch",
+    courseTitle: "Scratch",
+  };
+  const setup = (own: unknown, published: boolean | Error) => {
+    const lessonRepository = {
+      findOne: jest.fn().mockResolvedValue(own),
+      manager: { transaction: jest.fn().mockResolvedValue(9) },
+    };
+    const userRepository = { findOne: jest.fn().mockResolvedValue({ userId: 1, username: "ada" }) };
+    const github = {
+      lessonFolderExists: jest.fn(async () => {
+        if (published instanceof Error) throw published;
+        return published;
+      }),
+    };
+    const service = new UserService(
+      lessonRepository as never,
+      userRepository as never,
+      github as never,
+    );
+    return { service, lessonRepository, github };
+  };
+
+  it("is refused when a published lesson has it", async () => {
+    const { service, lessonRepository, github } = setup(null, true);
+    await expect(service.addUserLesson(1, lesson, "token")).rejects.toMatchObject({
+      status: 409,
+      message: expect.stringContaining("src/scratch/asteroids"),
+    });
+    expect(github.lessonFolderExists).toHaveBeenCalledWith("token", "src/scratch/asteroids");
+    expect(lessonRepository.manager.transaction).not.toHaveBeenCalled();
+  });
+
+  it("is refused when the user already has a lesson with that name in the course", async () => {
+    const { service, github } = setup({ lessonTitle: "Asteroids" }, false);
+    await expect(service.addUserLesson(1, lesson, "token")).rejects.toMatchObject({ status: 409 });
+    expect(github.lessonFolderExists).not.toHaveBeenCalled();
+  });
+
+  it("is created when free, or when GitHub cannot answer (checked again on submission)", async () => {
+    const warn = jest.spyOn(console, "warn").mockImplementation(() => undefined);
+    await expect(setup(null, false).service.addUserLesson(1, lesson, "token")).resolves.toBe(9);
+    await expect(
+      setup(null, new Error("rate limited")).service.addUserLesson(1, lesson, "token"),
+    ).resolves.toBe(9);
+    warn.mockRestore();
+  });
+});
+
 describe("creating a lesson", () => {
   const lesson = {
     lessonSlug: "hei",
@@ -19,6 +72,7 @@ describe("creating a lesson", () => {
       createQueryBuilder: () => ({ relation: () => ({ of: () => ({ add }) }) }),
     };
     const lessonRepository = {
+      findOne: jest.fn().mockResolvedValue(null),
       manager: {
         transaction: jest.fn(async (work: (m: typeof manager) => unknown) => work(manager)),
       },
@@ -26,7 +80,11 @@ describe("creating a lesson", () => {
     const userRepository = {
       findOne: jest.fn().mockResolvedValue({ userId: 1, username: "ada", name: "Ada" }),
     };
-    const service = new UserService(lessonRepository as never, userRepository as never);
+    const service = new UserService(
+      lessonRepository as never,
+      userRepository as never,
+      undefined as never,
+    );
 
     await expect(service.addUserLesson(1, lesson)).resolves.toBe(9);
     const files = saved.find(({ entity }) => entity.name === "FileStore")?.value as {
@@ -71,7 +129,11 @@ describe("deleting a lesson", () => {
     const userRepository = {
       findOne: jest.fn().mockResolvedValue({ userId: 1, username: "ada", lessons: [] }),
     };
-    const service = new UserService(lessonRepository as never, userRepository as never);
+    const service = new UserService(
+      lessonRepository as never,
+      userRepository as never,
+      undefined as never,
+    );
     return { service, steps, lessonRepository };
   }
 
