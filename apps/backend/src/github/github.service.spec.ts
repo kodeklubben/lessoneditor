@@ -303,3 +303,69 @@ describe("submitting a copy of a published lesson", () => {
     expect(fake.calls["git.createTree"]).toBeUndefined();
   });
 });
+
+describe("a submitted lesson's pull request, for the card", () => {
+  const env = { ...process.env };
+  beforeEach(() => {
+    process.env.GH_LESSON_REPO_OWNER = "kodeklubben";
+    process.env.GH_LESSON_REPO = "oppgaver";
+  });
+  afterAll(() => {
+    process.env = env;
+  });
+
+  const withPulls = (byHead: Record<string, object[]>) => {
+    const github = new GithubService();
+    const list = jest.fn(async ({ head }: { head: string }) => ({ data: byHead[head] ?? [] }));
+    github.createClient = () => ({ pulls: { list } }) as never;
+    return { github, list };
+  };
+  const pr = (created: string, state: string, merged: string | null) => ({
+    created_at: created,
+    state,
+    merged_at: merged,
+    html_url: `https://github.com/kodeklubben/oppgaver/pull/${created.slice(-2)}`,
+  });
+
+  it("says merged, open or closed, from the branch named after the lesson", async () => {
+    const { github, list } = withPulls({
+      "ada:31": [pr("2026-11-22T23:50", "closed", "2026-11-23T09:00")],
+      "ada:32": [pr("2026-11-22T23:51", "open", null)],
+      "ada:33": [pr("2026-11-22T23:52", "closed", null)],
+    });
+    expect(await github.lessonPullRequest("t", 31, ["ada"])).toEqual({
+      state: "merged",
+      url: "https://github.com/kodeklubben/oppgaver/pull/50",
+    });
+    expect((await github.lessonPullRequest("t", 32, ["ada"]))?.state).toBe("open");
+    expect((await github.lessonPullRequest("t", 33, ["ada"]))?.state).toBe("closed");
+    expect(list).toHaveBeenCalledWith(
+      expect.objectContaining({
+        owner: "kodeklubben",
+        repo: "oppgaver",
+        head: "ada:31",
+        state: "all",
+      }),
+    );
+    expect(await github.lessonPullRequest("t", 34, ["ada"])).toBeNull();
+  });
+
+  it("takes the newest one when several members submitted, and asks each fork once", async () => {
+    const { github, list } = withPulls({
+      "ada:7": [pr("2026-11-01T10:00", "closed", null)],
+      "bo:7": [pr("2026-11-20T10:00", "open", null)],
+    });
+    expect((await github.lessonPullRequest("t", 7, ["ada", "bo", "ada"]))?.state).toBe("open");
+    expect(list).toHaveBeenCalledTimes(2);
+  });
+
+  it("asks GitHub again only after a while", async () => {
+    const { github, list } = withPulls({ "ada:8": [pr("2026-11-20T10:00", "open", null)] });
+    await github.lessonPullRequest("t", 8, ["ada"]);
+    await github.lessonPullRequest("t", 8, ["ada"]);
+    expect(list).toHaveBeenCalledTimes(1);
+    github.pullRequestCacheMs = 0;
+    await github.lessonPullRequest("t", 8, ["ada"]);
+    expect(list).toHaveBeenCalledTimes(2);
+  });
+});

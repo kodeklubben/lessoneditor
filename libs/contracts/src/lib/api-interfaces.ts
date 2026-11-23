@@ -16,4 +16,5 @@ export const paths = {
   USER_LESSON_IMPORT: "/api/user/:userId/lesson/import",
   USER: "/api/user",
   USER_LESSONS: "/api/user/:userId/lessons",
+  USER_LESSON_PULL_REQUESTS: "/api/user/:userId/lessons/pull-requests",
 };
