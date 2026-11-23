@@ -180,3 +180,112 @@ describe("submitting a lesson to GitHub", () => {
     error.mockRestore();
   });
 });
+
+describe("submitting a copy of a published lesson", () => {
+  const env = { ...process.env };
+  const original = Buffer.from(
+    "---\ntitle: Asteroids\nlevel: 4\nauthor: ''\nauthorList: [Geir]\nlanguage: nb\n---\nTekst\n",
+  );
+  const copy = (
+    files: { filename: string; ext: string; content: Buffer; imported?: boolean }[],
+  ) => ({
+    lessonId: 7,
+    lessonSlug: "asteroids",
+    lessonTitle: "Asteroids",
+    courseSlug: "scratch",
+    upstream_path: "src/scratch/asteroids",
+    files: files.map(({ imported = true, ...file }) => ({
+      ...file,
+      imported_sha: imported ? gitBlobSha(file.content) : null,
+      upstream_sha: imported ? "repo-" + file.filename + file.ext : null,
+    })),
+  });
+  // What the repo had when the copy was made: the text, code the copy does not hold, an image.
+  const repoAtCopy = [
+    { path: "src/scratch/asteroids/asteroids.md", sha: "repo-asteroids.md" },
+    { path: "src/scratch/asteroids/kode.py", sha: "repo-kode.py" },
+  ];
+
+  beforeEach(() => {
+    process.env.DISABLE_PULL_REQUESTS = "false";
+    process.env.GH_LESSON_REPO_OWNER = "kodeklubben";
+    process.env.GH_LESSON_REPO = "oppgaver";
+  });
+  afterAll(() => {
+    process.env = env;
+  });
+
+  function run(lesson: ReturnType<typeof copy>, username: string, repo = repoAtCopy) {
+    const fake = fakeGithub([]);
+    // The folder listing the repo answers with: its sha per file, not the content.
+    (fake.octokit.repos as Record<string, unknown>).getContent = async () => ({
+      data: repo.map((file) => ({ type: "file", ...file })),
+    });
+    // The text as it is in the repo, for keeping its front matter.
+    (fake.octokit.git as Record<string, unknown>).getBlob = async () => ({
+      data: {
+        content: Buffer.from(
+          "---\ntitle: Asteroids\nlevel: 4\nauthor: 'Geir'\nlanguage: nb\n---\nTekst\n",
+        ).toString("base64"),
+      },
+    });
+    const github = new GithubService();
+    github.forkWaitMs = 0;
+    github.createClient = () => fake.octokit as never;
+    const submit = github.submitLesson({ userId: 1, username } as never, "token", lesson as never, {
+      message: "Rettet en skrivefeil",
+    });
+    return { fake, submit };
+  }
+
+  it("sends only the changed text, keeps level, deletes nothing and names the PR", async () => {
+    const lesson = copy([
+      { filename: "asteroids", ext: ".md", content: original },
+      { filename: "preview", ext: ".png", content: Buffer.from(" "), imported: false },
+    ]);
+    lesson.files[0].content = Buffer.from(original.toString().replace("Tekst", "Tekst, rettet"));
+    const { fake, submit } = run(lesson, "ada");
+    await submit;
+    const tree = (
+      fake.calls["git.createTree"][0] as { tree: { path: string; sha: string | null }[] }
+    ).tree;
+    expect(tree.map((entry) => [entry.path, entry.sha])).toEqual([
+      ["src/scratch/asteroids/asteroids.md", "blob-sha"],
+    ]);
+    const blob = fake.calls["git.createBlob"][0] as { content: string };
+    // The repo's own front matter text, quotes included; only the body changed.
+    expect(Buffer.from(blob.content, "base64").toString()).toBe(
+      "---\ntitle: Asteroids\nlevel: 4\nauthor: 'Geir'\nlanguage: nb\n---\nTekst, rettet\n",
+    );
+    expect(fake.calls["repos.createFork"]).toHaveLength(1);
+    expect(fake.calls["pulls.create"][0]).toMatchObject({ title: "Endringer i Asteroids" });
+  });
+
+  it("works in the repo directly when the submitter owns it, as with a test copy", async () => {
+    const lesson = copy([{ filename: "asteroids", ext: ".md", content: original }]);
+    lesson.files[0].content = Buffer.from("---\ntitle: Ny\n---\nNy\n");
+    const { fake, submit } = run(lesson, "Kodeklubben");
+    await submit;
+    expect(fake.calls["repos.createFork"]).toBeUndefined();
+    expect(fake.calls["git.createRef"]).toEqual([
+      expect.objectContaining({ owner: "kodeklubben", ref: "refs/heads/7" }),
+    ]);
+  });
+
+  it("refuses when nothing changed", async () => {
+    const { submit } = run(copy([{ filename: "asteroids", ext: ".md", content: original }]), "ada");
+    await expect(submit).rejects.toThrow("Ingen endringer å sende inn.");
+  });
+
+  it("refuses to overwrite a file someone changed in the repo since the copy was made", async () => {
+    const lesson = copy([{ filename: "asteroids", ext: ".md", content: original }]);
+    lesson.files[0].content = Buffer.from("---\ntitle: Ny\n---\nNy\n");
+    const { fake, submit } = run(lesson, "ada", [
+      { path: "src/scratch/asteroids/asteroids.md", sha: "someone-else" },
+    ]);
+    await expect(submit).rejects.toThrow(
+      "Endret på GitHub etter at kopien ble laget: asteroids.md",
+    );
+    expect(fake.calls["git.createTree"]).toBeUndefined();
+  });
+});

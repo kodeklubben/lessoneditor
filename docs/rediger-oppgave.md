@@ -7,7 +7,7 @@ The work is done in three pull requests:
 | PR | What | Writes to GitHub |
 |---|---|---|
 | A | Import: `/rediger/<course>/<lesson>` makes a copy for the signed-in user | No |
-| B | Submitting an imported lesson: a pull request with only the changed files, nothing deleted | Yes |
+| B | Submitting an imported lesson: a pull request with only the changed files, nothing deleted | Yes (tested against `sagatun/oppgaver-test`) |
 | C | The button on oppgaver.kidsakoder.no | No (another repo) |
 
 ## What a lesson in the repo looks like
@@ -38,11 +38,13 @@ What "no changes" means: a file is changed when the sha of its stored content di
 
 ## Submitting (PR B)
 
-- Only files whose content differs from `imported_sha`, plus new images, go into the commit. Nothing is deleted.
-- Changed texts are written back with the repo's front matter, keeping fields the editor does not know.
-- Written to `upstream_path`, on a branch from the repo's current default branch.
-- If a changed file's `upstream_sha` no longer matches the repo, someone else changed it meanwhile: the editor says so before submitting.
-- After the pull request is merged, the copy is locked; editing again starts from a fresh import.
+- Only files whose content differs from `imported_sha`, plus files added in the editor (new images, new languages), go into the commit. Nothing is deleted.
+- Changed texts are written back with the repo's front matter. Fields the editor does not know (`level` and others) stay in place.
+- Written to `upstream_path`, on the branch `<lessonId>` from the repo's current default branch. The pull request is titled "Endringer i <title>".
+- Before anything is written, the repo's folder is compared with `upstream_sha`. If someone else changed one of the files meanwhile, the submission is refused with the file names (409); the teacher makes a new copy. A copy without changes is refused too (400).
+- The submitter works through their fork, as for new lessons. Whoever owns the lesson repo (such as a test copy under their own account) works in it directly.
+- Submitting again updates the same branch and pull request.
+- Later: lock the copy after its pull request is merged, so editing again starts from a fresh import.
 
 ## Languages
 

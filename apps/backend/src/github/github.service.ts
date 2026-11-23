@@ -2,18 +2,26 @@ import {
   Injectable,
   BadGatewayException,
   BadRequestException,
+  ConflictException,
   ForbiddenException,
   HttpException,
   Logger,
   UnauthorizedException,
 } from "@nestjs/common";
-import { isCourseSlug, isLessonSlug } from "../../../../libs/contracts/src/lib/validation";
+import {
+  isCourseSlug,
+  isLessonSlug,
+  isRepoName,
+} from "../../../../libs/contracts/src/lib/validation";
 import { Octokit } from "@octokit/rest";
 import { Lesson } from "../lesson/lesson.entity";
 import { User } from "../user/user.entity";
 import {
+  buildChangedUploads,
   buildUploadFiles,
+  changedInRepo,
   changedUploads,
+  keepRepoFrontMatter,
   isPullRequestAlreadyExists,
   machineTranslationNote,
   pathsToDelete,
@@ -23,6 +31,12 @@ import { env } from "../app/env";
 
 type Repo = { owner: string; repo: string };
 type Branch = { name: string; commitSha: string; treeSha: string };
+
+/** src/<course>/<lesson> of a copied lesson, checked again before it becomes a path in the repo. */
+export function isUpstreamPath(path: string): boolean {
+  const [src, course, lesson, ...rest] = path.split("/");
+  return src === "src" && isCourseSlug(course) && isRepoName(lesson) && rest.length === 0;
+}
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -46,7 +60,11 @@ export class GithubService {
     return new Octokit({ auth: accessToken });
   }
 
-  /** Commits the lesson to src/<course>/<lesson>/ on branch <lessonId> in the user's fork and opens (or reuses) the PR. */
+  /**
+   * Commits the lesson to src/<course>/<lesson>/ on branch <lessonId> in the user's fork and opens
+   * (or reuses) the PR. A copy of a published lesson sends only its changed and new files, and
+   * deletes nothing (docs/rediger-oppgave.md).
+   */
   async submitLesson(
     user: User,
     accessToken: string | undefined,
@@ -59,8 +77,13 @@ export class GithubService {
     if (!accessToken) {
       throw new UnauthorizedException("Missing GitHub authorization");
     }
+    const copy = lesson.upstream_path ?? null;
     // Checked again here: older rows were stored before slugs were validated.
-    if (!isCourseSlug(lesson.courseSlug) || !isLessonSlug(lesson.lessonSlug)) {
+    if (
+      copy
+        ? !isUpstreamPath(copy)
+        : !isCourseSlug(lesson.courseSlug) || !isLessonSlug(lesson.lessonSlug)
+    ) {
       throw new BadRequestException("The lesson or course slug cannot be used as a path");
     }
     if (!lesson.files) {
@@ -73,7 +96,39 @@ export class GithubService {
     };
     try {
       const upstreamBranch = await this.defaultBranch(octokit, upstream);
-      const fork = await this.ensureFork(octokit, upstream);
+      const lessonPath = copy ?? ["src", lesson.courseSlug, lesson.lessonSlug].join("/");
+
+      let uploads;
+      if (copy) {
+        const changedSinceCopy = buildChangedUploads(lessonPath, lesson.files);
+        if (changedSinceCopy.length === 0) {
+          throw new BadRequestException("Ingen endringer å sende inn.");
+        }
+        const inRepo = await this.listFiles(octokit, upstream, upstreamBranch.name, lessonPath);
+        const conflicts = changedInRepo(changedSinceCopy, inRepo);
+        if (conflicts.length > 0) {
+          throw new ConflictException(
+            `Endret på GitHub etter at kopien ble laget: ${conflicts.join(", ")}. ` +
+              "Lag en ny kopi og ta med endringene dine dit.",
+          );
+        }
+        uploads = await Promise.all(
+          changedSinceCopy.map(async ({ upload, upstreamSha }) => {
+            if (!upstreamSha || !upload.path.endsWith(".md")) return upload;
+            const { data } = await octokit.git.getBlob({ ...upstream, file_sha: upstreamSha });
+            const original = Buffer.from(data.content, "base64").toString("utf-8");
+            const text = keepRepoFrontMatter(original, upload.buffer.toString("utf-8"));
+            return { ...upload, buffer: Buffer.from(text, "utf-8") };
+          }),
+        );
+      } else {
+        uploads = buildUploadFiles(lesson, lesson.files);
+      }
+
+      // The owner of the lesson repo (e.g. a test copy of it) works in it directly; anyone else
+      // through their fork.
+      const ownsRepo = user.username?.toLowerCase() === upstream.owner.toLowerCase();
+      const fork = ownsRepo ? upstream : await this.ensureFork(octokit, upstream);
       const branch = await this.ensureBranch(
         octokit,
         fork,
@@ -81,11 +136,10 @@ export class GithubService {
         upstreamBranch,
       );
 
-      const lessonPath = ["src", lesson.courseSlug, lesson.lessonSlug].join("/");
-      const uploads = buildUploadFiles(lesson, lesson.files);
       const existing = await this.listFiles(octokit, fork, branch.name, lessonPath);
       const changed = changedUploads(existing, uploads);
-      const deleted = pathsToDelete(existing, uploads);
+      // A copy never deletes: the repo has files it does not hold (code, subfolders).
+      const deleted = copy ? [] : pathsToDelete(existing, uploads);
 
       if (changed.length > 0 || deleted.length > 0) {
         const blobs = await Promise.all(
@@ -134,7 +188,7 @@ export class GithubService {
         fork,
         branch.name,
         upstreamBranch.name,
-        lesson.lessonTitle,
+        copy ? `Endringer i ${lesson.lessonTitle}` : lesson.lessonTitle,
         (submitMessage?.message ?? "") + machineTranslationNote(lesson.files),
       );
       return { url: pr?.html_url ?? null };

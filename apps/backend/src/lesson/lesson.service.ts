@@ -48,14 +48,6 @@ export class LessonService {
     submitMessage: { message: string },
   ) {
     const lesson = await this.getLesson(lessonId);
-    // A copy of a published lesson needs its own submission (only the changed files, nothing
-    // deleted; docs/rediger-oppgave.md, part B). The one for new lessons would remove the files
-    // the copy does not hold, such as code and subfolders.
-    if (lesson.upstream_path) {
-      throw new ConflictException(
-        "Innsending av endringer i en publisert oppgave er ikke på plass ennå. Kopien er lagret.",
-      );
-    }
     const result = await this.githubService.submitLesson(user, accessToken, lesson, submitMessage);
     await this.lessonRepository.update(lessonId, {
       submitted: true,

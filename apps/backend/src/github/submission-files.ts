@@ -1,4 +1,5 @@
 import { createHash } from "crypto";
+import { isDeepStrictEqual } from "util";
 import { dump } from "js-yaml";
 import {
   parseLessonMarkdown,
@@ -35,16 +36,28 @@ const repoFilename = (filename: string) =>
     LANGUAGE_ALIASES[language] ? `_${LANGUAGE_ALIASES[language]}` : whole,
   );
 
-/** The editor's front matter (lists) becomes the lesson repo's (comma separated strings). */
+/** Front matter only the editor uses; it never goes to the lesson repo. */
+const EDITOR_ONLY_FIELDS = ["author", "translator", "machineTranslated", "translatedFrom"];
+
+/**
+ * The editor's front matter (lists) becomes the lesson repo's (comma separated strings). Fields the
+ * editor does not know, such as level in a lesson copied from the repo, are kept in their place.
+ */
 export function toRepoMarkdown(raw: string): string {
-  const { data, body } = parseLessonMarkdown<StoredHeader>(raw);
-  const header: Record<string, string> = {
-    title: data.title ?? "",
-    author: (data.authorList ?? []).join(", "),
-  };
-  const translators = data.translatorList ?? [];
-  if (translators.length > 0) header.translator = translators.join(", ");
-  header.language = repoLanguage(data.language ?? "nb");
+  const { data, body } = parseLessonMarkdown<StoredHeader & Record<string, unknown>>(raw);
+  const header: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(data)) {
+    if (EDITOR_ONLY_FIELDS.includes(key)) continue;
+    if (key === "authorList") header.author = (data.authorList ?? []).join(", ");
+    else if (key === "translatorList") {
+      const translators = data.translatorList ?? [];
+      if (translators.length > 0) header.translator = translators.join(", ");
+    } else if (key === "language") header.language = repoLanguage(data.language ?? "nb");
+    else header[key] = value;
+  }
+  header.title ??= "";
+  header.author ??= "";
+  header.language ??= "nb";
   return stringifyLessonMarkdown(header, body);
 }
 
@@ -82,6 +95,79 @@ export function buildUploadFiles(
 /** Git's blob id, so unchanged files can be skipped without downloading them from GitHub. */
 export function gitBlobSha(buffer: Buffer): string {
   return createHash("sha1").update(`blob ${buffer.length}\0`).update(buffer).digest("hex");
+}
+
+/**
+ * The repo's own front matter text when its values did not change, so a submitted text differs
+ * from the original only where the teacher edited it, not in quoting or line breaks that YAML
+ * writes differently. Both texts are in the repo's format.
+ */
+export function keepRepoFrontMatter(original: string, updated: string): string {
+  const before = parseLessonMarkdown(original);
+  const after = parseLessonMarkdown(updated);
+  if (!original.startsWith("---") || !isDeepStrictEqual(before.data, after.data)) return updated;
+  const close = original.indexOf("\n---", 3);
+  if (close === -1) return updated;
+  const lineEnd = original.indexOf("\n", close + 4);
+  const head =
+    lineEnd === -1 ? original.slice(0, close + 4) + "\n" : original.slice(0, lineEnd + 1);
+  return head + after.body;
+}
+
+/** A stored file of a lesson copied from the repo (docs/rediger-oppgave.md). */
+interface ImportedFile extends StoredFile {
+  imported_sha?: string | null;
+  upstream_sha?: string | null;
+}
+
+/** The file as the repo gets it: the repo's front matter, YAML, or the image itself. */
+function repoUpload(folder: string, file: StoredFile): UploadObject | null {
+  const name = file.ext === ".md" ? repoFilename(file.filename) : file.filename;
+  const path = [folder, name + file.ext].join("/");
+  if (file.ext === ".yml") {
+    return { path, buffer: Buffer.from(dump(JSON.parse(file.content.toString())), "utf-8") };
+  }
+  if (file.ext === ".md") {
+    return { path, buffer: Buffer.from(toRepoMarkdown(file.content.toString()), "utf-8") };
+  }
+  if (IMAGE_EXTENSIONS.includes(file.ext)) return { path, buffer: Buffer.from(file.content) };
+  return null;
+}
+
+/**
+ * What a copy of a published lesson sends: only the files changed since the copy was made (their
+ * content no longer matches imported_sha) and the ones added in the editor. Nothing is deleted;
+ * files the copy does not hold stay as they are in the repo.
+ */
+export function buildChangedUploads(
+  folder: string,
+  files: ImportedFile[],
+): { upload: UploadObject; upstreamSha: string | null }[] {
+  const changed: { upload: UploadObject; upstreamSha: string | null }[] = [];
+  for (const file of files) {
+    if (file.filename === "preview" && file.ext === ".png") continue;
+    if (file.imported_sha && gitBlobSha(Buffer.from(file.content)) === file.imported_sha) continue;
+    const upload = repoUpload(folder, file);
+    if (upload) changed.push({ upload, upstreamSha: file.upstream_sha ?? null });
+  }
+  return changed;
+}
+
+/**
+ * Files someone changed in the repo after the copy was made, which a submission would overwrite.
+ * A new file that now exists in the repo counts as well.
+ */
+export function changedInRepo(
+  changed: { upload: UploadObject; upstreamSha: string | null }[],
+  repo: RepoFile[],
+): string[] {
+  const current = new Map(repo.map((file) => [file.path, file.sha]));
+  return changed
+    .filter(({ upload, upstreamSha }) => {
+      const now = current.get(upload.path);
+      return upstreamSha ? now !== upstreamSha : now !== undefined;
+    })
+    .map(({ upload }) => upload.path.split("/").pop() as string);
 }
 
 export interface RepoFile {
