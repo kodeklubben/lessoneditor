@@ -185,7 +185,7 @@ const lessonHighlight = HighlightStyle.define([
 
 const theme = EditorView.theme({
   "&": { height: "100%", backgroundColor: "#fff", borderRadius: "5px", fontSize: "1rem" },
-  "&.cm-focused": { outline: "3px solid #2185d0", outlineOffset: "-3px" },
+  "&.cm-focused": { outline: "2px solid #0fbe7b", outlineOffset: "0" },
   ".cm-scroller": { fontFamily: "inherit", lineHeight: "1.65" },
   ".cm-content": { padding: "1rem 0", caretColor: "#000" },
   ".cm-line": { padding: "0 1rem 0 0.75rem" },

@@ -38,7 +38,7 @@ const SubmitLessonCard = ({
         />
       )}
       <div>
-        <Header>Sende inn oppgave</Header>
+        <Header>Send inn oppgave</Header>
         <Card className="new-lesson_card">
           <div className="new-lesson_card__content">
             {/* A larger mouse target; keyboard and screen readers use the button below. */}
@@ -49,7 +49,7 @@ const SubmitLessonCard = ({
                   width: "100%",
                   objectFit: "cover",
                   objectPosition: "0 0",
-                  borderRadius: "10px",
+                  borderRadius: 0,
                 }}
                 src={previewImage[lessonId]}
               />

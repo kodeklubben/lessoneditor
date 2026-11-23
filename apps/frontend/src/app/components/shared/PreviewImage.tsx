@@ -21,7 +21,7 @@ const PreviewImage: FC<{ src?: string; className?: string; style?: CSSProperties
         alignItems: "center",
         justifyContent: "center",
         background: "#f3f4f5",
-        borderRadius: "10px",
+        borderRadius: 0,
       }}
       aria-hidden="true"
       data-testid="no-preview"

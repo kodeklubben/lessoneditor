@@ -37,7 +37,7 @@ describe("SubmitLessonModal", () => {
     let fail: (error: unknown) => void = () => undefined;
     mockPost.mockReturnValue(new Promise((_resolve, reject) => (fail = reject)));
     open("new");
-    fireEvent.click(screen.getByRole("button", { name: "Sende inn" }));
+    fireEvent.click(screen.getByRole("button", { name: "Send inn" }));
     expect(screen.getByRole("button", { name: /Sender inn …/ })).toHaveProperty("disabled", true);
     await act(async () =>
       fail({ response: { status: 403, data: { message: "GitHub submission is disabled" } } }),

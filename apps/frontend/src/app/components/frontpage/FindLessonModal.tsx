@@ -33,12 +33,10 @@ const FindLessonModal: FC = () => {
   return (
     <>
       <Button
-        basic
         icon="search"
-        labelPosition="left"
         content="Finn en oppgave"
         onClick={() => setOpen(true)}
-        className="find-lesson-trigger"
+        className="le-secondary"
       />
       {open && <FindLessonDialog onClose={() => setOpen(false)} />}
     </>

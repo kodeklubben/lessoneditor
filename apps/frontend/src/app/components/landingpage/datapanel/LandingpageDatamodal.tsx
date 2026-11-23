@@ -170,7 +170,7 @@ const LandingpageDatamodal = () => {
         trigger={
           <div>
             <Button
-              basic
+              className="le-secondary"
               onClick={() => setOpen(true)}
               content="Oppgavedata"
               id="landingpage_datamodal_trigger__big"
@@ -178,7 +178,7 @@ const LandingpageDatamodal = () => {
               icon="tags"
             />
             <Button
-              basic
+              className="le-secondary"
               onClick={() => setOpen(true)}
               id="landingpage_datamodal_trigger__small"
               size="medium"

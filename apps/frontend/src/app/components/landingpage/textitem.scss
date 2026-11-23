@@ -28,6 +28,7 @@
         object-fit: cover;
         object-position: 0 0;
         border: 1px solid var(--le-line);
+        border-radius: 0;
         transition: box-shadow 150ms ease-out;
       }
     }

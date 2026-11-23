@@ -6,7 +6,7 @@
   gap: 0.4rem;
   padding: 0.3rem 0.6rem;
   border: 1px solid var(--le-line);
-  border-radius: 999px;
+  border-radius: 0;
   background: #fff;
   white-space: nowrap;
 
@@ -27,6 +27,8 @@
 
   .text-switcher__kind {
     color: var(--le-muted);
+    padding-left: 0.45rem;
+    border-left: 1px solid var(--le-line);
   }
 
   .menu > .header {

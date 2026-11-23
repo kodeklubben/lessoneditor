@@ -13,13 +13,15 @@ const Content = () => {
       <div className="lessons_menu">
         <Menu secondary className="lessons_menu__items">
           <Menu.Item
-            name="Oppgavetekst"
+            name="lessontext"
+            content="Oppgavetekst"
             active={activeItem === "lessontext"}
             onClick={() => setActiveItem("lessontext")}
             style={activeItem === "lessontext" ? { borderBottom: "4px solid var(--le-green)" } : {}}
           />
           <Menu.Item
-            name="Veiledningstekst"
+            name="teacherguide"
+            content="Lærerveiledning"
             active={activeItem === "teacherguide"}
             onClick={() => setActiveItem("teacherguide")}
             style={
@@ -27,7 +29,8 @@ const Content = () => {
             }
           />
           <Menu.Item
-            name="Alle Filer"
+            name="allfiles"
+            content="Alle filer"
             active={activeItem === "allfiles"}
             onClick={() => setActiveItem("allfiles")}
             style={activeItem === "allfiles" ? { borderBottom: "4px solid var(--le-green)" } : {}}

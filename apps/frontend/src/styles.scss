@@ -8,7 +8,7 @@
 
 // Keyboard focus must be visible everywhere, also on Semantic's buttons and our own controls.
 :focus-visible {
-  outline: 3px solid #2185d0 !important;
+  outline: 3px solid #0b7a50 !important;
   outline-offset: 2px;
 }
 
@@ -79,4 +79,45 @@ body .ui.modal > .header,
 body .ui.modal .ui.header:first-child {
   font-family: var(--le-display);
   letter-spacing: 0.02em;
+}
+
+/* A text field that has the focus: the green frame, not Semantic's blue. */
+body .ui.input > input:focus,
+body .ui.form input:focus,
+body .ui.selection.active.dropdown,
+body .ui.selection.active.dropdown .menu {
+  border-color: var(--le-green);
+}
+
+/*
+ * Secondary actions (Finn en oppgave, Del, Oppgavedata): white with a green frame, so they read as
+ * buttons next to the filled green ones and not as a grey input field.
+ */
+body .ui.button.le-secondary {
+  background: #fff;
+  color: var(--le-green-ink);
+  box-shadow: inset 0 0 0 2px var(--le-green-ink);
+  border-radius: 0.28571429rem;
+
+  &:hover,
+  &:focus {
+    background: #eef7f2;
+    color: var(--le-green-ink-hover);
+  }
+  > .icon {
+    opacity: 1;
+  }
+}
+
+/* Dialogs: the × inside the dialog (it sat outside, over the page's buttons) and a clear edge. */
+body .ui.modal {
+  box-shadow:
+    0 0 0 1px var(--le-line),
+    0 12px 32px rgba(0, 0, 0, 0.12);
+  > .close.icon {
+    top: 1rem;
+    right: 1rem;
+    color: var(--le-ink);
+    z-index: 2;
+  }
 }

@@ -8,7 +8,7 @@
   .landingpage-head__row {
     display: flex;
     justify-content: space-between;
-    align-items: flex-end;
+    align-items: flex-start;
     gap: 2rem;
     flex-wrap: wrap;
   }
@@ -16,6 +16,8 @@
   .landingpage-head__info {
     flex: 1 1 22rem;
     min-width: 0;
+    // In line with the headings over the two cards.
+    padding-top: 1.6rem;
   }
 
   .landingpage-head__tools {
