@@ -64,7 +64,8 @@ const LandingpageDatamodal = () => {
         },
         { ...obj },
       );
-      setCheckBoxState((prevState) => ({ ...prevState, ...obj }));
+      // Replaced, not merged: after «Avbryt» a box ticked in the dialog must be unticked again.
+      setCheckBoxState(obj);
     };
     if (yml.tags) {
       mapYamlTags();
@@ -88,6 +89,14 @@ const LandingpageDatamodal = () => {
     } else {
       setSaveError("Kunne ikke lagre oppgavedataene. Prøv igjen.");
     }
+  };
+
+  /** «Avbryt» and Esc (5): back to what was saved, nothing is written. */
+  const cancel = () => {
+    if (prevData.current) setYml(prevData.current);
+    setIsEmptyDatapanelText(false);
+    setSaveError("");
+    setOpen(false);
   };
 
   const dropdownHandler = (event: SyntheticEvent, data: Record<string, string>) => {
@@ -177,11 +186,7 @@ const LandingpageDatamodal = () => {
       />
       <Modal
         closeOnDimmerClick={false}
-        onClose={() => {
-          // Esc: an empty dialog is put off (M3), a filled-in one is saved as before.
-          if (isEmptyDatapanel) setOpen(false);
-          else void onSubmit();
-        }}
+        onClose={cancel}
         onOpen={() => setOpen(true)}
         open={open}
         size="large"
@@ -223,16 +228,8 @@ const LandingpageDatamodal = () => {
             </FieldError>
           </div>
 
-          {isEmptyDatapanel && (
-            <Button
-              basic
-              content="Senere"
-              onClick={() => {
-                setIsEmptyDatapanelText(false);
-                setOpen(false);
-              }}
-            />
-          )}
+          {/* «Senere» while nothing is filled in yet (M3); otherwise it discards the changes. */}
+          <Button basic content={isEmptyDatapanel ? "Senere" : "Avbryt"} onClick={cancel} />
           <Button
             onClick={onSubmit}
             content="OK"

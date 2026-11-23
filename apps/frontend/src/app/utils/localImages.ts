@@ -3,6 +3,15 @@
 const IMAGE = /(!\[(?:[^[\]]|\[[^\]]*\])*\]\()\s*(?:\.\/)?([^)\s]+)((?:\s+"[^"]*")?\s*\))/g;
 
 /**
+ * Runs `replace` on the markdown outside fenced code blocks (``` … ```): an image link written in
+ * a code example is text to show, not an image to load (M4).
+ */
+function outsideCodeBlocks(markdown: string, replace: (text: string) => string): string {
+  const parts = markdown.split(/(^```[^\n]*\n[\s\S]*?^```[^\n]*$)/m);
+  return parts.map((part, index) => (index % 2 === 1 ? part : replace(part))).join("");
+}
+
+/**
  * Swaps the lesson's own images (./bilde.png) for the blob URLs the editor has loaded. Each link
  * is matched by its own name; external images and unknown files are left as they are (K17).
  *
@@ -15,13 +24,15 @@ export function replaceLocalImageUrls(
   images: Record<string, string>,
   upstreamBase?: string,
 ): string {
-  return markdown.replace(IMAGE, (whole, prefix: string, path: string, suffix: string) => {
-    if (path.includes(":") || path.startsWith("/")) return whole;
-    const url = path.includes("/") ? undefined : images[path];
-    if (url) return prefix + url + suffix;
-    if (upstreamBase) return prefix + new URL(path, upstreamBase).href + suffix;
-    return whole;
-  });
+  return outsideCodeBlocks(markdown, (text) =>
+    text.replace(IMAGE, (whole, prefix: string, path: string, suffix: string) => {
+      if (path.includes(":") || path.startsWith("/")) return whole;
+      const url = path.includes("/") ? undefined : images[path];
+      if (url) return prefix + url + suffix;
+      if (upstreamBase) return prefix + new URL(path, upstreamBase).href + suffix;
+      return whole;
+    }),
+  );
 }
 
 /** Where the files of a copied lesson's folder are on GitHub, or undefined for the editor's own lessons. */

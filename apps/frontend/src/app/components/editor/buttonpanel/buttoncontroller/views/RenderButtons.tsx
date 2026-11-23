@@ -29,7 +29,10 @@ export const RenderButtons: FC<RenderButtonsProps> = ({
   return (
     <>
       <Popup
-        content={title + " (" + shortcutLabel(shortcutKey) + ")"}
+        // The text buttons insert a section («Lagre» is a section about saving the project, not
+        // a save button). Their shortcuts stay ctrl on a Mac too: cmd+shift+c, a, i … belong to
+        // the browser.
+        content={`${icon ? "" : "Seksjon: "}${title} (${shortcutLabel(shortcutKey)})`}
         disabled={isTouchDevice()}
         mouseEnterDelay={250}
         mouseLeaveDelay={250}
