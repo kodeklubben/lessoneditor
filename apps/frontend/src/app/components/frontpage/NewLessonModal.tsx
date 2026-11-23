@@ -1,11 +1,12 @@
 import "./newlessonmodal.scss";
-import React, { Dispatch, FC, SetStateAction, SyntheticEvent, useState } from "react";
+import React, { Dispatch, FC, SetStateAction, SyntheticEvent, useEffect, useState } from "react";
 import slugify from "slugify";
 import { COURSESLIST, LANGUAGEOPTIONS } from "./settings/newLessonOptions";
 import { useUserContext } from "../../contexts/UserContext";
 import { useNavigate } from "react-router";
 import { Button, Input, Modal, Dropdown, Header } from "semantic-ui-react";
 import FieldError from "../shared/FieldError";
+import { useCatalog } from "../../utils/useCatalog";
 import { isCourseSlug, isLessonSlug, isTitle, MAX_TITLE_LENGTH } from "@lessoneditor/contracts";
 
 interface NewLessonModalProps {
@@ -62,18 +63,36 @@ const NewLessonModal: FC<NewLessonModalProps> = ({ openNewLessonModal, setOpenNe
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const { addLesson } = useUserContext();
+  const catalog = useCatalog();
+  const baseCourses = catalog
+    ? catalog.courses.map(({ value, text }) => ({ key: value, value, text }))
+    : COURSESLIST;
   const defaultState: LessonData = {
     lessonTitle: "",
     language: LANGUAGEOPTIONS[0].value,
     // A copy: a course added in one dialog must not stay in the list after it is cancelled.
-    courses: [...COURSESLIST],
-    course: COURSESLIST[0].value,
+    courses: [...baseCourses],
+    course: baseCourses[0].value,
   };
   const [lessonData, setLessonData] = useState<LessonData>(defaultState);
+  // The repo's courses (#335) once they are read; a course added in this dialog stays.
+  useEffect(() => {
+    if (!catalog) return;
+    setLessonData((prev) => {
+      const added = prev.courses.filter(
+        (course) =>
+          !baseCourses.some((known) => known.value === course.value) &&
+          !COURSESLIST.some((known) => known.value === course.value),
+      );
+      const courses = [...baseCourses, ...added];
+      const course = courses.some((c) => c.value === prev.course) ? prev.course : courses[0].value;
+      return { ...prev, courses, course };
+    });
+  }, [catalog]);
   const [openNewCourseModal, setOpenNewCourseModal] = useState(false);
   const [courseSearch, setCourseSearch] = useState("");
   // The course chosen before «Legg til nytt kurs», to go back to if the teacher regrets it.
-  const [previousCourse, setPreviousCourse] = useState<string>(COURSESLIST[0].value);
+  const [previousCourse, setPreviousCourse] = useState<string>(baseCourses[0].value);
   const [problem, setProblem] = useState<string | null>(null);
 
   const onChange = (e: SyntheticEvent, { name, value }: Record<string, string>) => {
