@@ -8,6 +8,7 @@ import { FileContextProvider } from "./contexts/FileContext";
 import Logout from "./components/shared/Logout";
 import SimplePreview from "./components/simple-preview/simple-preview";
 import ImportLesson from "./pages/ImportLesson";
+import NotFound from "./pages/NotFound";
 
 const App = () => {
   return (
@@ -59,7 +60,8 @@ const App = () => {
           }
         />
         <Route
-          path="/rediger/:course/:lesson"
+          // Also with the text's name after it, as in the lesson page's own address.
+          path="/rediger/:course/:lesson/*"
           element={
             <UserContextProvider>
               <ImportLesson />
@@ -67,7 +69,7 @@ const App = () => {
           }
         />
         <Route path="/logout" element={<Logout></Logout>} />
-        <Route path="*" element={<h1>Fant ikke siden</h1>} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );
