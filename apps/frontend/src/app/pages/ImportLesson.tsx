@@ -17,6 +17,23 @@ export function importErrorMessage(error: unknown): string {
     : "Kunne ikke hente oppgaven fra GitHub. Prøv igjen litt senere.";
 }
 
+/** Asks for the copy's first thumbnail, from its bokmål text (named after lessonSlug). */
+async function makeThumbnail(lessonId: number) {
+  try {
+    const { data } = await axios.get<{ lessonSlug: string }>(
+      paths.LESSON.replace(":lessonId", String(lessonId)),
+    );
+    await axios.put(
+      paths.LESSON_FILE_UPDATE_THUMB.replace(":lessonId", String(lessonId)).replace(
+        ":filename",
+        encodeURIComponent(data.lessonSlug),
+      ),
+    );
+  } catch {
+    // Cosmetic: the thumbnail is made again after the first edit.
+  }
+}
+
 /**
  * /rediger/<course>/<lesson>: the "Rediger oppgave" link from oppgaver.kidsakoder.no. Copies the
  * lesson to the signed-in user (or opens their existing copy) and goes to it.
@@ -34,12 +51,20 @@ const ImportLesson: FC = () => {
     started.current = true;
     const courseTitle = COURSESLIST.find((item) => item.value === course)?.text;
     axios
-      .post<{ lessonId: number }>(paths.USER_LESSON_IMPORT.replace(":userId", String(userId)), {
-        course,
-        lesson,
-        courseTitle,
+      .post<{ lessonId: number; existing: boolean }>(
+        paths.USER_LESSON_IMPORT.replace(":userId", String(userId)),
+        {
+          course,
+          lesson,
+          courseTitle,
+        },
+      )
+      .then(({ data }) => {
+        // A thumbnail right away instead of after the first edit; it takes a few seconds and the
+        // page shows a neutral picture meanwhile. A failure only leaves that picture.
+        if (!data.existing) void makeThumbnail(data.lessonId);
+        navigate(`/landingpage/${data.lessonId}`, { replace: true });
       })
-      .then(({ data }) => navigate(`/landingpage/${data.lessonId}`, { replace: true }))
       .catch((e) => setError(importErrorMessage(e)));
   }, [state.user?.userId, course, lesson, navigate]);
 

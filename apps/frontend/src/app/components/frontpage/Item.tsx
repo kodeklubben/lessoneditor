@@ -1,11 +1,12 @@
 import "./item.scss";
 import { LessonDTO } from "@lessoneditor/contracts";
 import React, { useState } from "react";
-import { Button, Card, Image, Icon, Popup } from "semantic-ui-react";
+import { Button, Card, Icon, Popup } from "semantic-ui-react";
 import { useNavigate } from "react-router";
 import { useUserContext } from "../../contexts/UserContext";
 
 import DeleteModal from "../shared/DeleteModal";
+import PreviewImage from "../shared/PreviewImage";
 
 interface Props {
   lesson: LessonDTO;
@@ -38,13 +39,7 @@ const Item: React.FC<Props> = ({ lesson }) => {
             className="card-content"
             onClick={() => navigateToHome(lesson.lessonId.toString())}
           >
-            <Image
-              className="card-content__image"
-              src={previewImage[lesson.lessonId]}
-              alt=""
-              bordered
-              rounded
-            />
+            <PreviewImage className="card-content__image" src={previewImage[lesson.lessonId]} />
 
             <Card.Content className="card-content__content">
               <Card.Header>
