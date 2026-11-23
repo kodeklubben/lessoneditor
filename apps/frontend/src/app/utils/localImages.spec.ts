@@ -16,6 +16,12 @@ describe("local image URLs in the preview", () => {
     expect(replaceLocalImageUrls("![A](a.png)", images)).toBe("![A](blob:a)");
   });
 
+  it("finds an image whose alt text holds a link", () => {
+    expect(replaceLocalImageUrls("![[Kilde](https://example.org/side)](./a.png)", images)).toBe(
+      "![[Kilde](https://example.org/side)](blob:a)",
+    );
+  });
+
   it("does not use the image list for paths in other folders", () => {
     expect(replaceLocalImageUrls("![A](../a.png)", images)).toBe("![A](../a.png)");
   });
@@ -30,6 +36,30 @@ describe("shared course images of a copied lesson", () => {
   it("shows ../bilder/ images from the commit the copy was made from", () => {
     expect(replaceLocalImageUrls("![Velg](../bilder/velg-bakgrunn.png)", {}, base)).toBe(
       "![Velg](https://raw.githubusercontent.com/kodeklubben/oppgaver/2fe66d1/src/scratch/bilder/velg-bakgrunn.png)",
+    );
+  });
+
+  it("shows every image the copy does not hold from GitHub too (P1-4)", () => {
+    const algoritmia = upstreamImageBase({
+      upstream_path: "src/uten_datamaskin/Algoritmia",
+      upstream_commit: "2fe66d1",
+    });
+    const raw = "https://raw.githubusercontent.com/kodeklubben/oppgaver/2fe66d1/src/";
+    const md = [
+      "![Ada](Ada_Lovelace.600x751.jpg)",
+      "![Nivå](./level3.svg)",
+      "![Kart](images/kart.png)",
+      "![Kopiert](a.png)",
+      "![Ekstern](https://example.org/x.png)",
+    ].join("\n");
+    expect(replaceLocalImageUrls(md, { "a.png": "blob:a" }, algoritmia)).toBe(
+      [
+        `![Ada](${raw}uten_datamaskin/Algoritmia/Ada_Lovelace.600x751.jpg)`,
+        `![Nivå](${raw}uten_datamaskin/Algoritmia/level3.svg)`,
+        `![Kart](${raw}uten_datamaskin/Algoritmia/images/kart.png)`,
+        "![Kopiert](blob:a)",
+        "![Ekstern](https://example.org/x.png)",
+      ].join("\n"),
     );
   });
 
