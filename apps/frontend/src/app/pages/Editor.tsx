@@ -18,7 +18,7 @@ const Editor: FC = () => {
   const { lang } = useParams() as any;
   const { state } = useLessonContext();
 
-  const { savedFileBody } = useFileContext();
+  const { savedFileBody, state: fileState } = useFileContext();
 
   const [mdText, setMdText] = useState("");
   const [openSettings, setOpenSettings] = useState<boolean>(false);
@@ -148,7 +148,10 @@ const Editor: FC = () => {
           />
           <Navbar>
             <div>
-              <h1 style={{ display: "inline" }}>{state.lesson.lessonTitle}</h1>
+              {/* This text's own title (V4): the nynorsk text is «Skritteljar», not «Skritteller». */}
+              <h1 style={{ display: "inline" }}>
+                {fileState.headerData?.title?.trim() || state.lesson.lessonTitle}
+              </h1>
               <h3 style={{ color: "silver", display: "inline" }}>{state.lesson.courseTitle}</h3>
             </div>
           </Navbar>

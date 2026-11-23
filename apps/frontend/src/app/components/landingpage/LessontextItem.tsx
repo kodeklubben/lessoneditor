@@ -8,6 +8,7 @@ import { useUserContext } from "../../contexts/UserContext";
 
 import DeleteModal from "../shared/DeleteModal";
 import MarkdownPreview from "./MarkdownPreview";
+import { useTextTitle } from "./useTextTitle";
 
 const LessontextItem: FC<any> = ({
   lessonId,
@@ -23,6 +24,7 @@ const LessontextItem: FC<any> = ({
   const [showMDPreview, setShowMDPreview] = useState<boolean>(false);
 
   const filename = language === "nb" ? lessonSlug : `${lessonSlug}_${language}`;
+  const title = useTextTitle(lessonId, filename);
 
   const navigateToEditor = (lessonId: any, lessonSlug: any, language: string) => {
     const target = ["/editor", lessonId, lessonSlug, language].join("/");
@@ -74,7 +76,7 @@ const LessontextItem: FC<any> = ({
         </div>
         <div className="text_item__lessontitle">
           <Item.Header>
-            <h2>{`Tittel: ${lessonTitle}`}</h2>
+            <h2>{`Tittel: ${title ?? lessonTitle}`}</h2>
           </Item.Header>
           <Item.Content>
             <Item.Meta>

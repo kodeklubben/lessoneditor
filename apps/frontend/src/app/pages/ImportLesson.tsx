@@ -7,6 +7,7 @@ import Navbar from "../components/navbar/Navbar";
 import ShowSpinner from "../components/ShowSpinner";
 import { COURSESLIST } from "../components/frontpage/settings/newLessonOptions";
 import { useUserContext } from "../contexts/UserContext";
+import { announceThumbnail } from "../utils/thumbnailEvents";
 
 /**
  * The server's message for a refused import (4xx), otherwise a general one. Validation errors
@@ -26,12 +27,13 @@ export function importErrorMessage(error: unknown): string {
 /** Asks for the copy's first thumbnail, of the text the server chose. */
 async function makeThumbnail(lessonId: number, text: string) {
   try {
-    await axios.put(
+    const { data: made } = await axios.put<boolean>(
       paths.LESSON_FILE_UPDATE_THUMB.replace(":lessonId", String(lessonId)).replace(
         ":filename",
         encodeURIComponent(text),
       ),
     );
+    if (made === true) announceThumbnail(lessonId);
   } catch {
     // Cosmetic: the thumbnail is made again after the first edit.
   }

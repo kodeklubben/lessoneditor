@@ -13,6 +13,7 @@ import NotLoggedInPage from "../pages/NotLoggedInPage";
 import ShowSpinner from "../components/ShowSpinner";
 import { isPreviewImage } from "../components/shared/PreviewImage";
 import { base64StringToBlob, createObjectURL } from "blob-util";
+import { onThumbnail } from "../utils/thumbnailEvents";
 
 export const UserContext = React.createContext({} as UserContextModel);
 
@@ -25,7 +26,7 @@ export const UserContextProvider = (props: any) => {
   const lessonsUrl = (userId: number) => paths.USER_LESSONS.replace(":userId", String(userId));
 
   /** Each lesson's thumbnail; a lesson without one (or a failed request) just shows no image. */
-  const fetchPreviews = (lessons: LessonDTO[]) =>
+  const fetchPreviews = (lessons: Pick<LessonDTO, "lessonId">[]) =>
     lessons.forEach(async ({ lessonId }) => {
       try {
         const file = await axios.get(
@@ -67,6 +68,9 @@ export const UserContextProvider = (props: any) => {
       active = false;
     };
   }, []);
+
+  // A thumbnail made after this page loaded (the editor was just left): show it without a reload.
+  useEffect(() => onThumbnail((lessonId) => fetchPreviews([{ lessonId }])), []);
 
   const getLesson = (lessonId: number): LessonDTO | undefined => {
     return userContexState.lessons?.find((item: LessonDTO) => item.lessonId === lessonId);
