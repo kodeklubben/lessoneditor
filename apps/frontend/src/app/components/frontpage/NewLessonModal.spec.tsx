@@ -4,6 +4,9 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 
 // react-router needs these, and jsdom does not have them.
 Object.assign(globalThis, { TextEncoder, TextDecoder });
+// The course list comes from the lesson repo (useCatalog); here the server has no answer, so the
+// built-in list applies.
+jest.mock("axios", () => ({ get: () => Promise.resolve({ data: null }) }));
 const { MemoryRouter } = require("react-router");
 const { default: NewLessonModal, newLessonProblem, matchesCourse } = require("./NewLessonModal");
 

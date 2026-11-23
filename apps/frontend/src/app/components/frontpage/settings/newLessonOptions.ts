@@ -79,6 +79,11 @@ export function languageOption(code: string): Record<string, any> {
   );
 }
 
+/**
+ * Used only when the lesson repo cannot be read (useCatalog); otherwise its courses apply. Kept
+ * in line with the repo by hand: «lego» had no folder there, command_line and learntomod were
+ * missing.
+ */
 export const COURSESLIST: { key: any; text: any; value: any }[] = [
   {
     key: "appinventor",
@@ -96,6 +101,11 @@ export const COURSESLIST: { key: any; text: any; value: any }[] = [
     value: "codestudio",
   },
   {
+    key: "command_line",
+    text: "Kommandolinje",
+    value: "command_line",
+  },
+  {
     key: "computercraft",
     text: "Computer Craft",
     value: "computercraft",
@@ -111,9 +121,9 @@ export const COURSESLIST: { key: any; text: any; value: any }[] = [
     value: "elm",
   },
   {
-    key: "lego",
-    text: "Lego",
-    value: "lego",
+    key: "learntomod",
+    text: "Learn To Mod",
+    value: "learntomod",
   },
   {
     key: "legomindstorms",
