@@ -85,11 +85,25 @@ a:hover {
 }
 
 .preview-area {
+  // Rings (things to tick off) only where the items are a checklist: «Sjekkliste» and «Lagre».
+  // A plain list in a step or before the first section is an ordinary list with filled dots (9b);
+  // the ring made it look like an empty checkbox.
   .section_check,
-  .section_activity,
   .section_save {
     @include styledList;
     @include sectionImg;
+  }
+
+  .section_activity {
+    @include sectionImg;
+  }
+
+  > ul:not(.contains-checklist) > li,
+  section:not(.section_check):not(.section_save) > ul:not(.contains-checklist) > li {
+    list-style: disc outside;
+    margin-left: 1.5em;
+    padding-top: 4px;
+    padding-bottom: 4px;
   }
 
   label > a:hover {

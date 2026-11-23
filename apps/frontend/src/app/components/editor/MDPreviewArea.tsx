@@ -73,10 +73,20 @@ const MDPreviewArea: FC<MDPreviewProps> = ({ mdText, course, language, preview, 
     }
   }, [parsedMDwithUpdatedImageURLS, course, language]);
 
+  // A link in a checklist item sits in the item's <label>: a click followed it and ticked the box
+  // too (9a). The link opens in a new tab instead, and the box stays as it was.
+  const openLinkNotLabel = (event: React.MouseEvent) => {
+    const link = (event.target as HTMLElement).closest("a[href]") as HTMLAnchorElement | null;
+    if (!link || !link.closest("label")) return;
+    event.preventDefault();
+    window.open(link.href, "_blank", "noopener,noreferrer");
+  };
+
   if (course === "scratch" && parsedMDwithUpdatedImageURLS) {
     return (
       <div
         className={`preview-area ${preview ? "preview" : ""}`}
+        onClick={openLinkNotLabel}
         // Empty until the blocks are drawn, so the thumbnailer never photographs raw block code.
         dangerouslySetInnerHTML={{ __html: sanitizeLessonHtml(svgContent) }}
       />
@@ -91,6 +101,7 @@ const MDPreviewArea: FC<MDPreviewProps> = ({ mdText, course, language, preview, 
     return (
       <div
         className={`preview-area ${preview ? "preview" : ""}`}
+        onClick={openLinkNotLabel}
         dangerouslySetInnerHTML={{ __html: sanitizeLessonHtml(parsedMDwithUpdatedImageURLS) }}
       />
     );
