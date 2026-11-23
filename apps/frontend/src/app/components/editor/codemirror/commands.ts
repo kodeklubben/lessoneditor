@@ -238,6 +238,66 @@ export const toggleList = (kind: ListKind, placeholder: string): StateCommand =>
  * The language the text's code blocks already use most (```html in a Web lesson that also has a
  * little ```css), so the button follows the lesson, for every course in the catalogue.
  */
+/**
+ * Tab and Shift-Tab on list items. Markdown nests an item under the one above only when it starts
+ * where that item's text starts: two spaces under «- », three under «1. ». Tab moves the lines to
+ * that column of the item above; Shift-Tab moves them out to the item they hang under. Anything
+ * that is not list items is left to CodeMirror's own indent.
+ */
+const indentWidth = (text: string) => /^[ \t]*/.exec(text)![0].replace(/\t/g, "    ").length;
+
+function listItemsIndent(state: EditorState, outwards: boolean): number | undefined {
+  const main = state.selection.main;
+  const first = state.doc.lineAt(main.from);
+  const last = state.doc.lineAt(main.to);
+  for (let n = first.number; n <= last.number; n++) {
+    if (!LIST_PREFIX.test(state.doc.line(n).text)) return undefined;
+  }
+  const own = indentWidth(first.text);
+  if (outwards && own === 0) return undefined;
+  for (let n = first.number - 1; n >= Math.max(1, first.number - 200); n--) {
+    const text = state.doc.line(n).text;
+    if (!text.trim()) continue;
+    const match = LIST_PREFIX.exec(text);
+    const indent = indentWidth(text);
+    if (!match) {
+      if (indent === 0) return undefined; // the list ended above
+      continue; // a continued line inside an item
+    }
+    if (outwards) {
+      if (indent < own) return indent;
+    } else {
+      if (indent === own) return match[0].replace(match[3] ?? "", "").replace(/\t/g, "    ").length;
+      if (indent < own) return undefined; // already the first item under its parent
+    }
+  }
+  return undefined;
+}
+
+const moveListItems =
+  (outwards: boolean): StateCommand =>
+  ({ state, dispatch }) => {
+    if (state.selection.ranges.length > 1) return false;
+    const target = listItemsIndent(state, outwards);
+    if (target === undefined) return false;
+    const main = state.selection.main;
+    const first = state.doc.lineAt(main.from);
+    const last = state.doc.lineAt(main.to);
+    const delta = target - indentWidth(first.text);
+    const changes: ChangeSpec[] = [];
+    for (let n = first.number; n <= last.number; n++) {
+      const line = state.doc.line(n);
+      const current = /^[ \t]*/.exec(line.text)![0];
+      const width = Math.max(0, indentWidth(line.text) + delta);
+      changes.push({ from: line.from, to: line.from + current.length, insert: " ".repeat(width) });
+    }
+    dispatch(state.update({ changes, scrollIntoView: true, userEvent: "input.indent" }));
+    return true;
+  };
+
+export const indentListItem = moveListItems(false);
+export const outdentListItem = moveListItems(true);
+
 export function documentCodeLanguage(state: EditorState): string | undefined {
   const counts = new Map<string, number>();
   for (const match of state.doc.toString().matchAll(/^[ \t]*```+[ \t]*([\w+#-]+)/gm))

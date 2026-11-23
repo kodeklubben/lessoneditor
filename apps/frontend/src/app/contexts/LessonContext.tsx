@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { useLocation, useParams } from "react-router";
 import axios from "axios";
 import { Container, Message } from "semantic-ui-react";
 
@@ -41,6 +41,36 @@ export const LessonContextProvider = (props: any) => {
     return filenames.data;
   };
 
+  /** Each image takes the place of its stand-in when it arrives. */
+  const loadImages = (imageFiles: string[], isCopy: boolean, isActive: () => boolean) => {
+    for (const file of imageFiles) {
+      const { filename, ext } = splitFilename(file);
+      axios
+        .get<string>(
+          // With the extension: a lesson from the repo can have asteroids.md and
+          // asteroids.png.
+          paths.LESSON_FILE.replace(":lessonId", lessonId).replace(
+            ":filename",
+            encodeURIComponent(filename + ext),
+          ),
+        )
+        .then(({ data }) => createObjectURL(base64StringToBlob(data, IMAGE_TYPES[ext])))
+        .then(
+          (url) =>
+            isActive() && setImages((prev: Record<string, string>) => ({ ...prev, [file]: url })),
+          () => {
+            if (!isActive()) return;
+            setImages((prev: Record<string, string>) => {
+              // A copy's preview shows a missing image from GitHub instead.
+              if (!isCopy) return { ...prev, [file]: failedImageUrl() };
+              const { [file]: _missing, ...rest } = prev;
+              return rest;
+            });
+          },
+        );
+    }
+  };
+
   useEffect(() => {
     let active = true;
     async function fetchLessonData() {
@@ -63,33 +93,7 @@ export const LessonContextProvider = (props: any) => {
         setFiles(filenames);
         setLoading(false);
 
-        const isCopy = Boolean(lessonRes.data.upstream_path);
-        for (const file of imageFiles) {
-          const { filename, ext } = splitFilename(file);
-          axios
-            .get<string>(
-              // With the extension: a lesson from the repo can have asteroids.md and
-              // asteroids.png.
-              paths.LESSON_FILE.replace(":lessonId", lessonId).replace(
-                ":filename",
-                encodeURIComponent(filename + ext),
-              ),
-            )
-            .then(({ data }) => createObjectURL(base64StringToBlob(data, IMAGE_TYPES[ext])))
-            .then(
-              (url) =>
-                active && setImages((prev: Record<string, string>) => ({ ...prev, [file]: url })),
-              () => {
-                if (!active) return;
-                setImages((prev: Record<string, string>) => {
-                  // A copy's preview shows a missing image from GitHub instead.
-                  if (!isCopy) return { ...prev, [file]: failedImageUrl() };
-                  const { [file]: _missing, ...rest } = prev;
-                  return rest;
-                });
-              },
-            );
-        }
+        loadImages(imageFiles, Boolean(lessonRes.data.upstream_path), () => active);
       } catch (e) {
         const status = (e as { response?: { status?: number } })?.response?.status;
         if (active)
@@ -106,6 +110,46 @@ export const LessonContextProvider = (props: any) => {
       active = false;
     };
   }, [lessonId]);
+
+  // The same lesson on the next page (from the editor back to the lesson page, say): React keeps
+  // this provider, so its title, files and lesson.yml are read again in the background. Images
+  // already shown stay; only new ones are fetched.
+  const { pathname } = useLocation();
+  const routed = useRef(false);
+  useEffect(() => {
+    if (!routed.current) {
+      routed.current = true;
+      return;
+    }
+    let active = true;
+    Promise.all([
+      axios.get<LessonDTO>(paths.LESSON.replace(":lessonId", lessonId)),
+      axios.get<FileDTO<YamlContent>>(
+        paths.LESSON_FILE.replace(":lessonId", lessonId).replace(":filename", "lesson"),
+      ),
+      fetchFileList(),
+    ]).then(
+      ([lessonRes, yamlFile, filenames]) => {
+        if (!active) return;
+        setLesson(lessonRes.data);
+        setYml(yamlFile.data.content);
+        setFiles(filenames);
+        const added = filenames.filter(
+          (file) => IMAGE_TYPES[splitFilename(file).ext] && !(file in images),
+        );
+        if (!added.length) return;
+        setImages((prev: Record<string, string>) => ({
+          ...prev,
+          ...Object.fromEntries(added.map((file) => [file, loadingImageUrl()])),
+        }));
+        loadImages(added, Boolean(lessonRes.data.upstream_path), () => active);
+      },
+      () => undefined, // what is on screen stays
+    );
+    return () => {
+      active = false;
+    };
+  }, [pathname]);
 
   const updateYaml = async (lessonId: string, data: YamlContent) => {
     try {

@@ -120,14 +120,14 @@ const EditorDatamodal: FC<EditorDatamodalProps> = ({
       >
         <Modal.Header className="editor_modal">
           <Header as="h1">
-            <span style={{ color: "grey", marginRight: "1ch" }}>{`Prosjekttittel: `}</span>
+            <span style={{ color: "grey", marginRight: "1ch" }}>{`Oppgave: `}</span>
             {lessonTitle}
             <Header.Subheader>{`Kurs: ${courseTitle}`}</Header.Subheader>
           </Header>
         </Modal.Header>
         <Modal.Content className="editor_modal">
           <Header as="h3" className="formLabel">
-            {`${FORM_TEXT.TITLE.heading} på ${languageName}`}
+            {`${FORM_TEXT.TITLE.heading} på ${languageName.toLocaleLowerCase("nb")}`}
             <span className="labelTextSpan">(obligatorisk)</span>
           </Header>
 

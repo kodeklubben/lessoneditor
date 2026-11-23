@@ -596,4 +596,38 @@ a:hover {
   input[type="checkbox"]:focus + label::before {
     background: color.adjust($checkbox-blue, $lightness: -20%);
   }
+
+  // Hints (<toggle><strong>Hint</strong><hide>…</hide></toggle>): a button that opens the hidden
+  // part, as on kodeklubben.no.
+  details.toggle {
+    margin: 0.75rem 0;
+
+    > summary {
+      display: inline-block;
+      padding: 0.35rem 0.9rem;
+      border: 1px solid #ccc;
+      background: #fff;
+      color: #333;
+      font-weight: 700;
+      cursor: pointer;
+      list-style: none;
+
+      &::-webkit-details-marker {
+        display: none;
+      }
+
+      &:hover {
+        background: #e6e6e6;
+      }
+
+      &:focus-visible {
+        outline: 2px solid #0fbe7b;
+        outline-offset: 2px;
+      }
+    }
+
+    .toggle__content {
+      margin: 0.5rem 0 0 10px;
+    }
+  }
 }
