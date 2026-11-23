@@ -33,7 +33,7 @@ async function makeThumbnail(lessonId: number, text: string) {
         encodeURIComponent(text),
       ),
     );
-    if (made === true) announceThumbnail(lessonId);
+    if (made === true) announceThumbnail(lessonId, text);
   } catch {
     // Cosmetic: the thumbnail is made again after the first edit.
   }
