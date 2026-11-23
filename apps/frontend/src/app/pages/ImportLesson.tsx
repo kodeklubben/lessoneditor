@@ -7,6 +7,7 @@ import Navbar from "../components/navbar/Navbar";
 import ShowSpinner from "../components/ShowSpinner";
 import { COURSESLIST } from "../components/frontpage/settings/newLessonOptions";
 import { useUserContext } from "../contexts/UserContext";
+import { useCatalog } from "../utils/useCatalog";
 import { announceThumbnail } from "../utils/thumbnailEvents";
 
 /**
@@ -51,6 +52,8 @@ const ImportLesson: FC = () => {
   const lesson = params.lesson ?? "";
   const { state } = useUserContext();
   const navigate = useNavigate();
+  // The repo's course title when it is already read; the import does not wait for it.
+  const catalog = useCatalog();
   const [error, setError] = useState("");
   const started = useRef(false);
 
@@ -58,7 +61,9 @@ const ImportLesson: FC = () => {
     const userId = state.user?.userId;
     if (!userId || started.current) return;
     started.current = true;
-    const courseTitle = COURSESLIST.find((item) => item.value === course)?.text;
+    const courseTitle =
+      catalog?.courses.find((item) => item.value === course)?.text ??
+      COURSESLIST.find((item) => item.value === course)?.text;
     axios
       .post<{ lessonId: number; existing: boolean; thumbnailFrom: string | null }>(
         paths.USER_LESSON_IMPORT.replace(":userId", String(userId)),
