@@ -8,6 +8,7 @@ import MultiInput from "./MultiInput";
 import { FORM_TEXT } from "./settings/landingpage_NO";
 import { useFileContext } from "../../../contexts/FileContext";
 import { shallowEqual } from "fast-equals";
+import FieldError from "../../shared/FieldError";
 
 interface EditorDatamodalProps {
   courseTitle: string;
@@ -25,6 +26,7 @@ const EditorDatamodal: FC<EditorDatamodalProps> = ({
   const { lang } = useParams<any>();
   const { state, saveFileHeader, setFileContextState } = useFileContext();
   const [loading, setLoading] = useState<boolean>(false);
+  const [saveError, setSaveError] = useState("");
 
   const prevData = useRef<any>(null);
 
@@ -71,19 +73,20 @@ const EditorDatamodal: FC<EditorDatamodalProps> = ({
   const onSubmit = async () => {
     if (!isValid) return;
     if (shallowEqual(state.headerData, prevData.current.headerData)) {
-      saveFileHeader(state.headerData);
       return setOpenSettings(false);
     }
-    if (saveFileHeader) {
-      try {
-        setLoading(true);
-        await saveFileHeader(state.headerData);
-        setLoading(false);
-        setOpenSettings(false);
-      } catch (e) {
-        console.error(e);
-      }
-    }
+    // A failed save used to close the dialog as if it had worked, and the change was gone.
+    setLoading(true);
+    setSaveError("");
+    const status = await saveFileHeader(state.headerData);
+    setLoading(false);
+    if (status === 200) setOpenSettings(false);
+    else
+      setSaveError(
+        status === 409
+          ? "Teksten er endret et annet sted. Last inn siden på nytt for å se den nyeste versjonen."
+          : "Kunne ikke lagre. Prøv igjen.",
+      );
   };
 
   return (
@@ -138,13 +141,7 @@ const EditorDatamodal: FC<EditorDatamodalProps> = ({
             onChange={changeHandler}
             fluid
           />
-          {!state.headerData.title?.trim() ? (
-            <p style={{ color: "red" }}>
-              <i>Må ha tittel</i>
-            </p>
-          ) : (
-            <p style={{ height: "1.35em" }}></p>
-          )}
+          <FieldError>{!state.headerData.title?.trim() && "Skriv en tittel."}</FieldError>
         </Modal.Content>
         <Modal.Content className="editor_modal">
           <MultiInput
@@ -156,14 +153,11 @@ const EditorDatamodal: FC<EditorDatamodalProps> = ({
             required="(obligatorisk)"
             title={FORM_TEXT.AUTHOR.heading}
           />
-          {typeof state.headerData.authorList === "object" &&
-          !(state.headerData.author || state.headerData!.authorList!.length > 0) ? (
-            <p>
-              <i style={{ color: "red" }}>Må ha forfatter</i>
-            </p>
-          ) : (
-            <p style={{ height: "1.35em" }}></p>
-          )}
+          <FieldError>
+            {typeof state.headerData.authorList === "object" &&
+              !(state.headerData.author || state.headerData!.authorList!.length > 0) &&
+              "Legg til minst én forfatter."}
+          </FieldError>
         </Modal.Content>
         <Modal.Content className="editor_modal">
           <MultiInput
@@ -178,20 +172,11 @@ const EditorDatamodal: FC<EditorDatamodalProps> = ({
         </Modal.Content>
 
         <Modal.Actions className="editor_modal">
-          {/* <Button
-            disabled={
-              !state.headerData?.title ||
-              (!state.headerData.author && state.headerData.authorList.length === 0)
-            }
-            color={
-              state.headerData?.title &&
-              (state.headerData.author || state.headerData.authorList.length > 0)
-                ? "black"
-                : "grey"
-            }
-            onClick={onCancel}
-            content="Avbryt"
-          /> */}
+          {saveError && (
+            <div style={{ textAlign: "left", marginBottom: "0.75em" }}>
+              <FieldError>{saveError}</FieldError>
+            </div>
+          )}
           <Button
             disabled={!isValid}
             onClick={onSubmit}

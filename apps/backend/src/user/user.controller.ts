@@ -11,7 +11,7 @@ import {
 } from "@nestjs/common";
 import { Request } from "express";
 import { UserService } from "./user.service";
-import { LessonDTO, UserDTO } from "@lessoneditor/contracts";
+import { LessonDTO, LessonPullRequest, UserDTO } from "@lessoneditor/contracts";
 import { LoginGuard } from "../auth/login.guard";
 import { ImportLessonBody, NewLessonBody } from "../app/request-bodies";
 import { sessionGithubToken } from "../auth/github-token";
@@ -29,6 +29,15 @@ export class UserController {
   async GetUserLessons(@Param("userId", ParseIntPipe) userId: number): Promise<LessonDTO[]> {
     const { lessons } = await this.userService.getUserLessons(userId);
     return lessons;
+  }
+
+  /** Open, merged or closed, for the submitted lessons' cards. Reads GitHub, writes nothing. */
+  @Get(":userId/lessons/pull-requests")
+  async GetLessonPullRequests(
+    @Req() req: Request,
+    @Param("userId", ParseIntPipe) userId: number,
+  ): Promise<Record<number, LessonPullRequest>> {
+    return this.userService.lessonPullRequests(userId, sessionGithubToken(req));
   }
 
   @Get()

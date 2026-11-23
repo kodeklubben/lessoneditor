@@ -1,6 +1,6 @@
 import { publicMember } from "./lesson.controller";
 import { isLessonOwner } from "./lesson.entity";
-import { LessonService, uniqueFilename } from "./lesson.service";
+import { contentVersion, LessonService, uniqueFilename } from "./lesson.service";
 import { deletionBlocker, splitFilename } from "../../../../libs/contracts/src/lib/files";
 
 describe("lesson submission state", () => {
@@ -187,10 +187,58 @@ describe("thumbnails (K14)", () => {
   });
 });
 
+describe("a text saved in two places (two tabs, two co-authors)", () => {
+  const setup = (affected = 1) => {
+    const file = { fileId: 5, filename: "hei", ext: ".md", content: Buffer.from("felles") };
+    const files = {
+      findOne: jest.fn().mockResolvedValue(file),
+      update: jest.fn().mockResolvedValue({ affected }),
+    };
+    const lessons = { update: jest.fn() };
+    const users = { findOne: jest.fn().mockResolvedValue({ userId: 1, username: "ada" }) };
+    const service = new LessonService(
+      lessons as never,
+      users as never,
+      files as never,
+      undefined as never,
+      undefined as never,
+    );
+    return { service, files, file };
+  };
+
+  it("refuses a save made to an older version, instead of replacing the newer text", async () => {
+    const { service, files } = setup();
+    const old = contentVersion(Buffer.from("noe annet"));
+    await expect(service.updateLessonFile(3, "hei", 1, "min tekst", old)).rejects.toMatchObject({
+      status: 409,
+    });
+    expect(files.update).not.toHaveBeenCalled();
+  });
+
+  it("saves over the version it was made to, and only while the row still holds it", async () => {
+    const { service, files, file } = setup();
+    await service.updateLessonFile(3, "hei", 1, "min tekst", contentVersion(file.content));
+    expect(files.update).toHaveBeenCalledWith(
+      { fileId: 5, content: Buffer.from("felles") },
+      expect.objectContaining({ content: Buffer.from("min tekst") }),
+    );
+  });
+
+  it("refuses when the other save got in between the check and the write", async () => {
+    const { service, file } = setup(0);
+    await expect(
+      service.updateLessonFile(3, "hei", 1, "min tekst", contentVersion(file.content)),
+    ).rejects.toMatchObject({ status: 409 });
+  });
+});
+
 describe("saving a text", () => {
   it("updates only that file's row and the lesson's time", async () => {
     const file = { fileId: 5, filename: "hei", ext: ".md", content: Buffer.from("gammel") };
-    const files = { findOne: jest.fn().mockResolvedValue(file), update: jest.fn() };
+    const files = {
+      findOne: jest.fn().mockResolvedValue(file),
+      update: jest.fn().mockResolvedValue({ affected: 1 }),
+    };
     const lessons = { save: jest.fn(), update: jest.fn() };
     const users = { findOne: jest.fn().mockResolvedValue({ userId: 1, username: "ada" }) };
     const service = new LessonService(
@@ -201,10 +249,13 @@ describe("saving a text", () => {
       undefined as never,
     );
     const saved = await service.updateLessonFile(3, "hei", 1, "ny");
-    expect(files.update).toHaveBeenCalledWith(5, {
-      content: Buffer.from("ny"),
-      updated_by: "ada",
-    });
+    expect(files.update).toHaveBeenCalledWith(
+      { fileId: 5 },
+      {
+        content: Buffer.from("ny"),
+        updated_by: "ada",
+      },
+    );
     expect(lessons.update).toHaveBeenCalledWith(3, { updated_at: expect.any(Date) });
     expect(lessons.save).not.toHaveBeenCalled();
     expect(saved.content.toString()).toBe("ny");

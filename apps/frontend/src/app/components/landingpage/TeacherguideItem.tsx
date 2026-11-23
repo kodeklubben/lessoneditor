@@ -41,6 +41,7 @@ const TeacherguideItem: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug
           openDeleteContent={openDeleteContent}
           setOpenDeleteContent={setOpenDeleteContent}
           deleteContent={() => removeMD(language, "README")}
+          what={`lærerveiledningen på ${String(languageOption(language).text).toLowerCase()}`}
         />
       )}
       <Item className="lesson_menu_card">

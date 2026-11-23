@@ -93,6 +93,7 @@ const ListFiles: FC<ListFilesProps> = ({ item, lessonId, files }) => {
           openDeleteContent={openDeleteContent}
           setOpenDeleteContent={setOpenDeleteContent}
           deleteContent={removeFile}
+          what={`«${item}»`}
         />
       )}
       <Item className="all-files--container">
