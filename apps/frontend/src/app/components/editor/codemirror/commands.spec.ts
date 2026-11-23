@@ -11,6 +11,7 @@ import {
   toggleInline,
   toggleList,
   toggleSection,
+  skipAttributesOnEnter,
 } from "./commands";
 import { lessonDiagnostics } from "./lint";
 import { codeMirrorKey } from "./setup";
@@ -105,6 +106,21 @@ describe("sections", () => {
       "## Husk å lagre {.tip}\n",
     );
   });
+});
+
+it("keeps a heading's {.activity} on the heading when Enter is pressed after the title", () => {
+  let state = stateOf("# Steg 1| {.activity}\nTekst");
+  const view = {
+    get state() {
+      return state;
+    },
+    dispatch: (spec: any) => (state = state.update(spec).state),
+  };
+  skipAttributesOnEnter(view as never);
+  expect(state.selection.main.head).toBe("# Steg 1 {.activity}".length);
+  state = stateOf("# Steg| 1 {.activity}");
+  skipAttributesOnEnter(view as never);
+  expect(state.selection.main.head).toBe("# Steg".length);
 });
 
 describe("lists", () => {

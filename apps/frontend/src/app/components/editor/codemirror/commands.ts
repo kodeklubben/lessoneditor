@@ -7,6 +7,7 @@ import {
   TransactionSpec,
 } from "@codemirror/state";
 import { ensureSyntaxTree, syntaxTree } from "@codemirror/language";
+import type { EditorView } from "@codemirror/view";
 import type { SyntaxNode } from "@lezer/common";
 import { attributeClasses, blockColourByClass, sectionByClass } from "./lessonSyntax";
 
@@ -401,3 +402,18 @@ export function activeButtons(state: EditorState): {
   }
   return { active, inCodeBlock };
 }
+
+/**
+ * Enter after a heading's title, before its {.activity}: the classes stay on the heading and the
+ * new line starts after them, as in the classic editor. Moves the cursor and lets Enter go on.
+ */
+export const skipAttributesOnEnter = (view: EditorView): boolean => {
+  const { state } = view;
+  const range = state.selection.main;
+  if (!range.empty || state.selection.ranges.length > 1) return false;
+  const line = state.doc.lineAt(range.head);
+  const rest = line.text.slice(range.head - line.from);
+  if (/^#{1,6}[ \t]/.test(line.text) && /^[ \t]*\{[^{}]*\}[ \t]*$/.test(rest))
+    view.dispatch({ selection: { anchor: line.to } });
+  return false;
+};

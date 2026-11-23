@@ -50,6 +50,7 @@ import {
   toggleInline,
   toggleList,
   toggleSection,
+  skipAttributesOnEnter,
 } from "./commands";
 import { lessonDecorations } from "./decorations";
 import { lessonCompletions } from "./completions";
@@ -174,6 +175,7 @@ const theme = EditorView.theme({
   ".cm-panels": { fontFamily: "inherit" },
   ".cm-tooltip": { fontFamily: "inherit", borderRadius: "5px" },
   ".cm-tooltip-autocomplete ul li[aria-selected]": { backgroundColor: "#2185d0" },
+  ".cm-tooltip-autocomplete ul li[aria-selected] .cm-completionDetail": { color: "#e6f0fa" },
   ".cm-completionDetail": { marginLeft: "0.75em", fontStyle: "normal", color: "#767676" },
   ".cm-placeholder": { color: "#9a9a9a" },
 });
@@ -219,6 +221,7 @@ export function lessonEditorExtensions({
     lessonDecorations,
     linter((view) => lessonDiagnostics(view.state, text), { delay: 600 }),
     Prec.high(keymap.of(toolbarKeymap(course, text, actions))),
+    Prec.highest(keymap.of([{ key: "Enter", run: skipAttributesOnEnter }])),
     keymap.of([
       ...closeBracketsKeymap,
       ...defaultKeymap,

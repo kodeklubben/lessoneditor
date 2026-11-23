@@ -1,3 +1,5 @@
+@use "sass:list";
+
 // The CodeMirror editor: the same place on the page as the textarea, and the lessons' sections in
 // the colours of their buttons (buttonConfig.ts) and of the lesson page.
 
@@ -146,26 +148,26 @@ $sections: (
 
   @each $name, $c in $sections {
     .cm-line.cm-lesson-section-#{$name} {
-      background-color: nth($c, 2);
-      box-shadow: inset 5px 0 0 nth($c, 1);
-      @if nth($c, 3) != inherit {
-        color: nth($c, 3);
+      background-color: list.nth($c, 2);
+      box-shadow: inset 5px 0 0 list.nth($c, 1);
+      @if list.nth($c, 3) != inherit {
+        color: list.nth($c, 3);
         // The # marks and the other highlighting would be grey on a coloured background.
         span {
-          color: nth($c, 3) !important;
+          color: list.nth($c, 3) !important;
         }
       }
     }
     .cm-lesson-section-#{$name} .cm-lesson-section-badge {
-      background-color: nth($c, 4);
-      color: nth($c, 5) !important;
-      border-color: nth($c, 6);
+      background-color: list.nth($c, 4);
+      color: list.nth($c, 5) !important;
+      border-color: list.nth($c, 6);
       span {
-        color: nth($c, 5) !important;
+        color: list.nth($c, 5) !important;
       }
     }
     .cm-line.cm-lesson-section-body-#{$name} {
-      box-shadow: inset 3px 0 0 rgba(nth($c, 1), 0.55);
+      box-shadow: inset 3px 0 0 color-mix(in srgb, list.nth($c, 1) 55%, transparent);
     }
   }
 
