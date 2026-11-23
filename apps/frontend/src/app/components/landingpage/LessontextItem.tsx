@@ -9,6 +9,8 @@ import { useUserContext } from "../../contexts/UserContext";
 import DeleteModal from "../shared/DeleteModal";
 import MarkdownPreview from "./MarkdownPreview";
 import { useTextTitle } from "./useTextTitle";
+import { useTextThumbnail } from "./useTextThumbnail";
+import PreviewImage from "../shared/PreviewImage";
 
 const LessontextItem: FC<any> = ({
   lessonId,
@@ -25,6 +27,7 @@ const LessontextItem: FC<any> = ({
 
   const filename = language === "nb" ? lessonSlug : `${lessonSlug}_${language}`;
   const title = useTextTitle(lessonId, filename);
+  const thumbnail = useTextThumbnail(lessonId, filename);
 
   const navigateToEditor = (lessonId: any, lessonSlug: any, language: string) => {
     const target = ["/editor", lessonId, lessonSlug, language].join("/");
@@ -63,13 +66,11 @@ const LessontextItem: FC<any> = ({
               `Forhåndsvis oppgaveteksten på ${languageText.toLowerCase()}`,
             )}
           >
-            <Item.Image
+            {/* Its own picture (1); bokmål falls back to the lesson's preview until it has one. */}
+            <PreviewImage
               className="lesson_menu_card_content__image"
-              src={previewImage[lessonId]}
-              size="tiny"
-              alt=""
-              rounded
-              bordered
+              style={{ height: "3.5rem" }}
+              src={thumbnail ?? (language === "nb" ? previewImage[lessonId] : undefined)}
             />
 
             {language ? <Image className="image_flag" src={languageImage} alt={""} /> : ""}

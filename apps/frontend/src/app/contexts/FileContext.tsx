@@ -155,7 +155,7 @@ const FileContextProvider = (props: any) => {
         filename,
       );
       const made = (await axios.put<boolean>(url)).data === true;
-      if (made) announceThumbnail(Number(lessonId));
+      if (made) announceThumbnail(Number(lessonId), filename);
       return made;
     } catch {
       // A missing thumbnail is cosmetic; it must never block or fail saving.

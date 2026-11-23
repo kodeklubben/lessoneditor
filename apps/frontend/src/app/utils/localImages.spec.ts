@@ -22,6 +22,13 @@ describe("local image URLs in the preview", () => {
     );
   });
 
+  it("leaves image links in code blocks alone (M4)", () => {
+    const md = "![A](a.png)\n\n```\n![A](a.png)\n```\n\n![B](b.png)";
+    expect(replaceLocalImageUrls(md, images)).toBe(
+      "![A](blob:a)\n\n```\n![A](a.png)\n```\n\n![B](blob:b)",
+    );
+  });
+
   it("does not use the image list for paths in other folders", () => {
     expect(replaceLocalImageUrls("![A](../a.png)", images)).toBe("![A](../a.png)");
   });

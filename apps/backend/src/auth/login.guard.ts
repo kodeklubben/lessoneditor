@@ -3,6 +3,7 @@ import {
   Injectable,
   UnauthorizedException,
   ForbiddenException,
+  NotFoundException,
 } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { Request, Response } from "express";
@@ -10,6 +11,7 @@ import { verify } from "jsonwebtoken";
 import { UserDTO } from "@lessoneditor/contracts";
 import { DataSource } from "typeorm";
 import { User } from "../user/user.entity";
+import { Lesson } from "../lesson/lesson.entity";
 import { encryptToken, RequestWithGithubToken } from "./github-token";
 import { env } from "../app/env";
 
@@ -67,7 +69,13 @@ export class LoginGuard extends AuthGuard("github") {
       const hasAccess = await this.dataSource.getRepository(User).exists({
         where: { userId, lessons: { lessonId } },
       });
-      if (!hasAccess) throw new ForbiddenException();
+      if (!hasAccess) {
+        // A deleted lesson is gone (404), not forbidden (9g). Lesson ids are sequential, so
+        // saying which ones exist reveals nothing.
+        const exists = await this.dataSource.getRepository(Lesson).exists({ where: { lessonId } });
+        if (!exists) throw new NotFoundException("Fant ikke oppgaven.");
+        throw new ForbiddenException();
+      }
     }
     return true;
   }

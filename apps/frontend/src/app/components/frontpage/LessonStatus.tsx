@@ -1,3 +1,4 @@
+import "./lessonstatus.scss";
 import { FC, useEffect, useState } from "react";
 import axios from "axios";
 import { Icon, SemanticICONS } from "semantic-ui-react";
@@ -8,7 +9,12 @@ import { LessonDTO, LessonPullRequest, paths } from "@lessoneditor/contracts";
  * front page and only when something was submitted; until it answers (or if GitHub does not), a
  * submitted card just says «Sendt inn».
  */
-export function useLessonPullRequests(userId: number | undefined, lessons: LessonDTO[]) {
+export function useLessonPullRequests(
+  userId: number | undefined,
+  lessons: LessonDTO[],
+  /** Changed to ask again, e.g. right after a submission. */
+  refreshKey = 0,
+) {
   const [pullRequests, setPullRequests] = useState<Record<number, LessonPullRequest>>({});
   const anySubmitted = lessons.some((lesson) => lesson.submitted);
   useEffect(() => {
@@ -23,7 +29,7 @@ export function useLessonPullRequests(userId: number | undefined, lessons: Lesso
     return () => {
       active = false;
     };
-  }, [userId, anySubmitted]);
+  }, [userId, anySubmitted, refreshKey]);
   return pullRequests;
 }
 
