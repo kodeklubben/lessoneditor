@@ -1,4 +1,9 @@
-import { ExecutionContext, ForbiddenException, UnauthorizedException } from "@nestjs/common";
+import {
+  ExecutionContext,
+  ForbiddenException,
+  NotFoundException,
+  UnauthorizedException,
+} from "@nestjs/common";
 import { sign } from "jsonwebtoken";
 import { DataSource } from "typeorm";
 import { LoginGuard } from "./login.guard";
@@ -40,13 +45,22 @@ describe("API access", () => {
   });
 
   it("checks lesson membership for read and write routes", async () => {
-    exists.mockResolvedValue(false);
+    // Not a member; the lesson exists.
+    exists.mockResolvedValueOnce(false).mockResolvedValueOnce(true);
     await expect(
       guard.canActivate(context({ method: "PUT", params: { lessonId: "5" } })),
     ).rejects.toBeInstanceOf(ForbiddenException);
     expect(exists).toHaveBeenCalledWith({ where: { userId: 12, lessons: { lessonId: 5 } } });
     exists.mockResolvedValue(true);
     await expect(guard.canActivate(context({ params: { lessonId: "5" } }))).resolves.toBe(true);
+  });
+
+  it("says 404 for a lesson that does not exist (9g), 403 only for someone else's", async () => {
+    exists.mockResolvedValue(false);
+    await expect(guard.canActivate(context({ params: { lessonId: "25" } }))).rejects.toBeInstanceOf(
+      NotFoundException,
+    );
+    expect(exists).toHaveBeenLastCalledWith({ where: { lessonId: 25 } });
   });
 
   it("allows a short-lived thumbnail token only for reading", async () => {

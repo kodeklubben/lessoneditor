@@ -5,8 +5,19 @@ import { useParams } from "react-router";
 import { useUserContext } from "../../contexts/UserContext";
 import SubmitlessonModal from "./SubmitLessonModal";
 import PreviewImage from "../shared/PreviewImage";
+import { LessonDTO, LessonPullRequest } from "@lessoneditor/contracts";
+import { submitMode, SUBMIT_LABEL } from "./utils/submitMode";
 
-const SubmitLessonCard = () => {
+const SubmitLessonCard = ({
+  lesson,
+  pullRequest,
+  onSubmitted,
+}: {
+  lesson: LessonDTO;
+  pullRequest?: LessonPullRequest;
+  onSubmitted: () => void;
+}) => {
+  const mode = submitMode(lesson, pullRequest);
   const [openSubmitModal, setOpenSubmitModal] = useState(false);
   const { lessonId } = useParams() as any;
   const { previewImage } = useUserContext();
@@ -21,6 +32,9 @@ const SubmitLessonCard = () => {
           openSubmitModal={openSubmitModal}
           setOpenSubmitModal={setOpenSubmitModal}
           lessonId={lessonId}
+          mode={mode}
+          pullRequest={pullRequest}
+          onSubmitted={onSubmitted}
         />
       )}
       <div>
@@ -46,7 +60,7 @@ const SubmitLessonCard = () => {
 
           <Button
             onClick={onSubmit}
-            content="Sende inn "
+            content={SUBMIT_LABEL[mode]}
             positive
             icon="envelope"
             labelPosition="left"
