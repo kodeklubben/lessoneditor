@@ -45,6 +45,36 @@
   padding-right: 1rem;
 }
 
+.navbar_help_button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25em;
+  margin-right: 1rem;
+  padding: 0.4em 0.6em;
+  border: 0;
+  border-radius: 6px;
+  background: none;
+  color: #4a4f54;
+  font: inherit;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    background: #f1f3f4;
+  }
+
+  .icon {
+    margin: 0;
+  }
+}
+
+// Only the icon on narrow screens; the label is still read by screen readers via aria-label.
+@media (max-width: 600px) {
+  .navbar_help_label {
+    display: none;
+  }
+}
+
 .navbar_image:hover {
   cursor: pointer;
 }
