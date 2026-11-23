@@ -234,9 +234,24 @@ export const toggleList = (kind: ListKind, placeholder: string): StateCommand =>
 
 // --- Code blocks ---------------------------------------------------------------------------------
 
-export const toggleCodeBlock = (language: string, placeholder: string): StateCommand =>
-  run((state) =>
-    state.changeByRange((range) => {
+/**
+ * The language the text's code blocks already use most (```html in a Web lesson that also has a
+ * little ```css), so the button follows the lesson, for every course in the catalogue.
+ */
+export function documentCodeLanguage(state: EditorState): string | undefined {
+  const counts = new Map<string, number>();
+  for (const match of state.doc.toString().matchAll(/^[ \t]*```+[ \t]*([\w+#-]+)/gm))
+    counts.set(match[1], (counts.get(match[1]) ?? 0) + 1);
+  let best: string | undefined;
+  for (const [language, count] of counts) if (!best || count > counts.get(best)!) best = language;
+  return best;
+}
+
+/** language is the course's; the text's own language wins when it has code blocks already. */
+export const toggleCodeBlock = (courseLanguage: string, placeholder: string): StateCommand =>
+  run((state) => {
+    const language = documentCodeLanguage(state) ?? courseLanguage;
+    return state.changeByRange((range) => {
       const block = enclosing(state, range, ["FencedCode"]);
       if (block) {
         // Inside a code block: take the fences away and keep the code as text.
@@ -291,8 +306,8 @@ export const toggleCodeBlock = (language: string, placeholder: string): StateCom
         changes: { from, to, insert: `${lead}${fence}\n${placeholder}\n\`\`\`${trail}` },
         range: EditorSelection.range(start, start + placeholder.length),
       };
-    }),
-  );
+    });
+  });
 
 // --- Scratch and micro:bit block colours: `gå 10 steg`{.blockmotion} -------------------------------
 

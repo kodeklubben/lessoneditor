@@ -4,7 +4,7 @@ import {
   CompletionResult,
   snippetCompletion,
 } from "@codemirror/autocomplete";
-import { coloursForCourse, codeBlockLanguage, SCRATCH_ANY_BLOCK, SECTIONS } from "./lessonSyntax";
+import { blockColours, codeBlockLanguage, SECTIONS } from "./lessonSyntax";
 
 /*
  * Suggestions while typing the lessons' own markup: the section after {. on a heading, the block
@@ -30,7 +30,6 @@ const LANGUAGES: [string, string][] = [
 ];
 
 export function lessonCompletions(course?: string) {
-  const colours = coloursForCourse(course);
   const ownLanguage = codeBlockLanguage(course);
 
   return (context: CompletionContext): CompletionResult | null => {
@@ -44,10 +43,11 @@ export function lessonCompletions(course?: string) {
       const closes = context.state.sliceDoc(context.pos, context.pos + 1) === "}";
       const end = closes ? "" : "}";
       const afterCode = before.slice(0, attribute.index).endsWith("`");
+      const colours = blockColours(course, context.state.doc.toString());
       const options: Completion[] = afterCode
-        ? [...colours, ...(course === "scratch" ? [SCRATCH_ANY_BLOCK] : [])].map((colour) => ({
+        ? colours.map((colour) => ({
             label: colour.cls,
-            detail: colour.title,
+            detail: colour.hint ?? colour.title,
             type: "constant",
             apply: colour.cls + end,
           }))

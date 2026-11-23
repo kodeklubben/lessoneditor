@@ -64,9 +64,11 @@ export interface BlockColour {
   title: string;
   color: string;
   shortcut: string;
+  /** A longer explanation than the button's title, for tooltips and suggestions. */
+  hint?: string;
 }
 
-const blockColours = (
+const coloursOf = (
   buttons: Record<
     string,
     { slug: string; output: string; title: string; color: string; shortcut: string }
@@ -80,25 +82,41 @@ const blockColours = (
     shortcut: button.shortcut,
   }));
 
-export const SCRATCH_COLOURS: BlockColour[] = blockColours(scratchbuttons);
-export const MICROBIT_COLOURS: BlockColour[] = blockColours(microbitbuttons);
+export const SCRATCH_COLOURS: BlockColour[] = coloursOf(scratchbuttons);
+export const MICROBIT_COLOURS: BlockColour[] = coloursOf(microbitbuttons);
 /**
  * `si [Hei!]`{.b}: a Scratch block in a sentence whose colour scratchblocks works out from the
- * block itself (399 times in kodeklubben/oppgaver). No button; the editor shows it as a block.
+ * block itself (399 times in kodeklubben/oppgaver). First in the Scratch row as «Kloss».
  */
 export const SCRATCH_ANY_BLOCK: BlockColour = {
   cls: "b",
   slug: "b",
-  title: "Scratch-kloss (fargen finnes ut fra klossen)",
+  title: "Kloss",
+  hint: "Kloss med fargen til kategorien sin, som forhåndsvisningen finner selv",
   color: "#5f6b7a",
-  shortcut: "",
+  shortcut: "ctrl+shift+b",
 };
 const ALL_COLOURS = [...SCRATCH_COLOURS, ...MICROBIT_COLOURS, SCRATCH_ANY_BLOCK];
 
 export const blockColourByClass = (cls: string) => ALL_COLOURS.find((colour) => colour.cls === cls);
 
-export const coloursForCourse = (course?: string): BlockColour[] =>
-  course === "scratch" ? SCRATCH_COLOURS : course === "microbit" ? MICROBIT_COLOURS : [];
+const SCRATCH_ROW = [SCRATCH_ANY_BLOCK, ...SCRATCH_COLOURS];
+export const ALL_COLOUR_SHORTCUTS = [
+  ...new Set([...SCRATCH_ROW, ...MICROBIT_COLOURS].map((c) => c.shortcut)),
+];
+
+/**
+ * The block colour buttons a text gets: Scratch's for the scratch course, micro:bit's for
+ * microbit. The course list comes from kodeklubben/oppgaver and can change, so a text that already
+ * has Scratch or micro:bit blocks gets their buttons whatever its course is called.
+ */
+export function blockColours(course: string | undefined, text: string): BlockColour[] {
+  if (course === "scratch") return SCRATCH_ROW;
+  if (course === "microbit") return MICROBIT_COLOURS;
+  if (/`\{\.microbit[a-z]+\}/.test(text)) return MICROBIT_COLOURS;
+  if (/`\{\.(block[a-z]+|b)\}/.test(text)) return SCRATCH_ROW;
+  return [];
+}
 
 /** The classes in an attribute list: {.activity .x} gives ["activity", "x"]. */
 export const attributeClasses = (attributes: string) =>

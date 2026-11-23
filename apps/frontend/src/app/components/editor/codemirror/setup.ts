@@ -38,7 +38,8 @@ import { tags as t } from "@lezer/highlight";
 import {
   attributesTag,
   CODE_LANGUAGE_ALIASES,
-  coloursForCourse,
+  ALL_COLOUR_SHORTCUTS,
+  blockColours,
   codeBlockLanguage,
   lessonAttributes,
   SECTIONS,
@@ -130,9 +131,16 @@ export function toolbarKeymap(
       key: codeMirrorKey(section.shortcut),
       run: toggleSection(section.cls, section.level, text),
     })),
-    ...coloursForCourse(course).map((colour) => ({
-      key: codeMirrorKey(colour.shortcut),
-      run: toggleBlockColour(colour.cls, text),
+    // Which colour a key gives depends on the text's blocks (blockColours), so it is looked up
+    // when the key is pressed.
+    ...ALL_COLOUR_SHORTCUTS.map((shortcut) => ({
+      key: codeMirrorKey(shortcut),
+      run: (view: EditorView) => {
+        const colour = blockColours(course, view.state.doc.toString()).find(
+          (c) => c.shortcut === shortcut,
+        );
+        return colour ? toggleBlockColour(colour.cls, text)(view) : false;
+      },
     })),
     action(hyperlink.hyperlink.shortcut, () => actions().openLink()),
     action(media.video.shortcut, () => actions().openVideo()),

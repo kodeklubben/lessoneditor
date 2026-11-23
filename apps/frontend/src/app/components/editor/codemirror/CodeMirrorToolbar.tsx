@@ -20,7 +20,7 @@ import EditorDatamodal from "../datapanel/EditorDatamodal";
 import SubmitButton from "../buttonpanel/SubmitButton";
 import SaveStatus from "../SaveStatus";
 import { AutosaveStatus } from "../../../utils/autosave";
-import { codeBlockLanguage, coloursForCourse, SECTIONS } from "./lessonSyntax";
+import { blockColours, codeBlockLanguage, SECTIONS } from "./lessonSyntax";
 import {
   InlineKind,
   ListKind,
@@ -217,7 +217,7 @@ const CodeMirrorToolbar: FC<Props> = ({
     </>
   );
 
-  const colourButtons = coloursForCourse(course).map((colour) => (
+  const colourButtons = blockColours(course, mdText).map((colour) => (
     <RenderMicroScratchButtons
       key={colour.slug}
       isON={!!active[colour.slug]}

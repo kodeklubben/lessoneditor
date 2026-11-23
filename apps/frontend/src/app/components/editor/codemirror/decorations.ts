@@ -127,7 +127,10 @@ function build(view: EditorView): DecorationSet {
             colour
               ? Decoration.mark({
                   class: "cm-lesson-block",
-                  attributes: { style: `--block-colour: ${colour.color}`, title: colour.title },
+                  attributes: {
+                    style: `--block-colour: ${colour.color}`,
+                    title: colour.hint ?? colour.title,
+                  },
                 }).range(node.from, node.to)
               : inlineCode.range(node.from, node.to),
           );

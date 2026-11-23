@@ -12,12 +12,18 @@ import {
   toggleList,
   toggleSection,
   skipAttributesOnEnter,
+  documentCodeLanguage,
 } from "./commands";
 import { lessonDiagnostics } from "./lint";
 import { codeMirrorKey } from "./setup";
 import { LanguageDescription } from "@codemirror/language";
 import { languages } from "@codemirror/language-data";
-import { blockColourByClass, CODE_LANGUAGE_ALIASES, codeBlockLanguage } from "./lessonSyntax";
+import {
+  blockColourByClass,
+  blockColours,
+  CODE_LANGUAGE_ALIASES,
+  codeBlockLanguage,
+} from "./lessonSyntax";
 
 const TEXT = "Tekst her";
 
@@ -275,6 +281,30 @@ describe("courses and their code", () => {
   });
 
   it("knows `si [Hei!]`{.b} as a Scratch block", () => {
-    expect(blockColourByClass("b")?.title).toMatch(/Scratch-kloss/);
+    expect(blockColourByClass("b")?.hint).toMatch(/forhåndsvisningen finner selv/);
+  });
+});
+
+describe("when the course list changes", () => {
+  it("writes code blocks in the language the text already uses", () => {
+    const text = "```html\n<p>\n```\n\n```css\np {}\n```\n\n```html\n<b>\n```\n\n|";
+    expect(documentCodeLanguage(stateOf(text))).toBe("html");
+    expect(run(toggleCodeBlock("", TEXT), text).text).toContain("```html\nTekst her\n```");
+    expect(run(toggleCodeBlock("python", TEXT), "Ingen kode ennå|").text).toContain("```python");
+  });
+
+  it("gives Scratch and micro:bit buttons to texts with their blocks, whatever the course is called", () => {
+    expect(blockColours("scratch", "")[0].title).toBe("Kloss");
+    expect(blockColours("scratch-3", "Trykk `gå`{.blockmotion}").map((c) => c.cls)).toContain(
+      "blockmotion",
+    );
+    expect(blockColours("ny_microbit", "`vis`{.microbitbasic}").map((c) => c.cls)).toContain(
+      "microbitbasic",
+    );
+    expect(blockColours("python", "print('hei')")).toEqual([]);
+  });
+
+  it("makes `…`{.b} blocks with the Kloss button", () => {
+    expect(run(toggleBlockColour("b", TEXT), "Bruk «si hei»").text).toBe("Bruk `si hei`{.b}");
   });
 });
