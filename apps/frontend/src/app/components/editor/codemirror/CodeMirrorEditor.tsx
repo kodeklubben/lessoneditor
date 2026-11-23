@@ -268,11 +268,11 @@ const CodeMirrorEditor: FC = () => {
         takeTheirs={async () => load(await autosave.takeTheirs())}
       />
       <Navbar>
-        <div>
-          <h1 style={{ display: "inline" }}>
+        <div className="editor-title">
+          <h1 className="le-display">
             {fileState.headerData?.title?.trim() || state.lesson.lessonTitle}
           </h1>
-          <h3 style={{ color: "silver", display: "inline" }}>{state.lesson.courseTitle}</h3>
+          <span className="editor-title__course">{state.lesson.courseTitle}</span>
         </div>
       </Navbar>
       <div className="editor_container cm-editor-page">

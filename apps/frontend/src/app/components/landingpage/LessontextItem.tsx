@@ -1,6 +1,6 @@
 import "./textitem.scss";
 import { useNavigate } from "react-router";
-import { Button, Item, Image, Icon } from "semantic-ui-react";
+import { Button, Item, Icon } from "semantic-ui-react";
 import { asButton } from "../../utils/a11y";
 import { FC, useState } from "react";
 import { languageOption } from "../frontpage/settings/newLessonOptions";
@@ -72,20 +72,16 @@ const LessontextItem: FC<any> = ({
               style={{ height: "3.5rem" }}
               src={thumbnail ?? (language === "nb" ? previewImage[lessonId] : undefined)}
             />
-
-            {language ? <Image className="image_flag" src={languageImage} alt={""} /> : ""}
           </Item.Content>
         </div>
         <div className="text_item__lessontitle">
-          <Item.Header>
-            <h2>{`Tittel: ${title ?? lessonTitle}`}</h2>
-          </Item.Header>
-          <Item.Content>
-            <Item.Meta>
-              <h3>Språk: {languageText}</h3>
-            </Item.Meta>
-          </Item.Content>
+          <span className="text_item__language">
+            {language ? <img className="text_item__flag" src={languageImage} alt="" /> : null}
+            {languageText}
+          </span>
+          <h2 className="text_item__title">{title ?? lessonTitle}</h2>
         </div>
+
         <Item.Content className="extra_content">
           <Button
             className="text_item_button__mobile"
@@ -105,12 +101,12 @@ const LessontextItem: FC<any> = ({
           {/* The last lesson text cannot be deleted (K15); the server refuses it as well. */}
           {canDelete && (
             <Button
-              style={{ background: "none" }}
+              className="text_item__delete"
               icon
               onClick={() => setOpenDeleteContent(true)}
               aria-label={`Slett oppgaveteksten på ${languageText.toLowerCase()}`}
             >
-              <Icon name="delete" />
+              <Icon name="trash alternate outline" />
               Slett
             </Button>
           )}

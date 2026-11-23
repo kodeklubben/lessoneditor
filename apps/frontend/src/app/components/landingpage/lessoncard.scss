@@ -1,28 +1,44 @@
-.new-lesson_card {
-  width: 100% !important;
-  padding: 1rem !important;
-  &:hover {
-    box-shadow: 0px 0px 2px 3px #0fbe7b;
-    cursor: pointer;
-  }
+// «Opprett ny tekstfil» and «Sende inn oppgave»: two square cards side by side, as the lesson
+// cards on the front page but quieter (a grey frame; green when pointed at).
+
+.new-lesson_card.ui.card {
+  width: 13rem !important;
+  margin: 0;
+  padding: 0.9rem !important;
+  border-radius: 0;
+  box-shadow: 0 0 0 1px var(--le-line);
+  transition: box-shadow 150ms ease-out;
+
+  &:hover,
+  &:focus-within,
   &.active {
-    box-shadow: 0px 0px 2px 3px #0fbe7b;
+    box-shadow: 0 0 0 3px var(--le-green);
+    cursor: pointer;
   }
 
   .new-lesson_card__content {
     .new-lesson_card__image {
-      height: 4.6rem;
+      height: 5rem;
       display: flex;
       justify-content: center;
       align-items: center;
     }
   }
 
-  button {
-    font-size: 0.8rem !important;
+  .ui.divider {
+    margin: 0.75rem 0;
   }
 
-  @media (min-width: 570px) {
-    font-size: 1rem;
+  .ui.button {
+    margin: 0;
+    width: 100%;
+    white-space: nowrap;
   }
+}
+
+// The heading over each card.
+.landingpage-head__actions .ui.header {
+  font-size: 1rem;
+  margin: 0 0 0.6rem;
+  color: var(--le-ink);
 }

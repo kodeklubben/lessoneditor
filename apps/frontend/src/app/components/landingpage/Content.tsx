@@ -16,19 +16,21 @@ const Content = () => {
             name="Oppgavetekst"
             active={activeItem === "lessontext"}
             onClick={() => setActiveItem("lessontext")}
-            style={activeItem === "lessontext" ? { borderBottom: "5px solid green" } : {}}
+            style={activeItem === "lessontext" ? { borderBottom: "4px solid var(--le-green)" } : {}}
           />
           <Menu.Item
             name="Veiledningstekst"
             active={activeItem === "teacherguide"}
             onClick={() => setActiveItem("teacherguide")}
-            style={activeItem === "teacherguide" ? { borderBottom: "5px solid green" } : {}}
+            style={
+              activeItem === "teacherguide" ? { borderBottom: "4px solid var(--le-green)" } : {}
+            }
           />
           <Menu.Item
             name="Alle Filer"
             active={activeItem === "allfiles"}
             onClick={() => setActiveItem("allfiles")}
-            style={activeItem === "allfiles" ? { borderBottom: "5px solid green" } : {}}
+            style={activeItem === "allfiles" ? { borderBottom: "4px solid var(--le-green)" } : {}}
           />
         </Menu>
 

@@ -1,155 +1,95 @@
+// The front page: the app's name with the green line, «Ny oppgave» beside it, and the lessons
+// below in a grid that the heading and the sorting line up with.
+
 .frontpage {
-  .frontpage_section1 {
-    font-size: 0.8rem;
-    background-color: #f7f7f7;
-    padding: 2rem 0;
+  padding-bottom: 4rem;
+}
 
-    .frontpage_section1__container {
-      padding: 0 1rem;
-      margin: auto;
-      max-width: 1200px;
+.frontpage-hero {
+  background-color: var(--le-band);
+  padding: 2.5rem 0 2rem;
+  margin-bottom: 2.5rem;
 
-      .frontpage_section1__header {
-        border-bottom: 0.3rem solid;
-        border-bottom-color: green;
-        margin: 0 0 1rem 0;
-        width: 50%;
-
-        max-width: 26rem;
-
-        h1 {
-          span {
-            white-space: nowrap;
-            font-size: 1.5rem;
-          }
-          .subtitle {
-            font-size: 2rem;
-            color: grey;
-          }
-        }
-      }
-
-      .frontpage_section1__cards {
-        margin-top: 4rem;
-        display: flex;
-        flex-flow: column;
-        align-items: center;
-
-        label {
-          width: 100%;
-        }
-
-        .card_container {
-          width: 100%;
-          .ui-card {
-            width: 100%;
-          }
-          &:not(:first-child) {
-            margin: 1rem 0 2rem 0;
-          }
-
-          display: flex;
-          flex-direction: column;
-          justify-content: flex-start;
-          label {
-            h3 {
-              margin: 0 0 1rem 0;
-            }
-          }
-
-          .card {
-            border: 1px solid lightgrey;
-            border-radius: 5px;
-            width: 14rem;
-            .ui-card {
-              width: 100%;
-            }
-
-            &:hover {
-              box-shadow: 0px 0px 2px 3px #0fbe7b;
-              cursor: pointer;
-            }
-            &:active {
-              box-shadow: 0px 0px 2px 3px #0fbe7b;
-            }
-
-            .card_content {
-              display: flex;
-              flex-flow: column;
-              justify-content: space-between;
-
-              .card_image_height {
-                height: 5rem;
-                display: flex;
-                justify-content: center;
-                align-items: center;
-              }
-            }
-            transition: all 200ms ease-in-out;
-          }
-        }
-      }
-    }
-  }
-
-  .frontpage_section2 {
-    width: 100%;
-    height: 100%;
-    padding: 2rem 0 0 0;
+  .frontpage-hero__row {
     display: flex;
-    justify-content: center;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+}
 
-    .frontpage_section2_container {
-      padding: 0 1rem;
-      max-width: 1200px;
-      width: 100%;
-      display: flex;
-      flex-flow: column;
+.frontpage-brand {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 0.6rem;
+  border-bottom: 4px solid var(--le-green);
+  min-width: min(22rem, 100%);
 
-      .frontpage_section2_container__header {
-        display: flex;
-        flex-flow: row;
-        justify-content: space-between;
-
-        h3 {
-          margin: 0;
-        }
-
-        .ui.inline.dropdown {
-          min-width: 6rem;
-          text-align: right;
-        }
-
-        .ui.dropdown .menu {
-          left: -1rem;
-        }
-      }
-    }
+  .frontpage-brand__org {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--le-ink);
   }
 
-  @media (min-width: 570px) {
-    .frontpage_section1 {
-      font-size: 1rem;
-      padding: 3rem;
+  .frontpage-brand__app {
+    font-size: 2.4rem;
+    line-height: 1.15;
+    color: var(--le-muted);
+  }
+}
 
-      .frontpage_section1__container {
-        .frontpage_section1__cards {
-          .card_container {
-            .card {
-              .card_content {
-                .card_image_height {
-                  height: 10rem;
-                }
-              }
-            }
-          }
-        }
-      }
+.frontpage-lessons-section {
+  .frontpage-lessons-section__header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+
+    h2 {
+      margin: 0;
+      font-size: 1.5rem;
     }
 
-    .frontpage_section2 {
-      font-size: 1rem;
-      padding: 3rem;
+    .ui.inline.dropdown {
+      color: var(--le-muted);
     }
+
+    .ui.inline.dropdown .menu {
+      left: auto;
+      right: 0;
+    }
+  }
+}
+
+.frontpage-empty {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 2rem;
+  border: 3px solid var(--le-green);
+  max-width: 40rem;
+
+  h3 {
+    font-family: var(--le-display);
+    margin: 0 0 0.4rem;
+  }
+
+  p {
+    color: var(--le-muted);
+    font-size: 1.05rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .le-column {
+    padding: 0 1rem;
+  }
+  .frontpage-hero {
+    padding: 1.5rem 0;
+  }
+  .frontpage-brand .frontpage-brand__app {
+    font-size: 1.9rem;
   }
 }

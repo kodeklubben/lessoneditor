@@ -1,168 +1,108 @@
+// The lesson cards: kidsakoder.no's square green frame, a preview of the lesson on top, and the
+// actions at the bottom of every card on the same line.
+
 .frontpage-lessons {
-  font-size: 0.8rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(13.5rem, 1fr));
+  gap: 1.75rem 1.5rem;
+}
+
+.card-item {
   display: flex;
-  flex-flow: row wrap;
-  // Stretch, not center: a card with a longer title made its row uneven (N12).
-  align-items: stretch;
-  justify-content: space-between;
-  margin: 0.5rem 0 0 0;
 
-  .card-item {
-    width: 43vw;
-    margin: 0 1.81vw 2rem 0;
+  .ui.card.card {
+    flex: 1;
+    width: auto;
+    margin: 0;
     display: flex;
+    flex-direction: column;
+    border: 3px solid var(--le-green);
+    border-radius: 0;
+    box-shadow: none;
+    transition: box-shadow 150ms ease-out;
 
-    .card {
-      flex: 1;
+    &:hover,
+    &:focus-within {
+      box-shadow: 0 0 0 4px rgba(15, 190, 123, 0.22);
+    }
+
+    > .content {
+      border-radius: 0;
+    }
+
+    .card-content {
+      padding: 0;
+      cursor: pointer;
+      flex: 1 0 auto;
       display: flex;
       flex-direction: column;
-      border: 4px solid #0fbe7b;
-      border-radius: 3px;
-      box-shadow: none;
-      transition: all 200ms ease-in-out;
 
-      &:hover {
-        box-shadow: 0px 0px 7px 6px lightgrey;
+      .card-content__image {
+        display: block;
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        height: auto;
+        object-fit: cover;
+        object-position: 0 0;
+        border: 0;
+        border-bottom: 1px solid var(--le-line);
       }
 
-      .card-content {
-        padding: 0;
-        cursor: pointer;
-        flex: 1 0 auto;
-        .content {
-          padding: 0.5rem;
-        }
-        .card-content__image {
-          height: 24vw;
-          width: 100%;
-          object-fit: cover;
-          object-position: 0 0;
-          border: 0;
-        }
+      .card-content__content {
+        flex: 1;
+        padding: 0.75rem 0.85rem 0.25rem;
+        border-top: 0;
 
-        .card-content__content {
-          padding: 0.5rem;
-          border-top: 0.5px solid lightgrey;
-
-          .header {
-            display: -webkit-box;
-            -webkit-box-orient: vertical;
-            -webkit-line-clamp: 2;
-            line-clamp: 2;
-            overflow: hidden;
-            overflow-wrap: anywhere;
-            line-height: 1.25;
-            min-height: 2.5em;
-          }
+        .header {
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
+          line-clamp: 2;
+          overflow: hidden;
+          overflow-wrap: anywhere;
+          font-size: 1.05rem;
+          line-height: 1.3;
+          min-height: 2.6em;
+          color: var(--le-ink);
         }
 
-        // Always there, so cards with and without a tag line up.
-        .card-content__status {
-          min-height: 1.9em;
-          margin-top: 0.4em;
+        .meta {
+          color: var(--le-muted);
+          font-size: 0.9rem;
+          margin: 0 0 0.25rem;
+        }
+
+        .meta + .header {
+          margin-top: 0;
         }
       }
-      .extra_content {
-        display: flex;
-        justify-content: space-between;
 
-        //padding: 0.5rem 1rem;
-        position: relative;
-
-        .button-desktop {
-          display: none;
-        }
-
-        .delete-button {
-          margin: 0;
-
-          position: absolute;
-
-          right: 0rem;
-        }
+      // Always there, so cards with and without a tag line up.
+      .card-content__status {
+        min-height: 1.9em;
+        margin-top: 0.4em;
       }
     }
-  }
 
-  .frontpage-lessons__card:hover {
-    box-shadow: 0px 0px 12px 4px lightgrey;
-    cursor: pointer;
-  }
+    .extra_content {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.6rem 0.85rem 0.75rem;
+      border-top: 0 !important;
 
-  .frontpage-lessons__card:active {
-    box-shadow: 0px 0px 12px 4px lightgrey;
-  }
-
-  @media (min-width: 478px) {
-    .card-item {
-      .card {
-        .extra_content {
-          .button-desktop {
-            display: block;
-          }
-          .button-mobile {
-            display: none;
-          }
-        }
+      .ui.button {
+        margin: 0;
       }
-    }
-  }
 
-  @media (min-width: 570px) {
-    margin-top: 1rem;
-    justify-content: flex-start;
-    .card-item {
-      width: 23vw;
-      margin: 0 3.78vw 2rem 0;
-      .card {
-        .card-content {
-          .card-content__image {
-            height: 15.5vw;
-          }
-        }
-        .extra_content {
-          .button-desktop {
-            display: none;
-          }
-          .button-mobile {
-            display: block;
-          }
-        }
-      }
-    }
-  }
+      .delete-button.ui.button {
+        background: none;
+        color: var(--le-muted);
+        padding: 0.6em 0.4em;
 
-  @media (min-width: 700px) {
-    .card-item {
-      width: 23vw;
-      margin: 0 5vw 2rem 0;
-    }
-  }
-
-  @media (min-width: 860px) {
-    .card-item {
-      .card {
-        .extra_content {
-          .button-desktop {
-            display: block;
-          }
-          .button-mobile {
-            display: none;
-          }
-        }
-      }
-    }
-  }
-
-  @media (min-width: 900px) {
-    .card-item {
-      width: 14rem;
-
-      .card {
-        .card-content {
-          .card-content__image {
-            height: 10rem;
-          }
+        &:hover,
+        &:focus {
+          color: #b3261e;
         }
       }
     }

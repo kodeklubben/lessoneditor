@@ -215,3 +215,25 @@ $sections: (
     text-underline-offset: 3px;
   }
 }
+
+// The lesson's title in the top bar, in Monda as the other pages, with the course beside it.
+.editor-title {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  min-width: 0;
+
+  h1 {
+    margin: 0;
+    font-size: 1.6rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .editor-title__course {
+    color: var(--le-muted);
+    font-weight: 700;
+    white-space: nowrap;
+  }
+}

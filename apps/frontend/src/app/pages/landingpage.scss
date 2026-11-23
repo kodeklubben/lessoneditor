@@ -1,55 +1,36 @@
-.landingpage_container {
-  display: flex;
-  flex-flow: column;
-  font-size: 0.8rem;
+// The lesson page: the course and title on the left, with sharing and lesson data under them;
+// a new text and submitting on the right. One column with the texts below.
 
-  .landingpage_actions {
-    background-color: #f7f7f7;
+.landingpage-head {
+  background-color: var(--le-band);
+  padding: 2.5rem 0 2rem;
 
-    .landingpage_actions__container {
-      position: relative;
-      max-width: 1200px;
-      padding: 1rem 1rem 1rem 1rem;
-      display: flex;
-      flex-flow: column;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin: auto;
-      .landingpage_datamodal_button {
-        position: absolute;
-        top: 0;
-        right: 0;
-        margin: 1rem;
-      }
+  .landingpage-head__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
 
-      .landingpage_actions {
-        padding-top: 2.5rem;
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: space-between;
-        align-items: center;
-        height: 100%;
-        width: 100%;
-        max-width: 23rem;
-      }
+  .landingpage-head__info {
+    flex: 1 1 22rem;
+    min-width: 0;
+  }
+
+  .landingpage-head__tools {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1.25rem;
+
+    .ui.button {
+      margin: 0;
     }
   }
 
-  @media (min-width: 570px) {
-    font-size: 1rem;
-    .landingpage_actions {
-      .landingpage_actions__container {
-        padding: 8rem 3rem 3rem 3rem;
-        flex-flow: row;
-        .landingpage_datamodal_button {
-          margin: 3rem;
-        }
-
-        .landingpage_actions {
-          padding-top: 0rem;
-          max-width: 28rem;
-        }
-      }
-    }
+  .landingpage-head__actions {
+    display: flex;
+    gap: 1.25rem;
+    align-items: stretch;
   }
 }

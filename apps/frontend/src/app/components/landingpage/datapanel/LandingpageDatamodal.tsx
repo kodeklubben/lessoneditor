@@ -36,8 +36,12 @@ const LandingpageDatamodal = () => {
     prevData.current = { ...yml };
   }, [open]);
 
+  // Opens by itself once for a lesson without data. «Senere» puts the data back (setYml), which
+  // runs this effect again; without the ref the dialog opened again at once.
+  const openedByItself = useRef(false);
   useEffect(() => {
-    if (isEmptyDatapanel) {
+    if (isEmptyDatapanel && !openedByItself.current) {
+      openedByItself.current = true;
       setOpen(true);
     }
     const mapYamlTags = () => {
