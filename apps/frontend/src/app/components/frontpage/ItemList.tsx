@@ -1,16 +1,13 @@
-import { LessonDTO } from "@lessoneditor/contracts";
+import { LessonDTO, LessonPullRequest } from "@lessoneditor/contracts";
 import { FC } from "react";
 import Item from "./Item";
-import { useLessonPullRequests } from "./LessonStatus";
-import { useUserContext } from "../../contexts/UserContext";
 
 interface ItemListProps {
   lessons: LessonDTO[];
+  pullRequests: Record<number, LessonPullRequest>;
 }
 
-const ItemList: FC<ItemListProps> = ({ lessons }) => {
-  const { state } = useUserContext();
-  const pullRequests = useLessonPullRequests(state.user?.userId, lessons);
+const ItemList: FC<ItemListProps> = ({ lessons, pullRequests }) => {
   return (
     <div className="frontpage-lessons">
       {lessons.map((lesson: LessonDTO) => (
