@@ -1,4 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router";
 import axios from "axios";
 import { paths } from "@lessoneditor/contracts";
 import { LessonDTO, NewLessonDTO } from "@lessoneditor/contracts";
@@ -26,8 +27,10 @@ export const UserContextProvider = (props: any) => {
   const lessonsUrl = (userId: number) => paths.USER_LESSONS.replace(":userId", String(userId));
 
   /** Each lesson's thumbnail; a lesson without one (or a failed request) just shows no image. */
+  const asked = useRef(new Set<number>());
   const fetchPreviews = (lessons: Pick<LessonDTO, "lessonId">[]) =>
     lessons.forEach(async ({ lessonId }) => {
+      asked.current.add(lessonId);
       try {
         const file = await axios.get(
           paths.LESSON_FILE.replace(":lessonId", String(lessonId)).replace(":filename", "preview"),
@@ -42,7 +45,8 @@ export const UserContextProvider = (props: any) => {
       }
     });
 
-  // Once per page: the provider is mounted per route, so it does not need to follow the location.
+  // Once per page load. Every route has its own <UserContextProvider>, but at the same place in
+  // the tree, so React keeps this one when the route changes: the effect below follows the route.
   useEffect(() => {
     let active = true;
     async function fetchData() {
@@ -68,6 +72,40 @@ export const UserContextProvider = (props: any) => {
       active = false;
     };
   }, []);
+
+  // A lesson copied, made or deleted on another page or in another tab: the list is read again in
+  // the background on each new page, and when the tab comes back after a while. The old list
+  // stays on screen until the new one is here.
+  const { pathname } = useLocation();
+  const userId = userContexState.user?.userId;
+  const lastRead = useRef(Date.now());
+  const revalidate = async () => {
+    if (userId === undefined) return;
+    lastRead.current = Date.now();
+    try {
+      const { data } = await axios.get<LessonDTO[]>(lessonsUrl(userId));
+      fetchPreviews(data.filter(({ lessonId }) => !asked.current.has(lessonId)));
+      setUserContextState((s) => ({ ...s, lessons: data }));
+    } catch {
+      // The list on screen stays; the next page tries again.
+    }
+  };
+  const routed = useRef(false);
+  useEffect(() => {
+    if (!routed.current) {
+      routed.current = true; // the first page: the load above reads the list
+      return;
+    }
+    void revalidate();
+  }, [pathname]);
+  useEffect(() => {
+    const onVisible = () => {
+      if (document.visibilityState === "visible" && Date.now() - lastRead.current > 30_000)
+        void revalidate();
+    };
+    document.addEventListener("visibilitychange", onVisible);
+    return () => document.removeEventListener("visibilitychange", onVisible);
+  }, [userId]);
 
   // A thumbnail made after this page loaded (the editor was just left): show it without a reload.
   useEffect(() => onThumbnail((lessonId) => fetchPreviews([{ lessonId }])), []);

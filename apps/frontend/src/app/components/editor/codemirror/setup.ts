@@ -17,6 +17,7 @@ import {
 import { defaultKeymap, history, historyKeymap, indentWithTab } from "@codemirror/commands";
 import {
   bracketMatching,
+  ensureSyntaxTree,
   foldGutter,
   foldKeymap,
   HighlightStyle,
@@ -53,6 +54,8 @@ import {
   toggleList,
   toggleSection,
   skipAttributesOnEnter,
+  indentListItem,
+  outdentListItem,
 } from "./commands";
 import { lessonDecorations } from "./decorations";
 import { lessonCompletions } from "./completions";
@@ -65,6 +68,29 @@ import {
   lists,
   media,
 } from "../buttonpanel/buttoncontroller/settings/buttonConfig";
+
+/**
+ * The third ` of a closing fence, typed on a line the code indented (after a Python «if …:», say):
+ * the fence moves back to where the opening fence starts, so the code block ends where it began.
+ */
+const dedentClosingFence = EditorView.inputHandler.of((view, from, to, text) => {
+  if (text !== "`") return false;
+  const { state } = view;
+  const line = state.doc.lineAt(from);
+  const before = line.text.slice(0, from - line.from);
+  if (!/^[ \t]+``$/.test(before) || line.text.slice(to - line.from).trim()) return false;
+  let node = ensureSyntaxTree(state, line.from, 200)?.resolveInner(line.from, 1) ?? null;
+  while (node && node.name !== "FencedCode") node = node.parent;
+  if (!node) return false;
+  const indent = /^[ \t]*/.exec(state.doc.lineAt(node.from).text)![0];
+  if (indent.length >= before.length - 2) return false;
+  view.dispatch({
+    changes: { from: line.from, to, insert: `${indent}\`\`\`` },
+    selection: { anchor: line.from + indent.length + 3 },
+    userEvent: "input.type",
+  });
+  return true;
+});
 
 /**
  * Markdown as the lessons write it: GitHub's extensions, {.attributes}, and highlighted code in
@@ -233,6 +259,7 @@ export function lessonEditorExtensions({
     dropCursor(),
     EditorState.allowMultipleSelections.of(true),
     indentOnInput(),
+    Prec.high(dedentClosingFence),
     bracketMatching(),
     closeBrackets(),
     autocompletion({ override: [lessonCompletions(course)], icons: false }),
@@ -247,7 +274,12 @@ export function lessonEditorExtensions({
     lessonDecorations,
     linter((view) => lessonDiagnostics(view.state, text), { delay: 600 }),
     Prec.high(keymap.of(toolbarKeymap(course, text, actions))),
-    Prec.highest(keymap.of([{ key: "Enter", run: skipAttributesOnEnter }])),
+    Prec.highest(
+      keymap.of([
+        { key: "Enter", run: skipAttributesOnEnter },
+        { key: "Tab", run: indentListItem, shift: outdentListItem },
+      ]),
+    ),
     keymap.of([
       ...closeBracketsKeymap,
       ...defaultKeymap,

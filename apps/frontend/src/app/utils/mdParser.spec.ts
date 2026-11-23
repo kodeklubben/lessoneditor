@@ -70,3 +70,39 @@ describe("preview sanitising", () => {
     );
   });
 });
+
+describe("hints written as <toggle> in the lessons", () => {
+  const lesson = [
+    "- [ ] Lag en overskrift.",
+    "",
+    "<toggle>",
+    "  <strong>Hint</strong>",
+    "  <hide>",
+    "",
+    "  ```html",
+    "  <h1>Hei</h1>",
+    "  ```",
+    "",
+    "  </hide>",
+    "</toggle>",
+    "",
+    "Videre.",
+  ].join("\n");
+
+  it("opens and closes in the preview, with the Markdown inside rendered", () => {
+    const html = sanitizeLessonHtml(mdParser(lesson));
+    expect(html).toContain('<details class="toggle"><summary>Hint</summary>');
+    expect(html).toContain('<div class="toggle__content">');
+    expect(html).toMatch(/<pre><code class="html">[\s\S]*Hei/);
+    expect(html).toMatch(/<\/div><\/details>[\s\S]*Videre/);
+    expect(html).not.toContain("&lt;toggle&gt;");
+  });
+
+  it("also reads the tags on one line, and leaves any other HTML as text", () => {
+    const html = mdParser("<toggle><strong>Se koden</strong><hide>\n\nKode\n\n</hide></toggle>\n");
+    expect(html).toContain("<summary>Se koden</summary>");
+    expect(mdParser("<strong>Fet</strong>\n")).toContain("&lt;strong&gt;Fet&lt;/strong&gt;");
+    expect(mdParser("<hide>x</hide>\n")).toContain("&lt;hide&gt;");
+    expect(mdParser('<toggle><strong onclick="x">Hint</strong>\n')).not.toMatch(/<strong onclick/);
+  });
+});

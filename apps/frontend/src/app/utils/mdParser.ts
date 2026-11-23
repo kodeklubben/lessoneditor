@@ -2,6 +2,7 @@ import { headerSections } from "./markdown-it-plugins/markdown-it-header-section
 import { insertImg } from "./markdown-it-plugins/markdown-it-insert-img";
 import { generateChecklist } from "./markdown-it-plugins/markdown-it-checklist";
 import { markdownItLineNumber } from "./markdown-it-plugins/markdown-it-line-number";
+import { toggleHints } from "./markdown-it-plugins/markdown-it-toggle";
 
 const hljs = require("highlight.js");
 const { full: emoji } = require("markdown-it-emoji");
@@ -33,6 +34,7 @@ const md = require("markdown-it")({
   .use(headerSections)
   .use(insertImg)
   .use(generateChecklist)
+  .use(toggleHints)
   .use(emoji)
   .use(markdownCustomContainer, "video", {
     validate: function (params: string) {

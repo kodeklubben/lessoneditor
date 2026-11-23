@@ -13,6 +13,8 @@ import {
   toggleSection,
   skipAttributesOnEnter,
   documentCodeLanguage,
+  indentListItem,
+  outdentListItem,
 } from "./commands";
 import { lessonDiagnostics } from "./lint";
 import { codeMirrorKey } from "./setup";
@@ -306,5 +308,32 @@ describe("when the course list changes", () => {
 
   it("makes `…`{.b} blocks with the Kloss button", () => {
     expect(run(toggleBlockColour("b", TEXT), "Bruk «si hei»").text).toBe("Bruk `si hei`{.b}");
+  });
+});
+
+describe("Tab and Shift-Tab in lists", () => {
+  it("nests an item where the text of the item above starts", () => {
+    expect(run(indentListItem, "1. En\n2. |To").text).toBe("1. En\n   2. To");
+    expect(run(indentListItem, "- En\n- |To").text).toBe("- En\n  - To");
+    expect(run(indentListItem, "- [ ] En\n- [ ] |To").text).toBe("- [ ] En\n  - [ ] To");
+    expect(run(indentListItem, "10. En\n\n    Mer om en.\n11. |To").text).toBe(
+      "10. En\n\n    Mer om en.\n    11. To",
+    );
+  });
+
+  it("moves selected items together, children and all", () => {
+    expect(run(indentListItem, "1. En\n«2. To\n   - a»").text).toBe("1. En\n   2. To\n      - a");
+  });
+
+  it("moves out to the item it hangs under", () => {
+    expect(run(outdentListItem, "1. En\n   - |a").text).toBe("1. En\n- a");
+    expect(run(outdentListItem, "- En\n  - a\n    - |b").text).toBe("- En\n  - a\n  - b");
+  });
+
+  it("leaves other lines, and the first item, to the ordinary indent", () => {
+    expect(run(indentListItem, "Tekst|").ok).toBe(false);
+    expect(run(indentListItem, "1. |En").ok).toBe(false);
+    expect(run(indentListItem, "1. En\n   - a\n   - |b").text).toBe("1. En\n   - a\n     - b");
+    expect(run(outdentListItem, "- |En").ok).toBe(false);
   });
 });
