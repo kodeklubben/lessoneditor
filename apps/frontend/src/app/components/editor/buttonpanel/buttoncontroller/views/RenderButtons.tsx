@@ -11,6 +11,8 @@ interface RenderButtonsProps {
   shortcutKey: string;
   style?: Record<string, string>;
   imageurl?: string;
+  /** Only the CodeMirror editor greys out undo and redo when there is nothing to undo. */
+  disabled?: boolean;
 }
 
 export const RenderButtons: FC<RenderButtonsProps> = ({
@@ -22,6 +24,7 @@ export const RenderButtons: FC<RenderButtonsProps> = ({
   shortcutKey,
   style,
   imageurl,
+  disabled,
 }) => {
   const isTouchDevice = () => {
     return "ontouchstart" in document.documentElement;
@@ -52,6 +55,7 @@ export const RenderButtons: FC<RenderButtonsProps> = ({
               size="huge"
               icon={icon}
               aria-label={title}
+              disabled={disabled}
               onClick={() => handleButtonClick(buttonSlug)}
             />
           ) : (

@@ -1,7 +1,7 @@
 import "./editor.scss";
 import axios from "axios";
 import { paths } from "@lessoneditor/contracts";
-import { useRef, useState, FC, useEffect } from "react";
+import { useRef, useState, FC, useEffect, lazy, Suspense } from "react";
 import ButtonPanel from "../components/editor/buttonpanel/ButtonPanel";
 import ImageUpload from "../components/editor/ImageUpload";
 import MDPreviewArea from "../components/editor/MDPreviewArea";
@@ -16,8 +16,13 @@ import { useAutosave } from "../components/editor/useAutosave";
 import MachineTranslationNotice from "../components/editor/MachineTranslationNotice";
 import { DESKTOP_EDITOR, useMediaQuery } from "../utils/useMediaQuery";
 import SaveProblemModal from "../components/editor/SaveProblemModal";
+import ContentPlaceholder from "../components/editor/ContentPlaceholder";
+import { codeMirrorEditorEnabled } from "../utils/featureFlags";
 
-const Editor: FC = () => {
+// Only loaded for those who turned it on (?editor=codemirror): the others download none of it.
+const CodeMirrorEditor = lazy(() => import("../components/editor/codemirror/CodeMirrorEditor"));
+
+const ClassicEditor: FC = () => {
   const { lang, lessonId } = useParams() as any;
   const { state } = useLessonContext();
 
@@ -260,4 +265,14 @@ const Editor: FC = () => {
     </>
   );
 };
+const Editor: FC = () => {
+  const [codeMirror] = useState(() => codeMirrorEditorEnabled());
+  if (!codeMirror) return <ClassicEditor />;
+  return (
+    <Suspense fallback={<ContentPlaceholder />}>
+      <CodeMirrorEditor />
+    </Suspense>
+  );
+};
+
 export default Editor;
