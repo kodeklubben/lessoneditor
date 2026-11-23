@@ -104,3 +104,35 @@ describe("buttonAction with bold and italic together", () => {
     expect(result.mdText).toBe("*ord*");
   });
 });
+
+describe("the placeholder in the text's language (9d)", () => {
+  const english = (state: State, button: Button) =>
+    buttonAction(
+      state.mdText,
+      state.cursorPositionStart,
+      state.cursorPositionEnd,
+      button.cursorIntON,
+      button.cursorIntOFF,
+      button.output.replaceAll("Tekst her", "Text here"),
+      "Text here",
+    );
+
+  it("does in English exactly what it does in Norwegian, with «Text here» selected", () => {
+    let en = english(at("", 0), sections.intro);
+    let nb = click(at("", 0), sections.intro);
+    expect(en.mdText).toBe("# Text here {.intro}\n");
+    expect(selected(en)).toBe("Text here");
+    en = english(en, sections.activity);
+    nb = click(nb, sections.activity);
+    expect(en.mdText).toBe(nb.mdText.replaceAll("Tekst her", "Text here"));
+    expect(selected(en)).toBe("Text here");
+  });
+
+  it("wraps a selection and unwraps it again with a different placeholder length", () => {
+    const bold = english(at("hello world", 6, 11), emphasis.bold);
+    expect(bold.mdText).toBe("hello **world**");
+    expect(selected(bold)).toBe("world");
+    const plain = english(bold, emphasis.bold);
+    expect(plain.mdText).toBe("hello world");
+  });
+});

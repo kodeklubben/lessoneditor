@@ -1,6 +1,8 @@
 import { FC, RefObject, Dispatch, SetStateAction, useState } from "react";
 import { useHotkeys } from "react-hotkeys-hook";
+import { useParams } from "react-router";
 import { buttonAction, isInsideCodeBlock } from "./utils/buttonMethods";
+import { DEFAULT_TEXT, placeholderText } from "../../settingsFiles/languages/editor_NO";
 import { codebuttons, emphasis } from "./settings/buttonConfig";
 import { microbitbuttons, scratchbuttons } from "./settings/microbitAndScratchButtonConfig";
 import { RenderButtons } from "./views/RenderButtons";
@@ -70,6 +72,9 @@ export const ButtonController: FC<ButtonControllerProps> = ({
   color,
   setUndoAndUndoPosition,
 }) => {
+  // «Text here» in an English text, «Tekst her» in a Norwegian one (9d).
+  const { lang } = useParams();
+  const placeholder = placeholderText(lang);
   const [prevTextData, setPrevTextData] = useState<{
     mdText: string;
     cursorPositionStart: number;
@@ -121,7 +126,8 @@ export const ButtonController: FC<ButtonControllerProps> = ({
         cursorPositionEnd,
         cursorIntON,
         cursorIntOFF,
-        output,
+        output.replaceAll(DEFAULT_TEXT, placeholder),
+        placeholder,
       );
       setChanges(results.mdText, results.cursorPositionStart, results.cursorPositionEnd);
     }
