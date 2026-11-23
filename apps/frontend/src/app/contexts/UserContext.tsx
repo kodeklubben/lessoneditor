@@ -11,6 +11,7 @@ import {
 } from "./userContext.functions";
 import NotLoggedInPage from "../pages/NotLoggedInPage";
 import ShowSpinner from "../components/ShowSpinner";
+import { isPreviewImage } from "../components/shared/PreviewImage";
 import { base64StringToBlob, createObjectURL } from "blob-util";
 
 export const UserContext = React.createContext({} as UserContextModel);
@@ -30,6 +31,7 @@ export const UserContextProvider = (props: any) => {
         const file = await axios.get(
           paths.LESSON_FILE.replace(":lessonId", String(lessonId)).replace(":filename", "preview"),
         );
+        if (!isPreviewImage(file.data)) return;
         setPreviewImages((prevImages) => ({
           ...prevImages,
           [lessonId]: createObjectURL(base64StringToBlob(file.data, "image/png")),
@@ -91,7 +93,13 @@ export const UserContextProvider = (props: any) => {
     language: string,
   ): Promise<number | undefined> => {
     try {
-      const newLesson: NewLessonDTO = { courseSlug, courseTitle, lessonSlug, lessonTitle, language };
+      const newLesson: NewLessonDTO = {
+        courseSlug,
+        courseTitle,
+        lessonSlug,
+        lessonTitle,
+        language,
+      };
       const newLessonRes = await axios.post<number>(
         paths.USER_LESSON_NEW.replace(":userId", userContexState.user!.userId.toString()),
         newLesson,

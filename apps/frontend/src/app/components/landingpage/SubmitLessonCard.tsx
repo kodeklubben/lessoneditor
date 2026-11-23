@@ -1,9 +1,10 @@
 import "./lessoncard.scss";
 import React, { useState } from "react";
-import { Card, Divider, Button, Header, Image, Icon } from "semantic-ui-react";
+import { Card, Divider, Button, Header, Icon } from "semantic-ui-react";
 import { useParams } from "react-router";
 import { useUserContext } from "../../contexts/UserContext";
 import SubmitlessonModal from "./SubmitLessonModal";
+import PreviewImage from "../shared/PreviewImage";
 
 const SubmitLessonCard = () => {
   const [openSubmitModal, setOpenSubmitModal] = useState(false);
@@ -28,17 +29,15 @@ const SubmitLessonCard = () => {
           <div className="new-lesson_card__content">
             {/* A larger mouse target; keyboard and screen readers use the button below. */}
             <div className="new-lesson_card__image" onClick={onSubmit} aria-hidden="true">
-              <Image
+              <PreviewImage
                 style={{
                   height: "5rem",
+                  width: "100%",
                   objectFit: "cover",
                   objectPosition: "0 0",
                   borderRadius: "10px",
                 }}
                 src={previewImage[lessonId]}
-                fluid
-                rounded
-                alt=""
               />
             </div>
           </div>
