@@ -135,6 +135,8 @@ export interface CatalogLesson {
   courseTitle: string;
   /** The lesson's folder, also its name in /rediger/<course>/<lesson>. */
   slug: string;
+  /** Its main text's name, for its page on oppgaver.kidsakoder.no (<course>/<slug>/<text>). */
+  text: string;
   title: string;
   level?: number;
   /** The texts' languages (nb, nn, en …), bokmål first. */

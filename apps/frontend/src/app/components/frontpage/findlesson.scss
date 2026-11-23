@@ -1,0 +1,248 @@
+// «Finn en oppgave»: the search on top stays put, the lessons scroll under it in a grid of square
+// cards like the front page's, with each lesson's own picture or its course's logo.
+
+.ui.modal.find-lesson {
+  border-radius: 0;
+
+  > .header {
+    padding-bottom: 1rem;
+  }
+
+  .find-lesson__lead {
+    margin: 0.35rem 0 0;
+    font-family: Lato, "Helvetica Neue", Arial, sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    letter-spacing: 0;
+    color: var(--le-muted);
+  }
+
+  .find-lesson__controls {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    background: var(--le-band);
+    border-bottom: 1px solid var(--le-line);
+
+    .ui.input > input {
+      font-size: 1.1rem;
+      border-radius: 0;
+    }
+  }
+
+  .find-lesson__filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+
+    .ui.selection.dropdown {
+      min-width: 12rem;
+      border-radius: 0;
+    }
+  }
+
+  .find-lesson__levels {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .find-lesson__level {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.45rem 0.7rem;
+    border: 1px solid var(--le-line);
+    background: #fff;
+    color: var(--le-ink);
+    font: inherit;
+    cursor: pointer;
+
+    img {
+      width: 1.1rem;
+      height: 1.1rem;
+    }
+
+    &:hover {
+      border-color: var(--le-green);
+    }
+
+    &[aria-pressed="true"] {
+      border-color: var(--le-green);
+      box-shadow: inset 0 0 0 2px var(--le-green);
+      font-weight: 700;
+    }
+  }
+
+  .find-lesson__results.scrolling.content {
+    max-height: calc(80vh - 14rem);
+    min-height: 22rem;
+  }
+
+  .find-lesson__count {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    color: var(--le-muted);
+    margin-bottom: 1rem;
+  }
+
+  .find-lesson__clear {
+    border: 0;
+    padding: 0;
+    background: none;
+    color: var(--le-green-ink);
+    text-decoration: underline;
+    cursor: pointer;
+    font: inherit;
+  }
+
+  .find-lesson__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr));
+    gap: 1.25rem;
+  }
+
+  .find-lesson__card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--le-line);
+    background: #fff;
+    transition: box-shadow 150ms ease-out;
+
+    &:hover,
+    &:focus-within {
+      box-shadow: 0 0 0 3px var(--le-green);
+    }
+  }
+
+  .find-lesson__card--skeleton {
+    height: 17rem;
+    background: linear-gradient(90deg, #f1f3f2 25%, #e7eae9 50%, #f1f3f2 75%);
+    background-size: 200% 100%;
+    animation: find-lesson-shimmer 1.4s ease-in-out infinite;
+
+    @media (prefers-reduced-motion: reduce) {
+      animation: none;
+    }
+  }
+
+  .find-lesson__picture {
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-bottom: 1px solid var(--le-line);
+    background: var(--le-band);
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+    }
+
+    // No picture of its own: the course's logo, small and quiet.
+    &.find-lesson__picture--logo img {
+      object-fit: contain;
+      padding: 2rem 3.5rem;
+      opacity: 0.35;
+    }
+  }
+
+  .find-lesson__body {
+    flex: 1;
+    padding: 0.75rem 0.9rem 0.25rem;
+  }
+
+  .find-lesson__course {
+    margin: 0 0 0.2rem;
+    color: var(--le-muted);
+    font-size: 0.9rem;
+  }
+
+  .find-lesson__title {
+    margin: 0 0 0.6rem;
+    font-size: 1.1rem;
+    line-height: 1.3;
+    overflow-wrap: anywhere;
+  }
+
+  .find-lesson__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem 0.7rem;
+    font-size: 0.85rem;
+    color: var(--le-muted);
+  }
+
+  .find-lesson__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+
+    img {
+      width: 0.95rem;
+      height: 0.95rem;
+    }
+
+    .icon {
+      margin: 0;
+    }
+  }
+
+  .find-lesson__flags {
+    display: inline-flex;
+    gap: 0.25rem;
+
+    img {
+      width: 1.2rem;
+      height: auto;
+      border: 1px solid var(--le-line);
+    }
+  }
+
+  .find-lesson__actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.6rem 0.9rem 0.8rem;
+
+    .ui.button {
+      margin: 0;
+    }
+  }
+
+  .find-lesson__view {
+    color: var(--le-green-ink);
+    text-decoration: underline;
+  }
+
+  .find-lesson__empty {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding: 2rem 0;
+
+    p {
+      font-size: 1.1rem;
+      color: var(--le-muted);
+    }
+  }
+
+  .find-lesson__more {
+    display: flex;
+    justify-content: center;
+    padding-top: 1.5rem;
+  }
+}
+
+@keyframes find-lesson-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
+}

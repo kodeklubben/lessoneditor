@@ -23,5 +23,6 @@ export const paths = {
   USER: "/api/user",
   USER_LESSONS: "/api/user/:userId/lessons",
   CATALOG: "/api/catalog",
+  CATALOG_LESSONS: "/api/catalog/lessons",
   USER_LESSON_PULL_REQUESTS: "/api/user/:userId/lessons/pull-requests",
 };

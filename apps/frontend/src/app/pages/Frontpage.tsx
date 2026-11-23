@@ -1,6 +1,8 @@
 import "./frontpage.scss";
 import { FC, useEffect, useState } from "react";
 import NewLessonModal from "../components/frontpage/NewLessonModal";
+import FindLessonModal from "../components/frontpage/FindLessonModal";
+import { prefetchLessonCatalog } from "../utils/useLessonCatalog";
 import ItemList from "../components/frontpage/ItemList";
 import { useUserContext } from "../contexts/UserContext";
 import Navbar from "../components/navbar/Navbar";
@@ -66,6 +68,15 @@ const frontpage: FC = () => {
     setUserLessons(sortLessons(state.lessons, sortValue, pullRequests));
   }, [state.lessons, sortValue, pullRequests]);
 
+  // The lessons for «Finn en oppgave» are read while the page sits idle, before anyone asks.
+  useEffect(() => {
+    if (!state.user) return undefined;
+    const idle = window.requestIdleCallback ?? ((run: () => void) => window.setTimeout(run, 1500));
+    const cancel = window.cancelIdleCallback ?? window.clearTimeout;
+    const handle = idle(() => prefetchLessonCatalog());
+    return () => cancel(handle);
+  }, [state.user]);
+
   // Back to the page the visitor came to before signing in, e.g. /rediger/<course>/<lesson>.
   useEffect(() => {
     const returnTo = takeReturnTo();
@@ -86,10 +97,13 @@ const frontpage: FC = () => {
               <span className="frontpage-brand__org">Lær Kidsa Koding</span>
               <span className="frontpage-brand__app le-display">Tekstbehandler</span>
             </h1>
-            <NewLessonModal
-              openNewLessonModal={openNewLessonModal}
-              setOpenNewLessonModal={setOpenNewLessonModal}
-            />
+            <div className="frontpage-hero__actions">
+              <FindLessonModal />
+              <NewLessonModal
+                openNewLessonModal={openNewLessonModal}
+                setOpenNewLessonModal={setOpenNewLessonModal}
+              />
+            </div>
           </div>
         </section>
         <section className="le-column frontpage-lessons-section">

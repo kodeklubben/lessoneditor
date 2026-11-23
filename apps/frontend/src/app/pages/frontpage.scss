@@ -19,6 +19,16 @@
   }
 }
 
+.frontpage-hero__actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+
+  .ui.button {
+    margin: 0;
+  }
+}
+
 .frontpage-brand {
   margin: 0;
   display: flex;
