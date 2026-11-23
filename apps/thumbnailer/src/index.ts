@@ -1,5 +1,5 @@
 import type { HttpFunction } from "@google-cloud/functions-framework";
-import takeScreenshot from "./app/take-screenshot";
+import takeScreenshot, { warmUpBrowser } from "./app/take-screenshot";
 import fastq from "fastq";
 import "dotenv/config";
 import { readRequest } from "./app/read-request";
@@ -14,6 +14,17 @@ const queue = fastq.promise(
 export const thumbnailer: HttpFunction = async (req, res) => {
   if (req.method !== "GET") {
     res.set("Allow", "GET").status(405).send("Method not allowed");
+    return;
+  }
+  // ?warmup: start the instance and Chromium before the first thumbnail is needed. Takes no
+  // picture and opens no page, so it needs no token.
+  if (req.query.warmup !== undefined) {
+    try {
+      await warmUpBrowser();
+      res.status(204).end();
+    } catch {
+      res.status(500).send("Could not start the browser");
+    }
     return;
   }
   let url: URL;

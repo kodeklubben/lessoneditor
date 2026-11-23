@@ -229,6 +229,11 @@ export class LessonService {
     return Object.assign(file, changes);
   }
 
+  /** The editor was opened: a thumbnail follows the first save. */
+  warmUpThumbnails(): void {
+    this.thumbService.warmUp();
+  }
+
   /**
    * Photographs a text of the lesson and stores it as preview.png, which older lessons may lack.
    * The photo takes 15–20 s, so only the preview row is written afterwards: texts saved meanwhile

@@ -1,4 +1,6 @@
 import "./editor.scss";
+import axios from "axios";
+import { paths } from "@lessoneditor/contracts";
 import { useRef, useState, FC, useEffect } from "react";
 import ButtonPanel from "../components/editor/buttonpanel/ButtonPanel";
 import ImageUpload from "../components/editor/ImageUpload";
@@ -51,6 +53,12 @@ const Editor: FC = () => {
   const language: string = lang;
   const isDesktop = useMediaQuery(DESKTOP_EDITOR);
   const autosave = useAutosave(mdText, savedFileBody);
+
+  // The first thumbnail follows the first save: wake the thumbnail service now, not then.
+  useEffect(() => {
+    if (lessonId)
+      axios.post(paths.LESSON_WARMUP.replace(":lessonId", String(lessonId))).catch(() => undefined);
+  }, [lessonId]);
 
   useEffect(() => {
     if (location.search === "?init") {
