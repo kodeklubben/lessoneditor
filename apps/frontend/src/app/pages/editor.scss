@@ -44,7 +44,15 @@
   }
 
   @media (min-width: 900px) {
+    // The buttons line up with the text panes below, not with the window's edge.
+    > .buttonpanel {
+      width: auto;
+      margin: 0 1rem;
+    }
+
     .editor-windows {
+      // No green lines out at the window's edges either; the panes have their own frames.
+      border-style: none;
       display: flex;
       flex-flow: row;
       justify-content: space-between;

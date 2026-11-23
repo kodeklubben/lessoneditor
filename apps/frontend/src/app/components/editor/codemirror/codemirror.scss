@@ -1,0 +1,217 @@
+@use "sass:list";
+
+// The CodeMirror editor: the same place on the page as the textarea, and the lessons' sections in
+// the colours of their buttons (buttonConfig.ts) and of the lesson page.
+
+.cm-editor-host {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  border-radius: 5px;
+  background: #fff;
+  overflow: hidden;
+
+  @media (min-width: 900px) {
+    height: calc(100vh - 12rem);
+    width: 49.5%;
+  }
+}
+
+.editor_container .editor-windows .cm-editor-host {
+  @media (min-width: 900px) {
+    flex: 1 1 0;
+    min-width: 0;
+    width: auto;
+  }
+}
+
+$sections: (
+  // class: (stripe, heading background, heading text, badge background, badge text, badge border)
+  intro: (
+    #1b1c1d,
+    #f4f4f4,
+    inherit,
+    #fff,
+    #1b1c1d,
+    #1b1c1d,
+  ),
+  activity: (
+    #349946,
+    #349946,
+    #fff,
+    #fff,
+    #23702f,
+    #fff,
+  ),
+  check: (
+    #1b1c1d,
+    #fff,
+    inherit,
+    #fff,
+    #1b1c1d,
+    #1b1c1d,
+  ),
+  tip: (
+    #ff7f00,
+    #fff99d,
+    inherit,
+    #fff99d,
+    #8a4500,
+    #ff7f00,
+  ),
+  protip: (
+    #ff7f00,
+    #fff99d,
+    inherit,
+    #fff99d,
+    #8a4500,
+    #ff7f00,
+  ),
+  flag: (
+    rgb(230, 134, 45),
+    #fff,
+    rgb(40, 122, 41),
+    #fff,
+    rgb(40, 122, 41),
+    rgb(230, 134, 45),
+  ),
+  challenge: (
+    #00b1da,
+    #00b1da,
+    #fff,
+    #fff,
+    #006f89,
+    #fff,
+  ),
+  try: (
+    #5fb3cf,
+    #abdbea,
+    inherit,
+    #fff,
+    #1f5f73,
+    #5fb3cf,
+  ),
+  save: (
+    rgb(36, 90, 154),
+    #fff,
+    rgb(36, 90, 154),
+    #fff,
+    rgb(36, 90, 154),
+    rgb(36, 90, 154),
+  ),
+);
+
+.cm-editor {
+  .cm-lesson-section {
+    border-radius: 6px;
+  }
+
+  .cm-lesson-section-badge {
+    display: inline-block;
+    margin-left: 0.25em;
+    padding: 0 0.5em;
+    border: 1px solid;
+    border-radius: 999px;
+    font-size: 0.75em;
+    line-height: 1.6;
+    vertical-align: middle;
+    font-weight: 400;
+  }
+
+  .cm-lesson-section-icon {
+    height: 1.1em;
+    margin-right: 0.35em;
+    vertical-align: -0.15em;
+  }
+
+  @each $name, $c in $sections {
+    .cm-line.cm-lesson-section-#{$name} {
+      background-color: list.nth($c, 2);
+      box-shadow: inset 5px 0 0 list.nth($c, 1);
+      @if list.nth($c, 3) != inherit {
+        color: list.nth($c, 3);
+        // The # marks and the other highlighting would be grey on a coloured background.
+        span {
+          color: list.nth($c, 3) !important;
+        }
+      }
+    }
+    .cm-lesson-section-#{$name} .cm-lesson-section-badge {
+      background-color: list.nth($c, 4);
+      color: list.nth($c, 5) !important;
+      border-color: list.nth($c, 6);
+      span {
+        color: list.nth($c, 5) !important;
+      }
+    }
+    .cm-line.cm-lesson-section-body-#{$name} {
+      box-shadow: inset 3px 0 0 color-mix(in srgb, list.nth($c, 1) 55%, transparent);
+    }
+  }
+
+  .cm-line.cm-lesson-section-flag {
+    box-shadow: none;
+    outline: 2px dotted rgb(230, 134, 45);
+    outline-offset: -2px;
+  }
+  .cm-lesson-section-intro,
+  .cm-lesson-section-check,
+  .cm-lesson-section-save {
+    outline: 2px solid currentColor;
+    outline-offset: -2px;
+  }
+  .cm-lesson-section-tip,
+  .cm-lesson-section-protip {
+    outline: 2px solid #ff7f00;
+    outline-offset: -2px;
+  }
+
+  // Code: in the text as the inline code button, in blocks grey as on the lesson page.
+  .cm-lesson-inline-code {
+    color: #c7254e;
+    background-color: #f9f2f4;
+    border-radius: 3px;
+    padding: 0 2px;
+  }
+  .cm-line.cm-lesson-codeblock {
+    background-color: #f5f5f5;
+    font-family: "SFMono-Regular", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.92em;
+  }
+  .cm-lesson-codeblock-first {
+    border-radius: 6px 6px 0 0;
+  }
+  .cm-lesson-codeblock-last {
+    border-radius: 0 0 6px 6px;
+  }
+  .cm-lesson-codeblock-first.cm-lesson-codeblock-last {
+    border-radius: 6px;
+  }
+
+  // Scratch and micro:bit blocks in their block colour.
+  .cm-lesson-block {
+    background-color: var(--block-colour);
+    color: #fff;
+    border-radius: 4px;
+    padding: 1px 4px;
+    span {
+      color: #fff !important;
+    }
+  }
+
+  .cm-lesson-attributes {
+    color: #767676;
+  }
+
+  .cm-line.cm-lesson-container {
+    background-color: #f6f3ff;
+    color: #5b3fa8;
+  }
+
+  // Lint: the gutter marks and the underline stay quiet for hints.
+  .cm-lintRange-info {
+    background-image: none;
+    text-decoration: underline dotted #2185d0;
+    text-underline-offset: 3px;
+  }
+}
