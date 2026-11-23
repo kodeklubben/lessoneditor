@@ -9,6 +9,7 @@ import CourseInfo from "../components/landingpage/CourseInfo";
 import Content from "../components/landingpage/Content";
 import { useLessonContext } from "../contexts/LessonContext";
 import LandingpageDatamodal from "../components/landingpage/datapanel/LandingpageDatamodal";
+import ShareLesson from "../components/landingpage/ShareLesson";
 import { useEffect } from "react";
 import axios from "axios";
 import { paths } from "@lessoneditor/contracts";
@@ -49,7 +50,11 @@ const Landingpage = () => {
       <div className="landingpage_container">
         <section className="landingpage_actions">
           <div className="landingpage_actions__container">
-            <div className="landingpage_datamodal_button">
+            <div
+              className="landingpage_datamodal_button"
+              style={{ display: "flex", gap: "0.5em", alignItems: "flex-start" }}
+            >
+              <ShareLesson lessonId={state.lesson.lessonId} />
               <LandingpageDatamodal />
             </div>
             <CourseInfo
