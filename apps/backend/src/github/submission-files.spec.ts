@@ -114,9 +114,9 @@ describe("submitting a copy of a published lesson", () => {
   };
   const editorText = toEditorMarkdown(repoText, "nb");
 
-  it("keeps fields the editor does not know, such as level", () => {
+  it("keeps fields the editor does not know, such as level, in their original order", () => {
     expect(toRepoMarkdown(editorText)).toBe(
-      "---\ntitle: Asteroids\nlevel: 4\nlanguage: nb\nauthor: Geir Arne Hjelle\n---\n\n# Intro {.intro}\n",
+      "---\ntitle: Asteroids\nlevel: 4\nauthor: Geir Arne Hjelle\nlanguage: nb\n---\n\n# Intro {.intro}\n",
     );
   });
 

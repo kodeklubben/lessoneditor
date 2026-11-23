@@ -92,19 +92,19 @@ const list = (value: unknown): string[] =>
  */
 export function toEditorMarkdown(raw: string, language: string): string {
   const { data, body } = parseLessonMarkdown<Record<string, unknown>>(raw);
-  const { author, translator, ...rest } = data;
-  return stringifyLessonMarkdown(
-    {
-      ...rest,
-      title: typeof data.title === "string" ? data.title : "",
-      author: "",
-      authorList: list(author),
-      translator: "",
-      translatorList: list(translator),
-      language: typeof data.language === "string" ? data.language : language,
-    },
-    body,
-  );
+  // In the original order, so a submitted text keeps its front matter lines where they were.
+  const header: Record<string, unknown> = {};
+  for (const [key, value] of Object.entries(data)) {
+    if (key === "author") Object.assign(header, { author: "", authorList: list(value) });
+    else if (key === "translator")
+      Object.assign(header, { translator: "", translatorList: list(value) });
+    else header[key] = value;
+  }
+  if (typeof header.title !== "string") header.title = "";
+  if (!("authorList" in header)) Object.assign(header, { author: "", authorList: [] });
+  if (!("translatorList" in header)) Object.assign(header, { translator: "", translatorList: [] });
+  if (typeof header.language !== "string") header.language = language;
+  return stringifyLessonMarkdown(header, body);
 }
 
 /** lesson.yml as the editor stores it: JSON, with the three tag lists always present. */
