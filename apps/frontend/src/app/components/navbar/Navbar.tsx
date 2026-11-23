@@ -2,6 +2,7 @@ import "./navbar.scss";
 import { FC, ReactNode } from "react";
 import { useNavigate } from "react-router";
 import ProfileMenu from "./ProfileMenu";
+import HelpMenu from "./HelpMenu";
 import { useUserContext } from "../../contexts/UserContext";
 import logo from "../../../../src/assets/public/lav_logo.jpg";
 import logo_mobile from "../../../../src/assets/public/lkk_logo.png";
@@ -34,6 +35,7 @@ const Navbar: FC<{ children?: ReactNode }> = ({ children }) => {
       </a>
       <div className="navbar_children_container">{children}</div>
       <div className="navbar_profilemenu_container">
+        <HelpMenu />
         {userState?.user && <ProfileMenu name={username} photo={userphoto} email={useremail} />}
       </div>
     </nav>

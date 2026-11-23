@@ -14,6 +14,7 @@ import { dataSourceOptions } from "../../../../db/data-sources";
 // Machine translation (../translate) is kept but not registered, so its endpoints do not exist and
 // the editor hides the option. Turn it on again only with an EU provider and a data processing
 // agreement: import TranslateModule here and set TRANSLATION_PROVIDER and MISTRAL_API_KEY.
+import { CatalogModule } from "../catalog/catalog.module";
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { dataSourceOptions } from "../../../../db/data-sources";
     AuthModule,
     UserModule,
     LessonModule,
+    CatalogModule,
     PassportModule,
   ],
   controllers: [],

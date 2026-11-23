@@ -109,3 +109,17 @@ export interface LessonPullRequest {
   state: PullRequestState;
   url: string;
 }
+
+/** A topic, subject or grade tag from the lesson repo's filtertags, with its Norwegian name. */
+export interface CatalogTag {
+  value: string;
+  name: string;
+}
+
+/** The courses one can write lessons in, and the tags, as the lesson repo has them (#335). */
+export interface LessonCatalog {
+  courses: { value: string; text: string }[];
+  topic: CatalogTag[];
+  subject: CatalogTag[];
+  grade: CatalogTag[];
+}

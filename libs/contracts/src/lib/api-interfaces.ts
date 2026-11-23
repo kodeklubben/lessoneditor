@@ -7,6 +7,9 @@ export const paths = {
   LESSON_FILE_UPDATE: "/api/lesson/:lessonId/files/:filename",
   LESSON_FILE_UPDATE_THUMB: "/api/lesson/:lessonId/files/:filename/updateThumbnail",
   LESSON_WARMUP: "/api/lesson/:lessonId/warmup",
+  LESSON_MEMBERS: "/api/lesson/:lessonId/users",
+  LESSON_MEMBER_ADD: "/api/lesson/:lessonId/members",
+  LESSON_MEMBER: "/api/lesson/:lessonId/members/:memberId",
   LESSON_TEXT_THUMB: "/api/lesson/:lessonId/files/:filename/thumbnail",
   LESSON_THUMB: "/api/lesson/:lessonId/thumbnail",
   LESSON_FILE_DELETE: "/api/lesson/:lessonId/files/:filename/:ext",
@@ -19,5 +22,6 @@ export const paths = {
   USER_LESSON_IMPORT: "/api/user/:userId/lesson/import",
   USER: "/api/user",
   USER_LESSONS: "/api/user/:userId/lessons",
+  CATALOG: "/api/catalog",
   USER_LESSON_PULL_REQUESTS: "/api/user/:userId/lessons/pull-requests",
 };

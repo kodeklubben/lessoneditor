@@ -106,12 +106,64 @@ export class LessonService {
     }
     //A lesson can only be shared by the creator
     if (!isLessonOwner(lesson, invitedByUser)) {
-      throw new HttpException("Lesson can only be shared by creator", HttpStatus.FORBIDDEN);
+      throw new HttpException("Bare den som laget oppgaven, kan dele den.", HttpStatus.FORBIDDEN);
     }
     // Sharing twice is a no-op, not a duplicate key error from the join table.
     if (invitedToUser.lessons.some((existing) => existing.lessonId === lesson.lessonId)) return;
     invitedToUser.lessons.push(lesson);
     await this.userRepository.save(invitedToUser);
+  }
+
+  /**
+   * Shares the lesson with a GitHub username (#337): what a teacher knows of a colleague. The
+   * person must have signed in to the editor once, so there is a user to add.
+   */
+  async addLessonMemberByUsername(
+    lessonId: number,
+    invitedByUserId: number,
+    username: string,
+  ): Promise<void> {
+    const invited = await this.userRepository
+      .createQueryBuilder("user")
+      .where("LOWER(user.username) = LOWER(:username)", { username })
+      .getOne();
+    if (!invited) {
+      throw new HttpException(
+        `Fant ingen bruker som heter «${username}». Personen må logge inn i Lesson Editor med GitHub én gang før oppgaven kan deles med dem.`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    await this.addLessonUser(lessonId, {
+      invitationToUserId: String(invited.userId),
+      invitationByUserId: String(invitedByUserId),
+    });
+  }
+
+  /**
+   * Takes someone off the lesson: the owner removes a member, a member can leave. The owner
+   * stays, or the lesson would have no one who may share or delete it.
+   */
+  async removeLessonMember(lessonId: number, byUserId: number, memberId: number): Promise<void> {
+    const lesson = await this.lessonRepository.findOne({ where: { lessonId } });
+    const by = await this.userRepository.findOne({ where: { userId: byUserId } });
+    const member = await this.userRepository.findOne({ where: { userId: memberId } });
+    if (!lesson || !by || !member) {
+      throw new HttpException("Fant ikke oppgaven eller brukeren.", HttpStatus.NOT_FOUND);
+    }
+    if (isLessonOwner(lesson, member)) {
+      throw new ConflictException("Den som laget oppgaven, kan ikke fjernes fra den.");
+    }
+    if (byUserId !== memberId && !isLessonOwner(lesson, by)) {
+      throw new HttpException(
+        "Bare den som laget oppgaven, kan fjerne andre fra den.",
+        HttpStatus.FORBIDDEN,
+      );
+    }
+    await this.userRepository
+      .createQueryBuilder()
+      .relation(User, "lessons")
+      .of(memberId)
+      .remove(lessonId);
   }
 
   /**

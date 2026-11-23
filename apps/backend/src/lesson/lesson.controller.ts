@@ -16,6 +16,7 @@ import {
 } from "@nestjs/common";
 import { Request, Response } from "express";
 import { contentVersion, LessonService } from "./lesson.service";
+import { isLessonOwner } from "./lesson.entity";
 import { LessonDTO, FileDTO, UserDTO, YamlContent } from "@lessoneditor/contracts";
 import { LoginGuard } from "../auth/login.guard";
 import { sessionGithubToken } from "../auth/github-token";
@@ -27,6 +28,7 @@ import {
   ShareLessonBody,
   SubmitLessonBody,
   UpdatedFileBody,
+  ShareByUsernameBody,
 } from "../app/request-bodies";
 
 /** What other members of a lesson may see about each other: never the e-mail address. */
@@ -95,12 +97,43 @@ export class LessonController {
     });
   }
 
+  /** The lesson's members, without e-mail; `owner` marks the one who made it (#337). */
   @Get(":lessonId/users")
   async GetLessonUsers(
     @Param("lessonId", ParseIntPipe) lessonId: number,
-  ): Promise<Omit<UserDTO, "email">[]> {
-    const { users } = await this.lessonService.getLesson(lessonId);
-    return users.map(publicMember);
+  ): Promise<(Omit<UserDTO, "email"> & { owner: boolean })[]> {
+    const lesson = await this.lessonService.getLesson(lessonId);
+    return lesson.users.map((user) => ({
+      ...publicMember(user),
+      owner: isLessonOwner(lesson, user),
+    }));
+  }
+
+  /** Shares the lesson with a GitHub username (#337). Only the owner may. */
+  @Post(":lessonId/members")
+  @HttpCode(204)
+  async AddLessonMember(
+    @Req() req: Request,
+    @Param("lessonId", ParseIntPipe) lessonId: number,
+    @Body() body: ShareByUsernameBody,
+  ): Promise<void> {
+    await this.lessonService.addLessonMemberByUsername(
+      lessonId,
+      (req.user as UserDTO).userId,
+      body.username,
+    );
+  }
+
+  /** The owner removes a member, or a member leaves. */
+  // :memberId, not :userId: LoginGuard only lets :userId be the signed-in user.
+  @Delete(":lessonId/members/:memberId")
+  @HttpCode(204)
+  async RemoveLessonMember(
+    @Req() req: Request,
+    @Param("lessonId", ParseIntPipe) lessonId: number,
+    @Param("memberId", ParseIntPipe) memberId: number,
+  ): Promise<void> {
+    await this.lessonService.removeLessonMember(lessonId, (req.user as UserDTO).userId, memberId);
   }
 
   @Get(":lessonId/files/:filename")

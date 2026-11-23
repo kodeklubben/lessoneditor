@@ -107,6 +107,15 @@ export class ShareLessonBody {
   invitationToUserId!: string;
 }
 
+/** A GitHub username: letters, digits and single hyphens, at most 39 characters. */
+export class ShareByUsernameBody {
+  @IsString()
+  @Matches(/^[A-Za-z0-9](?:[A-Za-z0-9-]{0,37}[A-Za-z0-9])?$/, {
+    message: "Skriv et GitHub-brukernavn, for eksempel kari-nordmann.",
+  })
+  username!: string;
+}
+
 export class SubmitLessonBody {
   @IsOptional()
   @IsString()

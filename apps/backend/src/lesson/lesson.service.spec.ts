@@ -318,3 +318,68 @@ describe("finding a file by name", () => {
     await expect(service.getLessonFile(1, "asteroids.gif")).rejects.toThrow("File does not exist");
   });
 });
+
+describe("sharing a lesson (#337)", () => {
+  const lesson = { lessonId: 7, created_by: "ada", created_by_id: 1 };
+  const people: Record<number, { userId: number; username: string; lessons?: unknown[] }> = {
+    1: { userId: 1, username: "ada" },
+    2: { userId: 2, username: "Bo-Larsen", lessons: [] },
+    3: { userId: 3, username: "cy" },
+  };
+  const setup = () => {
+    const remove = jest.fn();
+    const users = {
+      findOne: jest.fn(
+        async ({ where }: { where: { userId: number } }) => people[where.userId] ?? null,
+      ),
+      save: jest.fn(),
+      createQueryBuilder: jest.fn((alias?: string) =>
+        alias
+          ? {
+              where: (_sql: string, { username }: { username: string }) => ({
+                getOne: async () =>
+                  Object.values(people).find(
+                    (p) => p.username.toLowerCase() === username.toLowerCase(),
+                  ) ?? null,
+              }),
+            }
+          : { relation: () => ({ of: () => ({ remove }) }) },
+      ),
+    };
+    const lessons = { findOne: jest.fn().mockResolvedValue(lesson) };
+    const service = new LessonService(
+      lessons as never,
+      users as never,
+      undefined as never,
+      undefined as never,
+      undefined as never,
+    );
+    return { service, users, remove };
+  };
+
+  it("shares by GitHub username, whatever its case", async () => {
+    const { service, users } = setup();
+    await service.addLessonMemberByUsername(7, 1, "bo-larsen");
+    expect(users.save).toHaveBeenCalledWith(expect.objectContaining({ userId: 2 }));
+  });
+
+  it("says the person must sign in once when the editor does not know them", async () => {
+    const { service } = setup();
+    await expect(service.addLessonMemberByUsername(7, 1, "ukjent")).rejects.toMatchObject({
+      status: 404,
+      message: expect.stringContaining("logge inn i Lesson Editor"),
+    });
+  });
+
+  it("lets only the owner share and remove others; a member may leave; the owner stays", async () => {
+    const { service, remove } = setup();
+    await expect(service.addLessonMemberByUsername(7, 2, "cy")).rejects.toMatchObject({
+      status: 403,
+    });
+    await expect(service.removeLessonMember(7, 2, 3)).rejects.toMatchObject({ status: 403 });
+    await expect(service.removeLessonMember(7, 2, 1)).rejects.toMatchObject({ status: 409 });
+    await service.removeLessonMember(7, 2, 2);
+    await service.removeLessonMember(7, 1, 3);
+    expect(remove.mock.calls).toEqual([[7], [7]]);
+  });
+});
