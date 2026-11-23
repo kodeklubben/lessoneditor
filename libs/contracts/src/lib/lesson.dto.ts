@@ -100,6 +100,11 @@ export interface HeaderData {
   /** Set when the text was made by the translate button; shown until someone has reviewed it. */
   machineTranslated?: boolean;
   translatedFrom?: string;
+  /**
+   * The language a text was copied from to be translated (nb, nn …). The editor says so until
+   * the translator marks it done; it is never submitted.
+   */
+  copiedFrom?: string;
 }
 
 /** Where a submitted lesson's pull request on the lesson repo stands. */
@@ -122,4 +127,20 @@ export interface LessonCatalog {
   topic: CatalogTag[];
   subject: CatalogTag[];
   grade: CatalogTag[];
+}
+
+/** A lesson in the lesson repo, for finding it and making a copy from the front page. */
+export interface CatalogLesson {
+  course: string;
+  courseTitle: string;
+  /** The lesson's folder, also its name in /rediger/<course>/<lesson>. */
+  slug: string;
+  title: string;
+  level?: number;
+  /** The texts' languages (nb, nn, en …), bokmål first. */
+  languages: string[];
+  teacherGuide: boolean;
+  tags: { topic: string[]; subject: string[]; grade: string[] };
+  /** The lesson's own picture in the repo (src/<course>/<lesson>/<lesson>.png), if it has one. */
+  image?: string;
 }

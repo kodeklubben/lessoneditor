@@ -15,6 +15,9 @@ import Navbar from "../../navbar/Navbar";
 import ShowSpinner from "../../ShowSpinner";
 import MDPreviewArea from "../MDPreviewArea";
 import MachineTranslationNotice from "../MachineTranslationNotice";
+import CopiedTextNotice from "../CopiedTextNotice";
+import TextSwitcher from "../TextSwitcher";
+import { languageOption } from "../../frontpage/settings/newLessonOptions";
 import SaveProblemModal from "../SaveProblemModal";
 import { useAutosave } from "../useAutosave";
 import { placeholderText } from "../settingsFiles/languages/editor_NO";
@@ -73,6 +76,17 @@ const CodeMirrorEditor: FC = () => {
   useEffect(() => {
     if (new URLSearchParams(location.search).has("init")) setOpenSettings(true);
   }, [location.search]);
+
+  // The browser tab says which text is open, so two tabs with two languages can be told apart.
+  const textTitle = fileState.headerData?.title?.trim() || state.lesson?.lessonTitle;
+  useEffect(() => {
+    if (!textTitle) return undefined;
+    const previous = document.title;
+    document.title = `${textTitle} (${languageOption(lang).text}) – Lær Kidsa Koding`;
+    return () => {
+      document.title = previous;
+    };
+  }, [textTitle, lang]);
 
   const uploadImages = useCallback(
     async (files: File[]) => {
@@ -273,11 +287,13 @@ const CodeMirrorEditor: FC = () => {
             {fileState.headerData?.title?.trim() || state.lesson.lessonTitle}
           </h1>
           <span className="editor-title__course">{state.lesson.courseTitle}</span>
+          <TextSwitcher />
         </div>
       </Navbar>
       <div className="editor_container cm-editor-page">
         <CodeMirrorToolbar {...toolbarProps} />
         <MachineTranslationNotice />
+        <CopiedTextNotice />
         <div className="editor-windows">
           <div className="cm-editor-host" ref={hostRef} />
           <MDPreviewArea

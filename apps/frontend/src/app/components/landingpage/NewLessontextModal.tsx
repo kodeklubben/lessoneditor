@@ -101,7 +101,7 @@ const NewLessontextModal: FC<Props> = ({
   const copyFromName = used.find((option) => option.value === copyFrom)?.text;
   const copyOptions = [
     ...[...used].sort((a, b) => (a.value === "nb" ? -1 : b.value === "nb" ? 1 : 0)),
-    { key: "template", value: "", text: "Ingen – start med malen" },
+    { key: "template", value: "", text: "Malen (en tom oppgave)" },
   ];
 
   const openEditor = (lang: string) =>
@@ -236,6 +236,18 @@ const NewLessontextModal: FC<Props> = ({
       <Modal.Content
         style={{ display: "flex", flexFlow: "row wrap", alignItems: "center", gap: "1em" }}
       >
+        {/* The new text's language first, then what it starts from (it confused the other way). */}
+        <label htmlFor="new-text-language" style={{ fontWeight: 700 }}>
+          {translating ? "Oversett til:" : "Ny tekst på:"}
+        </label>
+        <Dropdown
+          id="new-text-language"
+          selection
+          value={language}
+          onChange={(_e, data) => setLanguage(String(data.value))}
+          options={unused}
+          disabled={loading || unused.length === 0}
+        />
         {translating && (
           <>
             <label htmlFor="translate-from" style={{ fontWeight: 700 }}>
@@ -254,7 +266,7 @@ const NewLessontextModal: FC<Props> = ({
         {!translating && used.length > 0 && (
           <>
             <label htmlFor="copy-from" style={{ fontWeight: 700 }}>
-              Kopier fra:
+              Start fra:
             </label>
             <Dropdown
               id="copy-from"
@@ -266,24 +278,15 @@ const NewLessontextModal: FC<Props> = ({
             />
           </>
         )}
-        <label htmlFor="new-text-language" style={{ fontWeight: 700 }}>
-          {translating ? "Oversett til:" : "Velg språk:"}
-        </label>
-        <Dropdown
-          id="new-text-language"
-          selection
-          value={language}
-          onChange={(_e, data) => setLanguage(String(data.value))}
-          options={unused}
-          disabled={loading || unused.length === 0}
-        />
       </Modal.Content>
 
       {copyFrom && copyFromName && unused.length > 0 && (
         <Modal.Content>
           <Message info size="small">
-            Den nye teksten starter som en kopi av teksten på {copyFromName.toLowerCase()}, med
-            bilder og kode. Oversett den i editoren, også tittelen.
+            Den nye teksten på{" "}
+            {String(unused.find((option) => option.value === language)?.text ?? "").toLowerCase()}{" "}
+            starter som en kopi av teksten på {copyFromName.toLowerCase()}, med bilder og kode.
+            Editoren minner deg på å oversette den, også tittelen.
           </Message>
         </Modal.Content>
       )}
@@ -307,7 +310,7 @@ const NewLessontextModal: FC<Props> = ({
       )}
 
       <Modal.Actions>
-        <Button disabled={loading} color="black" onClick={onClose}>
+        <Button disabled={loading} basic onClick={onClose}>
           Avbryt
         </Button>
         <Button
