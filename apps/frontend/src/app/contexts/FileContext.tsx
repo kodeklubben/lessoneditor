@@ -15,6 +15,7 @@ import {
   stringifyLessonMarkdown,
 } from "@lessoneditor/contracts";
 import ShowSpinner from "../components/ShowSpinner";
+import { announceThumbnail } from "../utils/thumbnailEvents";
 
 const FileContext = React.createContext<FileContextModel>({} as FileContextModel);
 
@@ -153,7 +154,9 @@ const FileContextProvider = (props: any) => {
         ":filename",
         filename,
       );
-      return (await axios.put<boolean>(url)).data === true;
+      const made = (await axios.put<boolean>(url)).data === true;
+      if (made) announceThumbnail(Number(lessonId));
+      return made;
     } catch {
       // A missing thumbnail is cosmetic; it must never block or fail saving.
       return false;

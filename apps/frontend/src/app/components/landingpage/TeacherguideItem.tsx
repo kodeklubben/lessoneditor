@@ -8,6 +8,7 @@ import { useUserContext } from "../../contexts/UserContext";
 
 import DeleteModal from "../shared/DeleteModal";
 import MarkdownPreview from "./MarkdownPreview";
+import { useTextTitle } from "./useTextTitle";
 
 const TeacherguideItem: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug, removeMD }) => {
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ const TeacherguideItem: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug
   const [showMDPreview, setShowMDPreview] = useState<boolean>(false);
 
   const filename = language === "nb" ? "README" : `README_${language}`;
+  const title = useTextTitle(lessonId, filename);
 
   const navigateToEditor = (lessonId: any, lessonSlug: any, language: string) => {
     const target = ["/editor", lessonId, "README", language].join("/");
@@ -68,7 +70,7 @@ const TeacherguideItem: FC<any> = ({ lessonId, language, lessonTitle, lessonSlug
         <div className="text_item__lessontitle">
           <Item.Header>
             <h2>
-              {`Tittel: ${lessonTitle}`}
+              {`Tittel: ${title ?? lessonTitle}`}
               <div>(lærerveiledning)</div>
             </h2>
           </Item.Header>
